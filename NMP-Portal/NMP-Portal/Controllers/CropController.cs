@@ -3748,6 +3748,29 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return model;
     }
 
+    
+    private async Task<(PlanViewModel, List<PlanSummaryResponse>)> FetchPlanAndCropYourPlanData(string? year, PlanViewModel model, int farmId, bool isCropPlanData)
+    {
+        List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
+        planSummaryResponse.RemoveAll(x => x.Year == 0);
+        planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
+        model.EncryptedHarvestYearList = new List<string>();
+        foreach (var planSummary in planSummaryResponse)
+        {
+            model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
+        }
+        if (!string.IsNullOrWhiteSpace(year))
+        {
+            model.EncryptedHarvestYear = year;
+            if (isCropPlanData)
+            {
+                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
+            }
+        }
+
+        ViewBag.PlanSummaryList = planSummaryResponse;
+        return (model, planSummaryResponse);
+    }
     [HttpGet]
     public async Task<IActionResult> PlansAndRecordsOverview(string id, string? year, string? q)
     {
@@ -3776,29 +3799,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         return View(model);
-    }
-
-    private async Task<(PlanViewModel, List<PlanSummaryResponse>)> FetchPlanAndCropYourPlanData(string? year, PlanViewModel model, int farmId, bool isCropPlanData)
-    {
-        List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
-        planSummaryResponse.RemoveAll(x => x.Year == 0);
-        planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
-        model.EncryptedHarvestYearList = new List<string>();
-        foreach (var planSummary in planSummaryResponse)
-        {
-            model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
-        }
-        if (!string.IsNullOrWhiteSpace(year))
-        {
-            model.EncryptedHarvestYear = year;
-            if (isCropPlanData)
-            {
-                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
-            }
-        }
-
-        ViewBag.PlanSummaryList = planSummaryResponse;
-        return (model, planSummaryResponse);
     }
 
     [HttpPost]

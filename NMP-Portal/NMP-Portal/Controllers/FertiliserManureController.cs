@@ -43,7 +43,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private const string _fieldGroupActionName = "FieldGroup";
     private const string _fertiliserManureBeforeUpdateSessionKey = "FertiliserManureBeforeUpdate";  //FieldGroupError
     private const string _fieldGroupErrorTempDataKey = "FieldGroupError";
-    private const string _fieldErrorTempDataKey = "FieldError"; 
+    private const string _fieldErrorTempDataKey = "FieldError";
     private const string _inOrgnaicManureDurationErrorTempDataKey = "InOrgnaicManureDurationError";
 
     private FertiliserManureViewModel? GetFertiliserManureFromSession()
@@ -340,12 +340,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             TempData["ErrorOnHarvestYearOverview"] = ex.Message;
 
             ClearTempErrors(_fieldGroupErrorTempDataKey, _fieldErrorTempDataKey);
-            if(model != null)
+            if (model != null)
             {
                 SetFertiliserManureToSession(model);
                 return RedirectToAction(_harvestYearOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
             }
-            
+
         }
 
         SetFertiliserManureToSession(model);
@@ -1293,7 +1293,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             defoliationSequenceName = await GetDefoliationSequenceName(matchedHeader.Crops.DefoliationSequenceID, model.FertiliserManures.FirstOrDefault()?.Defoliation);
         }
 
-        BindRecommendation(model, matchedHeader, manId.Value);
+        model = BindRecommendation(model, matchedHeader, manId.Value);
 
         return (fieldId, cropTypeId, defoliationSequenceName);
     }
@@ -1320,7 +1320,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return string.IsNullOrWhiteSpace(part) ? string.Empty : char.ToUpper(part[0]) + part[1..];
     }
 
-    private void BindRecommendation(FertiliserManureViewModel model, RecommendationHeader matchedHeader, int manId)
+    private static FertiliserManureViewModel BindRecommendation(FertiliserManureViewModel model, RecommendationHeader matchedHeader, int manId)
     {
         if (matchedHeader.RecommendationData != null)
         {
@@ -1330,6 +1330,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 model = FetchRecommendation(model, recData);
             }
         }
+        return model;
     }
 
     private static FertiliserManureViewModel FetchRecommendation(FertiliserManureViewModel model, RecommendationData recData)
@@ -2337,7 +2338,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (error == null)
                 {
 
-                    if (model.FarmCountryId==(int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0))
+                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0))
                     //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
                     //totalNitrogen > 100 and brassica crop will work for Scotland as well
                     {
