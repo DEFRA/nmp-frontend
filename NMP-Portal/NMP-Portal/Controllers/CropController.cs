@@ -50,6 +50,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _cropPrefix = "Crops[";
     private const string _yieldPrefix = "].Yield";
     private const string _grassGrowthClassActionName = "GrassGrowthClass";
+    private const string _copyCheckAnswerActionName = "CopyCheckAnswer";
     private PlanViewModel? GetCropFromSession()
     {
         if (HttpContext.Session.Exists(_cropDataSessionKey))
@@ -4777,14 +4778,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : UpdateExcessOrWinterRainfall() action called");
         PlanViewModel? model = GetHarvestYearPlanFromSession();
-
+        if (model == null)
+        {
+            _logger.LogTrace("Crop Controller : session not found in UpdateExcessOrWinterRainfall() action");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
         try
         {
-            if (model == null)
-            {
-                _logger.LogTrace("Crop Controller : session not found in UpdateExcessOrWinterRainfall() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-            }
+            return View("UpdateExcessOrWinterRainfall", model);
         }
         catch (Exception ex)
         {
@@ -4793,7 +4794,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
         }
 
-        return View("UpdateExcessOrWinterRainfall", model);
+
     }
 
     [HttpPost]
@@ -7119,7 +7120,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called");
         PlanViewModel? model = GetCropFromSession();
-        Error? error = null;
 
         try
         {
@@ -7134,7 +7134,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
-            TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
+            TempData[_tempDataErrorKey] = ex.Message;
             return RedirectToAction(_farmSummaryActionName, "Farm");
         }
     }
@@ -7155,7 +7155,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         SetCropToSession(model);
-        return RedirectToAction("CopyCheckAnswer");
+        return RedirectToAction(_copyCheckAnswerActionName);
     }
 
     [HttpGet]
@@ -7163,7 +7163,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called");
         PlanViewModel? model = GetCropFromSession();
-        Error? error = null;
         try
         {
             if (model == null)
@@ -7179,7 +7178,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
-            TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
+            TempData[_tempDataErrorKey] = ex.Message;
             return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm"));
         }
     }
@@ -7206,29 +7205,31 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 ModelState.AddModelError("OrganicInorganicCopy", Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet);
             }
-        }
 
-        if (!ModelState.IsValid)
-        {
-            return View("CopyCheckAnswer", model);
-        }
 
-        Error? error = null;
-        bool isOrganic = false;
-        bool isFertiliser = false;
-        isOrganic = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.OrganicMaterial) != 0;
-        isFertiliser = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.InorganicFertiliser) != 0;
-        (bool success, error) = await _cropLogic.CopyCropNutrientManagementPlan(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year ?? 0, model.CopyYear ?? 0, isOrganic, isFertiliser);
+            if (!ModelState.IsValid)
+            {
+                return View(_copyCheckAnswerActionName, model);
+            }
 
-        if (string.IsNullOrWhiteSpace(error?.Message) && success)
-        {
-            return BackActionForCopyCheckAnswer(model, success);
+            Error? error = null;
+            bool isOrganic = false;
+            bool isFertiliser = false;
+            isOrganic = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.OrganicMaterial) != 0;
+            isFertiliser = (model.OrganicInorganicCopy & OrganicInorganicCopyOptions.InorganicFertiliser) != 0;
+            (bool success, error) = await _cropLogic.CopyCropNutrientManagementPlan(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year ?? 0, model.CopyYear ?? 0, isOrganic, isFertiliser);
+
+            if (string.IsNullOrWhiteSpace(error?.Message) && success)
+            {
+                return BackActionForCopyCheckAnswer(model, success);
+            }
+            else
+            {
+                TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                return RedirectToAction(_copyCheckAnswerActionName);
+            }
         }
-        else
-        {
-            TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-            return RedirectToAction("CopyCheckAnswer");
-        }
+        return View(_copyCheckAnswerActionName, model);
     }
 
     public async Task<IActionResult> BackCopyCheckAnswer()

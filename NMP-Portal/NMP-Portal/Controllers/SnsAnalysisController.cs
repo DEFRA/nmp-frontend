@@ -78,7 +78,7 @@ namespace NMP.Portal.Controllers
             }
             if (!string.IsNullOrWhiteSpace(f))
             {
-                model.EncryptedFieldName = f ?? string.Empty;
+                model.EncryptedFieldName = f;
                 model.FieldName = _cropDataProtector.Unprotect(f);
             }
 
