@@ -9766,7 +9766,7 @@ managementPeriod.CropID.HasValue
             ValidateRequired(model);
 
             ValidateArea(model);
-            ValidateQuantity(model);
+            ValidateQuantity();
 
             ValidateAreaRules(model);
             ValidateQuantityRules(model);
