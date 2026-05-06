@@ -1653,10 +1653,6 @@ managementPeriod.CropID.HasValue
 
                     HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
 
-                    if (model.IsDefaultNutrient.Value)
-                    {
-                        return RedirectToAction("ManureApplyingDate");
-                    }
 
                     return RedirectToAction("DefaultNutrientValues");
                 }
@@ -2723,8 +2719,8 @@ managementPeriod.CropID.HasValue
                 else
                 {
                     ResetWarnings(model);
-                    return RedirectToAction(_checkAnswer);
                 }
+                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 return RedirectToAction("IncorporationMethod");
             }
             catch (Exception ex)
@@ -9743,7 +9739,7 @@ managementPeriod.CropID.HasValue
         }
         private void AddErrorIfNull(object? value, string key, string errorMessage)
         {
-            if (value == null)
+            if (value is null || (value is string str && string.IsNullOrWhiteSpace(str)))
             {
                 ModelState.AddModelError(key, errorMessage);
             }
