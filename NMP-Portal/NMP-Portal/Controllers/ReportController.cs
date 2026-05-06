@@ -1252,40 +1252,39 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         _logger.LogTrace("Report Controller : ReportOptions() action called");
         ReportViewModel? model = GetReportDataFromSession();
-        if (model == null)
-        {
-            _logger.LogTrace("Report Controller : ReportOptions() action : ReportViewModel is null in session");
-            return RedirectToAction("FarmList", "Farm");
-        }
+
         try
         {
-
-            if (string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
+            if (model == null && string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
             {
                 return RedirectToAction("FarmList", "Farm");
             }
-
-            if (!string.IsNullOrWhiteSpace(f))
+           
+            if (model == null)
             {
-                model.EncryptedFarmId = f;
-                model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                if (farm != null)
+                model = new ReportViewModel();
+                if (!string.IsNullOrWhiteSpace(f))
                 {
-                    model.FarmName = farm.Name;
-                    model.Country = farm.CountryID;
-                    model.FarmRB209CountryID = farm.RB209CountryID;
+                    model.EncryptedFarmId = f;
+                    model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
+                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+                    if (farm != null)
+                    {
+                        model.FarmName = farm.Name;
+                        model.Country = farm.CountryID;
+                        model.FarmRB209CountryID = farm.RB209CountryID;
+                    }
                 }
-            }
-            if (!string.IsNullOrWhiteSpace(h))
-            {
-                model.IsComingFromPlan = true;
-                model.EncryptedHarvestYear = h;
-                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-            }
-            else
-            {
-                model.IsComingFromPlan = false;
+                if (!string.IsNullOrWhiteSpace(h))
+                {
+                    model.IsComingFromPlan = true;
+                    model.EncryptedHarvestYear = h;
+                    model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
+                }
+                else
+                {
+                    model.IsComingFromPlan = false;
+                }
             }
 
             if (model.FarmId != null && model.Country == null)
@@ -1311,8 +1310,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnHarvestYearOverview"] = ex.Message;
             return RedirectToAction("HarvestYearOverview", new
             {
-                id = model.EncryptedFarmId,
-                year = model.EncryptedHarvestYear
+                id = model?.EncryptedFarmId,
+                year = model?.EncryptedHarvestYear
             });
         }
         return View(model);
