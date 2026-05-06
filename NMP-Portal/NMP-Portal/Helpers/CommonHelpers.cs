@@ -8,7 +8,7 @@ namespace NMP.Portal.Helpers
 {
     public class CommonHelpers
     {
-        public  string ShorthandDefoliationSequence(List<string> data)
+        public static string ShorthandDefoliationSequence(List<string> data)
         {
             if (data == null || data.Count == 0)
             {
@@ -65,6 +65,23 @@ namespace NMP.Portal.Helpers
         }
         public Recommendation FetchRecommendation(Recommendation recommendation)
         {
+            string kIndex = null;
+
+            if (recommendation.KIndex != null)
+            {
+                if (recommendation.KIndex == Resource.lblMinusTwo)
+                {
+                    kIndex = Resource.lblTwoMinus;
+                }
+                else if (recommendation.KIndex == Resource.lblPlusTwo)
+                {
+                    kIndex = Resource.lblTwoPlus;
+                }
+                else
+                {
+                    kIndex = recommendation.KIndex;
+                }
+            }
             var rec = new Recommendation
             {
                 ID = recommendation.ID,
@@ -93,7 +110,7 @@ namespace NMP.Portal.Helpers
                 SNSIndex = recommendation.SNSIndex,
                 SIndex = recommendation.SIndex,
                 LimeIndex = recommendation.PH,
-                KIndex = recommendation.KIndex != null ? (recommendation.KIndex == Resource.lblMinusTwo ? Resource.lblTwoMinus : (recommendation.KIndex == Resource.lblPlusTwo ? Resource.lblTwoPlus : recommendation.KIndex)) : null,
+                KIndex = kIndex,
                 MgIndex = recommendation.MgIndex,
                 PIndex = recommendation.PIndex,
                 NaIndex = recommendation.NaIndex,

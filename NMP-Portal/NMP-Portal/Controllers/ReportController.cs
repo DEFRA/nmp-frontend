@@ -675,8 +675,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
                                                 .Select(s => s.Trim())
                                                 .ToList();
-                                                CommonHelpers commonHelpers = new CommonHelpers();
-                                                cropData.DefoliationSequenceName =commonHelpers.ShorthandDefoliationSequence(defoliationList);
+                                              
+                                                cropData.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
                                             }
                                         }
                                     }

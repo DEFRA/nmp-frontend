@@ -3343,8 +3343,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                             .Split(',', StringSplitOptions.RemoveEmptyEntries)
                                             .Select(s => s.Trim())
                                             .ToList();
-                                        CommonHelpers commonHelpers = new CommonHelpers();
-                                        fieldDetail.Management = commonHelpers.ShorthandDefoliationSequence(defoliationList);
+
+                                        fieldDetail.Management = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
                                     }
 
                                     newField.FieldData.Add(fieldDetail);
@@ -3766,21 +3766,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
             (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
             model.FarmName = farm?.Name;
-
-            List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
-            planSummaryResponse.RemoveAll(x => x.Year == 0);
-            planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
-            model.EncryptedHarvestYearList = new List<string>();
-            foreach (var planSummary in planSummaryResponse)
-            {
-                model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
-            }
-            if (!string.IsNullOrWhiteSpace(year))
-            {
-                model.EncryptedHarvestYear = year;
-            }
-
-            ViewBag.PlanSummaryList = planSummaryResponse;
+            (model, List<PlanSummaryResponse> planSummaryResponse) = await FetchPlanAndCropYourPlanData(year, model, farmId, false);
 
             //fetch oldest previous cropping
             model = await FetchOldestPrviousCropping(model, farmId, planSummaryResponse);
@@ -3791,6 +3777,30 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         return View(model);
     }
+
+    private async Task<(PlanViewModel, List<PlanSummaryResponse>)> FetchPlanAndCropYourPlanData(string? year, PlanViewModel model, int farmId, bool isCropPlanData)
+    {
+        List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
+        planSummaryResponse.RemoveAll(x => x.Year == 0);
+        planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
+        model.EncryptedHarvestYearList = new List<string>();
+        foreach (var planSummary in planSummaryResponse)
+        {
+            model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
+        }
+        if (!string.IsNullOrWhiteSpace(year))
+        {
+            model.EncryptedHarvestYear = year;
+            if (isCropPlanData)
+            {
+                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
+            }
+        }
+
+        ViewBag.PlanSummaryList = planSummaryResponse;
+        return (model, planSummaryResponse);
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> PlansAndRecordsOverview(PlanViewModel model)
@@ -4002,8 +4012,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     .Split(',', StringSplitOptions.RemoveEmptyEntries)
                                     .Select(s => s.Trim())
                                     .ToList();
-                                CommonHelpers commonHelpers = new CommonHelpers();
-                                crop.DefoliationSequenceName = commonHelpers.ShorthandDefoliationSequence(defoliationList);
+
+                                crop.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
                             }
 
                             if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
@@ -6733,23 +6743,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             model.FarmName = farm?.Name;
 
-            List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
-            planSummaryResponse.RemoveAll(x => x.Year == 0);
-            planSummaryResponse = planSummaryResponse.OrderByDescending(x => x.Year).ToList();
-            model.EncryptedHarvestYearList = new List<string>();
+            (model, List<PlanSummaryResponse> planSummaryResponse) = await FetchPlanAndCropYourPlanData(year, model, farmId, true);
 
-            foreach (var planSummary in planSummaryResponse)
-            {
-                model.EncryptedHarvestYearList.Add(_farmDataProtector.Protect(planSummary.Year.ToString()));
-            }
-
-            if (!string.IsNullOrWhiteSpace(year))
-            {
-                model.EncryptedHarvestYear = year;
-                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
-            }
-
-            ViewBag.PlanSummaryList = planSummaryResponse;
             (int? topPrevCroppingYear, error) = await _previousCroppingLogic.FetchPreviousCroppingYearByFarmdId(farmId);
 
             if (string.IsNullOrWhiteSpace(error?.Message) && topPrevCroppingYear > 0)

@@ -1332,7 +1332,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
     }
 
-    private FertiliserManureViewModel FetchRecommendation(FertiliserManureViewModel model, RecommendationData recData)
+    private static FertiliserManureViewModel FetchRecommendation(FertiliserManureViewModel model, RecommendationData recData)
     {
         CommonHelpers commonHelpers = new CommonHelpers();
         if (recData.Recommendation != null)
