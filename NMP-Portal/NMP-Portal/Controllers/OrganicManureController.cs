@@ -9817,7 +9817,7 @@ managementPeriod.CropID.HasValue
         }
 
        
-        private void ValidateQuantity(OrganicManureViewModel model)
+        private void ValidateQuantity()
         {
             if (!ModelState.TryGetValue(_quantityKey, out var state))
                 return;
@@ -9885,7 +9885,7 @@ managementPeriod.CropID.HasValue
         }
 
         
-        private void ReplaceError(ModelStateEntry state, string message)
+        private static void ReplaceError(ModelStateEntry state, string message)
         {
             state.Errors.Clear();
             state.Errors.Add(message);
