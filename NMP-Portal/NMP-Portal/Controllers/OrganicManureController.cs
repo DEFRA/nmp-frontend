@@ -9891,7 +9891,7 @@ managementPeriod.CropID.HasValue
             state.Errors.Add(message);
         }
 
-        private void ReplaceNumericError(
+        private static void ReplaceNumericError(
             ModelStateEntry state,
             string firstError,
             string rawValue,
