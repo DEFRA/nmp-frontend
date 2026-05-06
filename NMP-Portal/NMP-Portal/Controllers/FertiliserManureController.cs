@@ -1066,7 +1066,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     if (int.TryParse(model.FieldList[0], out fieldId))
                     {
-                        (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error, fieldId);
+                        (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName, model) = await PopulateRecommendationData(model, error, fieldId);
                     }
                 }
                 catch (Exception ex)
@@ -1110,7 +1110,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         if (int.TryParse(model.FieldList[0], out fieldId))
                         {
-                            (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName) = await PopulateRecommendationData(model, error, fieldId);
+                            (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName,model) = await PopulateRecommendationData(model, error, fieldId);
                         }
                     }
                     catch (Exception ex)
@@ -1270,20 +1270,20 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_checkAnswerActionName);
     }
 
-    private async Task<(int fieldId, int? cropTypeId, string? defoliationSequenceName)>
+    private async Task<(int fieldId, int? cropTypeId, string? defoliationSequenceName, FertiliserManureViewModel model)>
     PopulateRecommendationData(FertiliserManureViewModel model, Error? error, int fieldId)
     {
         model.FieldName = (await _fieldLogic.FetchFieldByFieldId(fieldId)).Name;
 
         (List<RecommendationHeader> recommendationsHeader, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
         if (error != null || recommendationsHeader == null || !recommendationsHeader.Any())
-            return (fieldId, null, null);
+            return (fieldId, null, null,model);
 
         var manId = model.FertiliserManures?.FirstOrDefault()?.ManagementPeriodID;
-        if (manId == null) return (fieldId, null, null);
+        if (manId == null) return (fieldId, null, null, model);
 
         var matchedHeader = FindMatchedHeader(recommendationsHeader, manId.Value);
-        if (matchedHeader == null || matchedHeader.Crops == null) return (fieldId, null, null);
+        if (matchedHeader == null || matchedHeader.Crops == null) return (fieldId, null, null, model);
 
         var cropTypeId = matchedHeader.Crops.CropTypeID;
         string? defoliationSequenceName = null;
@@ -1295,7 +1295,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         model = BindRecommendation(model, matchedHeader, manId.Value);
 
-        return (fieldId, cropTypeId, defoliationSequenceName);
+        return (fieldId, cropTypeId, defoliationSequenceName, model);
     }
 
     private static RecommendationHeader? FindMatchedHeader(
