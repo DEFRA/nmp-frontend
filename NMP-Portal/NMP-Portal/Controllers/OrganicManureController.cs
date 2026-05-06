@@ -9840,7 +9840,7 @@ managementPeriod.CropID.HasValue
             if (rawValue.Length > 10)
             {
                 ModelState.AddModelError(_quantityKey,
-                 string.Format(Resource.lblValueMustNotExeedXDigit, Resource.MsgQuantity, 10));
+                 string.Format(Resource.lblValueMustNotExeedXDigit, Resource.lblQuantity, 10));
                 return;
             }
 
