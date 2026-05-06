@@ -730,7 +730,7 @@
                                     @Resource.lblQuantityApplied
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @((Model.Quantity.HasValue) ? string.Format(Resource.lblRateWithTonnes, Model.Quantity)  : Resource.lblNotSet)
+                                @((Model.Quantity.HasValue) ? string.Format(Resource.lblRateWithTonnes, string.Format("{0:N0}", Model.Quantity)) : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblChange
