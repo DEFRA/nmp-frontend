@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -19,7 +20,6 @@ namespace NMP.Services;
 public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IOrganicManureService
 {
     private readonly ILogger<OrganicManureService> _logger = logger;
-    private const string _errorLogTemplate = "{Code} : {Message} : {Stack} : {Path}";
     public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
     {
         List<ManureCropTypeResponse> cropTypeList = new List<ManureCropTypeResponse>();
@@ -113,7 +113,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (managementIds, error);
     }
 
-  
+
     public async Task<(bool, Error?)> AddOrganicManuresAsync(string organicManureData)
     {
         bool success = false;
@@ -163,9 +163,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if(responseWrapper?.Data is JObject data)
                 {
-                    rainType = responseWrapper.Data.ToObject<RainTypeResponse>();
+                    rainType = data.ToObject<RainTypeResponse>() ?? new RainTypeResponse();
                 }
             }
             else
@@ -195,9 +195,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.rainfallPostApplication?.value is JToken rainfallValue)
                 {
-                    totalRainfall = responseWrapper?.Data?.rainfallPostApplication != null ? responseWrapper.Data.rainfallPostApplication.value.ToObject<int>() : 0;
+                    totalRainfall = rainfallValue.ToObject<int?>() ?? 0;
                 }
             }
             else
@@ -261,9 +261,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.MoistureType is JToken moistureTypeToken)
                 {
-                    moisterType = responseWrapper.Data.MoistureType.ToObject<MoistureTypeResponse>();
+                    moisterType = moistureTypeToken.ToObject<MoistureTypeResponse>() ?? new MoistureTypeResponse();
                 }
             }
             else
@@ -294,10 +294,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var rainTypes = responseWrapper.Data.ToObject<List<RainTypeResponse>>();
+                    var rainTypes = data.ToObject<List<RainTypeResponse>>() ?? new List<RainTypeResponse>();
                     rainType.AddRange(rainTypes);
+
                 }
             }
             else
@@ -327,9 +328,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JObject data)
                 {
-                    rainType = responseWrapper.Data.ToObject<RainTypeResponse>();
+                    rainType = data.ToObject<RainTypeResponse>() ?? new RainTypeResponse();
                 }
             }
             else
@@ -425,10 +426,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var moisterType = responseWrapper.Data.ToObject<List<MoistureTypeResponse>>();
-                    moisterTypes.AddRange(moisterType);
+                    var moistureType = data.ToObject<List<MoistureTypeResponse>>() ?? new List<MoistureTypeResponse>();
+                    moisterTypes.AddRange(moistureType);
                 }
             }
             else
@@ -458,9 +459,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JObject data)
                 {
-                    moistureTypeResponse = responseWrapper.Data.ToObject<MoistureTypeResponse>();
+                    moistureTypeResponse = data.ToObject<MoistureTypeResponse>() ?? new MoistureTypeResponse();
                 }
             }
             else
@@ -478,7 +479,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (moistureTypeResponse, error);
     }
-  
+
 
     public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
@@ -494,7 +495,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             url += $"&organicManureID={organicManureId.Value}";
         }
         url = string.Format(url, HttpUtility.UrlEncode(managementId.ToString()), HttpUtility.UrlEncode(fromdate.ToString()), HttpUtility.UrlEncode(toDate.ToString()), HttpUtility.UrlEncode(confirm.ToString()));
-        (totalN, error)= await GetTotalN(url);
+        (totalN, error) = await GetTotalN(url);
         return (totalN, error);
     }
     public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDate(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
@@ -537,9 +538,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JObject data)
                 {
-                    cropType = responseWrapper.Data.ToObject<CropTypeResponse>();
+                    cropType = data.ToObject<CropTypeResponse>() ?? new CropTypeResponse();
                 }
             }
             else
@@ -569,9 +570,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.CropTypeLinking is JToken cropTypeLinkingToken)
                 {
-                    cropTypeLinking = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                    cropTypeLinking = cropTypeLinkingToken.ToObject<CropTypeLinkingResponse>() ?? new CropTypeLinkingResponse();
                 }
             }
             else
@@ -604,10 +605,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
                     var ids = responseWrapper?.Data?.ManureTypeIds.ToObject<List<int>>();
-                    if(ids != null)
+                    if (ids != null)
                     {
                         manureTypeIds.AddRange(ids);
-                    }                       
+                    }
                 }
             }
             else
@@ -638,9 +639,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.ManureTypeIds is JToken manureTypeIdsToken)
                 {
-                    manureTypeIds = responseWrapper.Data.ManureTypeIds.ToObject<List<int>>();
+                    manureTypeIds = manureTypeIdsToken.ToObject<List<int>>() ?? new List<int>();
                 }
             }
             else
@@ -736,9 +737,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.exists is JToken existsToken)
                 {
-                    isOrganicManureExist = responseWrapper.Data.exists.ToObject<bool>();
+                    isOrganicManureExist = existsToken.ToObject<bool>();
                 }
             }
             else
@@ -835,9 +836,10 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JObject data)
                 {
-                    mannerCalculateNutrientResponse = responseWrapper.Data.ToObject<MannerCalculateNutrientResponse>();
+                    mannerCalculateNutrientResponse = data.ToObject<MannerCalculateNutrientResponse>()
+                        ?? new MannerCalculateNutrientResponse();
                 }
             }
             else
@@ -956,9 +958,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JObject data)
                 {
-                    organicManure = responseWrapper.Data.ToObject<OrganicManureDataViewModel>();
+                    organicManure = data.ToObject<OrganicManureDataViewModel>() ?? new OrganicManureDataViewModel();
                 }
             }
             else
@@ -990,7 +992,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    organicManures = responseWrapper.Data.ToObject<OrganicManure>();
+                    organicManures = responseWrapper?.Data?.ToObject<List<OrganicManure>>() ?? new List<OrganicManure>();
                 }
             }
             else
@@ -1026,9 +1028,12 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode)
             {
-                message = responseWrapper.Data["message"].Value;
+                if (responseWrapper?.Data is JObject data)
+                {
+                    message = data["message"]?.Value<string>() ?? string.Empty;
+                }
             }
             else
             {
@@ -1274,7 +1279,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                totalRate =  Convert.ToDecimal(responseWrapper?.Data);
+                totalRate = Convert.ToDecimal(responseWrapper?.Data);
             }
             else
             {
@@ -1305,7 +1310,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             }
             requestUrl = string.Format(requestUrl, fieldId, dateFrom, dateTo);
 
-            (isLivestockcManureExist,error)= await CheckExistence(requestUrl);
+            (isLivestockcManureExist, error) = await CheckExistence(requestUrl);
         }
         catch (HttpRequestException hre)
         {
@@ -1358,9 +1363,9 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         {
             error = _logger.ExtractError(responseWrapper, error);
         }
-        return (totalN,error);
+        return (totalN, error);
     }
-        
+
     public async Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(int cropTypeId, int soilTypeId, int residueGroup)
     {
         Error? error = null;
