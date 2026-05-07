@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -28,14 +29,10 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
         {
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                fieldCount = responseWrapper?.Data["count"];
-            }
+            fieldCount = data["count"]?.Value<int>() ?? 0;
         }
-
         return fieldCount;
     }
 
@@ -50,9 +47,11 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
         {
-            if (responseWrapper != null && responseWrapper.Data != null)
+            var wrapper = responseWrapper;
+            if (wrapper?.Data != null)
             {
-                var soiltypeslist = responseWrapper.Data.ToObject<List<SoilTypesResponse>>();
+                var soiltypeslist = wrapper.Data.ToObject<List<SoilTypesResponse>>();
+
                 soilTypes.AddRange(soiltypeslist);
             }
         }
@@ -70,10 +69,11 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
         {
-            if (responseWrapper != null && responseWrapper.Data != null)
+            if (responseWrapper?.Data != null)
             {
-                List<NutrientResponseWrapper> nutrientResponseWapper = responseWrapper.Data.ToObject<List<NutrientResponseWrapper>>();
-                nutrients.AddRange(nutrientResponseWapper);
+                var nutrientResponseWrapper = responseWrapper.Data.ToObject<List<NutrientResponseWrapper>>();
+
+                nutrients.AddRange(nutrientResponseWrapper);
             }
         }
         else
@@ -92,27 +92,19 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        var wrapper = responseWrapper;
         if (response.IsSuccessStatusCode)
         {
-            if (responseWrapper != null && responseWrapper.Data != null)
+            if (wrapper?.Data != null)
             {
-                var soiltypeslist = responseWrapper.Data.ToObject<List<CropGroupResponse>>();
+                var soiltypeslist = wrapper.Data.ToObject<List<CropGroupResponse>>();
                 soilTypes.AddRange(soiltypeslist);
             }
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper.Error.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-
-            }
+            _logger.ExtractError(responseWrapper, error);
         }
-
         return soilTypes;
     }
 
@@ -128,22 +120,16 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                var wrapper = responseWrapper;
+                if (wrapper?.Data != null)
                 {
-                    var soiltypeslist = responseWrapper.Data.ToObject<List<CropTypeResponse>>();
+                    var soiltypeslist = wrapper.Data.ToObject<List<CropTypeResponse>>();
                     soilTypes.AddRange(soiltypeslist);
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -162,7 +148,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
 
     public async Task<string> FetchCropGroupById(int cropGroupId)
     {
-        Error error = null;
+        Error? error = null;
         string cropGroup = string.Empty;
         try
         {
@@ -171,29 +157,25 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropGroupByIdAsyncAPI, cropGroupId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
             {
-                cropGroup = responseWrapper.Data["cropGroupName"];
+                cropGroup = data["cropGroupName"]?.Value<string>() ?? string.Empty;
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -202,7 +184,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
 
     public async Task<string> FetchCropTypeById(int cropTypeId)
     {
-        Error error = null;
+        Error? error = null;
         string cropType = string.Empty;
         try
         {
@@ -211,29 +193,24 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeByIdAsyncAPI, cropTypeId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
             {
-                cropType = responseWrapper.Data["cropTypeName"];
+                cropType = data["cropTypeName"]?.Value<string>() ?? string.Empty;
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -277,16 +254,22 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     private async Task<(Field?, Error?)> ParseAddFieldResponseAsync(HttpResponseMessage response)
     {
         string result = await response.Content.ReadAsStringAsync();
-        var wrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-        if (wrapper?.Data != null && wrapper?.Data?.GetType().Name != "String")
+        var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        Error? error = null;
+        if (response.IsSuccessStatusCode)
         {
-            var field = ExtractObject<Field>(wrapper, "Field");
-            return (field, null);
+            if (responseWrapper?.Data != null && responseWrapper?.Data?.GetType().Name != "String")
+            {
+                var field = ExtractObject<Field>(responseWrapper, "Field");
+                return (field, null);
+            }
         }
-
-        var error = ExtractError(wrapper, _logger);
+        else
+        {
+            _logger.ExtractError(responseWrapper, error);
+        }
         return (null, error);
+
     }
 
     private static T? ExtractObject<T>(ResponseWrapper? wrapper, string key)
@@ -294,18 +277,6 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         return wrapper?.Data[key] is JObject jobject
             ? jobject.ToObject<T>()
             : default(T);
-    }
-
-    private static Error? ExtractError(ResponseWrapper? wrapper, ILogger<FieldService> logger)
-    {
-        var error = wrapper?.Error?.ToObject<Error>();
-
-        if (error != null)
-        {
-            logger.LogError("Error Response Wrapper: {Wrapper}", JsonConvert.SerializeObject(wrapper));
-        }
-
-        return error;
     }
 
     public async Task<bool> IsFieldExistAsync(int farmId, string name, int? fieldId = null)
@@ -341,16 +312,9 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                Error? error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            Error? error = new Error();
+            _logger.ExtractError(responseWrapper, error);
         }
-
         return fields;
     }
 
@@ -366,21 +330,14 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.Field != null)
                 {
-                    field = responseWrapper?.Data?.Field.ToObject<Field>();
+                    field = responseWrapper.Data.Field.ToObject<Field>();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -417,7 +374,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                ExtractError(responseWrapper, _logger);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -436,7 +393,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
 
     public async Task<string> FetchSoilTypeById(int soilTypeId)
     {
-        Error error = null;
+        Error? error = null;
         string soilType = string.Empty;
         try
         {
@@ -444,29 +401,25 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilTypeBySoilTypeIdAsyncAPI, soilTypeId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
             {
-                soilType = responseWrapper.Data["soilType"];
+                soilType = data["soilType"]?.ToString() ?? string.Empty;
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                _logger.ExtractError(responseWrapper, error);
+
             }
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -475,7 +428,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
 
     public async Task<List<SoilAnalysisResponse>> FetchSoilAnalysisByFieldId(int fieldId, string shortSummary)
     {
-        Error error = null;
+        Error? error = null;
         List<SoilAnalysisResponse> soilAnalysis = new List<SoilAnalysisResponse>();
         try
         {
@@ -484,29 +437,25 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilAnalysisByFieldIdAsyncAPI, fieldId, shortSummary));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+            if (response.IsSuccessStatusCode && responseWrapper?.Data?.SoilAnalyses?.records is JToken records)
             {
-                soilAnalysis = responseWrapper.Data.SoilAnalyses.records.ToObject<List<SoilAnalysisResponse>>();
+                soilAnalysis = records.ToObject<List<SoilAnalysisResponse>>() ?? new List<SoilAnalysisResponse>();
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -525,21 +474,14 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.FieldDetails is JToken fieldDetails)
                 {
-                    fieldDetail = responseWrapper.Data.FieldDetails.ToObject<FieldDetailResponse>();
+                    fieldDetail = fieldDetails.ToObject<FieldDetailResponse>() ?? new FieldDetailResponse();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
         }
         catch (HttpRequestException hre)
@@ -621,11 +563,13 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -644,18 +588,14 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.PostAsync(ApiurlHelper.FetchSNSIndexByMeasurementMethodAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
-            {
 
-                JObject? farmDataJObject = responseWrapper?.Data as JObject;
-                if (farmDataJObject != null)
-                {
-                    snsResponse = farmDataJObject.ToObject<SnsResponse>();
-                }
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject farmDataJObject)
+            {
+                snsResponse = farmDataJObject.ToObject<SnsResponse>() ?? new SnsResponse();
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
 
         }
@@ -683,28 +623,25 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.PostAsync(ApiurlHelper.FetchSNSIndexByMeasurementMethodForScotlandAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-            {
 
-                JObject? farmDataJObject = responseWrapper?.Data as JObject;
-                if (farmDataJObject != null)
-                {
-                    snsResponse = farmDataJObject.ToObject<SnsResponseForScotland>();
-                }
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject farmDataJObject)
+            {
+                snsResponse = farmDataJObject.ToObject<SnsResponseForScotland>() ?? new SnsResponseForScotland();
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
-
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -714,7 +651,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<(Field, Error)> UpdateFieldAsync(FieldData fieldData, int fieldId)
     {
         string jsonData = JsonConvert.SerializeObject(fieldData);
-        Field field = null;
+        Field? field = null;
         Error error = new Error();
         try
         {
@@ -722,19 +659,14 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateFieldAsyncAPI, fieldId), new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode && responseWrapper?.Data?["Field"] is JObject fieldObject)
             {
-                JObject farmDataJObject = responseWrapper.Data["Field"] as JObject;
-                if (fieldData != null)
-                {
-                    field = farmDataJObject.ToObject<Field>();
-                }
+                field = fieldObject.ToObject<Field>() ?? new Field();
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
-
         }
         catch (HttpRequestException hre)
         {
@@ -758,13 +690,13 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteFieldByIdAPI, fieldId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
             {
-                message = responseWrapper.Data["message"].Value;
+                message = data["message"]?.Value<string>() ?? string.Empty;
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
         }
         catch (HttpRequestException hre)
@@ -791,26 +723,30 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             var response = await httpClient.GetAsync(ApiurlHelper.FetchGrassManagementOptionsAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken records)
                 {
-                    var grassManagementOption = responseWrapper.Data.records.ToObject<List<CommonResponse>>();
+                    var grassManagementOption = records.ToObject<List<CommonResponse>>()
+                    ?? new List<CommonResponse>();
                     grassManagementOptions.AddRange(grassManagementOption);
                 }
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -829,24 +765,26 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var grassTypicalCut = responseWrapper.Data.ToObject<List<CommonResponse>>();
+                    var grassTypicalCut = data.ToObject<List<CommonResponse>>() ?? new List<CommonResponse>();
                     grassTypicalCuts.AddRange(grassTypicalCut);
                 }
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -856,7 +794,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
     public async Task<List<CommonResponse>> GetSoilNitrogenSupplyItems()
     {
         List<CommonResponse> soilNitrogenSupplyItems = new List<CommonResponse>();
-        Error error = new Error();
+        Error? error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -865,24 +803,26 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var soilNitrogenSupplyItem = responseWrapper.Data.ToObject<List<CommonResponse>>();
+                    var soilNitrogenSupplyItem = data.ToObject<List<CommonResponse>>() ?? new List<CommonResponse>();
                     soilNitrogenSupplyItems.AddRange(soilNitrogenSupplyItem);
                 }
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -897,14 +837,14 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             HttpClient httpClient = await GetNMPAPIClient();
             string url = string.Format(ApiurlHelper.FetchFieldByFarmIdAsyncAPI, farmId, shortSummary);
             var response = await httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if(responseWrapper?.Data?.Fields is JToken fieldsToken)
                 {
-                    var fieldslist = responseWrapper.Data.Fields.ToObject<List<Field>>();
+                    var fieldslist = fieldsToken.ToObject<List<Field>>()
+                    ?? new List<Field>();
                     fields.AddRange(fieldslist);
                 }
             }
@@ -915,11 +855,13 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         catch (HttpRequestException hre)
         {
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }

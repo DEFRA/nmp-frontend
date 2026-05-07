@@ -397,16 +397,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper?.Data?.CropTypeLinking != null)
+                var data = responseWrapper?.Data;
+                if (data?.CropTypeLinking != null)
                 {
-                    CropTypeLinkingResponse cropTypeLinkingResponse =
-                        responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-
-                    defaultYield = isScotland
-                        ? cropTypeLinkingResponse.DefaultYieldScotland
-                        : cropTypeLinkingResponse.DefaultYield;
+                    var cropTypeLinkingResponse = data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                    defaultYield = isScotland ? cropTypeLinkingResponse.DefaultYieldScotland : cropTypeLinkingResponse.DefaultYield;
                 }
             }
             else
