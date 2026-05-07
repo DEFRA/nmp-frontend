@@ -4855,9 +4855,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             //calculation for N standard and P2O5 standard on default occupancy change
             (livestockTypes, error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-            var defaultOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
-            var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-            var defaultPhosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+            var livestockType = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId);
+            var defaultOccupancy = livestockType?.Occupancy ?? 0;
+            var defaultNitrogenStandard = livestockType?.NByUnit;
+            var defaultPhosphate = livestockType?.P2O5;
             if (model.AverageOccupancy != defaultOccupancy)
             {
                 var nitrogenStandardFor100PercentOccupancy = (defaultNitrogenStandard / defaultOccupancy) * 100;
