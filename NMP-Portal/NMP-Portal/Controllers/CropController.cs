@@ -926,7 +926,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            (model, var redirect, bool matchFound) = BindSowingOrYieldProperty(model,planViewModel);
+            (model, var redirect, bool matchFound) = BindSowingOrYieldProperty(model, planViewModel);
             if (redirect != null)
             {
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
@@ -6145,13 +6145,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
 
             await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-
+            SetCropToSession(model);
             if (model.GrassGrowthClassQuestion != null)
             {
                 return (flowControl: false, value: RedirectToAction("DefoliationSequence"));
             }
         }
-
+        SetCropToSession(model);
         return (flowControl: true, value: null);
     }
 
@@ -6219,7 +6219,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Count;
             }
-
+            SetCropToSession(model);
             (bool flowControl, IActionResult? value) = await BindCrassGrowthClassData(q, model, grassGrowthClasses);
             if (!flowControl && value != null)
             {
@@ -6249,7 +6249,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         ValidateGrassGrowthClassProperties(model);
         if (!ModelState.IsValid)
         {
-            await BindViewBegForGrassGrowthClass(model, fieldIds);
+            model = await BindViewBegForGrassGrowthClass(model, fieldIds);
             return View(model);
         }
 
@@ -6381,7 +6381,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (flowControl: true, value: null, grassGrowthClassIds, grassGrowthClasses);
     }
 
-    private async Task BindViewBegForGrassGrowthClass(PlanViewModel model, List<int> fieldIds)
+    private async Task<PlanViewModel> BindViewBegForGrassGrowthClass(PlanViewModel model, List<int> fieldIds)
     {
         foreach (var crop in model.Crops)
         {
@@ -6397,6 +6397,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
             await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
         }
+        return model;
     }
 
     private void ValidateGrassGrowthClassProperties(PlanViewModel model)
@@ -6486,7 +6487,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.DryMatterYieldCounter = index;
                 model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
 
-
+                SetCropToSession(model);
                 await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[index].GrassGrowthClassId);
             }
 
@@ -6754,7 +6755,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.FarmName = farm?.Name;
 
             (model, List<PlanSummaryResponse> planSummaryResponse) = await FetchPlanAndCropYourPlanData(year, model, farmId, true);
-
+            SetCropToSession(model);
             (int? topPrevCroppingYear, error) = await _previousCroppingLogic.FetchPreviousCroppingYearByFarmdId(farmId);
 
             if (string.IsNullOrWhiteSpace(error?.Message) && topPrevCroppingYear > 0)
@@ -6796,7 +6797,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 //to remove base year from HarvestYear list
                 model = await FilterHarvestYearList(model, error);
-
+                SetCropToSession(model);
                 if (model.HarvestYear != null && model.HarvestYear.All(x => !x.IsAnyPlan))
                 {
                     return RedirectToAction(_harvestYearForPlanActionName, new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = false });
