@@ -47,11 +47,9 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
         {
-            var wrapper = responseWrapper;
-            if (wrapper?.Data != null)
+            if (responseWrapper?.Data is JToken data)
             {
-                var soiltypeslist = wrapper.Data.ToObject<List<SoilTypesResponse>>();
-
+                var soiltypeslist = data.ToObject<List<SoilTypesResponse>>() ?? new List<SoilTypesResponse>();
                 soilTypes.AddRange(soiltypeslist);
             }
         }
@@ -69,10 +67,9 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
         {
-            if (responseWrapper?.Data != null)
+            if (responseWrapper?.Data is JToken data)
             {
-                var nutrientResponseWrapper = responseWrapper.Data.ToObject<List<NutrientResponseWrapper>>();
-
+                var nutrientResponseWrapper = data.ToObject<List<NutrientResponseWrapper>>() ?? new List<NutrientResponseWrapper>();
                 nutrients.AddRange(nutrientResponseWrapper);
             }
         }
@@ -95,9 +92,10 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         var wrapper = responseWrapper;
         if (response.IsSuccessStatusCode)
         {
-            if (wrapper?.Data != null)
+            if (wrapper?.Data is JToken data)
             {
-                var soiltypeslist = wrapper.Data.ToObject<List<CropGroupResponse>>();
+                var soiltypeslist = data.ToObject<List<CropGroupResponse>>()
+                    ?? new List<CropGroupResponse>();
                 soilTypes.AddRange(soiltypeslist);
             }
         }
@@ -120,10 +118,9 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                var wrapper = responseWrapper;
-                if (wrapper?.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var soiltypeslist = wrapper.Data.ToObject<List<CropTypeResponse>>();
+                    var soiltypeslist = data.ToObject<List<CropTypeResponse>>() ?? new List<CropTypeResponse>();
                     soilTypes.AddRange(soiltypeslist);
                 }
             }
@@ -330,9 +327,9 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper?.Data?.Field != null)
+                if (responseWrapper?.Data?.Field is JToken fieldToken)
                 {
-                    field = responseWrapper.Data.Field.ToObject<Field>();
+                    field = fieldToken.ToObject<Field>() ?? new Field();
                 }
             }
             else
@@ -558,7 +555,7 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
