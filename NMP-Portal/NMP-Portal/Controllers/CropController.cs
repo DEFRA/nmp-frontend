@@ -3334,7 +3334,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                         FieldName = plan.FieldName,
                                         PlantingDate = plan.PlantingDate,
                                         Yield = plan.Yield,
-                                        Variety = plan.CropVariety
+                                        Variety = plan.CropVariety,
+                                        CropOrder = plan.CropOrder
                                     };
 
                                     if (plan.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(plan.Management))
@@ -3748,7 +3749,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return model;
     }
 
-    
+
     private async Task<(PlanViewModel, List<PlanSummaryResponse>)> FetchPlanAndCropYourPlanData(string? year, PlanViewModel model, int farmId, bool isCropPlanData)
     {
         List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
@@ -3863,8 +3864,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         int decryptedFarmId = 0;
         int decryptedFieldId = 0;
         int decryptedHarvestYear = 0;
-        List<RecommendationHeader> recommendations = null;
-        List<Crop> crops = null;
+        List<RecommendationHeader>? recommendations = null;
         try
         {
             if (HttpContext.Session.Exists("OrganicDataBeforeUpdate"))
@@ -4293,6 +4293,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 year = s
             });
         }
+        
         return View(model);
     }
 
