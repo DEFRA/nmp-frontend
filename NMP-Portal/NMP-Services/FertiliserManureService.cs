@@ -88,10 +88,12 @@ public class FertiliserManureService : Service, IFertiliserManureService
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+            if (response.IsSuccessStatusCode && responseWrapper?.Data?.FertiliserManure is JToken fertiliserManures)
             {
-                List<FertiliserManure> fertiliser = responseWrapper.Data.FertiliserManure.ToObject<List<FertiliserManure>>();
-                if (fertiliser != null && fertiliser.Count > 0)
+                List<FertiliserManure> fertiliser = fertiliserManures.ToObject<List<FertiliserManure>>() ?? new List<FertiliserManure>();
+
+                if (fertiliser.Count > 0)
                 {
                     fertilisers.AddRange(fertiliser);
                 }
@@ -110,11 +112,13 @@ public class FertiliserManureService : Service, IFertiliserManureService
         }
         catch (HttpRequestException hre)
         {
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error ??= new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -149,15 +153,15 @@ public class FertiliserManureService : Service, IFertiliserManureService
             var response = await httpClient.SendAsync(requestMessage);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
             {
-                message = responseWrapper.Data["message"].Value;
+                message = data["message"]?.Value<string>() ?? string.Empty;
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                if (responseWrapper?.Error is JToken errorToken)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
+                    error = errorToken.ToObject<Error>() ?? new Error();
                     if (error != null)
                     {
                         _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
@@ -202,23 +206,24 @@ public class FertiliserManureService : Service, IFertiliserManureService
             var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateFertiliserAPI), new StringContent(fertliserData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+            if (response.IsSuccessStatusCode && responseWrapper?.Data?.FertiliserManure is JToken fertiliserManureToken)
             {
-                List<FertiliserManure> fertilisers = responseWrapper.Data.FertiliserManure.ToObject<List<FertiliserManure>>();
-                if (fertilisers != null && fertilisers.Count > 0)
+                List<FertiliserManure> fertilisers = fertiliserManureToken.ToObject<List<FertiliserManure>>()
+                    ?? new List<FertiliserManure>();
+                if (fertilisers.Count > 0)
                 {
                     fertiliser.AddRange(fertilisers);
                 }
             }
-            else
+            else if (responseWrapper?.Error is JToken errorToken)
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                error = errorToken.ToObject<Error>();
+
+                if (error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
+                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+
                 }
             }
         }
@@ -291,9 +296,9 @@ public class FertiliserManureService : Service, IFertiliserManureService
             }
             else
             {
-                if (responseWrapper?.Error != null)
+                if (responseWrapper?.Error is JToken errorToken)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
+                    error = errorToken.ToObject<Error>();
                     _logger.LogError("{Code} : {Message} : {Stack} : {Path}",
                         error?.Code, error?.Message, error?.Stack, error?.Path);
                 }

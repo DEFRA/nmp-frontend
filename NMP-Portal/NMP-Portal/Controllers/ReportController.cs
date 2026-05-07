@@ -675,7 +675,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
                                                 .Select(s => s.Trim())
                                                 .ToList();
-                                                cropData.DefoliationSequenceName = ShorthandDefoliationSequence(defoliationList);
+                                              
+                                                cropData.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
                                             }
                                         }
                                     }
@@ -1197,54 +1198,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return nMaxLimit;
     }
-    private static string ShorthandDefoliationSequence(List<string> data)
-    {
-        if (data == null || data.Count == 0)
-        {
-            return "";
-        }
-
-        Dictionary<string, int> defoliationSequence = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-
-        foreach (string item in data)
-        {
-            string name = item.Trim().ToLower();
-            if (defoliationSequence.ContainsKey(name))
-            {
-                defoliationSequence[name]++;
-            }
-            else
-            {
-                defoliationSequence[name] = 1;
-            }
-        }
-
-        List<string> result = new List<string>();
-
-        foreach (var entry in defoliationSequence)
-        {
-            string word = entry.Key;
-
-            if (entry.Value > 1)
-            {
-                if (word.EndsWith("s") || word.EndsWith("x") || word.EndsWith("z") ||
-                    word.EndsWith("sh") || word.EndsWith("ch"))
-                {
-                    word += "es";
-                }
-                else
-                {
-                    word += "s";
-                }
-            }
-
-
-            word = char.ToUpper(word[0]) + word.Substring(1);
-            result.Add($"{entry.Value} {word}");
-        }
-
-        return string.Join(", ", result);
-    }
+  
 
 
     [HttpGet]
@@ -1252,40 +1206,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         _logger.LogTrace("Report Controller : ReportOptions() action called");
         ReportViewModel? model = GetReportDataFromSession();
-        if (model == null)
-        {
-            _logger.LogTrace("Report Controller : ReportOptions() action : ReportViewModel is null in session");
-            return RedirectToAction("FarmList", "Farm");
-        }
+
         try
         {
-
-            if (string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
+            if (model == null && string.IsNullOrWhiteSpace(f) && string.IsNullOrWhiteSpace(h))
             {
                 return RedirectToAction("FarmList", "Farm");
             }
 
-            if (!string.IsNullOrWhiteSpace(f))
+            if (model == null)
             {
-                model.EncryptedFarmId = f;
-                model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
-                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                if (farm != null)
-                {
-                    model.FarmName = farm.Name;
-                    model.Country = farm.CountryID;
-                    model.FarmRB209CountryID = farm.RB209CountryID;
-                }
-            }
-            if (!string.IsNullOrWhiteSpace(h))
-            {
-                model.IsComingFromPlan = true;
-                model.EncryptedHarvestYear = h;
-                model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
-            }
-            else
-            {
-                model.IsComingFromPlan = false;
+                model = await GetFarmByEncryptedFarmId(f, h);
             }
 
             if (model.FarmId != null && model.Country == null)
@@ -1311,8 +1242,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnHarvestYearOverview"] = ex.Message;
             return RedirectToAction("HarvestYearOverview", new
             {
-                id = model.EncryptedFarmId,
-                year = model.EncryptedHarvestYear
+                id = model?.EncryptedFarmId,
+                year = model?.EncryptedHarvestYear
             });
         }
         return View(model);
@@ -4878,9 +4809,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             //calculation for N standard and P2O5 standard on default occupancy change
             (livestockTypes, error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-            var defaultOccupancy = (int)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
-            var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-            var defaultPhosphate = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+            var livestockType = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId);
+            var defaultOccupancy = livestockType?.Occupancy ?? 0;
+            var defaultNitrogenStandard = livestockType?.NByUnit;
+            var defaultPhosphate = livestockType?.P2O5;
             if (model.AverageOccupancy != defaultOccupancy)
             {
                 var nitrogenStandardFor100PercentOccupancy = (defaultNitrogenStandard / defaultOccupancy) * 100;
@@ -7188,6 +7120,33 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
+    private async Task<ReportViewModel> GetFarmByEncryptedFarmId(string? f, string? h)
+    {
+        ReportViewModel model = new ReportViewModel();
+        if (!string.IsNullOrWhiteSpace(f))
+        {
+            model.EncryptedFarmId = f;
+            model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId.ToString()));
+            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+            if (farm != null)
+            {
+                model.FarmName = farm.Name;
+                model.Country = farm.CountryID;
+                model.FarmRB209CountryID = farm.RB209CountryID;
+            }
+        }
+        if (!string.IsNullOrWhiteSpace(h))
+        {
+            model.IsComingFromPlan = true;
+            model.EncryptedHarvestYear = h;
+            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear.ToString()));
+        }
+        else
+        {
+            model.IsComingFromPlan = false;
+        }
+        return model;
+    }
     private void ValidateFarmAverageVales(ReportViewModel model)
     {
         if (model.FarmAverageYields != null)

@@ -34,13 +34,16 @@
 
             
             <h1 class="govuk-heading-l">@Resource.lblEnterTheAreaAndQuantity</h1>
-            <govuk-input for="@Model.Area" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for="@Model.Area" type="number" inputmode="decimal"
+                         pattern="^\d{1,10}(\.\d{1,2})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
             </govuk-input>
-            <govuk-input for=@Model.Quantity inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.Quantity type="number" inputmode="numeric"
+                         pattern="^\d{1,10}$" step="1"
+                         maxlength="10" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblQuantityApplied
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>

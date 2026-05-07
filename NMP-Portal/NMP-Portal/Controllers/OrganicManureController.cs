@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Identity.Client;
 using Microsoft.VisualBasic.FileIO;
@@ -55,7 +56,9 @@ namespace NMP.Portal.Controllers
         private const string _fieldErrorTempDataKey = "FieldError";
         private const string _applicationDateKey = "ApplicationDate";
         private const string _soilDrainageEndDateKey = "SoilDrainageEndDate";
-        private const string _totalRainfallKey = "TotalRainfall";
+        private const string _totalRainfallKey = "TotalRainfall"; 
+        private const string _areaKey = "Area";
+        private const string _quantityKey = "Quantity";
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
             if (HttpContext.Session.Exists(_organicManureSessionKey))
@@ -1241,7 +1244,7 @@ managementPeriod.CropID.HasValue
                 List<ManureType> manureTypeList = new List<ManureType>();
                 Error? error = null;
 
-                (manureTypeList, error) =await GetManureTypeList(model);
+                (manureTypeList, error) = await GetManureTypeList(model);
                 model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
                 bool isHighReadilyAvailableNitrogen = false;
                 if (error == null && manureTypeList.Count > 0)
@@ -1650,10 +1653,6 @@ managementPeriod.CropID.HasValue
 
                     HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
 
-                    if (model.IsDefaultNutrient.Value)
-                    {
-                        return RedirectToAction("ManureApplyingDate");
-                    }
 
                     return RedirectToAction("DefaultNutrientValues");
                 }
@@ -2720,8 +2719,8 @@ managementPeriod.CropID.HasValue
                 else
                 {
                     ResetWarnings(model);
-                    return RedirectToAction(_checkAnswer);
                 }
+                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 return RedirectToAction("IncorporationMethod");
             }
             catch (Exception ex)
@@ -2960,28 +2959,7 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace($"Organic Manure Controller : AreaQuantity() post action called");
             int farmId = 0;
             FarmResponse farm = new FarmResponse();
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("Area"))
-            {
-                var areaError = ModelState["Area"].Errors.Count > 0 ?
-                                ModelState["Area"].Errors[0].ErrorMessage.ToString() : null;
-
-                if (areaError != null && areaError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Area"].RawValue, Resource.lblAreas)))
-                {
-                    ModelState["Area"].Errors.Clear();
-                    ModelState["Area"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblArea));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("Quantity"))
-            {
-                var quantityError = ModelState["Quantity"].Errors.Count > 0 ?
-                                ModelState["Quantity"].Errors[0].ErrorMessage.ToString() : null;
-
-                if (quantityError != null && quantityError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["Quantity"].RawValue, Resource.lblQuantity)))
-                {
-                    ModelState["Quantity"].Errors.Clear();
-                    ModelState["Quantity"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
-                }
-            }
+           
             ValidateAreaQuantity(model);
             if (!ModelState.IsValid)
             {
@@ -9761,7 +9739,7 @@ managementPeriod.CropID.HasValue
         }
         private void AddErrorIfNull(object? value, string key, string errorMessage)
         {
-            if (value == null)
+            if (value is null || (value is string str && string.IsNullOrWhiteSpace(str)))
             {
                 ModelState.AddModelError(key, errorMessage);
             }
@@ -9777,40 +9755,152 @@ managementPeriod.CropID.HasValue
             if (model.ApplicationRate > 250)
                 ModelState.AddModelError("ApplicationRate", Resource.MsgForApplicationRate);
         }
+
+
         private void ValidateAreaQuantity(OrganicManureViewModel model)
         {
+            ValidateRequired(model);
 
+            ValidateArea(model);
+            ValidateQuantity();
+
+            ValidateAreaRules(model);
+            ValidateQuantityRules(model);
+
+            CalculateApplicationRate(model);
+        }
+
+      
+        private void ValidateRequired(OrganicManureViewModel model)
+        {
             if (model.Area == null)
-            {
-                ModelState.AddModelError("Area", Resource.MsgEnterAValidArea);
-            }
+                ModelState.AddModelError(_areaKey, Resource.MsgEnterAValidArea);
+
             if (model.Quantity == null)
+                ModelState.AddModelError(_quantityKey, Resource.MsgEnterAValidQuantity);
+        }
+
+      
+        private void ValidateArea(OrganicManureViewModel model)
+        {
+            if (!ModelState.TryGetValue(_areaKey, out var state))
+                return;
+
+            var rawValue = state.RawValue?.ToString();
+            var firstError = state.Errors.FirstOrDefault()?.ErrorMessage;
+
+            if (string.IsNullOrEmpty(rawValue))
+                return;
+
+            // Max 10 digits (integer part)
+            if (rawValue.Split('.')[0].Length > 10)
             {
-                ModelState.AddModelError("Quantity", Resource.MsgEnterAValidQuantity);
-            }
-            if (model.Area != null && model.Area == 0)
-            {
-                ModelState.AddModelError("Area", Resource.MsgAreaMustBeGreaterThanZero);
-            }
-            if (model.Area != null && model.Area < 0)
-            {
-                ModelState.AddModelError("Area", Resource.MsgEnterANumberWhichIsGreaterThanZero);
-            }
-            if (model.Quantity != null && model.Quantity < 0)
-            {
-                ModelState.AddModelError("Quantity", Resource.MsgEnterANumberWhichIsGreaterThanZero);
+
+                ModelState.AddModelError(_areaKey, 
+                    string.Format(Resource.lblValueMustNotExeedXDigit, Resource.lblArea, 10));
+                return;
             }
 
-            if (model.Quantity != null && model.Area != null && model.Area > 0 && model.Quantity > 0)
+            // Max 2 decimal places
+            if (model.Area.HasValue && Math.Round(model.Area.Value, 2) != model.Area.Value)
+            {
+                ModelState.AddModelError(_areaKey,
+                     string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblArea.ToLower()));
+                return;
+            }
+
+            ReplaceNumericError(state, firstError, rawValue, Resource.lblAreas, Resource.lblArea);
+        }
+
+       
+        private void ValidateQuantity()
+        {
+            if (!ModelState.TryGetValue(_quantityKey, out var state))
+                return;
+
+            var rawValue = state.RawValue?.ToString();
+            var firstError = state.Errors.FirstOrDefault()?.ErrorMessage;
+
+            if (string.IsNullOrEmpty(rawValue))
+                return;
+
+            // No decimal allowed
+            if (rawValue.Contains("."))
+            {
+                ModelState.AddModelError(_quantityKey,
+                    string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
+                return;
+            }
+
+            // Max 10 digits
+            if (rawValue.Length > 10)
+            {
+                ModelState.AddModelError(_quantityKey,
+                 string.Format(Resource.lblValueMustNotExeedXDigit, Resource.lblQuantity, 10));
+                return;
+            }
+
+            ReplaceNumericError(state, firstError, rawValue, Resource.lblQuantity, Resource.MsgQuantity);
+        }
+
+      
+        private void ValidateAreaRules(OrganicManureViewModel model)
+        {
+            if (!model.Area.HasValue)
+                return;
+
+            if (model.Area == 0)
+                ModelState.AddModelError(_areaKey, Resource.MsgAreaMustBeGreaterThanZero);
+
+            if (model.Area < 0)
+                ModelState.AddModelError(_areaKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+        }
+
+        
+        private void ValidateQuantityRules(OrganicManureViewModel model)
+        {
+            if (!model.Quantity.HasValue)
+                return;
+
+            if (model.Quantity < 0)
+                ModelState.AddModelError(_quantityKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+        }
+
+        
+        private void CalculateApplicationRate(OrganicManureViewModel model)
+        {
+            if (model.Area > 0 && model.Quantity > 0)
             {
                 model.ApplicationRate = model.Quantity.Value / model.Area.Value;
 
-                if (model.ApplicationRate != null && model.ApplicationRate > 250)
+                if (model.ApplicationRate > 250)
                 {
-                    ModelState.AddModelError("Quantity", Resource.MsgForApplicationRate);
+                    ModelState.AddModelError(_quantityKey, Resource.MsgForApplicationRate);
                 }
             }
+        }
 
+        
+        private static void ReplaceError(ModelStateEntry state, string message)
+        {
+            state.Errors.Clear();
+            state.Errors.Add(message);
+        }
+
+        private static void ReplaceNumericError(
+            ModelStateEntry state,
+            string firstError,
+            string rawValue,
+            string pluralLabel,
+            string singularLabel)
+        {
+            var expectedError = string.Format(Resource.lblEnterNumericValue, rawValue, pluralLabel);
+
+            if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
+            {
+                ReplaceError(state,
+                    string.Format(Resource.MsgEnterDataOnlyInNumber, singularLabel));
+            }
         }
         private async Task<(List<ManureType>, Error?)> GetManureTypeList(OrganicManureViewModel? model)
         {

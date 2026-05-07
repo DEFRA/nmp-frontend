@@ -179,9 +179,13 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         var response = await httpClient.GetAsync(url);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (response.IsSuccessStatusCode &&  responseWrapper?.Data?.avarageAnnualRainfall != null)
         {
-            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall != null ? responseWrapper.Data.avarageAnnualRainfall.value : 0;
+            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall.value;
+        }
+        else
+        {
+            rainfallAverage = 0;
         }
 
         return rainfallAverage;
@@ -235,15 +239,15 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        
+        if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
         {
-            message = responseWrapper.Data["message"].Value;
+            message = data["message"]?.Value<string>() ?? string.Empty;
         }
         else
         {
             error = _logger.ExtractError(responseWrapper, error);
         }
-
         return (message, error);
     }
     public async Task<(List<Country>, Error)> FetchCountryAsync()
@@ -281,15 +285,15 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+        if (response.IsSuccessStatusCode && responseWrapper?.Data?.ExcessRainfall is JToken excessRainfall)
         {
-            excessRainfalls = responseWrapper.Data.ExcessRainfall.ToObject<ExcessRainfalls>();
+            excessRainfalls = excessRainfall.ToObject<ExcessRainfalls>() ?? new ExcessRainfalls();
         }
         else
         {
             error = _logger.ExtractError(responseWrapper, error);
         }
-
         return (excessRainfalls, error);
     }
     public async Task<(List<CommonResponse>, Error)> FetchExcessWinterRainfallOptionAsync()
@@ -302,10 +306,9 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (response.IsSuccessStatusCode && responseWrapper?.Data?.ExcessWinterRainFallOptions is JToken excessWinterRainFallOptions)
         {
-            excessWinterRainfallOption = responseWrapper.Data.ExcessWinterRainFallOptions.ToObject<List<CommonResponse>>();
-
+            excessWinterRainfallOption = excessWinterRainFallOptions.ToObject<List<CommonResponse>>() ?? new List<CommonResponse>();
         }
         else
         {

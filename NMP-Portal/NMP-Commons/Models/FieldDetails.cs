@@ -12,4 +12,5 @@ public class FieldDetails
     public string? PreviousCrop { get; set; }
     public string? SoilType { get; set; }
     public int? NitrogenResidueGroup { get; set; }
+    public int? CropOrder { get; set; }
 }

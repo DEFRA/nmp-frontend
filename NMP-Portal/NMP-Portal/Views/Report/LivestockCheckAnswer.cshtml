@@ -176,6 +176,12 @@
                                         {
                                             <govuk-summary-list-row-value>
                                                 <table class="nutrient_values">
+                                                <thead class="govuk-visually-hidden">
+                                                    <tr>
+                                                        <th scope="col">@Resource.lblField</th>
+                                                        <th scope="col">@Resource.lblValue</th>
+                                                    </tr>
+                                                </thead>
                                                     <tbody>
                                                         <tr><td>@Resource.lblJanuary:</td>   <td>@(string.Format("{0:N0} {1}", (Model.NumbersInJanuary ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
                                                         <tr><td>@Resource.lblFebruary:</td>  <td>@(string.Format("{0:N0} {1}", (Model.NumbersInFebruary ?? 0), ViewBag.LivestockCategory?.ToLower()))</td></tr>
