@@ -399,11 +399,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.CropTypeLinking != null)
                 {
-                    CropTypeLinkingResponse cropTypeLinkingResponse = responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                    CropTypeLinkingResponse cropTypeLinkingResponse =
+                        responseWrapper.Data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
 
-                    defaultYield = isScotland ? cropTypeLinkingResponse.DefaultYieldScotland : cropTypeLinkingResponse.DefaultYield;
+                    defaultYield = isScotland
+                        ? cropTypeLinkingResponse.DefaultYieldScotland
+                        : cropTypeLinkingResponse.DefaultYield;
                 }
             }
             else
@@ -1006,9 +1009,10 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if ((response.IsSuccessStatusCode && responseWrapper != null) || responseWrapper.Data != null)
+            var data = responseWrapper?.Data;
+            if (data != null)
             {
-                swardManagementResponse = responseWrapper?.Data?.ToObject<SwardManagementResponse>();
+                swardManagementResponse = data.ToObject<SwardManagementResponse>();
             }
             else
             {
