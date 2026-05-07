@@ -6365,7 +6365,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
         List<int> grassGrowthClassIds = new List<int>();
-        ; if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             TempData["GrassGrowthClassError"] = error.Message;
             return (flowControl: false, value: RedirectToAction("DefoliationSequence"), grassGrowthClassIds, grassGrowthClasses);
@@ -6508,7 +6508,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _logger.LogTrace("Crop Controller : DryMatterYield() post action called");
 
         Error? error = null;
-        List<int> fieldIds = await ValidateDryMatterYield(model, error);
+        List<int> fieldIds = await ValidateDryMatterYield(model);
 
         if (!ModelState.IsValid)
         {
@@ -6525,7 +6525,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         model.GrassGrowthClassCounter = 0;
         if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
         {
-            (bool flowControl, IActionResult? value) = await RedirectForDryMatterIfDifferentFigure(model, error, grassGrowthClasses);
+            (bool flowControl, IActionResult? value) = await RedirectForDryMatterIfDifferentFigure(model, grassGrowthClasses);
             if (!flowControl && value != null)
             {
                 return value;
@@ -6565,7 +6565,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return RedirectToAction(_checkAnswerActionName);
     }
 
-    private async Task<(bool flowControl, IActionResult? value)> RedirectForDryMatterIfDifferentFigure(PlanViewModel model, Error error, List<GrassGrowthClassResponse> grassGrowthClasses)
+    private async Task<(bool flowControl, IActionResult? value)> RedirectForDryMatterIfDifferentFigure(PlanViewModel model,  List<GrassGrowthClassResponse> grassGrowthClasses)
     {
         for (int i = 0; i < model.Crops.Count; i++)
         {
@@ -6605,7 +6605,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     }
 
-    private async Task<List<int>> ValidateDryMatterYield(PlanViewModel model, Error? error)
+    private async Task<List<int>> ValidateDryMatterYield(PlanViewModel model)
     {
         List<int> fieldIds = new List<int>();
         if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
@@ -6791,7 +6791,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             SetCropToSession(model);
             bool isPreviousYearPlanExist = false;
 
-            isPreviousYearPlanExist = model.HarvestYear.Any(x => x.Year < model.Year && x.IsAnyPlan == true);
+            isPreviousYearPlanExist = model.HarvestYear.Any(x => x.Year < model.Year && x.IsAnyPlan);
 
             if (isPreviousYearPlanExist)
             {
