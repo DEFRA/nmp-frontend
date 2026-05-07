@@ -3856,7 +3856,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns, string? v)//q=farmId,r=fieldId,s=harvestYear
+    public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns)//q=farmId,r=fieldId,s=harvestYear
     {
         _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q, r, s);
         RecommendationViewModel model = new RecommendationViewModel();
@@ -3865,12 +3865,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         int decryptedFieldId = 0;
         int decryptedHarvestYear = 0;
         List<RecommendationHeader>? recommendations = null;
-        //string q, 
-        int cropOrder = 1;
-        if (!string.IsNullOrWhiteSpace(v))
-        {
-            cropOrder = Convert.ToInt32(_cropDataProtector.Unprotect(v));
-        }
         try
         {
             if (HttpContext.Session.Exists("OrganicDataBeforeUpdate"))
@@ -4299,7 +4293,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 year = s
             });
         }
-        //Response.Redirect(cropOrder == 1 ? "#crop-1" : "#crop-2");
+        
         return View(model);
     }
 
