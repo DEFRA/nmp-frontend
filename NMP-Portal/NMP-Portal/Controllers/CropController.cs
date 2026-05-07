@@ -3334,7 +3334,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                         FieldName = plan.FieldName,
                                         PlantingDate = plan.PlantingDate,
                                         Yield = plan.Yield,
-                                        Variety = plan.CropVariety
+                                        Variety = plan.CropVariety,
+                                        CropOrder = plan.CropOrder
                                     };
 
                                     if (plan.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(plan.Management))
@@ -3748,7 +3749,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return model;
     }
 
-    
+
     private async Task<(PlanViewModel, List<PlanSummaryResponse>)> FetchPlanAndCropYourPlanData(string? year, PlanViewModel model, int farmId, bool isCropPlanData)
     {
         List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(farmId, 0);
@@ -3855,7 +3856,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns)//q=farmId,r=fieldId,s=harvestYear
+    public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns, string? v)//q=farmId,r=fieldId,s=harvestYear
     {
         _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q, r, s);
         RecommendationViewModel model = new RecommendationViewModel();
@@ -3863,8 +3864,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         int decryptedFarmId = 0;
         int decryptedFieldId = 0;
         int decryptedHarvestYear = 0;
-        List<RecommendationHeader> recommendations = null;
-        List<Crop> crops = null;
+        List<RecommendationHeader>? recommendations = null;
+        //string q, 
+        int cropOrder = 1;
+        if (!string.IsNullOrWhiteSpace(v))
+        {
+            cropOrder = Convert.ToInt32(_cropDataProtector.Unprotect(v));
+        }
         try
         {
             if (HttpContext.Session.Exists("OrganicDataBeforeUpdate"))
@@ -4293,6 +4299,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 year = s
             });
         }
+        //Response.Redirect(cropOrder == 1 ? "#crop-1" : "#crop-2");
         return View(model);
     }
 
