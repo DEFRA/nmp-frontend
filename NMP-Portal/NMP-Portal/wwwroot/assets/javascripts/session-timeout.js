@@ -53,7 +53,7 @@
     function resetTimers() {
         clearTimeout(warningTimer);
         clearTimeout(expiryTimer);
-        const last = parseInt(localStorage.getItem(STORAGE_KEY) || Date.now());
+        const last = Number.parseInt(localStorage.getItem(STORAGE_KEY) || Date.now());
         const since = Date.now() - last;
         const warnDelay = Math.max(0, SESSION_LENGTH - WARNING_TIME - since);
         const expireDelay = Math.max(0, SESSION_LENGTH - since);

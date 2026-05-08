@@ -28,12 +28,11 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilAnalysisByIdAsyncAPI, HttpUtility.UrlEncode(id.ToString())));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (response.IsSuccessStatusCode)
         {
-            JObject? soilanalysisObject = responseWrapper?.Data["SoilAnalysis"] as JObject;
-            if (soilanalysisObject != null)
+            if(responseWrapper?.Data?["SoilAnalysis"] is JObject soilanalysisObject)
             {
-                soilAnalysis = soilanalysisObject?.ToObject<SoilAnalysis>();
+                soilAnalysis = soilanalysisObject.ToObject<SoilAnalysis>() ?? new SoilAnalysis();
             }
         }
         else
@@ -53,11 +52,11 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
             var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateSoilAnalysisAsyncAPI, id), new StringContent(soilData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper?.Data["SoilAnalysis"] is JObject soilAnalysisJObject)
+                if(responseWrapper?.Data?["SoilAnalysis"] is JObject soilAnalysisJObject)
                 {
-                    soilAnalysis = soilAnalysisJObject.ToObject<SoilAnalysis>();
+                    soilAnalysis = soilAnalysisJObject.ToObject<SoilAnalysis>() ?? new SoilAnalysis();
                 }
             }
             else
@@ -87,15 +86,12 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
             var response = await httpClient.PostAsync(ApiurlHelper.AddSoilAnalysisAsyncAPI, new StringContent(soilAnalysisData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode)
             {
-
-                JObject soilAnalysisJObject = responseWrapper?.Data["soilAnalysis"] as JObject;
-                if (soilAnalysisJObject != null)
+                if(responseWrapper?.Data?["soilAnalysis"] is JObject soilAnalysisJObject)
                 {
-                    soilAnalysis = soilAnalysisJObject.ToObject<SoilAnalysis>();
+                    soilAnalysis = soilAnalysisJObject.ToObject<SoilAnalysis>() ?? new SoilAnalysis();
                 }
-
             }
             else
             {
@@ -123,9 +119,12 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
             var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteSoilAnalysisByIdAPI, soilAnalysisId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode)
             {
-                message = responseWrapper.Data["message"].Value;
+                if(responseWrapper?.Data is JObject data)
+                {
+                    message = data["message"]?.Value<string>() ?? string.Empty;
+                }
             }
             else
             {

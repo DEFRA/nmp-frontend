@@ -9,10 +9,11 @@ using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
+using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService),IStorageCapacityService
+public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IStorageCapacityService
 {
     private readonly ILogger<StorageCapacityService> _logger = logger;
 
@@ -37,26 +38,16 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper?.Error?.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (storageTypeList, error);
     }
@@ -68,49 +59,37 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         {
             HttpClient httpClient = await GetNMPAPIClient();
             string url = string.Empty;
-           
-                url = string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId);
+
+            url = string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId);
             var response = await httpClient.GetAsync(url);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var storeCapacity = responseWrapper.Data.ToObject<List<StoreCapacityResponse>>();
-                    if (storeCapacity != null)
-                    {
-                        storeCapacityList = storeCapacity;
-                    }
+                    storeCapacityList = data.ToObject<List<StoreCapacityResponse>>() ?? new List<StoreCapacityResponse>();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (storeCapacityList, error);
     }
     public async Task<(List<CommonResponse>, Error)> FetchMaterialStates()
     {
         List<CommonResponse> materialStatesList = new List<CommonResponse>();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -119,41 +98,31 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken records)
                 {
-                    var materialStates = responseWrapper.Data.records.ToObject<List<CommonResponse>>();
+                    var materialStates = records.ToObject<List<CommonResponse>>() ?? new List<CommonResponse>();
                     materialStatesList.AddRange(materialStates);
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (materialStatesList, error);
     }
     public async Task<(CommonResponse, Error)> FetchMaterialStateById(int id)
     {
-       CommonResponse materialState = new CommonResponse();
-        Error error = null;
+        CommonResponse materialState = new CommonResponse();
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -162,40 +131,30 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken records)
                 {
-                    materialState = responseWrapper.Data.records.ToObject<CommonResponse>();                    
+                    materialState = records.ToObject<CommonResponse>() ?? new CommonResponse();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (materialState, error);
     }
     public async Task<(StorageTypeResponse, Error)> FetchStorageTypeById(int id)
     {
         StorageTypeResponse storageType = new StorageTypeResponse();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -204,40 +163,30 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken records)
                 {
-                    storageType = responseWrapper.Data.records.ToObject<StorageTypeResponse>();
+                    storageType = records.ToObject<StorageTypeResponse>() ?? new StorageTypeResponse();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (storageType, error);
     }
     public async Task<(List<SolidManureTypeResponse>, Error)> FetchSolidManureType()
     {
         List<SolidManureTypeResponse> solidManureTypeList = new List<SolidManureTypeResponse>();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -246,40 +195,30 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken records)
                 {
-                    solidManureTypeList = responseWrapper.Data.records.ToObject<List<SolidManureTypeResponse>>();
+                    solidManureTypeList = records.ToObject<List<SolidManureTypeResponse>>() ?? new List<SolidManureTypeResponse>();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (solidManureTypeList, error);
     }
     public async Task<(SolidManureTypeResponse, Error)> FetchSolidManureTypeById(int id)
     {
         SolidManureTypeResponse solidManureType = new SolidManureTypeResponse();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -288,33 +227,23 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken records)
                 {
-                    solidManureType = responseWrapper.Data.records.ToObject<SolidManureTypeResponse>();
+                    solidManureType = records.ToObject<SolidManureTypeResponse>() ?? new SolidManureTypeResponse();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (solidManureType, error);
     }
@@ -322,7 +251,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(List<BankSlopeAnglesResponse>, Error)> FetchBankSlopeAngles()
     {
         List<BankSlopeAnglesResponse> bankSlopeAngleList = new List<BankSlopeAnglesResponse>();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -331,33 +260,23 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken records)
                 {
-                    bankSlopeAngleList = responseWrapper.Data.records.ToObject<List<BankSlopeAnglesResponse>>();
+                    bankSlopeAngleList = records.ToObject<List<BankSlopeAnglesResponse>>() ?? new List<BankSlopeAnglesResponse>();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (bankSlopeAngleList, error);
     }
@@ -365,7 +284,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(BankSlopeAnglesResponse, Error)> FetchBankSlopeAngleById(int id)
     {
         BankSlopeAnglesResponse bankSlopeAngle = new BankSlopeAnglesResponse();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -374,33 +293,23 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken records)
                 {
-                    bankSlopeAngle = responseWrapper.Data.records.ToObject<BankSlopeAnglesResponse>();
+                    bankSlopeAngle = records.ToObject<BankSlopeAnglesResponse>() ?? new BankSlopeAnglesResponse();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (bankSlopeAngle, error);
     }
@@ -417,37 +326,25 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             var response = await httpClient.PostAsync(ApiurlHelper.AddStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode)
             {
-
-                JObject storeCapacityJObject = responseWrapper.Data as JObject;
-                if (storeCapacityJObject != null)
+                if(responseWrapper?.Data is JObject storeCapacityJObject)
                 {
-                    storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>();
+                    storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>() ?? new StoreCapacity();
                 }
-
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error)?? new Error();
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (storeCapacity, error);
     }
@@ -455,43 +352,33 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, string storeName, int? ID)
     {
         bool isExist = false;
-        Error error = null;
+        Error? error = null;
 
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId,storeName,ID??0));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId, storeName, ID ?? 0));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JObject data)
                 {
-                    isExist = responseWrapper.Data.exists.ToObject<bool>();
+                    isExist = data["exists"]?.Value<bool>() ?? false;
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (isExist, error);
     }
@@ -515,33 +402,22 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (storeCapacity, error);
     }
 
     public async Task<(List<StoreCapacityResponse>, Error)> CopyExistingStorageCapacity(string copyStorageManureCapacityData)
     {
-        //StoreCapacity storeCapacity = null;
         List<StoreCapacityResponse> storeCapacities = new List<StoreCapacityResponse>();
         Error error = new Error();
         try
@@ -551,31 +427,25 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             var response = await httpClient.PostAsync(ApiurlHelper.CopyStoreManureCapacityAsyncAPI, new StringContent(copyStorageManureCapacityData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode)
             {
-                storeCapacities = responseWrapper.Data.ToObject<List<StoreCapacityResponse>>();
+                if(responseWrapper?.Data is JToken data)
+                {
+                    storeCapacities = data.ToObject<List<StoreCapacityResponse>>() ?? new List<StoreCapacityResponse>();
+                }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (storeCapacities, error);
     }
@@ -590,30 +460,25 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteStorageCapacityByIdAPI, id));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode)
             {
-                message = responseWrapper.Data["message"].Value;
+                if(responseWrapper?.Data is JObject data)
+                {
+                    message = data["message"]?.Value<string>() ?? string.Empty;
+                }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
 
         return (message, error);
@@ -631,37 +496,25 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             var response = await httpClient.PutAsync(ApiurlHelper.UpdateStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode)
             {
-
-                JObject storeCapacityJObject = responseWrapper.Data as JObject;
-                if (storeCapacityJObject != null)
+                if(responseWrapper?.Data is JObject storeCapacityJObject)
                 {
-                    storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>();
+                    storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>() ?? new StoreCapacity();
                 }
-
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            error = _logger.HandleException(ex, error);
         }
         return (storeCapacity, error);
     }
