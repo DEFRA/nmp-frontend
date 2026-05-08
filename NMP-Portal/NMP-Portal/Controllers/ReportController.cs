@@ -498,7 +498,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private async Task<List<HarvestYearPlanResponse>> AddOrRemoveCropTypeItemsForEngAndWales(int countryID, List<HarvestYearPlanResponse> cropTypeList, Error? error)
     {
         (List<CropTypeLinkingResponse> cropTypeLinking, error) = await _cropLogic.FetchCropTypeLinking();
-        if (error == null && cropTypeLinking != null && cropTypeLinking.Count > 0)
+        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && cropTypeLinking != null && cropTypeLinking.Count > 0)
         {
             if (countryID == (int)NMP.Commons.Enums.FarmCountry.England)
             {
@@ -547,7 +547,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
         (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
-        if (error == null && nutrients.Count > 0)
+        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && nutrients.Count > 0)
         {
             model.Nutrients = new List<NutrientResponseWrapper>();
             model.Nutrients = nutrients;
@@ -2257,7 +2257,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 model.ManureGroupIdForFilter = manureGroup;
                 model.ManureGroupId = manureGroup;
                 (List<ManureType> ManureTypes, error) = await _mannerLogic.FetchManureTypeList(manureGroup, farm.CountryID.Value);
-                if (error == null && ManureTypes != null && ManureTypes.Count > 0)
+                if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && ManureTypes != null && ManureTypes.Count > 0)
                 {
                     var SelectListItem = ManureTypes.Select(f => new SelectListItem
                     {
@@ -2331,7 +2331,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
                     : model.ManureGroupIdForFilter.Value;
                     (List<ManureType> ManureTypes, error) = await _mannerLogic.FetchManureTypeList(manureGroup, farm.CountryID.Value);
-                    if (error == null && ManureTypes != null && ManureTypes.Count > 0)
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && ManureTypes != null && ManureTypes.Count > 0)
                     {
                         var SelectListItem = ManureTypes.Select(f => new SelectListItem
                         {
@@ -2345,7 +2345,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
 
             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-            if (error == null && manureType != null)
+            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null)
             {
                 model.IsManureTypeLiquid = manureType.IsLiquid.Value;
                 model.ManureTypeName = manureType.Name;
@@ -2378,7 +2378,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
 
             (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
-            if (error == null && farmManureTypeList.Count > 0)
+            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureTypeList.Count > 0)
             {
                 FarmManureTypeResponse? previousFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == reportViewModel?.ManureTypeId);
                 FarmManureTypeResponse? currentFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
@@ -2702,7 +2702,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
 
-                    if (error == null && manureType != null && farmManureTypeList.Count > 0)
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null && farmManureTypeList.Count > 0)
                     {
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
 
@@ -2831,7 +2831,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             else
             {
                 (ManureType manureType, Error manureTypeError) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                if (error == null && farmManureTypeList.Count > 0)
+                if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureTypeList.Count > 0)
                 {
                     farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
                     if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue) || (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYes))
@@ -2958,7 +2958,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 else
                 {
                     (ManureType manureType, Error? error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                    if (error == null && manureType != null)
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null)
                     {
                         model.ManureType = manureType;
                     }
@@ -3013,7 +3013,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 else
                 {
                     (ManureType? manureType, Error? error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                    if (error == null && manureType != null)
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null)
                     {
                         model.ManureType = manureType;
                     }
@@ -3507,7 +3507,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         model.Postcode = nutrientsLoadingManure.PostCode;
                         model.Comment = nutrientsLoadingManure.Comments;
                         (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                        if (error == null && manureType != null)
+                        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null)
                         {
                             model.IsManureTypeLiquid = manureType.IsLiquid;
                             model.ManureGroupId = manureType.ManureGroupId;
@@ -3537,7 +3537,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         model.ManureType.DryMatter = nutrientsLoadingManure.DryMatterPercent;
                         model.ManureType.Uric = nutrientsLoadingManure.UricAcid;
                         (List<FarmManureTypeResponse> farmManureTypeResponse, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId.Value);
-                        if (error == null && farmManureTypeResponse != null && farmManureTypeResponse.Count > 0)
+                        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureTypeResponse != null && farmManureTypeResponse.Count > 0)
                         {
                             FarmManureTypeResponse farmManureType = farmManureTypeResponse.Where(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName).FirstOrDefault();
                             if (farmManureType != null)
@@ -3661,7 +3661,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         if (model.IsDefaultNutrient == null && model.ManureTypeId != null)
         {
             (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId.Value);
-            if (error == null && farmManureTypeList.Count > 0)
+            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureTypeList.Count > 0)
             {
                 farmManureTypeList = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId).ToList();
                 if (farmManureTypeList.Count > 0)
@@ -3836,7 +3836,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             if (string.IsNullOrWhiteSpace(error?.Message) && farmData != null)
                             {
                                 (List<ManureType> ManureTypes, error) = await _mannerLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.LivestockManure, farmData.CountryID.Value);
-                                if (error == null && ManureTypes != null && ManureTypes.Count > 0)
+                                if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && ManureTypes != null && ManureTypes.Count > 0)
                                 {
                                     var allImportData = nutrientsLoadingManuresList
                                    .Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper())
@@ -4033,7 +4033,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
             ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
             (List<CommonResponse> livestockGroups, error) = await _reportLogic.FetchLivestockGroupList();
-            if (error == null)
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.LivestockGroups = livestockGroups;
             }
@@ -4078,7 +4078,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return View(model);
             }
             (CommonResponse livestockGroup, error) = await _reportLogic.FetchLivestockGroupById(model.LivestockGroupId ?? 0);
-            if (error == null)
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 model.LivestockGroupName = livestockGroup.Name;
             }
@@ -4127,7 +4127,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         try
         {
             (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-            if (error == null)
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 ViewBag.LivestockTypes = livestockTypes;
             }
@@ -4164,7 +4164,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (!ModelState.IsValid)
             {
-                if (error == null)
+                if (error == null || string.IsNullOrWhiteSpace(error.Message))
                 {
                     ViewBag.LivestockTypes = livestockTypes;
                 }
@@ -4996,7 +4996,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
 
                 (CommonResponse livestockGroup, error) = await _reportLogic.FetchLivestockGroupById(model.LivestockGroupId ?? 0);
-                if (error == null)
+                if (error == null || string.IsNullOrWhiteSpace(error.Message))
                 {
                     model.LivestockGroupName = livestockGroup.Name;
                 }
@@ -5923,7 +5923,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             model.ManureTypeId = model.ManureGroupIdForFilter;
                             model.ManureTypeName = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter)?.ManureTypeName;
                             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureGroupIdForFilter.Value);
-                            if (error == null && manureType != null)
+                            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null)
                             {
                                 model.IsManureTypeLiquid = manureType.IsLiquid;
                             }
@@ -6242,7 +6242,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             nutrientsLoadingManureList = nutrientsLoadingManureList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
             (List<ManureType> selectedManureTypes, error) = await _mannerLogic.FetchManureTypeList((int)NMP.Commons.Enums.ManureGroup.LivestockManure, model.Farm.CountryID.Value);
-            if (error == null && selectedManureTypes != null && selectedManureTypes.Count > 0)
+            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && selectedManureTypes != null && selectedManureTypes.Count > 0)
             {
                 if (nutrientsLoadingManureList.Count > 0)
                 {
@@ -6431,7 +6431,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         List<int> grazingLivestockList = new List<int>();
         List<int> nonGrazingLivestockList = new List<int>();
         (List<LivestockTypeResponse> livestockList, error) = await _reportLogic.FetchLivestockTypes();
-        if (error == null && livestockList.Count > 0)
+        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && livestockList.Count > 0)
         {
             //if farm is Non derogated then need to set VealCalf is grazing 
             if (nutrientsLoadingFarmDetail.Derogation != null && (!nutrientsLoadingFarmDetail.Derogation.Value))
