@@ -1,8 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
+using NMP.Commons.Enums;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
+using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System;
@@ -15,13 +22,17 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISnsAnalysisService snsAnalysisService, IRecommendationService recommendationService, IPreviousCroppingLogic previousCroppingLogic) : ICropLogic
+public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, ISnsAnalysisService snsAnalysisService, IRecommendationService recommendationService, IPreviousCroppingLogic previousCroppingLogic) : ICropLogic
 {
     private readonly ILogger<CropLogic> _logger = logger;
     private readonly ICropService _cropService = cropService;
     private readonly ISnsAnalysisService _snsAnalysisService = snsAnalysisService;
     private readonly IRecommendationService _recommendationService = recommendationService;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
+    private readonly IFieldLogic _fieldLogic = fieldLogic;
+    private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+    private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
+    private readonly IDataProtector _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
     public async Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
     {
         _logger.LogTrace("Adding crop nutrient management plan");
@@ -262,5 +273,309 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
     {
         _logger.LogTrace("CropLogic : Fetch PreviousCropping By FieldId:{0} and Year:{1} called", fieldId, year);
         return await _previousCroppingLogic.FetchDataByFieldId(fieldId, year);
+    }
+
+
+
+    public async Task<(RecommendationViewModel, string)> BindDataForRecommendation(string q, string? s, RecommendationViewModel model, Error? error, List<RecommendationHeader> recommendations, string firstCropName)
+    {
+        CreateNewObject(model);
+
+        int cropCounter = 0;
+
+        firstCropName = recommendations.FirstOrDefault()?.Crops?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendations.FirstOrDefault().Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendations.FirstOrDefault().Crops.CropTypeID.Value);
+        foreach (var recommendation in recommendations)
+        {
+            //check sns already exist or not in SnsAnalyses table by cropID
+            SnsAnalysis snsData = await FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID ?? 0);
+            var crop = new CropViewModel
+            {
+                ID = recommendation.Crops.ID,
+                EncryptedCropId = _cropDataProtector.Protect(recommendation.Crops.ID.ToString()),
+                Year = recommendation.Crops.Year,
+                CropTypeID = recommendation.Crops.CropTypeID,
+                FieldID = recommendation.Crops.FieldID,
+                EncryptedFieldId = _fieldDataProtector.Protect(recommendation.Crops.FieldID.ToString()),
+                Variety = recommendation.Crops.Variety,
+                CropInfo1 = recommendation.Crops.CropInfo1,
+                CropInfo2 = recommendation.Crops.CropInfo2,
+                Yield = recommendation.Crops.Yield,
+                SowingDate = recommendation.Crops.SowingDate,
+                OtherCropName = recommendation.Crops.OtherCropName,
+                CropTypeName = recommendation.Crops.CropTypeID == 140 ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendation.Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
+                IsSnsExist = snsData.CropID > 0,
+                SnsAnalysisData = snsData,
+                SwardManagementName = recommendation.Crops.SwardManagementName,
+                EstablishmentName = recommendation.Crops.EstablishmentName,
+                SwardTypeName = recommendation.Crops.SwardTypeName,
+                DefoliationSequenceName = recommendation.Crops.DefoliationSequenceName,
+                CropGroupName = recommendation.Crops.CropGroupName,
+                SwardManagementID = recommendation.Crops.SwardManagementID,
+                Establishment = recommendation.Crops.Establishment,
+                SwardTypeID = recommendation.Crops.SwardTypeID,
+                DefoliationSequenceID = recommendation.Crops.DefoliationSequenceID,
+                PotentialCut = recommendation.Crops.PotentialCut
+            };
+            cropCounter++;
+            if (recommendation.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
+            {
+                List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .ToList();
+
+                //pooja
+                //crop.DefoliationSequenceName = Commonh.ShorthandDefoliationSequence(defoliationList);
+            }
+
+            if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
+            {
+                crop.EncryptedCropTypeName = _cropDataProtector.Protect(crop.CropTypeName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(crop.CropGroupName))
+            {
+                crop.EncryptedCropGroupName = _cropDataProtector.Protect(crop.CropGroupName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(recommendation.Crops.CropOrder.ToString()))
+            {
+                crop.EncryptedCropOrder = _cropDataProtector.Protect(recommendation.Crops.CropOrder.ToString());
+            }
+
+            if (recommendation.Crops.CropInfo1 != null)
+            {
+                crop.CropInfo1Name = await FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value);
+            }
+
+
+            model.FieldName = (await _fieldLogic.FetchFieldByFieldId(recommendation.Crops.FieldID.Value)).Name;
+            if (!string.IsNullOrWhiteSpace(model.FieldName))
+            {
+                crop.EncryptedFieldName = _cropDataProtector.Protect(model.FieldName);
+            }
+
+
+            List<CropTypeResponse> cropTypeResponseList = (await _fieldLogic.FetchAllCropTypes());
+            if (cropTypeResponseList != null)
+            {
+                CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
+                if (cropTypeResponse != null)
+                {
+                    crop.CropGroupID = cropTypeResponse.CropGroupId;
+                }
+            }
+
+            if (recommendation.Crops.CropInfo2 != null && crop.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Cereals)
+            {
+                crop.CropInfo2Name = await FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
+            }
+
+            if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && crop.PotentialCut != null)
+            {
+                var potentialCuts = new[]
+                {
+                                    Resource.lblOne.ToLower(), Resource.lblTwo.ToLower(), Resource.lblThree.ToLower(), Resource.lblFour.ToLower(),
+                                    Resource.lblFive.ToLower(), Resource.lblSix.ToLower(), Resource.lblSeven.ToLower(), Resource.lblEight.ToLower(), Resource.lblNine.ToLower()
+                                };
+
+                if (cropCounter == 1)
+                {
+                    (DefoliationSequenceResponse defoliationSequence, error) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                    if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                    {
+                        //pooja
+                        if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
+                        {
+                            // ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
+                        }
+                        else
+                        {
+                            //  ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
+                        }
+                    }
+
+                }
+                else if (cropCounter == 2)
+                {
+                    (DefoliationSequenceResponse defoliationSequence, error) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                    if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                    {//pooja
+                        if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
+                        {
+                            //ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
+                        }
+                        else
+                        {
+                            //ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
+                        }
+                    }
+                }
+            }
+
+            model.Crops.Add(crop);
+            if (recommendation.PKBalance != null)
+            {
+                model.PKBalance = new PKBalance();
+                model.PKBalance.PBalance = recommendation.PKBalance.PBalance;
+                model.PKBalance.KBalance = recommendation.PKBalance.KBalance;
+            }
+
+            string defolicationName = string.Empty;
+            if (recommendation.Crops.SwardTypeID != null && recommendation.Crops.PotentialCut != null && recommendation.Crops.DefoliationSequenceID != null)
+            {
+                if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                {
+                    (DefoliationSequenceResponse defoliationSequence, error) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                    if (error == null && defoliationSequence.DefoliationSequenceId != null)
+                    {
+                        defolicationName = defoliationSequence.DefoliationSequenceDescription;
+                    }
+                }
+            }
+            //pooja
+        }
+
+        (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
+        if (error == null && nutrients.Count > 0)
+        {
+            model.Nutrients = new List<NutrientResponseWrapper>();
+            model.Nutrients = nutrients;
+        }
+
+        return (model, firstCropName);
+    }
+
+    private static void CreateNewObject(RecommendationViewModel model)
+    {
+        if (model.Crops == null)
+        {
+            model.Crops = new List<CropViewModel>();
+        }
+
+        if (model.ManagementPeriods == null)
+        {
+            model.ManagementPeriods = new List<ManagementPeriodViewModel>();
+        }
+
+        if (model.Recommendations == null)
+        {
+            model.Recommendations = new List<Recommendation>();
+        }
+
+        if (model.RecommendationComments == null)
+        {
+            model.RecommendationComments = new List<RecommendationComment>();
+        }
+
+        if (model.OrganicManures == null)
+        {
+            model.OrganicManures = new List<OrganicManureDataViewModel>();
+        }
+
+        if (model.FertiliserManures == null)
+        {
+            model.FertiliserManures = new List<FertiliserManureDataViewModel>();
+        }
+    }
+    public RecommendationViewModel BindRecommendationCommentForRecommendation(RecommendationViewModel model, RecommendationData recData)
+    {
+        foreach (var item in recData.RecommendationComments)
+        {
+            var recCom = new RecommendationComment
+            {
+                ID = item.ID,
+                RecommendationID = item.RecommendationID,
+                Nutrient = item.Nutrient,
+                Comment = item.Comment
+            };
+            model.RecommendationComments.Add(recCom);
+        }
+        return model;
+    }
+    public RecommendationViewModel BindOrganicManureDataForRecommendation(RecommendationViewModel model, OrganicManureDataViewModel item, ManureType manureType)
+    {
+        var orgManure = new OrganicManureDataViewModel
+        {
+            ID = item.ID,
+            ManureTypeName = item.ManureTypeName,
+            ApplicationMethodName = item.ApplicationMethodName,
+            ApplicationDate = item.ApplicationDate,
+            ApplicationRate = item.ApplicationRate,
+            EncryptedId = _cropDataProtector.Protect(item.ID.ToString()),
+            EncryptedFieldName = _cropDataProtector.Protect(model.FieldName),
+            EncryptedManureTypeName = _cropDataProtector.Protect(item.ManureTypeName),
+            RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes
+        };
+
+        model.OrganicManures.Add(orgManure);
+        return model;
+    }
+    public RecommendationViewModel BindFertiliserDataForRecommendation(RecommendationViewModel model, RecommendationData recData)
+    {
+        foreach (var item in recData.FertiliserManures)
+        {
+            var fertiliserManure = new FertiliserManureDataViewModel
+            {
+                ID = item.ID,
+                ManagementPeriodID = item.ManagementPeriodID,
+                ApplicationDate = item.ApplicationDate,
+                ApplicationRate = item.ApplicationRate,
+                Confirm = item.Confirm,
+                N = item.N,
+                P2O5 = item.P2O5,
+                K2O = item.K2O,
+                MgO = item.MgO,
+                SO3 = item.SO3,
+                Na2O = item.Na2O,
+                Lime = item.Lime,
+                NH4N = item.NH4N,
+                NO3N = item.NO3N,
+                EncryptedId = _cropDataProtector.Protect(item.ID.ToString()),
+                EncryptedFieldName = _cropDataProtector.Protect(model.FieldName)
+            };
+
+
+            model.FertiliserManures.Add(fertiliserManure);
+        }
+        return model;
+    }
+    public RecommendationViewModel BindManagementPeriodForRecommendation(RecommendationViewModel model, RecommendationData recData, string defoliationSequenceName)
+    {
+        var ManagementPeriods = new ManagementPeriodViewModel
+        {
+            ID = recData.ManagementPeriod.ID,
+            CropID = recData.ManagementPeriod.CropID,
+            Defoliation = recData.ManagementPeriod.Defoliation,
+            DefoliationSequenceName = defoliationSequenceName,
+            Utilisation1ID = recData.ManagementPeriod.Utilisation1ID,
+            Utilisation2ID = recData.ManagementPeriod.Utilisation2ID,
+            PloughedDown = recData.ManagementPeriod.PloughedDown
+        };
+        model.ManagementPeriods.Add(ManagementPeriods);
+        return model;
+    }
+    public string BindDefoliationSequenceNameForRecommendation(string[]? defolicationParts, int defIndex)
+    {
+        string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim() : string.Empty;
+        string defoliationSequenceName = (!string.IsNullOrWhiteSpace(part)) ? char.ToUpper(part[0]).ToString() + part.Substring(1) : string.Empty;
+        return defoliationSequenceName;
+    }
+    public async Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop)
+    {
+        string defolicationName = string.Empty;
+        if (recommendation.Crops.SwardTypeID != null && recommendation.Crops.PotentialCut != null && recommendation.Crops.DefoliationSequenceID != null)
+        {
+            if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+            {
+                (DefoliationSequenceResponse defoliationSequence, _) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                if (defoliationSequence.DefoliationSequenceId != null)
+                {
+                    defolicationName = defoliationSequence.DefoliationSequenceDescription;
+                }
+            }
+        }
+
+        return defolicationName;
     }
 }
