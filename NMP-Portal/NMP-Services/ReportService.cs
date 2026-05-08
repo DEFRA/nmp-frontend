@@ -17,6 +17,7 @@ namespace NMP.Services;
 public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IReportService
 {
     private readonly ILogger<FarmService> _logger = logger;
+    private const string _applicationJson = "application/json";
 
     public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
@@ -25,7 +26,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         var (data, error) = await SendRequestAsync(
                 client => client.PostAsync(
                     ApiurlHelper.AddNutrientsLoadingFarmDetailsAPI,
-                    new StringContent(jsonData, Encoding.UTF8, "application/json")),
+                    new StringContent(jsonData, Encoding.UTF8, _applicationJson)),
                 wrapper =>
                 {
                     if (wrapper?.Data is JObject obj)
@@ -65,7 +66,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         var (data, error) = await SendRequestAsync<NutrientsLoadingFarmDetail>(
             client => client.PutAsync(
                 ApiurlHelper.UpdateNutrientsLoadingFarmDetailsAsyncAPI,
-                new StringContent(jsonData, Encoding.UTF8, "application/json")
+                new StringContent(jsonData, Encoding.UTF8, _applicationJson)
             ),
             wrapper =>
             {
@@ -105,7 +106,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         var (data, error) = await SendRequestAsync<NutrientsLoadingManures>(
             client => client.PostAsync(
                 ApiurlHelper.AddNutrientsLoadingManureAPI,
-                new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json")
+                new StringContent(nutrientsLoadingManure, Encoding.UTF8, _applicationJson)
             ),
             wrapper =>
             {
@@ -203,7 +204,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         var (data, error) = await SendRequestAsync<NutrientsLoadingManures>(
             client => client.PutAsync(
                 ApiurlHelper.UpdateNutrientsLoadingManureAsyncAPI,
-                new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json")
+                new StringContent(nutrientsLoadingManure, Encoding.UTF8, _applicationJson)
             ),
             wrapper =>
             {
@@ -265,7 +266,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         var (data, error) = await SendRequestAsync<NutrientsLoadingLiveStock>(
             client => client.PostAsync(
                 ApiurlHelper.AddNutrientsLoadingLivestockAPI,
-                new StringContent(jsonData, Encoding.UTF8, "application/json")
+                new StringContent(jsonData, Encoding.UTF8, _applicationJson)
             ),
             wrapper =>
             {
@@ -366,7 +367,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         var (data, error) = await SendRequestAsync<NutrientsLoadingLiveStock>(
             client => client.PutAsync(
                 ApiurlHelper.UpdateNutrientsLoadingLivestockAPI,
-                new StringContent(jsonData, Encoding.UTF8, "application/json")
+                new StringContent(jsonData, Encoding.UTF8, _applicationJson)
             ),
             wrapper =>
             {
