@@ -3,224 +3,115 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
-using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IStorageCapacityService
+public class StorageCapacityService(
+    ILogger<StorageCapacityService> logger,
+    IHttpContextAccessor httpContextAccessor,
+    IHttpClientFactory clientFactory,
+    TokenRefreshService tokenRefreshService)
+    : Service(httpContextAccessor, clientFactory, tokenRefreshService), IStorageCapacityService
 {
     private readonly ILogger<StorageCapacityService> _logger = logger;
 
+    private const string _recordsKey = "records";
+    private const string _existsKey = "exists";
+    private const string _messageKey = "message";
+    private const string _applicationJson = "application/json";
+
     public async Task<(List<StorageTypeResponse>, Error)> FetchStorageTypes()
     {
-        var (data, error) = await SendRequestAsync<List<StorageTypeResponse>>(
-            client => client.GetAsync(ApiurlHelper.FetchStorageTypesAsyncAPI),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<List<StorageTypeResponse>>()
-                           ?? new List<StorageTypeResponse>();
-                }
-
-                return new List<StorageTypeResponse>();
-            });
-
-        return (data ?? new List<StorageTypeResponse>(), error);
+        return await GetListResponseAsync<StorageTypeResponse>(
+            ApiurlHelper.FetchStorageTypesAsyncAPI,
+            useRecordsNode: true);
     }
+
     public async Task<(List<StoreCapacityResponse>, Error)> FetchStoreCapacityByFarmId(int farmId)
     {
-        var (data, error) = await SendRequestAsync<List<StoreCapacityResponse>>(
-            client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId)
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data is JToken token)
-                {
-                    return token.ToObject<List<StoreCapacityResponse>>()
-                           ?? new List<StoreCapacityResponse>();
-                }
-
-                return new List<StoreCapacityResponse>();
-            });
-
-        return (data ?? new List<StoreCapacityResponse>(), error);
+        return await GetListResponseAsync<StoreCapacityResponse>(
+            string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId));
     }
+
     public async Task<(List<CommonResponse>, Error)> FetchMaterialStates()
     {
-        var (data, error) = await SendRequestAsync<List<CommonResponse>>(
-            client => client.GetAsync(ApiurlHelper.FetchMaterialStatesListAsyncAPI),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<List<CommonResponse>>()
-                           ?? new List<CommonResponse>();
-                }
-
-                return new List<CommonResponse>();
-            });
-
-        return (data ?? new List<CommonResponse>(), error);
+        return await GetListResponseAsync<CommonResponse>(
+            ApiurlHelper.FetchMaterialStatesListAsyncAPI,
+            useRecordsNode: true);
     }
+
     public async Task<(CommonResponse, Error)> FetchMaterialStateById(int id)
     {
-        var (data, error) = await SendRequestAsync<CommonResponse>(
-            client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchMaterialStatesListByIDAsyncAPI, id)
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<CommonResponse>()
-                           ?? new CommonResponse();
-                }
-
-                return new CommonResponse();
-            });
-
-        return (data ?? new CommonResponse(), error);
+        return await GetSingleResponseAsync<CommonResponse>(
+            string.Format(ApiurlHelper.FetchMaterialStatesListByIDAsyncAPI, id));
     }
+
     public async Task<(StorageTypeResponse, Error)> FetchStorageTypeById(int id)
     {
-        var (data, error) = await SendRequestAsync<StorageTypeResponse>(
-            client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchStorageTypeByIdAsyncAPI, id)
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<StorageTypeResponse>()
-                           ?? new StorageTypeResponse();
-                }
-
-                return new StorageTypeResponse();
-            });
-
-        return (data ?? new StorageTypeResponse(), error);
+        return await GetSingleResponseAsync<StorageTypeResponse>(
+            string.Format(ApiurlHelper.FetchStorageTypeByIdAsyncAPI, id));
     }
+
     public async Task<(List<SolidManureTypeResponse>, Error)> FetchSolidManureType()
     {
-        var (data, error) = await SendRequestAsync<List<SolidManureTypeResponse>>(
-            client => client.GetAsync(ApiurlHelper.FetchSolidManureTypeAsyncAPI),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<List<SolidManureTypeResponse>>()
-                           ?? new List<SolidManureTypeResponse>();
-                }
-
-                return new List<SolidManureTypeResponse>();
-            });
-
-        return (data ?? new List<SolidManureTypeResponse>(), error);
+        return await GetListResponseAsync<SolidManureTypeResponse>(
+            ApiurlHelper.FetchSolidManureTypeAsyncAPI,
+            useRecordsNode: true);
     }
+
     public async Task<(SolidManureTypeResponse, Error)> FetchSolidManureTypeById(int id)
     {
-        var (data, error) = await SendRequestAsync<SolidManureTypeResponse>(
-            client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchSolidManureTypeByIdAsyncAPI, id)
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<SolidManureTypeResponse>()
-                           ?? new SolidManureTypeResponse();
-                }
-
-                return new SolidManureTypeResponse();
-            });
-
-        return (data ?? new SolidManureTypeResponse(), error);
+        return await GetSingleResponseAsync<SolidManureTypeResponse>(
+            string.Format(ApiurlHelper.FetchSolidManureTypeByIdAsyncAPI, id));
     }
 
     public async Task<(List<BankSlopeAnglesResponse>, Error)> FetchBankSlopeAngles()
     {
-        var (data, error) = await SendRequestAsync<List<BankSlopeAnglesResponse>>(
-            client => client.GetAsync(ApiurlHelper.FetchBankSlopeAnglesAsyncAPI),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<List<BankSlopeAnglesResponse>>()
-                           ?? new List<BankSlopeAnglesResponse>();
-                }
-
-                return new List<BankSlopeAnglesResponse>();
-            });
-
-        return (data ?? new List<BankSlopeAnglesResponse>(), error);
+        return await GetListResponseAsync<BankSlopeAnglesResponse>(
+            ApiurlHelper.FetchBankSlopeAnglesAsyncAPI,
+            useRecordsNode: true);
     }
 
     public async Task<(BankSlopeAnglesResponse, Error)> FetchBankSlopeAngleById(int id)
     {
-        var (data, error) = await SendRequestAsync<BankSlopeAnglesResponse>(
-            client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchBankSlopeAngleByIdAsyncAPI, id)
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<BankSlopeAnglesResponse>()
-                           ?? new BankSlopeAnglesResponse();
-                }
-
-                return new BankSlopeAnglesResponse();
-            });
-
-        return (data ?? new BankSlopeAnglesResponse(), error);
+        return await GetSingleResponseAsync<BankSlopeAnglesResponse>(
+            string.Format(ApiurlHelper.FetchBankSlopeAngleByIdAsyncAPI, id));
     }
 
     public async Task<(StoreCapacity, Error)> AddStoreCapacityAsync(StoreCapacity storeCapacityData)
     {
-        var jsonData = JsonConvert.SerializeObject(storeCapacityData);
+        string jsonData = JsonConvert.SerializeObject(storeCapacityData);
 
-        var (data, error) = await SendRequestAsync<StoreCapacity>(
+        var (data, error) = await SendRequestAsync(
             client => client.PostAsync(
                 ApiurlHelper.AddStoreCapacityAsyncAPI,
-                new StringContent(jsonData, Encoding.UTF8, "application/json")
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data is JObject obj)
-                {
-                    return obj.ToObject<StoreCapacity>() ?? new StoreCapacity();
-                }
-
-                return new StoreCapacity();
-            });
+                CreateJsonContent(jsonData)),
+            MapObject<StoreCapacity>);
 
         return (data ?? new StoreCapacity(), error);
     }
 
     public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, string storeName, int? ID)
     {
-        var (data, error) = await SendRequestAsync<bool>(
+        var (data, error) = await SendRequestAsync(
             client => client.GetAsync(
                 string.Format(
                     ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI,
                     farmId,
                     storeName,
-                    ID ?? 0
-                )
-            ),
+                    ID ?? 0)),
             wrapper =>
             {
                 if (wrapper?.Data is JObject obj)
                 {
-                    return obj["exists"]?.Value<bool>() ?? false;
+                    return obj[_existsKey]?.Value<bool>() ?? false;
                 }
 
                 return false;
@@ -231,98 +122,127 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
 
     public async Task<(StoreCapacity, Error)> FetchStoreCapacityByIdAsync(int id)
     {
-        var (data, error) = await SendRequestAsync<StoreCapacity>(
-            client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchStoreCapacityByIdAsyncAPI, id)
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data?["records"] is JToken token)
-                {
-                    return token.ToObject<StoreCapacity>()
-                           ?? new StoreCapacity();
-                }
-
-                return new StoreCapacity();
-            });
-
-        return (data ?? new StoreCapacity(), error);
+        return await GetSingleResponseAsync<StoreCapacity>(
+            string.Format(ApiurlHelper.FetchStoreCapacityByIdAsyncAPI, id));
     }
 
     public async Task<(List<StoreCapacityResponse>, Error)> CopyExistingStorageCapacity(string copyStorageManureCapacityData)
     {
-        var (data, error) = await SendRequestAsync<List<StoreCapacityResponse>>(
+        var (data, error) = await SendRequestAsync(
             client => client.PostAsync(
                 ApiurlHelper.CopyStoreManureCapacityAsyncAPI,
-                new StringContent(copyStorageManureCapacityData, Encoding.UTF8, "application/json")
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data is JToken token)
-                {
-                    return token.ToObject<List<StoreCapacityResponse>>()
-                           ?? new List<StoreCapacityResponse>();
-                }
-
-                return new List<StoreCapacityResponse>();
-            });
+                CreateJsonContent(copyStorageManureCapacityData)),
+            wrapper => MapList<StoreCapacityResponse>(wrapper));
 
         return (data ?? new List<StoreCapacityResponse>(), error);
     }
 
     public async Task<(string, Error)> RemoveStorageCapacity(int id)
     {
-        var (data, error) = await SendRequestAsync<string>(
+        var (data, error) = await SendRequestAsync(
             client => client.DeleteAsync(
-                string.Format(ApiurlHelper.DeleteStorageCapacityByIdAPI, id)
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data is JObject obj)
-                {
-                    return obj["message"]?.Value<string>() ?? string.Empty;
-                }
-
-                return string.Empty;
-            });
+                string.Format(ApiurlHelper.DeleteStorageCapacityByIdAPI, id)),
+            MapMessage);
 
         return (data ?? string.Empty, error);
     }
 
     public async Task<(StoreCapacity, Error)> UpdateStoreCapacityAsync(StoreCapacity storeCapacityData)
     {
-        var jsonData = JsonConvert.SerializeObject(storeCapacityData);
+        string jsonData = JsonConvert.SerializeObject(storeCapacityData);
 
-        var (data, error) = await SendRequestAsync<StoreCapacity>(
+        var (data, error) = await SendRequestAsync(
             client => client.PutAsync(
                 ApiurlHelper.UpdateStoreCapacityAsyncAPI,
-                new StringContent(jsonData, Encoding.UTF8, "application/json")
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data is JObject obj)
-                {
-                    return obj.ToObject<StoreCapacity>() ?? new StoreCapacity();
-                }
-
-                return new StoreCapacity();
-            });
+                CreateJsonContent(jsonData)),
+            MapObject<StoreCapacity>);
 
         return (data ?? new StoreCapacity(), error);
     }
 
-    private async Task<(T?, Error)> SendRequestAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> httpCall,
-   Func<ResponseWrapper?, T?> mapData)
+    private async Task<(List<T>, Error)> GetListResponseAsync<T>(
+        string url,
+        bool useRecordsNode = false)
     {
-        Error error = new Error();
+        var (data, error) = await SendRequestAsync(
+            client => client.GetAsync(url),
+            wrapper => MapList<T>(wrapper, useRecordsNode));
+
+        return (data ?? new List<T>(), error);
+    }
+
+    private async Task<(T, Error)> GetSingleResponseAsync<T>(string url)
+        where T : new()
+    {
+        var (data, error) = await SendRequestAsync(
+            client => client.GetAsync(url),
+            wrapper => MapSingle<T>(wrapper));
+
+        return (data ?? new T(), error);
+    }
+
+    private static List<T> MapList<T>(
+        ResponseWrapper? wrapper,
+        bool useRecordsNode = false)
+    {
+        JToken? token = useRecordsNode
+            ? wrapper?.Data?[_recordsKey]
+            : wrapper?.Data;
+
+        return token?.ToObject<List<T>>() ?? new List<T>();
+    }
+
+    private static T MapSingle<T>(ResponseWrapper? wrapper)
+        where T : new()
+    {
+        if (wrapper?.Data?[_recordsKey] is JToken token)
+        {
+            return token.ToObject<T>() ?? new T();
+        }
+
+        return new T();
+    }
+
+    private static T MapObject<T>(ResponseWrapper? wrapper)
+        where T : new()
+    {
+        if (wrapper?.Data is JObject obj)
+        {
+            return obj.ToObject<T>() ?? new T();
+        }
+
+        return new T();
+    }
+
+    private static string MapMessage(ResponseWrapper? wrapper)
+    {
+        if (wrapper?.Data is JObject obj)
+        {
+            return obj[_messageKey]?.Value<string>() ?? string.Empty;
+        }
+
+        return string.Empty;
+    }
+
+    private static StringContent CreateJsonContent(string jsonData)
+    {
+        return new StringContent(jsonData, Encoding.UTF8, _applicationJson);
+    }
+
+    private async Task<(T?, Error)> SendRequestAsync<T>(
+        Func<HttpClient, Task<HttpResponseMessage>> httpCall,
+        Func<ResponseWrapper?, T?> mapData)
+    {
+        Error error = new();
         T? resultData = default;
 
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpCall(httpClient);
+            HttpResponseMessage response = await httpCall(httpClient);
 
             string result = await response.Content.ReadAsStringAsync();
+
             ResponseWrapper? responseWrapper =
                 JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
