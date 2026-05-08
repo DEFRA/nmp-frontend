@@ -4664,61 +4664,35 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return View("RemoveCrop", model);
             }
+
             if (!model.RemoveCrop.Value)
             {
-                if (model.IsComingFromRecommendation != null && model.IsComingFromRecommendation.Value)
-                {
-                    return RedirectToAction("Recommendations", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear });
-                }
-                else
-                {
-                    return RedirectToAction(_checkAnswerActionName);
-                }
+                return await RedirectForRemoveCrop(model, false, null);
             }
             else
             {
-                Error? error = null;
-                (List<HarvestYearPlanResponse>? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                if (error == null && harvestYearPlanResponse.Count > 0)
+                (List<HarvestYearPlanResponse>? harvestYearPlanResponse, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
+                if (harvestYearPlanResponse.Any())
                 {
-                    if (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value)))
-                    {
-                        harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
-                    }
-                    else
+                    bool isNotComingFromRecommendation = model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value));
+
+                    harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
+
+                    if (!isNotComingFromRecommendation)
                     {
                         harvestYearPlanResponse = harvestYearPlanResponse.Where(x => x.FieldID == model.FieldID &&
-                        x.Year == model.Year && x.CropOrder == model.CropOrder.Value).ToList();
+                        x.CropOrder == model.CropOrder.Value).ToList();
                     }
-                    if (harvestYearPlanResponse.Count > 0)
+                    if (harvestYearPlanResponse.Any())
                     {
                         List<int> cropIds = harvestYearPlanResponse.Select(x => x.CropID).ToList();
-                        (string? message, error) = await _cropLogic.RemoveCropPlan(cropIds);
+                        (_, Error? error) = await _cropLogic.RemoveCropPlan(cropIds);
                         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                         {
                             TempData["RemoveGroupError"] = error.Message;
                             return View(model);
                         }
-                        else
-                        {
-                            (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
-                            if (error == null && harvestYearPlanResponse.Count > 0)
-                            {
-                                return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value))) ? _cropDataProtector.Protect(string.Format(Resource.MsgCropGroupNameRemoves, model.CropGroupName)) : _cropDataProtector.Protect(string.Format(Resource.lblCropTypeNameRemoveFromFieldName, model.CropType, model.FieldName)) });
-                            }
-                            else
-                            {
-                                List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), 0);
-                                if (planSummaryResponse != null && planSummaryResponse.Count > 0)
-                                {
-                                    return RedirectToAction(_plansAndRecordsOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()), q = (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value))) ? _cropDataProtector.Protect(string.Format(Resource.MsgCropGroupNameRemoves, model.CropGroupName)) : _cropDataProtector.Protect(string.Format(Resource.lblCropTypeNameRemoveFromFieldName, model.CropType, model.FieldName)) });
-                                }
-                                else
-                                {
-                                    return RedirectToAction(_farmSummaryActionName, "Farm", new { id = model.EncryptedFarmId, q = _farmDataProtector.Protect(Resource.lblTrue), r = (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value))) ? _farmDataProtector.Protect(string.Format(Resource.MsgCropGroupNameRemoves, model.CropGroupName)) : _farmDataProtector.Protect(string.Format(Resource.lblCropTypeNameRemoveFromFieldName, model.CropType, model.FieldName)) });
-                                }
-                            }
-                        }
+                        return await RedirectForRemoveCrop(model, true, harvestYearPlanResponse);
                     }
                 }
             }
@@ -4729,6 +4703,51 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             TempData["RemoveGroupError"] = ex.Message;
         }
         return View(model);
+    }
+
+    private async Task<IActionResult> RedirectForRemoveCrop(PlanViewModel model, bool isRemove, List<HarvestYearPlanResponse>? harvestYearPlanResponse)
+    {
+        if (!isRemove)
+        {
+            if (model.IsComingFromRecommendation != null && model.IsComingFromRecommendation.Value)
+            {
+                return RedirectToAction("Recommendations", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear });
+            }
+
+            return RedirectToAction(_checkAnswerActionName);
+
+        }
+        else
+        {
+            return await RedirectOnRemoveSucces(model, harvestYearPlanResponse);
+        }
+    }
+
+    private async Task<IActionResult> RedirectOnRemoveSucces(PlanViewModel model, List<HarvestYearPlanResponse> harvestYearPlanResponse)
+    {
+        string successMsg = string.Format(Resource.MsgCropGroupNameRemoves, model.CropGroupName);
+        string successMsgForCrop = _cropDataProtector.Protect(successMsg);
+        string successMsgForFarm = _farmDataProtector.Protect(successMsg);
+        string successMsgContent2 = string.Format(Resource.lblCropTypeNameRemoveFromFieldName, model.CropType, model.FieldName);
+        string successMsgContent2ForFarm = _farmDataProtector.Protect(successMsgContent2);
+        string successMsgContent2ForCrop = _cropDataProtector.Protect(successMsgContent2);
+        int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+        bool isNotComingFromRecommendation = (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value)));
+        (harvestYearPlanResponse, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, decryptedFarmId);
+        if (harvestYearPlanResponse.Count > 0)
+        {
+            return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = isNotComingFromRecommendation ? successMsgForCrop : successMsgContent2ForCrop });
+        }
+        else
+        {
+            List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(decryptedFarmId, 0);
+            if (planSummaryResponse != null && planSummaryResponse.Count > 0)
+            {
+                return RedirectToAction(_plansAndRecordsOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()), q = isNotComingFromRecommendation ? successMsgForCrop : successMsgContent2ForCrop });
+            }
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { id = model.EncryptedFarmId, q = _farmDataProtector.Protect(Resource.lblTrue), r = isNotComingFromRecommendation ? successMsgForFarm : successMsgContent2ForFarm });
+
+        }
     }
 
     private PlanViewModel BindCropDataForRemove(string? q, string? r, string? s, string? t, string? u, string? w, PlanViewModel model)
@@ -6565,7 +6584,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return RedirectToAction(_checkAnswerActionName);
     }
 
-    private async Task<(bool flowControl, IActionResult? value)> RedirectForDryMatterIfDifferentFigure(PlanViewModel model,  List<GrassGrowthClassResponse> grassGrowthClasses)
+    private async Task<(bool flowControl, IActionResult? value)> RedirectForDryMatterIfDifferentFigure(PlanViewModel model, List<GrassGrowthClassResponse> grassGrowthClasses)
     {
         for (int i = 0; i < model.Crops.Count; i++)
         {
