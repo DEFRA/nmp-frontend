@@ -16,6 +16,7 @@ namespace NMP.Services;
 public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IStorageCapacityService
 {
     private readonly ILogger<StorageCapacityService> _logger = logger;
+    private const string _recordsKey = "records";
 
     public async Task<(List<StorageTypeResponse>, Error)> FetchStorageTypes()
     {
@@ -46,7 +47,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             client => client.GetAsync(ApiurlHelper.FetchMaterialStatesListAsyncAPI),
             wrapper =>
             {
-                if (wrapper?.Data?["records"] is JToken token)
+                if (wrapper?.Data?[_recordsKey] is JToken token)
                 {
                     return token.ToObject<List<CommonResponse>>()
                            ?? new List<CommonResponse>();
@@ -83,7 +84,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             client => client.GetAsync(ApiurlHelper.FetchSolidManureTypeAsyncAPI),
             wrapper =>
             {
-                if (wrapper?.Data?["records"] is JToken token)
+                if (wrapper?.Data?[_recordsKey] is JToken token)
                 {
                     return token.ToObject<List<SolidManureTypeResponse>>()
                            ?? new List<SolidManureTypeResponse>();
@@ -102,7 +103,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ),
             wrapper =>
             {
-                if (wrapper?.Data?["records"] is JToken token)
+                if (wrapper?.Data?[_recordsKey] is JToken token)
                 {
                     return token.ToObject<SolidManureTypeResponse>()
                            ?? new SolidManureTypeResponse();
@@ -120,7 +121,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             client => client.GetAsync(ApiurlHelper.FetchBankSlopeAnglesAsyncAPI),
             wrapper =>
             {
-                if (wrapper?.Data?["records"] is JToken token)
+                if (wrapper?.Data?[_recordsKey] is JToken token)
                 {
                     return token.ToObject<List<BankSlopeAnglesResponse>>()
                            ?? new List<BankSlopeAnglesResponse>();
@@ -140,7 +141,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ),
             wrapper =>
             {
-                if (wrapper?.Data?["records"] is JToken token)
+                if (wrapper?.Data?[_recordsKey] is JToken token)
                 {
                     return token.ToObject<BankSlopeAnglesResponse>()
                            ?? new BankSlopeAnglesResponse();
@@ -188,7 +189,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             ),
             wrapper =>
             {
-                if (wrapper?.Data?["records"] is JToken token)
+                if (wrapper?.Data?[_recordsKey] is JToken token)
                 {
                     return token.ToObject<StoreCapacity>()
                            ?? new StoreCapacity();
@@ -247,7 +248,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
 
         return (data ?? new StoreCapacity(), error);
     }
-    private static List<T> ExtractList<T>(ResponseWrapper? wrapper, string key = "records")
+    private static List<T> ExtractList<T>(ResponseWrapper? wrapper, string key = _recordsKey)
     {
         if (wrapper?.Data?[key] is JToken token)
         {
@@ -256,7 +257,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         return new List<T>();
     }
 
-    private static T ExtractSingle<T>(ResponseWrapper? wrapper, string key = "records") where T : new()
+    private static T ExtractSingle<T>(ResponseWrapper? wrapper, string key = _recordsKey) where T : new()
     {
         if (wrapper?.Data?[key] is JToken token)
         {
