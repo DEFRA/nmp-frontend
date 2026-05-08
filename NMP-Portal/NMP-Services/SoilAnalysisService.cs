@@ -23,65 +23,32 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
     {
         _logger.LogTrace("SoilAnalysisService: soil-analyses/{Id} called.", id);
 
-        var (data, error) = await SendRequestAsync<SoilAnalysis>(
+        return await SendSoilAnalysisRequest(
             client => client.GetAsync(
                 string.Format(ApiurlHelper.FetchSoilAnalysisByIdAsyncAPI, HttpUtility.UrlEncode(id.ToString()))
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data?["SoilAnalysis"] is JObject obj)
-                {
-                    return obj.ToObject<SoilAnalysis>()
-                           ?? new SoilAnalysis();
-                }
-
-                return new SoilAnalysis();
-            });
-
-        return (data, error);
+            ));
     }
+
     public async Task<(SoilAnalysis?, Error?)> UpdateSoilAnalysisAsync(int id, string soilData)
     {
         _logger.LogTrace("SoilAnalysisService: soil-analyses/{Id}/{SoilData} called.", id, soilData);
 
-        var (data, error) = await SendRequestAsync<SoilAnalysis>(
+        return await SendSoilAnalysisRequest(
             client => client.PutAsync(
                 string.Format(ApiurlHelper.UpdateSoilAnalysisAsyncAPI, id),
                 new StringContent(soilData, Encoding.UTF8, _applicationJson)
-            ),
-            wrapper =>
-            {
-                if (wrapper?.Data?["SoilAnalysis"] is JObject obj)
-                {
-                    return obj.ToObject<SoilAnalysis>()
-                           ?? new SoilAnalysis();
-                }
-
-                return new SoilAnalysis();
-            });
-
-        return (data, error);
+            ));
     }
 
     public async Task<(SoilAnalysis?, Error?)> AddSoilAnalysisAsync(string soilAnalysisData)
     {
-        var (data, error) = await SendRequestAsync<SoilAnalysis>(
+        return await SendSoilAnalysisRequest(
             client => client.PostAsync(
                 ApiurlHelper.AddSoilAnalysisAsyncAPI,
                 new StringContent(soilAnalysisData, Encoding.UTF8, _applicationJson)
             ),
-            wrapper =>
-            {
-                if (wrapper?.Data?["soilAnalysis"] is JObject obj)
-                {
-                    return obj.ToObject<SoilAnalysis>()
-                           ?? new SoilAnalysis();
-                }
-
-                return new SoilAnalysis();
-            });
-
-        return (data, error);
+            key: "soilAnalysis"
+        );
     }
 
     public async Task<(string, Error?)> DeleteSoilAnalysisByIdAsync(int soilAnalysisId)
@@ -90,22 +57,44 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
             client => client.DeleteAsync(
                 string.Format(ApiurlHelper.DeleteSoilAnalysisByIdAPI, soilAnalysisId)
             ),
-            wrapper =>
-            {
-                if (wrapper?.Data is JObject obj)
-                {
-                    return obj["message"]?.Value<string>() ?? string.Empty;
-                }
-
-                return string.Empty;
-            });
+            wrapper => ExtractMessage(wrapper));
 
         return (data ?? string.Empty, error);
     }
-    private async Task<(T?, Error)> SendRequestAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> httpCall,
-   Func<ResponseWrapper?, T?> mapData)
+
+    private Task<(SoilAnalysis?, Error)> SendSoilAnalysisRequest(
+    Func<HttpClient, Task<HttpResponseMessage>> httpCall,
+    string key = "SoilAnalysis")
     {
-        Error error = new Error();
+        return SendRequestAsync(
+            httpCall,
+            wrapper => ExtractObject<SoilAnalysis>(wrapper, key) ?? new SoilAnalysis()
+        );
+    }
+
+    private static T? ExtractObject<T>(ResponseWrapper? wrapper, string key)
+    {
+        if (wrapper?.Data?[key] is JObject obj)
+        {
+            return obj.ToObject<T>();
+        }
+        return default;
+    }
+
+    private static string ExtractMessage(ResponseWrapper? wrapper)
+    {
+        if (wrapper?.Data is JObject obj)
+        {
+            return obj["message"]?.Value<string>() ?? string.Empty;
+        }
+        return string.Empty;
+    }
+
+    private async Task<(T?, Error)> SendRequestAsync<T>(
+        Func<HttpClient, Task<HttpResponseMessage>> httpCall,
+        Func<ResponseWrapper?, T?> mapData)
+    {
+        Error error = new();
         T? resultData = default;
 
         try
@@ -137,4 +126,5 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
 
         return (resultData, error);
     }
+
 }
