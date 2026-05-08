@@ -10,6 +10,7 @@ using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
+using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -30,37 +31,31 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+
+            if (response.IsSuccessStatusCode)
             {
-
-                JObject nutrientsLoadingFarmDetailsJObject = responseWrapper.Data as JObject;
-                if (nutrientsLoadingFarmDetailsJObject != null)
+                if (responseWrapper?.Data is JObject nutrientsLoadingFarmDetailsJObject)
                 {
-                    nutrientsLoadingFarmDetail = nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>();
+                    nutrientsLoadingFarmDetail = nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>()
+                        ?? new NutrientsLoadingFarmDetail();
                 }
-
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
 
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingFarmDetail, error);
     }
@@ -76,33 +71,29 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                JObject nutrientsLoadingFarmDetailsJObject = responseWrapper.Data["NutrientsLoadingFarmDetails"] as JObject;
-                if (nutrientsLoadingFarmDetailsJObject != null)
+                if (responseWrapper?.Data?["NutrientsLoadingFarmDetails"] is JObject nutrientsLoadingFarmDetailsJObject)
                 {
-                    nutrientsLoadingFarmDetail = nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>();
+                    nutrientsLoadingFarmDetail =
+                        nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>()
+                        ?? new NutrientsLoadingFarmDetail();
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    error= _logger.ExtractError(responseWrapper, error)?? new Error();
                 }
             }
 
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingFarmDetail, error);
     }
@@ -118,37 +109,28 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             var response = await httpClient.PutAsync(ApiurlHelper.UpdateNutrientsLoadingFarmDetailsAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (responseWrapper?.Data?["NutrientsLoadingFarmDetails"] is JObject nutrientsLoadingFarmDetailsJObject)
             {
-
-                JObject nutrientsLoadingFarmDetailsJObject = responseWrapper.Data["NutrientsLoadingFarmDetails"] as JObject;
-                if (nutrientsLoadingFarmDetailsJObject != null)
-                {
-                    nutrientsLoadingFarmDetail = nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>();
-                }
-
+                nutrientsLoadingFarmDetail =
+                    nutrientsLoadingFarmDetailsJObject.ToObject<NutrientsLoadingFarmDetail>()
+                    ?? new NutrientsLoadingFarmDetail();
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
 
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingFarmDetail, error);
     }
@@ -162,11 +144,12 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientsloadingFarmDetailsFarmIdAPI, farmId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
             if (response.IsSuccessStatusCode)
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var nutrientsLoadingManures = responseWrapper.Data.NutrientsLoadingFarmDetails.ToObject<List<NutrientsLoadingManures>>();
+                    var nutrientsLoadingManures = responseWrapper?.Data?.NutrientsLoadingFarmDetails.ToObject<List<NutrientsLoadingManures>>();
                     if (nutrientsLoadingManures != null)
                     {
                         NutrientsLoadingManuresList = nutrientsLoadingManures;
@@ -177,22 +160,17 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (NutrientsLoadingManuresList, error);
     }
@@ -207,37 +185,31 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             var response = await httpClient.PostAsync(ApiurlHelper.AddNutrientsLoadingManureAPI, new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+
+            if (response.IsSuccessStatusCode)
             {
-
-                JObject nutrientsLoadingManureDataObj = responseWrapper.Data as JObject;
-                if (nutrientsLoadingManureDataObj != null)
+                if(responseWrapper?.Data is JObject nutrientsLoadingManureDataObj)
                 {
-                    nutrientsLoadingManureData = nutrientsLoadingManureDataObj.ToObject<NutrientsLoadingManures>();
+                    nutrientsLoadingManureData = nutrientsLoadingManureDataObj.ToObject<NutrientsLoadingManures>()
+                    ?? new NutrientsLoadingManures();
                 }
-
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
 
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingManureData, error);
     }
@@ -253,35 +225,26 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var nutrientsLoadingFarmDetail = responseWrapper.Data.ToObject<List<NutrientsLoadingFarmDetail>>();
-                    if (nutrientsLoadingFarmDetail != null)
-                    {
-                        nutrientsLoadingFarmDetailList = nutrientsLoadingFarmDetail;
-                    }
+                    nutrientsLoadingFarmDetailList = data.ToObject<List<NutrientsLoadingFarmDetail>>() ?? new List<NutrientsLoadingFarmDetail>();
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingFarmDetailList, error);
     }
@@ -298,9 +261,12 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.LivestockGroups is JToken livestockGroupsToken)
                 {
-                    var livestockGroups = responseWrapper.Data.LivestockGroups.ToObject<List<CommonResponse>>();
+                    var livestockGroups =
+                        livestockGroupsToken.ToObject<List<CommonResponse>>()
+                        ?? new List<CommonResponse>();
+
                     livestockGroupList.AddRange(livestockGroups);
                 }
             }
@@ -308,24 +274,17 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (livestockGroupList, error);
     }
@@ -333,7 +292,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
     public async Task<(CommonResponse, Error)> FetchLivestockGroupById(int livestockGroupId)
     {
         CommonResponse livestockGroup = new CommonResponse();
-        Error error = null;
+        Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
@@ -342,33 +301,28 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.livestockGroup is JToken livestockGroupToken)
                 {
-                    livestockGroup = responseWrapper.Data.livestockGroup.ToObject<CommonResponse>();
+                    livestockGroup =
+                        livestockGroupToken.ToObject<CommonResponse>()
+                        ?? new CommonResponse();
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (livestockGroup, error);
     }
@@ -384,31 +338,28 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.NutrientsLoadingManure is JToken manureToken)
                 {
-                    NutrientsLoadingManure = responseWrapper.Data.NutrientsLoadingManure.ToObject<NutrientsLoadingManures>();
+                    NutrientsLoadingManure =
+                        manureToken.ToObject<NutrientsLoadingManures>()
+                        ?? new NutrientsLoadingManures();
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (NutrientsLoadingManure, error);
     }
@@ -423,36 +374,29 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             var response = await httpClient.PutAsync(ApiurlHelper.UpdateNutrientsLoadingManureAsyncAPI, new StringContent(nutrientsLoadingManure, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode)
             {
-                JObject nutrientsLoadingManureDataObj = responseWrapper.Data as JObject;
-                if (nutrientsLoadingManureDataObj != null)
+                if (responseWrapper?.Data is JObject nutrientsLoadingManureDataObj)
                 {
-                    NutrientsLoadingManureData = nutrientsLoadingManureDataObj.ToObject<NutrientsLoadingManures>();
+                    NutrientsLoadingManureData = nutrientsLoadingManureDataObj.ToObject<NutrientsLoadingManures>()
+                    ?? new NutrientsLoadingManures();
                 }
-
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (NutrientsLoadingManureData, error);
     }
@@ -469,9 +413,10 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.livestockTypes is JToken livestockTypesToken)
                 {
-                    var livestockTypes = responseWrapper.Data.livestockTypes.ToObject<List<LivestockTypeResponse>>();
+                    var livestockTypes = livestockTypesToken.ToObject<List<LivestockTypeResponse>>()
+                        ?? new List<LivestockTypeResponse>();
                     livestockTypeList.AddRange(livestockTypes);
                 }
             }
@@ -479,24 +424,17 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (livestockTypeList, error);
     }
@@ -510,30 +448,28 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteNutrientsLoadingManuresByIdAPI, nutrientsLoadingManureId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode)
             {
-                message = responseWrapper.Data["message"].Value;
+                if (responseWrapper?.Data is JObject data)
+                {
+                    message = data["message"]?.Value<string>() ?? string.Empty;
+                }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
 
         return (message, error);
@@ -551,37 +487,29 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             var response = await httpClient.PostAsync(ApiurlHelper.AddNutrientsLoadingLivestockAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode)
             {
-
-                JObject nutrientsLoadingLiveStocksJObject = responseWrapper.Data as JObject;
-                if (nutrientsLoadingLiveStocksJObject != null)
+                if(responseWrapper?.Data is JObject nutrientsLoadingLiveStocksJObject)
                 {
-                    nutrientsLoadingLiveStocks = nutrientsLoadingLiveStocksJObject.ToObject<NutrientsLoadingLiveStock>();
+                    nutrientsLoadingLiveStocks = nutrientsLoadingLiveStocksJObject.ToObject<NutrientsLoadingLiveStock>()
+                   ?? new NutrientsLoadingLiveStock();
                 }
-
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingLiveStocks, error);
     }
@@ -599,35 +527,27 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var nutrientsLoadingLiveStock = responseWrapper.Data.ToObject<List<NutrientsLoadingLiveStockViewModel>>();
-                    if (nutrientsLoadingLiveStock != null)
-                    {
-                        nutrientsLoadingLiveStockList = nutrientsLoadingLiveStock;
-                    }
+                    nutrientsLoadingLiveStockList = data.ToObject<List<NutrientsLoadingLiveStockViewModel>>()
+                        ?? new List<NutrientsLoadingLiveStockViewModel>();
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingLiveStockList, error);
     }
@@ -638,14 +558,15 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchLivestockTypesAsyncAPI));
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchLivestockTypesAsyncAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.LivestockTypes is JToken livestockTypesToken)
                 {
-                    var livestockTypes = responseWrapper.Data.LivestockTypes.ToObject<List<LivestockTypeResponse>>();
+                    var livestockTypes = livestockTypesToken.ToObject<List<LivestockTypeResponse>>()
+                        ?? new List<LivestockTypeResponse>();
                     livestockTypeList.AddRange(livestockTypes);
                 }
             }
@@ -653,24 +574,17 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (livestockTypeList, error);
     }
@@ -687,31 +601,27 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.records is JToken recordsToken)
                 {
-                    nutrientsLoadingLiveStock = responseWrapper.Data.records.ToObject<NutrientsLoadingLiveStock>();
+                    nutrientsLoadingLiveStock = recordsToken.ToObject<NutrientsLoadingLiveStock>()
+                        ?? new NutrientsLoadingLiveStock();
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingLiveStock, error);
     }
@@ -726,30 +636,28 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteNutrientsLoadingLivestockByIdAPI, nutrientsLoadingLivestockId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode)
             {
-                message = responseWrapper.Data["message"].Value;
+                if(responseWrapper?.Data is JObject data)
+                {
+                    message = data["message"]?.Value<string>() ?? string.Empty;
+                }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
 
         return (message, error);
@@ -767,37 +675,29 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode)
             {
-
-                JObject nutrientsLoadingLiveStocksJObject = responseWrapper.Data["NutrientsLoadingLiveStock"] as JObject;
-                if (nutrientsLoadingLiveStocksJObject != null)
+                if(responseWrapper?.Data?["NutrientsLoadingLiveStock"] is JObject nutrientsLoadingLiveStocksJObject)
                 {
-                    nutrientsLoadingLiveStocks = nutrientsLoadingLiveStocksJObject.ToObject<NutrientsLoadingLiveStock>();
+                    nutrientsLoadingLiveStocks = nutrientsLoadingLiveStocksJObject.ToObject<NutrientsLoadingLiveStock>()
+                    ?? new NutrientsLoadingLiveStock();
                 }
-
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return (nutrientsLoadingLiveStocks, error);
     }
@@ -814,38 +714,27 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data is JToken data)
                 {
-                    var organicManureFertilisers = responseWrapper?.Data?.ToObject<OrganicManureFertiliserResponse>();
-                    if (organicManureFertilisers != null)
-                    {
-                        organicManureFertiliserResponse = organicManureFertilisers;
-                    }
+                    organicManureFertiliserResponse = data.ToObject<OrganicManureFertiliserResponse>()
+                        ?? new OrganicManureFertiliserResponse();
                 }
             }
             else
             {
-                if (responseWrapper?.Error != null)
+                if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper?.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
+            _logger.HandleException(ex, error);
         }
         return (organicManureFertiliserResponse, error);
     }
