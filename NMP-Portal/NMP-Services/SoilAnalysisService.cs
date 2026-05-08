@@ -57,7 +57,7 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
             client => client.DeleteAsync(
                 string.Format(ApiurlHelper.DeleteSoilAnalysisByIdAPI, soilAnalysisId)
             ),
-            wrapper => ExtractMessage(wrapper));
+            wrapper => ExtractMessage(wrapper), _logger);
 
         return (data ?? string.Empty, error);
     }
@@ -69,7 +69,7 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         return SendRequestAsync(
             httpCall,
             wrapper => ExtractObject<SoilAnalysis>(wrapper, key) ?? new SoilAnalysis()
-        );
+        ,_logger);
     }
 
     private static T? ExtractObject<T>(ResponseWrapper? wrapper, string key)
@@ -88,43 +88,6 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
             return obj["message"]?.Value<string>() ?? string.Empty;
         }
         return string.Empty;
-    }
-
-    private async Task<(T?, Error)> SendRequestAsync<T>(
-        Func<HttpClient, Task<HttpResponseMessage>> httpCall,
-        Func<ResponseWrapper?, T?> mapData)
-    {
-        Error error = new();
-        T? resultData = default;
-
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpCall(httpClient);
-
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper =
-                JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-            if (response.IsSuccessStatusCode)
-            {
-                resultData = mapData(responseWrapper);
-            }
-            else
-            {
-                _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            _logger.HandleException(ex, error);
-        }
-
-        return (resultData, error);
     }
 
 }

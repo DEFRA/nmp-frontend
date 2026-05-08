@@ -34,11 +34,11 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                                ?? new NutrientsLoadingFarmDetail();
 
                     return new NutrientsLoadingFarmDetail();
-                });
+                }, _logger);
 
         return (data ?? new NutrientsLoadingFarmDetail(), error);
     }
-    
+
     public async Task<(NutrientsLoadingFarmDetail, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year)
     {
         var (data, error) = await SendRequestAsync<NutrientsLoadingFarmDetail>(
@@ -54,7 +54,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new NutrientsLoadingFarmDetail();
-            });
+            }, _logger);
 
         return (data ?? new NutrientsLoadingFarmDetail(), error);
     }
@@ -77,7 +77,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new NutrientsLoadingFarmDetail();
-            });
+            }, _logger);
 
         return (data ?? new NutrientsLoadingFarmDetail(), error);
     }
@@ -96,11 +96,11 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new List<NutrientsLoadingManures>();
-            });
+            }, _logger);
 
         return (data ?? new List<NutrientsLoadingManures>(), error);
     }
-    
+
     public async Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresAsync(string nutrientsLoadingManure)
     {
         var (data, error) = await SendRequestAsync<NutrientsLoadingManures>(
@@ -117,7 +117,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new NutrientsLoadingManures();
-            });
+            }, _logger);
 
         return (data ?? new NutrientsLoadingManures(), error);
     }
@@ -137,7 +137,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new List<NutrientsLoadingFarmDetail>();
-            });
+            }, _logger);
 
         return (data ?? new List<NutrientsLoadingFarmDetail>(), error);
     }
@@ -155,7 +155,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new List<CommonResponse>();
-            });
+            }, _logger);
 
         return (data ?? new List<CommonResponse>(), error);
     }
@@ -175,7 +175,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new CommonResponse();
-            });
+            }, _logger);
 
         return (data ?? new CommonResponse(), error);
     }
@@ -195,7 +195,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new NutrientsLoadingManures();
-            });
+            }, _logger);
 
         return (data ?? new NutrientsLoadingManures(), error);
     }
@@ -215,7 +215,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new NutrientsLoadingManures();
-            });
+            }, _logger);
 
         return (data ?? new NutrientsLoadingManures(), error);
     }
@@ -235,7 +235,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new List<LivestockTypeResponse>();
-            });
+            }, _logger);
 
         return (data ?? new List<LivestockTypeResponse>(), error);
     }
@@ -253,7 +253,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return string.Empty;
-            });
+            }, _logger);
 
         return (data ?? string.Empty, error);
     }
@@ -277,7 +277,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new NutrientsLoadingLiveStock();
-            });
+            }, _logger);
 
         return (data ?? new NutrientsLoadingLiveStock(), error);
     }
@@ -297,7 +297,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new List<NutrientsLoadingLiveStockViewModel>();
-            });
+            }, _logger);
 
         return (data ?? new List<NutrientsLoadingLiveStockViewModel>(), error);
     }
@@ -315,7 +315,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new List<LivestockTypeResponse>();
-            });
+            }, _logger);
 
         return (data ?? new List<LivestockTypeResponse>(), error);
     }
@@ -335,7 +335,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new NutrientsLoadingLiveStock();
-            });
+            }, _logger);
 
         return (data ?? new NutrientsLoadingLiveStock(), error);
     }
@@ -354,7 +354,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return string.Empty;
-            });
+            }, _logger);
 
         return (data ?? string.Empty, error);
     }
@@ -378,7 +378,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new NutrientsLoadingLiveStock();
-            });
+            }, _logger);
 
         return (data ?? new NutrientsLoadingLiveStock(), error);
     }
@@ -398,45 +398,9 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 }
 
                 return new OrganicManureFertiliserResponse();
-            });
+            }, _logger);
 
         return (data ?? new OrganicManureFertiliserResponse(), error);
-    }
-
-    private async Task<(T?, Error)> SendRequestAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> httpCall,
-    Func<ResponseWrapper?, T?> mapData)
-    {
-        Error error = new Error();
-        T? resultData = default;
-
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpCall(httpClient);
-
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper =
-                JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-            if (response.IsSuccessStatusCode)
-            {
-                resultData = mapData(responseWrapper);
-            }
-            else
-            {
-                _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            _logger.HandleException(ex, error);
-        }
-
-        return (resultData, error);
     }
 
 }

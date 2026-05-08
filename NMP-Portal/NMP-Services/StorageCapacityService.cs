@@ -22,7 +22,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         var (data, error) = await SendRequestAsync<List<StorageTypeResponse>>(
             client => client.GetAsync(ApiurlHelper.FetchStorageTypesAsyncAPI),
             wrapper =>
-            ExtractList<StorageTypeResponse>(wrapper));
+            ExtractList<StorageTypeResponse>(wrapper), _logger);
 
         return (data ?? new List<StorageTypeResponse>(), error);
     }
@@ -36,7 +36,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                     return token.ToObject<List<StoreCapacityResponse>>() ?? new List<StoreCapacityResponse>();
 
                 return new List<StoreCapacityResponse>();
-            });
+            }, _logger);
 
         return (data ?? new List<StoreCapacityResponse>(), error);
     }
@@ -53,7 +53,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 }
 
                 return new List<CommonResponse>();
-            });
+            }, _logger);
 
         return (data ?? new List<CommonResponse>(), error);
     }
@@ -62,7 +62,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         var (data, error) = await SendRequestAsync(
             client => client.GetAsync(string.Format(ApiurlHelper.FetchMaterialStatesListByIDAsyncAPI, id)),
             wrapper => ExtractSingle<CommonResponse>(wrapper)
-        );
+        , _logger);
 
         return (data ?? new CommonResponse(), error);
     }
@@ -72,7 +72,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
         var (data, error) = await SendRequestAsync(
             client => client.GetAsync(string.Format(ApiurlHelper.FetchStorageTypeByIdAsyncAPI, id)),
             wrapper => ExtractSingle<StorageTypeResponse>(wrapper)
-        );
+        , _logger);
 
         return (data ?? new StorageTypeResponse(), error);
     }
@@ -90,7 +90,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 }
 
                 return new List<SolidManureTypeResponse>();
-            });
+            }, _logger);
 
         return (data ?? new List<SolidManureTypeResponse>(), error);
     }
@@ -109,7 +109,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 }
 
                 return new SolidManureTypeResponse();
-            });
+            }, _logger);
 
         return (data ?? new SolidManureTypeResponse(), error);
     }
@@ -127,7 +127,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 }
 
                 return new List<BankSlopeAnglesResponse>();
-            });
+            }, _logger);
 
         return (data ?? new List<BankSlopeAnglesResponse>(), error);
     }
@@ -147,7 +147,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 }
 
                 return new BankSlopeAnglesResponse();
-            });
+            }, _logger);
 
         return (data ?? new BankSlopeAnglesResponse(), error);
     }
@@ -162,7 +162,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 new StringContent(jsonData, Encoding.UTF8, "application/json")
             ),
             wrapper => ExtractFromObject<StoreCapacity>(wrapper)
-        );
+        , _logger);
 
         return (data ?? new StoreCapacity(), error);
     }
@@ -174,7 +174,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId, storeName, ID ?? 0)
             ),
             wrapper => ExtractBoolean(wrapper, "exists")
-        );
+        , _logger);
 
         return (data, error);
     }
@@ -195,7 +195,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 }
 
                 return new StoreCapacity();
-            });
+            }, _logger);
 
         return (data ?? new StoreCapacity(), error);
     }
@@ -216,7 +216,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 }
 
                 return new List<StoreCapacityResponse>();
-            });
+            }, _logger);
 
         return (data ?? new List<StoreCapacityResponse>(), error);
     }
@@ -228,7 +228,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 string.Format(ApiurlHelper.DeleteStorageCapacityByIdAPI, id)
             ),
             wrapper => ExtractMessage(wrapper)
-        );
+        , _logger);
 
         return (data ?? string.Empty, error);
     }
@@ -243,47 +243,10 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
                 new StringContent(jsonData, Encoding.UTF8, "application/json")
             ),
             wrapper => ExtractFromObject<StoreCapacity>(wrapper)
-        );
+        , _logger);
 
         return (data ?? new StoreCapacity(), error);
     }
-
-    private async Task<(T?, Error)> SendRequestAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> httpCall,
-   Func<ResponseWrapper?, T?> mapData)
-    {
-        Error error = new Error();
-        T? resultData = default;
-
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpCall(httpClient);
-
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper =
-                JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-            if (response.IsSuccessStatusCode)
-            {
-                resultData = mapData(responseWrapper);
-            }
-            else
-            {
-                _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            _logger.HandleException(ex, error);
-        }
-
-        return (resultData, error);
-    }
-
     private static List<T> ExtractList<T>(ResponseWrapper? wrapper, string key = "records")
     {
         if (wrapper?.Data?[key] is JToken token)
