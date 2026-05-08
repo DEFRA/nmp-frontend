@@ -219,7 +219,8 @@
                                         @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
                                     </p>
 
-                                    <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#crop-1">@Resource.lblBackToTheTop</a></p>
+                                    <p class="govuk-body mt-5 margin-top-forty">
+                                    <a class="govuk-link" href="@(string.Format("{0}{1}", "#", tabId))">@Resource.lblBackToTheTop</a></p>
 
                                 }
 
