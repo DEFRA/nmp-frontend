@@ -42,10 +42,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
 
         }
@@ -80,10 +77,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error= _logger.ExtractError(responseWrapper, error)?? new Error();
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
 
         }
@@ -117,10 +111,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
 
         }
@@ -158,10 +149,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -196,10 +184,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
 
         }
@@ -232,10 +217,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -272,10 +254,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -310,10 +289,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -347,10 +323,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -384,10 +357,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -422,10 +392,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -457,10 +424,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -497,10 +461,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -535,10 +496,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -572,10 +530,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -609,10 +564,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -645,10 +597,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -685,10 +634,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
@@ -722,10 +668,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
