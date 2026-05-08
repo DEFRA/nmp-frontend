@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NMP.Commons.Helpers;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
@@ -16,7 +18,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
     private const string _errorLog= "{Code} : {Message} : {Stack} : {Path}";
     public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId,int countryId)
     {
-        Error error = null;
+        Error? error = null;
         string nutrientIndex = string.Empty;
         HttpClient httpClient = await GetNMPAPIClient();
         var requestUrl = string.Format(ApiurlHelper.FetchSoilNutrientIndexAsyncAPI, HttpUtility.UrlEncode(nutrientId.ToString()), HttpUtility.UrlEncode(nutrientValue.ToString()), HttpUtility.UrlEncode(methodologyId.ToString()), HttpUtility.UrlEncode(countryId.ToString()));
@@ -24,20 +26,13 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (responseWrapper?.Data is JObject data)
         {
-            nutrientIndex = responseWrapper.Data["index"];
+            nutrientIndex = data["index"]?.Value<string>() ?? string.Empty;
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError(_errorLog, error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (nutrientIndex, error);
@@ -51,9 +46,9 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (responseWrapper?.Data is JObject data)
         {
-            soilType = responseWrapper?.Data["soilType"];
+            soilType = data["soilType"]?.Value<string>() ?? string.Empty;
         }
 
         return soilType;
@@ -69,17 +64,16 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilMethodologiesByNutrientAndCountryIdAsyncAPI, nutrientId,countryId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (response.IsSuccessStatusCode)
         {
-            soilMethodologyList = responseWrapper?.Data?.ToObject<List<SoilMethologiesResponse>>();
+            if(responseWrapper != null && responseWrapper.Data != null)
+            {
+                soilMethodologyList = responseWrapper?.Data?.ToObject<List<SoilMethologiesResponse>>();
+            }
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                _logger.LogError(_errorLog, error?.Code, error?.Message, error?.Stack, error?.Path);
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
         return (soilMethodologyList, error);
     }
@@ -94,17 +88,16 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchAllSoilMethodologyNameAsyncAPI, nutrientId, methodologyId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (response.IsSuccessStatusCode)
         {
-            soilAnalysesMethod = responseWrapper?.Data?.ToObject<SoilMethologiesResponse>();
+            if(responseWrapper != null && responseWrapper.Data != null)
+            {
+                soilAnalysesMethod = responseWrapper?.Data?.ToObject<SoilMethologiesResponse>();
+            }
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                _logger.LogError(_errorLog, error?.Code, error?.Message, error?.Stack, error?.Path);
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
         return (soilAnalysesMethod, error);
     }
@@ -118,25 +111,22 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper?.Data != null)
+        if (response.IsSuccessStatusCode)
         {
-            List<SoilNutrientStatusResponse>? soilNutrientIndiceResponse = responseWrapper?.Data?.ToObject<List<SoilNutrientStatusResponse>>();
-
-            if (soilNutrientIndiceResponse != null)
+            if(responseWrapper?.Data != null)
             {
-                statusList = soilNutrientIndiceResponse;
+                List<SoilNutrientStatusResponse>? soilNutrientIndiceResponse = responseWrapper?.Data?.ToObject<List<SoilNutrientStatusResponse>>();
+
+                if (soilNutrientIndiceResponse != null)
+                {
+                    statusList = soilNutrientIndiceResponse;
+                }
             }
+            
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError(_errorLog, error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (statusList, error);
