@@ -17,130 +17,124 @@ namespace NMP.Services;
 public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ISoilAnalysisService
 {
     private readonly ILogger<SoilAnalysisService> _logger = logger;
+    private const string _applicationJson = "application/json";
 
     public async Task<(SoilAnalysis?, Error?)> FetchSoilAnalysisById(int id)
     {
-        SoilAnalysis? soilAnalysis = null;
-        Error? error = null;
-
         _logger.LogTrace("SoilAnalysisService: soil-analyses/{Id} called.", id);
-        HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilAnalysisByIdAsyncAPI, HttpUtility.UrlEncode(id.ToString())));
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode)
-        {
-            if(responseWrapper?.Data?["SoilAnalysis"] is JObject soilanalysisObject)
+
+        var (data, error) = await SendRequestAsync<SoilAnalysis>(
+            client => client.GetAsync(
+                string.Format(ApiurlHelper.FetchSoilAnalysisByIdAsyncAPI, HttpUtility.UrlEncode(id.ToString()))
+            ),
+            wrapper =>
             {
-                soilAnalysis = soilanalysisObject.ToObject<SoilAnalysis>() ?? new SoilAnalysis();
-            }
-        }
-        else
-        {
-            error = _logger.ExtractError(responseWrapper, error);
-        }
-        return (soilAnalysis, error);
+                if (wrapper?.Data?["SoilAnalysis"] is JObject obj)
+                {
+                    return obj.ToObject<SoilAnalysis>()
+                           ?? new SoilAnalysis();
+                }
+
+                return new SoilAnalysis();
+            });
+
+        return (data, error);
     }
     public async Task<(SoilAnalysis?, Error?)> UpdateSoilAnalysisAsync(int id, string soilData)
     {
-        SoilAnalysis? soilAnalysis = null;
-        Error? error = null;
-        try
-        {
-            _logger.LogTrace("SoilAnalysisService: soil-analyses/{Id}/{SoilData} called.", id, soilData);
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateSoilAnalysisAsyncAPI, id), new StringContent(soilData, Encoding.UTF8, "application/json"));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if(responseWrapper?.Data?["SoilAnalysis"] is JObject soilAnalysisJObject)
-                {
-                    soilAnalysis = soilAnalysisJObject.ToObject<SoilAnalysis>() ?? new SoilAnalysis();
-                }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
+        _logger.LogTrace("SoilAnalysisService: soil-analyses/{Id}/{SoilData} called.", id, soilData);
 
-        return (soilAnalysis, error);
+        var (data, error) = await SendRequestAsync<SoilAnalysis>(
+            client => client.PutAsync(
+                string.Format(ApiurlHelper.UpdateSoilAnalysisAsyncAPI, id),
+                new StringContent(soilData, Encoding.UTF8, _applicationJson)
+            ),
+            wrapper =>
+            {
+                if (wrapper?.Data?["SoilAnalysis"] is JObject obj)
+                {
+                    return obj.ToObject<SoilAnalysis>()
+                           ?? new SoilAnalysis();
+                }
+
+                return new SoilAnalysis();
+            });
+
+        return (data, error);
     }
 
     public async Task<(SoilAnalysis?, Error?)> AddSoilAnalysisAsync(string soilAnalysisData)
     {
-        SoilAnalysis? soilAnalysis = null;
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.AddSoilAnalysisAsyncAPI, new StringContent(soilAnalysisData, Encoding.UTF8, "application/json"));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<SoilAnalysis>(
+            client => client.PostAsync(
+                ApiurlHelper.AddSoilAnalysisAsyncAPI,
+                new StringContent(soilAnalysisData, Encoding.UTF8, _applicationJson)
+            ),
+            wrapper =>
             {
-                if(responseWrapper?.Data?["soilAnalysis"] is JObject soilAnalysisJObject)
+                if (wrapper?.Data?["soilAnalysis"] is JObject obj)
                 {
-                    soilAnalysis = soilAnalysisJObject.ToObject<SoilAnalysis>() ?? new SoilAnalysis();
+                    return obj.ToObject<SoilAnalysis>()
+                           ?? new SoilAnalysis();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (soilAnalysis, error);
+
+                return new SoilAnalysis();
+            });
+
+        return (data, error);
     }
 
     public async Task<(string, Error?)> DeleteSoilAnalysisByIdAsync(int soilAnalysisId)
     {
-        Error? error = null;
-        string message = string.Empty;
+        var (data, error) = await SendRequestAsync<string>(
+            client => client.DeleteAsync(
+                string.Format(ApiurlHelper.DeleteSoilAnalysisByIdAPI, soilAnalysisId)
+            ),
+            wrapper =>
+            {
+                if (wrapper?.Data is JObject obj)
+                {
+                    return obj["message"]?.Value<string>() ?? string.Empty;
+                }
+
+                return string.Empty;
+            });
+
+        return (data ?? string.Empty, error);
+    }
+    private async Task<(T?, Error)> SendRequestAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> httpCall,
+   Func<ResponseWrapper?, T?> mapData)
+    {
+        Error error = new Error();
+        T? resultData = default;
+
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteSoilAnalysisByIdAPI, soilAnalysisId));
+            var response = await httpCall(httpClient);
+
             string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            ResponseWrapper? responseWrapper =
+                JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
             if (response.IsSuccessStatusCode)
             {
-                if(responseWrapper?.Data is JObject data)
-                {
-                    message = data["message"]?.Value<string>() ?? string.Empty;
-                }
+                resultData = mapData(responseWrapper);
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error);
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = _logger.HandleHttpRequestException(hre, error);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = _logger.HandleException(ex, error);
+            _logger.HandleException(ex, error);
         }
 
-        return (message, error);
+        return (resultData, error);
     }
-
 }

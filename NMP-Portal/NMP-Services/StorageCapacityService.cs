@@ -19,503 +19,331 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
 
     public async Task<(List<StorageTypeResponse>, Error)> FetchStorageTypes()
     {
-        List<StorageTypeResponse> storageTypeList = new List<StorageTypeResponse>();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchStorageTypesAsyncAPI);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<List<StorageTypeResponse>>(
+            client => client.GetAsync(ApiurlHelper.FetchStorageTypesAsyncAPI),
+            wrapper =>
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    var storageTypes = responseWrapper?.Data?.records.ToObject<List<StorageTypeResponse>>();
-                    storageTypeList.AddRange(storageTypes);
+                    return token.ToObject<List<StorageTypeResponse>>()
+                           ?? new List<StorageTypeResponse>();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (storageTypeList, error);
+
+                return new List<StorageTypeResponse>();
+            });
+
+        return (data ?? new List<StorageTypeResponse>(), error);
     }
     public async Task<(List<StoreCapacityResponse>, Error)> FetchStoreCapacityByFarmId(int farmId)
     {
-        Error error = new Error();
-        List<StoreCapacityResponse> storeCapacityList = new List<StoreCapacityResponse>();
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Empty;
-
-            url = string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId);
-            var response = await httpClient.GetAsync(url);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<List<StoreCapacityResponse>>(
+            client => client.GetAsync(
+                string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId)
+            ),
+            wrapper =>
             {
-                if (responseWrapper?.Data is JToken data)
+                if (wrapper?.Data is JToken token)
                 {
-                    storeCapacityList = data.ToObject<List<StoreCapacityResponse>>() ?? new List<StoreCapacityResponse>();
+                    return token.ToObject<List<StoreCapacityResponse>>()
+                           ?? new List<StoreCapacityResponse>();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (storeCapacityList, error);
+
+                return new List<StoreCapacityResponse>();
+            });
+
+        return (data ?? new List<StoreCapacityResponse>(), error);
     }
     public async Task<(List<CommonResponse>, Error)> FetchMaterialStates()
     {
-        List<CommonResponse> materialStatesList = new List<CommonResponse>();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchMaterialStatesListAsyncAPI);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<List<CommonResponse>>(
+            client => client.GetAsync(ApiurlHelper.FetchMaterialStatesListAsyncAPI),
+            wrapper =>
             {
-                if (responseWrapper?.Data?.records is JToken records)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    var materialStates = records.ToObject<List<CommonResponse>>() ?? new List<CommonResponse>();
-                    materialStatesList.AddRange(materialStates);
+                    return token.ToObject<List<CommonResponse>>()
+                           ?? new List<CommonResponse>();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (materialStatesList, error);
+
+                return new List<CommonResponse>();
+            });
+
+        return (data ?? new List<CommonResponse>(), error);
     }
     public async Task<(CommonResponse, Error)> FetchMaterialStateById(int id)
     {
-        CommonResponse materialState = new CommonResponse();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMaterialStatesListByIDAsyncAPI, id));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<CommonResponse>(
+            client => client.GetAsync(
+                string.Format(ApiurlHelper.FetchMaterialStatesListByIDAsyncAPI, id)
+            ),
+            wrapper =>
             {
-                if (responseWrapper?.Data?.records is JToken records)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    materialState = records.ToObject<CommonResponse>() ?? new CommonResponse();
+                    return token.ToObject<CommonResponse>()
+                           ?? new CommonResponse();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (materialState, error);
+
+                return new CommonResponse();
+            });
+
+        return (data ?? new CommonResponse(), error);
     }
     public async Task<(StorageTypeResponse, Error)> FetchStorageTypeById(int id)
     {
-        StorageTypeResponse storageType = new StorageTypeResponse();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchStorageTypeByIdAsyncAPI, id));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<StorageTypeResponse>(
+            client => client.GetAsync(
+                string.Format(ApiurlHelper.FetchStorageTypeByIdAsyncAPI, id)
+            ),
+            wrapper =>
             {
-                if (responseWrapper?.Data?.records is JToken records)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    storageType = records.ToObject<StorageTypeResponse>() ?? new StorageTypeResponse();
+                    return token.ToObject<StorageTypeResponse>()
+                           ?? new StorageTypeResponse();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (storageType, error);
+
+                return new StorageTypeResponse();
+            });
+
+        return (data ?? new StorageTypeResponse(), error);
     }
     public async Task<(List<SolidManureTypeResponse>, Error)> FetchSolidManureType()
     {
-        List<SolidManureTypeResponse> solidManureTypeList = new List<SolidManureTypeResponse>();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchSolidManureTypeAsyncAPI);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<List<SolidManureTypeResponse>>(
+            client => client.GetAsync(ApiurlHelper.FetchSolidManureTypeAsyncAPI),
+            wrapper =>
             {
-                if (responseWrapper?.Data?.records is JToken records)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    solidManureTypeList = records.ToObject<List<SolidManureTypeResponse>>() ?? new List<SolidManureTypeResponse>();
+                    return token.ToObject<List<SolidManureTypeResponse>>()
+                           ?? new List<SolidManureTypeResponse>();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (solidManureTypeList, error);
+
+                return new List<SolidManureTypeResponse>();
+            });
+
+        return (data ?? new List<SolidManureTypeResponse>(), error);
     }
     public async Task<(SolidManureTypeResponse, Error)> FetchSolidManureTypeById(int id)
     {
-        SolidManureTypeResponse solidManureType = new SolidManureTypeResponse();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSolidManureTypeByIdAsyncAPI, id));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<SolidManureTypeResponse>(
+            client => client.GetAsync(
+                string.Format(ApiurlHelper.FetchSolidManureTypeByIdAsyncAPI, id)
+            ),
+            wrapper =>
             {
-                if (responseWrapper?.Data?.records is JToken records)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    solidManureType = records.ToObject<SolidManureTypeResponse>() ?? new SolidManureTypeResponse();
+                    return token.ToObject<SolidManureTypeResponse>()
+                           ?? new SolidManureTypeResponse();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (solidManureType, error);
+
+                return new SolidManureTypeResponse();
+            });
+
+        return (data ?? new SolidManureTypeResponse(), error);
     }
 
     public async Task<(List<BankSlopeAnglesResponse>, Error)> FetchBankSlopeAngles()
     {
-        List<BankSlopeAnglesResponse> bankSlopeAngleList = new List<BankSlopeAnglesResponse>();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchBankSlopeAnglesAsyncAPI);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<List<BankSlopeAnglesResponse>>(
+            client => client.GetAsync(ApiurlHelper.FetchBankSlopeAnglesAsyncAPI),
+            wrapper =>
             {
-                if (responseWrapper?.Data?.records is JToken records)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    bankSlopeAngleList = records.ToObject<List<BankSlopeAnglesResponse>>() ?? new List<BankSlopeAnglesResponse>();
+                    return token.ToObject<List<BankSlopeAnglesResponse>>()
+                           ?? new List<BankSlopeAnglesResponse>();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (bankSlopeAngleList, error);
+
+                return new List<BankSlopeAnglesResponse>();
+            });
+
+        return (data ?? new List<BankSlopeAnglesResponse>(), error);
     }
 
     public async Task<(BankSlopeAnglesResponse, Error)> FetchBankSlopeAngleById(int id)
     {
-        BankSlopeAnglesResponse bankSlopeAngle = new BankSlopeAnglesResponse();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchBankSlopeAngleByIdAsyncAPI, id));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<BankSlopeAnglesResponse>(
+            client => client.GetAsync(
+                string.Format(ApiurlHelper.FetchBankSlopeAngleByIdAsyncAPI, id)
+            ),
+            wrapper =>
             {
-                if (responseWrapper?.Data?.records is JToken records)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    bankSlopeAngle = records.ToObject<BankSlopeAnglesResponse>() ?? new BankSlopeAnglesResponse();
+                    return token.ToObject<BankSlopeAnglesResponse>()
+                           ?? new BankSlopeAnglesResponse();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (bankSlopeAngle, error);
+
+                return new BankSlopeAnglesResponse();
+            });
+
+        return (data ?? new BankSlopeAnglesResponse(), error);
     }
 
     public async Task<(StoreCapacity, Error)> AddStoreCapacityAsync(StoreCapacity storeCapacityData)
     {
-        string jsonData = JsonConvert.SerializeObject(storeCapacityData);
-        StoreCapacity storeCapacity = null;
-        Error error = new Error();
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
+        var jsonData = JsonConvert.SerializeObject(storeCapacityData);
 
-            var response = await httpClient.PostAsync(ApiurlHelper.AddStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<StoreCapacity>(
+            client => client.PostAsync(
+                ApiurlHelper.AddStoreCapacityAsyncAPI,
+                new StringContent(jsonData, Encoding.UTF8, "application/json")
+            ),
+            wrapper =>
             {
-                if(responseWrapper?.Data is JObject storeCapacityJObject)
+                if (wrapper?.Data is JObject obj)
                 {
-                    storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>() ?? new StoreCapacity();
+                    return obj.ToObject<StoreCapacity>() ?? new StoreCapacity();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error)?? new Error();
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (storeCapacity, error);
+
+                return new StoreCapacity();
+            });
+
+        return (data ?? new StoreCapacity(), error);
     }
 
     public async Task<(bool, Error)> IsStoreNameExistAsync(int farmId, string storeName, int? ID)
     {
-        bool isExist = false;
-        Error? error = null;
-
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId, storeName, ID ?? 0));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<bool>(
+            client => client.GetAsync(
+                string.Format(
+                    ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI,
+                    farmId,
+                    storeName,
+                    ID ?? 0
+                )
+            ),
+            wrapper =>
             {
-                if (responseWrapper?.Data is JObject data)
+                if (wrapper?.Data is JObject obj)
                 {
-                    isExist = data["exists"]?.Value<bool>() ?? false;
+                    return obj["exists"]?.Value<bool>() ?? false;
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (isExist, error);
+
+                return false;
+            });
+
+        return (data, error);
     }
 
     public async Task<(StoreCapacity, Error)> FetchStoreCapacityByIdAsync(int id)
     {
-        StoreCapacity? storeCapacity = new StoreCapacity();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchStoreCapacityByIdAsyncAPI, id));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<StoreCapacity>(
+            client => client.GetAsync(
+                string.Format(ApiurlHelper.FetchStoreCapacityByIdAsyncAPI, id)
+            ),
+            wrapper =>
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (wrapper?.Data?["records"] is JToken token)
                 {
-                    storeCapacity = responseWrapper?.Data?.records.ToObject<StoreCapacity>();
+                    return token.ToObject<StoreCapacity>()
+                           ?? new StoreCapacity();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (storeCapacity, error);
+
+                return new StoreCapacity();
+            });
+
+        return (data ?? new StoreCapacity(), error);
     }
 
     public async Task<(List<StoreCapacityResponse>, Error)> CopyExistingStorageCapacity(string copyStorageManureCapacityData)
     {
-        List<StoreCapacityResponse> storeCapacities = new List<StoreCapacityResponse>();
-        Error error = new Error();
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-
-            var response = await httpClient.PostAsync(ApiurlHelper.CopyStoreManureCapacityAsyncAPI, new StringContent(copyStorageManureCapacityData, Encoding.UTF8, "application/json"));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<List<StoreCapacityResponse>>(
+            client => client.PostAsync(
+                ApiurlHelper.CopyStoreManureCapacityAsyncAPI,
+                new StringContent(copyStorageManureCapacityData, Encoding.UTF8, "application/json")
+            ),
+            wrapper =>
             {
-                if(responseWrapper?.Data is JToken data)
+                if (wrapper?.Data is JToken token)
                 {
-                    storeCapacities = data.ToObject<List<StoreCapacityResponse>>() ?? new List<StoreCapacityResponse>();
+                    return token.ToObject<List<StoreCapacityResponse>>()
+                           ?? new List<StoreCapacityResponse>();
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (storeCapacities, error);
+
+                return new List<StoreCapacityResponse>();
+            });
+
+        return (data ?? new List<StoreCapacityResponse>(), error);
     }
 
     public async Task<(string, Error)> RemoveStorageCapacity(int id)
     {
-        Error error = new Error();
-        string message = string.Empty;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteStorageCapacityByIdAPI, id));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+        var (data, error) = await SendRequestAsync<string>(
+            client => client.DeleteAsync(
+                string.Format(ApiurlHelper.DeleteStorageCapacityByIdAPI, id)
+            ),
+            wrapper =>
             {
-                if(responseWrapper?.Data is JObject data)
+                if (wrapper?.Data is JObject obj)
                 {
-                    message = data["message"]?.Value<string>() ?? string.Empty;
+                    return obj["message"]?.Value<string>() ?? string.Empty;
                 }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
 
-        return (message, error);
+                return string.Empty;
+            });
+
+        return (data ?? string.Empty, error);
     }
 
     public async Task<(StoreCapacity, Error)> UpdateStoreCapacityAsync(StoreCapacity storeCapacityData)
     {
-        string jsonData = JsonConvert.SerializeObject(storeCapacityData);
-        StoreCapacity storeCapacity = null;
+        var jsonData = JsonConvert.SerializeObject(storeCapacityData);
+
+        var (data, error) = await SendRequestAsync<StoreCapacity>(
+            client => client.PutAsync(
+                ApiurlHelper.UpdateStoreCapacityAsyncAPI,
+                new StringContent(jsonData, Encoding.UTF8, "application/json")
+            ),
+            wrapper =>
+            {
+                if (wrapper?.Data is JObject obj)
+                {
+                    return obj.ToObject<StoreCapacity>() ?? new StoreCapacity();
+                }
+
+                return new StoreCapacity();
+            });
+
+        return (data ?? new StoreCapacity(), error);
+    }
+
+    private async Task<(T?, Error)> SendRequestAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> httpCall,
+   Func<ResponseWrapper?, T?> mapData)
+    {
         Error error = new Error();
+        T? resultData = default;
+
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpCall(httpClient);
 
-            var response = await httpClient.PutAsync(ApiurlHelper.UpdateStoreCapacityAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            ResponseWrapper? responseWrapper =
+                JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
             if (response.IsSuccessStatusCode)
             {
-                if(responseWrapper?.Data is JObject storeCapacityJObject)
-                {
-                    storeCapacity = storeCapacityJObject.ToObject<StoreCapacity>() ?? new StoreCapacity();
-                }
+                resultData = mapData(responseWrapper);
             }
             else
             {
-                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error = _logger.HandleHttpRequestException(hre, error);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = _logger.HandleException(ex, error);
+            _logger.HandleException(ex, error);
         }
-        return (storeCapacity, error);
+
+        return (resultData, error);
     }
 }
