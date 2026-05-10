@@ -4021,9 +4021,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             await BindViewBegForRecommendation(cropCounter, crop);
             string defolicationName = await _cropLogic.BindDefoliationNameForRecommendation(recommendation, crop);
 
-            var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
+            //var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
+            string[]? defolicationParts = defolicationName?.Split(',', StringSplitOptions.RemoveEmptyEntries);
             int defIndex = 0;
-            if (recommendation.RecommendationData != null && recommendation.RecommendationData.Any())
+            if (recommendation.RecommendationData?.Any() == true)
             {
                 foreach (var recData in recommendation.RecommendationData)
                 {
@@ -4053,35 +4054,31 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                     Resource.lblFive.ToLower(), Resource.lblSix.ToLower(), Resource.lblSeven.ToLower(), Resource.lblEight.ToLower(), Resource.lblNine.ToLower()
                                 };
 
-            if (cropCounter == 1)
-            {
-                (DefoliationSequenceResponse defoliationSequence, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                if (defoliationSequence.DefoliationSequenceId != null)
-                {
-                    if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
-                    {
-                        ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
-                    }
-                    else
-                    {
-                        ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
-                    }
-                }
 
-            }
-            else if (cropCounter == 2)
+            (DefoliationSequenceResponse defoliationSequence, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            bool defoliationSequenceDescription = defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment);
+            if (defoliationSequenceDescription)
             {
-                (DefoliationSequenceResponse defoliationSequence, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                if (defoliationSequence.DefoliationSequenceId != null)
+                string grassHeading = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
+                if (cropCounter == 1)
                 {
-                    if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
-                    {
-                        ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
-                    }
-                    else
-                    {
-                        ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
-                    }
+                    ViewBag.GrassHeadingCropOne = grassHeading;
+                }
+                else if (cropCounter == 2)
+                {
+                    ViewBag.GrassHeadingCropTwo = grassHeading;
+                }
+            }
+            else
+            {
+                string grassHeading = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
+                if (cropCounter == 1)
+                {
+                    ViewBag.GrassHeadingCropOne = grassHeading;
+                }
+                else if (cropCounter == 2)
+                {
+                    ViewBag.GrassHeadingCropTwo = grassHeading;
                 }
             }
         }
@@ -4575,13 +4572,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return harvestYearPlanResponse;
     }
-    private IActionResult? ValidateRemoveAction(PlanViewModel model)
+    private void ValidateRemoveAction(PlanViewModel model)
     {
         if (model.RemoveCrop == null)
         {
             ModelState.AddModelError("RemoveCrop", Resource.MsgSelectAnOptionBeforeContinuing);
         }
-        return null;
     }
     private async Task<IActionResult> RedirectForRemoveCrop(PlanViewModel model, bool isRemove, List<HarvestYearPlanResponse>? harvestYearPlanResponse)
     {

@@ -2909,7 +2909,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         return RedirectToAction(_checkAnswerActionName);
     }
-  
+
 
     private FertiliserManureViewModel BindPropertiesForRemove(string q, string r, string s, string? t, string? u, FertiliserManureViewModel? model)
     {
@@ -2959,7 +2959,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     {
         _logger.LogTrace("Fertiliser Manure Controller : RemoveFertiliser() action called");
         FertiliserManureViewModel? model = new FertiliserManureViewModel();
-        Error? error = null;
         try
         {
             if (string.IsNullOrWhiteSpace(q))

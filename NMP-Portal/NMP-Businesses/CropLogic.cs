@@ -286,6 +286,9 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
         firstCropName = recommendations[0]?.Crops?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendations[0].Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendations[0].Crops.CropTypeID.Value);
         foreach (var recommendation in recommendations)
         {
+            string cropTypeName = recommendation.Crops.CropTypeID == (int)CropTypes.Grass
+     ? nameof(CropTypes.Grass)
+     : await _fieldLogic.FetchCropTypeById(recommendation.Crops.CropTypeID!.Value);
             //check sns already exist or not in SnsAnalyses table by cropID
             SnsAnalysis snsData = await FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID ?? 0);
             var crop = new CropViewModel
@@ -302,7 +305,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
                 Yield = recommendation.Crops.Yield,
                 SowingDate = recommendation.Crops.SowingDate,
                 OtherCropName = recommendation.Crops.OtherCropName,
-                CropTypeName = recommendation.Crops.CropTypeID == 140 ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendation.Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendation.Crops.CropTypeID.Value),
+                CropTypeName = cropTypeName,
                 IsSnsExist = snsData.CropID > 0,
                 SnsAnalysisData = snsData,
                 SwardManagementName = recommendation.Crops.SwardManagementName,
@@ -363,23 +366,36 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
             }
 
             model.Crops.Add(crop);
-            if (recommendation.PKBalance != null)
-            {
-                model.PKBalance = new PKBalance();
-                model.PKBalance.PBalance = recommendation.PKBalance.PBalance;
-                model.PKBalance.KBalance = recommendation.PKBalance.KBalance;
-            }
+            model = BindPkBalanceForRecommendation(model, recommendation);
 
         }
 
-        (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
-        if (error == null && nutrients.Count > 0)
+        model = await BindNutrientListForRecommendation(model);
+
+        return (model, firstCropName);
+    }
+
+    private async Task<RecommendationViewModel> BindNutrientListForRecommendation(RecommendationViewModel model)
+    {
+        (List<NutrientResponseWrapper> nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
+        if (nutrients.Count > 0)
         {
             model.Nutrients = new List<NutrientResponseWrapper>();
             model.Nutrients = nutrients;
         }
 
-        return (model, firstCropName);
+        return model;
+    }
+
+    private RecommendationViewModel BindPkBalanceForRecommendation(RecommendationViewModel model, RecommendationHeader recommendation)
+    {
+        if (recommendation.PKBalance != null)
+        {
+            model.PKBalance = new PKBalance();
+            model.PKBalance.PBalance = recommendation.PKBalance.PBalance;
+            model.PKBalance.KBalance = recommendation.PKBalance.KBalance;
+        }
+        return model;
     }
 
     private static void CreateNewObject(RecommendationViewModel model)
