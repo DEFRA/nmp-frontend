@@ -9,10 +9,11 @@ using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
+using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService),ISnsAnalysisService
+public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ISnsAnalysisService
 {
     private readonly ILogger<SnsAnalysisService> _logger = logger;
 
@@ -28,82 +29,59 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data?.snsAnalyses?.records is JArray records && records.Count > 0)
                 {
-                    if(responseWrapper.Data.snsAnalyses.records.Count>0)
-                    {
-                        snsAnalysis = responseWrapper.Data.snsAnalyses.records[0].ToObject<SnsAnalysis>();
-
-                    }
+                    snsAnalysis = records[0].ToObject<SnsAnalysis>() ?? new SnsAnalysis();
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return snsAnalysis;
     }
 
     public async Task<(SnsAnalysis, Error)> AddSnsAnalysisAsync(SnsAnalysis snsData)
     {
-        //string jsonData = JsonConvert.SerializeObject(snsData);
         string jsonData = JsonConvert.SerializeObject(new { SnsAnalysis = snsData }, Formatting.Indented);
 
-        SnsAnalysis snsAnalysis = null;
+        SnsAnalysis? snsAnalysis = null;
         Error error = new Error();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            
-                var response = await httpClient.PostAsync(ApiurlHelper.AddSnsAnalysisAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                string result = await response.Content.ReadAsStringAsync();
-                ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-                if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
-                {
 
-                    JObject farmDataJObject = responseWrapper.Data["snsAnalysis"] as JObject;
-                    if (snsData != null)
-                    {
-                       snsAnalysis = farmDataJObject.ToObject<SnsAnalysis>();
-                    }
-
-                }
-                else
+            var response = await httpClient.PostAsync(ApiurlHelper.AddSnsAnalysisAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper?.Data?["snsAnalysis"] is JObject farmDataJObject)
                 {
-                    if (responseWrapper != null && responseWrapper.Error != null)
-                    {
-                        error = responseWrapper.Error.ToObject<Error>();
-                        _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                    }
+                    snsAnalysis = farmDataJObject.ToObject<SnsAnalysis>() ?? new SnsAnalysis();
                 }
-           
+            }
+            else
+            {
+                _logger.ExtractError(responseWrapper, error);
+            }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (snsAnalysis, error);
     }
@@ -117,29 +95,25 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
             var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteSNSAnalysisAPI, snsAnalysisId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode)
             {
-                message = responseWrapper.Data["message"].Value;
+                if (responseWrapper?.Data is JObject data)
+                {
+                    message = data["message"]?.Value<string>() ?? string.Empty;
+                }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
-                }
+                _logger.ExtractError(responseWrapper, error);
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
+            error = _logger.HandleException(ex, error);
         }
         return (message, error);
     }
