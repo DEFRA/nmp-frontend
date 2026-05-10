@@ -2909,47 +2909,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         return RedirectToAction(_checkAnswerActionName);
     }
-    [HttpGet]
-    public async Task<IActionResult> RemoveFertiliser(string q, string r, string s, string? t, string? u, string? v)
-    {
-        _logger.LogTrace("Fertiliser Manure Controller : RemoveFertiliser() action called");
-        FertiliserManureViewModel? model = new FertiliserManureViewModel();
-        Error? error = null;
-        try
-        {
-            if (string.IsNullOrWhiteSpace(q))
-            {
-                model = GetFertiliserManureFromSession();
-                if (model == null)
-                {
-                    _logger.LogError("Fertiliser Manure Controller : Session not found in RemoveFertiliser() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-                }
-                await BindViewBegForField(model, error);
-            }
-            else
-            {
-                model.IsComingFromRecommendation = true;
-                model = BindPropertiesForRemove(q, r, s, t, u, model);
-                SetFertiliserManureToSession(model);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            _logger.LogTrace(ex, "OrganicManure Controller : Exception in RemoveFertiliser() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-
-            if (model != null && model.IsComingFromRecommendation)
-            {
-                TempData["NutrientRecommendationsError"] = ex.Message;
-                return RedirectToAction(_recommendationsActionName, "Crop", new { q = model.EncryptedFarmId, r, s = model.EncryptedHarvestYear });
-            }
-
-            TempData["CheckYourAnswerError"] = ex.Message;
-            return RedirectToAction(_checkAnswerActionName);
-        }
-        return View(model);
-    }
+  
 
     private FertiliserManureViewModel BindPropertiesForRemove(string q, string r, string s, string? t, string? u, FertiliserManureViewModel? model)
     {
@@ -2981,7 +2941,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return model;
     }
 
-    private async Task BindViewBegForField(FertiliserManureViewModel? model, Error error)
+    private async Task BindViewBegForField(FertiliserManureViewModel? model)
     {
         if (model.FieldList != null && model.FieldList.Count > 0)
         {
@@ -2994,7 +2954,47 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
 
     }
+    [HttpGet]
+    public async Task<IActionResult> RemoveFertiliser(string q, string r, string s, string? t, string? u, string? v)
+    {
+        _logger.LogTrace("Fertiliser Manure Controller : RemoveFertiliser() action called");
+        FertiliserManureViewModel? model = new FertiliserManureViewModel();
+        Error? error = null;
+        try
+        {
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                model = GetFertiliserManureFromSession();
+                if (model == null)
+                {
+                    _logger.LogError("Fertiliser Manure Controller : Session not found in RemoveFertiliser() action");
+                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                }
+                await BindViewBegForField(model);
+            }
+            else
+            {
+                model.IsComingFromRecommendation = true;
+                model = BindPropertiesForRemove(q, r, s, t, u, model);
+                SetFertiliserManureToSession(model);
+            }
 
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace(ex, "OrganicManure Controller : Exception in RemoveFertiliser() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+
+            if (model != null && model.IsComingFromRecommendation)
+            {
+                TempData["NutrientRecommendationsError"] = ex.Message;
+                return RedirectToAction(_recommendationsActionName, "Crop", new { q = model.EncryptedFarmId, r, s = model.EncryptedHarvestYear });
+            }
+
+            TempData["CheckYourAnswerError"] = ex.Message;
+            return RedirectToAction(_checkAnswerActionName);
+        }
+        return View(model);
+    }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RemoveFertiliser(FertiliserManureViewModel model)

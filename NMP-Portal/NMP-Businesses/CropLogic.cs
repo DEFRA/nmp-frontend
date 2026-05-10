@@ -283,7 +283,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
 
         int cropCounter = 0;
 
-        firstCropName = recommendations.FirstOrDefault()?.Crops?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendations.FirstOrDefault().Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendations.FirstOrDefault().Crops.CropTypeID.Value);
+        firstCropName = recommendations[0]?.Crops?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass ? NMP.Commons.Enums.CropTypes.GetName(typeof(CropTypes), recommendations[0].Crops.CropTypeID) : await _fieldLogic.FetchCropTypeById(recommendations[0].Crops.CropTypeID.Value);
         foreach (var recommendation in recommendations)
         {
             //check sns already exist or not in SnsAnalyses table by cropID
@@ -317,16 +317,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
                 PotentialCut = recommendation.Crops.PotentialCut
             };
             cropCounter++;
-            if (recommendation.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
-            {
-                List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim())
-                    .ToList();
 
-                //pooja
-                //crop.DefoliationSequenceName = Commonh.ShorthandDefoliationSequence(defoliationList);
-            }
 
             if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
             {
@@ -359,7 +350,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
             List<CropTypeResponse> cropTypeResponseList = (await _fieldLogic.FetchAllCropTypes());
             if (cropTypeResponseList != null)
             {
-                CropTypeResponse cropTypeResponse = cropTypeResponseList.Where(x => x.CropTypeId == crop.CropTypeID).FirstOrDefault();
+                CropTypeResponse cropTypeResponse = cropTypeResponseList.First(x => x.CropTypeId == crop.CropTypeID);
                 if (cropTypeResponse != null)
                 {
                     crop.CropGroupID = cropTypeResponse.CropGroupId;
@@ -371,48 +362,6 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
                 crop.CropInfo2Name = await FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
             }
 
-            if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && crop.PotentialCut != null)
-            {
-                var potentialCuts = new[]
-                {
-                                    Resource.lblOne.ToLower(), Resource.lblTwo.ToLower(), Resource.lblThree.ToLower(), Resource.lblFour.ToLower(),
-                                    Resource.lblFive.ToLower(), Resource.lblSix.ToLower(), Resource.lblSeven.ToLower(), Resource.lblEight.ToLower(), Resource.lblNine.ToLower()
-                                };
-
-                if (cropCounter == 1)
-                {
-                    (DefoliationSequenceResponse defoliationSequence, error) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                    if (error == null && defoliationSequence.DefoliationSequenceId != null)
-                    {
-                        //pooja
-                        if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
-                        {
-                            // ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
-                        }
-                        else
-                        {
-                            //  ViewBag.GrassHeadingCropOne = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
-                        }
-                    }
-
-                }
-                else if (cropCounter == 2)
-                {
-                    (DefoliationSequenceResponse defoliationSequence, error) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                    if (error == null && defoliationSequence.DefoliationSequenceId != null)
-                    {//pooja
-                        if (defoliationSequence.DefoliationSequenceDescription.Contains(Resource.lblEstablishment))
-                        {
-                            //ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazingsPlusEstablishment, potentialCuts[(int)crop.PotentialCut - 1]);
-                        }
-                        else
-                        {
-                            //ViewBag.GrassHeadingCropTwo = string.Format(Resource.lblThereAreCountCutsAndGrazings, potentialCuts[(int)crop.PotentialCut - 1]);
-                        }
-                    }
-                }
-            }
-
             model.Crops.Add(crop);
             if (recommendation.PKBalance != null)
             {
@@ -421,19 +370,6 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
                 model.PKBalance.KBalance = recommendation.PKBalance.KBalance;
             }
 
-            string defolicationName = string.Empty;
-            if (recommendation.Crops.SwardTypeID != null && recommendation.Crops.PotentialCut != null && recommendation.Crops.DefoliationSequenceID != null)
-            {
-                if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                {
-                    (DefoliationSequenceResponse defoliationSequence, error) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                    if (error == null && defoliationSequence.DefoliationSequenceId != null)
-                    {
-                        defolicationName = defoliationSequence.DefoliationSequenceDescription;
-                    }
-                }
-            }
-            //pooja
         }
 
         (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
@@ -564,15 +500,13 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
     public async Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop)
     {
         string defolicationName = string.Empty;
-        if (recommendation.Crops.SwardTypeID != null && recommendation.Crops.PotentialCut != null && recommendation.Crops.DefoliationSequenceID != null)
+        if (recommendation.Crops.SwardTypeID != null && recommendation.Crops.PotentialCut != null && recommendation.Crops.DefoliationSequenceID != null
+            && (string.IsNullOrWhiteSpace(defolicationName) && recommendation.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass))
         {
-            if ((string.IsNullOrWhiteSpace(defolicationName)) && recommendation.Crops.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+            (DefoliationSequenceResponse defoliationSequence, _) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            if (!string.IsNullOrWhiteSpace(defoliationSequence.DefoliationSequenceDescription))
             {
-                (DefoliationSequenceResponse defoliationSequence, _) = await FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                if (defoliationSequence.DefoliationSequenceId != null)
-                {
-                    defolicationName = defoliationSequence.DefoliationSequenceDescription;
-                }
+                defolicationName = defoliationSequence.DefoliationSequenceDescription;
             }
         }
 
