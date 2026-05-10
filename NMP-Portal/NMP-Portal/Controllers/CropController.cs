@@ -3869,7 +3869,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             RemoveSessionForRecommendation();
 
-            BindSuccessMsgForRecommendation(sns, t, q);
+            BindSuccessMsgForRecommendation(sns, t, u);
 
             (model, decryptedFarmId, decryptedFieldId, decryptedHarvestYear) = await BindParameterPropertiesForRecommendation(q, r, s, model, decryptedFarmId, decryptedFieldId, decryptedHarvestYear);
 
@@ -4021,7 +4021,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             await BindViewBegForRecommendation(cropCounter, crop);
             string defolicationName = await _cropLogic.BindDefoliationNameForRecommendation(recommendation, crop);
 
-            //var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
+            
             string[]? defolicationParts = defolicationName?.Split(',', StringSplitOptions.RemoveEmptyEntries);
             int defIndex = 0;
             if (recommendation.RecommendationData?.Any() == true)

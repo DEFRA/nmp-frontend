@@ -321,49 +321,11 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
             };
             cropCounter++;
 
-
-            if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
-            {
-                crop.EncryptedCropTypeName = _cropDataProtector.Protect(crop.CropTypeName);
-            }
-
-            if (!string.IsNullOrWhiteSpace(crop.CropGroupName))
-            {
-                crop.EncryptedCropGroupName = _cropDataProtector.Protect(crop.CropGroupName);
-            }
-
-            if (!string.IsNullOrWhiteSpace(recommendation.Crops.CropOrder.ToString()))
-            {
-                crop.EncryptedCropOrder = _cropDataProtector.Protect(recommendation.Crops.CropOrder.ToString());
-            }
-
-            if (recommendation.Crops.CropInfo1 != null)
-            {
-                crop.CropInfo1Name = await FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value);
-            }
-
+            crop = await BindEncryptedValueForRecommendation(recommendation, crop, model);
 
             model.FieldName = (await _fieldLogic.FetchFieldByFieldId(recommendation.Crops.FieldID.Value)).Name;
-            if (!string.IsNullOrWhiteSpace(model.FieldName))
-            {
-                crop.EncryptedFieldName = _cropDataProtector.Protect(model.FieldName);
-            }
 
 
-            List<CropTypeResponse> cropTypeResponseList = (await _fieldLogic.FetchAllCropTypes());
-            if (cropTypeResponseList != null)
-            {
-                CropTypeResponse cropTypeResponse = cropTypeResponseList.First(x => x.CropTypeId == crop.CropTypeID);
-                if (cropTypeResponse != null)
-                {
-                    crop.CropGroupID = cropTypeResponse.CropGroupId;
-                }
-            }
-
-            if (recommendation.Crops.CropInfo2 != null && crop.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Cereals)
-            {
-                crop.CropInfo2Name = await FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
-            }
 
             model.Crops.Add(crop);
             model = BindPkBalanceForRecommendation(model, recommendation);
@@ -373,6 +335,50 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
         model = await BindNutrientListForRecommendation(model);
 
         return (model, firstCropName);
+    }
+
+    private async Task<CropViewModel> BindEncryptedValueForRecommendation(RecommendationHeader recommendation, CropViewModel crop, RecommendationViewModel model)
+    {
+        if (!string.IsNullOrWhiteSpace(crop.CropTypeName))
+        {
+            crop.EncryptedCropTypeName = _cropDataProtector.Protect(crop.CropTypeName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(crop.CropGroupName))
+        {
+            crop.EncryptedCropGroupName = _cropDataProtector.Protect(crop.CropGroupName);
+        }
+
+        if (!string.IsNullOrWhiteSpace(recommendation.Crops.CropOrder.ToString()))
+        {
+            crop.EncryptedCropOrder = _cropDataProtector.Protect(recommendation.Crops.CropOrder.ToString());
+        }
+
+        if (recommendation.Crops.CropInfo1 != null)
+        {
+            crop.CropInfo1Name = await FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(recommendation.Crops.CropTypeID.Value, recommendation.Crops.CropInfo1.Value);
+        }
+        if (!string.IsNullOrWhiteSpace(model.FieldName))
+        {
+            crop.EncryptedFieldName = _cropDataProtector.Protect(model.FieldName);
+        }
+
+
+        List<CropTypeResponse> cropTypeResponseList = (await _fieldLogic.FetchAllCropTypes());
+        if (cropTypeResponseList != null)
+        {
+            CropTypeResponse cropTypeResponse = cropTypeResponseList.First(x => x.CropTypeId == crop.CropTypeID);
+            if (cropTypeResponse != null)
+            {
+                crop.CropGroupID = cropTypeResponse.CropGroupId;
+            }
+        }
+
+        if (recommendation.Crops.CropInfo2 != null && crop.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Cereals)
+        {
+            crop.CropInfo2Name = await FetchCropInfo2NameByCropInfo2Id(crop.CropInfo2.Value);
+        }
+        return crop;
     }
 
     private async Task<RecommendationViewModel> BindNutrientListForRecommendation(RecommendationViewModel model)
@@ -387,7 +393,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
         return model;
     }
 
-    private RecommendationViewModel BindPkBalanceForRecommendation(RecommendationViewModel model, RecommendationHeader recommendation)
+    private static RecommendationViewModel BindPkBalanceForRecommendation(RecommendationViewModel model, RecommendationHeader recommendation)
     {
         if (recommendation.PKBalance != null)
         {
