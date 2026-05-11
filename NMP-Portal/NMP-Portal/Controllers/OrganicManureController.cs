@@ -6732,12 +6732,7 @@ managementPeriod.CropID.HasValue
                 }
 
                 //logic for AvailableNForNMax column that will be used to get sum of previous manure applications
-                int? percentOfTotalNForUseInNmaxCalculation = null;
-                (ManureType? manure, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
-                if (manure != null)
-                {
-                    percentOfTotalNForUseInNmaxCalculation = manure.PercentOfTotalNForUseInNmaxCalculation;
-                }
+                
 
                 (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farmData != null && (string.IsNullOrWhiteSpace(error?.Message)))
