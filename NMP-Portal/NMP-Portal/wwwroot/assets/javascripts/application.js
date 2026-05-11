@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("input", function (e) {
         if (e.target.matches(".govuk-date-input__input")) {
-            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+            e.target.value = e.target.value.replaceAll(/\D/g, "");
         }
     });
 
