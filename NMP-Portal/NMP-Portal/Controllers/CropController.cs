@@ -157,7 +157,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.IsCheckAnswer)
         {
-            for (int i = 0; i < model?.Crops?.Count; i++)
+            for (int i = 0; i < model.Crops?.Count; i++)
             {
                 model.Crops[i].Year = model.Year ?? 0;
             }
@@ -635,7 +635,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         model.CropType = await _fieldLogic.FetchCropTypeById(model.CropTypeID.Value);
         SetCropToSession(model);
-        if (harvestYearPlanResponse.Count() > 0)
+        if (harvestYearPlanResponse.Count > 0)
         {
             if (string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
@@ -1117,13 +1117,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private static Crop BindCropInfoOneTwoOrCropGroupName(PlanViewModel model, Crop crop, List<HarvestYearPlanResponse> harvestYearPlanResponseForFilter, List<Field> allFields, int fieldId)
     {
-        if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && harvestYearPlanResponseForFilter != null && harvestYearPlanResponseForFilter.Any(x => x.FieldID == fieldId))
         {
-            if (harvestYearPlanResponseForFilter != null && harvestYearPlanResponseForFilter.Any(x => x.FieldID == fieldId))
-            {
-                crop.ID = harvestYearPlanResponseForFilter.Where(x => x.FieldID == fieldId).Select(x => x.CropID).FirstOrDefault();
-                crop.CropOrder = harvestYearPlanResponseForFilter.Where(x => x.FieldID == fieldId).Select(x => x.CropOrder).FirstOrDefault();
-            }
+
+            crop.ID = harvestYearPlanResponseForFilter.Where(x => x.FieldID == fieldId).Select(x => x.CropID).FirstOrDefault();
+            crop.CropOrder = harvestYearPlanResponseForFilter.Where(x => x.FieldID == fieldId).Select(x => x.CropOrder).FirstOrDefault();
+
         }
         crop.FieldName = allFields.Where(x => x.ID == fieldId).Select(x => x.Name).FirstOrDefault();
         if (model.CropInfo1.HasValue)
@@ -1819,12 +1818,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<PlanViewModel> ValidateYield(PlanViewModel model)
     {
         decimal defaultYield = await _cropLogic.FetchCropTypeDefaultYieldByCropTypeId(model.CropTypeID.Value, model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland);
-        if (defaultYield == 0)
+        if (defaultYield == 0 && model.Crops[model.YieldCurrentCounter].Yield == null)
         {
-            if (model.Crops[model.YieldCurrentCounter].Yield == null)
-            {
-                ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + _yieldPrefix, string.Format(Resource.MsgEnterExpectedYieldforCropinField, model.CropType, model.FieldName));
-            }
+
+            ModelState.AddModelError(_cropPrefix + model.YieldCurrentCounter + _yieldPrefix, string.Format(Resource.MsgEnterExpectedYieldforCropinField, model.CropType, model.FieldName));
+
         }
         if (model.Crops[model.YieldCurrentCounter].Yield != null)
         {
@@ -1924,10 +1922,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             await PopulateCropInfoOneViewData(model, cropInfoOneList);
             if (cropInfoOneList != null && cropInfoOneList.Any(x => x.CropInfo1Name == Resource.lblNone))
             {
-                model.CropInfo1Name = cropInfoOneList?
+                model.CropInfo1Name = cropInfoOneList
                 .FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)
                 ?.CropInfo1Name;
-                model.CropInfo1 = cropInfoOneList?
+                model.CropInfo1 = cropInfoOneList
                 .FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Id;
 
                 model.Crops.ForEach(c => c.CropInfo1 = model.CropInfo1);
@@ -2379,7 +2377,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 cropPlanForFirstCropFilter = harvestYearPlanResponse
                     .Where(x => (x.IsBasePlan != null && (!x.IsBasePlan.Value))
                     ).ToList();
-                if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && ((!model.IsFieldToBeRemoved.HasValue || (model.IsFieldToBeRemoved.HasValue && !model.IsFieldToBeRemoved.Value)))
+                if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && (!model.IsFieldToBeRemoved.HasValue || (model.IsFieldToBeRemoved.HasValue && !model.IsFieldToBeRemoved.Value))
                 && string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r) && string.IsNullOrWhiteSpace(model.EncryptedFieldId))
                 {
                     //filter the plan list based on the crop group
@@ -2568,13 +2566,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (harvestYearPlanResponse.Count > 0)
                     {
                         List<string> fieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                        if (fieldIds.Count > 0 && fieldIds.Any(fieldId => model.FieldList.Contains(fieldId)))
+                        if (fieldIds.Count > 0 && fieldIds.Any(fieldId => model.FieldList.Contains(fieldId)) && string.IsNullOrWhiteSpace(model.CropGroupName))
                         {
-                            if (string.IsNullOrWhiteSpace(model.CropGroupName))
-                            {
-                                model.CropGroupName = model.PreviousCropGroupName;
-                                model.Crops[i].CropGroupName = model.PreviousCropGroupName;
-                            }
+
+                            model.CropGroupName = model.PreviousCropGroupName;
+                            model.Crops[i].CropGroupName = model.PreviousCropGroupName;
+
                         }
                     }
                 }
@@ -2645,7 +2642,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            string action = "YieldQuestion";
+            string action = string.Empty;
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && model.IsComingFromRecommendation == null)
             {
                 TempData["ErrorOnHarvestYearOverview"] = ex.Message;
@@ -2673,12 +2670,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 cropInfoOneList = await GetCropInfoOneList(model);
             }
-
-            action = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals ?
-                 _cropInfoTwoActionName : (((model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other)
-                 || cropInfoOneList.Count == 1) ?
-                 ((model.YieldQuestion != (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields) ?
-             "Yield" : "YieldQuestion") : "CropInfoOne");
 
             if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals)
             {
@@ -2728,7 +2719,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
-        string action = "YieldQuestion";
+        string action = string.Empty;
         try
         {
             bool isComingFromRec = (model.IsComingFromRecommendation != null && model.IsComingFromRecommendation.Value);
@@ -3011,11 +3002,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
                 (List<int> fieldsAllowedForSecondCrop, _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
 
-                if (harvestYearPlanResponse.Count > 0 || fieldsAllowedForSecondCrop.Count > 0)
-                {
-                    var harvestFieldIds = harvestYearPlanResponse.Select(x => x.FieldID.ToString()).ToList();
-                    fieldList = fieldList.Where(x => !harvestFieldIds.Contains(x.ID.ToString()) || fieldsAllowedForSecondCrop.Contains(x.ID ?? 0)).ToList();
-                }
+
             }
 
             ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
@@ -3150,6 +3137,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             v = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations) : _cropDataProtector.Protect(Resource.MsgForSuccessCrop)
         });
     }
+
+#pragma warning disable S107
     [HttpGet]
     public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r, string? s, string? t, string? u, string? v, string? w)//w is a link
     {
@@ -3433,135 +3422,133 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         string decrypSortBy = _cropDataProtector.Unprotect(s);
                         string decrypOrder = _cropDataProtector.Unprotect(u);
-                        if (!string.IsNullOrWhiteSpace(decrypSortBy) && !string.IsNullOrWhiteSpace(decrypOrder))
+                        if (!string.IsNullOrWhiteSpace(decrypSortBy) && !string.IsNullOrWhiteSpace(decrypOrder) && !string.IsNullOrWhiteSpace(t))
                         {
-                            if (!string.IsNullOrWhiteSpace(t))
+
+                            string decryptTabName = _cropDataProtector.Unprotect(t);
+                            if (!string.IsNullOrWhiteSpace(decryptTabName))
                             {
-                                string decryptTabName = _cropDataProtector.Unprotect(t);
-                                if (!string.IsNullOrWhiteSpace(decryptTabName))
+                                if (decryptTabName == Resource.lblOrganicMaterialApplicationsForSorting && model.HarvestYearPlans.OrganicManureList != null)
                                 {
-                                    if (decryptTabName == Resource.lblOrganicMaterialApplicationsForSorting && model.HarvestYearPlans.OrganicManureList != null)
+                                    if (decrypOrder == Resource.lblDesc)
                                     {
-                                        if (decrypOrder == Resource.lblDesc)
+                                        model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblField);
+                                        model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDate);
+                                        if (decrypSortBy == Resource.lblField)
                                         {
-                                            model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblField);
-                                            model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDate);
-                                            if (decrypSortBy == Resource.lblField)
-                                            {
-                                                model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.Field).ToList();
-                                                model.EncryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
-                                                model.SortOrganicListOrderByFieldName = Resource.lblDesc;
-                                                model.SortOrganicListOrderByDate = null;
-                                                model.SortOrganicListOrderByCropType = null;
-                                            }
-                                            else if (decrypSortBy == Resource.lblDate)
-                                            {
-                                                model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.ApplicationDate).ToList();
-                                                model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
-                                                model.SortOrganicListOrderByDate = Resource.lblDesc;
-                                                model.SortOrganicListOrderByFieldName = null;
-                                                model.SortOrganicListOrderByCropType = null;
-
-                                            }
-                                            else if (decrypSortBy == Resource.lblCropType)
-                                            {
-                                                model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.Crop).ToList();
-                                                model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
-                                                model.SortOrganicListOrderByCropType = Resource.lblDesc;
-                                                model.SortOrganicListOrderByFieldName = null;
-                                                model.SortOrganicListOrderByDate = null;
-
-                                            }
+                                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.Field).ToList();
+                                            model.EncryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                                            model.SortOrganicListOrderByFieldName = Resource.lblDesc;
+                                            model.SortOrganicListOrderByDate = null;
+                                            model.SortOrganicListOrderByCropType = null;
                                         }
-                                        else
+                                        else if (decrypSortBy == Resource.lblDate)
                                         {
-                                            if (decrypSortBy == Resource.lblField)
-                                            {
-                                                model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.Field).ToList();
-                                                model.EncryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
-                                                model.SortOrganicListOrderByFieldName = Resource.lblAsc;
-                                                model.SortOrganicListOrderByDate = null;
-                                                model.SortOrganicListOrderByCropType = null;
-                                            }
-                                            else if (decrypSortBy == Resource.lblDate)
-                                            {
-                                                model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.ApplicationDate).ToList();
-                                                model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblAsc);
-                                                model.SortOrganicListOrderByDate = Resource.lblAsc;
-                                                model.SortOrganicListOrderByFieldName = null;
-                                                model.SortOrganicListOrderByCropType = null;
+                                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.ApplicationDate).ToList();
+                                            model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                                            model.SortOrganicListOrderByDate = Resource.lblDesc;
+                                            model.SortOrganicListOrderByFieldName = null;
+                                            model.SortOrganicListOrderByCropType = null;
 
-                                            }
-                                            else if (decrypSortBy == Resource.lblCropType)
-                                            {
-                                                model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.Crop).ToList();
-                                                model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblAsc);
-                                                model.SortOrganicListOrderByCropType = Resource.lblAsc;
-                                                model.SortOrganicListOrderByFieldName = null;
-                                                model.SortOrganicListOrderByDate = null;
+                                        }
+                                        else if (decrypSortBy == Resource.lblCropType)
+                                        {
+                                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderByDescending(x => x.Crop).ToList();
+                                            model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
+                                            model.SortOrganicListOrderByCropType = Resource.lblDesc;
+                                            model.SortOrganicListOrderByFieldName = null;
+                                            model.SortOrganicListOrderByDate = null;
 
-                                            }
                                         }
                                     }
-                                    else if (decryptTabName == Resource.lblInorganicFertiliserApplicationsForSorting && model.HarvestYearPlans.InorganicFertiliserList != null)
+                                    else
                                     {
-                                        if (decrypOrder == Resource.lblDesc)
+                                        if (decrypSortBy == Resource.lblField)
                                         {
-                                            if (decrypSortBy == Resource.lblField)
-                                            {
-                                                model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.Field).ToList();
-                                                model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
-                                                model.SortInOrganicListOrderByFieldName = Resource.lblDesc;
-                                                model.SortInOrganicListOrderByDate = null;
-                                                model.SortInOrganicListOrderByCropType = null;
-                                            }
-                                            else if (decrypSortBy == Resource.lblDate)
-                                            {
-                                                model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.ApplicationDate).ToList();
-                                                model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
-                                                model.SortInOrganicListOrderByDate = Resource.lblDesc;
-                                                model.SortInOrganicListOrderByFieldName = null;
-                                                model.SortInOrganicListOrderByCropType = null;
-
-                                            }
-                                            else if (decrypSortBy == Resource.lblCropType)
-                                            {
-                                                model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.Crop).ToList();
-                                                model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
-                                                model.SortInOrganicListOrderByCropType = Resource.lblDesc;
-                                                model.SortInOrganicListOrderByDate = null;
-                                                model.SortInOrganicListOrderByFieldName = null;
-
-                                            }
+                                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.Field).ToList();
+                                            model.EncryptSortOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
+                                            model.SortOrganicListOrderByFieldName = Resource.lblAsc;
+                                            model.SortOrganicListOrderByDate = null;
+                                            model.SortOrganicListOrderByCropType = null;
                                         }
-                                        else
+                                        else if (decrypSortBy == Resource.lblDate)
                                         {
-                                            if (decrypSortBy == Resource.lblField)
-                                            {
-                                                model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.Field).ToList();
-                                                model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
-                                                model.SortInOrganicListOrderByFieldName = Resource.lblAsc;
-                                                model.SortInOrganicListOrderByDate = null;
-                                                model.SortInOrganicListOrderByCropType = null;
-                                            }
-                                            else if (decrypSortBy == Resource.lblDate)
-                                            {
-                                                model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.ApplicationDate).ToList();
-                                                model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblAsc);
-                                                model.SortInOrganicListOrderByDate = Resource.lblAsc;
-                                                model.SortInOrganicListOrderByFieldName = null;
-                                                model.SortInOrganicListOrderByCropType = null;
+                                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.ApplicationDate).ToList();
+                                            model.EncryptSortOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblAsc);
+                                            model.SortOrganicListOrderByDate = Resource.lblAsc;
+                                            model.SortOrganicListOrderByFieldName = null;
+                                            model.SortOrganicListOrderByCropType = null;
 
-                                            }
-                                            else if (decrypSortBy == Resource.lblCropType)
-                                            {
-                                                model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.Crop).ToList();
-                                                model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblAsc);
-                                                model.SortInOrganicListOrderByCropType = Resource.lblAsc;
-                                                model.SortInOrganicListOrderByDate = null;
-                                                model.SortInOrganicListOrderByFieldName = null;
+                                        }
+                                        else if (decrypSortBy == Resource.lblCropType)
+                                        {
+                                            model.HarvestYearPlans.OrganicManureList = model.HarvestYearPlans.OrganicManureList.OrderBy(x => x.Crop).ToList();
+                                            model.EncryptSortOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblAsc);
+                                            model.SortOrganicListOrderByCropType = Resource.lblAsc;
+                                            model.SortOrganicListOrderByFieldName = null;
+                                            model.SortOrganicListOrderByDate = null;
 
-                                            }
+                                        }
+                                    }
+                                }
+                                else if (decryptTabName == Resource.lblInorganicFertiliserApplicationsForSorting && model.HarvestYearPlans.InorganicFertiliserList != null)
+                                {
+                                    if (decrypOrder == Resource.lblDesc)
+                                    {
+                                        if (decrypSortBy == Resource.lblField)
+                                        {
+                                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.Field).ToList();
+                                            model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblDesc);
+                                            model.SortInOrganicListOrderByFieldName = Resource.lblDesc;
+                                            model.SortInOrganicListOrderByDate = null;
+                                            model.SortInOrganicListOrderByCropType = null;
+                                        }
+                                        else if (decrypSortBy == Resource.lblDate)
+                                        {
+                                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.ApplicationDate).ToList();
+                                            model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblDesc);
+                                            model.SortInOrganicListOrderByDate = Resource.lblDesc;
+                                            model.SortInOrganicListOrderByFieldName = null;
+                                            model.SortInOrganicListOrderByCropType = null;
+
+                                        }
+                                        else if (decrypSortBy == Resource.lblCropType)
+                                        {
+                                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderByDescending(x => x.Crop).ToList();
+                                            model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblDesc);
+                                            model.SortInOrganicListOrderByCropType = Resource.lblDesc;
+                                            model.SortInOrganicListOrderByDate = null;
+                                            model.SortInOrganicListOrderByFieldName = null;
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (decrypSortBy == Resource.lblField)
+                                        {
+                                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.Field).ToList();
+                                            model.EncryptSortInOrganicListOrderByFieldName = _cropDataProtector.Protect(Resource.lblAsc);
+                                            model.SortInOrganicListOrderByFieldName = Resource.lblAsc;
+                                            model.SortInOrganicListOrderByDate = null;
+                                            model.SortInOrganicListOrderByCropType = null;
+                                        }
+                                        else if (decrypSortBy == Resource.lblDate)
+                                        {
+                                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.ApplicationDate).ToList();
+                                            model.EncryptSortInOrganicListOrderByDate = _cropDataProtector.Protect(Resource.lblAsc);
+                                            model.SortInOrganicListOrderByDate = Resource.lblAsc;
+                                            model.SortInOrganicListOrderByFieldName = null;
+                                            model.SortInOrganicListOrderByCropType = null;
+
+                                        }
+                                        else if (decrypSortBy == Resource.lblCropType)
+                                        {
+                                            model.HarvestYearPlans.InorganicFertiliserList = model.HarvestYearPlans.InorganicFertiliserList.OrderBy(x => x.Crop).ToList();
+                                            model.EncryptSortInOrganicListOrderByCropType = _cropDataProtector.Protect(Resource.lblAsc);
+                                            model.SortInOrganicListOrderByCropType = Resource.lblAsc;
+                                            model.SortInOrganicListOrderByDate = null;
+                                            model.SortInOrganicListOrderByFieldName = null;
+
                                         }
                                     }
                                 }
@@ -3610,7 +3597,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return View(model);
     }
-
+#pragma warning restore S107
     private void RemoveOrganicManureFromSession()
     {
         if (HttpContext.Session.Exists("OrganicManure"))
@@ -4021,7 +4008,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             await BindViewBegForRecommendation(cropCounter, crop);
             string defolicationName = await _cropLogic.BindDefoliationNameForRecommendation(recommendation, crop);
 
-            
+
             string[]? defolicationParts = defolicationName?.Split(',', StringSplitOptions.RemoveEmptyEntries);
             int defIndex = 0;
             if (recommendation.RecommendationData?.Any() == true)
@@ -4247,7 +4234,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
-        if (!string.IsNullOrWhiteSpace(q) && model != null)
+        if (!string.IsNullOrWhiteSpace(q))
         {
             string decrypt = _cropDataProtector.Unprotect(q);
             switch (decrypt)
@@ -4304,7 +4291,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
-        if (!string.IsNullOrWhiteSpace(q) && model != null)
+        if (!string.IsNullOrWhiteSpace(q))
         {
             string decrypt = _cropDataProtector.Unprotect(q);
             switch (decrypt)
@@ -6059,12 +6046,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             return RedirectToAction("DefoliationSequence");
         }
-        else if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly)
+        else if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly && (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass))
         {
-            if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
-            {
-                return RedirectToAction(_defoliationActionName);
-            }
+
+            return RedirectToAction(_defoliationActionName);
 
         }
 
@@ -6295,19 +6280,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private void ValidateGrassGrowthClassProperties(PlanViewModel model)
     {
-        if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1)
+        if ((model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1) && model.Crops[model.GrassGrowthClassCounter].Yield == null)
         {
-            if (model.Crops[model.GrassGrowthClassCounter].Yield == null)
-            {
-                ModelState.AddModelError(_cropPrefix + model.GrassGrowthClassCounter + _yieldPrefix, Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+
+            ModelState.AddModelError(_cropPrefix + model.GrassGrowthClassCounter + _yieldPrefix, Resource.MsgSelectAnOptionBeforeContinuing);
         }
-        if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
+        if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1 && model.GrassGrowthClassQuestion == null)
         {
-            if (model.GrassGrowthClassQuestion == null)
-            {
-                ModelState.AddModelError("GrassGrowthClassQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
+
+            ModelState.AddModelError("GrassGrowthClassQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
         }
     }
 
@@ -6839,7 +6820,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         SetCropToSession(model);
         if (model.IsCheckAnswer)
         {
-            for (int i = 0; i < model?.Crops?.Count; i++)
+            for (int i = 0; i < model.Crops?.Count; i++)
             {
                 model.Crops[i].Year = model.Year.Value;
             }
@@ -7056,8 +7037,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 //filter the plan list based on the crop group
                 harvestYearPlanResponseForFilter = harvestYearPlanResponseForFilter.Where(x => x.CropGroupName == model.PreviousCropGroupName).ToList();
-                if (harvestYearPlanResponseForFilter != null)
-                {
+                
                     //Get the fields that we unchecked.
                     var removableFields = harvestYearPlanResponseForFilter.Where(f => !model.FieldList.Contains(f.FieldID.ToString())).ToList();
                     fieldsToBeRemoved = removableFields.Count > 0 ? removableFields : null;
@@ -7069,7 +7049,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     var newlyAddedFields = fieldList.Where(field => !fieldIdsToRemove.Contains(field.ID.Value)).ToList();
                     newlyAddedFields = newlyAddedFields.Where(x => model.FieldList.Contains(x.ID.Value.ToString())).ToList();
                     newFields = newlyAddedFields.Count > 0 ? newlyAddedFields : null;
-                }
+                
             }
         }
 
