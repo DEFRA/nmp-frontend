@@ -89,7 +89,7 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
         return await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(farmId);
     }
 
-    public async Task<(NutrientsLoadingFarmDetail, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year)
+    public async Task<(NutrientsLoadingFarmDetail?, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year)
     {
         _logger.LogTrace("Fetching N Loading farm details by FarmId and Year");
         return await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(farmId, year);

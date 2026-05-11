@@ -1636,7 +1636,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             if (!model.IsCheckList)
             {
-                (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+                (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["FetchNutrientsLoadingFarmDetailsError"] = error.Message;
@@ -1750,7 +1750,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 model.IsComingFromSuccessMsg = true;
             }
-            (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+            (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
             if (nutrientsLoadingFarmDetails != null)
             {
                 model.IsGrasslandDerogation = nutrientsLoadingFarmDetails.Derogation;
@@ -1823,7 +1823,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 ViewBag.NutrientsLoadingManuresData = nutrientsLoadingManuresList;
             }
 
-            (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+            (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
             if (nutrientsLoadingFarmDetails != null)
             {
                 model.IsGrasslandDerogation = nutrientsLoadingFarmDetails.Derogation;
@@ -2059,7 +2059,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction("LivestockManureNitrogenReportChecklist");
         }
 
-        (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+        (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
         if (!string.IsNullOrWhiteSpace(error?.Message))
         {
             TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
@@ -6193,7 +6193,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnLivestockManureNitrogenReportChecklist"] = error.Message;
             return RedirectToAction("LivestockManureNitrogenReportChecklist");
         }
-        (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.Farm.ID, model.Year.Value);
+        (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetail, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.Farm.ID, model.Year.Value);
         if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingFarmDetail != null)
         {
             model.IsGrasslandDerogation = nutrientsLoadingFarmDetail.Derogation.Value;
