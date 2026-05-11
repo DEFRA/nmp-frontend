@@ -1110,7 +1110,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     {
                         if (int.TryParse(model.FieldList[0], out fieldId))
                         {
-                            (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName,model) = await PopulateRecommendationData(model, error, fieldId);
+                            (fieldId, ViewBag.CropTypeId, ViewBag.DefoliationSequenceName, model) = await PopulateRecommendationData(model, error, fieldId);
                         }
                     }
                     catch (Exception ex)
@@ -1277,7 +1277,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         (List<RecommendationHeader> recommendationsHeader, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(fieldId, model.HarvestYear.Value);
         if (error != null || recommendationsHeader == null || !recommendationsHeader.Any())
-            return (fieldId, null, null,model);
+            return (fieldId, null, null, model);
 
         var manId = model.FertiliserManures?.FirstOrDefault()?.ManagementPeriodID;
         if (manId == null) return (fieldId, null, null, model);
@@ -2909,12 +2909,56 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         return RedirectToAction(_checkAnswerActionName);
     }
+
+
+    private FertiliserManureViewModel BindPropertiesForRemove(string q, string r, string s, string? t, string? u, FertiliserManureViewModel? model)
+    {
+        if (!string.IsNullOrWhiteSpace(q))
+        {
+            model.EncryptedFertId = q;
+        }
+        if (!string.IsNullOrWhiteSpace(r))
+        {
+            ViewBag.EncryptedFieldId = r;
+            model.FieldList = [_fieldDataProtector.Unprotect(r)];
+        }
+        if (!string.IsNullOrWhiteSpace(s))
+        {
+            model.FieldName = _cropDataProtector.Unprotect(s);
+        }
+
+        if (!string.IsNullOrWhiteSpace(t))
+        {
+            model.EncryptedFarmId = t;
+            model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(t));
+        }
+
+        if (!string.IsNullOrWhiteSpace(u))
+        {
+            model.EncryptedHarvestYear = u;
+            model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(u));
+        }
+        return model;
+    }
+
+    private async Task BindViewBegForField(FertiliserManureViewModel? model)
+    {
+        if (model.FieldList != null && model.FieldList.Count > 0)
+        {
+            (List<CommonResponse> fieldList, _) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
+            if (fieldList.Count > 0)
+            {
+                PopulateFieldNames(model, fieldList);
+                ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList[0]);
+            }
+        }
+
+    }
     [HttpGet]
     public async Task<IActionResult> RemoveFertiliser(string q, string r, string s, string? t, string? u, string? v)
     {
         _logger.LogTrace("Fertiliser Manure Controller : RemoveFertiliser() action called");
         FertiliserManureViewModel? model = new FertiliserManureViewModel();
-        Error? error = null;
         try
         {
             if (string.IsNullOrWhiteSpace(q))
@@ -2925,44 +2969,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     _logger.LogError("Fertiliser Manure Controller : Session not found in RemoveFertiliser() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                if (model.FieldList != null && model.FieldList.Count > 0)
-                {
-                    (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
-                    if (error == null && fieldList.Count > 0)
-                    {
-                        PopulateFieldNames(model, fieldList);
-                        ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList[0]);
-                    }
-                }
+                await BindViewBegForField(model);
             }
             else
             {
                 model.IsComingFromRecommendation = true;
-                if (!string.IsNullOrWhiteSpace(q))
-                {
-                    model.EncryptedFertId = q;
-                }
-                if (!string.IsNullOrWhiteSpace(r))
-                {
-                    ViewBag.EncryptedFieldId = r;
-                    model.FieldList = [_fieldDataProtector.Unprotect(r)];
-                }
-                if (!string.IsNullOrWhiteSpace(s))
-                {
-                    model.FieldName = _cropDataProtector.Unprotect(s);
-                }
-
-                if (!string.IsNullOrWhiteSpace(t))
-                {
-                    model.EncryptedFarmId = t;
-                    model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(t));
-                }
-
-                if (!string.IsNullOrWhiteSpace(u))
-                {
-                    model.EncryptedHarvestYear = u;
-                    model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(u));
-                }
+                model = BindPropertiesForRemove(q, r, s, t, u, model);
                 SetFertiliserManureToSession(model);
             }
 
@@ -2982,7 +2994,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         return View(model);
     }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RemoveFertiliser(FertiliserManureViewModel model)

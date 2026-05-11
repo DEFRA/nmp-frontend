@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 namespace NMP.Application;
 public interface ICropLogic
 {
@@ -50,4 +51,11 @@ public interface ICropLogic
     Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
     Task<(Recommendation?, Error?)> FetchRecommendationByManagementPeriodId(int managementPeriodID);
     Task<(List<PreviousCroppingData>?, Error?)> FetchDataByFieldId(int fieldId, int year);
+    Task<(RecommendationViewModel, string)> BindDataForRecommendation(string q, string? s, RecommendationViewModel model, Error? error, List<RecommendationHeader> recommendations, string firstCropName);
+    RecommendationViewModel BindRecommendationCommentForRecommendation(RecommendationViewModel model, RecommendationData recData);
+    RecommendationViewModel BindOrganicManureDataForRecommendation(RecommendationViewModel model, OrganicManureDataViewModel item, ManureType manureType);
+    RecommendationViewModel BindFertiliserDataForRecommendation(RecommendationViewModel model, RecommendationData recData);
+    RecommendationViewModel BindManagementPeriodForRecommendation(RecommendationViewModel model, RecommendationData recData, string defoliationSequenceName);
+    string BindDefoliationSequenceNameForRecommendation(string[]? defolicationParts, int defIndex);
+    Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop);
 }
