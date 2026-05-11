@@ -108,21 +108,26 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(ApiurlHelper.MergePreviousCropAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+
+            var response = await httpClient.PutAsync(
+                ApiurlHelper.MergePreviousCropAPI,
+                new StringContent(jsonData, Encoding.UTF8, "application/json"));
+
             string result = await response.Content.ReadAsStringAsync();
+
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+
+            if (response.IsSuccessStatusCode)
             {
-                success = responseWrapper?.Data?.PreviousCropping;
+                if (responseWrapper?.Data is not null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+                {
+                    success = responseWrapper?.Data?.PreviousCropping;
+                }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    _logger.ExtractError(responseWrapper, error);
-                }
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
             }
-
         }
         catch (HttpRequestException hre)
         {
@@ -132,6 +137,7 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         {
             _logger.HandleException(ex, error);
         }
+
         return (success, error);
     }
     public async Task<(int?, Error)> FetchPreviousCroppingYearByFarmdId(int farmId)
