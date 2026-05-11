@@ -7,7 +7,7 @@ namespace NMP.Application;
 public interface IReportLogic
 {
     Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData);
-    Task<(NutrientsLoadingFarmDetail, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year);
+    Task<(NutrientsLoadingFarmDetail?, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year);
     Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData);
     Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmId(int farmId);
     Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresAsync(string nutrientsLoadingManure);
@@ -43,6 +43,6 @@ public interface IReportLogic
         int nMaxLimitForCropType,
        List<NMaxLimitReportResponse> nMaxList);
     Task ProcessScotland(ProcessScotlandContext ctx);
-     Task<string> GetPreviousCropAsync(int fieldId, int year);
+    Task<string> GetPreviousCropAsync(int fieldId, int year);
     Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId);
 }
