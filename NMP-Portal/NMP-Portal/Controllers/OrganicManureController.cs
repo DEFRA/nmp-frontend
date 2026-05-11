@@ -371,7 +371,7 @@ namespace NMP.Portal.Controllers
                 List<string> cropOrderList = cropGroupList.Where(x => x.CropGroupName.Equals(model.FieldGroup)).Select(x => x.CropOrder).ToList();
                 if (cropOrderList.Count == 1)
                 {
-                    model.CropOrder = Convert.ToInt32(cropOrderList.First());
+                    model.CropOrder = Convert.ToInt32(cropOrderList[0]);
                 }
                 else
                 {
@@ -3180,11 +3180,7 @@ managementPeriod.CropID.HasValue
                     if (error == null && manureTypeList.Count > 0)
                     {
                         var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-                        bool isLiquid = false;
-                        if (manureType != null)
-                        {
-                            isLiquid = manureType.IsLiquid.Value;
-                        }
+                        
                         string applicableFor = Resource.lblNull;
                         (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _mannerLogic.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
                         if (error == null && incorporationDelaysList.Count == 1)
@@ -4837,7 +4833,7 @@ managementPeriod.CropID.HasValue
 
                         List<string> fieldNames = model.FieldList
                        .Select(id => organicManureField.FirstOrDefault(f => f.Id == Convert.ToInt64(id))?.Name).ToList();
-                        string concatenatedFieldNames = string.Join(", ", fieldNames);
+                        
 
                     }
 
