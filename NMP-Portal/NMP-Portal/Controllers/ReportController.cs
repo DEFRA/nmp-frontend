@@ -47,7 +47,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly string _reportDataSessionKey = "ReportData";
     private readonly string _errorOnYear = "ErrorOnYear";
     private readonly string _errorOnReportOptions = "ErrorOnReportOptions";
-    private readonly string _errorOnSelectField = "ErrorOnSelectField";
+    private readonly string _errorOnSelectField = "ErrorOnSelectField"; 
+    private readonly string _isAnyLivestockNumber = "IsAnyLivestockNumber";
     private ReportViewModel? GetReportDataFromSession()
     {
         if (HttpContext.Session.Exists(_reportDataSessionKey))
@@ -3948,7 +3949,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             if (model.IsAnyLivestockNumber == null)
             {
-                ModelState.AddModelError("IsAnyLivestockNumber", Resource.MsgSelectAnOptionBeforeContinuing);
+                ModelState.AddModelError(_isAnyLivestockNumber, Resource.MsgSelectAnOptionBeforeContinuing);
             }
             if (!ModelState.IsValid)
             {
@@ -4040,7 +4041,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             else
             {
                 TempData["ErrorOnIsAnyLivestock"] = error.Message;
-                return RedirectToAction("IsAnyLivestockNumber");
+                return RedirectToAction(_isAnyLivestockNumber);
             }
         }
         catch (Exception ex)
@@ -4048,7 +4049,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             _logger.LogTrace(ex, "Report Controller : Exception in LivestockGroup() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
 
             TempData["ErrorOnIsAnyLivestockNumber"] = ex.Message;
-            return RedirectToAction("IsAnyLivestockNumber");
+            return RedirectToAction(_isAnyLivestockNumber);
 
         }
         return View(model);
@@ -5568,7 +5569,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                             model.IsManageLivestock = false;
                             SetReportDataToSession(model);
-                            return RedirectToAction("IsAnyLivestockNumber", model);                        
+                            return RedirectToAction(_isAnyLivestockNumber, model);                        
                     }
                 }
             }

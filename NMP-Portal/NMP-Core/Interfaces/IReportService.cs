@@ -4,26 +4,26 @@ using NMP.Commons.ViewModels;
 namespace NMP.Core.Interfaces;
 public interface IReportService
 {
-    Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData);
-    Task<(NutrientsLoadingFarmDetail?, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId,int year);
-    Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData);
-    Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmId(int farmId);
-    Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresAsync(string nutrientsLoadingManure);
-    Task<(List<NutrientsLoadingFarmDetail>, Error)> FetchNutrientsLoadingFarmDetailsByFarmId(int farmId);
-    Task<(List<CommonResponse>, Error)> FetchLivestockGroupList();
-    Task<(CommonResponse, Error)> FetchLivestockGroupById(int livestockGroupId);
-    Task<(NutrientsLoadingManures, Error)> FetchNutrientsLoadingManuresByIdAsync(int id);
-    Task<(NutrientsLoadingManures, Error)> UpdateNutrientsLoadingManuresAsync(string nutrientsLoadingManure);
-    Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypesByGroupId(int livestockGroupId);
-    Task<(string, Error)> DeleteNutrientsLoadingManureByIdAsync(int nutrientsLoadingManureId);
+    Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsServiceAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData);
+    Task<(NutrientsLoadingFarmDetail, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearServiceAsync(int farmId,int year);
+    Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsServiceAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData);
+    Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmIdServiceAsync(int farmId);
+    Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresServiceAsync(string nutrientsLoadingManure);
+    Task<(List<NutrientsLoadingFarmDetail>, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdServiceAsync(int farmId);
+    Task<(List<CommonResponse>, Error)> FetchLivestockGroupListServiceAsync();
+    Task<(CommonResponse, Error)> FetchLivestockGroupByIdServiceAsync(int livestockGroupId);
+    Task<(NutrientsLoadingManures, Error)> FetchNutrientsLoadingManuresByIdServiceAsync(int id);
+    Task<(NutrientsLoadingManures, Error)> UpdateNutrientsLoadingManuresServiceAsync(string nutrientsLoadingManure);
+    Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypesByGroupIdServiceAsync(int livestockGroupId);
+    Task<(string, Error)> DeleteNutrientsLoadingManureByIdServiceAsync(int nutrientsLoadingManureId);
 
-    Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
+    Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockServiceAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
 
-    Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year);
-    Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypes();
-    Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdAsync(int id);
-    Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdAsync(int nutrientsLoadingLivestockId);
+    Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYearServiceAsync(int farmId, int year);
+    Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypesServiceAsync();
+    Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdServiceAsync(int id);
+    Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdServiceAsync(int nutrientsLoadingLivestockId);
 
-    Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
-    Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId);
+    Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockServiceAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
+    Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropIdServiceAsync(int cropId);
 }

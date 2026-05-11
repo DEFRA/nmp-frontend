@@ -26,109 +26,109 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
     public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
         _logger.LogTrace("Adding N Loading Farm details");
-        return await _reportService.AddNutrientsLoadingFarmDetailsAsync(nutrientsLoadingFarmDetailsData);
+        return await _reportService.AddNutrientsLoadingFarmDetailsServiceAsync(nutrientsLoadingFarmDetailsData);
     }
 
     public async Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData)
     {
         _logger.LogTrace("Adding N Loading live stock");
-        return await _reportService.AddNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStockData);
+        return await _reportService.AddNutrientsLoadingLiveStockServiceAsync(nutrientsLoadingLiveStockData);
     }
 
     public async Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresAsync(string nutrientsLoadingManure)
     {
         _logger.LogTrace("Adding N Loading manures");
-        return await _reportService.AddNutrientsLoadingManuresAsync(nutrientsLoadingManure);
+        return await _reportService.AddNutrientsLoadingManuresServiceAsync(nutrientsLoadingManure);
     }
 
     public async Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdAsync(int nutrientsLoadingLivestockId)
     {
         _logger.LogTrace("Deleting N Loading live stock by Id");
-        return await _reportService.DeleteNutrientsLoadingLivestockByIdAsync(nutrientsLoadingLivestockId);
+        return await _reportService.DeleteNutrientsLoadingLivestockByIdServiceAsync(nutrientsLoadingLivestockId);
     }
 
     public async Task<(string, Error)> DeleteNutrientsLoadingManureByIdAsync(int nutrientsLoadingManureId)
     {
         _logger.LogTrace("Deleting N loading manure by Id");
-        return await _reportService.DeleteNutrientsLoadingManureByIdAsync(nutrientsLoadingManureId);
+        return await _reportService.DeleteNutrientsLoadingManureByIdServiceAsync(nutrientsLoadingManureId);
     }
 
     public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year)
     {
         _logger.LogTrace("Fetching live stock by Farm Id and Year");
-        return await _reportService.FetchLivestockByFarmIdAndYear(farmId, year);
+        return await _reportService.FetchLivestockByFarmIdAndYearServiceAsync(farmId, year);
     }
 
     public async Task<(CommonResponse, Error)> FetchLivestockGroupById(int livestockGroupId)
     {
         _logger.LogTrace("Fetching livestock group by Id");
-        return await _reportService.FetchLivestockGroupById(livestockGroupId);
+        return await _reportService.FetchLivestockGroupByIdServiceAsync(livestockGroupId);
     }
 
     public async Task<(List<CommonResponse>, Error)> FetchLivestockGroupList()
     {
         _logger.LogTrace("Fetch livestock group list");
-        return await _reportService.FetchLivestockGroupList();
+        return await _reportService.FetchLivestockGroupListServiceAsync();
     }
 
     public async Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypes()
     {
         _logger.LogTrace("Fetching livestock types");
-        return await _reportService.FetchLivestockTypes();
+        return await _reportService.FetchLivestockTypesServiceAsync();
     }
 
     public async Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypesByGroupId(int livestockGroupId)
     {
         _logger.LogTrace("Fetching livestock types by group Id");
-        return await _reportService.FetchLivestockTypesByGroupId(livestockGroupId);
+        return await _reportService.FetchLivestockTypesByGroupIdServiceAsync(livestockGroupId);
     }
 
     public async Task<(List<NutrientsLoadingFarmDetail>, Error)> FetchNutrientsLoadingFarmDetailsByFarmId(int farmId)
     {
         _logger.LogTrace("Fetching N Loading farm details by FarmId");
-        return await _reportService.FetchNutrientsLoadingFarmDetailsByFarmId(farmId);
+        return await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdServiceAsync(farmId);
     }
 
     public async Task<(NutrientsLoadingFarmDetail?, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year)
     {
         _logger.LogTrace("Fetching N Loading farm details by FarmId and Year");
-        return await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(farmId, year);
+        return await _reportService.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearServiceAsync(farmId, year);
     }
 
     public async Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdAsync(int id)
     {
         _logger.LogTrace("Fetching N Loading livestock by Id");
-        return await _reportService.FetchNutrientsLoadingLiveStockByIdAsync(id);
+        return await _reportService.FetchNutrientsLoadingLiveStockByIdServiceAsync(id);
     }
 
     public async Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmId(int farmId)
     {
         _logger.LogTrace("Fetching N Loading Manures by FarmId");
-        return await _reportService.FetchNutrientsLoadingManuresByFarmId(farmId);
+        return await _reportService.FetchNutrientsLoadingManuresByFarmIdServiceAsync(farmId);
     }
 
     public async Task<(NutrientsLoadingManures, Error)> FetchNutrientsLoadingManuresByIdAsync(int id)
     {
         _logger.LogTrace("Fetching N Loading Manures by Id");
-        return await _reportService.FetchNutrientsLoadingManuresByIdAsync(id);
+        return await _reportService.FetchNutrientsLoadingManuresByIdServiceAsync(id);
     }
 
     public async Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
         _logger.LogTrace("Update N Loading Farm Details");
-        return await _reportService.UpdateNutrientsLoadingFarmDetailsAsync(nutrientsLoadingFarmDetailsData);
+        return await _reportService.UpdateNutrientsLoadingFarmDetailsServiceAsync(nutrientsLoadingFarmDetailsData);
     }
 
     public async Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData)
     {
         _logger.LogTrace("Update N Loading livestack");
-        return await _reportService.UpdateNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStockData);
+        return await _reportService.UpdateNutrientsLoadingLiveStockServiceAsync(nutrientsLoadingLiveStockData);
     }
 
     public async Task<(NutrientsLoadingManures, Error)> UpdateNutrientsLoadingManuresAsync(string nutrientsLoadingManure)
     {
         _logger.LogTrace("Update Nutrients Loading Manures");
-        return await _reportService.UpdateNutrientsLoadingManuresAsync(nutrientsLoadingManure);
+        return await _reportService.UpdateNutrientsLoadingManuresServiceAsync(nutrientsLoadingManure);
     }
 
     public static (int soilTypeAdjustment, int millingWheat, decimal yieldAdjustment)
@@ -755,7 +755,7 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
     public async Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId)
     {
         _logger.LogTrace("Fetching organic manure and fertiliser list by cropId");
-        return await _reportService.FetchOrganicManureFertiliserByCropId(cropId);
+        return await _reportService.FetchOrganicManureFertiliserByCropIdServiceAsync(cropId);
     }
 }
 

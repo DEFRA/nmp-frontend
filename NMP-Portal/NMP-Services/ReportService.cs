@@ -19,7 +19,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
     private readonly ILogger<FarmService> _logger = logger;
     private const string _applicationJson = "application/json";
 
-    public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
+    public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsServiceAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
         string jsonData = JsonConvert.SerializeObject(nutrientsLoadingFarmDetailsData);
 
@@ -39,7 +39,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new NutrientsLoadingFarmDetail(), error);
     }
 
-    public async Task<(NutrientsLoadingFarmDetail?, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year)
+    public async Task<(NutrientsLoadingFarmDetail, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearServiceAsync(int farmId, int year)
     {
         var (data, error) = await SendRequestAsync<NutrientsLoadingFarmDetail>(
             client => client.GetAsync(
@@ -58,7 +58,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
 
         return (data ?? null, error);
     }
-    public async Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(
+    public async Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsServiceAsync(
     NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
         string jsonData = JsonConvert.SerializeObject(nutrientsLoadingFarmDetailsData);
@@ -81,7 +81,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
 
         return (data ?? new NutrientsLoadingFarmDetail(), error);
     }
-    public async Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmId(int farmId)
+    public async Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmIdServiceAsync(int farmId)
     {
         var (data, error) = await SendRequestAsync<List<NutrientsLoadingManures>>(
             client => client.GetAsync(
@@ -101,7 +101,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new List<NutrientsLoadingManures>(), error);
     }
 
-    public async Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresAsync(string nutrientsLoadingManure)
+    public async Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresServiceAsync(string nutrientsLoadingManure)
     {
         var (data, error) = await SendRequestAsync<NutrientsLoadingManures>(
             client => client.PostAsync(
@@ -122,7 +122,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new NutrientsLoadingManures(), error);
     }
 
-    public async Task<(List<NutrientsLoadingFarmDetail>, Error)> FetchNutrientsLoadingFarmDetailsByFarmId(int farmId)
+    public async Task<(List<NutrientsLoadingFarmDetail>, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdServiceAsync(int farmId)
     {
         var (data, error) = await SendRequestAsync<List<NutrientsLoadingFarmDetail>>(
             client => client.GetAsync(
@@ -142,7 +142,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new List<NutrientsLoadingFarmDetail>(), error);
     }
 
-    public async Task<(List<CommonResponse>, Error)> FetchLivestockGroupList()
+    public async Task<(List<CommonResponse>, Error)> FetchLivestockGroupListServiceAsync()
     {
         var (data, error) = await SendRequestAsync<List<CommonResponse>>(
             client => client.GetAsync(ApiurlHelper.FetchLivestockGroupListAsyncAPI),
@@ -160,7 +160,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new List<CommonResponse>(), error);
     }
 
-    public async Task<(CommonResponse, Error)> FetchLivestockGroupById(int livestockGroupId)
+    public async Task<(CommonResponse, Error)> FetchLivestockGroupByIdServiceAsync(int livestockGroupId)
     {
         var (data, error) = await SendRequestAsync<CommonResponse>(
             client => client.GetAsync(
@@ -180,7 +180,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new CommonResponse(), error);
     }
 
-    public async Task<(NutrientsLoadingManures, Error)> FetchNutrientsLoadingManuresByIdAsync(int id)
+    public async Task<(NutrientsLoadingManures, Error)> FetchNutrientsLoadingManuresByIdServiceAsync(int id)
     {
         var (data, error) = await SendRequestAsync<NutrientsLoadingManures>(
             client => client.GetAsync(
@@ -199,7 +199,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
 
         return (data ?? new NutrientsLoadingManures(), error);
     }
-    public async Task<(NutrientsLoadingManures, Error)> UpdateNutrientsLoadingManuresAsync(string nutrientsLoadingManure)
+    public async Task<(NutrientsLoadingManures, Error)> UpdateNutrientsLoadingManuresServiceAsync(string nutrientsLoadingManure)
     {
         var (data, error) = await SendRequestAsync<NutrientsLoadingManures>(
             client => client.PutAsync(
@@ -220,7 +220,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new NutrientsLoadingManures(), error);
     }
 
-    public async Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypesByGroupId(int livestockGroupId)
+    public async Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypesByGroupIdServiceAsync(int livestockGroupId)
     {
         var (data, error) = await SendRequestAsync<List<LivestockTypeResponse>>(
             client => client.GetAsync(
@@ -239,7 +239,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
 
         return (data ?? new List<LivestockTypeResponse>(), error);
     }
-    public async Task<(string, Error)> DeleteNutrientsLoadingManureByIdAsync(int nutrientsLoadingManureId)
+    public async Task<(string, Error)> DeleteNutrientsLoadingManureByIdServiceAsync(int nutrientsLoadingManureId)
     {
         var (data, error) = await SendRequestAsync<string>(
             client => client.DeleteAsync(
@@ -258,7 +258,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? string.Empty, error);
     }
 
-    public async Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockAsync(
+    public async Task<(NutrientsLoadingLiveStock, Error)> AddNutrientsLoadingLiveStockServiceAsync(
     NutrientsLoadingLiveStock nutrientsLoadingLiveStockData)
     {
         string jsonData = JsonConvert.SerializeObject(nutrientsLoadingLiveStockData);
@@ -282,7 +282,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new NutrientsLoadingLiveStock(), error);
     }
 
-    public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year)
+    public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYearServiceAsync(int farmId, int year)
     {
         var (data, error) = await SendRequestAsync<List<NutrientsLoadingLiveStockViewModel>>(
             client => client.GetAsync(
@@ -302,7 +302,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new List<NutrientsLoadingLiveStockViewModel>(), error);
     }
 
-    public async Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypes()
+    public async Task<(List<LivestockTypeResponse>, Error)> FetchLivestockTypesServiceAsync()
     {
         var (data, error) = await SendRequestAsync<List<LivestockTypeResponse>>(
             client => client.GetAsync(ApiurlHelper.FetchLivestockTypesAsyncAPI),
@@ -320,7 +320,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new List<LivestockTypeResponse>(), error);
     }
 
-    public async Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdAsync(int id)
+    public async Task<(NutrientsLoadingLiveStock, Error)> FetchNutrientsLoadingLiveStockByIdServiceAsync(int id)
     {
         var (data, error) = await SendRequestAsync<NutrientsLoadingLiveStock>(
             client => client.GetAsync(
@@ -340,7 +340,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new NutrientsLoadingLiveStock(), error);
     }
 
-    public async Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdAsync(int nutrientsLoadingLivestockId)
+    public async Task<(string, Error)> DeleteNutrientsLoadingLivestockByIdServiceAsync(int nutrientsLoadingLivestockId)
     {
         var (data, error) = await SendRequestAsync<string>(
             client => client.DeleteAsync(
@@ -359,7 +359,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? string.Empty, error);
     }
 
-    public async Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockAsync(
+    public async Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockServiceAsync(
     NutrientsLoadingLiveStock nutrientsLoadingLiveStockData)
     {
         string jsonData = JsonConvert.SerializeObject(nutrientsLoadingLiveStockData);
@@ -383,7 +383,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new NutrientsLoadingLiveStock(), error);
     }
 
-    public async Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId)
+    public async Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropIdServiceAsync(int cropId)
     {
         var (data, error) = await SendRequestAsync<OrganicManureFertiliserResponse>(
             client => client.GetAsync(
