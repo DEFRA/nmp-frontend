@@ -715,10 +715,8 @@ namespace NMP.Portal.Controllers
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.ClimateDataPostCode);
 
                     var rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
-                    if (rainfall != null)
-                    {
-                        model.Rainfall = (int)Math.Round(rainfall);
-                    }
+
+                    model.Rainfall = (int)Math.Round(rainfall);
                     if (model.Rainfall == null || model.Rainfall == 0)
                     {
                         ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
@@ -746,10 +744,8 @@ namespace NMP.Portal.Controllers
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
 
                     decimal? rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
-                    if (rainfall != null)
-                    {
-                        model.Rainfall = (int)Math.Round(rainfall.Value);
-                    }
+
+                    model.Rainfall = (int)Math.Round(rainfall.Value);
 
                     SetFarmToSession(model);
                 }
@@ -1464,7 +1460,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.ClimateDataPostCode = model.Postcode;
                 }
-                
+
                 var nvzData = await PrepareNvzDataAsync(model);
 
                 var farmData = new FarmData
