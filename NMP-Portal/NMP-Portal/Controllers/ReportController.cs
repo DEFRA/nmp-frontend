@@ -4071,7 +4071,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
                 ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
                 (List<CommonResponse> livestockGroups, error) = await _reportLogic.FetchLivestockGroupList();
-                if (error == null)
+                if (livestockGroups?.Any()==true)
                 {
                     ViewBag.LivestockGroups = livestockGroups;
                 }
@@ -5563,6 +5563,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                 })
                                 .ToList();
                         }
+                    }
+                    else
+                    {
+                            model.IsManageLivestock = false;
+                            SetReportDataToSession(model);
+                            return RedirectToAction("IsAnyLivestockNumber", model);                        
                     }
                 }
             }

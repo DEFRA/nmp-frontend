@@ -39,7 +39,7 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
         return (data ?? new NutrientsLoadingFarmDetail(), error);
     }
 
-    public async Task<(NutrientsLoadingFarmDetail, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year)
+    public async Task<(NutrientsLoadingFarmDetail?, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId, int year)
     {
         var (data, error) = await SendRequestAsync<NutrientsLoadingFarmDetail>(
             client => client.GetAsync(
@@ -50,13 +50,13 @@ public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor htt
                 if (wrapper?.Data?["NutrientsLoadingFarmDetails"] is JObject obj)
                 {
                     return obj.ToObject<NutrientsLoadingFarmDetail>()
-                           ?? new NutrientsLoadingFarmDetail();
+                           ?? null;
                 }
 
-                return new NutrientsLoadingFarmDetail();
+                return null;
             }, _logger);
 
-        return (data ?? new NutrientsLoadingFarmDetail(), error);
+        return (data ?? null, error);
     }
     public async Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(
     NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
