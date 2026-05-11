@@ -3179,8 +3179,6 @@ managementPeriod.CropID.HasValue
 
                     if (error == null && manureTypeList.Count > 0)
                     {
-                        var manureType = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId);
-
                         string applicableFor = Resource.lblNull;
                         (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _mannerLogic.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
                         if (error == null && incorporationDelaysList.Count == 1)
@@ -4823,27 +4821,6 @@ managementPeriod.CropID.HasValue
                     TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
                     return View(model);
                 }
-
-
-                (List<CommonResponse> organicManureField, error) = await _organicManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                if (error == null)
-                {
-                    if (model.FieldGroup == Resource.lblSelectSpecificFields && model.FieldList.Count < organicManureField.Count)
-                    {
-
-                        List<string> fieldNames = model.FieldList
-                       .Select(id => organicManureField.FirstOrDefault(f => f.Id == Convert.ToInt64(id))?.Name).ToList();
-
-
-                    }
-
-                }
-                else
-                {
-                    TempData[_addOrganicManureError] = error.Message;
-                    return View(model);
-                }
-
 
                 if (success)
                 {
@@ -6760,15 +6737,6 @@ managementPeriod.CropID.HasValue
                 if (manure != null)
                 {
                     percentOfTotalNForUseInNmaxCalculation = manure.PercentOfTotalNForUseInNmaxCalculation;
-                }
-                decimal totalNitrogen = 0;
-                if (percentOfTotalNForUseInNmaxCalculation != null && model.OrganicManures != null && model.OrganicManures.Any())
-                {
-                    totalNitrogen = model.OrganicManures?
-                   .FirstOrDefault()?
-                   .N ?? 0;
-
-
                 }
 
                 (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
