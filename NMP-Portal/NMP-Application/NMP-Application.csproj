@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NMP-Commons\NMP-Commons.csproj" />
+	  <ProjectReference Include="..\NMP-Core\NMP-Core.csproj" />
   </ItemGroup>
 
 </Project>
