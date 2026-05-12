@@ -412,4 +412,35 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
         return (flowControl: true, value: default);
     }
+    public async Task<(FertiliserManureViewModel model, WarningResponse warningResponse, bool isNitrogenRateExceeded)> WarningForGrass(FertiliserManureViewModel model, WarningResponse warningResponse, string startPeriod, bool isNitrogenRateExceeded, decimal nitrogenWithinWarningPeriod)
+    {
+        bool isNitrogenGreterThan40Or80 = (model.N.Value > 40 || (nitrogenWithinWarningPeriod + model.N.Value) > 80);
+        if (isNitrogenGreterThan40Or80)
+        {
+            isNitrogenRateExceeded = true;
+        }
+
+        if (isNitrogenRateExceeded)
+        {
+            warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateGrass.ToString());
+
+            model = SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
+        }
+
+        return (model, warningResponse, isNitrogenRateExceeded);
+    }
+    public async Task<(FertiliserManureViewModel model, WarningResponse warningResponse)> WarningForBrassicaCrop(FertiliserManureViewModel model, decimal totalNitrogen, WarningResponse warningResponse, string startPeriod, string endPeriod, decimal nitrogenInFourWeek)
+    {
+        bool isClosedPeriodWarning = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0));
+        if (isClosedPeriodWarning)
+        //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
+        //totalNitrogen > 100 and brassica crop will work for Scotland as well
+        {
+            warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateBrassica.ToString());
+
+            model = SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod));
+        }
+
+        return (model, warningResponse);
+    }
 }

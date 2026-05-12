@@ -2315,15 +2315,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                 if (error == null)
                 {
-                    bool isClosedPeriodWarning = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0));
-                    if (isClosedPeriodWarning)
-                    //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
-                    //totalNitrogen > 100 and brassica crop will work for Scotland as well
-                    {
-                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateBrassica.ToString());
-
-                        model = _fertiliserManureLogic.SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod));
-                    }
+                    (model, warningResponse) = await _fertiliserManureLogic.WarningForBrassicaCrop(model, totalNitrogen, warningResponse, startPeriod, endPeriod, nitrogenInFourWeek);
                 }
                 else
                 {
@@ -2359,19 +2351,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 decimal nitrogenWithinWarningPeriod = 0;
                 //if we are coming for update then we will exclude the fertiliserId.
                 (error, nitrogenWithinWarningPeriod) = await _fertiliserManureLogic.BindNitrogenWithInWarningPeriod(model, managementId, fieldId, error, start, end, nitrogenWithinWarningPeriod);
-
-                bool isNitrogenGreterThan40Or80 = (model.N.Value > 40 || (nitrogenWithinWarningPeriod + model.N.Value) > 80);
-                if (isNitrogenGreterThan40Or80)
-                {
-                    isNitrogenRateExceeded = true;
-                }
-
-                if (isNitrogenRateExceeded)
-                {
-                    warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateGrass.ToString());
-
-                    model = _fertiliserManureLogic.SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
-                }
+                (model, warningResponse, isNitrogenRateExceeded) = await _fertiliserManureLogic.WarningForGrass(model, warningResponse, startPeriod, isNitrogenRateExceeded, nitrogenWithinWarningPeriod);
             }
 
 
@@ -2403,6 +2383,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (model, error);
     }
 
+    
 
 
     private async Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> NmaxLogicForCrop(FertiliserManureViewModel model, int managementId, int fieldId, Error? error, ManagementPeriod? managementPeriod, decimal previousApplicationsN, decimal currentApplicationNitrogen)
