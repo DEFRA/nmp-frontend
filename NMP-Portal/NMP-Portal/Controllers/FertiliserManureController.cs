@@ -2295,50 +2295,34 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         decimal totalNitrogen = 0;
         model.IsNitrogenExceedWarning = false;
         //if we are coming for update then we will exclude the fertiliserId.
-
+        WarningResponse warningResponse = new WarningResponse();
         (totalNitrogen, error) = await FetchNitrogenAsync(fieldId, startDate, endDate, model, managementId, _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate);
         if (error == null)
         {
-
             totalNitrogen = totalNitrogen + Convert.ToDecimal(model.N);
             HashSet<int> brassicaCrops = BrassicaCrops();
             string closedPeriod = WarningWithinPeriod.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
             bool isWithinClosedPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
-            string startPeriod = string.Empty;
-            string endPeriod = string.Empty;
-            string[] periods = closedPeriod.Split(" to ");
-
-            if (periods.Length == 2)
-            {
-                startPeriod = periods[0];
-                endPeriod = periods[1];
-            }
+            bool isCropBrassicaAndWithInClosedPeriod = brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod;
+            (string startPeriod, string endPeriod) = _fertiliserManureLogic.BindStartPeriodAndEndPeriod(closedPeriod);
             //warning excel sheet row no. 25
-            if (brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod)
+            if (isCropBrassicaAndWithInClosedPeriod)
             {
                 DateTime fourWeekDate = model.Date.Value.AddDays(-27);
                 decimal nitrogenInFourWeek = 0;
                 //if we are coming for update then we will exclude the fertiliserId.
-                if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
-                {
-                    (nitrogenInFourWeek, error) = await _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, fourWeekDate, model.Date.Value, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
-                }
-                else
-                {
-                    (nitrogenInFourWeek, error) = await _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, fourWeekDate, model.Date.Value, null, false);
-
-                }
+                (error, nitrogenInFourWeek) = await _fertiliserManureLogic.BindNitrogenInFourWeekForWarning(model, managementId, fieldId, error, fourWeekDate, nitrogenInFourWeek);
 
                 if (error == null)
                 {
-
-                    if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0))
+                    bool isClosedPeriodWarning = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland ? totalNitrogen > 100 : (totalNitrogen > 100 || model.N.Value > 50 || nitrogenInFourWeek > 0));
+                    if (isClosedPeriodWarning)
                     //nitrogenInFourWeek>0 means check Nitrogen applied within 28 days
                     //totalNitrogen > 100 and brassica crop will work for Scotland as well
                     {
-                        WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateBrassica.ToString());
+                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateBrassica.ToString());
 
-                        SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod));
+                        model = _fertiliserManureLogic.SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod));
                     }
                 }
                 else
@@ -2348,145 +2332,24 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
 
             //warning excel sheet row no. 24
-            if ((cropTypeId == (int)NMP.Commons.Enums.CropTypes.Asparagus || cropTypeId == (int)NMP.Commons.Enums.CropTypes.BulbOnions || cropTypeId == (int)NMP.Commons.Enums.CropTypes.SaladOnions) && isWithinClosedPeriod)
-            {
-                bool isNitrogenRateExceeded = false;
-                int maxNitrogenRate = 0;
-                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Asparagus && totalNitrogen > 50)
-                {
-                    isNitrogenRateExceeded = true;
-                    maxNitrogenRate = 50;
-                }
-                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.BulbOnions && totalNitrogen > 40)
-                {
-                    isNitrogenRateExceeded = true;
-                    maxNitrogenRate = 40;
-                }
+            (model,warningResponse) = await _fertiliserManureLogic.BindNmaxWarningInModelForAsparagusAndOnionCrops(model, cropTypeId, totalNitrogen, isWithinClosedPeriod, startPeriod, endPeriod);
 
-                if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.SaladOnions && totalNitrogen > 40)
-                {
-                    isNitrogenRateExceeded = true;
-                    maxNitrogenRate = 40;
-                }
+            (string warningPeriod, startPeriod, endPeriod) = _fertiliserManureLogic.BindStartEndDateAndWarningPeriod(model, endDate, closedPeriod);
 
-                if (isNitrogenRateExceeded)
-                {
-                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRate.ToString());
-
-                    SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod, maxNitrogenRate));
-                }
-            }
-
-            string warningPeriod = string.Empty;
-            periods = closedPeriod.Split(" to ");
-
-            if (periods.Length == 2)
-            {
-                startPeriod = periods[0];
-                endPeriod = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland) ? endDate.ToString("dd MMMM") : Resource.lbl31October;
-                warningPeriod = $"{startPeriod} to {endPeriod}";
-            }
             bool isWithinWarningPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(model.Date.Value, warningPeriod);
 
             DateTime endOfOctober = new DateTime(model.Date.Value.Year, 10, 31, 00, 00, 00, DateTimeKind.Unspecified);
             decimal PreviousApplicationsNitrogen = 0;
             //if we are coming for update then we will exclude the fertiliserId.
-            if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
-            {
-                (PreviousApplicationsNitrogen, error) = await _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endOfOctober, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
-            }
-            else
-            {
-                (PreviousApplicationsNitrogen, error) = await _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, startDate, endOfOctober, null, false);
-            }
+            (error, PreviousApplicationsNitrogen) = await _fertiliserManureLogic.BindPreviousYearNitrogen(model, managementId, startDate, fieldId, error, endOfOctober, PreviousApplicationsNitrogen);
 
             //warning excel sheet row no. 26
-            bool isResidueGroupOne = false;
-            bool isResidueGroupTwo = false;
-            bool isResidueGroupThree = false;
-            bool isResidueGroup4To6 = false;
-            Recommendation? recommendation = null;
-            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-            {
-                (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
-                if (recommendation != null && recommendation.NIndex == 1.ToString())
-                {
-                    isResidueGroupOne = true;
-                }
-                if (recommendation != null && recommendation.NIndex == 2.ToString())
-                {
-                    isResidueGroupTwo = true;
-                }
-                if (recommendation != null && recommendation.NIndex == 3.ToString())
-                {
-                    isResidueGroupThree = true;
-                }
-                if (recommendation != null && (recommendation.NIndex == 4.ToString() || recommendation.NIndex == 5.ToString() || recommendation.NIndex == 6.ToString()))
-                {
-                    isResidueGroup4To6 = true;
-                }
-            }
-            bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
-            bool hasValidResidue = isResidueGroupOne || isResidueGroupTwo || isResidueGroupThree;
 
-            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape
-                && isWithinWarningPeriod
-                && (!isScotland || hasValidResidue || isResidueGroup4To6))
-            {
-                bool isNitrogenRateExceeded = false;
 
-                if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
-                {
-                    if ((PreviousApplicationsNitrogen + model.N.Value) > 30)
-                    {
-                        isNitrogenRateExceeded = true;
-                    }
-
-                    if (isNitrogenRateExceeded)
-                    {
-                        WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateOSR.ToString());
-
-                        SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
-                    }
-                }
-                else
-                {
-                    WarningResponse warningResponse = new WarningResponse();
-                    if (hasValidResidue)
-                    {
-                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InOrgNMAXRateResidueGroup.ToString());
-                    }
-                    if (isResidueGroup4To6)
-                    {
-                        warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateResidueGroup4To6.ToString());
-                        isNitrogenRateExceeded = true;
-
-                    }
-                    if (isResidueGroupOne && (totalNitrogen > 30))
-                    {
-                        isNitrogenRateExceeded = true;
-                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 1, 30) : null;
-                    }
-                    else if (isResidueGroupTwo && (totalNitrogen > 20))
-                    {
-                        isNitrogenRateExceeded = true;
-                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 2, 20) : null;
-                    }
-                    else if (isResidueGroupThree && (totalNitrogen > 10))
-                    {
-                        isNitrogenRateExceeded = true;
-                        warningResponse.Para2 = !string.IsNullOrWhiteSpace(warningResponse.Para2) ? string.Format(warningResponse.Para2, 3, 10) : null;
-                    }
-
-                    if (isNitrogenRateExceeded)
-                    {
-
-                        SetClosedPeriodWarning(model, warningResponse, warningResponse.Para2);
-                    }
-                }
-            }
+            (model, warningResponse) = await _fertiliserManureLogic.BindOilseedRapeWarnings(model, managementId, totalNitrogen, startPeriod, PreviousApplicationsNitrogen, isWithinWarningPeriod, cropTypeId);
             //warning excel sheet row no. 27
-            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass && isWithinWarningPeriod)
+            bool isThisGrassCropAndInWarningPeriod = (cropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass && isWithinWarningPeriod);
+            if (isThisGrassCropAndInWarningPeriod)
             {
                 bool isNitrogenRateExceeded = false;
                 string startString = $"{startPeriod} {startDate.Year}";
@@ -2495,26 +2358,19 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 DateTime end = DateTime.ParseExact(endString, "d MMMM yyyy", CultureInfo.InvariantCulture);
                 decimal nitrogenWithinWarningPeriod = 0;
                 //if we are coming for update then we will exclude the fertiliserId.
-                if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
-                {
-                    (nitrogenWithinWarningPeriod, error) = await _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, start, end, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), false);
-                }
-                else
-                {
-                    (nitrogenWithinWarningPeriod, error) = await _fertiliserManureLogic.FetchTotalNBasedOnFieldIdAndAppDate(fieldId, start, end, null, false);
+                (error, nitrogenWithinWarningPeriod) = await _fertiliserManureLogic.BindNitrogenWithInWarningPeriod(model, managementId, fieldId, error, start, end, nitrogenWithinWarningPeriod);
 
-                }
-
-                if (model.N.Value > 40 || (nitrogenWithinWarningPeriod + model.N.Value) > 80)
+                bool isNitrogenGreterThan40Or80 = (model.N.Value > 40 || (nitrogenWithinWarningPeriod + model.N.Value) > 80);
+                if (isNitrogenGreterThan40Or80)
                 {
                     isNitrogenRateExceeded = true;
                 }
 
                 if (isNitrogenRateExceeded)
                 {
-                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateGrass.ToString());
+                    warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRateGrass.ToString());
 
-                    SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
+                    model = _fertiliserManureLogic.SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod));
                 }
             }
 
@@ -2526,130 +2382,14 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             int cropId = managementPeriod?.CropID ?? 0;
             decimal previousApplicationsN = 0;
             decimal currentApplicationNitrogen = Convert.ToDecimal(model.N);
-            int farmCountryId = model.FarmCountryId ?? 0;
-            int scotland = (int)NMP.Commons.Enums.FarmCountry.Scotland;
-            CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
-            int? scotlandNmax = null;
-            int residueGroup = 0;
-            bool isWinterOilseedRapeAutumn = false;
 
             //if we are coming for update then we will exclude the fertiliserId.
-            if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+            (error, previousApplicationsN) = await _fertiliserManureLogic.BindPreviousApplicationN(model, managementId, error, cropId, previousApplicationsN);
+
+            (bool flowControl, (FertiliserManureViewModel, Error?) value) = await NmaxLogicForCrop(model, managementId, fieldId, error, managementPeriod, previousApplicationsN, currentApplicationNitrogen);
+            if (!flowControl)
             {
-                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, model.UpdatedFertiliserIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.FertiliserId).FirstOrDefault(), null);
-            }
-            else
-            {
-                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, null);
-            }
-
-            if (managementPeriod?.CropID != null)
-            {
-                (Crop? crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-
-
-                if (farmCountryId == scotland)
-                {
-
-                    Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
-                    (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
-
-                    if (recommendation != null)
-                    {
-                        residueGroup = Convert.ToInt32(recommendation.NIndex);
-                    }
-                    isWinterOilseedRapeAutumn = Functions.IsWinterOilseedRapeAutumn(crop.CropTypeID ?? 0, model.HarvestYear ?? 0, model.Date.Value);
-                    (scotlandNmax, error) = await _organicManureLogic.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(crop.CropTypeID.Value, isWinterOilseedRapeAutumn ? -1 : field.SoilTypeID ?? 0, residueGroup);
-                    if (scotlandNmax == null)
-                    {
-                        scotlandNmax = Convert.ToInt32(recommendation?.CropN);
-                    }
-                }
-                else
-                {
-                    (cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-
-                }
-                if (error == null)
-                {
-                    int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
-
-                    if ((model.FarmCountryId != scotland && nmaxLimitEnglandOrWales != null) || (model.FarmCountryId == scotland && scotlandNmax != null))
-                    {
-                        (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
-                        if (error == null)
-                        {
-                            decimal nMaxLimit = 0;
-
-                            (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                            (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
-                            if (error == null)
-                            {
-                                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                                nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-
-                                OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
-                                if (model.FarmCountryId != scotland)
-                                {
-                                    nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
-                                }
-                                else
-                                {
-                                    int? winterRainfall = null;
-                                    (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
-                                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-                                    {
-                                        return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                                    }
-                                    else
-                                    {
-                                        winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
-                                    }
-
-                                    nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
-                                }
-
-                                decimal totalNitrogenApplied = 0;
-
-                                totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
-
-                                if (totalNitrogenApplied > nMaxLimit)
-                                {
-                                    string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
-                                    model.IsNMaxLimitWarning = true;
-
-
-                                    WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farm?.CountryID ?? 0, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
-                                    if (farmCountryId != scotland && crop?.CropTypeID != null && error == null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
-                                    {
-
-                                        SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
-
-
-                                    }
-                                    if (farmCountryId == scotland)
-                                    {
-                                        SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit));
-                                    }
-                                }
-                                else
-                                {
-                                    return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                                }
-                            }
-                            else
-                            {
-                                return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                    }
-                }
-
+                return value;
             }
 
         }
@@ -2662,6 +2402,85 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     }
 
 
+
+    private async Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> NmaxLogicForCrop(FertiliserManureViewModel model, int managementId, int fieldId, Error? error, ManagementPeriod? managementPeriod, decimal previousApplicationsN, decimal currentApplicationNitrogen)
+    {
+        int farmCountryId = model.FarmCountryId ?? 0;
+        int scotland = (int)NMP.Commons.Enums.FarmCountry.Scotland;
+        if (managementPeriod?.CropID != null)
+        {
+            (Crop? crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
+
+            (error, CropTypeLinkingResponse cropTypeLinking, int? scotlandNmax, int residueGroup, bool isWinterOilseedRapeAutumn) = await _fertiliserManureLogic.BindDataForNmaxWarning(model, managementId, fieldId, error, farmCountryId, scotland, crop);
+
+            if (error == null)
+            {
+                int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+                bool isAppliedNMaxWarning = ((model.FarmCountryId != scotland && nmaxLimitEnglandOrWales != null) || (model.FarmCountryId == scotland && scotlandNmax != null));
+                if (isAppliedNMaxWarning)
+                {
+                    (FieldDetailResponse fieldDetail, _) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
+                    if (fieldDetail != null)
+                    {
+                        decimal nMaxLimit = 0;
+
+                        (List<int> currentYearManureTypeIds, _) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+                        (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
+                        if (error == null)
+                        {
+                            nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
+
+                            OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+                            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+                            if (model.FarmCountryId != scotland)
+                            {
+                                nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
+                            }
+                            else
+                            {
+                                int? winterRainfall = null;
+                                (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
+                                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                                {
+                                    return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
+                                }
+                                else
+                                {
+                                    winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
+                                }
+
+                                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
+                            }
+
+                            decimal totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
+
+                            (bool flowControl, (FertiliserManureViewModel, Error?) _) = await _fertiliserManureLogic.BindNmaxWarnings(model, error, totalNitrogenApplied, farmCountryId, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit);
+                            if (!flowControl)
+                            {
+                                return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
+                            }
+                        }
+                        else
+                        {
+                            return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
+                        }
+                    }
+                }
+                else
+                {
+                    return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
+                }
+            }
+
+        }
+
+        return (flowControl: true, value: default);
+    }
+
+ 
+
+
+
     private static async Task<(decimal, Error?)> FetchNitrogenAsync(int fieldId, DateTime from,
     DateTime to, FertiliserManureViewModel model, int managementId, Func<int, DateTime, DateTime, int?, bool, Task<(decimal, Error?)>> fetchFunc)
     {
@@ -2672,26 +2491,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return await fetchFunc(fieldId, from, to, fertiliserId, false);
     }
-    private static void SetClosedPeriodWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2 = null)
-    {
-        model.IsNitrogenExceedWarning = true;
-        model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
-        model.ClosedPeriodNitrogenExceedWarningCodeID = warningResponse.WarningCodeID;
-        model.ClosedPeriodNitrogenExceedWarningLevelID = warningResponse.WarningLevelID;
-        model.ClosedPeriodNitrogenExceedWarningPara1 = warningResponse.Para1;
-        model.ClosedPeriodNitrogenExceedWarningPara2 = para2;
-        model.ClosedPeriodNitrogenExceedWarningPara3 = warningResponse.Para3;
-    }
-    private static void SetNMaxWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2)
-    {
-        model.IsNMaxLimitWarning = true;
-        model.CropNmaxLimitWarningHeader = warningResponse.Header;
-        model.CropNmaxLimitWarningCodeID = warningResponse.WarningCodeID;
-        model.CropNmaxLimitWarningLevelID = warningResponse.WarningLevelID;
-        model.CropNmaxLimitWarningPara1 = warningResponse.Para1;
-        model.CropNmaxLimitWarningPara2 = para2;
-        model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
-    }
+
+  
     private static HashSet<int> BrassicaCrops()
     {
         return new HashSet<int>

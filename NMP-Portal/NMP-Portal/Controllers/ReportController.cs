@@ -5052,17 +5052,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 averageNumberForYear = (model.AverageNumberOfPlaces ?? 0);
             }
-            decimal averageNumberForYearRoundOfValue = Math.Round(averageNumberForYear, 1);
+            decimal averageNumberForYearRoundOfValue = averageNumberForYear;
 
             if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
             {
-                totalNProduced = Math.Round(averageNumberForYearRoundOfValue * model.NitrogenStandard ?? 0);
-                totalPProduced = Math.Round(averageNumberForYearRoundOfValue * model.PhosphateStandard ?? 0);
+                totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandard ?? 0),0);
+                totalPProduced = Math.Round(averageNumberForYearRoundOfValue * (model.PhosphateStandard ?? 0),0);
             }
             else
             {
-                totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandard ?? 0));
-                totalPProduced = Math.Round(averageNumberForYearRoundOfValue * model.PhosphateStandard ?? 0);
+                totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandard ?? 0),0);
+                totalPProduced = Math.Round(averageNumberForYearRoundOfValue * (model.PhosphateStandard ?? 0),0);
             }
             ViewBag.TotalNProduced = totalNProduced;
             ViewBag.TotalPProduced = totalPProduced;
