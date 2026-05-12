@@ -47,7 +47,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly string _reportDataSessionKey = "ReportData";
     private readonly string _errorOnYear = "ErrorOnYear";
     private readonly string _errorOnReportOptions = "ErrorOnReportOptions";
-    private readonly string _errorOnSelectField = "ErrorOnSelectField"; 
+    private readonly string _errorOnSelectField = "ErrorOnSelectField";
     private readonly string _isAnyLivestockNumber = "IsAnyLivestockNumber";
     private ReportViewModel? GetReportDataFromSession()
     {
@@ -676,7 +676,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
                                                 .Select(s => s.Trim())
                                                 .ToList();
-                                              
+
                                                 cropData.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
                                             }
                                         }
@@ -1199,7 +1199,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return nMaxLimit;
     }
-  
+
 
 
     [HttpGet]
@@ -4495,14 +4495,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         _logger.LogTrace("Report Controller : AverageNumber() post action called");
         try
         {
-            if (model.AverageNumber == null)
-            {
-                ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterTheAverageNumberOfThisTypeFor, model.Year));
-            }
-            else if (model.AverageNumber < 0 || model.AverageNumber > 999999)
-            {
-                ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 999999));
-            }
+            ValidateAverageNumberProperty(model);
 
             if (!ModelState.IsValid)
             {
@@ -4551,6 +4544,25 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             _logger.LogTrace(ex, "Report Controller : Exception in AverageNumber() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnAverageNumber"] = ex.Message;
             return View(model);
+        }
+    }
+
+    private void ValidateAverageNumberProperty(ReportViewModel model)
+    {
+        if (model.AverageNumber == null)
+        {
+            ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterTheAverageNumberOfThisTypeFor, model.Year));
+        }
+        else
+        {
+            if (model.AverageNumber < 0 || model.AverageNumber > 999999)
+            {
+                ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterAValueBetweenValue, 0, 999999));
+            }
+            if (model.AverageNumber % 1 != 0)
+            {
+                ModelState.AddModelError("AverageNumber", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999999));
+            }
         }
     }
 
@@ -5052,18 +5064,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 averageNumberForYear = (model.AverageNumberOfPlaces ?? 0);
             }
-            decimal averageNumberForYearRoundOfValue = Math.Round(averageNumberForYear, 1);
+            decimal averageNumberForYearRoundOfValue = averageNumberForYear;
 
-            if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
-            {
-                totalNProduced = Math.Round(averageNumberForYearRoundOfValue * model.NitrogenStandard ?? 0);
-                totalPProduced = Math.Round(averageNumberForYearRoundOfValue * model.PhosphateStandard ?? 0);
-            }
-            else
-            {
-                totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandard ?? 0));
-                totalPProduced = Math.Round(averageNumberForYearRoundOfValue * model.PhosphateStandard ?? 0);
-            }
+
+            totalNProduced = Math.Round(averageNumberForYearRoundOfValue * (model.NitrogenStandard ?? 0), 0);
+            totalPProduced = Math.Round(averageNumberForYearRoundOfValue * (model.PhosphateStandard ?? 0), 0);
+
             ViewBag.TotalNProduced = totalNProduced;
             ViewBag.TotalPProduced = totalPProduced;
             model.IsLivestockCheckAnswer = true;
@@ -5567,9 +5573,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     }
                     else
                     {
-                            model.IsManageLivestock = false;
-                            SetReportDataToSession(model);
-                            return RedirectToAction(_isAnyLivestockNumber, model);                        
+                        model.IsManageLivestock = false;
+                        SetReportDataToSession(model);
+                        return RedirectToAction(_isAnyLivestockNumber, model);
                     }
                 }
             }
@@ -6431,7 +6437,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.TotalImportExportTotalN = total > 0 ? $"+{total}" : total == 0 ? "0" : string.Format("{0:N0}", total);
 
         ViewBag.TotalNLoading = totalNLoading;
-        ViewBag.AverageLivestockManureTotalNLoading = (int)Math.Round(totalNLoading / (nutrientsLoadingFarmDetail?.LandInNVZ??0 + (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0)), 0);
+        ViewBag.AverageLivestockManureTotalNLoading = (int)Math.Round(totalNLoading / (nutrientsLoadingFarmDetail?.LandInNVZ ?? 0 + (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0)), 0);
         ViewBag.ComplianceOrNot = totalLivestockManureCapacity >= totalNLoading ? Resource.lblCompliance : Resource.lblNonCompliance;
 
 
