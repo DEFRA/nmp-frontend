@@ -2415,8 +2415,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             if (error == null)
             {
-                int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
-                bool isAppliedNMaxWarning = ((model.FarmCountryId != scotland && nmaxLimitEnglandOrWales != null) || (model.FarmCountryId == scotland && scotlandNmax != null));
+                BindNmaxLimitOrIsAppliedNmaxWarning(model, scotland, cropTypeLinking, scotlandNmax, out int? nmaxLimitEnglandOrWales, out bool isAppliedNMaxWarning);
                 if (isAppliedNMaxWarning)
                 {
                     (FieldDetailResponse fieldDetail, _) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
@@ -2438,17 +2437,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             }
                             else
                             {
-                                int? winterRainfall = null;
-                                (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
-                                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                                (bool isSucess, error, int? winterRainfall) = await BindWinterRainfallForNmaxLimit(model);
+                                if (!isSucess)
                                 {
                                     return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
                                 }
-                                else
-                                {
-                                    winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
-                                }
-
                                 nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
                             }
 
@@ -2477,9 +2470,26 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (flowControl: true, value: default);
     }
 
- 
+    private static void BindNmaxLimitOrIsAppliedNmaxWarning(FertiliserManureViewModel model, int scotland, CropTypeLinkingResponse cropTypeLinking, int? scotlandNmax, out int? nmaxLimitEnglandOrWales, out bool isAppliedNMaxWarning)
+    {
+        nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+        isAppliedNMaxWarning = ((model.FarmCountryId != scotland && nmaxLimitEnglandOrWales != null) || (model.FarmCountryId == scotland && scotlandNmax != null));
+    }
 
-
+    private async Task<(bool flowControl, Error?, int?)> BindWinterRainfallForNmaxLimit(FertiliserManureViewModel model)
+    {
+        int? winterRainfall = null;
+        (ExcessRainfalls excessRainfalls, Error error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
+        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+        {
+            return (flowControl: false, error, winterRainfall);
+        }
+        else
+        {
+            winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
+        }
+        return (flowControl: true, null, winterRainfall);
+    }
 
     private static async Task<(decimal, Error?)> FetchNitrogenAsync(int fieldId, DateTime from,
     DateTime to, FertiliserManureViewModel model, int managementId, Func<int, DateTime, DateTime, int?, bool, Task<(decimal, Error?)>> fetchFunc)
@@ -2492,7 +2502,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return await fetchFunc(fieldId, from, to, fertiliserId, false);
     }
 
-  
+
     private static HashSet<int> BrassicaCrops()
     {
         return new HashSet<int>

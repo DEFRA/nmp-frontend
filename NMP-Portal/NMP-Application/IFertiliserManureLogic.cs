@@ -24,7 +24,7 @@ public interface IFertiliserManureLogic
     (string, string, string) BindStartEndDateAndWarningPeriod(FertiliserManureViewModel model, DateTime endDate, string closedPeriod);
     (string, string) BindStartPeriodAndEndPeriod(string closedPeriod);
     Task<(Error? error, decimal PreviousApplicationsNitrogen)> BindPreviousYearNitrogen(FertiliserManureViewModel model, int managementId, DateTime startDate, int fieldId, Error? error, DateTime endOfOctober, decimal PreviousApplicationsNitrogen);
-    Task<(bool, WarningResponse, FertiliserManureViewModel)> BindResidueWarning(FertiliserManureViewModel model, decimal totalNitrogen, bool isResidueGroupOne, bool isResidueGroupTwo, bool isResidueGroupThree, bool isResidueGroup4To6, bool hasValidResidue, bool isNitrogenRateExceeded);
+    
     FertiliserManureViewModel SetClosedPeriodWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2 = null);
     Task<(Error? error, decimal nitrogenWithinWarningPeriod)> BindNitrogenWithInWarningPeriod(FertiliserManureViewModel model, int managementId, int fieldId, Error? error, DateTime start, DateTime end, decimal nitrogenWithinWarningPeriod);
     Task<(Error? error, decimal previousApplicationsN)> BindPreviousApplicationN(FertiliserManureViewModel model, int managementId, Error? error, int cropId, decimal previousApplicationsN);

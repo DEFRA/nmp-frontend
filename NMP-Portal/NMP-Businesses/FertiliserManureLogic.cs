@@ -159,8 +159,9 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
         return (error, nitrogenInFourWeek);
     }
-    public async Task<(bool, WarningResponse, FertiliserManureViewModel)> BindResidueWarning(FertiliserManureViewModel model, decimal totalNitrogen, bool isResidueGroupOne, bool isResidueGroupTwo, bool isResidueGroupThree, bool isResidueGroup4To6, bool hasValidResidue, bool isNitrogenRateExceeded)
+    private async Task<(bool, WarningResponse, FertiliserManureViewModel)> BindResidueWarning(FertiliserManureViewModel model, decimal totalNitrogen, int managementId,bool isScotland, bool hasValidResidue, bool isNitrogenRateExceeded)
     {
+        (bool isResidueGroupOne, bool isResidueGroupTwo, bool isResidueGroupThree, bool isResidueGroup4To6) = await BindResidueGroupCondtition(managementId, isScotland);
         WarningResponse warningResponse = new WarningResponse();
         if (hasValidResidue)
         {
@@ -334,7 +335,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
             }
             else
             {
-                (isNitrogenRateExceeded, warningResponse, model) = await BindResidueWarning(model, totalNitrogen, isResidueGroupOne, isResidueGroupTwo, isResidueGroupThree, isResidueGroup4To6, hasValidResidue, isNitrogenRateExceeded);
+                (isNitrogenRateExceeded, warningResponse, model) = await BindResidueWarning(model, totalNitrogen, managementId,isScotland, hasValidResidue, isNitrogenRateExceeded);
             }
         }
 
@@ -391,7 +392,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
             bool isScotland = farmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
             WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farmCountryId, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
-            if (!isScotland && crop?.CropTypeID != null && error == null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
+            if (!isScotland && crop.CropTypeID != null && error == null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
             {
 
                model= SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
@@ -400,7 +401,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
             }
             if (isScotland)
             {
-               model= SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit));
+                SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit));
             }
         }
         else
