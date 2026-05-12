@@ -1457,12 +1457,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     return RedirectToAction("Year");
                 }
             }
-            string isComingFromPlan = _reportDataProtector.Protect(model.IsComingFromPlan.ToString());
+            string? isComingFromPlan = (model.IsComingFromPlan.HasValue && model.IsComingFromPlan.Value) ? _reportDataProtector.Protect(model.IsComingFromPlan.ToString()) : string.Empty;
             if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
             {
                 SetReportDataToSession(model);
 
-                return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { q = model.EncryptedFarmId, isPlan = isComingFromPlan });
+                return RedirectToAction("ManageStorageCapacity", "StorageCapacity", new { y = model.EncryptedHarvestYear, q = model.EncryptedFarmId, isPlan = isComingFromPlan });
             }
             return View(model);
         }
