@@ -31,5 +31,5 @@ public interface IFertiliserManureLogic
     Task<(Error? error, CropTypeLinkingResponse cropTypeLinking, int? scotlandNmax, int residueGroup, bool isWinterOilseedRapeAutumn)> BindDataForNmaxWarning(FertiliserManureViewModel model, int managementId, int fieldId, Error? error, int farmCountryId, int scotland, Crop? crop);
     Task<(FertiliserManureViewModel, WarningResponse)> BindNmaxWarningInModelForAsparagusAndOnionCrops(FertiliserManureViewModel model, int cropTypeId, decimal totalNitrogen, bool isWithinClosedPeriod, string startPeriod, string endPeriod);
     Task<(FertiliserManureViewModel, WarningResponse)> BindOilseedRapeWarnings(FertiliserManureViewModel model, int managementId, decimal totalNitrogen, string startPeriod, decimal PreviousApplicationsNitrogen, bool isWithinWarningPeriod, int cropTypeId);
-    Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> BindNmaxWarnings(FertiliserManureViewModel model, Error? error, decimal totalNitrogenApplied, int farmCountryId, Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit);
+    Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> BindNmaxWarnings(FertiliserManureViewModel model, decimal totalNitrogenApplied, int farmCountryId, Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit);
 }

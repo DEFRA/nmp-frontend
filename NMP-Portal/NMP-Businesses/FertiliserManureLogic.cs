@@ -383,8 +383,9 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
         model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
         return model;
     }
-    public async Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> BindNmaxWarnings(FertiliserManureViewModel model, Error? error, decimal totalNitrogenApplied, int farmCountryId,  Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit)
+    public async Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> BindNmaxWarnings(FertiliserManureViewModel model, decimal totalNitrogenApplied, int farmCountryId,  Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit)
     {
+        Error? error = null;
         if (totalNitrogenApplied > nMaxLimit)
         {
             string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
