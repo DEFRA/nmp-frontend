@@ -2433,7 +2433,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 (bool isSucess, error, int? winterRainfall) = await BindWinterRainfallForNmaxLimit(model);
                 if (!isSucess)
                 {
-                    return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
+                    return (flowControl: false, value: (model, error));
                 }
                 nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax),crop.Yield??null , fieldDetail.SoilTypeName, crop.CropInfo1 ?? null, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
             }
@@ -2448,12 +2448,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
 
         }
-        else
-        {
-            return (flowControl: false, value: (model,  error));
-        }
-
-
+        
         return (flowControl: true, value: default);
     }
 
