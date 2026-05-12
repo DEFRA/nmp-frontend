@@ -11,30 +11,30 @@ public class StoreCapacity
     public int? SolidManureTypeID { get; set; }  //not in view model
 
     
-    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheLengthToOneDecimalPlace))]
+    [RegularExpression(@"^-?\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheLengthToOneDecimalPlace))]
     public decimal? Length { get; set; }
 
     
-    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheWidthToOneDecimalPlace))]
+    [RegularExpression(@"^-?\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheWidthToOneDecimalPlace))]
     public decimal? Width { get; set; }
 
     
-    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheDepthToOneDecimalPlace))]
+    [RegularExpression(@"^-?\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheDepthToOneDecimalPlace))]
     public decimal? Depth { get; set; }
 
     
-    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheCircumferenceToOneDecimalPlace))]
+    [RegularExpression(@"^-?\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheCircumferenceToOneDecimalPlace))]
     public decimal? Circumference { get; set; }
 
     
-    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheDiameterToOneDecimalPlace))]
+    [RegularExpression(@"^-?\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheDiameterToOneDecimalPlace))]
     public decimal? Diameter { get; set; }
     public int? BankSlopeAngleID { get; set; }
     public bool? IsCovered { get; set; }
     public decimal? CapacityVolume { get; set; }
 
     
-    [RegularExpression(@"^\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheWeightCapacityToOneDecimalPlace))]
+    [RegularExpression(@"^-?\d+(\.\d{1})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblEnterTheWeightCapacityToOneDecimalPlace))]
     public decimal? CapacityWeight { get; set; }
     public decimal? SurfaceArea { get; set; }
     public DateTime? CreatedOn { get; set; }
