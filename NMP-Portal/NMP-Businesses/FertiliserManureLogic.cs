@@ -393,7 +393,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
             bool isScotland = farmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
             WarningResponse warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(farmCountryId, NMP.Commons.Enums.WarningKey.NMaxLimit.ToString());
-            if (!isScotland && crop.CropTypeID != null && error == null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
+            if (!isScotland && crop.CropTypeID != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
             {
 
                model= SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
@@ -407,7 +407,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
         }
         else
         {
-            return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
+            return (flowControl: false, value: (model, error));
         }
 
         return (flowControl: true, value: default);

@@ -2418,40 +2418,39 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         if (isAppliedNMaxWarning)
         {
             (FieldDetailResponse fieldDetail, _) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
-            if (fieldDetail != null)
+
+            decimal nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
+            if (model.FarmCountryId != scotland)
             {
-                decimal nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-                if (model.FarmCountryId != scotland)
+                (bool isSucessForWarning, (FertiliserManureViewModel, Error?) value, nMaxLimit) = await NmaxLimitBindForEnglandAndWales(model, fieldId, error, crop, fieldDetail, nMaxLimit);
+                if (!isSucessForWarning)
                 {
-                    (bool isSucessForWarning, (FertiliserManureViewModel, Error?) value, nMaxLimit) = await NmaxLimitBindForEnglandAndWales(model, fieldId, error, crop, fieldDetail, nMaxLimit);
-                    if (!isSucessForWarning)
-                    {
-                        return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
-                    }
+                    return (flowControl: false, value);
                 }
-                else
-                {
-                    (bool isSucess, error, int? winterRainfall) = await BindWinterRainfallForNmaxLimit(model);
-                    if (!isSucess)
-                    {
-                        return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
-                    }
-                    nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
-                }
-
-                decimal totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
-
-                (bool flowControl, (FertiliserManureViewModel, Error?) _) = await _fertiliserManureLogic.BindNmaxWarnings(model, totalNitrogenApplied, farmCountryId, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit);
-                if (!flowControl)
+            }
+            else
+            {
+                (bool isSucess, error, int? winterRainfall) = await BindWinterRainfallForNmaxLimit(model);
+                if (!isSucess)
                 {
                     return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
                 }
-
+                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax),crop.Yield??null , fieldDetail.SoilTypeName, crop.CropInfo1 ?? null, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
             }
+
+            decimal totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
+
+            (bool flowControl, (FertiliserManureViewModel, Error?) _) = await _fertiliserManureLogic.BindNmaxWarnings(model, totalNitrogenApplied, farmCountryId, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit);
+            if (!flowControl)
+            {
+                return (flowControl: false, value: (model,error));
+            }
+
+
         }
         else
         {
-            return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
+            return (flowControl: false, value: (model,  error));
         }
 
 
@@ -2470,7 +2469,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         else
         {
-            return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error), nMaxLimit);
+            return (flowControl: false, value: (model, error), nMaxLimit);
         }
 
         return (flowControl: true, value: default, nMaxLimit);
