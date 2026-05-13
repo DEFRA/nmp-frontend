@@ -534,4 +534,141 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
 
         return defolicationName;
     }
+    public PlanViewModel FilterOrganicAndInorganicListForHarvestYearOverview(PlanViewModel model, string? s, string? u, string? t)
+    {
+        string decrypSortBy = _cropDataProtector.Unprotect(s);
+        string decrypOrder = _cropDataProtector.Unprotect(u);
+        if (!string.IsNullOrWhiteSpace(decrypSortBy) && !string.IsNullOrWhiteSpace(decrypOrder) && !string.IsNullOrWhiteSpace(t))
+        {
+            string decryptTabName = _cropDataProtector.Unprotect(t);
+            model = ApplyApplicationListSorting(model, decryptTabName, decrypSortBy, decrypOrder);
+        }
+        return model;
+    }
+    private PlanViewModel ApplyApplicationListSorting(
+    PlanViewModel model,
+    string decryptTabName,
+    string decrypSortBy,
+    string decrypOrder)
+    {
+        bool isDescending = decrypOrder == Resource.lblDesc;
+
+        if (decryptTabName == Resource.lblOrganicMaterialApplicationsForSorting &&
+            model.HarvestYearPlans.OrganicManureList != null)
+        {
+            model.HarvestYearPlans.OrganicManureList =
+                SortApplicationList(
+                    model.HarvestYearPlans.OrganicManureList,
+                    decrypSortBy,
+                    isDescending);
+
+            UpdateSortState(model, decrypSortBy, isDescending, true);
+        }
+        else if (decryptTabName == Resource.lblInorganicFertiliserApplicationsForSorting &&
+                 model.HarvestYearPlans.InorganicFertiliserList != null)
+        {
+            model.HarvestYearPlans.InorganicFertiliserList =
+                SortApplicationList(
+                    model.HarvestYearPlans.InorganicFertiliserList,
+                    decrypSortBy,
+                    isDescending);
+
+            UpdateSortState(model, decrypSortBy, isDescending, false);
+        }
+        return model;
+    }
+
+    private List<T> SortApplicationList<T>(
+     List<T> list,
+     string sortBy,
+     bool isDescending)
+    {
+        if (sortBy == Resource.lblField)
+        {
+            return isDescending
+                ? list.OrderByDescending(x => GetPropertyValue<string>(x, "Field")).ToList()
+                : list.OrderBy(x => GetPropertyValue<string>(x, "Field")).ToList();
+        }
+
+        if (sortBy == Resource.lblDate)
+        {
+            return isDescending
+                ? list.OrderByDescending(x => GetPropertyValue<DateTime>(x, "ApplicationDate")).ToList()
+                : list.OrderBy(x => GetPropertyValue<DateTime>(x, "ApplicationDate")).ToList();
+        }
+
+        if (sortBy == Resource.lblCropType)
+        {
+            return isDescending
+                ? list.OrderByDescending(x => GetPropertyValue<string>(x, "Crop")).ToList()
+                : list.OrderBy(x => GetPropertyValue<string>(x, "Crop")).ToList();
+        }
+
+        return list;
+    }
+
+    private TValue GetPropertyValue<TValue>(object obj, string propertyName)
+    {
+        return (TValue)obj.GetType().GetProperty(propertyName)?.GetValue(obj)!;
+    }
+
+    private void UpdateSortState(
+        PlanViewModel model,
+        string sortBy,
+        bool isDescending,
+        bool isOrganic)
+    {
+        string order = isDescending ? Resource.lblDesc : Resource.lblAsc;
+        string encryptedOrder = _cropDataProtector.Protect(order);
+
+        if (isOrganic)
+        {
+            model.SortOrganicListOrderByFieldName = null;
+            model.SortOrganicListOrderByDate = null;
+            model.SortOrganicListOrderByCropType = null;
+
+            switch (sortBy)
+            {
+                case var s when s == Resource.lblField:
+                    model.SortOrganicListOrderByFieldName = order;
+                    model.EncryptSortOrganicListOrderByFieldName = encryptedOrder;
+                    break;
+
+                case var s when s == Resource.lblDate:
+                    model.SortOrganicListOrderByDate = order;
+                    model.EncryptSortOrganicListOrderByDate = encryptedOrder;
+                    break;
+
+                case var s when s == Resource.lblCropType:
+                    model.SortOrganicListOrderByCropType = order;
+                    model.EncryptSortOrganicListOrderByCropType = encryptedOrder;
+                    break;
+            }
+        }
+        else
+        {
+            model.SortInOrganicListOrderByFieldName = null;
+            model.SortInOrganicListOrderByDate = null;
+            model.SortInOrganicListOrderByCropType = null;
+
+            switch (sortBy)
+            {
+                case var s when s == Resource.lblField:
+                    model.SortInOrganicListOrderByFieldName = order;
+                    model.EncryptSortInOrganicListOrderByFieldName = encryptedOrder;
+                    break;
+
+                case var s when s == Resource.lblDate:
+                    model.SortInOrganicListOrderByDate = order;
+                    model.EncryptSortInOrganicListOrderByDate = encryptedOrder;
+                    break;
+
+                case var s when s == Resource.lblCropType:
+                    model.SortInOrganicListOrderByCropType = order;
+                    model.EncryptSortInOrganicListOrderByCropType = encryptedOrder;
+                    break;
+            }
+        }
+    }
+
 }

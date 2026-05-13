@@ -405,10 +405,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
                 SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit));
             }
         }
-        else
-        {
-            return (flowControl: false, value: (model, error));
-        }
+       
 
         return (flowControl: true, value: default);
     }
