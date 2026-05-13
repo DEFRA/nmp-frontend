@@ -3205,9 +3205,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             model.EncryptedHarvestYear = year;
                             model.Year = harvestYear;
                             HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
-                        }                     
+                        }
 
                     }
+                    HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 }
             }
             else
@@ -3221,16 +3222,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     model = BindSortingData(s, t, u, model);
                     BindViewBegForSortingList();
+                    HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 }
             }
-            HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
         }
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in HarvestYearOverview() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             model = null;
             ViewBag.Error = ex.Message;
-            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()) });
+            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year });
             
         }
         return View(model);
