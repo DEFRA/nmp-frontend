@@ -7757,4 +7757,10 @@ livestock manure.</value>
   <data name="lblStatus" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="TransferFarmFromAnotherCompany" xml:space="preserve">
+    <value>Transfer farm from another company</value>
+  </data>
+  <data name="lblWhichCompanyDoYouWantToTransferFrom" xml:space="preserve">
+    <value>Which company do you want to transfer from?</value>
+  </data>
 </root>

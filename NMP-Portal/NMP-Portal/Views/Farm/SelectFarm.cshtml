@@ -1,0 +1,40 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model FarmTransferViewModel
+@{
+    string title = "Select Farm";
+    ViewData["Title"] = $"{title}";
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="SelectOrganisation" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="SelectFarm" method="post" asp-controller="Farm" autocomplete="off">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ID)
+            <govuk-radios asp-for="@Model.FarmId">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l text-wrap-anywhere">
+                        @Resource.lblYourFarms
+                    </govuk-radios-fieldset-legend>
+                    @if (ViewBag.Farms != null)
+                    {
+                        @foreach (var item in ViewBag.Farms)
+                        {
+                            <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                        }
+                    }
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            <a class="govuk-link" asp-action="FarmList" asp-controller="Farm">@Resource.lblCancel</a>
+        </p>
+    </div>
+</div>

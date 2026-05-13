@@ -1,8 +1,13 @@
 ﻿@using NMP.Commons.Resources;
 @using NMP.Commons.ViewModels;
+@using Newtonsoft.Json
 @model FarmsViewModel
 @{
     ViewData["Title"] = Resource.lblYourFarms;
+    int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
+     
+    int organisationCount = ((SelectList)ViewBag.Organisations).Count();
+
 }
 
 @if (TempData["Error"] != null)
@@ -44,12 +49,22 @@ else
                     <p class="govuk-body">
                         <a class="govuk-link" asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</a>
                     </p>
+                    @if (enrolmentCount > 1 && organisationCount > 0)
+                    {
+                        <p class="govuk-body">
+                            <a class="govuk-link" asp-action="SelectOrganisation" asp-controller="Farm">@Resource.TransferFarmFromAnotherCompany</a>
+                        </p>
+                    }
                 </div>
             }
             else
             {
                 <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyFarms</p>
                 <govuk-button-link asp-action="Name" asp-controller="Farm">@Resource.lblAddAFarm</govuk-button-link>
+                @if (enrolmentCount > 1 && organisationCount > 0)
+                {
+                    <govuk-button-link asp-action="SelectOrganisation" asp-controller="Farm">@Resource.TransferFarmFromAnotherCompany</govuk-button-link>
+                }
             }
         </div>
     </div>

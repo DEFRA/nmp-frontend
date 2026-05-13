@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -18010,6 +18010,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which company do you want to transfer from?.
+        /// </summary>
+        public static string lblWhichCompanyDoYouWantToTransferFrom {
+            get {
+                return ResourceManager.GetString("lblWhichCompanyDoYouWantToTransferFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which country is {0} in?.
         /// </summary>
         public static string lblWhichCountryIsIn {
@@ -22949,6 +22958,15 @@ namespace NMP.Commons.Resources {
         public static string TransCookieName {
             get {
                 return ResourceManager.GetString("TransCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer farm from another company.
+        /// </summary>
+        public static string TransferFarmFromAnotherCompany {
+            get {
+                return ResourceManager.GetString("TransferFarmFromAnotherCompany", resourceCulture);
             }
         }
         

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,8 +15,11 @@ using NMP.Commons.ViewModels;
 using NMP.Portal.Helpers;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Error = NMP.Commons.ServiceResponses.Error;
 
@@ -87,6 +91,7 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
+            ViewBag.Organisations = GetOrganisationsFromClaims();
             return View(model);
         }
 
@@ -1683,22 +1688,23 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId });
             }
         }
+               
 
         [HttpGet]
-        public IActionResult Transfer(string id)
+        public IActionResult SelectOrganisation()
         {
-            _logger.LogTrace("Farm Controller : Transfer() action called");
+            _logger.LogTrace("Farm Controller : SelectOrganisation() action called");
             FarmTransferViewModel model = new();
+           // model.FarmId = farmId;
 
             try
             {
-                model.FarmId = Convert.ToInt32(_dataProtector.Unprotect(id));                             
-                
+
                 ViewBag.Organisations = GetOrganisationsFromClaims();
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, "farm Controller : Exception in Transfer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "Farm Controller : Exception in SelectOrganisation() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
             return View(model);
@@ -1706,9 +1712,9 @@ namespace NMP.Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Transfer(FarmTransferViewModel model)
+        public IActionResult SelectOrganisation(FarmTransferViewModel model)
         {
-            _logger.LogTrace("Farm Controller : Transfer() action called");
+            _logger.LogTrace("Farm Controller : SelectOrganisation() post action called");
 
             // check validation that organisation must exist in Organisation table by OrganisationId
             
@@ -1716,9 +1722,10 @@ namespace NMP.Portal.Controllers
             {
                 if(ModelState.IsValid)
                 {
+                    string organisationId = _dataProtector.Protect(model.ID.ToString());
                     // Call API to transfer farm to another organisation based on model.FarmId and model.OrganisationId
                     // Redirect to farm list page after successful transfer
-                    RedirectToAction("FarmList", new { id = _dataProtector.Protect(model.FarmId.ToString()), q = _dataProtector.Protect("true") });
+                    return RedirectToAction("SelectFarm", new { organisationId });
                 }
 
                 ViewBag.Organisations = GetOrganisationsFromClaims();
@@ -1726,11 +1733,56 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, "farm Controller : Exception in Transfer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "farm Controller : Exception in SelectOrganisation() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
-            }            
+            }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SelectFarm(string organisationId)
+        {
+            _logger.LogTrace("Farm Controller : SelectFarm() action called");
+            FarmTransferViewModel model = new();
+            Guid.TryParse(_dataProtector.Unprotect(organisationId), out Guid orgId);
+            model.ID = orgId;
+
+            try
+            {
+                (List<Farm> farms, _) = await _farmLogic.FetchFarmByOrgIdAsync(orgId);
+                ViewBag.Farms = new SelectList(farms, "ID", "Name");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "farm Controller : Exception in SelectOrganisation() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SelectFarm(FarmTransferViewModel model)
+        {
+            _logger.LogTrace("Farm Controller : SelectFarm() post action called");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //TODO: Need to update Farm here
+                    //update Farm's OrganisationId to model.OrganisationId based on model.FarmId
+                    return RedirectToAction(_farmListActionName);
+                }
+
+                (List<Farm> farms, _) = await _farmLogic.FetchFarmByOrgIdAsync(model.ID);
+                ViewBag.Farms = new SelectList(farms, "ID", "Name");
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "farm Controller : Exception in SelectFarm() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
 
         private SelectList GetOrganisationsFromClaims()
         {

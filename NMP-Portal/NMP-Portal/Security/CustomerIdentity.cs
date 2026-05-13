@@ -273,9 +273,7 @@ namespace NMP.Portal.Security
         {
             userData.User = new User();
             userData.Organisation = new Organisation();
-            string currentRelationShipId = string.Empty;
-            string organisationName = string.Empty;
-            Guid? organisationId = null;
+            string currentRelationShipId = string.Empty;                        
             List<string> relationShipsArray = new List<string>();
             List<string> rolesArray = new List<string>();
             List<Organisation> organisations = new List<Organisation>();
@@ -313,7 +311,7 @@ namespace NMP.Portal.Security
                 }
             }
 
-            ParseOrganisations(identity, userData, currentRelationShipId, ref organisationName, ref organisationId, ref relationShipsArray, ref organisations);
+            ParseOrganisations(identity, userData, currentRelationShipId, ref relationShipsArray, ref organisations);
             
             ParseRole(identity, currentRelationShipId, ref rolesArray);
         }
@@ -354,8 +352,10 @@ namespace NMP.Portal.Security
             }
         }
 
-        private static void ParseOrganisations(ClaimsIdentity? identity, UserData userData, string currentRelationShipId, ref string organisationName, ref Guid? organisationId, ref List<string> relationShipsArray, ref List<Organisation> organisations)
+        private static void ParseOrganisations(ClaimsIdentity? identity, UserData userData, string currentRelationShipId,  ref List<string> relationShipsArray, ref List<Organisation> organisations)
         {
+            Guid organisationId;
+            string organisationName;
             List<string> relationShipDetails = new List<string>();
             foreach (var item in relationShipsArray)
             {
