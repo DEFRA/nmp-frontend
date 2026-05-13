@@ -257,16 +257,22 @@
                                     @Resource.lblForMultipleDefoliation
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @{
-                                         string defoliationValue;
-                                     
-                                         if (!Model.IsSameDefoliationForAll.HasValue)
-                                        defoliationValue = Resource.lblNotSet;
-                                         else if (Model.IsSameDefoliationForAll.Value)
-                                        defoliationValue = Resource.lblYes;
-                                         else
-                                        defoliationValue = Resource.lblNo;
-                                     }
+                                        @{
+                                                    string defoliationValue;
+
+                                                    if (!Model.IsSameDefoliationForAll.HasValue)
+                                                    {
+                                                        defoliationValue = Resource.lblNotSet;
+                                                    }
+                                                    else if (Model.IsSameDefoliationForAll.Value)
+                                                    {
+                                                        defoliationValue = Resource.lblYes;
+                                                    }
+                                                    else
+                                                    {
+                                                        defoliationValue = Resource.lblNo;
+                                                    }
+                                                }
                                 @defoliationValue
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>

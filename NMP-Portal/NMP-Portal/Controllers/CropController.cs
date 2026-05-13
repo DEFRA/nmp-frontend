@@ -3176,40 +3176,36 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (harvestYearPlanResponse != null)
                     {
                         List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
-                        if (allCropDetails.Count == 0)
+                        if (allCropDetails.Any())
                         {
-                            TempData["ErrorOnHarvestYearOverview"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;//error.Message; //
-                            model = null;
-                        }
+                            BindLastModifiedDate(model, allCropDetails);
 
-                        BindLastModifiedDate(model, allCropDetails);
+                            model.AnnualRainfall = harvestYearPlanResponse.farmDetails?.Rainfall;
+                            var harvestYearPlans = new HarvestYearPlans
+                            {
+                                FieldData = new List<HarvestYearPlanFields>(),
+                                OrganicManureList = new List<OrganicManureResponse>(),
+                                InorganicFertiliserList = new List<InorganicFertiliserResponse>(),
+                            };
 
-                        model.AnnualRainfall = harvestYearPlanResponse.farmDetails?.Rainfall;
-                        var harvestYearPlans = new HarvestYearPlans
-                        {
-                            FieldData = new List<HarvestYearPlanFields>(),
-                            OrganicManureList = new List<OrganicManureResponse>(),
-                            InorganicFertiliserList = new List<InorganicFertiliserResponse>(),
-                        };
+                            BindFieldDataForHarvestYearOverviewPage(allCropDetails, harvestYearPlans);
 
-                        BindFieldDataForHarvestYearOverviewPage(allCropDetails, harvestYearPlans);
+                            (bool isSuccess, IActionResult? actionResult) = await BindOrganicManureDataForHarvestYearOverviewPage(model, error, harvestYearPlanResponse, harvestYearPlans);
+                            if (!isSuccess && actionResult != null)
+                            {
+                                return actionResult;
+                            }
 
-                        (bool isSuccess, IActionResult? actionResult) = await BindOrganicManureDataForHarvestYearOverviewPage(model, error, harvestYearPlanResponse, harvestYearPlans);
-                        if (!isSuccess && actionResult != null)
-                        {
-                            return actionResult;
-                        }
+                            BindFertilizerDataForHarvestYearOverviewPage(harvestYearPlanResponse, harvestYearPlans);
+                            BindSortingProperties(model);
 
-                        BindFertilizerDataForHarvestYearOverviewPage(harvestYearPlanResponse, harvestYearPlans);
-                        BindSortingProperties(model);
-
-                        BindViewBegForSortingList();
-                        model.HarvestYearPlans = harvestYearPlans;
-                        model.EncryptedFarmId = id;
-                        model.EncryptedHarvestYear = year;
-                        model.Year = harvestYear;
-                        HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
-
+                            BindViewBegForSortingList();
+                            model.HarvestYearPlans = harvestYearPlans;
+                            model.EncryptedFarmId = id;
+                            model.EncryptedHarvestYear = year;
+                            model.Year = harvestYear;
+                            HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+                        }                     
 
                     }
                 }
@@ -3232,8 +3228,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in HarvestYearOverview() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnHarvestYearOverview"] = ex.Message;
             model = null;
+            ViewBag.Error = ex.Message;
+            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()) });
+            
         }
         return View(model);
     }
@@ -3767,7 +3765,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(decryptedHarvestYear, decryptedFarmId);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["ErrorOnHarvestYearOverview"] = error?.Message;
+                TempData["ErrorOnHarvestYearOverview"] = error.Message;
                 return RedirectToAction(_harvestYearOverviewActionName, new
                 {
                     id = q,
@@ -3783,7 +3781,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             (recommendations, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["ErrorOnHarvestYearOverview"] = error?.Message;
+                TempData["ErrorOnHarvestYearOverview"] = error.Message;
                 return RedirectToAction(_harvestYearOverviewActionName, new
                 {
                     id = q,
