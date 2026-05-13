@@ -3279,6 +3279,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<(bool flowControl, IActionResult? value)> BindRainfallDataForHarvestYearOverview(PlanViewModel? model, int farmId, int harvestYear, Error? error, FarmResponse farm)
     {
+        string winterRainfallFirstContent = string.Empty;
         bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
         (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(farmId, harvestYear);
 
@@ -3287,27 +3288,25 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ViewBag.Error = error.Message;
             return (flowControl: false, value: View(_plansAndRecordsOverviewActionName, new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()) }));
         }
-        else
+        if (excessRainfalls.WinterRainfall != null)
         {
-            if (excessRainfalls.WinterRainfall != null)
-            {
-                await BindExcessRainfallDataForHarvestYearOverviewPage(model, excessRainfalls);
-                string winterRainfallFirstContent = string.Format(Resource.lblWinterRainfallIs450OrMoreOrLess, model.WinterRainfallName);
-                string winterRainfallSecondContent = string.Format(Resource.lblExcessWinterRainfallWithValue, model.ExcessWinterRainfallName);
-                string winterRainfallThirdContent = string.Format(Resource.lblChangeWinterRainfallForHarvestYear, harvestYear);
-                ViewBag.ExcessRainfallContentFirst = (isScotland ? winterRainfallFirstContent : winterRainfallSecondContent);
-                ViewBag.ExcessRainfallContentSecond = (isScotland ? winterRainfallThirdContent : Resource.lblUpdateExcessWinterRainfall);
+            await BindExcessRainfallDataForHarvestYearOverviewPage(model, excessRainfalls);
+            winterRainfallFirstContent = string.Format(Resource.lblWinterRainfallIs450OrMoreOrLess, model.WinterRainfallName);
+            string winterRainfallSecondContent = string.Format(Resource.lblExcessWinterRainfallWithValue, model.ExcessWinterRainfallName);
+            string winterRainfallThirdContent = string.Format(Resource.lblChangeWinterRainfallForHarvestYear, harvestYear);
+            ViewBag.ExcessRainfallContentFirst = (isScotland ? winterRainfallFirstContent : winterRainfallSecondContent);
+            ViewBag.ExcessRainfallContentSecond = (isScotland ? winterRainfallThirdContent : Resource.lblUpdateExcessWinterRainfall);
 
-            }
-            else
-            {
-                model.AnnualRainfall = farm?.Rainfall;
-                model.IsExcessOrWinterRainfallUpdated = false;
-                string winterRainfallFirstContent = string.Format(Resource.lblEnterWinterRainfallForHarvestYear, harvestYear);
-                ViewBag.ExcessRainfallContentFirst = (isScotland ? Resource.lblYouHaveNotEnteredWinterRainfall : Resource.lblYouHaveNotEnteredAnyExcessWinterRainfall);
-                ViewBag.ExcessRainfallContentSecond = (isScotland ? winterRainfallFirstContent : string.Format(Resource.lblAddExcessWinterRainfallForHarvestYear, harvestYear));
-            }
+            return (flowControl: true, value: null);
         }
+
+        model.AnnualRainfall = farm?.Rainfall;
+        model.IsExcessOrWinterRainfallUpdated = false;
+        winterRainfallFirstContent = string.Format(Resource.lblEnterWinterRainfallForHarvestYear, harvestYear);
+        ViewBag.ExcessRainfallContentFirst = (isScotland ? Resource.lblYouHaveNotEnteredWinterRainfall : Resource.lblYouHaveNotEnteredAnyExcessWinterRainfall);
+        ViewBag.ExcessRainfallContentSecond = (isScotland ? winterRainfallFirstContent : string.Format(Resource.lblAddExcessWinterRainfallForHarvestYear, harvestYear));
+
+
 
         return (flowControl: true, value: null);
     }
