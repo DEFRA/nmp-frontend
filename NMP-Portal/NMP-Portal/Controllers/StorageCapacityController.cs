@@ -30,7 +30,7 @@ namespace NMP.Portal.Controllers
         private const string _storageCapacityDataSessionKey = "StorageCapacityData";
         private const string _farmSummaryActionName = "FarmSummary";
         [HttpGet]
-        public async Task<IActionResult> ManageStorageCapacity(string q, string? r, string? s, string? isPlan, string? t, string? u)
+        public async Task<IActionResult> ManageStorageCapacity(string y,string q, string? r, string? s, string? isPlan, string? t, string? u)
         {
             _logger.LogTrace("StorageCapacity Controller : ManageStorageCapacity() action called");
 
@@ -39,7 +39,10 @@ namespace NMP.Portal.Controllers
 
             if (string.IsNullOrWhiteSpace(q))
                 return View(model);
-
+            if(!string.IsNullOrWhiteSpace(y))
+            {
+                model.EncryptedHarvestYear = y;
+            }
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             var (farm, farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
@@ -77,12 +80,12 @@ namespace NMP.Portal.Controllers
             return RedirectToAction(
                 "OrganicMaterialStorageNotAvailable",
                 _storageCapacityActionName,
-                new { f = q, isPlan });
+                new { f = q,y=y, isPlan });
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? isPlan)
+        public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? y, string? isPlan)
         {
             _logger.LogTrace("StorageCapacity Controller : OrganicMaterialStorageNotAvailable() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
@@ -96,13 +99,18 @@ namespace NMP.Portal.Controllers
                     {
                         model.FarmName = farm.Name;
                         model.FarmID = decryptedFarmId;
-                        model.EncryptedFarmID = f;
+                        model.EncryptedFarmID = f; 
+                        if (!string.IsNullOrWhiteSpace(y))
+                        {
+                            model.EncryptedHarvestYear = y;
+                        }
                         if (!string.IsNullOrWhiteSpace(isPlan))
                         {
                             model.IsComingFromPlan = isPlan;
                             ViewBag.IsPlan = isPlan;
                         }
                     }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 }
             }
             catch (Exception ex)
