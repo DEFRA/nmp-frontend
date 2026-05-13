@@ -4211,51 +4211,18 @@ managementPeriod.CropID.HasValue
                 }
                 if (string.IsNullOrWhiteSpace(s))
                 {
-                    (List<CommonResponse> fieldList, error) = await _organicManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                    if (error == null)
-                    {
-                        if ((model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll)) && fieldList.Count > 0)
-                        {
+                    (error, model) = await PrepareFieldDataAsync(model);
 
-                            var fieldNames = fieldList
-                                             .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                             .Select(field => field.Name)
-                                             .ToList();
-                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-
-                            if (string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
-                            {
-                                ViewBag.Fields = fieldList;
-                            }
-                            if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
-                            {
-                                model.FieldName = fieldNames.FirstOrDefault();
-                            }
-
-                        }
-                        if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
-                        {
-                            (List<FertiliserAndOrganicManureUpdateResponse> organicResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
-                            if (string.IsNullOrWhiteSpace(error?.Message) && organicResponse != null && organicResponse.Count > 0)
-                            {
-                                var SelectListItem = ToSelectList(organicResponse.DistinctBy(f => f.Id), f => f.Id.ToString(), f => f.Name);
-                                ViewBag.Fields = SelectListItem.OrderBy(x => x.Text).ToList();
-                            }
-                        }
-                    }
-                    else
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
                     {
                         if (string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
                         {
                             TempData["ConditionsAffectingNutrientsError"] = error.Message;
                             return RedirectToAction("ConditionsAffectingNutrients");
                         }
-                        else
-                        {
 
-                            HttpContext.Session.Remove(_organicManureSessionKey);
-                            return RedirectToHarvestYearPage(model, error);
-                        }
+                        HttpContext.Session.Remove(_organicManureSessionKey);
+                        return RedirectToHarvestYearPage(model, error);
                     }
                 }
                 string message = string.Empty;
@@ -4587,38 +4554,7 @@ managementPeriod.CropID.HasValue
                 ValidateManureModel(model);
                 if (!ModelState.IsValid)
                 {
-                    (List<CommonResponse> fieldList, error) = await _organicManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-                    if (error == null)
-                    {
-                        if ((model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll)) && fieldList.Count > 0)
-                        {
-
-                            var fieldNames = fieldList
-                                             .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                             .Select(field => field.Name)
-                                             .ToList();
-                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-
-                            if (string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
-                            {
-                                ViewBag.Fields = fieldList;
-                            }
-                            if (model.FieldList != null && model.FieldList.Count == 1 && fieldNames != null)
-                            {
-                                model.FieldName = fieldNames.FirstOrDefault();
-                            }
-
-                        }
-                        if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
-                        {
-                            (List<FertiliserAndOrganicManureUpdateResponse> organicResponse, error) = await _organicManureLogic.FetchFieldWithSameDateAndManureType(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)), model.FarmId.Value, model.HarvestYear.Value);
-                            if (string.IsNullOrWhiteSpace(error?.Message) && organicResponse != null && organicResponse.Count > 0)
-                            {
-                                var SelectListItem = ToSelectList(organicResponse.DistinctBy(f => f.Id), f => f.Id.ToString(), f => f.Name);
-                                ViewBag.Fields = SelectListItem.OrderBy(x => x.Text).ToList();
-                            }
-                        }
-                    }
+                    (error, model) = await PrepareFieldDataAsync(model);
                     return View(model);
                 }
 
@@ -4857,7 +4793,70 @@ managementPeriod.CropID.HasValue
             return View(model);
 
         }
+        private async Task<(Error? error, OrganicManureViewModel model)> PrepareFieldDataAsync(OrganicManureViewModel model)
+        {
+            (List<CommonResponse> fieldList, var error) =
+                await _organicManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(
+                    model.HarvestYear.Value,
+                    model.FarmId.Value,
+                    model.FieldGroup.Equals(Resource.lblSelectSpecificFields) ||
+                    model.FieldGroup.Equals(Resource.lblAll)
+                        ? null
+                        : model.FieldGroup);
 
+            if (error == null)
+            {
+                if ((model.FieldGroup.Equals(Resource.lblSelectSpecificFields) ||
+                     model.FieldGroup.Equals(Resource.lblAll)) &&
+                    fieldList.Count > 0)
+                {
+                    var fieldNames = fieldList
+                        .Where(field => model.FieldList.Contains(field.Id.ToString()))
+                        .OrderBy(field => field.Name)
+                        .Select(field => field.Name)
+                        .ToList();
+
+                    ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+
+                    if (string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
+                    {
+                        ViewBag.Fields = fieldList;
+                    }
+
+                    if (model.FieldList != null &&
+                        model.FieldList.Count == 1 &&
+                        fieldNames != null)
+                    {
+                        model.FieldName = fieldNames.FirstOrDefault();
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
+                {
+                    (List<FertiliserAndOrganicManureUpdateResponse> organicResponse, error) =
+                        await _organicManureLogic.FetchFieldWithSameDateAndManureType(
+                            Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)),
+                            model.FarmId.Value,
+                            model.HarvestYear.Value);
+
+                    if (string.IsNullOrWhiteSpace(error?.Message) &&
+                        organicResponse != null &&
+                        organicResponse.Count > 0)
+                    {
+                        var selectListItem = ToSelectList(
+                            organicResponse.DistinctBy(f => f.Id),
+                            f => f.Id.ToString(),
+                            f => f.Name);
+
+                        ViewBag.Fields = selectListItem.OrderBy(x => x.Text).ToList();
+                    }
+                }
+
+                return (null, model);
+            }
+
+            return (error, model);
+        }
         private IActionResult RedirectToHarvestYearPage(OrganicManureViewModel model, Error error)
         {
             TempData["ErrorOnHarvestYearOverview"] = error.Message;
