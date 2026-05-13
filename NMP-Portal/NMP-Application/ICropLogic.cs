@@ -58,4 +58,5 @@ public interface ICropLogic
     RecommendationViewModel BindManagementPeriodForRecommendation(RecommendationViewModel model, RecommendationData recData, string defoliationSequenceName);
     string BindDefoliationSequenceNameForRecommendation(string[]? defolicationParts, int defIndex);
     Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop);
+    PlanViewModel FilterOrganicAndInorganicListForHarvestYearOverview(PlanViewModel model, string? s, string? u, string? t);
 }

@@ -2313,14 +2313,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 //if we are coming for update then we will exclude the fertiliserId.
                 (error, nitrogenInFourWeek) = await _fertiliserManureLogic.BindNitrogenInFourWeekForWarning(model, managementId, fieldId, error, fourWeekDate, nitrogenInFourWeek);
 
-                if (error == null)
-                {
-                    (model, warningResponse) = await _fertiliserManureLogic.WarningForBrassicaCrop(model, totalNitrogen, warningResponse, startPeriod, endPeriod, nitrogenInFourWeek);
-                }
-                else
-                {
-                    return (model, error);
-                }
+                (model, warningResponse) = await _fertiliserManureLogic.WarningForBrassicaCrop(model, totalNitrogen, warningResponse, startPeriod, endPeriod, nitrogenInFourWeek);
+
             }
 
             //warning excel sheet row no. 24
@@ -2383,7 +2377,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (model, error);
     }
 
-    
+
 
 
     private async Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> NmaxLogicForCrop(FertiliserManureViewModel model, int managementId, int fieldId, Error? error, ManagementPeriod? managementPeriod, decimal previousApplicationsN, decimal currentApplicationNitrogen)
@@ -2416,7 +2410,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     return (flowControl: false, value: (model, error));
                 }
-                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax),crop.Yield??null , fieldDetail.SoilTypeName, crop.CropInfo1 ?? null, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
+                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield ?? null, fieldDetail.SoilTypeName, crop.CropInfo1 ?? null, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
             }
 
             decimal totalNitrogenApplied = previousApplicationsN + currentApplicationNitrogen;
@@ -2424,12 +2418,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             (bool flowControl, (FertiliserManureViewModel, Error?) _) = await _fertiliserManureLogic.BindNmaxWarnings(model, totalNitrogenApplied, farmCountryId, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit);
             if (!flowControl)
             {
-                return (flowControl: false, value: (model,error));
+                return (flowControl: false, value: (model, error));
             }
 
 
         }
-        
+
         return (flowControl: true, value: default);
     }
 
