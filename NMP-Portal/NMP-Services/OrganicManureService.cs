@@ -20,7 +20,7 @@ namespace NMP.Services;
 public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IOrganicManureService
 {
     private readonly ILogger<OrganicManureService> _logger = logger;
-    public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
+    public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYearServiceAsync(int farmId, int harvestYear)
     {
         List<ManureCropTypeResponse> cropTypeList = new List<ManureCropTypeResponse>();
         Error? error = null;
@@ -44,7 +44,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (cropTypeList, error);
     }
-    public async Task<(List<CommonResponse>, Error?)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName)
+    public async Task<(List<CommonResponse>, Error?)> FetchFieldByFarmIdAndHarvestYearAndCropGroupNameServiceAsync(int harvestYear, int farmId, string? cropGroupName)
     {
         List<CommonResponse> fieldResponses = new List<CommonResponse>();
         Error? error = null;
@@ -77,8 +77,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (fieldResponses, error);
     }
-
-    public async Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
+    public async Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameServiceAsync(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {
         List<int> managementIds = new List<int>();
         Error? error = null;
@@ -112,9 +111,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (managementIds, error);
     }
-
-
-    public async Task<(bool, Error?)> AddOrganicManuresAsync(string organicManureData)
+    public async Task<(bool, Error?)> AddOrganicManuresServiceAsync(string organicManureData)
     {
         bool success = false;
         Error? error = null;
@@ -149,9 +146,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (success, error);
     }
-
-
-    public async Task<(RainTypeResponse, Error)> FetchRainTypeDefault()
+    public async Task<(RainTypeResponse, Error)> FetchRainTypeDefaultServiceAsync()
     {
         RainTypeResponse rainType = new RainTypeResponse();
         Error? error = null;
@@ -183,7 +178,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (rainType, error);
     }
-    public async Task<int> FetchRainfallByPostcodeAndDateRange(string jsonString)
+    public async Task<int> FetchRainfallByPostcodeAndDateRangeServiceAsync(string jsonString)
     {
         int totalRainfall = 0;
         Error? error = null;
@@ -215,8 +210,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return totalRainfall;
     }
-
-    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedDataDefault()
+    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedDataDefaultServiceAsync()
     {
         WindspeedResponse? windSpeed = null;
         Error? error = null;
@@ -249,7 +243,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (windSpeed, error);
     }
 
-    public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDate(string applicationDate)
+    public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDateServiceAsync(string applicationDate)
     {
         MoistureTypeResponse moisterType = new MoistureTypeResponse();
         Error? error = null;
@@ -282,7 +276,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (moisterType, error);
     }
 
-    public async Task<(List<RainTypeResponse>, Error)> FetchRainTypeList()
+    public async Task<(List<RainTypeResponse>, Error)> FetchRainTypeListServiceAsync()
     {
         List<RainTypeResponse> rainType = new List<RainTypeResponse>();
         Error? error = null;
@@ -316,7 +310,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (rainType, error);
     }
-    public async Task<(RainTypeResponse, Error)> FetchRainTypeById(int rainTypeId)
+    public async Task<(RainTypeResponse, Error)> FetchRainTypeByIdServiceAsync(int rainTypeId)
     {
         RainTypeResponse rainType = new RainTypeResponse();
         Error? error = null;
@@ -349,7 +343,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (rainType, error);
     }
 
-    public async Task<(List<WindspeedResponse>, Error?)> FetchWindspeedList()
+    public async Task<(List<WindspeedResponse>, Error?)> FetchWindspeedListServiceAsync()
     {
         List<WindspeedResponse> windspeeds = new List<WindspeedResponse>();
         Error? error = null;
@@ -382,7 +376,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (windspeeds, error);
     }
-    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedById(int windspeedId)
+    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedByIdServiceAsync(int windspeedId)
     {
         WindspeedResponse? windspeedResponse = null;
         Error? error = null;
@@ -414,7 +408,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (windspeedResponse, error);
     }
-    public async Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeList()
+    public async Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeListServiceAsync()
     {
         List<MoistureTypeResponse> moisterTypes = new List<MoistureTypeResponse>();
         Error? error = null;
@@ -447,7 +441,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (moisterTypes, error);
     }
-    public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeById(int moisterTypeId)
+    public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeByIdServiceAsync(int moisterTypeId)
     {
         MoistureTypeResponse moistureTypeResponse = new MoistureTypeResponse();
         Error? error = null;
@@ -480,8 +474,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (moistureTypeResponse, error);
     }
 
-
-    public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDate(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDateServiceAsync(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -498,7 +491,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         (totalN, error) = await GetTotalN(url);
         return (totalN, error);
     }
-    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDate(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDateServiceAsync(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -526,7 +519,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYear(int fieldId, int year, bool confirm)
+    public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYearServiceAsync(int fieldId, int year, bool confirm)
     {
         CropTypeResponse cropType = new CropTypeResponse();
         Error? error = null;
@@ -558,7 +551,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (cropType, error);
     }
-    public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId)
+    public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeIdServiceAsync(int cropTypeId)
     {
         CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
         Error? error = null;
@@ -590,7 +583,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (cropTypeLinking, error);
     }
-    public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year, bool confirm)
+    public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureServiceAsync(int fieldId, int year, bool confirm)
     {
         List<int> manureTypeIds = new List<int>();
         Error? error = null;
@@ -627,7 +620,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (manureTypeIds, error);
     }
 
-    public async Task<(List<int>, Error)> FetchManureTypsIdsByManIdFromOrgManure(int managementId)
+    public async Task<(List<int>, Error)> FetchManureTypsIdsByManIdFromOrgManureServiceAsync(int managementId)
     {
         List<int> manureTypeIds = new List<int>();
         Error? error = null;
@@ -660,7 +653,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (manureTypeIds, error);
     }
 
-    public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliser(int managementId, bool confirm, int? fertiliserId, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliserServiceAsync(int managementId, bool confirm, int? fertiliserId, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -689,7 +682,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (totalN, error);
     }
-    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(int cropId, bool confirm, int? fertiliserId, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdFromOrgManureAndFertiliserServiceAsync(int cropId, bool confirm, int? fertiliserId, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -715,7 +708,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRange(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId, bool isSlurryOnly)
+    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRangeServiceAsync(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId, bool isSlurryOnly)
     {
         Error? error = null;
         bool isOrganicManureExist = false;
@@ -758,7 +751,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (isOrganicManureExist, error);
     }
 
-    public async Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString)
+    public async Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptakeServiceAsync(string jsonString)
     {
         Error? error = null;
         NitrogenUptakeResponse? nitrogenUptakeResponse = new NitrogenUptakeResponse();
@@ -790,7 +783,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (nitrogenUptakeResponse, error);
     }
-    public async Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmId(int farmId)
+    public async Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmIdServiceAsync(int farmId)
     {
         List<FarmManureTypeResponse> farmManureTypes = new List<FarmManureTypeResponse>();
         Error? error = null;
@@ -823,7 +816,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (farmManureTypes, error);
     }
-    public async Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrient(string jsonData)
+    public async Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrientServiceAsync(string jsonData)
     {
         MannerCalculateNutrientResponse mannerCalculateNutrientResponse = new MannerCalculateNutrientResponse();
         Error? error = null;
@@ -858,7 +851,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (mannerCalculateNutrientResponse, error);
     }
 
-    public async Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeId(int soilTypeId)
+    public async Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeIdServiceAsync(int soilTypeId)
     {
         SoilTypeSoilTextureResponse? soilTypeSoilTexture = new SoilTypeSoilTextureResponse();
         Error? error = null;
@@ -891,7 +884,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (soilTypeSoilTexture, error);
     }
 
-    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAndIsGreenCompost(int fieldId, DateTime startDate, DateTime endDate, bool confirm, bool isGreenFoodCompost, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAndIsGreenCompostServiceAsync(int fieldId, DateTime startDate, DateTime endDate, bool confirm, bool isGreenFoodCompost, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -918,7 +911,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDate(int fieldId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateServiceAsync(int fieldId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -946,7 +939,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(OrganicManureDataViewModel, Error)> FetchOrganicManureById(int id)
+    public async Task<(OrganicManureDataViewModel, Error)> FetchOrganicManureByIdServiceAsync(int id)
     {
         OrganicManureDataViewModel organicManure = new OrganicManureDataViewModel();
         Error? error = null;
@@ -978,7 +971,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (organicManure, error);
     }
-    public async Task<(List<OrganicManure>, Error)> FetchOrganicManureByFarmIdAndYear(int farmId, int year)
+    public async Task<(List<OrganicManure>, Error)> FetchOrganicManureByFarmIdAndYearServiceAsync(int farmId, int year)
     {
         List<OrganicManure> organicManures = new List<OrganicManure>();
         Error? error = null;
@@ -1011,7 +1004,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (organicManures, error);
     }
 
-    public async Task<(string, Error)> DeleteOrganicManureByIdAsync(string orgManureIds)
+    public async Task<(string, Error)> DeleteOrganicManureByIdServiceAsync(string orgManureIds)
     {
         Error? error = null;
         string message = string.Empty;
@@ -1051,7 +1044,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (message, error);
     }
-    public async Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeId(int farmId, int ManureTypeId, string ManureTypeName)
+    public async Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeIdServiceAsync(int farmId, int ManureTypeId, string ManureTypeName)
     {
         bool isFarmManureTypeExist = false;
         Error? error = new Error();
@@ -1084,7 +1077,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (isFarmManureTypeExist, error);
     }
-    public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndManureType(int fertiliserId, int farmId, int harvestYear)
+    public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndManureTypeServiceAsync(int fertiliserId, int farmId, int harvestYear)
     {
         Error? error = new Error();
         List<FertiliserAndOrganicManureUpdateResponse> organicResponse = new List<FertiliserAndOrganicManureUpdateResponse>();
@@ -1115,7 +1108,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (organicResponse, error);
     }
 
-    public async Task<(List<OrganicManure>, Error)> UpdateOrganicManure(string organicManureData)
+    public async Task<(List<OrganicManure>, Error)> UpdateOrganicManureServiceAsync(string organicManureData)
     {
         Error? error = null;
         List<OrganicManure> organicManures = new List<OrganicManure>();
@@ -1150,7 +1143,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (organicManures, error);
     }
 
-    public async Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodID(int managementPeriodID)
+    public async Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodIDServiceAsync(int managementPeriodID)
     {
         Error? error = null;
         decimal? totalN = null;
@@ -1171,7 +1164,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeById(int id)
+    public async Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeByIdServiceAsync(int id)
     {
         FarmManureTypeResponse? farmManureType = new FarmManureTypeResponse();
         Error? error = null;
@@ -1200,7 +1193,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (farmManureType, error);
     }
-    public async Task<(string?, Error?)> FetchOrganicManureClosedPeriod(OrganicClosedPeriodRequest organicClosedPeriodRequest)
+    public async Task<(string?, Error?)> FetchOrganicManureClosedPeriodServiceAsync(OrganicClosedPeriodRequest organicClosedPeriodRequest)
     {
         string? closedPeriod = null;
         Error? error = null;
@@ -1231,7 +1224,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (closedPeriod, error);
     }
 
-    public async Task<(bool, Error)> FetchLivestockManureExistanceByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId)
+    public async Task<(bool, Error)> FetchLivestockManureExistanceByDateRangeServiceAsync(int cropId, string dateFrom, string dateTo, int? organicManureId)
     {
         Error? error = null;
         bool isLivestockcManureExist = false;
@@ -1256,7 +1249,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (isLivestockcManureExist, error);
     }
 
-    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry)
+    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeServiceAsync(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry)
     {
         Error? error = null;
         decimal? totalRate = (decimal?)null;
@@ -1297,7 +1290,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalRate, error);
     }
 
-    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int fieldId, string dateFrom, string dateTo, int? organicManureId)
+    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRangeServiceAsync(int fieldId, string dateFrom, string dateTo, int? organicManureId)
     {
         Error? error = null;
         bool isLivestockcManureExist = false;
@@ -1366,7 +1359,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(int cropTypeId, int soilTypeId, int residueGroup)
+    public async Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroupServiceAsync(int cropTypeId, int soilTypeId, int residueGroup)
     {
         Error? error = null;
         int? scotlandNmax = 0;
