@@ -162,8 +162,8 @@
                     @Resource.lblUpdateThisGroup
                     </govuk-button> *@
                                 </div>
-                                @* big_crop_table_version_five *@                                
-                                                                                                                                <div class="table-container">
+                                @* big_crop_table_version_five *@
+                                <div class="table-container">
                                     <table class="govuk-table big_crop_table_version_five margin-bottom-forty">
                                         <caption class="govuk-table__caption--m govuk-visually-hidden">
                                             @if (!string.IsNullOrWhiteSpace(harvestYearPlan.CropGroupName))
@@ -230,7 +230,7 @@
 
                                                         </td>
                                                         <td class="govuk-table__cell">
-                                                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" aria-label="@(string.Format("{0} {1}",Resource.lblUpdateThisFieldOrViewRecommendations,string.Format(Resource.MsgGenericFor, field.FieldName)))">
+                                                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-fragment="@(field.CropOrder == 2 ? "crop-2" : "crop-1")" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateThisFieldOrViewRecommendations, string.Format(Resource.MsgGenericFor, field.FieldName)))">
                                                                 @Resource.lblUpdateThisFieldOrViewRecommendations
                                                             </a>
                                                         </td>

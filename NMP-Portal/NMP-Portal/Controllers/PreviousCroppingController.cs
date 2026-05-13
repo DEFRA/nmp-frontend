@@ -937,7 +937,7 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                TempData["Error"] = error.Message;
+                TempData["Error"] = error?.Message;
                 List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
                 ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.GrassManagementOptionID)?.Name;
 

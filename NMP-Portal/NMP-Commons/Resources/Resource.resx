@@ -7757,6 +7757,9 @@ livestock manure.</value>
   <data name="lblStatus" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="lblValueMustNotExeedXDigit" xml:space="preserve">
+    <value>{0} must not exceed {1} digits.</value>
+  </data>
   <data name="TransferFarmFromAnotherCompany" xml:space="preserve">
     <value>Transfer farm from another company</value>
   </data>

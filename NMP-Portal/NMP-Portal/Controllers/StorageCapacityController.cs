@@ -30,7 +30,7 @@ namespace NMP.Portal.Controllers
         private const string _storageCapacityDataSessionKey = "StorageCapacityData";
         private const string _farmSummaryActionName = "FarmSummary";
         [HttpGet]
-        public async Task<IActionResult> ManageStorageCapacity(string q, string? r, string? s, string? isPlan, string? t, string? u)
+        public async Task<IActionResult> ManageStorageCapacity(string y,string q, string? r, string? s, string? isPlan, string? t, string? u)
         {
             _logger.LogTrace("StorageCapacity Controller : ManageStorageCapacity() action called");
 
@@ -39,7 +39,10 @@ namespace NMP.Portal.Controllers
 
             if (string.IsNullOrWhiteSpace(q))
                 return View(model);
-
+            if(!string.IsNullOrWhiteSpace(y))
+            {
+                model.EncryptedHarvestYear = y;
+            }
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             var (farm, farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
@@ -77,12 +80,12 @@ namespace NMP.Portal.Controllers
             return RedirectToAction(
                 "OrganicMaterialStorageNotAvailable",
                 _storageCapacityActionName,
-                new { f = q, isPlan });
+                new { f = q,y=y, isPlan });
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? isPlan)
+        public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? y, string? isPlan)
         {
             _logger.LogTrace("StorageCapacity Controller : OrganicMaterialStorageNotAvailable() action called");
             StorageCapacityViewModel model = new StorageCapacityViewModel();
@@ -96,13 +99,18 @@ namespace NMP.Portal.Controllers
                     {
                         model.FarmName = farm.Name;
                         model.FarmID = decryptedFarmId;
-                        model.EncryptedFarmID = f;
+                        model.EncryptedFarmID = f; 
+                        if (!string.IsNullOrWhiteSpace(y))
+                        {
+                            model.EncryptedHarvestYear = y;
+                        }
                         if (!string.IsNullOrWhiteSpace(isPlan))
                         {
                             model.IsComingFromPlan = isPlan;
                             ViewBag.IsPlan = isPlan;
                         }
                     }
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 }
             }
             catch (Exception ex)
@@ -222,7 +230,7 @@ namespace NMP.Portal.Controllers
 
                     (bool isStoreNameExists, Error error) = await _storageCapacityLogic.IsStoreNameExistAsync(model.FarmID ?? 0, model.StoreName, Id);
 
-                    if (error == null)
+                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
                     {
                         if (isStoreNameExists)
                         {
@@ -271,7 +279,7 @@ namespace NMP.Portal.Controllers
                     model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                 {
                     (List<StorageTypeResponse> storageTypes, Error error) = await _storageCapacityLogic.FetchStorageTypes();
-                    if (error == null)
+                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
                     {
                         ViewBag.StorageTypes = storageTypes;
                     }
@@ -284,7 +292,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     (List<SolidManureTypeResponse> solidManureTypeList, Error error) = await _storageCapacityLogic.FetchSolidManureType();
-                    if (error == null)
+                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
                     {
                         ViewBag.SolidManureTypeList = solidManureTypeList.OrderByDescending(x => x.ID).ToList();
                     }
@@ -324,7 +332,7 @@ namespace NMP.Portal.Controllers
                    model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                     {
                         (List<StorageTypeResponse> storageTypes, error) = await _storageCapacityLogic.FetchStorageTypes();
-                        if (error == null)
+                        if (error == null || string.IsNullOrWhiteSpace(error.Message))
                         {
                             ViewBag.StorageTypes = storageTypes;
                         }
@@ -332,7 +340,7 @@ namespace NMP.Portal.Controllers
                     else
                     {
                         (List<SolidManureTypeResponse> solidManureTypeList, error) = await _storageCapacityLogic.FetchSolidManureType();
-                        if (error == null)
+                        if (error == null || string.IsNullOrWhiteSpace(error.Message))
                         {
                             ViewBag.SolidManureTypeList = solidManureTypeList;
                         }
@@ -348,7 +356,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (model.StorageTypeID == storageModel.StorageTypeID && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
+                    if (storageModel != null && model.StorageTypeID == storageModel.StorageTypeID && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
                         return RedirectToAction("CheckAnswer");
                     }
@@ -362,7 +370,7 @@ namespace NMP.Portal.Controllers
                    model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                 {
                     (StorageTypeResponse storageTypeResponse, error) = await _storageCapacityLogic.FetchStorageTypeById(model.StorageTypeID.Value);
-                    if (error == null)
+                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
                     {
                         model.StorageTypeName = storageTypeResponse.Name;
                         model.FreeBoardHeight = storageTypeResponse.FreeBoardHeight;
@@ -371,7 +379,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     (SolidManureTypeResponse solidManureTypeResponse, error) = await _storageCapacityLogic.FetchSolidManureTypeById(model.StorageTypeID.Value);
-                    if (error == null)
+                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
                     {
                         model.StorageTypeName = solidManureTypeResponse.Name;
                     }
@@ -780,7 +788,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToFarmList();
                 }
                 (SolidManureTypeResponse solidManureTypeResponse, Error error) = await _storageCapacityLogic.FetchSolidManureTypeById(model.StorageTypeID.Value);
-                if (error == null)
+                if (error == null || string.IsNullOrWhiteSpace(error.Message))
                 {
                     model.SolidManureDensity = solidManureTypeResponse.Density;
                     model.CapacityWeight = Math.Round((model.Length * model.Width * model.Depth) * (solidManureTypeResponse.Density) ?? 0);  //solid manure weight capacity calculation
@@ -817,7 +825,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (model.CapacityWeight == storageModel.CapacityWeight && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
+                    if (storageModel != null && model.CapacityWeight == storageModel.CapacityWeight && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
                         return RedirectToAction("CheckAnswer");
                     }
@@ -921,7 +929,7 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (model.StorageBagCapacity == storageModel.StorageBagCapacity && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
+                    if (storageModel != null && model.StorageBagCapacity == storageModel.StorageBagCapacity && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
                         return RedirectToAction("CheckAnswer");
                     }
@@ -986,7 +994,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToFarmList();
                 }
                 (List<BankSlopeAnglesResponse> bankSlopeAngles, Error error) = await _storageCapacityLogic.FetchBankSlopeAngles();
-                if (error == null)
+                if (error == null || string.IsNullOrWhiteSpace(error.Message))
                 {
                     ViewBag.BankSlopeAngles = bankSlopeAngles;
                 }
@@ -1023,14 +1031,14 @@ namespace NMP.Portal.Controllers
                 if (!ModelState.IsValid)
                 {
                     (List<BankSlopeAnglesResponse> bankSlopeAngles, error) = await _storageCapacityLogic.FetchBankSlopeAngles();
-                    if (error == null)
+                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
                     {
                         ViewBag.BankSlopeAngles = bankSlopeAngles;
                     }
                     return View(model);
                 }
                 (BankSlopeAnglesResponse bankSlopeAngle, error) = await _storageCapacityLogic.FetchBankSlopeAngleById(model.BankSlopeAngleID ?? 0);
-                if (error == null)
+                if (error == null || string.IsNullOrWhiteSpace(error.Message))
                 {
                     model.BankSlopeAngleName = bankSlopeAngle.Name;
                     model.Slope = bankSlopeAngle.Slope;
@@ -1125,7 +1133,7 @@ namespace NMP.Portal.Controllers
                     }
 
                     (CommonResponse materialState, error) = await _storageCapacityLogic.FetchMaterialStateById(storeCapacity.MaterialStateID.Value);
-                    if (error == null)
+                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
                     {
                         model.MaterialStateName = materialState.Name;
                     }
@@ -1134,7 +1142,7 @@ namespace NMP.Portal.Controllers
                    model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
                     {
                         (StorageTypeResponse storageTypeResponse, error) = await _storageCapacityLogic.FetchStorageTypeById(model.StorageTypeID.Value);
-                        if (error == null)
+                        if (error == null || string.IsNullOrWhiteSpace(error.Message))
                         {
                             model.StorageTypeName = storageTypeResponse.Name;
                             model.FreeBoardHeight = storageTypeResponse.FreeBoardHeight;
@@ -1148,7 +1156,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.StorageTypeID = storeCapacity.SolidManureTypeID;
                         (SolidManureTypeResponse solidManureTypeResponse, error) = await _storageCapacityLogic.FetchSolidManureTypeById(model.StorageTypeID.Value);
-                        if (error == null)
+                        if (error == null || string.IsNullOrWhiteSpace(error.Message))
                         {
                             model.StorageTypeName = solidManureTypeResponse.Name;
                         }
@@ -1169,7 +1177,7 @@ namespace NMP.Portal.Controllers
                     if (model.BankSlopeAngleID != null)
                     {
                         (BankSlopeAnglesResponse bankSlopeAngle, error) = await _storageCapacityLogic.FetchBankSlopeAngleById(model.BankSlopeAngleID ?? 0);
-                        if (error == null)
+                        if (error == null || string.IsNullOrWhiteSpace(error.Message))
                         {
                             model.BankSlopeAngleName = bankSlopeAngle.Name;
                             model.Slope = bankSlopeAngle.Slope;
@@ -2224,7 +2232,7 @@ namespace NMP.Portal.Controllers
         private async Task LoadMaterialStatesAsync()
         {
             var (materialStates, error) = await _storageCapacityLogic.FetchMaterialStates();
-            if (error == null)
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 materialStates.RemoveAll(x =>
                 x.Id == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage);
@@ -2354,7 +2362,7 @@ namespace NMP.Portal.Controllers
             var (materialState, error) =
                 await _storageCapacityLogic.FetchMaterialStateById(model.MaterialStateID.Value);
 
-            if (error == null && materialState != null)
+            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && materialState != null)
             {
                 model.MaterialStateName = materialState.Name;
             }
@@ -2508,7 +2516,7 @@ namespace NMP.Portal.Controllers
             var (materialState, error) =
                 await _storageCapacityLogic.FetchMaterialStateById(model.MaterialStateID.Value);
 
-            if (error == null)
+            if (error == null || string.IsNullOrWhiteSpace(error.Message))
             {
                 model.MaterialStateName = materialState.Name;
             }

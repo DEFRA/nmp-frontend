@@ -93,7 +93,7 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     public async Task<int> FetchFieldCountByFarmIdAsync(int farmId)
     {
         _logger.LogTrace("Fetching field count for FarmId: {FarmId}", farmId);
-        return await _fieldService.FetchFieldCountByFarmIdAsync(farmId);
+        return await _fieldService.FetchFieldCountByFarmIdServiceAsync(farmId);
     }
     public async Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId)
     {

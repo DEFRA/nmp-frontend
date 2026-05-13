@@ -24,11 +24,21 @@
     string backAction;
 
     if (Model.IsCheckAnswer && Model.IsDefaultNutrientOptionChange)
+    {
         backAction = "CheckAnswer";
-    else if (Model.ApplicationMethodCount > 0)
-        backAction = "ApplicationMethod";
-    else
+    }
+    else if (Model.ApplicationMethodCount == 1)
+    {
         backAction = "ManureApplyingDate";
+    }
+    else if (Model.ApplicationMethodCount > 1)
+    {
+        backAction = "ApplicationMethod";
+    }
+    else
+    {
+        backAction = "ManureApplyingDate";
+    }
 
     if (Model.IsManureTypeLiquid == null)
     {

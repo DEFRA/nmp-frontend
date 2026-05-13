@@ -108,12 +108,14 @@
                         @foreach (var crop in Model.Crops)
                         {
                             var tablabel = Model.Crops.Count == 1 ? Resource.lblNutrientAndLimeRecommendations : Resource.lblCrop1Recommendations;
-
-                            var tabId = "crop-1";
+                                var grassHeadingCrop =  ViewBag.GrassHeadingCropOne;
+                                var tabId = "crop-1";
                             if (cropNumber == 2)
-                            {
-                                tablabel = Resource.lblCrop2Recommendations;
-                                tabId = "crop-2";
+                                {
+                                    grassHeadingCrop = ViewBag.GrassHeadingCropTwo;
+                                    tablabel = Resource.lblCrop2Recommendations;
+                                    managementTableIndex = 1;
+                                    tabId = "crop-2";
                             }
 
                             <govuk-tabs-item id=@tabId label=@tablabel>
@@ -149,7 +151,7 @@
                                     @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     {
                                         <p>
-                                            @ViewBag.GrassHeadingCropOne
+                                            @grassHeadingCrop
                                         </p>
 
                                         <hr class="seperator_five">
@@ -219,7 +221,8 @@
                                         @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
                                     </p>
 
-                                    <p class="govuk-body mt-5 margin-top-forty"><a class="govuk-link " href="#crop-1">@Resource.lblBackToTheTop</a></p>
+                                    <p class="govuk-body mt-5 margin-top-forty">
+                                    <a class="govuk-link" href="@(string.Format("{0}{1}", "#", tabId))">@Resource.lblBackToTheTop</a></p>
 
                                 }
 
@@ -495,6 +498,12 @@
                                     <div class="tabs-thirds margin-bottom-forty">
 
                                         <table class="govuk-table">
+                                            <thead class="govuk-visually-hidden">
+                                                <tr>
+                                                    <th scope="col">@Resource.lblField</th>
+                                                    <th scope="col">@Resource.lblValue</th>
+                                                </tr>
+                                            </thead>
                                             <tbody class="govuk-table__body">
                                                 <tr class="govuk-table__row">
                                                     <td class="govuk-table__cell">

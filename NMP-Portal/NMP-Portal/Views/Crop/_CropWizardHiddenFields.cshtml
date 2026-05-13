@@ -132,6 +132,7 @@
     }
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryId" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder" />
 
     @if (Model.HarvestYear != null && Model.HarvestYear.Count > 0)
     {

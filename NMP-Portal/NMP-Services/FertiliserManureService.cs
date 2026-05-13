@@ -20,7 +20,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
     {
         _logger = logger;
     }
-    public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
+    public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameServiceAsync(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {
         string url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI,
         harvestYear, cropGroupName, fieldIds, cropOrder);
@@ -41,14 +41,14 @@ public class FertiliserManureService : Service, IFertiliserManureService
         return (data ?? new List<int>(), error);
 
     }
-    public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
+    public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYearServiceAsync(int farmId, int harvestYear)
     {
         string url = string.Format(ApiurlHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.ToObject<List<ManureCropTypeResponse>>(), url);
         return (data ?? new List<ManureCropTypeResponse>(), error);
 
     }
-    public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName)
+    public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupNameServiceAsync(int harvestYear, int farmId, string? cropGroupName)
     {
         string url = string.Empty;
         if (!string.IsNullOrWhiteSpace(cropGroupName))
@@ -64,20 +64,20 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
     }
 
-    public async Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurations()
+    public async Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurationsServiceAsync()
     {
         string url = ApiurlHelper.FetchInOrganicManureDurationsAsyncAPI;
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.InorganicManureDurations.ToObject<List<InOrganicManureDurationResponse>>(), url);
         return (data ?? new List<InOrganicManureDurationResponse>(), error);
     }
-    public async Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsById(int id)
+    public async Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsByIdServiceAsync(int id)
     {
         string url = string.Format(ApiurlHelper.FetchInOrganicManureDurationsByIdAsyncAPI, id);
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.InorganicManureDuration.ToObject<InOrganicManureDurationResponse>(), url);
         return (data ?? new InOrganicManureDurationResponse(), error);
     }
 
-    public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure)
+    public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureServiceAsync(string fertiliserManure)
     {
         Error? error = null;
         List<FertiliserManure> fertilisers = new List<FertiliserManure>();
@@ -88,10 +88,12 @@ public class FertiliserManureService : Service, IFertiliserManureService
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+            if (response.IsSuccessStatusCode && responseWrapper?.Data?.FertiliserManure is JToken fertiliserManures)
             {
-                List<FertiliserManure> fertiliser = responseWrapper.Data.FertiliserManure.ToObject<List<FertiliserManure>>();
-                if (fertiliser != null && fertiliser.Count > 0)
+                List<FertiliserManure> fertiliser = fertiliserManures.ToObject<List<FertiliserManure>>() ?? new List<FertiliserManure>();
+
+                if (fertiliser.Count > 0)
                 {
                     fertilisers.AddRange(fertiliser);
                 }
@@ -110,17 +112,19 @@ public class FertiliserManureService : Service, IFertiliserManureService
         }
         catch (HttpRequestException hre)
         {
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error ??= new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
         return (fertilisers, error);
     }
-    public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDate(int fieldId, DateTime startDate, DateTime endDate, int? fertiliserId, bool confirm)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDateServiceAsync(int fieldId, DateTime startDate, DateTime endDate, int? fertiliserId, bool confirm)
     {
         string fromdate = startDate.ToString("yyyy-MM-dd");
         string toDate = endDate.ToString("yyyy-MM-dd");
@@ -133,7 +137,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
         return (data ?? 0, error);
     }
-    public async Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds)
+    public async Task<(string, Error)> DeleteFertiliserByIdServiceAsync(string fertiliserIds)
     {
         Error error = new Error();
         string message = string.Empty;
@@ -149,19 +153,17 @@ public class FertiliserManureService : Service, IFertiliserManureService
             var response = await httpClient.SendAsync(requestMessage);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
             {
-                message = responseWrapper.Data["message"].Value;
+                message = data["message"]?.Value<string>() ?? string.Empty;
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                if (responseWrapper?.Error is JToken errorToken)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
+                    error = errorToken.ToObject<Error>() ?? new Error();                    
                         _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
+                    
                 }
             }
         }
@@ -180,19 +182,19 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
         return (message, error);
     }
-    public async Task<(FertiliserManureDataViewModel, Error)> FetchFertiliserByIdAsync(int fertiliserId)
+    public async Task<(FertiliserManureDataViewModel, Error)> FetchFertiliserByIdServiceAsync(int fertiliserId)
     {
         string url = string.Format(ApiurlHelper.FetchFertiliserByIdAPI, fertiliserId);
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.ToObject<FertiliserManureDataViewModel>(), url);
         return (data ?? new FertiliserManureDataViewModel(), error);
     }
-    public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId, int farmId, int harvestYear)
+    public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndNutrientServiceAsync(int fertiliserId, int farmId, int harvestYear)
     {
         string url = string.Format(ApiurlHelper.FetchFieldWithSameDateAndNutrientAPI, fertiliserId, farmId, harvestYear);
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.ToObject<List<FertiliserAndOrganicManureUpdateResponse>>(), url);
         return (data ?? new List<FertiliserAndOrganicManureUpdateResponse>(), error);
     }
-    public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData)
+    public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliserServiceAsync(string fertliserData)
     {
         Error? error = null;
         List<FertiliserManure> fertiliser = new List<FertiliserManure>();
@@ -202,23 +204,24 @@ public class FertiliserManureService : Service, IFertiliserManureService
             var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateFertiliserAPI), new StringContent(fertliserData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+            if (response.IsSuccessStatusCode && responseWrapper?.Data?.FertiliserManure is JToken fertiliserManureToken)
             {
-                List<FertiliserManure> fertilisers = responseWrapper.Data.FertiliserManure.ToObject<List<FertiliserManure>>();
-                if (fertilisers != null && fertilisers.Count > 0)
+                List<FertiliserManure> fertilisers = fertiliserManureToken.ToObject<List<FertiliserManure>>()
+                    ?? new List<FertiliserManure>();
+                if (fertilisers.Count > 0)
                 {
                     fertiliser.AddRange(fertilisers);
                 }
             }
-            else
+            else if (responseWrapper?.Error is JToken errorToken)
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                error = errorToken.ToObject<Error>();
+
+                if (error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
+                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+
                 }
             }
         }
@@ -243,7 +246,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
         return (fertiliser, error);
     }
-    public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID)
+    public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodIDServiceAsync(int managementPeriodID)
     {
         string url = string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDAPI, managementPeriodID);
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
@@ -251,7 +254,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
     }
 
-    public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(
+    public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriodServiceAsync(
     int countryId, int cropTypeId, int? nvzProgramId)
     {
         string url = nvzProgramId == null
@@ -263,7 +266,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
     }
 
-    public async Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn)
+    public async Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumnServiceAsync(int managementPeriodID, bool isAutumn)
     {
         string url = string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDIsAutumnAsyncAPI, managementPeriodID, isAutumn);
         var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
@@ -291,9 +294,9 @@ public class FertiliserManureService : Service, IFertiliserManureService
             }
             else
             {
-                if (responseWrapper?.Error != null)
+                if (responseWrapper?.Error is JToken errorToken)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
+                    error = errorToken.ToObject<Error>();
                     _logger.LogError("{Code} : {Message} : {Stack} : {Path}",
                         error?.Code, error?.Message, error?.Stack, error?.Path);
                 }

@@ -16417,6 +16417,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} must not exceed {1} digits..
+        /// </summary>
+        public static string lblValueMustNotExeedXDigit {
+            get {
+                return ResourceManager.GetString("lblValueMustNotExeedXDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}%.
         /// </summary>
         public static string lblValuePercent {
