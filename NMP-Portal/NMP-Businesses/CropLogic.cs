@@ -578,7 +578,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
         return model;
     }
 
-    private List<T> SortApplicationList<T>(
+    private static List<T> SortApplicationList<T>(
      List<T> list,
      string sortBy,
      bool isDescending)

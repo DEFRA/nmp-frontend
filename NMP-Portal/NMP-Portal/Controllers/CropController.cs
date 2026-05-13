@@ -3176,7 +3176,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (harvestYearPlanResponse != null)
                     {
                         List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
-                        if (allCropDetails.Any() == true)
+                        if (allCropDetails.Any())
                         {
                             BindLastModifiedDate(model, allCropDetails);
 
@@ -3282,14 +3282,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
         (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(farmId, harvestYear);
 
-        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+        if (!string.IsNullOrWhiteSpace(error.Message))
         {
             ViewBag.Error = error.Message;
             return (flowControl: false, value: View(_plansAndRecordsOverviewActionName, new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()) }));
         }
         else
         {
-            if (excessRainfalls != null && excessRainfalls.WinterRainfall != null)
+            if (excessRainfalls.WinterRainfall != null)
             {
                 await BindExcessRainfallDataForHarvestYearOverviewPage(model, excessRainfalls);
                 string winterRainfallFirstContent = string.Format(Resource.lblWinterRainfallIs450OrMoreOrLess, model.WinterRainfallName);
