@@ -607,7 +607,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
         return list;
     }
 
-    private TValue GetPropertyValue<TValue>(object obj, string propertyName)
+    private static TValue GetPropertyValue<TValue>(object obj, string propertyName)
     {
         return (TValue)obj.GetType().GetProperty(propertyName)?.GetValue(obj)!;
     }

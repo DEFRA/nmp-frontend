@@ -3176,11 +3176,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (harvestYearPlanResponse != null)
                     {
                         List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
-                        if (allCropDetails != null)
+                        if (allCropDetails.Any() == true)
                         {
                             BindLastModifiedDate(model, allCropDetails);
 
-                            model.AnnualRainfall = harvestYearPlanResponse?.farmDetails?.Rainfall;
+                            model.AnnualRainfall = harvestYearPlanResponse.farmDetails?.Rainfall;
                             var harvestYearPlans = new HarvestYearPlans
                             {
                                 FieldData = new List<HarvestYearPlanFields>(),
@@ -3199,7 +3199,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             BindFertilizerDataForHarvestYearOverviewPage(harvestYearPlanResponse, harvestYearPlans);
                             BindSortingProperties(model);
 
-                            BindViewBegForSortingList(model);
+                            BindViewBegForSortingList();
                             model.HarvestYearPlans = harvestYearPlans;
                             model.EncryptedFarmId = id;
                             model.EncryptedHarvestYear = year;
@@ -3224,7 +3224,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (model != null)
                 {
                     model = BindSortingData(s, t, u, model);
-                    BindViewBegForSortingList(model);
+                    BindViewBegForSortingList();
                 }
             }
             HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
@@ -3279,6 +3279,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<(bool flowControl, IActionResult? value)> BindRainfallDataForHarvestYearOverview(PlanViewModel? model, int farmId, int harvestYear, Error? error, FarmResponse farm)
     {
+        bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
         (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(farmId, harvestYear);
 
         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
@@ -3291,17 +3292,20 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (excessRainfalls != null && excessRainfalls.WinterRainfall != null)
             {
                 await BindExcessRainfallDataForHarvestYearOverviewPage(model, excessRainfalls);
-
-                ViewBag.ExcessRainfallContentFirst = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? string.Format(Resource.lblWinterRainfallIs450OrMoreOrLess, model.WinterRainfallName) : string.Format(Resource.lblExcessWinterRainfallWithValue, model.ExcessWinterRainfallName));
-                ViewBag.ExcessRainfallContentSecond = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? string.Format(Resource.lblChangeWinterRainfallForHarvestYear, harvestYear) : Resource.lblUpdateExcessWinterRainfall);
+                string winterRainfallFirstContent = string.Format(Resource.lblWinterRainfallIs450OrMoreOrLess, model.WinterRainfallName);
+                string winterRainfallSecondContent = string.Format(Resource.lblExcessWinterRainfallWithValue, model.ExcessWinterRainfallName);
+                string winterRainfallThirdContent = string.Format(Resource.lblChangeWinterRainfallForHarvestYear, harvestYear);
+                ViewBag.ExcessRainfallContentFirst = (isScotland ? winterRainfallFirstContent : winterRainfallSecondContent);
+                ViewBag.ExcessRainfallContentSecond = (isScotland ? winterRainfallThirdContent : Resource.lblUpdateExcessWinterRainfall);
 
             }
             else
             {
                 model.AnnualRainfall = farm?.Rainfall;
                 model.IsExcessOrWinterRainfallUpdated = false;
-                ViewBag.ExcessRainfallContentFirst = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblYouHaveNotEnteredWinterRainfall : Resource.lblYouHaveNotEnteredAnyExcessWinterRainfall);
-                ViewBag.ExcessRainfallContentSecond = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? string.Format(Resource.lblEnterWinterRainfallForHarvestYear, harvestYear) : string.Format(Resource.lblAddExcessWinterRainfallForHarvestYear, harvestYear));
+                string winterRainfallFirstContent = string.Format(Resource.lblEnterWinterRainfallForHarvestYear, harvestYear);
+                ViewBag.ExcessRainfallContentFirst = (isScotland ? Resource.lblYouHaveNotEnteredWinterRainfall : Resource.lblYouHaveNotEnteredAnyExcessWinterRainfall);
+                ViewBag.ExcessRainfallContentSecond = (isScotland ? winterRainfallFirstContent : string.Format(Resource.lblAddExcessWinterRainfallForHarvestYear, harvestYear));
             }
         }
 
@@ -3320,7 +3324,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (model, farm);
     }
 
-    private void BindViewBegForSortingList(PlanViewModel? model)
+    private void BindViewBegForSortingList()
     {
         ViewBag.InOrganicListSortByFieldName = _cropDataProtector.Protect(Resource.lblField);
         ViewBag.InOrganicListSortByDate = _cropDataProtector.Protect(Resource.lblDate);
@@ -3469,36 +3473,33 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task BindSuccessMsgForHarvestYearOverviewPage(string? q, string? r, string? v, string? w)
     {
-        if (!string.IsNullOrWhiteSpace(q))
-        {
-            if (!string.IsNullOrWhiteSpace(r))
-            {
-                TempData["successMsg"] = _cropDataProtector.Unprotect(r);
-                if (!string.IsNullOrWhiteSpace(v))
-                {
-                    TempData["successMsgSecond"] = _cropDataProtector.Unprotect(v);
-                }
-                if (!string.IsNullOrWhiteSpace(w))
-                {
-                    int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(w));
-                    if (decryptedFieldId > 0)
-                    {
-                        Field field = await _fieldLogic.FetchFieldByFieldId(decryptedFieldId);
-                        if (field != null)
-                        {
-                            TempData["fieldName"] = field.Name;
-                        }
-                    }
-                    TempData["successMsgLink"] = w;
-                }
-            }
-            ViewBag.Success = true;
-        }
-        else
+        if (string.IsNullOrWhiteSpace(q))
         {
             ViewBag.Success = false;
             RemoveCropSession();
+            return;
         }
+
+        if (!string.IsNullOrWhiteSpace(r))
+        {
+            TempData["successMsg"] = _cropDataProtector.Unprotect(r);
+            if (!string.IsNullOrWhiteSpace(v))
+            {
+                TempData["successMsgSecond"] = _cropDataProtector.Unprotect(v);
+            }
+            if (!string.IsNullOrWhiteSpace(w))
+            {
+                int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(w));
+
+                Field field = await _fieldLogic.FetchFieldByFieldId(decryptedFieldId);
+                if (field != null)
+                {
+                    TempData["fieldName"] = field.Name;
+                }
+                TempData["successMsgLink"] = w;
+            }
+        }
+        ViewBag.Success = true;
     }
 #pragma warning restore S107
     private void RemoveOrganicManureFromSession()
