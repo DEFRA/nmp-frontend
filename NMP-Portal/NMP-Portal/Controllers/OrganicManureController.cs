@@ -463,7 +463,8 @@ namespace NMP.Portal.Controllers
                 var (fieldSelectList, fieldError) = await GetFieldSelectListAsync(model);
                 if (fieldError != null)
                 {
-                    return HandleViewError(_fieldGroupError, fieldError, model);
+                    TempData[_fieldGroupError] = fieldError.Message;
+                    return View(_fieldGroup, model);
                 }
 
                 ViewBag.FieldList = fieldSelectList;
@@ -573,18 +574,21 @@ namespace NMP.Portal.Controllers
                 var (fieldSelectList, fieldError) = await GetFieldSelectListAsync(model);
                 if (fieldError != null)
                 {
-                    return HandleViewError(_fieldErrorTempDataKey, fieldError, model);
+                    TempData[_fieldErrorTempDataKey] = fieldError.Message;
+                    return View(model);
                 }
 
                 ViewBag.FieldList = fieldSelectList;
 
                 // Encrypted ID check
                 var (encList, encError) = await GetFieldsForEncryptedIdAsync(model);
+
                 if (encError != null)
                 {
-                    return HandleViewError(_fieldErrorTempDataKey, fieldError, model);
+                    TempData[_fieldErrorTempDataKey] = encError.Message;
+                    return View(model);
                 }
-                
+
                 if (encList != null)
                     ViewBag.FieldList = encList;
 
@@ -635,7 +639,8 @@ namespace NMP.Portal.Controllers
                 var mgmtError = await PopulateManagementAsync(model, fieldIds, cropPlans, sessionModel);
                 if (mgmtError != null)
                 {
-                    return HandleViewError(_fieldErrorTempDataKey, mgmtError, model);
+                    TempData[_fieldErrorTempDataKey] = mgmtError.Message;
+                    return View(model);
                 }
 
                 // CheckAnswer logic
@@ -673,7 +678,6 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace(ex, "Exception in POST Fields()");
                 TempData[_fieldErrorTempDataKey] = ex.Message;
                 return View(model);
-
             }
 
             return RedirectToAction(_manureGroup);
@@ -1269,7 +1273,8 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return HandleViewError("ManureGroupError", error, model);
+                    TempData["ManureGroupError"] = error.Message;
+                    return View(model);
                 }
             }
             catch (Exception ex)
@@ -1461,7 +1466,8 @@ managementPeriod.CropID.HasValue
                     (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
-                        return HandleViewError("ManureApplyingDateError", error, model);
+                        TempData["ManureApplyingDateError"] = error.Message;
+                        return View(model);
                     }
                     else
                     {
@@ -1629,7 +1635,7 @@ managementPeriod.CropID.HasValue
                 {
                     return RedirectToAction(_farmList, "Farm");
                 }
-                
+
                 List<ManureType> manureTypeList = new List<ManureType>();
                 (manureTypeList, error) = await GetManureTypeList(model);
 
@@ -1783,24 +1789,28 @@ managementPeriod.CropID.HasValue
                                     }
                                     else
                                     {
-                                        return HandleViewError("ApplicationMethodError", error, model);
+                                        TempData["ApplicationMethodError"] = error.Message;
+                                        return View(model);
                                     }
                                 }
                                 else
                                 {
-                                    return HandleViewError("ApplicationMethodError", error, model);
+                                    TempData["ApplicationMethodError"] = error?.Message;
+                                    return View(model);
                                 }
 
                                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                             }
                             else
                             {
-                                return HandleViewError("ApplicationMethodError", error, model);
+                                TempData["ApplicationMethodError"] = error.Message;
+                                return View(model);
                             }
                         }
                         else if (error != null)
                         {
-                            return HandleViewError("ApplicationMethodError", error, model);
+                            TempData["ApplicationMethodError"] = error.Message;
+                            return View(model);
                         }
                     }
                 }
@@ -2575,12 +2585,14 @@ managementPeriod.CropID.HasValue
                                                 }
                                                 else
                                                 {
-                                                    return HandleViewError("ApplicationRateMethodError", error, model);
+                                                    TempData["ApplicationRateMethodError"] = error.Message;
+                                                    return View(model);
                                                 }
                                             }
                                             else
                                             {
-                                                return HandleViewError("ApplicationRateMethodError", error, model);
+                                                TempData["ApplicationRateMethodError"] = error.Message;
+                                                return View(model);
                                             }
 
                                             //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
@@ -2596,14 +2608,16 @@ managementPeriod.CropID.HasValue
                                                 }
                                                 else
                                                 {
-                                                    return HandleViewError("ApplicationRateMethodError", error, model);
+                                                    TempData["ApplicationRateMethodError"] = error.Message;
+                                                    return View(model);
                                                 }
                                             }
 
                                         }
                                         else
                                         {
-                                            return HandleViewError("ApplicationRateMethodError", error, model);
+                                            TempData["ApplicationRateMethodError"] = error.Message;
+                                            return View(model);
                                         }
 
                                     }
@@ -2743,12 +2757,14 @@ managementPeriod.CropID.HasValue
                                             }
                                             else
                                             {
-                                                return HandleViewError("ManualApplicationRateError", error, model);
+                                                TempData["ManualApplicationRateError"] = error.Message;
+                                                return View(model);
                                             }
                                         }
                                         else
                                         {
-                                            return HandleViewError("ManualApplicationRateError", error, model);
+                                            TempData["ManualApplicationRateError"] = error.Message;
+                                            return View(model);
                                         }
 
                                         //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
@@ -2764,14 +2780,16 @@ managementPeriod.CropID.HasValue
                                             }
                                             else
                                             {
-                                                return HandleViewError("ManualApplicationRateError", error, model);
+                                                TempData["ManualApplicationRateError"] = error.Message;
+                                                return View(model);
                                             }
                                         }
 
                                     }
                                     else
                                     {
-                                        return HandleViewError("ManualApplicationRateError", error, model);
+                                        TempData["ManualApplicationRateError"] = error.Message;
+                                        return View(model);
                                     }
 
                                 }
@@ -2916,12 +2934,14 @@ managementPeriod.CropID.HasValue
                                         }
                                         else
                                         {
-                                            return HandleViewError("AreaAndQuantityError", error, model);
+                                            TempData["AreaAndQuantityError"] = error.Message;
+                                            return View(model);
                                         }
                                     }
                                     else
                                     {
-                                        return HandleViewError("AreaAndQuantityError", error, model);
+                                        TempData["AreaAndQuantityError"] = error.Message;
+                                        return View(model);
                                     }
 
                                     //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
@@ -2937,14 +2957,16 @@ managementPeriod.CropID.HasValue
                                         }
                                         else
                                         {
-                                            return HandleViewError("AreaAndQuantityError", error, model);
+                                            TempData["AreaAndQuantityError"] = error.Message;
+                                            return View(model);
                                         }
                                     }
 
                                 }
                                 else
                                 {
-                                    return HandleViewError("AreaAndQuantityError", error, model);
+                                    TempData["AreaAndQuantityError"] = error.Message;
+                                    return View(model);
                                 }
 
                             }
@@ -3264,7 +3286,8 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return HandleViewError("IncorporationDelayError", error, model);
+                    TempData["IncorporationDelayError"] = error.Message;
+                    return View(model);
                 }
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -3558,7 +3581,8 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return HandleViewError("ManureGroupError", error, model);
+                    TempData["ManureGroupError"] = error.Message;
+                    return View(model);
                 }
 
                 if (!model.IsFieldGroupChange && (!model.IsAnyChangeInField))
@@ -4305,7 +4329,8 @@ managementPeriod.CropID.HasValue
 
                 if (error != null)
                 {
-                    return HandleViewError("CheckYourAnswerError", error, model);
+                    TempData["CheckYourAnswerError"] = error.Message;
+                    return View(model);
                 }
 
                 ValidateGrassDefoliation(model);
@@ -7008,7 +7033,9 @@ managementPeriod.CropID.HasValue
                                     TempData["RemoveOrganicManureError"] = fieldListError.Message;
                                 }
                             }
-                            return HandleViewError("RemoveOrganicManureError", error, model);
+
+                            TempData["RemoveOrganicManureError"] = error.Message;
+                            return View(model);
                         }
                     }
                 }
@@ -7092,7 +7119,8 @@ managementPeriod.CropID.HasValue
 
                 if (error != null)
                 {
-                    return HandleViewError("CheckYourAnswerError", error, model);
+                    TempData["CheckYourAnswerError"] = error.Message;
+                    return View(model);
                 }
                 ValidateGrassDefoliation(model);
 
@@ -7941,7 +7969,8 @@ managementPeriod.CropID.HasValue
                         }
                         else
                         {
-                            return HandleViewError("ManureTypeError", error, model);
+                            TempData["ManureTypeError"] = error.Message;
+                            return View(model);
                         }
 
 
@@ -7963,12 +7992,14 @@ managementPeriod.CropID.HasValue
                                 (model.ApplicationMethodName, error) = await _mannerLogic.FetchApplicationMethodById(model.ApplicationMethod.Value);
                                 if (error != null)
                                 {
-                                    return HandleViewError("ManureTypeError", error, model);
+                                    TempData["ManureTypeError"] = error.Message;
+                                    return View(model);
                                 }
                             }
                             else if (error != null)
                             {
-                                return HandleViewError("ManureTypeError", error, model);
+                                TempData["ManureTypeError"] = error.Message;
+                                return View(model);
                             }
 
                         }
@@ -9551,10 +9582,6 @@ managementPeriod.CropID.HasValue
                 org.MgO = model.MgO;
             }
         }
-        private IActionResult HandleViewError(string key, Error? error, object model)
-        {
-            TempData[key] = error?.Message;
-            return View(model);
-        }
+
     }
 }
