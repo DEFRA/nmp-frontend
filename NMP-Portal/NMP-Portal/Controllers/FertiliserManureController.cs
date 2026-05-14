@@ -45,6 +45,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private const string _fieldGroupErrorTempDataKey = "FieldGroupError";
     private const string _fieldErrorTempDataKey = "FieldError";
     private const string _inOrgnaicManureDurationErrorTempDataKey = "InOrgnaicManureDurationError";
+    private const string _checkYourAnswerErrorDataKey = "CheckYourAnswerError";
 
     private FertiliserManureViewModel? GetFertiliserManureFromSession()
     {
@@ -446,7 +447,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         SetFertiliserManureToSession(model);
-                        TempData["CheckYourAnswerError"] = error.Message;
+                        TempData[_checkYourAnswerErrorDataKey] = error.Message;
                         return RedirectToAction(_checkAnswerActionName);
                     }
                     (var redirect, _) = BindFieldViewBegGet(fertiliserResponse, null, true, true);
@@ -481,7 +482,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return RedirectToAction(_fieldGroupActionName);
             }
 
-            TempData["CheckYourAnswerError"] = ex.Message;
+            TempData[_checkYourAnswerErrorDataKey] = ex.Message;
             return RedirectToAction(_checkAnswerActionName);
 
         }
@@ -787,7 +788,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return (flowControl: false, value: View(model));
         }
         (model, fertiliserManureViewModel) = await BuildFertiliserManureList(managementIds, model, fertiliserManureViewModel, cropPlans);
+        (model, error) = await BindGrassDataForPost(model, error, cropPlans);
 
+        return (flowControl: true, value: null);
+    }
+
+    private async Task<(FertiliserManureViewModel model, Error error)> BindGrassDataForPost(FertiliserManureViewModel model, Error error, List<HarvestYearPlanResponse> cropPlans)
+    {
         if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
         {
             int grassCropCounter = 0;
@@ -818,7 +825,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             model.IsAnyChangeInSameDefoliationFlag = false;
         }
 
-        return (flowControl: true, value: null);
+        return (model, error);
     }
 
     private static void BindFieldDataIfSelectAll(FertiliserManureViewModel model, List<SelectListItem>? selectListItem)
@@ -1716,7 +1723,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                             {
-                                TempData["CheckYourAnswerError"] = error.Message;
+                                TempData[_checkYourAnswerErrorDataKey] = error.Message;
                             }
                             else
                             {
@@ -1940,7 +1947,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                 }
                                                 else
                                                 {
-                                                    TempData["CheckYourAnswerError"] = error.Message;
+                                                    TempData[_checkYourAnswerErrorDataKey] = error.Message;
                                                     return View(model);
                                                 }
                                             }
@@ -2067,7 +2074,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
-                TempData["CheckYourAnswerError"] = error.Message;
+                TempData[_checkYourAnswerErrorDataKey] = error.Message;
                 return View(model);
             }
 
@@ -2218,13 +2225,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
                 else
                 {
-                    TempData["CheckYourAnswerError"] = error.Message;
+                    TempData[_checkYourAnswerErrorDataKey] = error.Message;
                 }
             }
         }
         catch (Exception ex)
         {
-            TempData["CheckYourAnswerError"] = ex.Message;
+            TempData[_checkYourAnswerErrorDataKey] = ex.Message;
             return View(model);
         }
         return View(model);
@@ -2570,7 +2577,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
-                TempData["CheckYourAnswerError"] = error.Message;
+                TempData[_checkYourAnswerErrorDataKey] = error.Message;
                 return RedirectToAction(_checkAnswerActionName);
             }
             if (model.DoubleCrop == null && model.IsDoubleCropAvailable)
@@ -2731,7 +2738,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
                 else
                 {
-                    TempData["CheckYourAnswerError"] = error?.Message;
+                    TempData[_checkYourAnswerErrorDataKey] = error?.Message;
                     return RedirectToAction(_checkAnswerActionName);
                 }
 
@@ -2739,7 +2746,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         catch (Exception ex)
         {
-            TempData["CheckYourAnswerError"] = ex.Message;
+            TempData[_checkYourAnswerErrorDataKey] = ex.Message;
             return RedirectToAction(_checkAnswerActionName);
         }
         return RedirectToAction(_checkAnswerActionName);
@@ -2824,7 +2831,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return RedirectToAction(_recommendationsActionName, "Crop", new { q = model.EncryptedFarmId, r, s = model.EncryptedHarvestYear });
             }
 
-            TempData["CheckYourAnswerError"] = ex.Message;
+            TempData[_checkYourAnswerErrorDataKey] = ex.Message;
             return RedirectToAction(_checkAnswerActionName);
         }
         return View(model);
@@ -2960,7 +2967,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Fertiliser Manure Controller : Exception in Cancel() action : {0}, {1}", ex.Message, ex.StackTrace);
-            TempData["CheckYourAnswerError"] = ex.Message;
+            TempData[_checkYourAnswerErrorDataKey] = ex.Message;
             return RedirectToAction(_checkAnswerActionName);
         }
 
@@ -3128,7 +3135,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                             }
                             else
                             {
-                                TempData["CheckYourAnswerError"] = error.Message;
+                                TempData[_checkYourAnswerErrorDataKey] = error.Message;
                                 return RedirectToAction(_checkAnswerActionName);
                             }
                             TempData[_fieldGroupErrorTempDataKey] = error.Message;
@@ -3158,7 +3165,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 }
                                 else
                                 {
-                                    TempData["CheckYourAnswerError"] = error.Message;
+                                    TempData[_checkYourAnswerErrorDataKey] = error.Message;
                                     return RedirectToAction(_checkAnswerActionName);
                                 }
 
@@ -3222,7 +3229,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             else
             {
-                TempData["CheckYourAnswerError"] = ex.Message;
+                TempData[_checkYourAnswerErrorDataKey] = ex.Message;
                 return RedirectToAction(_checkAnswerActionName);
             }
             TempData[_fieldGroupErrorTempDataKey] = ex.Message;
