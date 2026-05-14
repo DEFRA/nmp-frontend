@@ -2206,6 +2206,22 @@ managementPeriod.CropID.HasValue
             return View(model);
         }
 
+        private void ReplaceNumericError(string key, string validationLabel, string displayLabel)
+        {
+            if (!ModelState.ContainsKey(key) || ModelState[key].Errors.Count == 0)
+            {
+                return;
+            }
+            var errorMessage = ModelState[key].Errors[0].ErrorMessage;
+            string expectedMessage = string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, validationLabel);
+            if (!string.Equals(errorMessage, expectedMessage))
+            {
+                return;
+            }
+            ModelState[key].Errors.Clear();
+            ModelState[key].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, displayLabel));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ManualNutrientValues(OrganicManureViewModel model)
@@ -2213,105 +2229,19 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace($"Organic Manure Controller : ManualNutrientValues() post action called");
             try
             {
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("DryMatterPercent"))
+                if (!ModelState.IsValid)
                 {
-                    var dryMatterPercentError = ModelState["DryMatterPercent"].Errors.Count > 0 ?
-                                    ModelState["DryMatterPercent"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (dryMatterPercentError != null && dryMatterPercentError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["DryMatterPercent"].RawValue, Resource.lblDryMatterPercent)))
-                    {
-                        ModelState["DryMatterPercent"].Errors.Clear();
-                        ModelState["DryMatterPercent"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblDryMatter));
-                    }
+                    ReplaceNumericError("DryMatterPercent", Resource.lblDryMatterPercent, Resource.lblDryMatter);
+                    ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
+                    ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
+                    ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
+                    ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
+                    ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
+                    ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
+                    ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
+                    ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
                 }
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
-                {
-                    var totalNitrogenError = ModelState["N"].Errors.Count > 0 ?
-                                    ModelState["N"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (totalNitrogenError != null && totalNitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["N"].RawValue, Resource.lblN)))
-                    {
-                        ModelState["N"].Errors.Clear();
-                        ModelState["N"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalNitrogen));
-                    }
-                }
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("NH4N"))
-                {
-                    var ammoniumError = ModelState["NH4N"].Errors.Count > 0 ?
-                                    ModelState["NH4N"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (ammoniumError != null && ammoniumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NH4N"].RawValue, Resource.lblNH4N)))
-                    {
-                        ModelState["NH4N"].Errors.Clear();
-                        ModelState["NH4N"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmmonium));
-                    }
-                }
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("UricAcid"))
-                {
-                    var uricAcidError = ModelState["UricAcid"].Errors.Count > 0 ?
-                                    ModelState["UricAcid"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (uricAcidError != null && uricAcidError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["UricAcid"].RawValue, Resource.lblUricAcidForError)))
-                    {
-                        ModelState["UricAcid"].Errors.Clear();
-                        ModelState["UricAcid"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblUricAcid));
-                    }
-                }
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("NO3N"))
-                {
-                    var nitrogenError = ModelState["NO3N"].Errors.Count > 0 ?
-                                    ModelState["NO3N"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (nitrogenError != null && nitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NO3N"].RawValue, Resource.lblNO3N)))
-                    {
-                        ModelState["NO3N"].Errors.Clear();
-                        ModelState["NO3N"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblNitrogen));
-                    }
-                }
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("P2O5"))
-                {
-                    var totalPhosphateError = ModelState["P2O5"].Errors.Count > 0 ?
-                                    ModelState["P2O5"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (totalPhosphateError != null && totalPhosphateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["P2O5"].RawValue, Resource.lblP2O5)))
-                    {
-                        ModelState["P2O5"].Errors.Clear();
-                        ModelState["P2O5"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPhosphate));
-                    }
-                }
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("K2O"))
-                {
-                    var totalPotassiumError = ModelState["K2O"].Errors.Count > 0 ?
-                                    ModelState["K2O"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (totalPotassiumError != null && totalPotassiumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["K2O"].RawValue, Resource.lblK2O)))
-                    {
-                        ModelState["K2O"].Errors.Clear();
-                        ModelState["K2O"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPotassium));
-                    }
-                }
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("SO3"))
-                {
-                    var sulphurSO3Error = ModelState["SO3"].Errors.Count > 0 ?
-                                    ModelState["SO3"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (sulphurSO3Error != null && sulphurSO3Error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SO3"].RawValue, Resource.lblSO3)))
-                    {
-                        ModelState["SO3"].Errors.Clear();
-                        ModelState["SO3"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalSulphur));
-                    }
-                }
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("MgO"))
-                {
-                    var totalMagnesiumOxideError = ModelState["MgO"].Errors.Count > 0 ?
-                                    ModelState["MgO"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (totalMagnesiumOxideError != null && totalMagnesiumOxideError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
-                    {
-                        ModelState["MgO"].Errors.Clear();
-                        ModelState["MgO"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
-                    }
-                }
+                
                 AddErrorIfNull(model.DryMatterPercent, "DryMatterPercent", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
 
                 AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
@@ -2766,16 +2696,9 @@ managementPeriod.CropID.HasValue
             Error? error = null;
             try
             {
-                if ((!ModelState.IsValid) && ModelState.ContainsKey("ApplicationRate"))
+                if (!ModelState.IsValid)
                 {
-                    var applicationRateError = ModelState["ApplicationRate"].Errors.Count > 0 ?
-                                    ModelState["ApplicationRate"].Errors[0].ErrorMessage.ToString() : null;
-
-                    if (applicationRateError != null && applicationRateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["ApplicationRate"].RawValue, Resource.lblApplicationRate)))
-                    {
-                        ModelState["ApplicationRate"].Errors.Clear();
-                        ModelState["ApplicationRate"].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgApplicationRate));
-                    }
+                    ReplaceNumericError("ApplicationRate", Resource.lblApplicationRate, Resource.MsgEnterDataOnlyInNumber);
                 }
                 ValidateApplicationRate(model);
 
@@ -4884,22 +4807,11 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> AutumnCropNitrogenUptake(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : AutumnCropNitrogenUptake() post action called");
-            if (!ModelState.IsValid && ModelState.ContainsKey("AutumnCropNitrogenUptake"))
+            if (!ModelState.IsValid)
             {
-                var autumnCropNitrogenUptakeState = ModelState["AutumnCropNitrogenUptake"];
-
-                if (autumnCropNitrogenUptakeState.Errors.Count > 0)
-                {
-                    var firstError = autumnCropNitrogenUptakeState.Errors[0];
-
-                    if (firstError.ErrorMessage == string.Format(Resource.lblEnterNumericValue, autumnCropNitrogenUptakeState.RawValue, "AutumnCropNitrogenUptake"))
-                    {
-                        autumnCropNitrogenUptakeState.Errors.Clear();
-                        autumnCropNitrogenUptakeState.Errors.Add(Resource.MsgEnterValidNumericValueBeforeContinuing);
-                    }
-                }
+                ReplaceNumericError("AutumnCropNitrogenUptake", "AutumnCropNitrogenUptake", Resource.MsgEnterValidNumericValueBeforeContinuing);
             }
-
+            
             if (model.AutumnCropNitrogenUptake == null)
             {
                 ModelState.AddModelError("AutumnCropNitrogenUptake", Resource.MsgEnterAValueBeforeContinue);
