@@ -3206,17 +3206,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             model.Year = harvestYear;
                             HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                         }
-                        else
-                        {
-                            TempData["ErrorOnHarvestYearOverview"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;//error.Message; //
-                            model = null;
-                        }
+
                     }
+                    HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 }
             }
             else
             {
-                (bool flowControl, IActionResult value) = BindSessionDataForHarvestYearOverview(ref model);
+                (bool flowControl, IActionResult? value) = BindSessionDataForHarvestYearOverview(ref model);
                 if (!flowControl && value != null)
                 {
                     return value;
@@ -3225,15 +3222,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     model = BindSortingData(s, t, u, model);
                     BindViewBegForSortingList();
+                    HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 }
             }
-            HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
         }
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in HarvestYearOverview() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            TempData["ErrorOnHarvestYearOverview"] = ex.Message;
             model = null;
+            ViewBag.Error = ex.Message;
+            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year });
+            
         }
         return View(model);
     }
@@ -3765,31 +3764,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
             (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(decryptedHarvestYear, decryptedFarmId);
-            if (harvestYearPlanResponse != null && error == null)
-            {
-                bool isAllBasePlan = harvestYearPlanResponse.All(h => ((h.IsBasePlan != null) && (h.IsBasePlan.Value)));
-                if (isAllBasePlan)
-                {
-                    ViewBag.AddMannerDisabled = true;
-                }
-                if (decryptedFieldId > 0 && decryptedHarvestYear > 0)
-                {
-                    (recommendations, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
-                    if (recommendations != null && recommendations.Any())
-                    {
-                        ViewBag.IsComingFromRecommendation = _cropDataProtector.Protect(Resource.lblFalse.ToString());
-                        string firstCropName = string.Empty;
-                        (bool flowControl, IActionResult? value, model, firstCropName) = await BindAllRecommendationData(q, s, model, error, recommendations, firstCropName);
-                        if (!flowControl && value != null)
-                        {
-                            return value;
-                        }
-
-                        await BindPreviousCropping(s, model, error, decryptedFieldId, decryptedHarvestYear, firstCropName);
-                    }
-                }
-            }
-            else
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["ErrorOnHarvestYearOverview"] = error.Message;
                 return RedirectToAction(_harvestYearOverviewActionName, new
@@ -3797,6 +3772,34 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     id = q,
                     year = s
                 });
+            }
+            bool isAllBasePlan = harvestYearPlanResponse.All(h => ((h.IsBasePlan != null) && (h.IsBasePlan.Value)));
+            if (isAllBasePlan)
+            {
+                ViewBag.AddMannerDisabled = true;
+            }
+
+            (recommendations, error) = await _cropLogic.FetchRecommendationByFieldIdAndYear(decryptedFieldId, decryptedHarvestYear);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData["ErrorOnHarvestYearOverview"] = error.Message;
+                return RedirectToAction(_harvestYearOverviewActionName, new
+                {
+                    id = q,
+                    year = s
+                });
+            }
+            if (recommendations.Any())
+            {
+                ViewBag.IsComingFromRecommendation = _cropDataProtector.Protect(Resource.lblFalse.ToString());
+                string firstCropName = string.Empty;
+                (bool flowControl, IActionResult? value, model, firstCropName) = await BindAllRecommendationData(q, s, model, error, recommendations, firstCropName);
+                if (!flowControl && value != null)
+                {
+                    return value;
+                }
+
+                await BindPreviousCropping(s, model, error, decryptedFieldId, decryptedHarvestYear, firstCropName);
             }
         }
         catch (Exception ex)
