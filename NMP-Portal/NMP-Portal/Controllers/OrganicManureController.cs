@@ -1487,7 +1487,7 @@ managementPeriod.CropID.HasValue
                                             //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
                                             if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
                                             {
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), farm, crop?.SowingDate, crop.ID.Value);
+                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), farm, crop?.SowingDate, crop?.ID ?? 0);
                                             }
 
 
