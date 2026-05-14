@@ -3158,57 +3158,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (!string.IsNullOrWhiteSpace(id))
                 {
-                    model = new PlanViewModel();
-                    int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
-                    int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
-                    Error? error = null;
-                    (model, FarmResponse? farm) = await BindFarmDataForHarvestYearOverview(model, farmId);
-
-                    (bool flowControl, IActionResult? value) = await BindRainfallDataForHarvestYearOverview(model, farmId, harvestYear, error, farm);
+                    (bool flowControl, IActionResult? value,model) = await BindDataForHarvestYearOverview(id, year);
                     if (!flowControl && value != null)
                     {
                         return value;
                     }
-
-                    model.Year = harvestYear;
-                    (HarvestYearResponseHeader? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId(harvestYear, farmId);
-
-                    if (harvestYearPlanResponse != null)
-                    {
-                        List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
-                        if (allCropDetails.Any())
-                        {
-                            BindLastModifiedDate(model, allCropDetails);
-
-                            model.AnnualRainfall = harvestYearPlanResponse.farmDetails?.Rainfall;
-                            var harvestYearPlans = new HarvestYearPlans
-                            {
-                                FieldData = new List<HarvestYearPlanFields>(),
-                                OrganicManureList = new List<OrganicManureResponse>(),
-                                InorganicFertiliserList = new List<InorganicFertiliserResponse>(),
-                            };
-
-                            BindFieldDataForHarvestYearOverviewPage(allCropDetails, harvestYearPlans);
-
-                            (bool isSuccess, IActionResult? actionResult) = await BindOrganicManureDataForHarvestYearOverviewPage(model, error, harvestYearPlanResponse, harvestYearPlans);
-                            if (!isSuccess && actionResult != null)
-                            {
-                                return actionResult;
-                            }
-
-                            BindFertilizerDataForHarvestYearOverviewPage(harvestYearPlanResponse, harvestYearPlans);
-                            BindSortingProperties(model);
-
-                            BindViewBegForSortingList();
-                            model.HarvestYearPlans = harvestYearPlans;
-                            model.EncryptedFarmId = id;
-                            model.EncryptedHarvestYear = year;
-                            model.Year = harvestYear;
-                            HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
-                        }
-
-                    }
-                    HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
                 }
             }
             else
@@ -3232,9 +3186,65 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model = null;
             ViewBag.Error = ex.Message;
             return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year });
-            
+
         }
         return View(model);
+    }
+
+    private async Task<(bool flowControl, IActionResult? value, PlanViewModel)> BindDataForHarvestYearOverview(string id, string year)
+    {
+        PlanViewModel model = new PlanViewModel();
+        int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+        int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
+        Error? error = null;
+        (model, FarmResponse? farm) = await BindFarmDataForHarvestYearOverview(model, farmId);
+
+        (bool flowControl, IActionResult? value) = await BindRainfallDataForHarvestYearOverview(model, farmId, harvestYear, error, farm);
+        if (!flowControl && value != null)
+        {
+            return (flowControl: false, value: value, model);
+        }
+
+        model.Year = harvestYear;
+        (HarvestYearResponseHeader? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId(harvestYear, farmId);
+
+        if (harvestYearPlanResponse != null)
+        {
+            List<CropDetailResponse> allCropDetails = harvestYearPlanResponse.CropDetails ?? new List<CropDetailResponse>().ToList();
+            if (allCropDetails.Count > 0)
+            {
+                BindLastModifiedDate(model, allCropDetails);
+
+                model.AnnualRainfall = harvestYearPlanResponse.farmDetails?.Rainfall;
+                var harvestYearPlans = new HarvestYearPlans
+                {
+                    FieldData = new List<HarvestYearPlanFields>(),
+                    OrganicManureList = new List<OrganicManureResponse>(),
+                    InorganicFertiliserList = new List<InorganicFertiliserResponse>(),
+                };
+
+                BindFieldDataForHarvestYearOverviewPage(allCropDetails, harvestYearPlans);
+
+                (bool isSuccess, IActionResult? actionResult) = await BindOrganicManureDataForHarvestYearOverviewPage(model, error, harvestYearPlanResponse, harvestYearPlans);
+                if (!isSuccess && actionResult != null)
+                {
+                    return (flowControl: false, value: actionResult,model);
+                }
+
+                BindFertilizerDataForHarvestYearOverviewPage(harvestYearPlanResponse, harvestYearPlans);
+                BindSortingProperties(model);
+
+                BindViewBegForSortingList();
+                model.HarvestYearPlans = harvestYearPlans;
+                model.EncryptedFarmId = id;
+                model.EncryptedHarvestYear = year;
+                model.Year = harvestYear;
+                HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+            }
+        }
+        HttpContext.Session.SetObjectAsJson("HarvestYearPlan", model);
+
+        return (flowControl: true, value: null,model);
     }
 
     private (bool flowControl, IActionResult? value) BindSessionDataForHarvestYearOverview(ref PlanViewModel? model)
