@@ -2092,18 +2092,7 @@ managementPeriod.CropID.HasValue
                     }
                     if (model.OrganicManures != null && model.OrganicManures.Count > 0)
                     {
-                        foreach (var orgManure in model.OrganicManures)
-                        {
-                            orgManure.DryMatterPercent = model.ManureType.DryMatter;
-                            orgManure.N = model.ManureType.TotalN;
-                            orgManure.NH4N = model.ManureType.NH4N;
-                            orgManure.UricAcid = model.ManureType.Uric;
-                            orgManure.NO3N = model.ManureType.NO3N;
-                            orgManure.P2O5 = model.ManureType.P2O5;
-                            orgManure.K2O = model.ManureType.K2O;
-                            orgManure.SO3 = model.ManureType.SO3;
-                            orgManure.MgO = model.ManureType.MgO;
-                        }
+                        UpdateOrganicManuresFromModel(model);
                     }
 
                     HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -2363,18 +2352,7 @@ managementPeriod.CropID.HasValue
                 }
                 if (model.OrganicManures.Count > 0)
                 {
-                    foreach (var orgManure in model.OrganicManures)
-                    {
-                        orgManure.DryMatterPercent = model.DryMatterPercent;
-                        orgManure.N = model.N;
-                        orgManure.NH4N = model.NH4N;
-                        orgManure.UricAcid = model.UricAcid;
-                        orgManure.NO3N = model.NO3N;
-                        orgManure.P2O5 = model.P2O5;
-                        orgManure.K2O = model.K2O;
-                        orgManure.SO3 = model.SO3;
-                        orgManure.MgO = model.MgO;
-                    }
+                    UpdateOrganicManuresFromModel(model);
                 }
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -2396,6 +2374,7 @@ managementPeriod.CropID.HasValue
             }
 
         }
+
         [HttpGet]
         public IActionResult NutrientValuesStoreForFuture()
         {
@@ -2545,11 +2524,8 @@ managementPeriod.CropID.HasValue
                             orgManure.ApplicationRate = model.ApplicationRate.Value;
                         }
                     }
-                    model.IsNMaxLimitWarning = false;
-                    model.IsOrgManureNfieldLimitWarning = false;
-                    model.IsEndClosedPeriodFebruaryWarning = false;
-                    model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
-
+                    
+                    ResetWarnings(model);
                     string message = string.Empty;
 
                     OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
@@ -2726,10 +2702,7 @@ managementPeriod.CropID.HasValue
                 {
                     return View("ManualApplicationRate", model);
                 }
-                model.IsNMaxLimitWarning = false;
-                model.IsOrgManureNfieldLimitWarning = false;
-                model.IsEndClosedPeriodFebruaryWarning = false;
-                model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
+                ResetWarnings(model);
 
                 string message = string.Empty;
 
@@ -2910,10 +2883,7 @@ managementPeriod.CropID.HasValue
                     orgManure.ApplicationRate = model.ApplicationRate.Value;
                 }
             }
-            model.IsNMaxLimitWarning = false;
-            model.IsOrgManureNfieldLimitWarning = false;
-            model.IsEndClosedPeriodFebruaryWarning = false;
-            model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
+            ResetWarnings(model);
             string message = string.Empty;
             OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
             if (organicManureViewModel == null)
@@ -4139,11 +4109,8 @@ managementPeriod.CropID.HasValue
                     }
                 }
                 string message = string.Empty;
-                model.IsOrgManureNfieldLimitWarning = false;
-                model.IsNMaxLimitWarning = false;
+                ResetWarnings(model);
                 model.IsAnyChangeInField = false;
-                model.IsEndClosedPeriodFebruaryWarning = false;
-                model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 = false;
                 model.IsDoubleCropValueChange = false;
 
                 (farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
@@ -7978,18 +7945,7 @@ managementPeriod.CropID.HasValue
                             model.MgO = manureTypeData.MgO;
                             model.P2O5 = manureTypeData.P2O5;
                             model.UricAcid = manureTypeData.Uric;
-                            foreach (var orgManure in model.OrganicManures)
-                            {
-                                orgManure.DryMatterPercent = manureTypeData.DryMatter;
-                                orgManure.N = manureTypeData.TotalN;
-                                orgManure.NH4N = manureTypeData.NH4N;
-                                orgManure.NO3N = manureTypeData.NO3N;
-                                orgManure.K2O = manureTypeData.K2O;
-                                orgManure.SO3 = manureTypeData.SO3;
-                                orgManure.MgO = manureTypeData.MgO;
-                                orgManure.P2O5 = manureTypeData.P2O5;
-                                orgManure.UricAcid = manureTypeData.Uric;
-                            }
+                            UpdateOrganicManuresFromModel(model);
                         }
                         else
                         {
@@ -9585,6 +9541,23 @@ managementPeriod.CropID.HasValue
                 return (manureTypeList, error);
             }
             return (new List<ManureType>(), null);
+        }
+        private static void UpdateOrganicManuresFromModel(OrganicManureViewModel model)
+        {
+            if (model?.OrganicManures == null) return;
+
+            foreach (var org in model.OrganicManures)
+            {
+                org.DryMatterPercent = model.DryMatterPercent ?? model.ManureType?.DryMatter;
+                org.N = model.N;
+                org.NH4N = model.NH4N;
+                org.UricAcid = model.UricAcid;
+                org.NO3N = model.NO3N;
+                org.P2O5 = model.P2O5;
+                org.K2O = model.K2O;
+                org.SO3 = model.SO3;
+                org.MgO = model.MgO;
+            }
         }
 
     }
