@@ -879,7 +879,7 @@ namespace NMP.Portal.Controllers
             model.IsAnyChangeInSameDefoliationFlag = false;
         }
 
-        private List<HarvestYearPlanResponse> GetFilteredCropList(
+        private static List<HarvestYearPlanResponse> GetFilteredCropList(
             OrganicManureViewModel model,
             List<HarvestYearPlanResponse> cropPlans,
             bool isGetFlow,
@@ -1280,7 +1280,7 @@ managementPeriod.CropID.HasValue
 
         private async Task PopulateManureGroupListAsync()
         {
-            var (manureGroupList, error) = await FetchManureGroup();
+            var (manureGroupList, _) = await FetchManureGroup();
             ViewBag.ManureGroupList = manureGroupList;
 
             
@@ -1308,7 +1308,10 @@ managementPeriod.CropID.HasValue
             return manureId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
                 || manureId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
         }
-       
+        private static bool IsOtherManure(OrganicManureViewModel model)
+        {
+            return IsOtherManureType(model.ManureTypeId);
+        }
         private static ManureType? GetAndApplyManureType(OrganicManureViewModel model, List<ManureType> manureTypeList, Error? error)
         {
             if (error != null || manureTypeList.Count == 0)
@@ -1484,7 +1487,7 @@ managementPeriod.CropID.HasValue
                                             //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
                                             if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
                                             {
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), farm, crop.SowingDate, crop.ID.Value);
+                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), farm, crop?.SowingDate, crop.ID.Value);
                                             }
 
 
@@ -2415,7 +2418,7 @@ managementPeriod.CropID.HasValue
             {
                 return RedirectToAction(_farmList, "Farm");
             }
-            if (IsOtherManureType(model))
+            if (IsOtherManure(model))
             {
                 model.IsAnyNeedToStoreNutrientValueForFuture = true;
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -7443,7 +7446,7 @@ managementPeriod.CropID.HasValue
                         {
                             return RedirectToAction(_manureGroup);
                         }
-                        else if (IsOtherManureType(model))
+                        else if (IsOtherManure(model))
                         {
                             return RedirectToAction("OtherMaterialName");
                         }
@@ -8031,7 +8034,7 @@ managementPeriod.CropID.HasValue
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
 
 
-                if (IsOtherManureType(model))
+                if (IsOtherManure(model))
                 {
                     HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                     return RedirectToAction("OtherMaterialName");
@@ -8343,7 +8346,7 @@ managementPeriod.CropID.HasValue
                         {
                             return RedirectToAction(_manureGroup);
                         }
-                        if (IsOtherManureType(model))
+                        if (IsOtherManure(model))
                         {
                             return RedirectToAction("OtherMaterialName");
                         }
@@ -8724,7 +8727,7 @@ managementPeriod.CropID.HasValue
                 return RedirectToAction(_manureGroup);
             }
 
-            if (IsOtherManureType(model))
+            if (IsOtherManure(model))
             {
                 return RedirectToAction("OtherMaterialName");
             }
@@ -9280,10 +9283,7 @@ managementPeriod.CropID.HasValue
             return model.ManureGroupIdForFilter == (int)ManureTypes.OtherLiquidMaterials
                 || model.ManureGroupIdForFilter == (int)ManureTypes.OtherSolidMaterials;
         }
-        private static bool IsOtherManureType(OrganicManureViewModel model)
-        {
-            return IsOtherManureType(model.ManureTypeId);
-        }
+        
         private static bool HasError(Error? error)
         {
             return error != null && !string.IsNullOrWhiteSpace(error.Message);
