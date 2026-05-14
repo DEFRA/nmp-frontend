@@ -1136,12 +1136,10 @@ managementPeriod.CropID.HasValue
             try
             {
 
-                (List<SelectListItem> manureGroupList, Error? error) = await FetchManureGroup();
-
-                ViewBag.ManureGroupList = manureGroupList;
+                var (manureGroupList, error) = await PopulateManureGroupListAsync();
                 if (model.FarmId.HasValue)
                 {
-                    (List<FarmManureTypeResponse> farmManureGroupList, error) = await FetchFarmManureGroup(model.FarmId.Value);
+                    (var farmManureGroupList, error) = await PopulateFarmManureListAsync(model);
                     if (error != null)
                     {
                         TempData[_fieldErrorTempDataKey] = error.Message;
@@ -1150,9 +1148,6 @@ managementPeriod.CropID.HasValue
 
                     if (farmManureGroupList.Any())
                     {
-                        var selectListItems = ToSelectList(farmManureGroupList, f => f.ID.ToString(), f => f.ManureTypeName);
-                        ViewBag.FarmManureTypeList = selectListItems;
-
                         if (string.IsNullOrWhiteSpace(model.FarmGroupManureId) && model.ManureGroupIdForFilter != null)
                         {
                             if (!string.IsNullOrWhiteSpace(model.OtherMaterialName) && (model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials))
@@ -1196,20 +1191,13 @@ managementPeriod.CropID.HasValue
             {
                 if (!ModelState.IsValid)
                 {
-                    (List<SelectListItem> manureGroupList, error) = await FetchManureGroup();
-
-                    ViewBag.ManureGroupList = manureGroupList;
+                     (var manureGroupList, error) = await PopulateManureGroupListAsync();
                     if (model.FarmId.HasValue)
                     {
-                        (List<FarmManureTypeResponse> farmManureGroupList, error) = await FetchFarmManureGroup(model.FarmId.Value);
+                        (var farmManureGroupList, error) = await PopulateFarmManureListAsync(model);
                         if (error != null)
                         {
                             TempData["ManureGroupError"] = error.Message;
-                        }
-                        if (farmManureGroupList.Any())
-                        {
-                            var selectListItems = ToSelectList(farmManureGroupList, f => f.ID.ToString(), f => f.ManureTypeName);
-                            ViewBag.FarmManureTypeList = selectListItems;
                         }
                     }
                     return View(model);
@@ -1285,6 +1273,32 @@ managementPeriod.CropID.HasValue
             SetOrganicManureToSession(model);
             return RedirectToAction("ManureType");
         }
+
+        private async Task<(List<SelectListItem> manureGroupList, Error? error)> PopulateManureGroupListAsync()
+        {
+            var (manureGroupList, error) = await FetchManureGroup();
+            ViewBag.ManureGroupList = manureGroupList;
+
+            return (manureGroupList, error);
+        }
+
+        private async Task<(List<FarmManureTypeResponse> farmManureGroupList, Error? error)> PopulateFarmManureListAsync(OrganicManureViewModel model)
+        {
+            var (farmManureGroupList, error) = await FetchFarmManureGroup(model.FarmId.Value);
+
+            if (error == null && farmManureGroupList.Any())
+            {
+                var selectListItems = ToSelectList(
+                    farmManureGroupList,
+                    f => f.ID.ToString(),
+                    f => f.ManureTypeName
+                );
+
+                ViewBag.FarmManureTypeList = selectListItems;
+            }
+
+            return (farmManureGroupList, error);
+        }
         private static bool IsOtherManureType(int? manureId)
         {
             return manureId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
@@ -1351,29 +1365,10 @@ managementPeriod.CropID.HasValue
                     if (!string.IsNullOrWhiteSpace(closedPeriod))
                     {
                         model = await GetDatesFromClosedPeriod(model, closedPeriod);
-                        string formattedStartDate = model.ClosedPeriodStartDate?.ToString("d MMMM yyyy");
-                        string formattedEndDate = model.ClosedPeriodEndDate?.ToString("d MMMM yyyy");
-
-                        CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
-                        List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
-                        int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
-                        (cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropTypeId);
-
-                        //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                        if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
-                        {
-                            model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
-                        }
-
+                        await SetClosedPeriodUIAsync(model);
                     }
-                    foreach (var fieldId in model.FieldList)
-                    {
-                        Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
-                        if (field != null && field.IsWithinNVZ == true)
-                        {
-                            model.IsWithinNVZ = true;
-                        }
-                    }
+                    model.IsWithinNVZ = await IsAnyFieldWithinNVZ(model.FieldList);
+
 
                 }
                 if (model.FieldList.Count == 1)
@@ -1428,20 +1423,7 @@ managementPeriod.CropID.HasValue
 
                 if (!ModelState.IsValid)
                 {
-
-                    List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
-                    int cropTypeId = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.CropTypeID).FirstOrDefault() ?? 0;
-                    CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
-                    (cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropTypeId);
-
-                    string formattedStartDate = model.ClosedPeriodStartDate?.ToString("d MMMM yyyy");
-                    string formattedEndDate = model.ClosedPeriodEndDate?.ToString("d MMMM yyyy");
-                    //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                    if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
-                    {
-                        model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
-                    }
-
+                    await SetClosedPeriodUIAsync(model);
                     return View(model);
                 }
 
@@ -1462,8 +1444,7 @@ managementPeriod.CropID.HasValue
 
                 if (model.FieldList.Count >= 1)
                 {
-                    farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-                    (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                     (farm, error) = await GetFarmAsync(model.EncryptedFarmId);
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
                         TempData["ManureApplyingDateError"] = error.Message;
@@ -1566,7 +1547,43 @@ managementPeriod.CropID.HasValue
             }
 
         }
+        private async Task SetClosedPeriodUIAsync(OrganicManureViewModel model)
+        {
+            List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
 
+            int cropTypeId = cropsResponse
+                .Where(x => x.Year == model.HarvestYear)
+                .Select(x => x.CropTypeID)
+                .FirstOrDefault() ?? 0;
+
+            var (cropTypeLinkingResponse, _) = await _organicManureLogic
+                .FetchCropTypeLinkingByCropTypeId(cropTypeId);
+
+            string formattedStartDate = model.ClosedPeriodStartDate?.ToString("d MMMM yyyy");
+            string formattedEndDate = model.ClosedPeriodEndDate?.ToString("d MMMM yyyy");
+
+            if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
+            {
+                model.ClosedPeriodForUI = $"{formattedStartDate} to {formattedEndDate}";
+            }
+        }
+        private async Task<(FarmResponse? farm, Error? error)> GetFarmAsync(string encryptedFarmId)
+        {
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(encryptedFarmId));
+            return await _farmLogic.FetchFarmByIdAsync(farmId);
+        }
+        private async Task<bool> IsAnyFieldWithinNVZ(List<string> fieldList)
+        {
+            foreach (var fieldId in fieldList)
+            {
+                var field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
+                if (field != null && field.IsWithinNVZ == true)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private async Task PopulateManureApplyingDateModel(OrganicManureViewModel model)
         {
             List<ManureType> manureTypeList = new List<ManureType>();
