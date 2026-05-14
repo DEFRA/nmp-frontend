@@ -446,7 +446,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
                         SetFertiliserManureToSession(model);
-                        TempData["CheckYourAnswerError"] = error?.Message;
+                        TempData["CheckYourAnswerError"] = error.Message;
                         return RedirectToAction(_checkAnswerActionName);
                     }
                     (var redirect, _) = BindFieldViewBegGet(fertiliserResponse, null, true, true);
@@ -781,29 +781,23 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         List<int> managementIds = new List<int>();
         (managementIds, error) = await _fertiliserManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldIds, (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll)) ? null : model.FieldGroup, (model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll)) ? 1 : null);
 
-        if (managementIds.Count > 0)
-        {
-            (model, fertiliserManureViewModel) = await BuildFertiliserManureList(managementIds, model, fertiliserManureViewModel, cropPlans);
-        }
-        else
+        if (error != null)
         {
             TempData[_fieldErrorTempDataKey] = error.Message;
             return (flowControl: false, value: View(model));
         }
+        (model, fertiliserManureViewModel) = await BuildFertiliserManureList(managementIds, model, fertiliserManureViewModel, cropPlans);
+
         if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
         {
             int grassCropCounter = 0;
             foreach (var field in model.FieldList)
             {
-                List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field)).ToList();
+                List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(field) && x.CropOrder == 1).ToList();
 
-                if (cropList.Count == 2)
-                {
-                    cropList = cropList.Where(x => x.CropOrder == 1).ToList();
-                }
                 if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
                 {
-                    (List<ManagementPeriod> managementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList.Select(x => x.CropID).FirstOrDefault(), false);
+                    (List<ManagementPeriod> managementPeriod, error) = await _cropLogic.FetchManagementperiodByCropId(cropList[0].CropID, false);
 
                     var filteredFertiliserManure = model.FertiliserManures?.Where(fm => managementPeriod.Any(mp => mp.ID == fm.ManagementPeriodID) &&
                     fm.Defoliation == null).ToList();

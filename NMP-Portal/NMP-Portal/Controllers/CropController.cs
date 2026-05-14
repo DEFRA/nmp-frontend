@@ -3158,7 +3158,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (!string.IsNullOrWhiteSpace(id))
                 {
-                    (bool flowControl, IActionResult? value,model) = await BindDataForHarvestYearOverview(id, year,  model);
+                    (bool flowControl, IActionResult? value,model) = await BindDataForHarvestYearOverview(id, year);
                     if (!flowControl && value != null)
                     {
                         return value;
@@ -3191,9 +3191,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return View(model);
     }
 
-    private async Task<(bool flowControl, IActionResult? value, PlanViewModel)> BindDataForHarvestYearOverview(string id, string year,  PlanViewModel? model)
+    private async Task<(bool flowControl, IActionResult? value, PlanViewModel)> BindDataForHarvestYearOverview(string id, string year)
     {
-        model = new PlanViewModel();
+        PlanViewModel model = new PlanViewModel();
         int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
         int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
         Error? error = null;
