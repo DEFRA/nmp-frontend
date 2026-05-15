@@ -2285,7 +2285,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 (isBasePlan, allSowingAreSame, firstSowingDate, counter) = await populateCropUpdateData(model, harvestYearPlanResponse, isBasePlan, allSowingAreSame, firstSowingDate, counter, yields);
 
 
-                BindSowingQuestionForCheckAnswer(model, harvestYearPlanResponse, allSowingAreSame);
+              model=  BindSowingQuestionForCheckAnswer(model, harvestYearPlanResponse, allSowingAreSame);
                 model.CropTypeID = harvestYearPlanResponse[0].CropTypeID;
                 model = await BindUpdateCropData(model, harvestYearPlanResponse, defaultYield, yields);
             }
@@ -2565,12 +2565,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    private static void BindSowingQuestionForCheckAnswer(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse, bool allSowingAreSame)
+    private static PlanViewModel BindSowingQuestionForCheckAnswer(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse, bool allSowingAreSame)
     {
         if (model.Crops != null && model.Crops.All(x => x.SowingDate != null) && model.SowingDateQuestion == null && allSowingAreSame && harvestYearPlanResponse.Count >= 1)
         {
             model.SowingDateQuestion = (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields;
         }
+        return model;
     }
 
     private async Task<PlanViewModel> BindUpdateCropData(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse, decimal defaultYield, List<decimal?> yields)
@@ -2587,7 +2588,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         else
         {
-            BindYieldQuestionForCheckAnswer(model, harvestYearPlanResponse, defaultYield, yields);
+            model= BindYieldQuestionForCheckAnswer(model, harvestYearPlanResponse, defaultYield, yields);
         }
         model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedHarvestYear));
         model.CropType = harvestYearPlanResponse[0].CropTypeName;
@@ -2599,7 +2600,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return model;
     }
 
-    private static void BindYieldQuestionForCheckAnswer(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse, decimal defaultYield, List<decimal?> yields)
+    private static PlanViewModel BindYieldQuestionForCheckAnswer(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse, decimal defaultYield, List<decimal?> yields)
     {
 
         bool allAreDefault = yields.All(y => y.HasValue && y.Value == defaultYield);
@@ -2623,7 +2624,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.YieldQuestion = (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield;
         }
 
-
+        return model;
     }
 
     private async Task<(bool isBasePlan, bool allSowingAreSame, DateTime? firstSowingDate, int counter)> populateCropUpdateData(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse, bool isBasePlan, bool allSowingAreSame, DateTime? firstSowingDate, int counter, List<decimal?> yields)
