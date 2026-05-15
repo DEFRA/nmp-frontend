@@ -2391,19 +2391,25 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
                 ViewBag.CropInfoOneList = cropInfoOneResponse.OrderBy(c => c.CropInfo1Name);
 
-                if (cropInfoOneResponse.Count > 0)
-                {
-                    model.CropInfo1Name = cropInfoOneResponse.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Name;
-                    model.CropInfo1 = cropInfoOneResponse.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Id;
-
-                    for (int i = 0; i < model.Crops?.Count; i++)
-                    {
-                        model.Crops[i].CropInfo1 = model.CropInfo1;
-                    }
-                }
+               model= BindCropInfoOneForCheckAnswer(model, cropInfoOneResponse);
 
             }
         }
+    }
+
+    private static PlanViewModel BindCropInfoOneForCheckAnswer(PlanViewModel model, List<CropInfoOneResponse> cropInfoOneResponse)
+    {
+        if (cropInfoOneResponse.Count > 0)
+        {
+            model.CropInfo1Name = cropInfoOneResponse.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Name;
+            model.CropInfo1 = cropInfoOneResponse.FirstOrDefault(x => x.CropInfo1Name == Resource.lblNone)?.CropInfo1Id;
+
+            for (int i = 0; i < model.Crops?.Count; i++)
+            {
+                model.Crops[i].CropInfo1 = model.CropInfo1;
+            }
+        }
+        return model;
     }
 
     private async Task<(PlanViewModel, List<HarvestYearPlanResponse>?)> BindEncryptedPropertiesAndViewBegForCheckAnswer(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse, List<Field> allFieldList, List<Field> fieldList)
@@ -2516,21 +2522,27 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (!model.Crops.Any(x => x.FieldID == removableField.FieldID))
                 {
-                    (Crop? crop, _) = await _cropLogic.FetchCropById(removableField.CropID);
-                    if (crop != null)
-                    {
-                        crop.FieldName = allFieldList.Where(x => x.ID == removableField.FieldID).Select(x => x.Name).FirstOrDefault();
-                        model.Crops.Add(crop);
-                    }
-                    bool isNeedToAddField = (model.FieldList != null && !model.FieldList.Contains(removableField.FieldID.ToString()));
-                    if (isNeedToAddField)
-                    {
-                        model.FieldList.Add(removableField.FieldID.ToString());
-                    }
+                    model=await AddedNewFieldInListForCheckAnswer(model, allFieldList, removableField);
                 }
             }
         }
 
+    }
+
+    private async Task<PlanViewModel> AddedNewFieldInListForCheckAnswer(PlanViewModel model, List<Field> allFieldList, HarvestYearPlanResponse removableField)
+    {
+        (Crop? crop, _) = await _cropLogic.FetchCropById(removableField.CropID);
+        if (crop != null)
+        {
+            crop.FieldName = allFieldList.Where(x => x.ID == removableField.FieldID).Select(x => x.Name).FirstOrDefault();
+            model.Crops.Add(crop);
+        }
+        bool isNeedToAddField = (model.FieldList != null && !model.FieldList.Contains(removableField.FieldID.ToString()));
+        if (isNeedToAddField)
+        {
+            model.FieldList.Add(removableField.FieldID.ToString());
+        }
+        return model;
     }
 
     private static void RemoveNewlyAddedFields(PlanViewModel model, List<Field> newlyAddedFields)
