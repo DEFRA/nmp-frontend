@@ -425,7 +425,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             IActionResult? value = null;
             if (model == null)
             {
-                return RedirectNoSessionFound(model);
+                return RedirectNoSessionFound();
             }
 
             model.CropOrder = 1;
@@ -490,7 +490,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return View(model);
     }
 
-    private IActionResult RedirectNoSessionFound(FertiliserManureViewModel? model)
+    private IActionResult RedirectNoSessionFound()
     {
 
         _logger.LogError("Fertiliser Manure Controller : Session not found in FieldGroup() action");
