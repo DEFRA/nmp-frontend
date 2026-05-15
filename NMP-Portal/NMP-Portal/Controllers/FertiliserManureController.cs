@@ -422,16 +422,16 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         Error? error = null;
         try
         {
+            IActionResult? value = null;
             if (model == null)
             {
-                _logger.LogError("Fertiliser Manure Controller : Session not found in FieldGroup() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectNoSessionFound(model);
             }
 
             model.CropOrder = 1;
             if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
             {
-                (bool flowControl, IActionResult? value) = await BindFieldDataForAdd(model, error);
+                (bool flowControl, value) = await BindFieldDataForAdd(model);
                 if (!flowControl && value != null)
                 {
                     return value;
@@ -444,7 +444,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (isAllDataAvailable)
                 {
                     (List<FertiliserAndOrganicManureUpdateResponse> fertiliserResponse, error) = await _fertiliserManureLogic.FetchFieldWithSameDateAndNutrient(decryptedId, model.FarmId.Value, model.HarvestYear.Value);
-                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
                     {
                         SetFertiliserManureToSession(model);
                         TempData[_checkYourAnswerErrorDataKey] = error.Message;
@@ -475,7 +475,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Fertiliser Controller : Exception in Fields() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            if (model != null && string.IsNullOrWhiteSpace(model.EncryptedFertId))
+            if (string.IsNullOrWhiteSpace(model?.EncryptedFertId))
             {
                 TempData[_fieldGroupErrorTempDataKey] = ex.Message;
                 ClearTempErrors(_fieldErrorTempDataKey);
@@ -490,9 +490,17 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return View(model);
     }
 
-    private async Task<(bool flowControl, IActionResult? value)> BindFieldDataForAdd(FertiliserManureViewModel? model, Error error)
+    private IActionResult RedirectNoSessionFound(FertiliserManureViewModel? model)
     {
-        (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+
+        _logger.LogError("Fertiliser Manure Controller : Session not found in FieldGroup() action");
+        return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+
+    }
+
+    private async Task<(bool flowControl, IActionResult? value)> BindFieldDataForAdd(FertiliserManureViewModel? model)
+    {
+        (List<CommonResponse> fieldList, Error? error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
         (bool flowControl, IActionResult? value) = BindErrorAndRedirectForField(error);
         if (!flowControl && value != null)
         {
@@ -694,11 +702,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     public async Task<IActionResult> Fields(FertiliserManureViewModel model)
     {
         _logger.LogTrace("Fertiliser Manure Controller : Fields() post action called");
-        Error? error = null;
+
         try
         {
-            (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
-            if (fieldList != null && fieldList.Count > 0)
+            (List<CommonResponse> fieldList, Error? error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, model.FieldGroup.Equals(Resource.lblSelectSpecificFields) || model.FieldGroup.Equals(Resource.lblAll) ? null : model.FieldGroup);
+            if (fieldList.Count > 0)
             {
                 (_, var selectListItem) = BindFieldViewBegGet(null, fieldList, false, false);
                 if (!string.IsNullOrWhiteSpace(model.EncryptedFertId))
@@ -711,7 +719,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     (_, selectListItem) = BindFieldViewBegGet(fertiliserResponse, null, true, false);
                 }
                 (List<HarvestYearPlanResponse> cropPlans, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
-                if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     return RedirectForFieldError(model, error);
                 }
