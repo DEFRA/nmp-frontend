@@ -2391,13 +2391,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 List<CropInfoOneResponse> cropInfoOneResponse = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
                 ViewBag.CropInfoOneList = cropInfoOneResponse.OrderBy(c => c.CropInfo1Name);
 
-               model= BindCropInfoOneForCheckAnswer(model, cropInfoOneResponse);
+             BindCropInfoOneForCheckAnswer(model, cropInfoOneResponse);
 
             }
         }
     }
 
-    private static PlanViewModel BindCropInfoOneForCheckAnswer(PlanViewModel model, List<CropInfoOneResponse> cropInfoOneResponse)
+    private static void BindCropInfoOneForCheckAnswer(PlanViewModel model, List<CropInfoOneResponse> cropInfoOneResponse)
     {
         if (cropInfoOneResponse.Count > 0)
         {
@@ -2409,7 +2409,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.Crops[i].CropInfo1 = model.CropInfo1;
             }
         }
-        return model;
     }
 
     private async Task<(PlanViewModel, List<HarvestYearPlanResponse>?)> BindEncryptedPropertiesAndViewBegForCheckAnswer(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse, List<Field> allFieldList, List<Field> fieldList)
