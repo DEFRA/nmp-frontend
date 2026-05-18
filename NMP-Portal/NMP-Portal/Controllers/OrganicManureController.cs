@@ -2488,8 +2488,7 @@ managementPeriod.CropID.HasValue
                 {
                     ViewBag.Error = error1.Message;
                 }
-                ResetWarnings(model);
-                model.IsWarningMsgNeedToShow = false;
+                ResetWarnings(model,true);
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             }
             catch (Exception ex)
@@ -2561,7 +2560,7 @@ managementPeriod.CropID.HasValue
                         }
                     }
 
-                    ResetWarnings(model);
+                    ResetWarnings(model,false);
                     string message = string.Empty;
 
                     OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
@@ -2665,8 +2664,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    ResetWarnings(model);
-                    model.IsWarningMsgNeedToShow = false;
+                    ResetWarnings(model,true);
                 }
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 return RedirectToAction("IncorporationMethod");
@@ -2702,8 +2700,7 @@ managementPeriod.CropID.HasValue
 
                 (List<CommonResponse> manureGroupList, Error error1) = await _mannerLogic.FetchManureGroupList();
                 model.ManureGroupName = (error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
-                ResetWarnings(model);
-                model.IsWarningMsgNeedToShow = false;
+                ResetWarnings(model, true);
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 return View(model);
             }
@@ -2733,7 +2730,7 @@ managementPeriod.CropID.HasValue
                 {
                     return View("ManualApplicationRate", model);
                 }
-                ResetWarnings(model);
+                ResetWarnings(model, false);
 
                 string message = string.Empty;
 
@@ -2839,8 +2836,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    ResetWarnings(model);
-                    model.IsWarningMsgNeedToShow = false;
+                    ResetWarnings(model, true);
                 }
 
                 model.Area = null;
@@ -2885,8 +2881,7 @@ managementPeriod.CropID.HasValue
             {
                 return RedirectToAction(_farmList, "Farm");
             }
-            ResetWarnings(model);
-            model.IsWarningMsgNeedToShow = false;
+            ResetWarnings(model, true);
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             return View(model);
         }
@@ -2915,7 +2910,7 @@ managementPeriod.CropID.HasValue
                     orgManure.ApplicationRate = model.ApplicationRate.Value;
                 }
             }
-            ResetWarnings(model);
+            ResetWarnings(model, false);
             string message = string.Empty;
             OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
             if (organicManureViewModel == null)
@@ -3017,8 +3012,7 @@ managementPeriod.CropID.HasValue
             }
             else
             {
-                ResetWarnings(model);
-                model.IsWarningMsgNeedToShow = false;
+                ResetWarnings(model, true);
             }
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange) && (!model.IsAnyChangeInField))
@@ -4142,7 +4136,7 @@ managementPeriod.CropID.HasValue
                     }
                 }
                 string message = string.Empty;
-                ResetWarnings(model);
+                ResetWarnings(model, false);
                 model.IsAnyChangeInField = false;
                 model.IsDoubleCropValueChange = false;
 
@@ -9323,8 +9317,12 @@ managementPeriod.CropID.HasValue
                 : manureType?.Name ?? string.Empty;
         }
 
-        private static void ResetWarnings(OrganicManureViewModel model)
+        private static void ResetWarnings(OrganicManureViewModel model, bool isWarningMsgNeedToShowReset)
         {
+            if(isWarningMsgNeedToShowReset)
+            {
+                model.IsWarningMsgNeedToShow = false;
+            }
             model.IsOrgManureNfieldLimitWarning = false;
             model.IsNMaxLimitWarning = false;
             model.IsEndClosedPeriodFebruaryWarning = false;
