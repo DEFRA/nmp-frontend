@@ -4398,12 +4398,14 @@ managementPeriod.CropID.HasValue
                                 else
                                 {
                                     TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
+                                    await PrepareFieldDataAsync(model);
                                     return View(model);
                                 }
                             }
                             else
                             {
                                 TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
+                                await PrepareFieldDataAsync(model);
                                 return View(model);
                             }
                         }
@@ -4412,6 +4414,7 @@ managementPeriod.CropID.HasValue
                     else
                     {
                         TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
+                        await PrepareFieldDataAsync(model);
                         return View(model);
                     }
 
@@ -4522,6 +4525,7 @@ managementPeriod.CropID.HasValue
                 if (!success || error != null)
                 {
                     TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
+                    await PrepareFieldDataAsync(model);
                     return View(model);
                 }
 
@@ -9174,17 +9178,17 @@ managementPeriod.CropID.HasValue
             organicManure.UricAcid = model.UricAcid;
         }
 
-        private static void SetDefaultNutrients(dynamic manureType, OrganicManureDataViewModel organicManure)
+        private static void SetDefaultNutrients(ManureType manureType, OrganicManureDataViewModel organicManure)
         {
-            organicManure.DryMatterPercent = manureType.DryMatter.Value;
-            organicManure.K2O = manureType.K2O.Value;
-            organicManure.MgO = manureType.MgO.Value;
-            organicManure.N = manureType.TotalN.Value;
-            organicManure.NH4N = manureType.NH4N.Value;
-            organicManure.NO3N = manureType.NO3N.Value;
-            organicManure.P2O5 = manureType.P2O5.Value;
-            organicManure.SO3 = manureType.SO3.Value;
-            organicManure.UricAcid = manureType.Uric.Value;
+            organicManure.DryMatterPercent = manureType.DryMatter;
+            organicManure.K2O = manureType.K2O;
+            organicManure.MgO = manureType.MgO;
+            organicManure.N = manureType.TotalN;
+            organicManure.NH4N = manureType.NH4N;
+            organicManure.NO3N = manureType.NO3N;
+            organicManure.P2O5 = manureType.P2O5;
+            organicManure.SO3 = manureType.SO3;
+            organicManure.UricAcid = manureType.Uric;
         }
 
         private static void ApplyAutumnCropNitrogen(OrganicManureViewModel model, OrganicManureDataViewModel organicManure, int index)

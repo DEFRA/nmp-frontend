@@ -3223,7 +3223,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     InorganicFertiliserList = new List<InorganicFertiliserResponse>(),
                 };
 
-                BindFieldDataForHarvestYearOverviewPage(allCropDetails, harvestYearPlans);
+                BindFieldDataForHarvestYearOverviewPage(allCropDetails, harvestYearPlans, model);
 
                 (bool isSuccess, IActionResult? actionResult) = await BindOrganicManureDataForHarvestYearOverviewPage(model, error, harvestYearPlanResponse, harvestYearPlans);
                 if (!isSuccess && actionResult != null)
@@ -3396,7 +3396,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (flowControl: true, value: null);
     }
 
-    private void BindFieldDataForHarvestYearOverviewPage(List<CropDetailResponse> allCropDetails, HarvestYearPlans harvestYearPlans)
+    private void BindFieldDataForHarvestYearOverviewPage(List<CropDetailResponse> allCropDetails, HarvestYearPlans harvestYearPlans, PlanViewModel model)
     {
         var groupedResult = allCropDetails
                             .GroupBy(crop => new { crop.CropTypeName, crop.CropGroupName, crop.CropTypeID })
@@ -3408,6 +3408,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                                 HarvestPlans = g.ToList()
                             })
                             .OrderBy(g => g.CropTypeName);
+        model.FieldCount = allCropDetails.Select(h => h.FieldID).Distinct().Count();
         foreach (var group in groupedResult)
         {
             var newField = new HarvestYearPlanFields
