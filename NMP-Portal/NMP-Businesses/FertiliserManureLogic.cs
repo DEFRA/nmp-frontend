@@ -451,7 +451,6 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
             model.FieldName = model.DefoliationList[model.DefoliationCurrentCounter].FieldName;
         }
         List<Crop> cropList = new List<Crop>();
-        string cropTypeName = string.Empty;
         bool isDefoliationListNeedToCreate = (model.DefoliationList == null || model.IsAnyChangeInField ||
         (model.DefoliationList != null && model.FertiliserManures.Where(x => x.IsGrass).Select(x => x.FieldID).Any(fieldId => !model.DefoliationList.Select(d => d.FieldID).Contains(fieldId.Value))));
         if (isDefoliationListNeedToCreate)

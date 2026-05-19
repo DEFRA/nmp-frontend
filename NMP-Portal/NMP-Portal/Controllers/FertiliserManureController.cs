@@ -2998,60 +2998,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Defoliation(string q)
-    {
-        _logger.LogTrace("Fertiliser Manure Controller : Defoliation({Q}) action called", q);
-        FertiliserManureViewModel? model = GetFertiliserManureFromSession();
 
-        if (model == null)
-        {
-            _logger.LogError("Fertiliser Manure Controller : Session not found in Defoliation() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-        }
-        try
-        {
-            bool isComingFirstTime = (string.IsNullOrWhiteSpace(q) && model != null && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) || (model.IsAnyChangeInField || model.IsCropGroupChange)));
-            bool isThisComingForRedirect = (!string.IsNullOrWhiteSpace(q) && model != null && (model.FertiliserManures != null && model.FertiliserManures.Count > 0));
-            if (isComingFirstTime)
-            {
-                await BindDefoliationData(model);
-            }
-            else if (isThisComingForRedirect)
-            {
-                int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
-                int index = itemCount - 1;
-                (bool flowControl, IActionResult? value) = RedirectForDefoliationGet(model, itemCount);
-                if (!flowControl && value != null)
-                {
-                    return value;
-                }
-                model.FieldID = model.DefoliationList[index].FieldID;
-                model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DefoliationList[index].FieldID)).Name;
-                model.DefoliationCurrentCounter = index;
-                model.IsSameDefoliationForAll = model.IsSameDefoliationForAll ?? false;
-                model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
-                SetFertiliserManureToSession(model);
-            }
-            if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
-            {
-                (model, List<Crop> cropList) = await _fertiliserManureLogic.HandleDefoliationList(model);
-                (bool flowControl, IActionResult? value) = await PrepareDefoliationList(model, cropList);
-                if (!flowControl && value != null)
-                {
-                    return value;
-                }
-            }
-            await BindViewBegForDefoliationList(model);
-            SetFertiliserManureToSession(model);
-            return View(model);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogTrace("Fertiliser Controller : Exception in Defoliation() action : {0}, {1}", ex.Message, ex.StackTrace);
-            return BindErrorForDefoliationGet(model, ex.Message);
-        }
-    }
 
 
 
@@ -3088,6 +3035,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     return (flowControl: false, value: value);
                 }
             }
+            counter++;
         }
 
 
@@ -3127,7 +3075,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 Counter = counter,
             };
             model.DefoliationList.Add(defoliationList);
-            counter++;
         }
 
         return (flowControl: true, value: null);
@@ -3162,7 +3109,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             model.DefoliationEncryptedCounter = string.Empty;
             SetFertiliserManureToSession(model);
 
-            if (model.GrassCropCount != null && model.GrassCropCount.Value > 1 && model.NeedToShowSameDefoliationForAll)
+            bool isNeedToShowAllDefoliation = (model.GrassCropCount != null && model.GrassCropCount.Value > 1 && model.NeedToShowSameDefoliationForAll);
+            bool isThisSelectSpecificAndcomingFromRecommendation = model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation;
+            if (isNeedToShowAllDefoliation)
             {
                 return (flowControl: false, value: RedirectToAction("IsSameDefoliationForAll"));
             }
@@ -3170,9 +3119,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 return (flowControl: false, value: RedirectToAction(_doubleCropActionName, new { q = model.DoubleCropEncryptedCounter }));
             }
-            if (model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation)
+            if (isThisSelectSpecificAndcomingFromRecommendation)
             {
-                if (model.FieldList.Count > 0 && model.FieldList.Count == 1)
+                if (model.FieldList.Count == 1)
                 {
                     string fieldId = model.FieldList[0];
                     return (flowControl: false, value: RedirectToAction(_recommendationsActionName, "Crop", new
@@ -3190,7 +3139,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             return (flowControl: false, value: RedirectToAction(_fieldGroupActionName));
         }
-        if (model.IsCheckAnswer && model.IsDoubleCropAvailable && model.IsDoubleCropValueChange && (!model.NeedToShowSameDefoliationForAll))
+
+        bool needToRedirectToDoubleCropAction = (model.IsCheckAnswer && model.IsDoubleCropAvailable && model.IsDoubleCropValueChange && (!model.NeedToShowSameDefoliationForAll));
+        if (needToRedirectToDoubleCropAction)
         {
             return (flowControl: false, value: RedirectToAction(_doubleCropActionName, new { q = model.DoubleCropEncryptedCounter }));
         }
@@ -3214,7 +3165,60 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         SetFertiliserManureToSession(model);
     }
+    [HttpGet]
+    public async Task<IActionResult> Defoliation(string q)
+    {
+        _logger.LogTrace("Fertiliser Manure Controller : Defoliation({Q}) action called", q);
+        FertiliserManureViewModel? model = GetFertiliserManureFromSession();
 
+        if (model == null)
+        {
+            _logger.LogError("Fertiliser Manure Controller : Session not found in Defoliation() action");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+        try
+        {
+            bool isComingFirstTime = (string.IsNullOrWhiteSpace(q) && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) || (model.IsAnyChangeInField || model.IsCropGroupChange)));
+            bool isThisComingForRedirect = (!string.IsNullOrWhiteSpace(q) && (model.FertiliserManures != null && model.FertiliserManures.Count > 0));
+            if (isComingFirstTime)
+            {
+                await BindDefoliationData(model);
+            }
+            else if (isThisComingForRedirect)
+            {
+                int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
+                int index = itemCount - 1;
+                (bool flowControl, IActionResult? value) = RedirectForDefoliationGet(model, itemCount);
+                if (!flowControl && value != null)
+                {
+                    return value;
+                }
+                model.FieldID = model.DefoliationList[index].FieldID;
+                model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DefoliationList[index].FieldID)).Name;
+                model.DefoliationCurrentCounter = index;
+                model.IsSameDefoliationForAll = model.IsSameDefoliationForAll ?? false;
+                model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+                SetFertiliserManureToSession(model);
+            }
+            if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
+            {
+                (model, List<Crop> cropList) = await _fertiliserManureLogic.HandleDefoliationList(model);
+                (bool flowControl, IActionResult? value) = await PrepareDefoliationList(model, cropList);
+                if (!flowControl && value != null)
+                {
+                    return value;
+                }
+            }
+            await BindViewBegForDefoliationList(model);
+            SetFertiliserManureToSession(model);
+            return View(model);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace("Fertiliser Controller : Exception in Defoliation() action : {0}, {1}", ex.Message, ex.StackTrace);
+            return BindErrorForDefoliationGet(model, ex.Message);
+        }
+    }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Defoliation(FertiliserManureViewModel model)
@@ -3485,44 +3489,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_fieldGroupActionName);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> IsSameDefoliationForAll()
-    {
-        _logger.LogTrace($"Fertiliser Controller : IsSameDefoliationForAll() action called");
-        Error error = new Error();
 
-        FertiliserManureViewModel? model = GetFertiliserManureFromSession();
-        if (model == null)
-        {
-            _logger.LogError("Fertiliser Manure Controller : Session not found in IsSameDefoliationForAll() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-        }
-        if (model.IsAnyChangeInSameDefoliationFlag)
-        {
-            model.IsAnyChangeInSameDefoliationFlag = false;
-        }
-
-        List<FertiliserManureDataViewModel> fertiliserGrassList = model.FertiliserManures.Where(x => x.IsGrass).ToList();
-        List<List<SelectListItem>> allDefoliations = await BindAllDefoliation(error, model, fertiliserGrassList);
-
-        if (allDefoliations.Count > 0)
-        {
-            List<List<string>> defoliationSequenceList = allDefoliations
-        .Select(list => list.Select(item => item.Text).ToList())
-        .ToList();
-
-            if (defoliationSequenceList.Count > 0)
-            {
-                (bool flowControl, IActionResult? value) = await RedirectForIsSameDefoliationForAll(model, allDefoliations, defoliationSequenceList);
-                if (!flowControl && value != null)
-                {
-                    return value;
-                }
-            }
-        }
-        SetFertiliserManureToSession(model);
-        return View(model);
-    }
 
     private async Task<(bool flowControl, IActionResult? value)> RedirectForIsSameDefoliationForAll(FertiliserManureViewModel model, List<List<SelectListItem>> allDefoliations, List<List<string>> defoliationSequenceList)
     {
@@ -3553,14 +3520,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 .Select(d => d.FieldID)
                 .ToList();
 
-                if (defoIds != null)
-                {
-                    model.FieldID = model.FertiliserManures
-                        .Where(x => x.IsGrass)
-                        .Select(x => x.FieldID)
-                        .FirstOrDefault(fid => fid != null && !defoIds.Contains(fid.Value));
-                    model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value)).Name;
-                }
+
+                model.FieldID = model.FertiliserManures
+                    .Where(x => x.IsGrass)
+                    .Select(x => x.FieldID)
+                    .FirstOrDefault(fid => fid != null && !defoIds.Contains(fid.Value));
+                model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value)).Name;
+
                 model.DefoliationCurrentCounter = model.DefoliationList.Count;
                 model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
             }
@@ -3591,31 +3557,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     List<int> defoliationList = managementPeriod.Select(x => x.Defoliation.Value).ToList();
                     List<SelectListItem> defoliationSelectList = new List<SelectListItem>();
                     (Crop? crop, error) = await _cropLogic.FetchCropById(cropId);
-                    if (crop != null && defoliationSequenceID != null)
-                    {
-                        (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                        if (defoliationSequence != null)
-                        {
-                            string description = defoliationSequence.DefoliationSequenceDescription;
-                            string[] defoliationParts = description.Split(',')
-                                                                    .Select(x => x.Trim())
-                                                                    .ToArray();
-                            List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
-                            foreach (int defoliation in defoliationList)
-                            {
-                                string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
-                                ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
-                                : defoliation.ToString();
-
-                                allDefoliationWithName.Add(new SelectListItem
-                                {
-                                    Text = text,
-                                    Value = defoliation.ToString()
-                                });
-                            }
-                            allDefoliations.Add(allDefoliationWithName);
-                        }
-                    }
+                    allDefoliations = await PrepairAllDefoiliationList(error, allDefoliations, defoliationSequenceID, defoliationList, crop);
                 }
             }
         }
@@ -3623,6 +3565,75 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return allDefoliations;
     }
 
+    private async Task<List<List<SelectListItem>>> PrepairAllDefoiliationList(Error error, List<List<SelectListItem>> allDefoliations, int? defoliationSequenceID, List<int> defoliationList, Crop? crop)
+    {
+        if (crop != null && defoliationSequenceID != null)
+        {
+            (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            if (defoliationSequence != null)
+            {
+                string description = defoliationSequence.DefoliationSequenceDescription;
+                string[] defoliationParts = description.Split(',')
+                                                        .Select(x => x.Trim())
+                                                        .ToArray();
+                List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
+                foreach (int defoliation in defoliationList)
+                {
+                    string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                    ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                    : defoliation.ToString();
+
+                    allDefoliationWithName.Add(new SelectListItem
+                    {
+                        Text = text,
+                        Value = defoliation.ToString()
+                    });
+                }
+                allDefoliations.Add(allDefoliationWithName);
+            }
+        }
+
+        return allDefoliations;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> IsSameDefoliationForAll()
+    {
+        _logger.LogTrace($"Fertiliser Controller : IsSameDefoliationForAll() action called");
+        Error error = new Error();
+
+        FertiliserManureViewModel? model = GetFertiliserManureFromSession();
+        if (model == null)
+        {
+            _logger.LogError("Fertiliser Manure Controller : Session not found in IsSameDefoliationForAll() action");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+        if (model.IsAnyChangeInSameDefoliationFlag)
+        {
+            model.IsAnyChangeInSameDefoliationFlag = false;
+        }
+
+        List<FertiliserManureDataViewModel> fertiliserGrassList = model.FertiliserManures.Where(x => x.IsGrass).ToList();
+        List<List<SelectListItem>> allDefoliations = await BindAllDefoliation(error, model, fertiliserGrassList);
+
+        if (allDefoliations.Count > 0)
+        {
+            List<List<string>> defoliationSequenceList = allDefoliations
+        .Select(list => list.Select(item => item.Text).ToList())
+        .ToList();
+
+            if (defoliationSequenceList.Any())
+            {
+                (bool flowControl, IActionResult? value) = await RedirectForIsSameDefoliationForAll(model, allDefoliations, defoliationSequenceList);
+                if (!flowControl && value != null)
+                {
+                    return value;
+                }
+            }
+        }
+        SetFertiliserManureToSession(model);
+        return View(model);
+    }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult IsSameDefoliationForAll(FertiliserManureViewModel model)
@@ -3677,67 +3688,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_defoliationActionName);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> DoubleCrop(string q)
-    {
-        _logger.LogTrace("Fertiliser Manure Controller : DoubleCrop({0}) action called", q);
-        FertiliserManureViewModel? model = GetFertiliserManureFromSession();
-        try
-        {
-            if (model == null)
-            {
-                _logger.LogError("Fertiliser Manure Controller : Session not found in DoubleCrop() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-            }
 
-            bool isComingFirstTime = (string.IsNullOrWhiteSpace(q) && model.FertiliserManures != null && model.FertiliserManures.Count > 0
-  && (model.IsAnyChangeInField || model.IsCropGroupChange));
-            bool isThisForRedirect = (!string.IsNullOrWhiteSpace(q) && (model.DoubleCrop != null && model.DoubleCrop.Count > 0));
-
-            if (isComingFirstTime)
-            {
-                model.DoubleCropCurrentCounter = 0;
-                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
-                SetFertiliserManureToSession(model);
-            }
-            else if (isThisForRedirect)
-            {
-                int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
-                int index = itemCount - 1;
-                if (itemCount == 0)
-                {
-                    model.DoubleCropCurrentCounter = 0;
-                    model.DoubleCropEncryptedCounter = string.Empty;
-                    SetFertiliserManureToSession(model);
-                    if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField))
-                    {
-                        return RedirectToAction(_checkAnswerActionName);
-                    }
-
-                    return BackActionForInOrganicAndDoubleCrop(model);
-                }
-                model.FieldID = model.DoubleCrop[index].FieldID;
-                model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DoubleCrop[index].FieldID)).Name;
-                model.DoubleCropCurrentCounter = index;
-                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
-            }
-            if (model.FieldList != null && model.FieldList.Count > 0)
-            {
-                (bool flowControl, IActionResult value) = await PrepareDoubleCroppingList(model);
-                if (!flowControl && value != null)
-                {
-                    return value;
-                }
-            }
-
-            SetFertiliserManureToSession(model);
-        }
-        catch (Exception ex)
-        {
-            return BindErrorForDoubleCropping(model, ex.Message);
-        }
-        return View(model);
-    }
 
     private async Task<(bool flowControl, IActionResult? value)> PrepareDoubleCroppingList(FertiliserManureViewModel? model)
     {
@@ -3846,7 +3797,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             (cropList, _) = await _cropLogic.FetchCropPlanByFieldIdAndYear(fieldId, model.HarvestYear.Value);
             if (cropList != null && cropList.Count == 2)
             {
-                var cropTypeId = cropList.FirstOrDefault()?.CropTypeID;
+                var cropTypeId = cropList[0]?.CropTypeID;
                 if (cropTypeId.HasValue)
                 {
                     cropTypeName = await _fieldLogic.FetchCropTypeById(cropTypeId.Value);
@@ -3869,7 +3820,67 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return (cropList, cropTypeName);
     }
+    [HttpGet]
+    public async Task<IActionResult> DoubleCrop(string q)
+    {
+        _logger.LogTrace("Fertiliser Manure Controller : DoubleCrop({0}) action called", q);
+        FertiliserManureViewModel? model = GetFertiliserManureFromSession();
+        try
+        {
+            if (model == null)
+            {
+                _logger.LogError("Fertiliser Manure Controller : Session not found in DoubleCrop() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
 
+            bool isComingFirstTime = (string.IsNullOrWhiteSpace(q) && model.FertiliserManures != null && model.FertiliserManures.Count > 0
+  && (model.IsAnyChangeInField || model.IsCropGroupChange));
+            bool isThisForRedirect = (!string.IsNullOrWhiteSpace(q) && (model.DoubleCrop != null && model.DoubleCrop.Count > 0));
+
+            if (isComingFirstTime)
+            {
+                model.DoubleCropCurrentCounter = 0;
+                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
+                SetFertiliserManureToSession(model);
+            }
+            else if (isThisForRedirect)
+            {
+                int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
+                int index = itemCount - 1;
+                if (itemCount == 0)
+                {
+                    model.DoubleCropCurrentCounter = 0;
+                    model.DoubleCropEncryptedCounter = string.Empty;
+                    SetFertiliserManureToSession(model);
+                    if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField))
+                    {
+                        return RedirectToAction(_checkAnswerActionName);
+                    }
+
+                    return BackActionForInOrganicAndDoubleCrop(model);
+                }
+                model.FieldID = model.DoubleCrop[index].FieldID;
+                model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DoubleCrop[index].FieldID)).Name;
+                model.DoubleCropCurrentCounter = index;
+                model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
+            }
+            if (model.FieldList != null && model.FieldList.Count > 0)
+            {
+                (bool flowControl, IActionResult value) = await PrepareDoubleCroppingList(model);
+                if (!flowControl && value != null)
+                {
+                    return value;
+                }
+            }
+
+            SetFertiliserManureToSession(model);
+        }
+        catch (Exception ex)
+        {
+            return BindErrorForDoubleCropping(model, ex.Message);
+        }
+        return View(model);
+    }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DoubleCrop(FertiliserManureViewModel model)
