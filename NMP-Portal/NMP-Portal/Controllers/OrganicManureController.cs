@@ -1451,42 +1451,7 @@ managementPeriod.CropID.HasValue
                     {
                         if (farm != null)
                         {
-                            bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
-                            if (model.FieldList != null && model.FieldList.Count > 0)
-                            {
-                                foreach (var fieldId in model.FieldList)
-                                {
-                                    Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
-                                    if (field != null && field.IsWithinNVZ.Value)
-                                    {
-
-                                        CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
-                                        if (!(IsOtherManureType(model.ManureGroupIdForFilter)))
-                                        {
-                                            //skip elosed period warning message for crop which has 0 NMax
-                                            Crop crop = null;
-                                            if (model.OrganicManures.Any(x => x.FieldID == Convert.ToInt32(fieldId)))
-                                            {
-                                                int manId = model.OrganicManures.Where(x => x.FieldID == Convert.ToInt32(fieldId)).Select(x => x.ManagementPeriodID).FirstOrDefault();
-
-                                                (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(manId);
-                                                (crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-
-                                                (cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop?.CropTypeID ?? 0);
-                                            }
-                                            //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                                            if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
-                                            {
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), farm, crop?.SowingDate, crop?.ID ?? 0);
-                                            }
-
-
-                                        }
-
-
-                                    }
-                                }
-                            }
+                            (model, error) = await ProcessNVZClosedPeriodWarningAsync(model, farm);
                         }
                     }
 
@@ -4222,41 +4187,7 @@ managementPeriod.CropID.HasValue
                     {
                         if (farm != null)
                         {
-                            bool nonRegisteredOrganicProducer = farm.RegisteredOrganicProducer.Value;
-                            if (model.OrganicManures != null && model.OrganicManures.Count > 0)
-                            {
-                                foreach (var organicManure in model.OrganicManures)
-                                {
-                                    int? fieldId = organicManure.FieldID ?? null;
-                                    if (fieldId != null)
-                                    {
-                                        Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
-                                        if (field != null && field.IsWithinNVZ.Value && !(IsOtherManureType(model.ManureTypeId)))
-                                        {
-                                            Crop crop = null;
-                                            CropTypeLinkingResponse cropTypeLinkingResponse = new CropTypeLinkingResponse();
-
-                                            (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
-                                            (crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-
-                                            (cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID ?? 0);
-
-
-                                            //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
-                                            if (cropTypeLinkingResponse.NMaxLimitEngland != 0)
-                                            {
-                                                (model, error) = await IsClosedPeriodWarningMessage(model, field.IsWithinNVZ.Value, farm.RegisteredOrganicProducer.Value, Convert.ToInt32(fieldId), farm, crop.SowingDate, managementPeriod.CropID.Value);
-
-                                                if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                                                {
-                                                    return HandleError(model, error);
-                                                }
-                                            }
-
-                                        }
-                                    }
-                                }
-                            }
+                            (model, error) = await ProcessNVZClosedPeriodWarningAsync(model, farm);
                         }
                     }
                 }
@@ -4312,6 +4243,60 @@ managementPeriod.CropID.HasValue
                 }
             }
             return View(model);
+        }
+
+        private async Task<(OrganicManureViewModel model, Error error)> ProcessNVZClosedPeriodWarningAsync(OrganicManureViewModel model, Farm farm)
+        {
+            Error error = null;
+
+            if (model?.OrganicManures == null || !model.OrganicManures.Any())
+                return (model, error);
+
+            foreach (var organicManure in model.OrganicManures)
+            {
+                int? fieldId = organicManure.FieldID;
+
+                if (!fieldId.HasValue)
+                    continue;
+
+                Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
+
+                if (field == null ||
+                    !field.IsWithinNVZ.GetValueOrDefault() ||
+                    IsOtherManureType(model.ManureTypeId))
+                {
+                    continue;
+                }
+
+                (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
+
+                if (managementPeriod == null)
+                    continue;
+
+                (Crop crop, error) =  await _cropLogic.FetchCropById(managementPeriod.CropID.GetValueOrDefault());
+
+                if (crop == null)
+                    continue;
+
+                (CropTypeLinkingResponse cropTypeLinkingResponse, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(
+                        crop.CropTypeID ?? 0);
+
+                // NMaxLimitEngland is 0 for:
+                // Winter beans, Spring beans, Peas, Market pick peas
+                if (cropTypeLinkingResponse?.NMaxLimitEngland != 0)
+                {
+                    (model, error) = await IsClosedPeriodWarningMessage(
+                        model,
+                        field.IsWithinNVZ.Value,
+                        farm.RegisteredOrganicProducer.Value,
+                        fieldId.Value,
+                        farm,
+                        crop.SowingDate,
+                        managementPeriod.CropID.Value);
+                }
+            }
+
+            return (model, error);
         }
 
         private OrganicManureViewModel? GetOrganicDataBeforeUpdateFromSession()
