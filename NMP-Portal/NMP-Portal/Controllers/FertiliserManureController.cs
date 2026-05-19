@@ -46,6 +46,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private const string _fieldErrorTempDataKey = "FieldError";
     private const string _inOrgnaicManureDurationErrorTempDataKey = "InOrgnaicManureDurationError";
     private const string _checkYourAnswerErrorDataKey = "CheckYourAnswerError";
+    private const string _pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
 
     private FertiliserManureViewModel? GetFertiliserManureFromSession()
     {
@@ -1268,8 +1269,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         {
                                             int year = model.HarvestYear.Value;
                                             (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
-                                            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                                            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+
+                                            Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
                                             if (closedPeriod != null)
                                             {
                                                 Match match = regex.Match(closedPeriod);
@@ -1926,8 +1927,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                             {
                                                 int year = model.HarvestYear.Value;
                                                 (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
-                                                string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-                                                Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMicroseconds(100));
+
+                                                Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMicroseconds(100));
                                                 if (closedPeriod != null)
                                                 {
                                                     Match match = regex.Match(closedPeriod);
@@ -2285,29 +2286,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         Error? error = null;
 
         //warning excel sheet row no. 23
-        HashSet<int> filterCrops = new HashSet<int>
-                            {
-                                (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
-                                (int)NMP.Commons.Enums.CropTypes.Asparagus,
-                                (int)NMP.Commons.Enums.CropTypes.ForageRape,
-                                (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
-                                (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
-                                (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
-                                (int)NMP.Commons.Enums.CropTypes.ForageSwedesGrazed,
-                                (int)NMP.Commons.Enums.CropTypes.ForageTurnipsRootsLifted,
-                                (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
-                                (int)NMP.Commons.Enums.CropTypes.Cabbage,
-                                (int)NMP.Commons.Enums.CropTypes.Calabrese,
-                                (int)NMP.Commons.Enums.CropTypes.Cauliflower,
-                                (int)NMP.Commons.Enums.CropTypes.Radish,
-                                (int)NMP.Commons.Enums.CropTypes.WildRocket,
-                                (int)NMP.Commons.Enums.CropTypes.Swedes,
-                                (int)NMP.Commons.Enums.CropTypes.Turnips,
-                                (int)NMP.Commons.Enums.CropTypes.BulbOnions,
-                                (int)NMP.Commons.Enums.CropTypes.SaladOnions,
-                                (int)NMP.Commons.Enums.CropTypes.Grass
-                            };
-
+        HashSet<int> filterCrops = WarningWithinPeriod.FilteredCropForWarning();
 
         int? fieldId = model.FieldID ?? null;
         Field field = await _fieldLogic.FetchFieldByFieldId(fieldId ?? 0);
@@ -2316,7 +2295,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         bool isScotland = model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
 
-        bool isCropAllowed = isScotland ? BrassicaCrops().Contains(cropTypeId) : filterCrops.Contains(cropTypeId);
+        bool isCropAllowed = isScotland ? WarningWithinPeriod.BrassicaCrops().Contains(cropTypeId) : filterCrops.Contains(cropTypeId);
 
         if (!isCropAllowed && isWithinClosedPeriod)
         {
@@ -2365,6 +2344,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return (model, error);
     }
+
+
+
     private async Task<(FertiliserManureViewModel, Error?)> IsNitrogenExceedWarning(FertiliserManureViewModel model, int managementId, int cropTypeId, DateTime startDate, DateTime endDate, int fieldId)
     {
         Error? error = null;
@@ -2376,7 +2358,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         if (error == null)
         {
             totalNitrogen = totalNitrogen + Convert.ToDecimal(model.N);
-            HashSet<int> brassicaCrops = BrassicaCrops();
+            HashSet<int> brassicaCrops =WarningWithinPeriod.BrassicaCrops();
             string closedPeriod = WarningWithinPeriod.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
             bool isWithinClosedPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
             bool isCropBrassicaAndWithInClosedPeriod = brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod;
@@ -2554,26 +2536,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     }
 
 
-    private static HashSet<int> BrassicaCrops()
-    {
-        return new HashSet<int>
-            {
-                (int)NMP.Commons.Enums.CropTypes.ForageRape,
-                (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
-                (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
-                (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
-                (int)NMP.Commons.Enums.CropTypes.ForageSwedesGrazed,
-                (int)NMP.Commons.Enums.CropTypes.ForageTurnipsRootsLifted,
-                (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
-                (int)NMP.Commons.Enums.CropTypes.Cabbage,
-                (int)NMP.Commons.Enums.CropTypes.Calabrese,
-                (int)NMP.Commons.Enums.CropTypes.Cauliflower,
-                (int)NMP.Commons.Enums.CropTypes.Radish,
-                (int)NMP.Commons.Enums.CropTypes.WildRocket,
-                (int)NMP.Commons.Enums.CropTypes.Swedes,
-                (int)NMP.Commons.Enums.CropTypes.Turnips
-            };
-    }
+    
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -3111,33 +3074,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             bool isNeedToShowAllDefoliation = (model.GrassCropCount != null && model.GrassCropCount.Value > 1 && model.NeedToShowSameDefoliationForAll);
             bool isThisSelectSpecificAndcomingFromRecommendation = model.FieldGroup == Resource.lblSelectSpecificFields && model.IsComingFromRecommendation;
-            if (isNeedToShowAllDefoliation)
-            {
-                return (flowControl: false, value: RedirectToAction("IsSameDefoliationForAll"));
-            }
-            if (model.IsDoubleCropAvailable || model.IsDoubleCropValueChange)
-            {
-                return (flowControl: false, value: RedirectToAction(_doubleCropActionName, new { q = model.DoubleCropEncryptedCounter }));
-            }
-            if (isThisSelectSpecificAndcomingFromRecommendation)
-            {
-                if (model.FieldList.Count == 1)
-                {
-                    string fieldId = model.FieldList[0];
-                    return (flowControl: false, value: RedirectToAction(_recommendationsActionName, "Crop", new
-                    {
-                        q = model.EncryptedFarmId,
-                        r = _fieldDataProtector.Protect(fieldId),
-                        s = model.EncryptedHarvestYear
-
-                    }));
-                }
-            }
-            else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
-            {
-                return (flowControl: false, value: RedirectToAction(_fieldsActionName));
-            }
-            return (flowControl: false, value: RedirectToAction(_fieldGroupActionName));
+            return HandleRedirectForDefoliationGet(model, isNeedToShowAllDefoliation, isThisSelectSpecificAndcomingFromRecommendation);
         }
 
         bool needToRedirectToDoubleCropAction = (model.IsCheckAnswer && model.IsDoubleCropAvailable && model.IsDoubleCropValueChange && (!model.NeedToShowSameDefoliationForAll));
@@ -3147,6 +3084,35 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
 
         return (flowControl: true, value: null);
+    }
+
+    private (bool flowControl, IActionResult? value) HandleRedirectForDefoliationGet(FertiliserManureViewModel? model, bool isNeedToShowAllDefoliation, bool isThisSelectSpecificAndcomingFromRecommendation)
+    {
+        if (isNeedToShowAllDefoliation)
+        {
+            return (flowControl: false, value: RedirectToAction("IsSameDefoliationForAll"));
+        }
+        if (model.IsDoubleCropAvailable || model.IsDoubleCropValueChange)
+        {
+            return (flowControl: false, value: RedirectToAction(_doubleCropActionName, new { q = model.DoubleCropEncryptedCounter }));
+        }
+        if (isThisSelectSpecificAndcomingFromRecommendation && model.FieldList.Count == 1)
+        {
+            string fieldId = model.FieldList[0];
+            return (flowControl: false, value: RedirectToAction(_recommendationsActionName, "Crop", new
+            {
+                q = model.EncryptedFarmId,
+                r = _fieldDataProtector.Protect(fieldId),
+                s = model.EncryptedHarvestYear
+
+            }));
+
+        }
+        else if (model.FieldGroup == Resource.lblSelectSpecificFields && (!model.IsComingFromRecommendation))
+        {
+            return (flowControl: false, value: RedirectToAction(_fieldsActionName));
+        }
+        return (flowControl: false, value: RedirectToAction(_fieldGroupActionName));
     }
 
     private async Task BindDefoliationData(FertiliserManureViewModel? model)
@@ -3622,13 +3588,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         .Select(list => list.Select(item => item.Text).ToList())
         .ToList();
 
-            if (defoliationSequenceList.Any())
+
+            (bool flowControl, IActionResult? value) = await RedirectForIsSameDefoliationForAll(model, allDefoliations, defoliationSequenceList);
+            if (!flowControl && value != null)
             {
-                (bool flowControl, IActionResult? value) = await RedirectForIsSameDefoliationForAll(model, allDefoliations, defoliationSequenceList);
-                if (!flowControl && value != null)
-                {
-                    return value;
-                }
+                return value;
             }
         }
         SetFertiliserManureToSession(model);
@@ -4457,8 +4421,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         if (error != null || string.IsNullOrWhiteSpace(closedPeriod))
             return null;
 
-        string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-        Regex regex = new(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+        Regex regex = new(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
         Match match = regex.Match(closedPeriod);
         if (!match.Success)
