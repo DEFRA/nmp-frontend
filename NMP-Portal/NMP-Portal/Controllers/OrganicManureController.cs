@@ -932,7 +932,19 @@ namespace NMP.Portal.Controllers
         {
             await BindOrganicData(model, cropPlans);
             RemoveFieldsFromDoubleCropList(model);
-            BindDefoliationOrDoubleCropList(model);
+            Functions.BindCounter(model.DefoliationList, _fieldDataProtector,
+             (item, count, enc) =>
+             {
+                 item.Counter = count;
+                 item.EncryptedCounter = enc;
+             });
+            Functions.BindCounter(model.DoubleCrop, _fieldDataProtector,
+             (item, count, enc) =>
+             {
+                 item.Counter = count;
+                 item.EncryptedCounter = enc;
+             });
+
         }
         private async Task<Error?> PopulateManagementAsync(OrganicManureViewModel model, string fieldIds, List<HarvestYearPlanResponse> cropPlans, OrganicManureViewModel sessionModel)
         {
@@ -953,28 +965,6 @@ namespace NMP.Portal.Controllers
             return null;
         }
 
-        private void BindDefoliationOrDoubleCropList(OrganicManureViewModel model)
-        {
-            if (model.DefoliationList != null && model.DefoliationList.Count > 0)
-            {
-                int counter = 1;
-                model.DefoliationList.ForEach(d =>
-                {
-                    d.Counter = counter;
-                    d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                });
-            }
-            if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
-            {
-                int counter = 1;
-                model.DoubleCrop.ForEach(d =>
-                {
-                    d.Counter = counter;
-                    d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-                });
-            }
-
-        }
         private async Task<OrganicManureViewModel> BindOrganicData(OrganicManureViewModel model, List<HarvestYearPlanResponse> cropPlans)
         {
             int organicCounter = 1;
