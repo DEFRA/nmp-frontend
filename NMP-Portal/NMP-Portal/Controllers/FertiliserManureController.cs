@@ -890,7 +890,18 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
     private IActionResult? ProcessFertiliserManureModel(FertiliserManureViewModel model)
     {
-        model = BindDefoliationAndDiubleList(model);
+        Functions.BindCounter(model.DefoliationList, _fieldDataProtector,
+             (item, count, enc) =>
+             {
+                 item.Counter = count;
+                 item.EncryptedCounter = enc;
+             });
+        Functions.BindCounter(model.DoubleCrop, _fieldDataProtector,
+         (item, count, enc) =>
+         {
+             item.Counter = count;
+             item.EncryptedCounter = enc;
+         });
         SetFertiliserManureToSession(model);
 
         // Check Answer flow
@@ -933,28 +944,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return null;
     }
 
-    private FertiliserManureViewModel BindDefoliationAndDiubleList(FertiliserManureViewModel model)
-    {
-        if (model.DefoliationList != null && model.DefoliationList.Count > 0)
-        {
-            int counter = 1;
-            model.DefoliationList.ForEach(d =>
-            {
-                d.Counter = counter;
-                d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-            });
-        }
-        if (model.DoubleCrop != null && model.DoubleCrop.Count > 0)
-        {
-            int counter = 1;
-            model.DoubleCrop.ForEach(d =>
-            {
-                d.Counter = counter;
-                d.EncryptedCounter = _fieldDataProtector.Protect($"{counter++}");
-            });
-        }
-        return model;
-    }
     private async Task<FertiliserManureViewModel> BindDefoliationListForField(FertiliserManureViewModel model, List<HarvestYearPlanResponse> cropPlans)
     {
         int fertiliserCounter = 1;
