@@ -1133,7 +1133,7 @@ managementPeriod.CropID.HasValue
                 await PopulateManureGroupListAsync();
                 if (model.FarmId.HasValue)
                 {
-                    (var farmManureGroupList,Error? error) = await PopulateFarmManureListAsync(model);
+                    (var farmManureGroupList, Error? error) = await PopulateFarmManureListAsync(model);
                     if (error != null)
                     {
                         TempData[_fieldErrorTempDataKey] = error.Message;
@@ -1188,7 +1188,7 @@ managementPeriod.CropID.HasValue
                     await PopulateManureGroupListAsync();
                     if (model.FarmId.HasValue)
                     {
-                        (_,error) = await PopulateFarmManureListAsync(model);
+                        (_, error) = await PopulateFarmManureListAsync(model);
                         if (error != null)
                         {
                             TempData["ManureGroupError"] = error.Message;
@@ -1425,16 +1425,14 @@ managementPeriod.CropID.HasValue
                 }
 
                 //check for closed period warning.
-                if (model != null)
-                {
-                    OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
 
-                    if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
-                    {
-                        model.IsWarningMsgNeedToShow = false;
-                        model.IsApplicationDateChange = true;
-                    }
+                OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
+                if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
+                {
+                    model.IsWarningMsgNeedToShow = false;
+                    model.IsApplicationDateChange = true;
                 }
+
                 model.IsClosedPeriodWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
@@ -2443,7 +2441,7 @@ managementPeriod.CropID.HasValue
                 {
                     ViewBag.Error = error1.Message;
                 }
-                ResetWarnings(model,true);
+                ResetWarnings(model, true);
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             }
             catch (Exception ex)
@@ -2515,7 +2513,7 @@ managementPeriod.CropID.HasValue
                         }
                     }
 
-                    ResetWarnings(model,false);
+                    ResetWarnings(model, false);
                     string message = string.Empty;
 
                     OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
@@ -2619,7 +2617,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    ResetWarnings(model,true);
+                    ResetWarnings(model, true);
                 }
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 return RedirectToAction("IncorporationMethod");
@@ -4273,7 +4271,7 @@ managementPeriod.CropID.HasValue
                 if (managementPeriod == null)
                     continue;
 
-                (Crop crop, error) =  await _cropLogic.FetchCropById(managementPeriod.CropID.GetValueOrDefault());
+                (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.GetValueOrDefault());
 
                 if (crop == null)
                     continue;
@@ -9294,7 +9292,7 @@ managementPeriod.CropID.HasValue
 
         private static void ResetWarnings(OrganicManureViewModel model, bool isWarningMsgNeedToShowReset)
         {
-            if(isWarningMsgNeedToShowReset)
+            if (isWarningMsgNeedToShowReset)
             {
                 model.IsWarningMsgNeedToShow = false;
             }
