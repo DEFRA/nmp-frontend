@@ -71,11 +71,11 @@
 }
 @{
     var heading=GetFertiliserText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnInorganicMaterialApplication, Model.HarvestYear??0));
-    
+
     string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     int counter = 1;
-
+    string isSameDefoliationForAllHeading = Resource.lblForMultipleDefoliation;
 }
 
 @section BeforeContent {
@@ -257,22 +257,28 @@
                                     @Resource.lblForMultipleDefoliation
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @{
-                                         string defoliationText;
-                                     
-                                         if (!Model.IsSameDefoliationForAll.HasValue)
-                                             defoliationText = Resource.lblNotSet;
-                                         else if (Model.IsSameDefoliationForAll.Value)
-                                             defoliationText = Resource.lblYes;
-                                         else
-                                             defoliationText = Resource.lblNo;
-                                     }
-                                     @defoliationText
+                                        @{
+                                                    string defoliationValue;
+
+                                                    if (!Model.IsSameDefoliationForAll.HasValue)
+                                                    {
+                                                        defoliationValue = Resource.lblNotSet;
+                                                    }
+                                                    else if (Model.IsSameDefoliationForAll.Value)
+                                                    {
+                                                        defoliationValue = Resource.lblYes;
+                                                    }
+                                                    else
+                                                    {
+                                                        defoliationValue = Resource.lblNo;
+                                                    }
+                                                }
+                                @defoliationValue
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="IsSameDefoliationForAll" asp-controller="FertiliserManure">@Resource.lblChange
                                         <span class="govuk-visually-hidden">
-                                            @Resource.lblForMultipleDefoliation
+                                        @isSameDefoliationForAllHeading
                                         </span>
                                     </govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>

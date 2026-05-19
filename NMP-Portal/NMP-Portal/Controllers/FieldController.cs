@@ -131,7 +131,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
             else if (fieldCount > 0)
             {
-                if (model != null && model.CopyExistingField != null && model.CopyExistingField.Value)
+                if (model.CopyExistingField != null && model.CopyExistingField.Value)
                 {
                     return await Task.FromResult(RedirectToAction("CopyFields", "Field"));
                 }
@@ -183,14 +183,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmID);
                 if (farm != null)
                 {
-                    model.FarmRB209CountryID = farm?.RB209CountryID;
-                    model.FarmName = farm?.Name;
-                    model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+                    model.FarmRB209CountryID = farm.RB209CountryID;
+                    model.FarmName = farm.Name;
+                    model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
                     model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(r) && model != null)
+            if (!string.IsNullOrWhiteSpace(r))
             {
                 model.EncryptedHarvestYear = r;
                 model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
@@ -1024,130 +1024,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return View(model);
     }
 
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> SoilNutrientValue(FieldViewModel model)
-    //{
-    //    _logger.LogTrace("Field Controller : SoilNutrientValue() post action called");
-    //    Error error = null;
-    //    try
-    //    {
-    //        ValidateSoilNutrientValues(model);
-
-    //        if (!ModelState.IsValid)
-    //        {
-    //            return View(model);
-    //        }
-
-    //        model.SoilAnalyses.PhosphorusMethodologyID = (int)PhosphorusMethodology.Olsens;
-
-    //        if (model.SoilAnalyses.Phosphorus != null || model.SoilAnalyses.Potassium != null ||
-    //            model.SoilAnalyses.Magnesium != null)
-    //        {
-    //            if (model.IsSoilNutrientValueTypeIndex.HasValue && !model.IsSoilNutrientValueTypeIndex.Value)
-    //            {
-    //                (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
-    //                if (error == null && nutrients.Count > 0)
-    //                {
-    //                    int phosphorusId = 1;
-    //                    int potassiumId = 2;
-    //                    int magnesiumId = 3;
-
-    //                    if (model.SoilAnalyses.Phosphorus != null)
-    //                    {
-    //                        var phosphorusNutrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPhosphate));
-
-    //                        if (phosphorusNutrient != null)
-    //                        {
-    //                            phosphorusId = phosphorusNutrient.nutrientId;
-    //                        }
-
-    //                        (string phosphorusIndexValue, error) = await _soilService.FetchSoilNutrientIndex(phosphorusId, model.SoilAnalyses.Phosphorus, (int)PhosphorusMethodology.Olsens);
-
-    //                        if (!string.IsNullOrWhiteSpace(phosphorusIndexValue) && error == null)
-    //                        {
-    //                            model.SoilAnalyses.PhosphorusIndex = Convert.ToInt32(phosphorusIndexValue.Trim());
-    //                        }
-    //                        else if (error != null)
-    //                        {
-    //                            ViewBag.Error = error.Message;
-    //                            return View(model);
-    //                        }
-    //                    }
-
-    //                    if (model.SoilAnalyses.Magnesium != null)
-    //                    {
-    //                        var magnesiumNutrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblMagnesium));
-
-    //                        if (magnesiumNutrient != null)
-    //                        {
-    //                            magnesiumId = magnesiumNutrient.nutrientId;
-    //                        }
-
-    //                        (string magnesiumIndexValue, error) = await _soilService.FetchSoilNutrientIndex(magnesiumId, model.SoilAnalyses.Magnesium, (int)MagnesiumMethodology.None);
-
-    //                        if (!string.IsNullOrWhiteSpace(magnesiumIndexValue) && error == null)
-    //                        {
-    //                            model.SoilAnalyses.MagnesiumIndex = Convert.ToInt32(magnesiumIndexValue.Trim());
-    //                        }
-    //                        else if (error != null)
-    //                        {
-    //                            ViewBag.Error = error.Message;
-    //                            return View(model);
-    //                        }
-    //                    }
-
-    //                    if (model.SoilAnalyses.Potassium != null)
-    //                    {
-    //                        var potassiumNutrient = nutrients.FirstOrDefault(a => a.nutrient.Equals(Resource.lblPotash));
-
-    //                        if (potassiumNutrient != null)
-    //                        {
-    //                            potassiumId = potassiumNutrient.nutrientId;
-    //                        }
-
-    //                        (string potassiumIndexValue, error) = await _soilService.FetchSoilNutrientIndex(potassiumId, model.SoilAnalyses.Potassium, (int)PotassiumMethodology.None);
-
-    //                        if (!string.IsNullOrWhiteSpace(potassiumIndexValue) && error == null)
-    //                        {
-    //                            model.PotassiumIndexValue = potassiumIndexValue.Trim();
-    //                        }
-    //                        else if (error != null)
-    //                        {
-    //                            ViewBag.Error = error.Message;
-    //                            return View(model);
-    //                        }
-    //                    }
-    //                }
-    //                if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-    //                {
-    //                    ViewBag.Error = error.Message;
-    //                    return View(model);
-    //                }
-    //            }
-    //            else
-    //            {
-    //                model.SoilAnalyses.Phosphorus = null;
-    //                model.SoilAnalyses.Magnesium = null;
-    //                model.SoilAnalyses.Potassium = null;
-    //            }
-    //        }
-
-    //        SetFieldDataToSession(model);
-    //        if (model.IsCheckAnswer)
-    //        {
-    //            return RedirectToAction(_checkAnswerActionName);
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.LogTrace(ex, "Field Controller : Exception in SoilNutrientValue() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-    //        ViewBag.Error = string.Concat(error, ex.Message);
-    //        return View(model);
-    //    }
-
-    //    return RedirectToAction(_lastHarvestYearActionName);
-    //}
 
     [HttpPost]
     [ValidateAntiForgeryToken]

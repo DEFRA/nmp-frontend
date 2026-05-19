@@ -8,6 +8,7 @@ using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Reflection;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
@@ -385,7 +386,6 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
     }
     public async Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> BindNmaxWarnings(FertiliserManureViewModel model, decimal totalNitrogenApplied, int farmCountryId,  Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit)
     {
-        Error? error = null;
         if (totalNitrogenApplied > nMaxLimit)
         {
             string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
@@ -405,10 +405,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
                 SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit));
             }
         }
-        else
-        {
-            return (flowControl: false, value: (model, error));
-        }
+       
 
         return (flowControl: true, value: default);
     }
@@ -443,4 +440,5 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
         return (model, warningResponse);
     }
+    
 }
