@@ -7760,4 +7760,7 @@ livestock manure.</value>
   <data name="lblValueMustNotExeedXDigit" xml:space="preserve">
     <value>{0} must not exceed {1} digits.</value>
   </data>
+  <data name="lblPara1PAS100" xml:space="preserve">
+    <value>The green compost or green/food compost applied must be produced in accordance with the standards set out in PAS 100 and must not contain livestock manure</value>
+  </data>
 </root>

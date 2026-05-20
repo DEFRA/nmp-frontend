@@ -1375,6 +1375,7 @@ managementPeriod.CropID.HasValue
                 }
                 model.IsWarningMsgNeedToShow = false;
                 model.IsClosedPeriodWarning = false;
+                model.IsApplicationJulyToSeptWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 return View(model);
@@ -1434,7 +1435,7 @@ managementPeriod.CropID.HasValue
                 }
 
                 model.IsClosedPeriodWarning = false;
-                model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
+                model.IsApplicationJulyToSeptWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
 
                 if (model.FieldList.Count >= 1)
@@ -1455,7 +1456,7 @@ managementPeriod.CropID.HasValue
 
                 }
 
-                if (model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+                if (model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || model.IsApplicationJulyToSeptWarning)
                 {
                     if (!model.IsWarningMsgNeedToShow)
                     {
@@ -1468,6 +1469,7 @@ managementPeriod.CropID.HasValue
                 {
                     model.IsWarningMsgNeedToShow = false;
                     model.IsClosedPeriodWarning = false;
+                    model.IsApplicationJulyToSeptWarning = false;
                     model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
                 }
 
@@ -4174,6 +4176,7 @@ managementPeriod.CropID.HasValue
 
 
                 model.IsClosedPeriodWarning = false;
+                model.IsApplicationJulyToSeptWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
                 if (model.FieldList != null && model.FieldList.Count >= 1)
                 {
@@ -4190,7 +4193,7 @@ managementPeriod.CropID.HasValue
                     }
                 }
 
-                if (model.IsNMaxLimitWarning || model.IsOrgManureNfieldLimitWarning || model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+                if (model.IsNMaxLimitWarning || model.IsOrgManureNfieldLimitWarning || model.IsClosedPeriodWarning || model.IsApplicationJulyToSeptWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
                 {
                     model.IsWarningMsgNeedToShow = true;
                 }
@@ -5191,7 +5194,7 @@ managementPeriod.CropID.HasValue
                         (int)NMP.Commons.Enums.CropTypes.Pears,
                         (int)NMP.Commons.Enums.CropTypes.Plums
                     };
-
+                    bool showPAS100Warning = true;
                     (List<int> managementIds, error) = await _organicManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
                    model.HarvestYear.Value, fieldId.ToString(), null, null);
 
@@ -5253,7 +5256,7 @@ managementPeriod.CropID.HasValue
                             if ((!isScotland || isGreenCompostExistIn2Year || isCompost) && totalN > 500)
                             {
                                 model.IsOrgManureNfieldLimitWarning = true;
-
+                                showPAS100Warning = false;
                                 var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString();
 
                                 WarningResponse? warning = warningList
@@ -5331,7 +5334,7 @@ managementPeriod.CropID.HasValue
                             decimal currentApplicationNitrogen = 0;
                             currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
                             totalN = previousAppliedTotalN + currentApplicationNitrogen;
-                            if (totalN > 250)
+                            if (totalN > 250 && showPAS100Warning)
                             {
                                 model.IsOrgManureNfieldLimitWarning = true;
 
@@ -6098,13 +6101,13 @@ managementPeriod.CropID.HasValue
             //scotland warning excel sheet row no. 26
             WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
                 model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.RanManureJulyToSep.ToString());
-            model.ClosedPeriodWarningHeader = warning.Header;
-            model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
-            model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
-            model.ClosedPeriodWarningPara1 = warning.Para1;
-            model.ClosedPeriodWarningPara2 = warning.Para2;
-            model.ClosedPeriodWarningPara3 = warning.Para3;
-            model.IsClosedPeriodWarning = true;
+            model.ApplicationJulyToSeptHeader = warning.Header;
+            model.ApplicationJulyToSeptCodeID = warning.WarningCodeID;
+            model.ApplicationJulyToSeptLevelID = warning.WarningLevelID;
+            model.ApplicationJulyToSeptPara1 = warning.Para1;
+            model.ApplicationJulyToSeptPara2 = warning.Para2;
+            model.ApplicationJulyToSeptPara3 = warning.Para3;
+            model.IsApplicationJulyToSeptWarning = true;
 
             return (model, null);
         }
@@ -8722,14 +8725,19 @@ managementPeriod.CropID.HasValue
                 if (model != null && model.OrganicManures != null && model.OrganicManures.Count > 0)
                 {
                     (ManagementPeriod managementPeriod, Error error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
-                    if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+                    if (model.IsOrgManureNfieldLimitWarning || model.IsNMaxLimitWarning || model.IsClosedPeriodWarning || model.IsApplicationJulyToSeptWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
                     {
                         AddOrganicManureNfieldLimitWarning(model, warningMessages, organicManure, managementPeriod);
                         AddNMaxLimitWarning(model, warningMessages, organicManure, managementPeriod);
                         AddClosedPeriodWarning(model, warningMessages, organicManure, managementPeriod);
+                        
                         AddEndClosedPeriodFebruaryWarning(model, warningMessages, organicManure, managementPeriod);
                         AddEndClosedPeriodFebruaryExistWithinThreeWeeks(model, warningMessages, organicManure, managementPeriod);
                         AddStartPeriodEndFebOrganicAppRateExceedMaxN150(model, warningMessages, organicManure, managementPeriod);
+                        if (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                        {
+                            AddApplicationJulyToSeptWarning(model, warningMessages, organicManure, managementPeriod);
+                        }
                     }
                 }
             }
@@ -8827,6 +8835,23 @@ managementPeriod.CropID.HasValue
                 warningMessage.Para1 = model.ClosedPeriodWarningPara1;
                 warningMessage.Para2 = model.ClosedPeriodWarningPara2;
                 warningMessage.Para3 = model.ClosedPeriodWarningPara3;
+                warningMessages.Add(warningMessage);
+            }
+        }
+        private static void AddApplicationJulyToSeptWarning(OrganicManureViewModel model, List<WarningMessage> warningMessages, OrganicManureDataViewModel organicManure, ManagementPeriod managementPeriod)
+        {
+            if (model.IsApplicationJulyToSeptWarning)
+            {
+                WarningMessage warningMessage = new WarningMessage();
+                warningMessage.FieldID = organicManure.FieldID ?? 0;
+                warningMessage.CropID = managementPeriod.CropID ?? 0;
+                warningMessage.JoiningID = null;
+                warningMessage.WarningLevelID = model.ApplicationJulyToSeptLevelID;
+                warningMessage.WarningCodeID = model.ApplicationJulyToSeptCodeID;
+                warningMessage.Header = model.ApplicationJulyToSeptHeader;
+                warningMessage.Para1 = model.ApplicationJulyToSeptPara1;
+                warningMessage.Para2 = model.ApplicationJulyToSeptPara2;
+                warningMessage.Para3 = model.ApplicationJulyToSeptPara3;
                 warningMessages.Add(warningMessage);
             }
         }

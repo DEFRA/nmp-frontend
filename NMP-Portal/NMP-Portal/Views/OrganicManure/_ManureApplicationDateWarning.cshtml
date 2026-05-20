@@ -1,0 +1,126 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
+@{
+    int trueWarningCount = 0;
+    if (Model.IsClosedPeriodWarning) trueWarningCount++;
+    if (Model.IsApplicationJulyToSeptWarning) trueWarningCount++;
+    if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks) trueWarningCount++;
+}
+@if (Model.IsClosedPeriodWarning || Model.IsApplicationJulyToSeptWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+{
+    <govuk-notification-banner>
+        <govuk-notification-banner-title>
+            @Resource.lblImportant
+        </govuk-notification-banner-title>
+        @if (trueWarningCount == 1)
+        {
+            @if (Model.IsClosedPeriodWarning)
+            {
+                <p class="govuk-notification-banner__heading">
+                    @Model.ClosedPeriodWarningPara1
+                </p>
+                <p class="govuk-body">@Model.ClosedPeriodWarningPara2</p>
+                if (@Model.ClosedPeriodWarningPara3 != null)
+                {
+                    <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
+                }
+            }
+            @if (Model.IsApplicationJulyToSeptWarning)
+            {
+                <p class="govuk-notification-banner__heading">
+                    @Model.ApplicationJulyToSeptPara1
+                </p>
+                <p class="govuk-body">@Model.ApplicationJulyToSeptPara2</p>
+                if (@Model.ApplicationJulyToSeptPara3 != null)
+                {
+                    <p class="govuk-body">@Model.ApplicationJulyToSeptPara3</p>
+                }
+            }
+            @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+            {
+                <p class="govuk-notification-banner__heading">
+                    @Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1
+                </p>
+                <p class="govuk-body">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2</p>
+                @if (Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 != null)
+                {
+                    <p class="govuk-body">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 </p>
+                }
+            }
+        }
+        @if (trueWarningCount > 1)
+        {
+            @* <div class="govuk-notification-banner__content">*@
+            <p class="govuk-notification-banner__heading">
+                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England || Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    @Resource.lblThisApplicationMayBreachMoreThanOneNVZRule
+                }
+                @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                {
+                    @Resource.lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation
+                }
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+                @if (Model.IsClosedPeriodWarning)
+                {
+                    <li>@Model.ClosedPeriodWarningPara1</li>
+                }
+                @if (Model.IsApplicationJulyToSeptWarning)
+                {
+                    <li>@Model.ApplicationJulyToSeptPara1</li>
+                }
+                @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+                {
+                    <li>@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1</li>
+                }
+                
+            </ul>
+            <govuk-details>
+                <govuk-details-summary>
+
+                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.England || Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    {
+                        @Resource.lblMoreAboutTheseNVZRules
+                    }
+                    @if (Model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+                    {
+                        @Resource.lblMoreAboutTheseWaterResourceRegulation
+                    }
+                </govuk-details-summary>
+                <govuk-details-text>
+                    @if (Model.IsClosedPeriodWarning)
+                    {
+                        <h2 class="govuk-heading-s">@Model.ClosedPeriodWarningPara1</h2>
+                        <p class="govuk-body">@Model.ClosedPeriodWarningPara2</p>
+                    }
+                    @if (Model.IsApplicationJulyToSeptWarning)
+                    {
+                        <h2 class="govuk-heading-s">@Model.ApplicationJulyToSeptPara1</h2>
+                        <p class="govuk-body warning-text">@Model.ApplicationJulyToSeptPara2</p>
+                    }
+                    @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+                    {
+                        <h2 class="govuk-heading-s">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1</h2>
+                        <p class="govuk-body">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2</p>
+                    }
+                    
+                </govuk-details-text>
+            </govuk-details>
+            @if (Model.IsClosedPeriodWarning)
+            {
+                <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
+            }
+            else if (Model.IsApplicationJulyToSeptWarning)
+            {
+                <p class="govuk-body">@Model.ApplicationJulyToSeptPara3</p>
+            }
+            else if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+            {
+                <p class="govuk-body">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3</p>
+            }
+            
+        }
+
+    </govuk-notification-banner>
+}
