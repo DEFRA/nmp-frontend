@@ -6259,28 +6259,7 @@ managementPeriod.CropID.HasValue
         {
             Error? error = null;
             string warningMsg = string.Empty;
-            HashSet<int> cropTypeIdsForTrigger = new HashSet<int>
-            {
-                    (int)NMP.Commons.Enums.CropTypes.Asparagus,
-                    (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
-                    (int)NMP.Commons.Enums.CropTypes.ForageRape,
-                    (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
-                    (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
-                    (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
-                    (int)NMP.Commons.Enums.CropTypes.ForageSwedesGrazed,
-                    (int)NMP.Commons.Enums.CropTypes.ForageTurnipsRootsLifted,
-                    (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
-                    (int)NMP.Commons.Enums.CropTypes.Cabbage,
-                    (int)NMP.Commons.Enums.CropTypes.Calabrese,
-                    (int)NMP.Commons.Enums.CropTypes.Cauliflower,
-                    (int)NMP.Commons.Enums.CropTypes.Radish,
-                    (int)NMP.Commons.Enums.CropTypes.WildRocket,
-                    (int)NMP.Commons.Enums.CropTypes.Swedes,
-                    (int)NMP.Commons.Enums.CropTypes.Turnips,
-                    (int)NMP.Commons.Enums.CropTypes.BulbOnions,
-                    (int)NMP.Commons.Enums.CropTypes.SaladOnions,
-                    (int)NMP.Commons.Enums.CropTypes.Grass
-            };
+            HashSet<int> cropTypeIdsForTrigger = WarningWithinPeriod.FilteredCropForWarning();
 
             HashSet<int> brassicaCrops = WarningWithinPeriod.BrassicaCrops();
          

@@ -437,36 +437,14 @@ namespace NMP.Portal.Helpers
                 {
                     case (int)NMP.Commons.Enums.CropTypes.Asparagus:             //Asparagus
                     case (int)NMP.Commons.Enums.CropTypes.BulbOnions:            //Bulb Onions
-                        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
-                        }
-                        if (isSandyShallowSoil && (sowingDate < september16))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
-                        }
-                        if (!isSandyShallowSoil)
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
-                        }
+                        WarningPeriod = BindWarningPeriod(WarningPeriod, september16, isSandyShallowSoil, sowingDate, lastDayOfFeb);
                         break;
 
                     case (int)NMP.Commons.Enums.CropTypes.SaladOnions:            //Salad Onions
 
                         if (cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
                         {
-                            if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                            {
-                                WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
-                            }
-                            if (isSandyShallowSoil && (sowingDate < september16))
-                            {
-                                WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
-                            }
-                            if (!isSandyShallowSoil)
-                            {
-                                WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
-                            }
+                            WarningPeriod = BindWarningPeriod(WarningPeriod, september16, isSandyShallowSoil, sowingDate, lastDayOfFeb);
                         }
                         break;
 
@@ -485,18 +463,7 @@ namespace NMP.Portal.Helpers
                     case (int)NMP.Commons.Enums.CropTypes.WildRocket:
                     case (int)NMP.Commons.Enums.CropTypes.Swedes:
                     case (int)NMP.Commons.Enums.CropTypes.Turnips:
-                        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
-                        }
-                        if (isSandyShallowSoil && (sowingDate < september16))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
-                        }
-                        if (!isSandyShallowSoil)
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
-                        }
+                        WarningPeriod = BindWarningPeriod(WarningPeriod, september16, isSandyShallowSoil, sowingDate, lastDayOfFeb);
 
                         break;
 
@@ -522,6 +489,24 @@ namespace NMP.Portal.Helpers
                         break;
                 }
             }
+            return WarningPeriod;
+        }
+
+        private static string? BindWarningPeriod(string? WarningPeriod, DateTime september16, bool isSandyShallowSoil, DateTime? sowingDate, int lastDayOfFeb)
+        {
+            if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
+            {
+                WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
+            }
+            if (isSandyShallowSoil && (sowingDate < september16))
+            {
+                WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
+            }
+            if (!isSandyShallowSoil)
+            {
+                WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
+            }
+
             return WarningPeriod;
         }
 
