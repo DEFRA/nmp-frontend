@@ -2543,60 +2543,12 @@ managementPeriod.CropID.HasValue
                                     if (isFieldIsInNVZ)
                                     {
 
-                                        (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
-                                        if (error == null)
+                                        (bool flowControl, string? errorMessage, model) = await BindWarningForApplicationRate(model, error, message, farm, organicManure, fieldId);
+                                        if (!flowControl && string.IsNullOrWhiteSpace(errorMessage))
                                         {
-                                            (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId.Value, model.HarvestYear.Value, false);
-                                            if (error == null)
-                                            {
-                                                (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
-                                                if (error == null)
-                                                {
-                                                    (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
-                                                    if (!(IsOtherManureType(model.ManureTypeId)))
-                                                    {
-                                                        (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm, managementPeriod.CropID.Value, fieldId.Value);
-
-                                                    }
-
-                                                }
-                                                else
-                                                {
-                                                    TempData["ApplicationRateMethodError"] = error.Message;
-                                                    return View(model);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                TempData["ApplicationRateMethodError"] = error.Message;
-                                                return View(model);
-                                            }
-
-                                            //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
-                                            if (!(IsOtherManureType(model.ManureTypeId)))
-                                            {
-                                                (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
-                                                if (error == null)
-                                                {
-                                                    if (!string.IsNullOrWhiteSpace(message))
-                                                    {
-                                                        TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    TempData["ApplicationRateMethodError"] = error.Message;
-                                                    return View(model);
-                                                }
-                                            }
-
-                                        }
-                                        else
-                                        {
-                                            TempData["ApplicationRateMethodError"] = error.Message;
+                                            TempData["ApplicationRateMethodError"] = errorMessage;
                                             return View(model);
                                         }
-
                                     }
                                 }
                             }
@@ -2713,59 +2665,10 @@ managementPeriod.CropID.HasValue
                                 bool isFieldIsInNVZ = field.IsWithinNVZ != null && field.IsWithinNVZ.Value;
                                 if (isFieldIsInNVZ)
                                 {
-
-                                    (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
-                                    if (error == null)
+                                    (bool flowControl, string? errorMessage, model) = await BindWarningForApplicationRate(model, error, message, farm, organicManure, fieldId);
+                                    if (!flowControl && string.IsNullOrWhiteSpace(errorMessage))
                                     {
-                                        (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId.Value, model.HarvestYear.Value, false);
-                                        if (error == null)
-                                        {
-                                            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
-                                            if (error == null)
-                                            {
-                                                (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
-
-                                                if (!(IsOtherManureType(model.ManureTypeId)))
-                                                {
-                                                    (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm, managementPeriod.CropID.Value, fieldId.Value);
-
-                                                }
-
-                                            }
-                                            else
-                                            {
-                                                TempData["ManualApplicationRateError"] = error.Message;
-                                                return View(model);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            TempData["ManualApplicationRateError"] = error.Message;
-                                            return View(model);
-                                        }
-
-                                        //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
-                                        if (!(IsOtherManureType(model.ManureTypeId)))
-                                        {
-                                            (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
-                                            if (error == null)
-                                            {
-                                                if (!string.IsNullOrWhiteSpace(message))
-                                                {
-                                                    TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                TempData["ManualApplicationRateError"] = error.Message;
-                                                return View(model);
-                                            }
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        TempData["ManualApplicationRateError"] = error.Message;
+                                        TempData["ManualApplicationRateError"] = errorMessage;
                                         return View(model);
                                     }
 
@@ -2823,6 +2726,62 @@ managementPeriod.CropID.HasValue
             }
 
             return RedirectToAction("IncorporationMethod");
+        }
+
+        private async Task<(bool flowControl, string? value, OrganicManureViewModel)> BindWarningForApplicationRate(OrganicManureViewModel model, Error? error, string message, FarmResponse farm, OrganicManureDataViewModel organicManure, int? fieldId)
+        {
+            (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
+            if (error == null)
+            {
+                (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId.Value, model.HarvestYear.Value, false);
+                if (error == null)
+                {
+                    (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
+                    if (error == null)
+                    {
+                        (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
+
+                        if (!(IsOtherManureType(model.ManureTypeId)))
+                        {
+                            (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm, managementPeriod.CropID.Value, fieldId.Value);
+
+                        }
+
+                    }
+                    else
+                    {
+                        return (flowControl: false, value: error.Message, model);
+                    }
+                }
+                else
+                {
+                    return (flowControl: false, value: error.Message, model);
+                }
+
+                //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
+                if (!(IsOtherManureType(model.ManureTypeId)))
+                {
+                    (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
+                    if (error == null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(message))
+                        {
+                            TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
+                        }
+                    }
+                    else
+                    {
+                        return (flowControl: false, value: error.Message, model);
+                    }
+                }
+
+            }
+            else
+            {
+                return (flowControl: false, value: error.Message, model);
+            }
+
+            return (flowControl: true, value: null, model);
         }
 
         [HttpGet]
@@ -2891,60 +2850,12 @@ managementPeriod.CropID.HasValue
                             if (isFieldIsInNVZ)
                             {
 
-                                (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
-                                if (error == null)
+                                (bool flowControl, string? errorMessage, model) = await BindWarningForApplicationRate(model, error, message, farm, organicManure, fieldId);
+                                if (!flowControl && string.IsNullOrWhiteSpace(errorMessage))
                                 {
-                                    (FieldDetailResponse fieldDetail, error) = await _fieldLogic.FetchFieldDetailByFieldIdAndHarvestYear(fieldId.Value, model.HarvestYear.Value, false);
-                                    if (error == null)
-                                    {
-                                        (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
-                                        if (error == null)
-                                        {
-                                            (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
-                                            if (!(IsOtherManureType(model.ManureTypeId)))
-                                            {
-                                                (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, farm, managementPeriod.CropID.Value, fieldId.Value);
-
-                                            }
-
-                                        }
-                                        else
-                                        {
-                                            TempData["AreaAndQuantityError"] = error.Message;
-                                            return View(model);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        TempData["AreaAndQuantityError"] = error.Message;
-                                        return View(model);
-                                    }
-
-                                    //Closed period and maximum application rate for high N organic manure on a registered organic farm message - Max Application Rate - Warning Message
-                                    if (!(IsOtherManureType(model.ManureTypeId)))
-                                    {
-                                        (model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150, message, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, Convert.ToInt32(fieldId), farm, organicManure.ManagementPeriodID);
-                                        if (error == null)
-                                        {
-                                            if (!string.IsNullOrWhiteSpace(message))
-                                            {
-                                                TempData["AppRateExceeds150WithinClosedPeriodOrganic"] = message;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            TempData["AreaAndQuantityError"] = error.Message;
-                                            return View(model);
-                                        }
-                                    }
-
-                                }
-                                else
-                                {
-                                    TempData["AreaAndQuantityError"] = error.Message;
+                                    TempData["AreaAndQuantityError"] = errorMessage;
                                     return View(model);
                                 }
-
                             }
                         }
                     }
@@ -8904,7 +8815,7 @@ managementPeriod.CropID.HasValue
                 string description = defoliationSequence.DefoliationSequenceDescription;
                 if (!string.IsNullOrWhiteSpace(description))
                 {
-                    selectedDefoliation =CommonHelpers.BindDefoliationName(defoliation, description);
+                    selectedDefoliation = CommonHelpers.BindDefoliationName(defoliation, description);
 
                 }
             }
