@@ -1681,68 +1681,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     }
                                     else
                                     {
-                                        if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
-                                        {
-                                            TempData["NutrientValuesError"] = error.Message;
-                                            return RedirectToAction("NutrientValues");
-                                        }
-                                        else
-                                        {
-                                            if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (model.IsComingFromRecommendation))
-                                            {
-                                                TempData["NutrientRecommendationsError"] = error.Message;
-                                                string fieldId = model.FieldList[0];
-                                                return RedirectToAction(_recommendationsActionName, "Crop", new
-                                                {
-                                                    q = model.EncryptedFarmId,
-                                                    r = _fieldDataProtector.Protect(fieldId),
-                                                    s = model.EncryptedHarvestYear
-
-                                                });
-                                            }
-                                            else
-                                            {
-                                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                                return RedirectToAction(_harvestYearOverviewActionName, "Crop", new
-                                                {
-                                                    id = model.EncryptedFarmId,
-                                                    year = model.EncryptedHarvestYear
-                                                });
-
-                                            }
-                                        }
+                                        return RedirectForErrorOnCheckAnswer(model, error.Message);
                                     }
                                 }
                                 else
                                 {
-                                    if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
-                                    {
-                                        TempData["NutrientValuesError"] = error.Message;
-                                        return RedirectToAction("NutrientValues");
-                                    }
-                                    else
-                                    {
-                                        if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (model.IsComingFromRecommendation))
-                                        {
-                                            TempData["NutrientRecommendationsError"] = error.Message;
-                                            string fieldId = model.FieldList[0];
-                                            return RedirectToAction(_recommendationsActionName, "Crop", new
-                                            {
-                                                q = model.EncryptedFarmId,
-                                                r = _fieldDataProtector.Protect(fieldId),
-                                                s = model.EncryptedHarvestYear
-                                            });
-                                        }
-                                        else
-                                        {
-                                            TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                            return RedirectToAction(_harvestYearOverviewActionName, "Crop", new
-                                            {
-                                                id = model.EncryptedFarmId,
-                                                year = model.EncryptedHarvestYear
-                                            });
-                                        }
-                                    }
+                                 return RedirectForErrorOnCheckAnswer(model, error.Message);
                                 }
                             }
                             int fieldIdForUpdate = Convert.ToInt32(model.FieldList.FirstOrDefault());
@@ -1783,27 +1727,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         if (error == null && defoliationSequence != null)
                                         {
                                             string description = defoliationSequence.DefoliationSequenceDescription;
-
-                                            string[] defoliationParts = description.Split(',')
-                                                                                   .Select(x => x.Trim())
-                                                                                   .ToArray();
-                                            string selectedDefoliation = (defoliation > 0 && defoliation.Value <= defoliationParts.Length)
-                                            ? $"{Enum.GetName(typeof(PotentialCut), defoliation.Value)} - {defoliationParts[defoliation.Value - 1]}"
-                                            : $"{defoliation}";
-                                            var parts = selectedDefoliation.Split('-');
-                                            if (parts.Length == 2)
-                                            {
-                                                var left = parts[0].Trim();
-                                                var right = parts[1].Trim();
-
-                                                if (!string.IsNullOrWhiteSpace(right))
-                                                {
-                                                    right = char.ToUpper(right[0]) + right.Substring(1);
-                                                }
-
-                                                selectedDefoliation = $"{left} - {right}";
-                                            }
-                                            defoliationName = selectedDefoliation;
+                                            
+                                            defoliationName = CommonHelpers.BindDefoliationName(defoliation.Value, description); ;
                                             var defList = new DefoliationList
                                             {
                                                 CropID = crop.ID.Value,
@@ -2019,38 +1944,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return View(model);
     }
 
-    private IActionResult RedirectForErrorOnCheckAnswer(FertiliserManureViewModel? model, string message)
-    {
-        if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
-        {
-            TempData["NutrientValuesError"] = message;
-            return RedirectToAction("NutrientValues");
-        }
-        else
-        {
-            if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (model.IsComingFromRecommendation))
-            {
-                TempData["NutrientRecommendationsError"] = message;
-                string fieldId = model.FieldList[0];
-                return RedirectToAction(_recommendationsActionName, "Crop", new
-                {
-                    q = model.EncryptedFarmId,
-                    r = _fieldDataProtector.Protect(fieldId),
-                    s = model.EncryptedHarvestYear
-                });
-            }
-            else
-            {
-                TempData["ErrorOnHarvestYearOverview"] = message;
-                return RedirectToAction(_harvestYearOverviewActionName, "Crop", new
-                {
-                    id = model.EncryptedFarmId,
-                    year = model.EncryptedHarvestYear
-                });
-            }
-        }
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CheckAnswer(FertiliserManureViewModel model)
@@ -2119,6 +2012,38 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         return View(model);
     }
+    private IActionResult RedirectForErrorOnCheckAnswer(FertiliserManureViewModel? model, string message)
+    {
+        if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
+        {
+            TempData["NutrientValuesError"] = message;
+            return RedirectToAction("NutrientValues");
+        }
+        else
+        {
+            if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (model.IsComingFromRecommendation))
+            {
+                TempData["NutrientRecommendationsError"] = message;
+                string fieldId = model.FieldList[0];
+                return RedirectToAction(_recommendationsActionName, "Crop", new
+                {
+                    q = model.EncryptedFarmId,
+                    r = _fieldDataProtector.Protect(fieldId),
+                    s = model.EncryptedHarvestYear
+                });
+            }
+            else
+            {
+                TempData["ErrorOnHarvestYearOverview"] = message;
+                return RedirectToAction(_harvestYearOverviewActionName, "Crop", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
+            }
+        }
+    }
+
 
     private IActionResult RedirectForCheckAnswerSuccess(FertiliserManureViewModel model, string successMsg, string successMsgSecond, bool success)
     {
