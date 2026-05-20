@@ -6127,7 +6127,7 @@ managementPeriod.CropID.HasValue
             isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(
                 model.ApplicationDate, model.ClosedPeriodStartDate, model.ClosedPeriodEndDate);
             HashSet<int> cropTypeIdsForTrigger = WarningWithinPeriod.FilteredCropForWarning();
-           
+
             if (isWithinClosedPeriod && !cropTypeIdsForTrigger.Contains(cropTypeResponse.CropTypeId))
             {
                 //warning excel sheet row no. 12
@@ -6262,7 +6262,7 @@ managementPeriod.CropID.HasValue
             HashSet<int> cropTypeIdsForTrigger = WarningWithinPeriod.FilteredCropForWarning();
 
             HashSet<int> brassicaCrops = WarningWithinPeriod.BrassicaCrops();
-         
+
             (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(managementPeriodId);
             int cropId = managementPeriod.CropID ?? 0;
             if (farm != null)
@@ -8904,26 +8904,7 @@ managementPeriod.CropID.HasValue
                 string description = defoliationSequence.DefoliationSequenceDescription;
                 if (!string.IsNullOrWhiteSpace(description))
                 {
-                    string[] defoliationParts = description.Split(',')
-                                                          .Select(x => x.Trim())
-                                                          .ToArray();
-
-                    selectedDefoliation = (defoliation > 0 && defoliation <= defoliationParts.Length)
-                                         ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} -{defoliationParts[defoliation - 1]}"
-                                         : $"{defoliation}";
-                    var parts = selectedDefoliation.Split('-');
-                    if (parts.Length == 2)
-                    {
-                        var left = parts[0].Trim();
-                        var right = parts[1].Trim();
-
-                        if (!string.IsNullOrWhiteSpace(right))
-                        {
-                            right = char.ToUpper(right[0]) + right.Substring(1);
-                        }
-
-                        selectedDefoliation = $"{left} - {right}";
-                    }
+                    selectedDefoliation =CommonHelpers.BindDefoliationName(defoliation, description);
 
                 }
             }

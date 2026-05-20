@@ -137,5 +137,31 @@ namespace NMP.Portal.Helpers
             };
             return rec;
         }
+        public static string BindDefoliationName(int defoliation, string description)
+        {
+            string selectedDefoliation;
+            string[] defoliationParts = description.Split(',')
+                                                                      .Select(x => x.Trim())
+                                                                      .ToArray();
+
+            selectedDefoliation = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                 ? $"{Enum.GetName(typeof(NMP.Commons.Enums.PotentialCut), defoliation)} -{defoliationParts[defoliation - 1]}"
+                                 : $"{defoliation}";
+            var parts = selectedDefoliation.Split('-');
+            if (parts.Length == 2)
+            {
+                var left = parts[0].Trim();
+                var right = parts[1].Trim();
+
+                if (!string.IsNullOrWhiteSpace(right))
+                {
+                    right = char.ToUpper(right[0]) + right.Substring(1);
+                }
+
+                selectedDefoliation = $"{left} - {right}";
+            }
+
+            return selectedDefoliation;
+        }
     }
 }

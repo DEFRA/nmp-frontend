@@ -1773,34 +1773,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
                                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                                     {
-                                        if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
-                                        {
-                                            TempData["NutrientValuesError"] = error.Message;
-                                            return RedirectToAction("NutrientValues");
-                                        }
-                                        else
-                                        {
-                                            if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (model.IsComingFromRecommendation))
-                                            {
-                                                TempData["NutrientRecommendationsError"] = error.Message;
-                                                string fieldId = model.FieldList[0];
-                                                return RedirectToAction(_recommendationsActionName, "Crop", new
-                                                {
-                                                    q = model.EncryptedFarmId,
-                                                    r = _fieldDataProtector.Protect(fieldId),
-                                                    s = model.EncryptedHarvestYear
-                                                });
-                                            }
-                                            else
-                                            {
-                                                TempData["ErrorOnHarvestYearOverview"] = error.Message;
-                                                return RedirectToAction(_harvestYearOverviewActionName, "Crop", new
-                                                {
-                                                    id = model.EncryptedFarmId,
-                                                    year = model.EncryptedHarvestYear
-                                                });
-                                            }
-                                        }
+                                        return RedirectForErrorOnCheckAnswer(model, error.Message);
                                     }
 
                                     (managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
@@ -2041,37 +2014,41 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         catch (Exception ex)
         {
-            if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
+            return RedirectForErrorOnCheckAnswer(model, ex.Message);
+        }
+        return View(model);
+    }
+
+    private IActionResult RedirectForErrorOnCheckAnswer(FertiliserManureViewModel? model, string message)
+    {
+        if (string.IsNullOrWhiteSpace(model.EncryptedFertId))
+        {
+            TempData["NutrientValuesError"] = message;
+            return RedirectToAction("NutrientValues");
+        }
+        else
+        {
+            if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (model.IsComingFromRecommendation))
             {
-                TempData["NutrientValuesError"] = ex.Message;
-                return RedirectToAction("NutrientValues");
+                TempData["NutrientRecommendationsError"] = message;
+                string fieldId = model.FieldList[0];
+                return RedirectToAction(_recommendationsActionName, "Crop", new
+                {
+                    q = model.EncryptedFarmId,
+                    r = _fieldDataProtector.Protect(fieldId),
+                    s = model.EncryptedHarvestYear
+                });
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(model.EncryptedFertId) && (model.IsComingFromRecommendation))
+                TempData["ErrorOnHarvestYearOverview"] = message;
+                return RedirectToAction(_harvestYearOverviewActionName, "Crop", new
                 {
-                    TempData["NutrientRecommendationsError"] = ex.Message;
-                    string fieldId = model.FieldList[0];
-                    return RedirectToAction(_recommendationsActionName, "Crop", new
-                    {
-                        q = model.EncryptedFarmId,
-                        r = _fieldDataProtector.Protect(fieldId),
-                        s = model.EncryptedHarvestYear
-
-                    });
-                }
-                else
-                {
-                    TempData["ErrorOnHarvestYearOverview"] = ex.Message;
-                    return RedirectToAction(_harvestYearOverviewActionName, "Crop", new
-                    {
-                        id = model.EncryptedFarmId,
-                        year = model.EncryptedHarvestYear
-                    });
-                }
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear
+                });
             }
         }
-        return View(model);
     }
 
     [HttpPost]
@@ -4252,23 +4229,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             string description = defoliationSequence.DefoliationSequenceDescription;
             if (!string.IsNullOrWhiteSpace(description))
             {
-                string[] defoliationParts = description.Split(',').Select(x => x.Trim()).ToArray();
-                selectedDefoliation = (defoliation > 0 && defoliation <= defoliationParts.Length)
-                                     ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} -{defoliationParts[defoliation - 1]}"
-                                     : $"{defoliation}";
-                var parts = selectedDefoliation.Split('-');
-                if (parts.Length == 2)
-                {
-                    var left = parts[0].Trim();
-                    var right = parts[1].Trim();
-
-                    if (!string.IsNullOrWhiteSpace(right))
-                    {
-                        right = char.ToUpper(right[0]) + right.Substring(1);
-                    }
-
-                    selectedDefoliation = $"{left} - {right}";
-                }
+                selectedDefoliation = CommonHelpers.BindDefoliationName(defoliation, description);
             }
         }
         return (selectedDefoliation, error);
