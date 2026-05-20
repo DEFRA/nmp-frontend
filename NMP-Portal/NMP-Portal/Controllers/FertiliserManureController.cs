@@ -1564,6 +1564,37 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrogenLowercase, 9999));
         }
     }
+    private async Task CreateDefoliationItem(FertiliserManureViewModel? model, FertiliserManureDataViewModel fertiliserManure, ManagementPeriod managementPeriod, string defoliationName, Crop crop)
+    {
+        var defoliationList = new DefoliationList
+        {
+            CropID = crop.ID.Value,
+            ManagementPeriodID = fertiliserManure.ManagementPeriodID,
+            FieldID = crop.FieldID.Value,
+            FieldName = (await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value)).Name,
+            EncryptedCounter = _fieldDataProtector.Protect(model.DefoliationList.Count + 1.ToString()), //model.DoubleCropEncryptedCounter,
+            Counter = model.DefoliationList.Count + 1,
+            Defoliation = managementPeriod.Defoliation,
+            DefoliationName = defoliationName
+        };
+        model.DefoliationList.Add(defoliationList);
+    }
+
+    private async Task PrepareDoubleCropList(FertiliserManureViewModel? model, string cropTypeName, int fertiliserCounter, Crop crop)
+    {
+        var doubleCropData = new DoubleCrop
+        {
+            CropID = crop.ID.Value,
+            CropName = cropTypeName,
+            CropOrder = crop.CropOrder.Value,
+            FieldID = crop.FieldID.Value,
+            FieldName = (await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value)).Name,
+            EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString()), //model.DoubleCropEncryptedCounter,
+            Counter = model.DoubleCropCurrentCounter,
+        };
+        model.DoubleCrop.Add(doubleCropData);
+    }
+
 
     [HttpGet]
     public async Task<IActionResult> CheckAnswer(string? q, string? r, string? s, string? t, string? u)
@@ -1718,7 +1749,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                             string description = defoliationSequence.DefoliationSequenceDescription;
 
                                             defoliationName = CommonHelpers.BindDefoliationName(defoliation.Value, description);
-                                            await PrepareDefoliationList(model, fertiliserManure, managementPeriod, defoliationName, crop);
+                                            await CreateDefoliationItem(model, fertiliserManure, managementPeriod, defoliationName, crop);
                                             fertiliserManure.Defoliation = managementPeriod.Defoliation;
                                             fertiliserManure.DefoliationName = defoliationName;
                                         }
@@ -1920,37 +1951,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return RedirectForErrorOnCheckAnswer(model, ex.Message);
         }
         return View(model);
-    }
-
-    private async Task PrepareDefoliationList(FertiliserManureViewModel? model, FertiliserManureDataViewModel fertiliserManure, ManagementPeriod managementPeriod, string defoliationName, Crop crop)
-    {
-        var defoliationList = new DefoliationList
-        {
-            CropID = crop.ID.Value,
-            ManagementPeriodID = fertiliserManure.ManagementPeriodID,
-            FieldID = crop.FieldID.Value,
-            FieldName = (await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value)).Name,
-            EncryptedCounter = _fieldDataProtector.Protect(model.DefoliationList.Count + 1.ToString()), //model.DoubleCropEncryptedCounter,
-            Counter = model.DefoliationList.Count + 1,
-            Defoliation = managementPeriod.Defoliation,
-            DefoliationName = defoliationName
-        };
-        model.DefoliationList.Add(defoliationList);
-    }
-
-    private async Task PrepareDoubleCropList(FertiliserManureViewModel? model, string cropTypeName, int fertiliserCounter, Crop crop)
-    {
-        var doubleCropData = new DoubleCrop
-        {
-            CropID = crop.ID.Value,
-            CropName = cropTypeName,
-            CropOrder = crop.CropOrder.Value,
-            FieldID = crop.FieldID.Value,
-            FieldName = (await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value)).Name,
-            EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString()), //model.DoubleCropEncryptedCounter,
-            Counter = model.DoubleCropCurrentCounter,
-        };
-        model.DoubleCrop.Add(doubleCropData);
     }
 
     [HttpPost]
