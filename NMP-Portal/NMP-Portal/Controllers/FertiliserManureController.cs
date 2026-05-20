@@ -1665,18 +1665,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                     if (cropList != null && cropList.Count == 2 && managementPeriod != null)
                                     {
                                         cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
-                                        var doubleCrop = new DoubleCrop
-                                        {
-                                            CropID = crop.ID.Value,
-                                            CropName = cropTypeName,
-                                            CropOrder = crop.CropOrder.Value,
-                                            FieldID = crop.FieldID.Value,
-                                            FieldName = (await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value)).Name,
-                                            EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString()), //model.DoubleCropEncryptedCounter,
-                                            Counter = model.DoubleCropCurrentCounter,
-                                        };
-                                        model.DoubleCrop.Add(doubleCrop);
-
+                                        await PrepareDoubleCropList(model, cropTypeName, fertiliserCounter, crop);
 
                                     }
                                     else
@@ -1727,20 +1716,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                         if (error == null && defoliationSequence != null)
                                         {
                                             string description = defoliationSequence.DefoliationSequenceDescription;
-                                            
-                                            defoliationName = CommonHelpers.BindDefoliationName(defoliation.Value, description); ;
-                                            var defList = new DefoliationList
-                                            {
-                                                CropID = crop.ID.Value,
-                                                ManagementPeriodID = fertiliserManure.ManagementPeriodID,
-                                                FieldID = crop.FieldID.Value,
-                                                FieldName = (await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value)).Name,
-                                                EncryptedCounter = _fieldDataProtector.Protect(model.DefoliationList.Count + 1.ToString()), //model.DoubleCropEncryptedCounter,
-                                                Counter = model.DefoliationList.Count + 1,
-                                                Defoliation = managementPeriod.Defoliation,
-                                                DefoliationName = defoliationName
-                                            };
-                                            model.DefoliationList.Add(defList);
+
+                                            defoliationName = CommonHelpers.BindDefoliationName(defoliation.Value, description);
+                                            await PrepareDefoliationList(model, fertiliserManure, managementPeriod, defoliationName, crop);
                                             fertiliserManure.Defoliation = managementPeriod.Defoliation;
                                             fertiliserManure.DefoliationName = defoliationName;
                                         }
@@ -1942,6 +1920,37 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return RedirectForErrorOnCheckAnswer(model, ex.Message);
         }
         return View(model);
+    }
+
+    private async Task PrepareDefoliationList(FertiliserManureViewModel? model, FertiliserManureDataViewModel fertiliserManure, ManagementPeriod managementPeriod, string defoliationName, Crop crop)
+    {
+        var defoliationList = new DefoliationList
+        {
+            CropID = crop.ID.Value,
+            ManagementPeriodID = fertiliserManure.ManagementPeriodID,
+            FieldID = crop.FieldID.Value,
+            FieldName = (await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value)).Name,
+            EncryptedCounter = _fieldDataProtector.Protect(model.DefoliationList.Count + 1.ToString()), //model.DoubleCropEncryptedCounter,
+            Counter = model.DefoliationList.Count + 1,
+            Defoliation = managementPeriod.Defoliation,
+            DefoliationName = defoliationName
+        };
+        model.DefoliationList.Add(defoliationList);
+    }
+
+    private async Task PrepareDoubleCropList(FertiliserManureViewModel? model, string cropTypeName, int fertiliserCounter, Crop crop)
+    {
+        var doubleCropData = new DoubleCrop
+        {
+            CropID = crop.ID.Value,
+            CropName = cropTypeName,
+            CropOrder = crop.CropOrder.Value,
+            FieldID = crop.FieldID.Value,
+            FieldName = (await _fieldLogic.FetchFieldByFieldId(crop.FieldID.Value)).Name,
+            EncryptedCounter = _fieldDataProtector.Protect(fertiliserCounter.ToString()), //model.DoubleCropEncryptedCounter,
+            Counter = model.DoubleCropCurrentCounter,
+        };
+        model.DoubleCrop.Add(doubleCropData);
     }
 
     [HttpPost]
@@ -3417,23 +3426,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
             if (defoliationSequence != null)
             {
-                string description = defoliationSequence.DefoliationSequenceDescription;
-                string[] defoliationParts = description.Split(',')
-                                                        .Select(x => x.Trim())
-                                                        .ToArray();
-                List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
-                foreach (int defoliation in defoliationList)
-                {
-                    string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
-                    ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
-                    : defoliation.ToString();
-
-                    allDefoliationWithName.Add(new SelectListItem
-                    {
-                        Text = text,
-                        Value = defoliation.ToString()
-                    });
-                }
+                List<SelectListItem> allDefoliationWithName = CommonHelpers.BindAllDefoliationWithName(defoliationList, defoliationSequence);
                 allDefoliations.Add(allDefoliationWithName);
             }
         }

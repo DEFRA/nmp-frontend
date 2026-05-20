@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using NMP.Commons.Enums;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -162,6 +163,28 @@ namespace NMP.Portal.Helpers
             }
 
             return selectedDefoliation;
+        }
+        public static List<SelectListItem> BindAllDefoliationWithName(List<int> defoliationList, DefoliationSequenceResponse defoliationSequence)
+        {
+            string description = defoliationSequence.DefoliationSequenceDescription;
+            string[] defoliationParts = description.Split(',')
+                                                    .Select(x => x.Trim())
+                                                    .ToArray();
+            List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
+            foreach (int defoliation in defoliationList)
+            {
+                string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                : defoliation.ToString();
+
+                allDefoliationWithName.Add(new SelectListItem
+                {
+                    Text = text,
+                    Value = defoliation.ToString()
+                });
+            }
+
+            return allDefoliationWithName;
         }
     }
 }
