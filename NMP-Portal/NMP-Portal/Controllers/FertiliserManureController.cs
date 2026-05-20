@@ -1276,14 +1276,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                 Match match = regex.Match(closedPeriod);
                                                 if (match.Success)
                                                 {
-                                                    int startDay = int.Parse(match.Groups[1].Value);
-                                                    string startMonthStr = match.Groups[2].Value;
-                                                    int endDay = int.Parse(match.Groups[3].Value);
-                                                    string endMonthStr = match.Groups[4].Value;
-
-                                                    Dictionary<int, string> dtfi = GetMonthDictionary();
-                                                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-                                                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
+                                                    Dictionary<int, string> dtfi;
+                                                    WarningWithinPeriod.BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
 
                                                     DateTime startDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
                                                     DateTime endDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
@@ -1934,15 +1928,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                     Match match = regex.Match(closedPeriod);
                                                     if (match.Success)
                                                     {
-                                                        int startDay = int.Parse(match.Groups[1].Value);
-                                                        string startMonthStr = match.Groups[2].Value;
-                                                        int endDay = int.Parse(match.Groups[3].Value);
-                                                        string endMonthStr = match.Groups[4].Value;
-
-                                                        Dictionary<int, string> dtfi = GetMonthDictionary();
-
-                                                        int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-                                                        int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
+                                                        Dictionary<int, string> dtfi;
+                                                        WarningWithinPeriod.BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
 
                                                         DateTime startDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
                                                         DateTime endDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
@@ -4427,15 +4414,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         if (!match.Success)
             return null;
 
-        int startDay = int.Parse(match.Groups[1].Value);
-        string startMonthStr = match.Groups[2].Value;
-        int endDay = int.Parse(match.Groups[3].Value);
-        string endMonthStr = match.Groups[4].Value;
-
-        Dictionary<int, string> dtfi = GetMonthDictionary();
-
-        int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-        int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
+        Dictionary<int, string> dtfi;
+        WarningWithinPeriod.BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
 
         DateTime startDate;
         DateTime endDate;
