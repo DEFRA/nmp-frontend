@@ -1276,23 +1276,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                 Match match = regex.Match(closedPeriod);
                                                 if (match.Success)
                                                 {
-                                                    Dictionary<int, string> dtfi;
-                                                    WarningWithinPeriod.BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
-
-                                                    DateTime startDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
-                                                    DateTime endDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
-
-                                                    if (startMonth <= endMonth)
-                                                    {
-                                                        startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                        endDate = new DateTime(year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                    }
-                                                    else if (startMonth >= endMonth)
-                                                    {
-                                                        startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                        endDate = new DateTime(year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                    }
-
+                                                    DateTime startDate, endDate;
+                                                    GetStartAndEndDateForWarning(year, match, out startDate, out endDate);
 
                                                     if (model.N > 0)
                                                     {
@@ -1362,6 +1347,25 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return View(model);
         }
         return RedirectToAction(_checkAnswerActionName);
+    }
+
+    private static void GetStartAndEndDateForWarning(int year, Match match, out DateTime startDate, out DateTime endDate)
+    {
+        Dictionary<int, string> dtfi;
+        WarningWithinPeriod.BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
+
+        startDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
+        endDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
+        if (startMonth <= endMonth)
+        {
+            startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+            endDate = new DateTime(year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+        }
+        else if (startMonth >= endMonth)
+        {
+            startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+            endDate = new DateTime(year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+        }
     }
 
     private async Task<(int fieldId, int? cropTypeId, string? defoliationSequenceName, FertiliserManureViewModel model)>
@@ -1928,22 +1932,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                                     Match match = regex.Match(closedPeriod);
                                                     if (match.Success)
                                                     {
-                                                        Dictionary<int, string> dtfi;
-                                                        WarningWithinPeriod.BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
-
-                                                        DateTime startDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
-                                                        DateTime endDate = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
-
-                                                        if (startMonth <= endMonth)
-                                                        {
-                                                            startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                            endDate = new DateTime(year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                        }
-                                                        else if (startMonth >= endMonth)
-                                                        {
-                                                            startDate = new DateTime(year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                            endDate = new DateTime(year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                                                        }
+                                                        DateTime startDate, endDate;
+                                                        GetStartAndEndDateForWarning(year, match, out startDate, out endDate);
 
                                                         string cropType = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
                                                         //NMaxLimitEngland is 0 for England and Whales for crops Winter beans​ ,Spring beans​, Peas​ ,Market pick peas
