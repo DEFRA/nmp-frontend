@@ -34,4 +34,5 @@ public interface IFertiliserManureLogic
     Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> BindNmaxWarnings(FertiliserManureViewModel model, decimal totalNitrogenApplied, int farmCountryId, Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit);
     Task<(FertiliserManureViewModel model, WarningResponse warningResponse, bool isNitrogenRateExceeded)> WarningForGrass(FertiliserManureViewModel model, WarningResponse warningResponse, string startPeriod, bool isNitrogenRateExceeded, decimal nitrogenWithinWarningPeriod);
     Task<(FertiliserManureViewModel model, WarningResponse warningResponse)> WarningForBrassicaCrop(FertiliserManureViewModel model, decimal totalNitrogen, WarningResponse warningResponse, string startPeriod, string endPeriod, decimal nitrogenInFourWeek);
+    Task<(FertiliserManureViewModel, List<Crop>)> HandleDefoliationList(FertiliserManureViewModel model);
 }
