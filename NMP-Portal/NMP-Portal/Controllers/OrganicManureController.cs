@@ -3070,9 +3070,8 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> IncorporationDelay()
         {
             _logger.LogTrace($"Organic Manure Controller : IncorporationDelay() action called");
-            OrganicManureViewModel? model = new OrganicManureViewModel();
             Error? error = null;
-            model = GetOrganicManureFromSession();
+            OrganicManureViewModel? model = GetOrganicManureFromSession();
             if (model == null)
             {
                 return RedirectToAction(_farmList, "Farm");
@@ -6778,7 +6777,7 @@ managementPeriod.CropID.HasValue
                         {
                             model.FieldName = fieldNames[0];
                         }
-                        else if (fieldNames != null)
+                        else
                         {
                             model.FieldName = string.Empty;
                             ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
