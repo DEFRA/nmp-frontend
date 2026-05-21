@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -11182,6 +11182,15 @@ namespace NMP.Commons.Resources {
         public static string lblPaperCrumbleOrStrawMulch {
             get {
                 return ResourceManager.GetString("lblPaperCrumbleOrStrawMulch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The green compost or green/food compost applied must be produced in accordance with the standards set out in PAS 100 and must not contain livestock manure.
+        /// </summary>
+        public static string lblPara1PAS100 {
+            get {
+                return ResourceManager.GetString("lblPara1PAS100", resourceCulture);
             }
         }
         

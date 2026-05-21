@@ -165,22 +165,23 @@
                 </govuk-error-summary>
             }
             
-            @if ((Model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsOrgManureNfieldLimitWarning) || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsApplicationJulyToSeptWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
                     
-                    @if (Model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsOrgManureNfieldLimitWarning)
+                    @if (Model.IsOrgManureNfieldLimitWarning && !string.IsNullOrWhiteSpace(Model.NmaxWarningPara1) && !Model.NmaxWarningPara1.Equals(Resource.lblPara1PAS100))
                     {
                        @*  We don't have to show this warning on check answer page (mentioned on scotland warning excel sheet row no. 6) *@
-                        <p class="govuk-notification-banner__heading">
+                      
+                         <p class="govuk-notification-banner__heading">
                             @if (Model.NmaxWarningPara1 != null)
                             {
                                 @Model.NmaxWarningPara1
                             }
-                        </p>
+                         </p>
                     }
                     @if (Model.IsNMaxLimitWarning)
                     {
@@ -196,6 +197,12 @@
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.ClosedPeriodWarningPara1
+                        </p>
+                    }
+                    @if (Model.IsApplicationJulyToSeptWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Model.ApplicationJulyToSeptPara1
                         </p>
                     }
                     @if (Model.IsEndClosedPeriodFebruaryWarning)
