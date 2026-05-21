@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using NMP.Commons.Enums;
@@ -235,6 +236,21 @@ namespace NMP.Commons.Helpers
                 isAutumn = true;
             }
             return isAutumn;
+        }
+        public static void BindCounter<T>(
+    List<T> list,
+    IDataProtector protector,
+    Action<T, int, string> setValues)
+        {
+            if (list != null && list.Count > 0)
+            {
+                int counter = 1;
+                list.ForEach(item =>
+                {
+                    var encrypted = protector.Protect($"{counter}");
+                    setValues(item, counter++, encrypted);
+                });
+            }
         }
     }
 }

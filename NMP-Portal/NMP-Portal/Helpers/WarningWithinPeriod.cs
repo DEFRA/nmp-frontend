@@ -127,14 +127,8 @@ namespace NMP.Portal.Helpers
                 Match match = regex.Match(closedPeriod);
                 if (match.Success)
                 {
-                    int startDay = int.Parse(match.Groups[1].Value);
-                    string startMonthStr = match.Groups[2].Value;
-                    int endDay = int.Parse(match.Groups[3].Value);
-                    string endMonthStr = match.Groups[4].Value;
-                    Dictionary<int, string> dtfi = GetMonths();
-                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
-
+                    Dictionary<int, string> dtfi;
+                    BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
                     DateTime closedPeriodStart = new DateTime(applicationDate.Year, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                     DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
 
@@ -200,27 +194,8 @@ namespace NMP.Portal.Helpers
                 Match match = regex.Match(closedPeriod);
                 if (match.Success)
                 {
-                    int startDay = int.Parse(match.Groups[1].Value);
-                    string startMonthStr = match.Groups[2].Value;
-                    int endDay = int.Parse(match.Groups[3].Value);
-                    string endMonthStr = match.Groups[4].Value;
-
-                    //DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
-                    Dictionary<int, string> dtfi = new Dictionary<int, string>();
-                    dtfi.Add(0, Resource.lblJanuary);
-                    dtfi.Add(1, Resource.lblFebruary);
-                    dtfi.Add(2, Resource.lblMarch);
-                    dtfi.Add(3, Resource.lblApril);
-                    dtfi.Add(4, Resource.lblMay);
-                    dtfi.Add(5, Resource.lblJune);
-                    dtfi.Add(6, Resource.lblJuly);
-                    dtfi.Add(7, Resource.lblAugust);
-                    dtfi.Add(8, Resource.lblSeptember);
-                    dtfi.Add(9, Resource.lblOctober);
-                    dtfi.Add(10, Resource.lblNovember);
-                    dtfi.Add(11, Resource.lblDecember);
-                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
+                    Dictionary<int, string> dtfi;
+                    BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
                     string endMonthFullName = dtfi[endMonth - 1];
 
                     DateTime? endDateFebruary = null;
@@ -300,6 +275,19 @@ namespace NMP.Portal.Helpers
             }
 
             return message;
+        }
+
+        public static void BindDatesForWarning(Match match, out int startDay, out int endDay, out Dictionary<int, string> dtfi, out int startMonth, out int endMonth)
+        {
+            startDay = int.Parse(match.Groups[1].Value);
+            string startMonthStr = match.Groups[2].Value;
+            endDay = int.Parse(match.Groups[3].Value);
+            string endMonthStr = match.Groups[4].Value;
+
+            //DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
+            dtfi = GetMonths();
+            startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
+            endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
         }
 
         public string ClosedPeriodForFertiliserWarningMessage(DateTime applicationDate, int cropTypeId, string soilType, string cropType)
@@ -384,15 +372,8 @@ namespace NMP.Portal.Helpers
                 Match match = regex.Match(closedPeriod);
                 if (match.Success)
                 {
-                    int startDay = int.Parse(match.Groups[1].Value);
-                    string startMonthStr = match.Groups[2].Value;
-                    int endDay = int.Parse(match.Groups[3].Value);
-                    string endMonthStr = match.Groups[4].Value;
-
-
-                    Dictionary<int, string> dtfi = GetMonths();
-                    int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-                    int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
+                    Dictionary<int, string> dtfi;
+                    BindDatesForWarning(match, out int startDay, out int endDay, out dtfi, out int startMonth, out int endMonth);
 
                     DateTime? endDateFebruary = null;
                     endDateFebruary = new DateTime(applicationDate.Year, 3, 1, 00, 00, 00, DateTimeKind.Unspecified);
@@ -456,36 +437,14 @@ namespace NMP.Portal.Helpers
                 {
                     case (int)NMP.Commons.Enums.CropTypes.Asparagus:             //Asparagus
                     case (int)NMP.Commons.Enums.CropTypes.BulbOnions:            //Bulb Onions
-                        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
-                        }
-                        if (isSandyShallowSoil && (sowingDate < september16))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
-                        }
-                        if (!isSandyShallowSoil)
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
-                        }
+                        WarningPeriod = BindWarningPeriod(WarningPeriod, september16, isSandyShallowSoil, sowingDate, lastDayOfFeb);
                         break;
 
                     case (int)NMP.Commons.Enums.CropTypes.SaladOnions:            //Salad Onions
 
                         if (cropInfo1 == 12)                                       // cropInfo1Id==12 for Overwintered
                         {
-                            if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                            {
-                                WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
-                            }
-                            if (isSandyShallowSoil && (sowingDate < september16))
-                            {
-                                WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
-                            }
-                            if (!isSandyShallowSoil)
-                            {
-                                WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
-                            }
+                            WarningPeriod = BindWarningPeriod(WarningPeriod, september16, isSandyShallowSoil, sowingDate, lastDayOfFeb);
                         }
                         break;
 
@@ -504,18 +463,7 @@ namespace NMP.Portal.Helpers
                     case (int)NMP.Commons.Enums.CropTypes.WildRocket:
                     case (int)NMP.Commons.Enums.CropTypes.Swedes:
                     case (int)NMP.Commons.Enums.CropTypes.Turnips:
-                        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
-                        }
-                        if (isSandyShallowSoil && (sowingDate < september16))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
-                        }
-                        if (!isSandyShallowSoil)
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
-                        }
+                        WarningPeriod = BindWarningPeriod(WarningPeriod, september16, isSandyShallowSoil, sowingDate, lastDayOfFeb);
 
                         break;
 
@@ -541,6 +489,24 @@ namespace NMP.Portal.Helpers
                         break;
                 }
             }
+            return WarningPeriod;
+        }
+
+        private static string? BindWarningPeriod(string? WarningPeriod, DateTime september16, bool isSandyShallowSoil, DateTime? sowingDate, int lastDayOfFeb)
+        {
+            if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
+            {
+                WarningPeriod = string.Format(Resource.lbl1Augto28Feb, Resource.lblAugust, lastDayOfFeb, Resource.lblFebruary);
+            }
+            if (isSandyShallowSoil && (sowingDate < september16))
+            {
+                WarningPeriod = string.Format(Resource.lbl16Septo28Feb, Resource.lblSeptember, lastDayOfFeb, Resource.lblFebruary);
+            }
+            if (!isSandyShallowSoil)
+            {
+                WarningPeriod = string.Format(Resource.lbl1Octto28Feb, Resource.lblOctober, lastDayOfFeb, Resource.lblFebruary);
+            }
+
             return WarningPeriod;
         }
 
@@ -644,6 +610,42 @@ namespace NMP.Portal.Helpers
                 }
             }
             return isWithinDateRange;
+        }
+        public static HashSet<int> BrassicaCrops()
+        {
+            return new HashSet<int>
+    {
+        (int)NMP.Commons.Enums.CropTypes.ForageRape,
+        (int)NMP.Commons.Enums.CropTypes.ForageSwedesRootsLifted,
+        (int)NMP.Commons.Enums.CropTypes.KaleGrazed,
+        (int)NMP.Commons.Enums.CropTypes.StubbleTurnipsGrazed,
+        (int)NMP.Commons.Enums.CropTypes.ForageSwedesGrazed,
+        (int)NMP.Commons.Enums.CropTypes.ForageTurnipsRootsLifted,
+        (int)NMP.Commons.Enums.CropTypes.BrusselSprouts,
+        (int)NMP.Commons.Enums.CropTypes.Cabbage,
+        (int)NMP.Commons.Enums.CropTypes.Calabrese,
+        (int)NMP.Commons.Enums.CropTypes.Cauliflower,
+        (int)NMP.Commons.Enums.CropTypes.Radish,
+        (int)NMP.Commons.Enums.CropTypes.WildRocket,
+        (int)NMP.Commons.Enums.CropTypes.Swedes,
+        (int)NMP.Commons.Enums.CropTypes.Turnips
+    };
+        }
+
+        public static HashSet<int> FilteredCropForWarning()
+        {
+            var crops = BrassicaCrops();
+
+            crops.UnionWith(new[]
+            {
+        (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape,
+        (int)NMP.Commons.Enums.CropTypes.Asparagus,
+        (int)NMP.Commons.Enums.CropTypes.BulbOnions,
+        (int)NMP.Commons.Enums.CropTypes.SaladOnions,
+        (int)NMP.Commons.Enums.CropTypes.Grass
+    });
+
+            return crops;
         }
     }
 }
