@@ -1440,6 +1440,7 @@ managementPeriod.CropID.HasValue
 
                 if (model.FieldList.Count >= 1)
                 {
+                    model.IsWithinNVZ = await IsAnyFieldWithinNVZ(model.FieldList);
                     (farm, error) = await GetFarmAsync(model.EncryptedFarmId);
                     if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                     {
