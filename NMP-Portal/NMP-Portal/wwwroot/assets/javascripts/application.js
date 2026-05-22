@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
         checkboxes.forEach(function (checkbox) {
             checkbox.addEventListener("change", function () {
                 // Update "Select All" checkbox based on individual checkboxes' state
-                selectAllCheckbox.checked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+                selectAllCheckbox.checked = Array.from(checkboxes)
+                    .every(item => item.checked);
             });
         });
         // Select or deselect all checkboxes when "Select All" changes

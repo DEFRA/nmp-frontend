@@ -47,13 +47,13 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -67,7 +67,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         {
             if (farmData == null || farmData.Farm == null)
             {
-                error ??= new Error();
+                error = new Error();
                 error.Message = Resource.MsgInvalidFarmData;
                 return (farm, error);
             }
@@ -76,7 +76,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
             bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID, orgId);
             if (IsFarmExist)
             {
-                error ??= new Error();
+                error = new Error();
                 error.Message = string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode);
                 return (farm, error);
             }
@@ -140,13 +140,13 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -326,7 +326,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         string url = string.Empty;
         HttpResponseMessage response = null;
         url = string.Format(ApiurlHelper.AddOrUpdateExcessWinterRainfallAPI, farmId, year);
-        if (isUpdated != null && isUpdated)
+        if (isUpdated)
         {
             response = await httpClient.PutAsync(url, new StringContent(excessWinterRainfallData, Encoding.UTF8, "application/json"));
         }

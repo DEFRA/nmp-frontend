@@ -29,7 +29,6 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
-        //context.Response.Headers.Append("X-Xss-Protection", new StringValues("1; mode=block"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
         // You can use https://report-uri.com/ to get notified when a misissued certificate is detected
@@ -64,7 +63,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         //    "child-src 'self';" +
         //    "connect-src 'self' wss: ws:;" +
         //    "default-src 'self';" +
-        //    "font-src 'self' https: " + //fonts.googleapis.com;
+        
         //    "form-action 'self';" +
         //    "frame-ancestors 'self';" +
         //    "frame-src 'self';" +

@@ -116,7 +116,7 @@ namespace NMP.Portal.Security
             }
         }
 
-        private static async Task OnRemoteSignOut(RemoteSignOutContext context)
+        private static async Task OnRemoteSignOut(RemoteSignOutContext _)
         {
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -136,7 +136,7 @@ namespace NMP.Portal.Security
             await Task.CompletedTask.ConfigureAwait(false);
         }
 
-        private static async Task OnSignedOutCallbackRedirect(RemoteSignOutContext context)
+        private static async Task OnSignedOutCallbackRedirect(RemoteSignOutContext _)
         { 
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
@@ -146,7 +146,7 @@ namespace NMP.Portal.Security
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
+        private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext _)
         {
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -170,7 +170,7 @@ namespace NMP.Portal.Security
             await Task.CompletedTask.ConfigureAwait(false);
         }
 
-        private static async Task OnAuthorizationCodeReceived(AuthorizationCodeReceivedContext context)
+        private static async Task OnAuthorizationCodeReceived(AuthorizationCodeReceivedContext _)
         {
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
