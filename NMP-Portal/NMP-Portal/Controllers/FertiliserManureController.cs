@@ -1277,7 +1277,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 model.IsWarningMsgNeedToShow = true;
                 SetFertiliserManureToSession(model);
-                return (flowControl: false, value: View(model));
+                return (flowControl: false, value: View(model),model);
             }
         }
         else
@@ -1288,7 +1288,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             model.IsWarningMsgNeedToShow = false;
         }
 
-        return (flowControl: true, value: null);
+        return (flowControl: true, value: null,model);
     }
 
     private async Task<(bool flowControl, IActionResult? value, FertiliserManureViewModel)> CalculateNitrogenWarning(FertiliserManureViewModel model, Error? error, FertiliserManureDataViewModel fertiliser)
