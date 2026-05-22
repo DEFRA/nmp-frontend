@@ -1989,49 +1989,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return View(model);
             }
 
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
-            ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
-            (List<NutrientsLoadingManures> nutrientsLoadingManures, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-
-            if (nutrientsLoadingManures.Count > 0)
-            {
-                nutrientsLoadingManures = nutrientsLoadingManures.Where(x => x.ManureDate.Value.Date.Year == model.Year).ToList();
-                ViewBag.NutrientLivestockData = nutrientsLoadingManures;
-            }
-
             if (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
                 model.TotalAreaInNVZ = model.TotalFarmArea;
             }
-            bool? isAnyLivestockImportExport = null;
 
-            if (model.IsAnyLivestockImportExport.HasValue)
+            (var NutrientsLoadingFarmDetailsData, error) = await BindNutrientsLoadingFarmDetailData(model);
+            if (NutrientsLoadingFarmDetailsData != null && error == null)
             {
-                isAnyLivestockImportExport = nutrientsLoadingManures.Count > 0;
+                (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+
             }
-            bool? isAnyLivestockNumber = null;
-
-            if (model.IsAnyLivestockNumber.HasValue)
-            {
-                isAnyLivestockNumber = nutrientsLoadingLiveStockList.Count > 0;
-            }
-
-            var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
-            {
-                FarmID = model.FarmId,
-                CalendarYear = model.Year,
-                LandInNVZ = model.TotalAreaInNVZ,
-                LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
-                TotalFarmed = model.TotalFarmArea,
-                ManureTotal = null,
-                Derogation = model.IsGrasslandDerogation,
-                GrassPercentage = model.GrassPercentage,
-                ContingencyPlan = false,
-                IsAnyLivestockImportExport = isAnyLivestockImportExport,
-                IsAnyLivestockNumber = isAnyLivestockNumber,
-            };
-
-            (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["FarmDetailsSaveError"] = error.Message;
@@ -2137,35 +2105,16 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (model.IsAnyLivestockImportExport.HasValue && !model.IsAnyLivestockImportExport.Value)
             {
                 model.IsCheckAnswer = false;
-                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
-                ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
-                (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingManuresList.Count > 0)
-                {
-                    nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
-                    ViewBag.NutrientsLoadingManuresData = nutrientsLoadingManuresList;
-
-                }
                 if (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
                 {
                     model.TotalAreaInNVZ = model.TotalFarmArea;
                 }
-
-                var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
+                var (NutrientsLoadingFarmDetailsData, error) = await BindNutrientsLoadingFarmDetailData(model);
+                if (NutrientsLoadingFarmDetailsData != null && error == null)
                 {
-                    FarmID = model.FarmId,
-                    CalendarYear = model.Year,
-                    LandInNVZ = model.TotalAreaInNVZ,
-                    LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
-                    TotalFarmed = model.TotalFarmArea,
-                    ManureTotal = null,
-                    Derogation = model.IsGrasslandDerogation,
-                    GrassPercentage = model.GrassPercentage,
-                    ContingencyPlan = false,
-                    IsAnyLivestockImportExport = nutrientsLoadingManuresList.Count > 0,
-                    IsAnyLivestockNumber = nutrientsLoadingLiveStockList.Count > 0,
-                };
-                (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+                    (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+                }
+
                 SetReportDataToSession(model);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
@@ -3959,29 +3908,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (model.IsAnyLivestockNumber == false)
             {
-                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
-                ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
-                (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingManuresList.Count > 0)
+                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error? error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+
+                (var NutrientsLoadingFarmDetailsData, error) = await BindNutrientsLoadingFarmDetailData(model);
+                if (NutrientsLoadingFarmDetailsData != null && error == null)
                 {
-                    nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year).ToList();
-                    ViewBag.NutrientsLoadingManuresData = nutrientsLoadingManuresList;
+                    (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
                 }
-                var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail()
-                {
-                    FarmID = model.FarmId,
-                    CalendarYear = model.Year,
-                    LandInNVZ = model.TotalAreaInNVZ,
-                    LandNotNVZ = model.TotalFarmArea - model.TotalAreaInNVZ,
-                    TotalFarmed = model.TotalFarmArea,
-                    ManureTotal = null,
-                    Derogation = model.IsGrasslandDerogation,
-                    GrassPercentage = model.GrassPercentage,
-                    ContingencyPlan = false,
-                    IsAnyLivestockImportExport = nutrientsLoadingManuresList.Count > 0,
-                    IsAnyLivestockNumber = nutrientsLoadingLiveStockList.Count > 0,
-                };
-                (NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+
                 SetReportDataToSession(model);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
@@ -6778,33 +6712,47 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private async Task<(NutrientsLoadingFarmDetail?, Error)> SaveGrasslandDerogationAsync(ReportViewModel model)
     {
-        // Fetch livestock
-        var (livestockList, livestockError) =
-            await _reportLogic.FetchLivestockByFarmIdAndYear(
-                model.FarmId!.Value,
-                model.Year ?? 0);
-
-        if (!string.IsNullOrWhiteSpace(livestockError?.Message))
+        NutrientsLoadingFarmDetail? savedNutrientsLoadingFarmDetailsData = null;
+        var (NutrientsLoadingFarmDetailsData, error) = await BindNutrientsLoadingFarmDetailData(model);
+        if (NutrientsLoadingFarmDetailsData != null && error == null)
         {
-            return (null, livestockError);
+            (savedNutrientsLoadingFarmDetailsData, error) =
+           await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
+
         }
+
+        if (!string.IsNullOrWhiteSpace(error?.Message))
+        {
+            return (null, error);
+        }
+
+        return (savedNutrientsLoadingFarmDetailsData, new Error());
+    }
+
+    private async Task<(NutrientsLoadingFarmDetail?, Error?)> BindNutrientsLoadingFarmDetailData(ReportViewModel model)
+    {
+        // Fetch livestock
+        Error? error = null;
+        (List<NutrientsLoadingLiveStockViewModel>? nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId!.Value, model.Year ?? 0);
+        if (!string.IsNullOrWhiteSpace(error?.Message))
+        {
+            return (null, error);
+        }
+        ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
 
         // Fetch manures
-        var (manures, manureError) =
-            await _reportLogic.FetchNutrientsLoadingManuresByFarmId(
-                model.FarmId!.Value);
+        (List<NutrientsLoadingManures> nutrientsLoadingManures, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId!.Value);
 
-        if (!string.IsNullOrWhiteSpace(manureError?.Message))
+        if (!string.IsNullOrWhiteSpace(error?.Message))
         {
-            return (null, manureError);
+            return (null, error);
         }
 
-        if (manures?.Any() == true)
+        if (nutrientsLoadingManures?.Any() == true)
         {
-            manures = manures
-                .Where(x => x.ManureDate?.Year == model.Year)
-                .ToList();
+            nutrientsLoadingManures = nutrientsLoadingManures.Where(x => x.ManureDate?.Year == model.Year).ToList();
         }
+        ViewBag.NutrientsLoadingManuresData = nutrientsLoadingManures;
 
         var NutrientsLoadingFarmDetailsData = new NutrientsLoadingFarmDetail
         {
@@ -6819,24 +6767,15 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 : null,
             ContingencyPlan = false,
             IsAnyLivestockImportExport = model.IsAnyLivestockImportExport.HasValue
-                ? manures?.Any() == true
+                ? nutrientsLoadingManures?.Any() == true
                 : null,
             IsAnyLivestockNumber = model.IsAnyLivestockNumber.HasValue
-                ? livestockList?.Any() == true
+                ? nutrientsLoadingLiveStockList?.Any() == true
                 : null
         };
+        return (NutrientsLoadingFarmDetailsData, error);
 
-        var (savedNutrientsLoadingFarmDetailsData, saveError) =
-            await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
-
-        if (!string.IsNullOrWhiteSpace(saveError?.Message))
-        {
-            return (null, saveError);
-        }
-
-        return (savedNutrientsLoadingFarmDetailsData, new Error());
     }
-
     private void SetVegetableHints(Dictionary<string, int[]> cropGroups, Dictionary<int, string> cropTypeMap)
     {
         ViewBag.Group1VegetablesHint = BuildHint(cropGroups, Resource.lblGroup1Vegetables, cropTypeMap);
