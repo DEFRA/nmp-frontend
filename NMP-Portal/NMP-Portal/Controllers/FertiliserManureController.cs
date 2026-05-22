@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Fluid.Parser;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -139,6 +140,29 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return RedirectToAction(_fieldGroupActionName);
     }
+    private IActionResult RedirectForFieldGroupGet(FertiliserManureViewModel? model)
+    {
+        if (model.IsDoubleCropAvailable)
+        {
+            SetFertiliserManureToSession(model);
+            return RedirectToAction(_doubleCropActionName);
+        }
+        if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
+        {
+            SetFertiliserManureToSession(model);
+            return RedirectToAction(_defoliationActionName);
+        }
+        else
+        {
+            model.GrassCropCount = null;
+            model.IsSameDefoliationForAll = null;
+            model.IsAnyChangeInSameDefoliationFlag = false;
+            SetFertiliserManureToSession(model);
+        }
+
+        SetFertiliserManureToSession(model);
+        return RedirectToAction("InOrgnaicManureDuration");
+    }
     [HttpGet]
     public async Task<IActionResult> FieldGroup(string q, string r, string? s)//q=FarmId,r=harvestYear,s=fieldId
     {
@@ -178,7 +202,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     string fieldId = _fieldDataProtector.Unprotect(s);
                     model.FieldList.Add(fieldId);
 
-                    (error, model) = await BindFertiliserListForFieldGroup(q, r, s, model, fieldId);
+                    (error, model) = await BindFertiliserListForFieldGroup(model, fieldId);
                     if (!string.IsNullOrWhiteSpace(error?.Message))
                     {
                         TempData["NutrientRecommendationsError"] = error.Message;
@@ -197,7 +221,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             (_, _, error) = await BindFieldGroupList(model, error);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["ErrorOnHarvestYearOverview"] = error?.Message;
+                TempData["ErrorOnHarvestYearOverview"] = error.Message;
                 ClearTempErrors(_fieldGroupErrorTempDataKey, _fieldErrorTempDataKey);
 
                 SetFertiliserManureToSession(model);
@@ -222,30 +246,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return View("Views/FertiliserManure/FieldGroup.cshtml", model);
     }
 
-    private IActionResult RedirectForFieldGroupGet(FertiliserManureViewModel? model)
-    {
-        if (model.IsDoubleCropAvailable)
-        {
-            SetFertiliserManureToSession(model);
-            return RedirectToAction(_doubleCropActionName);
-        }
-        if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
-        {
-            SetFertiliserManureToSession(model);
-            return RedirectToAction(_defoliationActionName);
-        }
-        else
-        {
-            model.GrassCropCount = null;
-            model.IsSameDefoliationForAll = null;
-            model.IsAnyChangeInSameDefoliationFlag = false;
-            SetFertiliserManureToSession(model);
-        }
-
-        SetFertiliserManureToSession(model);
-        return RedirectToAction("InOrgnaicManureDuration");
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> FieldGroup(FertiliserManureViewModel model)
@@ -261,7 +261,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             (List<ManureCropTypeResponse> cropGroupList, List<SelectListItem> selectListItem, error) = await BindFieldGroupList(model, error);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData[_fieldGroupErrorTempDataKey] = error?.Message;
+                TempData[_fieldGroupErrorTempDataKey] = error.Message;
             }
             if (!ModelState.IsValid)
             {
@@ -370,58 +370,62 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return model;
     }
 
-    private async Task<(Error?, FertiliserManureViewModel)> BindFertiliserListForFieldGroup(string q, string r, string s, FertiliserManureViewModel? model, string fieldId)
+    private async Task<(Error?, FertiliserManureViewModel)> BindFertiliserListForFieldGroup(FertiliserManureViewModel? model, string fieldId)
     {
         Error? error = null;
         (List<Crop> cropList, error) = await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(fieldId), model.HarvestYear.Value);
+        await BindDoubleCropAndDefoliationEncryptedData(model, fieldId, cropList);
+
+        (List<int> managementIds, error) = await _fertiliserManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldId, null, 1);// 1 id cropOrder
+        if (error == null && managementIds.Count > 0)
+        {
+
+            if (model.FertiliserManures == null)
+            {
+                model.FertiliserManures = new List<FertiliserManureDataViewModel>();
+            }
+            if (model.FertiliserManures.Count > 0)
+            {
+                model.FertiliserManures.Clear();
+            }
+            int counter = 1;
+            foreach (var manIds in managementIds)
+            {
+                var fertiliserManure = new FertiliserManureDataViewModel
+                {
+                    ManagementPeriodID = manIds,
+                    EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
+                    FieldID = Convert.ToInt32(fieldId),
+                    FieldName = (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name
+                };
+                counter++;
+                model.FertiliserManures.Add(fertiliserManure);
+            }
+            model.DefoliationCurrentCounter = 0;
+
+        }
+
+        return (error, model);
+    }
+
+    private async Task BindDoubleCropAndDefoliationEncryptedData(FertiliserManureViewModel model, string fieldId, List<Crop> cropList)
+    {
         if (cropList.Count > 0)
         {
-            if (cropList.Count > 0 && cropList.Count == 2)
+            if (cropList.Count == 2)
             {
                 model.IsDoubleCropAvailable = true;
                 model.DoubleCropCurrentCounter = 0;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name;
                 model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
             }
-            if (cropList.Count > 0 && cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
+            if (cropList.Any(x => x.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && x.DefoliationSequenceID != null))
             {
                 model.IsAnyCropIsGrass = true;
                 model.DefoliationCurrentCounter = 0;
                 model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(0.ToString());
             }
         }
-
-        (List<int> managementIds, error) = await _fertiliserManureLogic.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, fieldId, null, 1);// 1 id cropOrder
-        if (error == null)
-        {
-            if (managementIds.Count > 0)
-            {
-                if (model.FertiliserManures == null)
-                {
-                    model.FertiliserManures = new List<FertiliserManureDataViewModel>();
-                }
-                if (model.FertiliserManures.Count > 0)
-                {
-                    model.FertiliserManures.Clear();
-                }
-                int counter = 1;
-                foreach (var manIds in managementIds)
-                {
-                    var fertiliserManure = new FertiliserManureDataViewModel
-                    {
-                        ManagementPeriodID = manIds,
-                        EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
-                        FieldID = Convert.ToInt32(fieldId),
-                        FieldName = (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name
-                    };
-                    counter++;
-                    model.FertiliserManures.Add(fertiliserManure);
-                }
-                model.DefoliationCurrentCounter = 0;
-            }
-        }
-
-        return (error, model);
     }
 
     [HttpGet]
@@ -1238,7 +1242,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
-                if (fertiliserManureViewModel != null && model.N != fertiliserManureViewModel.N)
+                if (model.N != fertiliserManureViewModel.N)
                 {
                     model.IsWarningMsgNeedToShow = false;
                 }
@@ -1277,7 +1281,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 model.IsWarningMsgNeedToShow = true;
                 SetFertiliserManureToSession(model);
-                return (flowControl: false, value: View(model),model);
+                return (flowControl: false, value: View(model), model);
             }
         }
         else
@@ -1288,7 +1292,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             model.IsWarningMsgNeedToShow = false;
         }
 
-        return (flowControl: true, value: null,model);
+        return (flowControl: true, value: null, model);
     }
 
     private async Task<(bool flowControl, IActionResult? value, FertiliserManureViewModel)> CalculateNitrogenWarning(FertiliserManureViewModel model, Error? error, FertiliserManureDataViewModel fertiliser)
@@ -1319,20 +1323,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     int year = model.HarvestYear.Value;
                     (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
 
-                    Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
-                    if (closedPeriod != null)
+                    (bool flowControl, string ? errorMessage, model) = await BindNitrogenWarningData(model, fertiliser, field, crop, year, closedPeriod);
+                    if (!flowControl && !string.IsNullOrWhiteSpace(errorMessage))
                     {
-                        Match match = regex.Match(closedPeriod);
-                        if (match.Success)
-                        {
-                            GetStartAndEndDateForWarning(year, match, out DateTime startDate, out DateTime endDate);
-                            (bool flowControl, IActionResult? value, model) = await HandleNitrogenWarning(model, fertiliser, field, crop, startDate, endDate);
-                            if (!flowControl && value != null)
-                            {
-                                return (flowControl: false, value: value, model);
-                            }
-
-                        }
+                        TempData["NutrientValuesError"] = errorMessage;
+                        return (flowControl: false, value: RedirectToAction("NutrientValues", model), model);
                     }
 
                 }
@@ -1343,7 +1338,28 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (flowControl: true, value: null, model);
     }
 
-    private async Task<(bool flowControl, IActionResult? value, FertiliserManureViewModel)> HandleNitrogenWarning(FertiliserManureViewModel model, FertiliserManureDataViewModel fertiliser, Field field, Crop crop, DateTime startDate, DateTime endDate)
+    private async Task<(bool flowControl, string?, FertiliserManureViewModel)> BindNitrogenWarningData(FertiliserManureViewModel model, FertiliserManureDataViewModel fertiliser, Field field, Crop crop, int year, string? closedPeriod)
+    {
+        Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+        if (closedPeriod != null)
+        {
+            Match match = regex.Match(closedPeriod);
+            if (match.Success)
+            {
+                GetStartAndEndDateForWarning(year, match, out DateTime startDate, out DateTime endDate);
+                (bool flowControl, string? errorMessage, model) = await HandleNitrogenWarning(model, fertiliser, field, crop, startDate, endDate);
+                if (!flowControl && !string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    return (flowControl: false, errorMessage, model);
+                }
+
+            }
+        }
+
+        return (flowControl: true, null, model);
+    }
+
+    private async Task<(bool flowControl, string?, FertiliserManureViewModel)> HandleNitrogenWarning(FertiliserManureViewModel model, FertiliserManureDataViewModel fertiliser, Field field, Crop crop, DateTime startDate, DateTime endDate)
     {
         Error? error = null;
         if (model.N > 0)
@@ -1362,13 +1378,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
             else
             {
-                TempData["NutrientValuesError"] = error.Message;
-                return (flowControl: false, value: RedirectToAction("NutrientValues", model), model);
+                return (flowControl: false, error.Message, model);
             }
 
         }
 
-        return (flowControl: true, value: null, model);
+        return (flowControl: true, null, model);
     }
 
     private async Task<(bool flowControl, IActionResult? value)> ValidateNutrientValuesProperties(FertiliserManureViewModel model, Error? error)
