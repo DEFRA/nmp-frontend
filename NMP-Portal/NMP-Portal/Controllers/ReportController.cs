@@ -2635,16 +2635,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         farmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
                         if (farmManure != null)
                         {
-                            model.ManureType.DryMatter = farmManure.DryMatter;
-                            model.ManureType.TotalN = farmManure.TotalN;
-                            model.ManureType.NH4N = farmManure.NH4N;
-                            model.ManureType.Uric = farmManure.Uric;
-                            model.ManureType.NO3N = farmManure.NO3N;
-                            model.ManureType.P2O5 = farmManure.P2O5;
-                            model.ManureType.K2O = farmManure.K2O;
-                            model.ManureType.SO3 = farmManure.SO3;
-                            model.ManureType.MgO = farmManure.MgO;
-                            model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
+                            MapFarmManureValues(model, farmManure);
                         }
                         else
                         {
@@ -2678,17 +2669,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             model.IsDefaultValueChange = false;
                             if (farmManure != null)
                             {
-                                model.ManureType.DryMatter = farmManure.DryMatter;
-                                model.ManureType.TotalN = farmManure.TotalN;
-                                model.ManureType.NH4N = farmManure.NH4N;
-                                model.ManureType.Uric = farmManure.Uric;
-                                model.ManureType.NO3N = farmManure.NO3N;
-                                model.ManureType.P2O5 = farmManure.P2O5;
-                                model.ManureType.K2O = farmManure.K2O;
-                                model.ManureType.SO3 = farmManure.SO3;
-                                model.ManureType.MgO = farmManure.MgO;
+                                MapFarmManureValues(model, farmManure);
                                 ViewBag.FarmManureApiOption = Resource.lblTrue;
-                                model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
                             }
                             else
                             {
@@ -2769,16 +2751,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             _logger.LogTrace("Report Controller : LivestockDefaultNutrientValue() action : FarmManureTypeResponse is null");
                             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                         }
-                        model.ManureType.DryMatter = farmManure.DryMatter;
-                        model.ManureType.TotalN = farmManure.TotalN;
-                        model.ManureType.NH4N = farmManure.NH4N;
-                        model.ManureType.Uric = farmManure.Uric;
-                        model.ManureType.NO3N = farmManure.NO3N;
-                        model.ManureType.P2O5 = farmManure.P2O5;
-                        model.ManureType.K2O = farmManure.K2O;
-                        model.ManureType.SO3 = farmManure.SO3;
-                        model.ManureType.MgO = farmManure.MgO;
-
+                        MapFarmManureValues(model, farmManure);
                     }
                     if (manureTypeError == null)
                     {
@@ -2803,17 +2776,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                         if (farmManure != null)
                         {
-                            model.ManureType.DryMatter = farmManure.DryMatter;
-                            model.ManureType.TotalN = farmManure.TotalN;
-                            model.ManureType.NH4N = farmManure.NH4N;
-                            model.ManureType.Uric = farmManure.Uric;
-                            model.ManureType.NO3N = farmManure.NO3N;
-                            model.ManureType.P2O5 = farmManure.P2O5;
-                            model.ManureType.K2O = farmManure.K2O;
-                            model.ManureType.SO3 = farmManure.SO3;
-                            model.ManureType.MgO = farmManure.MgO;
+                            MapFarmManureValues(model, farmManure);
                             ViewBag.FarmManureApiOption = Resource.lblTrue;
-                            model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
                         }
                         else
                         {
@@ -2893,15 +2857,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                         if (farmManure != null)
                         {
-                            model.ManureType.DryMatter = farmManure.DryMatter;
-                            model.ManureType.TotalN = farmManure.TotalN;
-                            model.ManureType.NH4N = farmManure.NH4N;
-                            model.ManureType.Uric = farmManure.Uric;
-                            model.ManureType.NO3N = farmManure.NO3N;
-                            model.ManureType.P2O5 = farmManure.P2O5;
-                            model.ManureType.K2O = farmManure.K2O;
-                            model.ManureType.SO3 = farmManure.SO3;
-                            model.ManureType.MgO = farmManure.MgO;
+                            MapFarmManureValues(model, farmManure);
                         }
 
                         model.IsThisDefaultValueOfRB209 = false;
@@ -2957,16 +2913,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                         if (farmManure != null)
                         {
-                            model.ManureType.DryMatter = farmManure.DryMatter;
-                            model.ManureType.TotalN = farmManure.TotalN;
-                            model.ManureType.NH4N = farmManure.NH4N;
-                            model.ManureType.Uric = farmManure.Uric;
-                            model.ManureType.NO3N = farmManure.NO3N;
-                            model.ManureType.P2O5 = farmManure.P2O5;
-                            model.ManureType.K2O = farmManure.K2O;
-                            model.ManureType.SO3 = farmManure.SO3;
-                            model.ManureType.MgO = farmManure.MgO;
-
+                            MapFarmManureValues(model, farmManure);
                         }
                         if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
                         {
@@ -7152,6 +7099,22 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return result;
     }
+
+    private void MapFarmManureValues(ReportViewModel model, FarmManureTypeResponse? farmManure)
+    {
+        model.ManureType.DryMatter = farmManure.DryMatter;
+        model.ManureType.TotalN = farmManure.TotalN;
+        model.ManureType.NH4N = farmManure.NH4N;
+        model.ManureType.Uric = farmManure.Uric;
+        model.ManureType.NO3N = farmManure.NO3N;
+        model.ManureType.P2O5 = farmManure.P2O5;
+        model.ManureType.K2O = farmManure.K2O;
+        model.ManureType.SO3 = farmManure.SO3;
+        model.ManureType.MgO = farmManure.MgO;
+        model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
+
+    }
+
 #pragma warning disable S6967
     public async Task<WinterOilseedAutumnSpring> WinterOilseedRapeAutumnSpringCheck(int year, int cropId)
     {
