@@ -1706,7 +1706,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                                 }
                                 else
                                 {
-                                 return RedirectForErrorOnCheckAnswer(model, error.Message);
+                                    return RedirectForErrorOnCheckAnswer(model, error.Message);
                                 }
                             }
                             int fieldIdForUpdate = Convert.ToInt32(model.FieldList.FirstOrDefault());
@@ -1969,12 +1969,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
 
             await ValidatePropertiesForCheckAnswer(model, cropPlans);
-
+            await BindViewBegForCheckAnswerPost(model);
             if (!ModelState.IsValid)
             {
                 model.IsCheckAnswer = false;
                 SetFertiliserManureToSession(model);
-                await BindViewBegForCheckAnswerPost(model);
                 return View(model);
             }
 
@@ -2246,7 +2245,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         if (error == null)
         {
             totalNitrogen = totalNitrogen + Convert.ToDecimal(model.N);
-            HashSet<int> brassicaCrops =WarningWithinPeriod.BrassicaCrops();
+            HashSet<int> brassicaCrops = WarningWithinPeriod.BrassicaCrops();
             string closedPeriod = WarningWithinPeriod.ClosedPeriodForFertiliser(cropTypeId) ?? string.Empty;
             bool isWithinClosedPeriod = WarningWithinPeriod.IsApplicationWithinWarningPeriod(model.Date.Value, closedPeriod);
             bool isCropBrassicaAndWithInClosedPeriod = brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod;
@@ -2424,7 +2423,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     }
 
 
-    
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -3019,6 +3018,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         SetFertiliserManureToSession(model);
     }
+    
+
     [HttpGet]
     public async Task<IActionResult> Defoliation(string q)
     {
@@ -3032,13 +3033,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
         try
         {
-            bool isComingFirstTime = (string.IsNullOrWhiteSpace(q) && (model.DefoliationList == null || (model.DefoliationList != null && model.DefoliationList.Count == 0) || (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) || (model.IsAnyChangeInField || model.IsCropGroupChange)));
-            bool isThisComingForRedirect = (!string.IsNullOrWhiteSpace(q) && (model.FertiliserManures != null && model.FertiliserManures.Count > 0));
-            if (isComingFirstTime)
+            if (_fertiliserManureLogic.IsComingFirstTimeForDefoliationGet(model, q))
             {
                 await BindDefoliationData(model);
             }
-            else if (isThisComingForRedirect)
+            else if (_fertiliserManureLogic.IsRedirectRequestForDefoliationGet(model, q))
             {
                 int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
                 int index = itemCount - 1;
@@ -3656,6 +3655,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return (cropList, cropTypeName);
     }
+
+
     [HttpGet]
     public async Task<IActionResult> DoubleCrop(string q)
     {
@@ -3669,17 +3670,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            bool isComingFirstTime = (string.IsNullOrWhiteSpace(q) && model.FertiliserManures != null && model.FertiliserManures.Count > 0
-  && (model.IsAnyChangeInField || model.IsCropGroupChange));
-            bool isThisForRedirect = (!string.IsNullOrWhiteSpace(q) && (model.DoubleCrop != null && model.DoubleCrop.Count > 0));
-
-            if (isComingFirstTime)
+            if (_fertiliserManureLogic.IsInitialLoadAfterFieldChange(model, q))
             {
                 model.DoubleCropCurrentCounter = 0;
                 model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
                 SetFertiliserManureToSession(model);
             }
-            else if (isThisForRedirect)
+            else if (_fertiliserManureLogic.IsRedirectWithDoubleCropData(model, q))
             {
                 int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
                 int index = itemCount - 1;

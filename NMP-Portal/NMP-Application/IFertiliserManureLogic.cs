@@ -35,4 +35,8 @@ public interface IFertiliserManureLogic
     Task<(FertiliserManureViewModel model, WarningResponse warningResponse, bool isNitrogenRateExceeded)> WarningForGrass(FertiliserManureViewModel model, WarningResponse warningResponse, string startPeriod, bool isNitrogenRateExceeded, decimal nitrogenWithinWarningPeriod);
     Task<(FertiliserManureViewModel model, WarningResponse warningResponse)> WarningForBrassicaCrop(FertiliserManureViewModel model, decimal totalNitrogen, WarningResponse warningResponse, string startPeriod, string endPeriod, decimal nitrogenInFourWeek);
     Task<(FertiliserManureViewModel, List<Crop>)> HandleDefoliationList(FertiliserManureViewModel model);
+    bool IsInitialLoadAfterFieldChange(FertiliserManureViewModel model, string q);
+    bool IsRedirectWithDoubleCropData(FertiliserManureViewModel model, string q);
+    bool IsComingFirstTimeForDefoliationGet(FertiliserManureViewModel model, string q);
+    bool IsRedirectRequestForDefoliationGet(FertiliserManureViewModel model, string q);
 }

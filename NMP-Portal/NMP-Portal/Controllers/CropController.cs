@@ -848,7 +848,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate))
             {
-                if (model.FieldList != null)
+                if (model.FieldList != null&&(model.IsCropGroupChange||model.IsCropTypeChange))
                 {
                     selectListItem.RemoveAll(item => !model.FieldList.Contains(item.Value));
                 }
