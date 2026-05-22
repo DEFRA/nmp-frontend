@@ -7100,7 +7100,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return result;
     }
 
-    private void MapFarmManureValues(ReportViewModel model, FarmManureTypeResponse? farmManure)
+    private static void MapFarmManureValues(ReportViewModel model, FarmManureTypeResponse? farmManure)
     {
         model.ManureType.DryMatter = farmManure.DryMatter;
         model.ManureType.TotalN = farmManure.TotalN;

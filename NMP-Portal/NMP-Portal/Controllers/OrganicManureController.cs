@@ -1906,15 +1906,7 @@ managementPeriod.CropID.HasValue
                             {
                                 model.DefaultFarmManureValueDate = farmManure.ModifiedOn == null ? farmManure.CreatedOn : farmManure.ModifiedOn;
                                 ViewBag.FarmManureApiOption = Resource.lblTrue;
-                                if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
-                                {
-                                    ViewBag.FarmManureApiOption = Resource.lblTrue;
-                                }
-                                else if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) || (model.IsThisDefaultValueOfRB209 != null && (model.IsThisDefaultValueOfRB209.Value)))
-                                {
-                                    ViewBag.FarmManureApiOption = null;
-                                    ViewBag.RB209ApiOption = Resource.lblTrue;
-                                }
+                                ViewBagForDefaultOrStandardValue(model);
                             }
                         }
                     }
@@ -1939,6 +1931,18 @@ managementPeriod.CropID.HasValue
             return View(model);
         }
 
+        private void ViewBagForDefaultOrStandardValue(OrganicManureViewModel model)
+        {
+            if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
+            {
+                ViewBag.FarmManureApiOption = Resource.lblTrue;
+            }
+            else if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) || (model.IsThisDefaultValueOfRB209 != null && (model.IsThisDefaultValueOfRB209.Value)))
+            {
+                ViewBag.FarmManureApiOption = null;
+                ViewBag.RB209ApiOption = Resource.lblTrue;
+            }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DefaultNutrientValues(OrganicManureViewModel model)
@@ -2008,14 +2012,7 @@ managementPeriod.CropID.HasValue
                             {
                                 if (farmManure != null)
                                 {
-                                    if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
-                                    {
-                                        ViewBag.FarmManureApiOption = Resource.lblTrue;
-                                    }
-                                    else if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) || (model.IsThisDefaultValueOfRB209 != null && (model.IsThisDefaultValueOfRB209.Value)))
-                                    {
-                                        ViewBag.RB209ApiOption = Resource.lblTrue;
-                                    }
+                                    ViewBagForDefaultOrStandardValue(model);
                                 }
                             }
                         }
@@ -2034,15 +2031,7 @@ managementPeriod.CropID.HasValue
                 {
                     if (model.DryMatterPercent == null)
                     {
-                        model.DryMatterPercent = model.ManureType.DryMatter;
-                        model.N = model.ManureType.TotalN;
-                        model.P2O5 = model.ManureType.P2O5;
-                        model.NH4N = model.ManureType.NH4N;
-                        model.UricAcid = model.ManureType.Uric;
-                        model.SO3 = model.ManureType.SO3;
-                        model.K2O = model.ManureType.K2O;
-                        model.MgO = model.ManureType.MgO;
-                        model.NO3N = model.ManureType.NO3N;
+                        BindNutrientsFromManureType(model);
                     }
 
                     HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -7788,15 +7777,7 @@ managementPeriod.CropID.HasValue
                             model.ManureType = manureTypeData;
                             if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis)
                             {
-                                model.DryMatterPercent = model.ManureType.DryMatter;
-                                model.N = model.ManureType.TotalN;
-                                model.P2O5 = model.ManureType.P2O5;
-                                model.NH4N = model.ManureType.NH4N;
-                                model.UricAcid = model.ManureType.Uric;
-                                model.SO3 = model.ManureType.SO3;
-                                model.K2O = model.ManureType.K2O;
-                                model.MgO = model.ManureType.MgO;
-                                model.NO3N = model.ManureType.NO3N;
+                                BindNutrientsFromManureType(model);
                             }
                             model.DryMatterPercent = manureTypeData.DryMatter;
                             model.N = manureTypeData.TotalN;
@@ -9416,6 +9397,19 @@ managementPeriod.CropID.HasValue
                 org.SO3 = manure?.SO3 ?? model.SO3;
                 org.MgO = manure?.MgO ?? model.MgO;
             }
+        }
+
+        private static void BindNutrientsFromManureType(OrganicManureViewModel model)
+        {
+            model.DryMatterPercent = model.ManureType.DryMatter;
+            model.N = model.ManureType.TotalN;
+            model.P2O5 = model.ManureType.P2O5;
+            model.NH4N = model.ManureType.NH4N;
+            model.UricAcid = model.ManureType.Uric;
+            model.SO3 = model.ManureType.SO3;
+            model.K2O = model.ManureType.K2O;
+            model.MgO = model.ManureType.MgO;
+            model.NO3N = model.ManureType.NO3N;
         }
 
     }

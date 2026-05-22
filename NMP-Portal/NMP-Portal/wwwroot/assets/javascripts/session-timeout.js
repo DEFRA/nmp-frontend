@@ -138,6 +138,9 @@
                 e.preventDefault();
                 FOCUSABLE_ELEMENTS[0].focus();
             }
+            else {
+                // added this for sonar issue: Add the missing "else" clause.
+            }
 
         }
     }

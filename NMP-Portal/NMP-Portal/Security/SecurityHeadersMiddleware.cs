@@ -32,7 +32,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
         // You can use https://report-uri.com/ to get notified when a misissued certificate is detected
-        //context.Response.Headers.Add("Expect-CT", new StringValues("max-age=0, enforce, report-uri=\"https://example.report-uri.com/r/d/ct/enforce\""));
+        
 
         context.Response.Headers.Append("Permissions-Policy", new StringValues(
             "accelerometer=(self), " +
@@ -80,7 +80,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         //     "style-src-elem 'self' 'unsafe-inline'  " + //fonts.googleapis.com www.gstatic.com; stackpath.bootstrapcdn.com;" +
         //    "upgrade-insecure-requests;" +
         //    "worker-src 'self';"
-        //    ));
+      
                 
 
         return _requestDelegate(context);
