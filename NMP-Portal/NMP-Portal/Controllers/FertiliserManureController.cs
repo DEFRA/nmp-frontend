@@ -1298,42 +1298,44 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private async Task<(bool flowControl, IActionResult? value, FertiliserManureViewModel)> CalculateNitrogenWarning(FertiliserManureViewModel model, Error? error, FertiliserManureDataViewModel fertiliser)
     {
         int? fieldId = fertiliser.FieldID ?? null;
-        if (fieldId != null)
+        if (fieldId == null)
         {
-            Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
-            if (field != null)
-            {
-                model.FieldID = fieldId.Value;
-                bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
-                if (isFieldIsInNVZ)
-                {
-                    (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
-                    if (!string.IsNullOrWhiteSpace(error?.Message) || managementPeriod == null)
-                    {
-                        TempData["NutrientValuesError"] = error?.Message;
-                        return (flowControl: false, value: RedirectToAction("NutrientValues", model), model);
-                    }
-                    (Crop? crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-                    if (!string.IsNullOrWhiteSpace(error?.Message) || crop == null)
-                    {
-                        TempData["NutrientValuesError"] = error?.Message;
-                        return (flowControl: false, value: RedirectToAction("NutrientValues", model), model);
-                    }
-
-                    int year = model.HarvestYear.Value;
-                    (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
-
-                    (bool flowControl, string ? errorMessage, model) = await BindNitrogenWarningData(model, fertiliser, field, crop, year, closedPeriod);
-                    if (!flowControl && !string.IsNullOrWhiteSpace(errorMessage))
-                    {
-                        TempData["NutrientValuesError"] = errorMessage;
-                        return (flowControl: false, value: RedirectToAction("NutrientValues", model), model);
-                    }
-
-                }
-            }
-
+            return (flowControl: true, value: null, model);
         }
+        Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
+        if (field == null)
+        {
+            return (flowControl: true, value: null, model);
+        }
+        model.FieldID = fieldId.Value;
+        bool isFieldIsInNVZ = field.IsWithinNVZ.Value;
+        if (!isFieldIsInNVZ)
+        {
+            return (flowControl: true, value: null, model);
+        }
+        (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
+        if (!string.IsNullOrWhiteSpace(error?.Message) || managementPeriod == null)
+        {
+            TempData["NutrientValuesError"] = error?.Message;
+            return (flowControl: false, value: RedirectToAction("NutrientValues", model), model);
+        }
+        (Crop? crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
+        if (!string.IsNullOrWhiteSpace(error?.Message) || crop == null)
+        {
+            TempData["NutrientValuesError"] = error?.Message;
+            return (flowControl: false, value: RedirectToAction("NutrientValues", model), model);
+        }
+
+        int year = model.HarvestYear.Value;
+        (string? closedPeriod, error) = await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(model.FarmCountryId ?? 0, crop.CropTypeID.Value, field.NVZProgrammeID);
+
+        (bool flowControl, string? errorMessage, model) = await BindNitrogenWarningData(model, fertiliser, field, crop, year, closedPeriod);
+        if (!flowControl && !string.IsNullOrWhiteSpace(errorMessage))
+        {
+            TempData["NutrientValuesError"] = errorMessage;
+            return (flowControl: false, value: RedirectToAction("NutrientValues", model), model);
+        }
+
 
         return (flowControl: true, value: null, model);
     }
