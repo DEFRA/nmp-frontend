@@ -2608,7 +2608,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private async Task<List<FarmManureTypeResponse>> GetFarmManureList(int? farmId)
     {
         var (list, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(farmId ?? 0);
-        return (error == null || string.IsNullOrWhiteSpace(error?.Message)) ? list : new List<FarmManureTypeResponse>();
+        return (error == null || string.IsNullOrWhiteSpace(error.Message)) ? list : new List<FarmManureTypeResponse>();
     }
 
     private async Task<ManureType?> GetManureType(int? manureTypeId)
@@ -2616,10 +2616,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         if (!manureTypeId.HasValue) return null;
 
         var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(manureTypeId.Value);
-        return (error == null || string.IsNullOrWhiteSpace(error?.Message)) ? manureType : null;
+        return (error == null || string.IsNullOrWhiteSpace(error.Message)) ? manureType : null;
     }
 
-    private void ApplyFarmManure(ReportViewModel model, FarmManureTypeResponse farmManure, bool setDate = false)
+    private static void ApplyFarmManure(ReportViewModel model, FarmManureTypeResponse farmManure, bool setDate = false)
     {
         MapFarmManureValues(model, farmManure);
 
@@ -2629,7 +2629,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
-    private void ResetNutrients(ReportViewModel model)
+    private static void ResetNutrients(ReportViewModel model)
     {
         model.DryMatterPercent = null;
         model.N = null;
@@ -2642,7 +2642,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         model.NO3N = null;
     }
 
-    private void BindFromManureType(ReportViewModel model)
+    private static void BindFromManureType(ReportViewModel model)
     {
         if (model.ManureType == null) return;
 
@@ -2837,7 +2837,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         // ✅ Reset nutrients
         ResetNutrients(model);
 
-        var sessionModel = GetReportDataFromSession();
+        GetReportDataFromSession();
 
         if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues ||
             model.DefaultNutrientValue == Resource.lblYes)

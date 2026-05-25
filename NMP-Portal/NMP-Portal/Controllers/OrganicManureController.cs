@@ -1824,14 +1824,14 @@ managementPeriod.CropID.HasValue
             return RedirectToAction("DefaultNutrientValues");
         }
 
-        private FarmManureTypeResponse? GetFarmManure(List<FarmManureTypeResponse> list, int? manureTypeId, string? manureTypeName)
+        private static FarmManureTypeResponse? GetFarmManure(List<FarmManureTypeResponse> list, int? manureTypeId, string? manureTypeName)
         {
             return list.FirstOrDefault(x =>
                 x.ManureTypeID == manureTypeId &&
                 x.ManureTypeName == manureTypeName);
         }
 
-        private void ApplyFarmManureValues(OrganicManureViewModel model, FarmManureTypeResponse farmManure)
+        private static void ApplyFarmManureValues(OrganicManureViewModel model, FarmManureTypeResponse farmManure)
         {
             CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
             model.DefaultFarmManureValueDate = farmManure.ModifiedOn ?? farmManure.CreatedOn;
@@ -2003,7 +2003,7 @@ managementPeriod.CropID.HasValue
                 model.DryMatterPercent = model.N = model.P2O5 = model.NH4N =
                 model.UricAcid = model.SO3 = model.K2O = model.MgO = model.NO3N = null;
 
-                var sessionModel = GetOrganicManureFromSession();
+                 GetOrganicManureFromSession();
 
                 if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues ||
                     model.DefaultNutrientValue == Resource.lblYes)
