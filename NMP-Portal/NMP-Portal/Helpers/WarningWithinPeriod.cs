@@ -210,62 +210,41 @@ namespace NMP.Portal.Helpers
                         DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
                         if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                         {
-                            if (isSlurry)
+                            if (isSlurry && applicationRate > 30)
                             {
-                                if (applicationRate > 30)
-                                {
-                                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                                }
+                                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                             }
-                            if (isPoultryManure)
+                            if (isPoultryManure && applicationRate > 8)
                             {
-                                if (applicationRate > 8)
-                                {
-                                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                                }
+                                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                             }
                         }
                     }
-                    if (startMonth > endMonth)
+                    if (startMonth > endMonth && applicationDate > ClosedPeriodEndDate)
                     {
-                        if (applicationDate > ClosedPeriodEndDate)
+                        DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
                         {
-                            DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                            if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
+                            if (isSlurry && applicationRate > 30)
                             {
-                                if (isSlurry)
-                                {
-                                    if (applicationRate > 30)
-                                    {
-                                        message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                                    }
-                                }
-                                if (isPoultryManure)
-                                {
-                                    if (applicationRate > 8)
-                                    {
-                                        message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                                    }
-                                }
+                                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                             }
-
-                            DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-                            if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+                            if (isPoultryManure && applicationRate > 8)
                             {
-                                if (isSlurry)
-                                {
-                                    if (applicationRate > 30)
-                                    {
-                                        message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                                    }
-                                }
-                                if (isPoultryManure)
-                                {
-                                    if (applicationRate > 8)
-                                    {
-                                        message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                                    }
-                                }
+                                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            }
+                        }
+
+                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+                        {
+                            if (isSlurry && applicationRate > 30)
+                            {
+                                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                            }
+                            if (isPoultryManure && applicationRate > 8)
+                            {
+                                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                             }
                         }
 
@@ -284,7 +263,6 @@ namespace NMP.Portal.Helpers
             endDay = int.Parse(match.Groups[3].Value);
             string endMonthStr = match.Groups[4].Value;
 
-            //DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
             dtfi = GetMonths();
             startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
             endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
@@ -304,12 +282,9 @@ namespace NMP.Portal.Helpers
             }
             else if (cropTypeId != (int)NMP.Commons.Enums.CropTypes.Asparagus && cropTypeId != (int)NMP.Commons.Enums.CropTypes.BrusselSprouts && cropTypeId != (int)NMP.Commons.Enums.CropTypes.Cabbage &&
                 cropTypeId != (int)NMP.Commons.Enums.CropTypes.Cauliflower && cropTypeId != (int)NMP.Commons.Enums.CropTypes.Calabrese &&
-                cropTypeId != (int)NMP.Commons.Enums.CropTypes.BulbOnions && cropTypeId != (int)NMP.Commons.Enums.CropTypes.SaladOnions)
+                cropTypeId != (int)NMP.Commons.Enums.CropTypes.BulbOnions && cropTypeId != (int)NMP.Commons.Enums.CropTypes.SaladOnions && (month >= (int)NMP.Commons.Enums.Month.September || month == (int)NMP.Commons.Enums.Month.January && day <= 15))
             {
-                if ((month >= (int)NMP.Commons.Enums.Month.September) || ((month == (int)NMP.Commons.Enums.Month.January && day <= 15)))
-                {
-                    message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, Resource.lblOneSepToFifteenJan);
-                }
+                message = string.Format(Resource.MsgForFertiliserClosedPeriodWarning, cropType, soilType, Resource.lblOneSepToFifteenJan);
             }
             return message;
         }
@@ -602,12 +577,9 @@ namespace NMP.Portal.Helpers
         public bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
         {
             bool isWithinDateRange = false;
-            if (applicationDate.HasValue && startDate.HasValue && endDate.HasValue)
+            if (applicationDate.HasValue && startDate.HasValue && endDate.HasValue && applicationDate.Value >= startDate.Value && applicationDate.Value <= endDate.Value)
             {
-                if (applicationDate.Value >= startDate.Value && applicationDate.Value <= endDate.Value)
-                {
-                    isWithinDateRange = true;
-                }
+                isWithinDateRange = true;
             }
             return isWithinDateRange;
         }

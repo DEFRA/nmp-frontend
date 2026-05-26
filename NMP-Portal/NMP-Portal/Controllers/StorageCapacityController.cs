@@ -30,7 +30,7 @@ namespace NMP.Portal.Controllers
         private const string _storageCapacityDataSessionKey = "StorageCapacityData";
         private const string _farmSummaryActionName = "FarmSummary";
         [HttpGet]
-        public async Task<IActionResult> ManageStorageCapacity(string y,string q, string? r, string? s, string? isPlan, string? t, string? u)
+        public async Task<IActionResult> ManageStorageCapacity(string y, string q, string? r, string? s, string? isPlan, string? t, string? u)
         {
             _logger.LogTrace("StorageCapacity Controller : ManageStorageCapacity() action called");
 
@@ -39,7 +39,7 @@ namespace NMP.Portal.Controllers
 
             if (string.IsNullOrWhiteSpace(q))
                 return View(model);
-            if(!string.IsNullOrWhiteSpace(y))
+            if (!string.IsNullOrWhiteSpace(y))
             {
                 model.EncryptedHarvestYear = y;
             }
@@ -80,7 +80,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction(
                 "OrganicMaterialStorageNotAvailable",
                 _storageCapacityActionName,
-                new { f = q,y=y, isPlan });
+                new { f = q, y = y, isPlan });
         }
 
 
@@ -99,7 +99,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.FarmName = farm.Name;
                         model.FarmID = decryptedFarmId;
-                        model.EncryptedFarmID = f; 
+                        model.EncryptedFarmID = f;
                         if (!string.IsNullOrWhiteSpace(y))
                         {
                             model.EncryptedHarvestYear = y;
@@ -230,12 +230,9 @@ namespace NMP.Portal.Controllers
 
                     (bool isStoreNameExists, Error error) = await _storageCapacityLogic.IsStoreNameExistAsync(model.FarmID ?? 0, model.StoreName, Id);
 
-                    if (error == null || string.IsNullOrWhiteSpace(error.Message))
+                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && isStoreNameExists)
                     {
-                        if (isStoreNameExists)
-                        {
-                            ModelState.AddModelError("StoreName", Resource.MsgStoreAlreadyExists);
-                        }
+                        ModelState.AddModelError("StoreName", Resource.MsgStoreAlreadyExists);
                     }
                 }
 
@@ -244,13 +241,9 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                if (model.IsCheckAnswer)
+                if (model.IsCheckAnswer && !model.IsMaterialTypeChange)
                 {
-                    if (!model.IsMaterialTypeChange)
-                    {
-                        return RedirectToAction("CheckAnswer");
-                    }
-
+                    return RedirectToAction("CheckAnswer");
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
@@ -823,12 +816,9 @@ namespace NMP.Portal.Controllers
                 {
                     storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
-                if (model.IsCheckAnswer)
+                if (model.IsCheckAnswer && storageModel != null && model.CapacityWeight == storageModel.CapacityWeight && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                 {
-                    if (storageModel != null && model.CapacityWeight == storageModel.CapacityWeight && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
-                    {
-                        return RedirectToAction("CheckAnswer");
-                    }
+                    return RedirectToAction("CheckAnswer");
                 }
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
@@ -927,12 +917,9 @@ namespace NMP.Portal.Controllers
                 {
                     storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
-                if (model.IsCheckAnswer)
+                if (model.IsCheckAnswer && storageModel != null && model.StorageBagCapacity == storageModel.StorageBagCapacity && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                 {
-                    if (storageModel != null && model.StorageBagCapacity == storageModel.StorageBagCapacity && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
-                    {
-                        return RedirectToAction("CheckAnswer");
-                    }
+                    return RedirectToAction("CheckAnswer");
                 }
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
@@ -1862,7 +1849,6 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorOnCopyExistingManureStorage"] = ex.Message;
                 return View(model);
             }
-            //return View(model);
         }
 
         [HttpGet]
@@ -1946,13 +1932,13 @@ namespace NMP.Portal.Controllers
                 {
                     string successMsgContent = Resource.lblYouHaveAddedManureStorage;
                     var tabId = "slurryStorageList";
-                    if (storageCapacityList != null && storageCapacityList.Select(x => x.MaterialStateID).Distinct().Count() == 1)
+                    if (storageCapacityList.Select(x => x.MaterialStateID).Distinct().Count() == 1)
                     {
-                        if (storageCapacityList?.FirstOrDefault()?.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
+                        if (storageCapacityList.FirstOrDefault()?.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
                         {
                             tabId = "dirtyWaterList";
                         }
-                        else if (storageCapacityList?.FirstOrDefault()?.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                        else if (storageCapacityList.FirstOrDefault()?.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                         {
                             tabId = "solidManureStorageList";
                         }
@@ -1979,7 +1965,6 @@ namespace NMP.Portal.Controllers
                 TempData["ErrorOnCopyExistingManureStorageYearList"] = ex.Message;
                 return View(model);
             }
-            //return View(model);
         }
 
 

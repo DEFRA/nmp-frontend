@@ -87,16 +87,16 @@
     }
 
     function startCountdown(seconds) {
-        let remaining = seconds;        
+        let remaining = seconds;
         countdownInterval = setInterval(() => {
-            remaining--;            
+            remaining--;
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
                 expireSession();
             }
         }, 1000);
     }
-    
+
     function keepAlive() {
         fetch(REFRESH_URL).then(response => {
             if (response.ok) {
@@ -134,12 +134,14 @@
                     e.preventDefault();
                     FOCUSABLE_ELEMENTS[FOCUSABLE_ELEMENTS.length - 1].focus();
                 }
-            } else {
-                if (focusedIndex === FOCUSABLE_ELEMENTS.length - 1) {
-                    e.preventDefault();
-                    FOCUSABLE_ELEMENTS[0].focus();
-                }
+            } else if (focusedIndex === FOCUSABLE_ELEMENTS.length - 1) {
+                e.preventDefault();
+                FOCUSABLE_ELEMENTS[0].focus();
             }
+            else {
+                // added this for sonar issue: Add the missing "else" clause.
+            }
+
         }
     }
 
