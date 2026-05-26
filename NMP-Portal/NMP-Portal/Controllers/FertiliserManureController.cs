@@ -1225,13 +1225,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return View(model);
             }
 
-            model.IsNitrogenExceedWarning = false;
-            model.IsNMaxLimitWarning = false;
-            model.IsClosedPeriodWarning = false;
-            if (model.Lime != null)
-            {
-                model.Lime = Math.Round(model.Lime.Value, 1);
-            }
+            BindValuesForNutrientProperties(model);
 
             if (model.FieldList.Count >= 1)
             {
@@ -1246,16 +1240,10 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     model.IsWarningMsgNeedToShow = false;
                 }
-                if (model.FertiliserManures != null)
+                (bool isSuccess, IActionResult action, model) = await BindWarningForFertiliser(model, error);
+                if (!isSuccess && action != null)
                 {
-                    foreach (var fertiliser in model.FertiliserManures)
-                    {
-                        (bool isSuccessForCalculation, IActionResult? actionResult, model) = await CalculateNitrogenWarning(model, error, fertiliser);
-                        if (!isSuccessForCalculation && actionResult != null)
-                        {
-                            return actionResult;
-                        }
-                    }
+                    return action;
                 }
             }
             (bool flowControl, IActionResult? value, model) = RedirectForNutrientValues(model);
@@ -1271,6 +1259,34 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             return View(model);
         }
         return RedirectToAction(_checkAnswerActionName);
+    }
+
+    private static void BindValuesForNutrientProperties(FertiliserManureViewModel model)
+    {
+        model.IsNitrogenExceedWarning = false;
+        model.IsNMaxLimitWarning = false;
+        model.IsClosedPeriodWarning = false;
+        if (model.Lime != null)
+        {
+            model.Lime = Math.Round(model.Lime.Value, 1);
+        }
+    }
+
+    private async Task<(bool flowControl, IActionResult value, FertiliserManureViewModel)> BindWarningForFertiliser(FertiliserManureViewModel model, Error error)
+    {
+        if (model.FertiliserManures != null)
+        {
+            foreach (var fertiliser in model.FertiliserManures)
+            {
+                (bool isSuccessForCalculation, IActionResult? actionResult, model) = await CalculateNitrogenWarning(model, error, fertiliser);
+                if (!isSuccessForCalculation && actionResult != null)
+                {
+                    return (flowControl: false, value: actionResult, model);
+                }
+            }
+        }
+
+        return (flowControl: true, value: null, model);
     }
 
     private (bool flowControl, IActionResult? value, FertiliserManureViewModel) RedirectForNutrientValues(FertiliserManureViewModel model)
