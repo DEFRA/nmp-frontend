@@ -29,11 +29,10 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
-        //context.Response.Headers.Append("X-Xss-Protection", new StringValues("1; mode=block"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
         // You can use https://report-uri.com/ to get notified when a misissued certificate is detected
-        //context.Response.Headers.Add("Expect-CT", new StringValues("max-age=0, enforce, report-uri=\"https://example.report-uri.com/r/d/ct/enforce\""));
+        
 
         context.Response.Headers.Append("Permissions-Policy", new StringValues(
             "accelerometer=(self), " +
@@ -64,7 +63,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         //    "child-src 'self';" +
         //    "connect-src 'self' wss: ws:;" +
         //    "default-src 'self';" +
-        //    "font-src 'self' https: " + //fonts.googleapis.com;
+        
         //    "form-action 'self';" +
         //    "frame-ancestors 'self';" +
         //    "frame-src 'self';" +
@@ -81,7 +80,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         //     "style-src-elem 'self' 'unsafe-inline'  " + //fonts.googleapis.com www.gstatic.com; stackpath.bootstrapcdn.com;" +
         //    "upgrade-insecure-requests;" +
         //    "worker-src 'self';"
-        //    ));
+      
                 
 
         return _requestDelegate(context);

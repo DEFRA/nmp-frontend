@@ -443,6 +443,26 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
         return (model, warningResponse);
     }
+    //Double crop start
+    public bool IsInitialLoadAfterFieldChange(FertiliserManureViewModel model, string q)
+    {
+        return string.IsNullOrWhiteSpace(q) &&
+               model.FertiliserManures != null &&
+               model.FertiliserManures.Count > 0 &&
+               (model.IsAnyChangeInField || model.IsCropGroupChange);
+    }
+
+    public bool IsRedirectWithDoubleCropData(FertiliserManureViewModel model, string q)
+    {
+        return !string.IsNullOrWhiteSpace(q) &&
+               model.DoubleCrop != null &&
+               model.DoubleCrop.Count > 0;
+    }
+    //Double crop end
+
+
+
+    //Defoliation start
     public async Task<(FertiliserManureViewModel, List<Crop>)> HandleDefoliationList(FertiliserManureViewModel model)
     {
         if (model.DefoliationList != null && model.DefoliationList.Count > 0 && model.DefoliationCurrentCounter < model.DefoliationList.Count)
@@ -463,6 +483,21 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
         return (model, cropList);
     }
+    public bool IsComingFirstTimeForDefoliationGet(FertiliserManureViewModel model, string q)
+    {
+        return string.IsNullOrWhiteSpace(q) &&
+               (model.DefoliationList == null ||
+                model.DefoliationList.Count == 0 ||
+                (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) ||
+                model.IsAnyChangeInField ||
+                model.IsCropGroupChange);
+    }
 
-
+    public bool IsRedirectRequestForDefoliationGet(FertiliserManureViewModel model, string q)
+    {
+        return !string.IsNullOrWhiteSpace(q) &&
+               model.FertiliserManures != null &&
+               model.FertiliserManures.Count > 0;
+    }
+    //Defoliation end
 }

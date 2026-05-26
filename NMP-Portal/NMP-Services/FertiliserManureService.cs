@@ -171,13 +171,11 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
         }
 
         return (message, error);
@@ -201,7 +199,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateFertiliserAPI), new StringContent(fertliserData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateFertiliserAPI, new StringContent(fertliserData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -232,7 +230,6 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 Message = Resource.MsgServiceNotAvailable
             };
             _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
@@ -241,7 +238,6 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 Message = ex.Message
             };
             _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
         }
 
         return (fertiliser, error);
@@ -310,7 +306,6 @@ public class FertiliserManureService : Service, IFertiliserManureService
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.Message);
-            throw;
         }
 
         return (default, error);

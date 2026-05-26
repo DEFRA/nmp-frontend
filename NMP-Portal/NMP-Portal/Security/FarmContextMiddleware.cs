@@ -7,7 +7,6 @@ namespace NMP.Portal.Security
     public class FarmContextMiddleware(RequestDelegate next, IDataProtectionProvider dataProtectionProvider)
     {
         private readonly RequestDelegate _next = next;
-        //private readonly IFarmContextLogic _farmLogic = farmLogic;
         private readonly IDataProtector _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
 
         public async Task Invoke(HttpContext context, FarmContext farmContext, IFarmContextLogic farmLogic)

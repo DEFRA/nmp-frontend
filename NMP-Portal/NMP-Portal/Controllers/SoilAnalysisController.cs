@@ -203,7 +203,19 @@ namespace NMP.Portal.Controllers
                             model.OrganicMatterPercentage = soilAnalysis.OrganicMatterPercentage;
                             if (soilAnalysis.PotassiumIndex != null)
                             {
-                                model.PotassiumIndexValue = soilAnalysis.PotassiumIndex.ToString() == Resource.lblMinusTwo ? Resource.lblTwoMinus : (soilAnalysis.PotassiumIndex.ToString() == Resource.lblPlusTwo ? Resource.lblTwoPlus : soilAnalysis.PotassiumIndex.ToString());
+                                string potassiumIndex = soilAnalysis.PotassiumIndex.ToString();
+                                if (potassiumIndex == Resource.lblMinusTwo)
+                                {
+                                    model.PotassiumIndexValue = Resource.lblTwoMinus;
+                                }
+                                else if (potassiumIndex == Resource.lblPlusTwo)
+                                {
+                                    model.PotassiumIndexValue = Resource.lblTwoPlus;
+                                }
+                                else
+                                {
+                                    model.PotassiumIndexValue = potassiumIndex;
+                                }
                             }
 
                             model.PotassiumIndex = soilAnalysis.PotassiumIndex;

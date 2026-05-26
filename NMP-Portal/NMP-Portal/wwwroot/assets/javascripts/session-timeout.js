@@ -1,5 +1,5 @@
 ﻿(function () {
-    if (!window.sessionConfig) return;
+    if (!window.sessionConfig) { return; }
 
     const SESSION_LENGTH = window.sessionConfig.timeoutMinutes * 60 * 1000;
     const WARNING_TIME = window.sessionConfig.warningMinutes * 60 * 1000; // Show warning 3 minutes before expiry
@@ -32,6 +32,9 @@
                     break;
                 case 'expire':
                     expireSession();
+                    break;
+                default:
+                    // unknown message type
                     break;
             }
         };
@@ -87,16 +90,16 @@
     }
 
     function startCountdown(seconds) {
-        let remaining = seconds;        
+        let remaining = seconds;
         countdownInterval = setInterval(() => {
-            remaining--;            
+            remaining--;
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
                 expireSession();
             }
         }, 1000);
     }
-    
+
     function keepAlive() {
         fetch(REFRESH_URL).then(response => {
             if (response.ok) {
@@ -128,18 +131,20 @@
     // ---- Focus trap (modal only) ----
     function trapFocus(e) {
         if (e.key === "Tab") {
-            var focusedIndex = FOCUSABLE_ELEMENTS.indexOf(document.activeElement);
+            const focusedIndex = FOCUSABLE_ELEMENTS.indexOf(document.activeElement);
             if (e.shiftKey) {
                 if (focusedIndex === 0) {
                     e.preventDefault();
                     FOCUSABLE_ELEMENTS[FOCUSABLE_ELEMENTS.length - 1].focus();
                 }
-            } else {
-                if (focusedIndex === FOCUSABLE_ELEMENTS.length - 1) {
-                    e.preventDefault();
-                    FOCUSABLE_ELEMENTS[0].focus();
-                }
+            } else if (focusedIndex === FOCUSABLE_ELEMENTS.length - 1) {
+                e.preventDefault();
+                FOCUSABLE_ELEMENTS[0].focus();
             }
+            else {
+                // added this for sonar issue: Add the missing "else" clause.
+            }
+
         }
     }
 
