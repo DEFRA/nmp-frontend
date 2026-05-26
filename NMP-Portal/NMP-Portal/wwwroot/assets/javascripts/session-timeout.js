@@ -1,5 +1,5 @@
 ﻿(function () {
-    if (!window.sessionConfig) return;
+    if (!window.sessionConfig) { return; }
 
     const SESSION_LENGTH = window.sessionConfig.timeoutMinutes * 60 * 1000;
     const WARNING_TIME = window.sessionConfig.warningMinutes * 60 * 1000; // Show warning 3 minutes before expiry
@@ -32,6 +32,9 @@
                     break;
                 case 'expire':
                     expireSession();
+                    break;
+                default:
+                    // unknown message type
                     break;
             }
         };
@@ -128,7 +131,7 @@
     // ---- Focus trap (modal only) ----
     function trapFocus(e) {
         if (e.key === "Tab") {
-            var focusedIndex = FOCUSABLE_ELEMENTS.indexOf(document.activeElement);
+            const focusedIndex = FOCUSABLE_ELEMENTS.indexOf(document.activeElement);
             if (e.shiftKey) {
                 if (focusedIndex === 0) {
                     e.preventDefault();
