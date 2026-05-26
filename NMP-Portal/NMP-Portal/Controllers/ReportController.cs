@@ -26,22 +26,21 @@ using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Portal.Controllers;
 
 [Authorize]
-public class ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider, IFarmLogic farmLogic,
-    IFieldLogic fieldLogic, ICropLogic cropLogic, IOrganicManureLogic organicManureLogic, IMannerLogic mannerLogic, IScotlandNMaxValueLogic scotlandNMaxValueLogic,
-     IReportLogic reportLogic, IStorageCapacityLogic storageCapacityLogic, IWarningLogic warningLogic) : Controller
+public class ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider,
+     IReportLogic reportLogic, IStorageCapacityLogic storageCapacityLogic, IReportLogicDependencies dependencies) : Controller
 {
     private readonly ILogger<ReportController> _logger = logger;
     private readonly IDataProtector _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
-    private readonly IFarmLogic _farmLogic = farmLogic;
-    private readonly IFieldLogic _fieldLogic = fieldLogic;
-    private readonly ICropLogic _cropLogic = cropLogic;
-    private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
+    private readonly IFarmLogic _farmLogic = dependencies.FarmLogic;
+    private readonly IFieldLogic _fieldLogic = dependencies.FieldLogic;
+    private readonly ICropLogic _cropLogic = dependencies.CropLogic;
+    private readonly IOrganicManureLogic _organicManureLogic = dependencies.OrganicManureLogic;
     private readonly IReportLogic _reportLogic = reportLogic;
     private readonly IStorageCapacityLogic _storageCapacityLogic = storageCapacityLogic;
-    private readonly IWarningLogic _warningLogic = warningLogic;
-    private readonly IMannerLogic _mannerLogic = mannerLogic;
-    private readonly IScotlandNMaxValueLogic _scotlandNMaxValueLogic = scotlandNMaxValueLogic;
+    private readonly IWarningLogic _warningLogic = dependencies.WarningLogic;
+    private readonly IMannerLogic _mannerLogic = dependencies.MannerLogic;
+    private readonly IScotlandNMaxValueLogic _scotlandNMaxValueLogic = dependencies.ScotlandNMaxValueLogic;
     private readonly string _error = "Error";
     private readonly string _numberInJanuary = "NumbersInJanuary";
     private readonly string _reportDataSessionKey = "ReportData";

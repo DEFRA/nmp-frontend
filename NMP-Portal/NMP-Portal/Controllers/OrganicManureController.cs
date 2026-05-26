@@ -28,21 +28,20 @@ namespace NMP.Portal.Controllers
 {
     [Authorize]
     public class OrganicManureController(ILogger<OrganicManureController> logger, IDataProtectionProvider dataProtectionProvider,
-          IOrganicManureLogic organicManureLogic, IFarmLogic farmLogic, ICropLogic cropLogic, IFieldLogic fieldLogic, IMannerLogic mannerLogic,
-          IFertiliserManureLogic fertiliserManureLogic, IWarningLogic warningLogic) : Controller
+          IOrganicManureLogicDependencies dependencies) : Controller
     {
         private readonly ILogger<OrganicManureController> _logger = logger;
         private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
         private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
         private readonly IDataProtector _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
         private readonly IDataProtector _organicManureProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.OrganicManureController");
-        private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
-        private readonly IFarmLogic _farmLogic = farmLogic;
-        private readonly ICropLogic _cropLogic = cropLogic;
-        private readonly IFieldLogic _fieldLogic = fieldLogic;
-        private readonly IMannerLogic _mannerLogic = mannerLogic;
-        private readonly IFertiliserManureLogic _fertiliserManureLogic = fertiliserManureLogic;
-        private readonly IWarningLogic _warningLogic = warningLogic;
+        private readonly IOrganicManureLogic _organicManureLogic = dependencies.OrganicManureLogic;
+        private readonly IFarmLogic _farmLogic = dependencies.FarmLogic;
+        private readonly ICropLogic _cropLogic = dependencies.CropLogic;
+        private readonly IFieldLogic _fieldLogic = dependencies.FieldLogic;
+        private readonly IMannerLogic _mannerLogic = dependencies.MannerLogic;
+        private readonly IFertiliserManureLogic _fertiliserManureLogic = dependencies.FertiliserManureLogic;
+        private readonly IWarningLogic _warningLogic = dependencies.WarningLogic;
         private const string _organicManureSessionKey = "OrganicManure";
         private const string _fieldGroup = "FieldGroup";
         private const string _checkAnswer = "CheckAnswer";
