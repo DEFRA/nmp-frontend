@@ -452,15 +452,9 @@ namespace NMP.Portal.Controllers
                 // Crop plans
                 var (cropPlans, cropError) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
 
-                if (cropError != null && !string.IsNullOrWhiteSpace(cropError.Message))
+                if (!string.IsNullOrWhiteSpace(cropError?.Message))
                 {
-                    TempData[string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
-                        ? _fieldGroupError
-                        : _addOrganicManureError] = cropError.Message;
-
-                    return string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
-                        ? RedirectToAction(_fieldGroup, model)
-                        : RedirectToAction(_checkAnswer);
+                    return RedirectForFieldGet(model, cropError.Message);
                 }
 
                 // Field list
@@ -498,17 +492,12 @@ namespace NMP.Portal.Controllers
                 ResetOrganicManures(model);
                 model.IsDoubleCropAvailable = false;
 
-                foreach (string field in model.FieldList)
-                {
-                    var cropList = cropPlans
-                        .Where(x => x.FieldID == Convert.ToInt32(field))
-                        .ToList();
-
-                    model = await BindGrassProperty(model, cropList, Convert.ToInt32(field));
-                }
+                model = await BindGrassPropertyForFieldGet(model, cropPlans);
 
                 if (!HttpContext.Session.Keys.Contains(_organicManureSessionKey))
+                {
                     return RedirectToAction(_farmList, "Farm");
+                }
 
                 var sessionModel = GetOrganicManureFromSession();
 
@@ -529,13 +518,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 // CheckAnswer logic
-                if (model.IsCheckAnswer && model.OrganicManures?.Count > 0)
-                {
-                    model.AutumnCropNitrogenUptakes = await BuildAutumnCropNitrogenUptakeAsync(model);
-
-                    for (int i = 0; i < model.OrganicManures.Count; i++)
-                        ApplyCommonManureProperties(model, model.OrganicManures[i], i);
-                }
+                await CheckAnswereLogicForFieldGet(model);
 
                 // Field name
                 if (model.FieldList?.Count == 1)
@@ -552,16 +535,45 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Exception in Fields()");
 
-                TempData[string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
-                    ? _fieldGroupError
-                    : _addOrganicManureError] = ex.Message;
-
-                return string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
-                    ? RedirectToAction(_fieldGroup, model)
-                    : RedirectToAction(_checkAnswer);
+                return RedirectForFieldGet(model, ex.Message);
             }
         }
 
+        private async Task CheckAnswereLogicForFieldGet(OrganicManureViewModel model)
+        {
+            if (model.IsCheckAnswer && model.OrganicManures?.Count > 0)
+            {
+                model.AutumnCropNitrogenUptakes = await BuildAutumnCropNitrogenUptakeAsync(model);
+
+                for (int i = 0; i < model.OrganicManures.Count; i++)
+                    ApplyCommonManureProperties(model, model.OrganicManures[i], i);
+            }
+        }
+
+        private async Task<OrganicManureViewModel> BindGrassPropertyForFieldGet(OrganicManureViewModel model, List<HarvestYearPlanResponse> cropPlans)
+        {
+            foreach (string field in model.FieldList)
+            {
+                var cropList = cropPlans
+                    .Where(x => x.FieldID == Convert.ToInt32(field))
+                    .ToList();
+
+                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field));
+            }
+
+            return model;
+        }
+
+        private IActionResult RedirectForFieldGet(OrganicManureViewModel model, string message)
+        {
+            TempData[string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
+                ? _fieldGroupError
+                : _addOrganicManureError] = message;
+
+            return string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
+                ? RedirectToAction(_fieldGroup, model)
+                : RedirectToAction(_checkAnswer);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -2003,7 +2015,7 @@ managementPeriod.CropID.HasValue
                 model.DryMatterPercent = model.N = model.P2O5 = model.NH4N =
                 model.UricAcid = model.SO3 = model.K2O = model.MgO = model.NO3N = null;
 
-                 GetOrganicManureFromSession();
+                GetOrganicManureFromSession();
 
                 if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues ||
                     model.DefaultNutrientValue == Resource.lblYes)
@@ -2062,7 +2074,7 @@ managementPeriod.CropID.HasValue
                 ViewBag.RB209ApiOption = Resource.lblTrue;
             }
         }
-        
+
 
         [HttpGet]
         public IActionResult ManualNutrientValues()
@@ -7839,7 +7851,7 @@ managementPeriod.CropID.HasValue
                                 (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
                                 if (error == null && defoliationSequence != null)
                                 {
-                                    List<SelectListItem> allDefoliationWithName =CommonHelpers.BindAllDefoliationWithName(defoliationList, defoliationSequence);
+                                    List<SelectListItem> allDefoliationWithName = CommonHelpers.BindAllDefoliationWithName(defoliationList, defoliationSequence);
                                     allDefoliations.Add(allDefoliationWithName);
                                 }
                             }
@@ -7923,7 +7935,7 @@ managementPeriod.CropID.HasValue
             return View(model);
         }
 
-    
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -8438,7 +8450,7 @@ managementPeriod.CropID.HasValue
                         AddOrganicManureNfieldLimitWarning(model, warningMessages, organicManure, managementPeriod);
                         AddNMaxLimitWarning(model, warningMessages, organicManure, managementPeriod);
                         AddClosedPeriodWarning(model, warningMessages, organicManure, managementPeriod);
-                        
+
                         AddEndClosedPeriodFebruaryWarning(model, warningMessages, organicManure, managementPeriod);
                         AddEndClosedPeriodFebruaryExistWithinThreeWeeks(model, warningMessages, organicManure, managementPeriod);
                         AddStartPeriodEndFebOrganicAppRateExceedMaxN150(model, warningMessages, organicManure, managementPeriod);
