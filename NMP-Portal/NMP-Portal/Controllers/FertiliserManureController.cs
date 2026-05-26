@@ -22,18 +22,18 @@ namespace NMP.Portal.Controllers;
 [Authorize]
 [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public class FertiliserManureController(ILogger<FertiliserManureController> logger, IDataProtectionProvider dataProtectionProvider,
-    IFarmLogic farmLogic, IFertiliserManureLogic fertiliserManureLogic, ICropLogic cropLogic, IFieldLogic fieldLogic, IOrganicManureLogic organicManureLogic, IWarningLogic warningLogic) : Controller
+    IFertiliserManureLogicDependencies logicDependencies) : Controller
 {
     private readonly ILogger<FertiliserManureController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
     private readonly IDataProtector _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
-    private readonly IFarmLogic _farmLogic = farmLogic;
-    private readonly IFertiliserManureLogic _fertiliserManureLogic = fertiliserManureLogic;
-    private readonly ICropLogic _cropLogic = cropLogic;
-    private readonly IFieldLogic _fieldLogic = fieldLogic;
-    private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
+    private readonly IFarmLogic _farmLogic = logicDependencies.FarmLogic;
+    private readonly IFertiliserManureLogic _fertiliserManureLogic = logicDependencies.FertiliserManureLogic;
+    private readonly ICropLogic _cropLogic = logicDependencies.CropLogic;
+    private readonly IFieldLogic _fieldLogic = logicDependencies.FieldLogic;
+    private readonly IOrganicManureLogic _organicManureLogic = logicDependencies.OrganicManureLogic;
     private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
-    private readonly IWarningLogic _warningLogic = warningLogic;
+    private readonly IWarningLogic _warningLogic = logicDependencies.WarningLogic;
     private const string _fertiliserManureSessionKey = "FertiliserManure";
     private const string _harvestYearOverviewActionName = "HarvestYearOverview";
     private const string _checkAnswerActionName = "CheckAnswer";
