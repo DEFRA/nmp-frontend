@@ -436,6 +436,32 @@ namespace NMP.Portal.Controllers
 
             return organicManure;
         }
+
+
+        private async Task<OrganicManureViewModel> BindGrassPropertyForField(OrganicManureViewModel model, List<HarvestYearPlanResponse> cropPlans)
+        {
+            foreach (string field in model.FieldList)
+            {
+                var cropList = cropPlans
+                    .Where(x => x.FieldID == Convert.ToInt32(field))
+                    .ToList();
+
+                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field));
+            }
+
+            return model;
+        }
+
+        private IActionResult RedirectForFieldGet(OrganicManureViewModel model, string message)
+        {
+            TempData[string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
+                ? _fieldGroupError
+                : _addOrganicManureError] = message;
+
+            return string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
+                ? RedirectToAction(_fieldGroup, model)
+                : RedirectToAction(_checkAnswer);
+        }
         [HttpGet]
         public async Task<IActionResult> Fields()
         {
@@ -491,7 +517,7 @@ namespace NMP.Portal.Controllers
                 ResetOrganicManures(model);
                 model.IsDoubleCropAvailable = false;
 
-                model = await BindGrassPropertyForFieldGet(model, cropPlans);
+                model = await BindGrassPropertyForField(model, cropPlans);
 
                 if (!HttpContext.Session.Keys.Contains(_organicManureSessionKey))
                 {
@@ -537,32 +563,6 @@ namespace NMP.Portal.Controllers
                 return RedirectForFieldGet(model, ex.Message);
             }
         }
-
-        private async Task<OrganicManureViewModel> BindGrassPropertyForFieldGet(OrganicManureViewModel model, List<HarvestYearPlanResponse> cropPlans)
-        {
-            foreach (string field in model.FieldList)
-            {
-                var cropList = cropPlans
-                    .Where(x => x.FieldID == Convert.ToInt32(field))
-                    .ToList();
-
-                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field));
-            }
-
-            return model;
-        }
-
-        private IActionResult RedirectForFieldGet(OrganicManureViewModel model, string message)
-        {
-            TempData[string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
-                ? _fieldGroupError
-                : _addOrganicManureError] = message;
-
-            return string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)
-                ? RedirectToAction(_fieldGroup, model)
-                : RedirectToAction(_checkAnswer);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Fields(OrganicManureViewModel model)
@@ -624,7 +624,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 // Grass binding
-                model = await GrassLogicForFieldPost(model, cropPlans);
+                model = await BindGrassPropertyForField(model, cropPlans);
 
                 string fieldIds = string.Join(",", model.FieldList);
 
@@ -687,19 +687,7 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private async Task<OrganicManureViewModel> GrassLogicForFieldPost(OrganicManureViewModel model, List<HarvestYearPlanResponse> cropPlans)
-        {
-            foreach (string field in model.FieldList)
-            {
-                var cropList = cropPlans
-                    .Where(x => x.FieldID == Convert.ToInt32(field))
-                    .ToList();
-
-                model = await BindGrassProperty(model, cropList, Convert.ToInt32(field));
-            }
-
-            return model;
-        }
+        
 
         private static void SelectAllLogic(OrganicManureViewModel model, List<SelectListItem> fieldSelectList)
         {
@@ -1145,6 +1133,33 @@ managementPeriod.CropID.HasValue
             }
             return model;
         }
+
+
+        private static void BindFarmManureGroupId(OrganicManureViewModel model, List<FarmManureTypeResponse> farmManureGroupList, bool isThisOtherManure)
+        {
+            if (farmManureGroupList.Count > 0)
+            {
+                if (string.IsNullOrWhiteSpace(model.FarmGroupManureId) && model.ManureGroupIdForFilter != null)
+                {
+                    if (isThisOtherManure)
+                    {
+                        FarmManureTypeResponse? farmManureType = farmManureGroupList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName));
+                        if (farmManureType != null)
+                        {
+                            model.FarmGroupManureId = string.Format(Resource.lblFarmManureWithId, farmManureType.ID.ToString());
+                        }
+                    }
+                    else
+                    {
+                        model.FarmGroupManureId = model.ManureGroupIdForFilter.ToString();
+                    }
+                }
+            }
+            else
+            {
+                model.FarmGroupManureId = model.ManureGroupIdForFilter.ToString();
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> ManureGroup()
         {
@@ -1181,33 +1196,6 @@ managementPeriod.CropID.HasValue
             return View(model);
 
         }
-
-        private static void BindFarmManureGroupId(OrganicManureViewModel model, List<FarmManureTypeResponse> farmManureGroupList, bool isThisOtherManure)
-        {
-            if (farmManureGroupList.Count > 0)
-            {
-                if (string.IsNullOrWhiteSpace(model.FarmGroupManureId) && model.ManureGroupIdForFilter != null)
-                {
-                    if (isThisOtherManure)
-                    {
-                        FarmManureTypeResponse? farmManureType = farmManureGroupList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId && x.ManureTypeName.Equals(model.OtherMaterialName));
-                        if (farmManureType != null)
-                        {
-                            model.FarmGroupManureId = string.Format(Resource.lblFarmManureWithId, farmManureType.ID.ToString());
-                        }
-                    }
-                    else
-                    {
-                        model.FarmGroupManureId = model.ManureGroupIdForFilter.ToString();
-                    }
-                }
-            }
-            else
-            {
-                model.FarmGroupManureId = model.ManureGroupIdForFilter.ToString();
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManureGroup(OrganicManureViewModel model)
