@@ -2311,6 +2311,19 @@ managementPeriod.CropID.HasValue
                 }
             }
 
+            ValidateDryMatter(model);
+
+            if (model.N != null && (model.N < 0 || model.N > 297))
+            {
+                ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
+            }
+            ValidateNH4NUricAcidNO3NAndP2O5(model);
+
+            ValidateK2OMgOAndSO3(model);
+        }
+
+        private void ValidateDryMatter(OrganicManureViewModel model)
+        {
             if (model.DryMatterPercent != null)
             {
                 if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
@@ -2330,14 +2343,6 @@ managementPeriod.CropID.HasValue
                 }
             }
 
-            if (model.N != null && (model.N < 0 || model.N > 297))
-            {
-                ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
-            }
-
-            ValidateNH4NUricAcidNO3NAndP2O5(model);
-
-            ValidateK2OMgOAndSO3(model);
         }
 
         private void ValidateNH4NUricAcidNO3NAndP2O5(OrganicManureViewModel model)
