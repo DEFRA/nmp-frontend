@@ -1200,7 +1200,17 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodAsyncAPI, organicClosedPeriodRequest.SoilTypeId, organicClosedPeriodRequest.FieldType, organicClosedPeriodRequest.HarvestYear, organicClosedPeriodRequest.SowingDate, organicClosedPeriodRequest.CountryId, organicClosedPeriodRequest.CropGroupId, organicClosedPeriodRequest.CropTypeId, organicClosedPeriodRequest.IsPerennial));
+            string url = string.Empty;
+            if (organicClosedPeriodRequest.SowingDate != null)
+            {
+                url = string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodAsyncAPI, organicClosedPeriodRequest.SoilTypeId, organicClosedPeriodRequest.FieldType, organicClosedPeriodRequest.HarvestYear, organicClosedPeriodRequest.SowingDate, organicClosedPeriodRequest.CountryId, organicClosedPeriodRequest.CropGroupId, organicClosedPeriodRequest.CropTypeId, organicClosedPeriodRequest.IsPerennial);
+
+            }
+            else
+            {
+                url = string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodNoSowingDateAsyncAPI, organicClosedPeriodRequest.SoilTypeId, organicClosedPeriodRequest.FieldType, organicClosedPeriodRequest.HarvestYear, organicClosedPeriodRequest.CountryId, organicClosedPeriodRequest.CropGroupId, organicClosedPeriodRequest.CropTypeId, organicClosedPeriodRequest.IsPerennial);
+            }
+                var response = await httpClient.GetAsync(url);
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

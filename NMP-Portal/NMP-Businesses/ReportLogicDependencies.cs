@@ -1,4 +1,6 @@
-﻿using NMP.Application;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NMP.Application;
+using NMP.Core.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace NMP.Businesses
 {
+    [Business(ServiceLifetime.Transient)]
     public class ReportLogicDependencies(
     IFarmLogic farmLogic,
     IFieldLogic fieldLogic,
