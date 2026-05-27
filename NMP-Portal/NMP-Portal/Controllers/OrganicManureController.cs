@@ -2335,6 +2335,13 @@ managementPeriod.CropID.HasValue
                 ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
             }
 
+            ValidateNH4NUricAcidNO3NAndP2O5(model);
+
+            ValidateK2OMgOAndSO3(model);
+        }
+
+        private void ValidateNH4NUricAcidNO3NAndP2O5(OrganicManureViewModel model)
+        {
             if (model.NH4N != null && (model.NH4N < 0 || model.NH4N > 99))
             {
                 ModelState.AddModelError("NH4N", string.Format(Resource.MsgMinMaxValidation, Resource.lblAmmonium, 99));
@@ -2354,7 +2361,10 @@ managementPeriod.CropID.HasValue
             {
                 ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 99));
             }
+        }
 
+        private void ValidateK2OMgOAndSO3(OrganicManureViewModel model)
+        {
             if (model.K2O != null && (model.K2O < 0 || model.K2O > 99))
             {
                 ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 99));
@@ -2368,8 +2378,8 @@ managementPeriod.CropID.HasValue
             {
                 ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 99));
             }
-
         }
+
         private void ReplaceNumericError(string key, string validationLabel, string displayLabel)
         {
             if (!ModelState.ContainsKey(key) || ModelState[key].Errors.Count == 0)
@@ -2585,26 +2595,24 @@ managementPeriod.CropID.HasValue
             return (flowControl: true, value: null, model);
         }
 
-        private async Task<(bool flowControl, IActionResult? value, OrganicManureViewModel)> PrepareWarningMessageForApplicationRateMethod(OrganicManureViewModel model, Error error, string message)
+        private async Task<(bool flowControl, IActionResult? value, OrganicManureViewModel)> PrepareWarningMessageForApplicationRateMethod(OrganicManureViewModel model, Error? error, string message)
         {
-            if (model.OrganicManures != null && model.OrganicManures.Count > 0)
+            if (model.OrganicManures?.Count > 0)
             {
                 (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 foreach (var organicManure in model.OrganicManures)
                 {
                     int? fieldId = organicManure.FieldID ?? null;
-                    if (fieldId != null)
+                    if (fieldId != null && await GetIsFieldIsInNVZ(fieldId.Value))
                     {
-                        if (await GetIsFieldIsInNVZ(fieldId.Value))
+                        (bool flowControl, string? errorMessage, model) = await BindWarningForApplicationRate(model, error, message, farm, organicManure, fieldId);
+                        if (!flowControl && string.IsNullOrWhiteSpace(errorMessage))
                         {
-                            (bool flowControl, string? errorMessage, model) = await BindWarningForApplicationRate(model, error, message, farm, organicManure, fieldId);
-                            if (!flowControl && string.IsNullOrWhiteSpace(errorMessage))
-                            {
-                                TempData["ApplicationRateMethodError"] = errorMessage;
-                                return (flowControl: false, value: View(model), model);
-                            }
+                            TempData["ApplicationRateMethodError"] = errorMessage;
+                            return (flowControl: false, value: View(model), model);
                         }
                     }
+
                 }
             }
 
@@ -2615,9 +2623,9 @@ managementPeriod.CropID.HasValue
         {
             bool isFieldIsInNVZ = false;
             Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
-            if (field != null)
+            if (field != null && field.IsWithinNVZ.HasValue)
             {
-                isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
+                isFieldIsInNVZ = field.IsWithinNVZ.Value;
             }
             return isFieldIsInNVZ;
         }
