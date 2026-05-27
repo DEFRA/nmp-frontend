@@ -142,7 +142,44 @@
         SO3 = Model.ManureType.SO3,
         MgO = Model.ManureType.MgO
     });
-    
+
+     bool showOrgManureWarning =
+        Model.IsOrgManureNfieldLimitWarning &&
+        !string.IsNullOrWhiteSpace(Model.NmaxWarningPara1) &&
+        !Model.NmaxWarningPara1.Equals(Resource.lblPara1PAS100);
+
+    bool showNMaxWarning =
+        Model.IsNMaxLimitWarning &&
+        !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1);
+
+    bool showClosedPeriodWarning =
+        Model.IsClosedPeriodWarning &&
+        !string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1);
+
+    bool showJulyToSeptWarning =
+        Model.IsApplicationJulyToSeptWarning &&
+        !string.IsNullOrWhiteSpace(Model.ApplicationJulyToSeptPara1);
+
+    bool showEndFebWarning =
+        Model.IsEndClosedPeriodFebruaryWarning &&
+        !string.IsNullOrWhiteSpace(Model.EndClosedPeriodEndFebWarningPara1);
+
+    bool showEndFebWithinThreeWeeksWarning =
+        Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks &&
+        !string.IsNullOrWhiteSpace(Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1);
+
+    bool showStartPeriodWarning =
+        Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 &&
+        !string.IsNullOrWhiteSpace(Model.StartClosedPeriodEndFebWarningPara1);
+
+    bool showNotificationBanner =
+        showOrgManureWarning ||
+        showNMaxWarning ||
+        showClosedPeriodWarning ||
+        showJulyToSeptWarning ||
+        showEndFebWarning ||
+        showEndFebWithinThreeWeeksWarning ||
+        showStartPeriodWarning;
 }
 @section BeforeContent {
     <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
@@ -165,59 +202,56 @@
                 </govuk-error-summary>
             }
             
-            @if (Model.IsOrgManureNfieldLimitWarning || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsApplicationJulyToSeptWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+            @if (showNotificationBanner)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
-                    
-                    @if (Model.IsOrgManureNfieldLimitWarning && !string.IsNullOrWhiteSpace(Model.NmaxWarningPara1) && !Model.NmaxWarningPara1.Equals(Resource.lblPara1PAS100))
-                    {
-                       @*  We don't have to show this warning on check answer page (mentioned on scotland warning excel sheet row no. 6) *@
-                      
-                         <p class="govuk-notification-banner__heading">
-                            @if (Model.NmaxWarningPara1 != null)
-                            {
-                                @Model.NmaxWarningPara1
-                            }
-                         </p>
-                    }
-                    @if (Model.IsNMaxLimitWarning)
+            
+                    @if (showOrgManureWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @if (Model.CropNmaxLimitWarningPara1 != null)
-                            {
-                                @Model.CropNmaxLimitWarningPara1
-                            }
+                            @Model.NmaxWarningPara1
                         </p>
                     }
-
-                    @if (Model.IsClosedPeriodWarning)
+            
+                    @if (showNMaxWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Model.CropNmaxLimitWarningPara1
+                        </p>
+                    }
+            
+                    @if (showClosedPeriodWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.ClosedPeriodWarningPara1
                         </p>
                     }
-                    @if (Model.IsApplicationJulyToSeptWarning)
+            
+                    @if (showJulyToSeptWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.ApplicationJulyToSeptPara1
                         </p>
                     }
-                    @if (Model.IsEndClosedPeriodFebruaryWarning)
+            
+                    @if (showEndFebWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.EndClosedPeriodEndFebWarningPara1
                         </p>
                     }
-                    @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+            
+                    @if (showEndFebWithinThreeWeeksWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1
                         </p>
                     }
-                    @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+            
+                    @if (showStartPeriodWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.StartClosedPeriodEndFebWarningPara1
@@ -225,7 +259,6 @@
                     }
                 </govuk-notification-banner>
             }
-
             <h1 class="govuk-heading-l">
                 @GetManureText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear))
 

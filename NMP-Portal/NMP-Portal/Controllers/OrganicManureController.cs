@@ -1369,38 +1369,7 @@ managementPeriod.CropID.HasValue
                 {
                     return View(model);
                 }
-                List<ManureType> manureTypeList = new List<ManureType>();
-                Error? error = null;
-
-                (manureTypeList, error) = await GetManureTypeList(model);
-                model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
-                var manureType = GetAndApplyManureType(model, manureTypeList, error);
-                bool isHighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen ?? false;
-                model.HighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen;
-                (List<CommonResponse> manureGroupList, Error error1) = await _mannerLogic.FetchManureGroupList();
-                model.ManureGroupName = (error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
-
-                int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
-
-                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-                if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
-                {
-                    TempData["Error"] = error.Message;
-                }
-                if (farm != null)
-                {
-                    string? closedPeriod = await GetClosedPeriod(model, farm, isHighReadilyAvailableNitrogen);
-
-                    model.ClosedPeriod = closedPeriod;
-                    if (!string.IsNullOrWhiteSpace(closedPeriod))
-                    {
-                        model = await GetDatesFromClosedPeriod(model, closedPeriod);
-                        await SetClosedPeriodUIAsync(model);
-                    }
-                    model.IsWithinNVZ = await IsAnyFieldWithinNVZ(model.FieldList);
-
-
-                }
+                model = await PrepareManureApplyingDateViewModelAsync(model);
                 if (model.FieldList.Count == 1)
                 {
                     Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(model.FieldList[0]));
@@ -1436,7 +1405,7 @@ managementPeriod.CropID.HasValue
 
                 if (!ModelState.IsValid)
                 {
-                    await SetClosedPeriodUIAsync(model);
+                    model = await PrepareManureApplyingDateViewModelAsync(model);
                     return View(model);
                 }
 
@@ -9621,6 +9590,44 @@ managementPeriod.CropID.HasValue
             model.MgO = model.ManureType.MgO;
             model.NO3N = model.ManureType.NO3N;
         }
+
+        private async Task<OrganicManureViewModel> PrepareManureApplyingDateViewModelAsync(OrganicManureViewModel model)
+        {
+            List<ManureType> manureTypeList = new List<ManureType>();
+            Error? error = null;
+
+            (manureTypeList, error) = await GetManureTypeList(model);
+            model.ManureTypeName = (error == null && manureTypeList.Count > 0) ? manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.Name : string.Empty;
+            var manureType = GetAndApplyManureType(model, manureTypeList, error);
+            bool isHighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen ?? false;
+            model.HighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen;
+            (List<CommonResponse> manureGroupList, Error error1) = await _mannerLogic.FetchManureGroupList();
+            model.ManureGroupName = (error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
+
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+
+            (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
+            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+            {
+                TempData["Error"] = error.Message;
+            }
+            if (farm != null)
+            {
+                string? closedPeriod = await GetClosedPeriod(model, farm, isHighReadilyAvailableNitrogen);
+
+                model.ClosedPeriod = closedPeriod;
+                if (!string.IsNullOrWhiteSpace(closedPeriod))
+                {
+                    model = await GetDatesFromClosedPeriod(model, closedPeriod);
+                    await SetClosedPeriodUIAsync(model);
+                }
+                model.IsWithinNVZ = await IsAnyFieldWithinNVZ(model.FieldList);
+
+
+            }
+            return model;
+        }
+
 
     }
 }
