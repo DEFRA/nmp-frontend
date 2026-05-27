@@ -7005,6 +7005,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (!ModelState.IsValid)
         {
             (ViewBag.RemovableFields, ViewBag.NewlyAddedFields) = await SeparateFieldsAsync(model);
+            return View(model);
         }
 
         SetCropToSession(model);
