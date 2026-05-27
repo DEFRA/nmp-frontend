@@ -63,6 +63,7 @@ namespace NMP.Portal.Controllers
         private const string _applicationRateKey = "ApplicationRate";
         private const string _formatIndexKey = "{0} {1}";
         private const string _autumnCropNitrogenUptakeKey = "AutumnCropNitrogenUptake";
+        private const string _applicationMethodErrorKey = "ApplicationMethodError";
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
             if (HttpContext.Session.Exists(_organicManureSessionKey))
@@ -1650,6 +1651,47 @@ managementPeriod.CropID.HasValue
             return null;
         }
 
+
+        private void BindIsApplicationMethodChange(OrganicManureViewModel model)
+        {
+            if (model.IsCheckAnswer && (!model.IsFieldGroupChange) && (!model.IsManureTypeChange))
+            {
+                model.IsApplicationMethodChange = true;
+            }
+            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+        }
+
+        private (bool flowControl, IActionResult? value) RedirectForCheckAnswerApplicationMethod(OrganicManureViewModel model)
+        {
+            if (model.IsCheckAnswer)
+            {
+                OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+
+                if (organicManureViewModel == null)
+                {
+                    return (flowControl: false, value: RedirectToAction(_farmList, "Farm"));
+                }
+                if (IsDeepAndShallowInjection(organicManureViewModel))
+                {
+                    model.IncorporationDelay = null;
+                    model.IncorporationMethod = null;
+                    model.IncorporationDelayName = string.Empty;
+                    model.IncorporationMethodName = string.Empty;
+                    foreach (var orgManure in model.OrganicManures)
+                    {
+                        orgManure.IncorporationDelayID = null;
+                        orgManure.IncorporationMethodID = null;
+                    }
+                }
+                if (!(model.IsFieldGroupChange) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
+                {
+                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    return (flowControl: false, value: RedirectToAction(_checkAnswer));
+                }
+            }
+            return (flowControl: true, value: null);
+        }
+
         [HttpGet]
         public async Task<IActionResult> ApplicationMethod()
         {
@@ -1723,47 +1765,6 @@ managementPeriod.CropID.HasValue
             }
             return View(model);
         }
-
-        private void BindIsApplicationMethodChange(OrganicManureViewModel model)
-        {
-            if (model.IsCheckAnswer && (!model.IsFieldGroupChange) && (!model.IsManureTypeChange))
-            {
-                model.IsApplicationMethodChange = true;
-            }
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-        }
-
-        private (bool flowControl, IActionResult? value) RedirectForCheckAnswerApplicationMethod(OrganicManureViewModel model)
-        {
-            if (model.IsCheckAnswer)
-            {
-                OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
-
-                if (organicManureViewModel == null)
-                {
-                    return (flowControl: false, value: RedirectToAction(_farmList, "Farm"));
-                }
-                if (IsDeepAndShallowInjection(organicManureViewModel))
-                {
-                    model.IncorporationDelay = null;
-                    model.IncorporationMethod = null;
-                    model.IncorporationDelayName = string.Empty;
-                    model.IncorporationMethodName = string.Empty;
-                    foreach (var orgManure in model.OrganicManures)
-                    {
-                        orgManure.IncorporationDelayID = null;
-                        orgManure.IncorporationMethodID = null;
-                    }
-                }
-                if (!(model.IsFieldGroupChange) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
-                {
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                    return (flowControl: false, value: RedirectToAction(_checkAnswer));
-                }
-            }
-            return (flowControl: true, value: null);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApplicationMethod(OrganicManureViewModel model)
@@ -1838,7 +1839,7 @@ managementPeriod.CropID.HasValue
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in ApplicationMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["ApplicationMethodError"] = ex.Message;
+                TempData[_applicationMethodErrorKey] = ex.Message;
                 return ViewBag(model);
             }
             return RedirectToAction("DefaultNutrientValues");
@@ -1850,7 +1851,7 @@ managementPeriod.CropID.HasValue
 
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["ApplicationMethodError"] = error.Message;
+                TempData[_applicationMethodErrorKey] = error.Message;
                 return (flowControl: false, value: View(model));
             }
 
@@ -1860,7 +1861,7 @@ managementPeriod.CropID.HasValue
                 (model.IncorporationMethodName, error) = await _mannerLogic.FetchIncorporationMethodById(model.IncorporationMethod.Value);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
-                    TempData["ApplicationMethodError"] = error.Message;
+                    TempData[_applicationMethodErrorKey] = error.Message;
                     return (flowControl: false, value: View(model));
                 }
 
@@ -1881,7 +1882,7 @@ managementPeriod.CropID.HasValue
             (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _mannerLogic.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethod ?? 0, applicableFor);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["ApplicationMethodError"] = error.Message;
+                TempData[_applicationMethodErrorKey] = error.Message;
                 return (flowControl: false, value: View(model));
             }
             else
@@ -1890,7 +1891,7 @@ managementPeriod.CropID.HasValue
                 (model.IncorporationDelayName, error) = await _mannerLogic.FetchIncorporationDelayById(model.IncorporationDelay.Value);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
-                    TempData["ApplicationMethodError"] = error.Message;
+                    TempData[_applicationMethodErrorKey] = error.Message;
                     return (flowControl: false, value: View(model));
                 }
 
@@ -1937,6 +1938,39 @@ managementPeriod.CropID.HasValue
             }
         }
 
+
+
+        private void BindFarmManureValues(OrganicManureViewModel model, FarmManureTypeResponse? farmManure)
+        {
+            if (model.IsDefaultValueChange)
+            {
+                model.IsDefaultValueChange = false;
+
+                if (farmManure != null)
+                {
+                    ApplyFarmManureValues(model, farmManure);
+                    ViewBag.FarmManureApiOption = Resource.lblTrue;
+                }
+            }
+            else if (farmManure != null)
+            {
+                ApplyFarmManureValues(model, farmManure);
+                ViewBag.FarmManureApiOption = Resource.lblTrue;
+                ViewBagForDefaultOrStandardValue(model);
+            }
+        }
+
+        private static void BindIsDefaultNutrientOptionChange(OrganicManureViewModel model)
+        {
+            if (model.IsCheckAnswer &&
+                                !model.IsApplicationMethodChange &&
+                                !model.IsFieldGroupChange &&
+                                !model.IsManureTypeChange &&
+                                !model.IsIncorporationMethodChange)
+            {
+                model.IsDefaultNutrientOptionChange = true;
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> DefaultNutrientValues()
@@ -1996,39 +2030,6 @@ managementPeriod.CropID.HasValue
 
             return View(model);
         }
-
-        private void BindFarmManureValues(OrganicManureViewModel model, FarmManureTypeResponse? farmManure)
-        {
-            if (model.IsDefaultValueChange)
-            {
-                model.IsDefaultValueChange = false;
-
-                if (farmManure != null)
-                {
-                    ApplyFarmManureValues(model, farmManure);
-                    ViewBag.FarmManureApiOption = Resource.lblTrue;
-                }
-            }
-            else if (farmManure != null)
-            {
-                ApplyFarmManureValues(model, farmManure);
-                ViewBag.FarmManureApiOption = Resource.lblTrue;
-                ViewBagForDefaultOrStandardValue(model);
-            }
-        }
-
-        private static void BindIsDefaultNutrientOptionChange(OrganicManureViewModel model)
-        {
-            if (model.IsCheckAnswer &&
-                                !model.IsApplicationMethodChange &&
-                                !model.IsFieldGroupChange &&
-                                !model.IsManureTypeChange &&
-                                !model.IsIncorporationMethodChange)
-            {
-                model.IsDefaultNutrientOptionChange = true;
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DefaultNutrientValues(OrganicManureViewModel model)
@@ -2040,7 +2041,7 @@ managementPeriod.CropID.HasValue
 
             try
             {
-                var (farmManureList, error) =
+                var (farmManureList, _) =
                     await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
 
                 var farmManure = GetFarmManure(farmManureList, model.ManureTypeId, model.ManureTypeName);
@@ -2535,7 +2536,7 @@ managementPeriod.CropID.HasValue
                     {
                         return RedirectToAction(_farmList, "Farm");
                     }
-                    if (organicManureViewModel != null && model.ApplicationRateMethod != organicManureViewModel.ApplicationRateMethod)
+                    if (model.ApplicationRateMethod != organicManureViewModel.ApplicationRateMethod)
                     {
                         model.IsWarningMsgNeedToShow = false;
                     }
@@ -2594,18 +2595,13 @@ managementPeriod.CropID.HasValue
                     int? fieldId = organicManure.FieldID ?? null;
                     if (fieldId != null)
                     {
-                        Field field = await _fieldLogic.FetchFieldByFieldId(fieldId.Value);
-                        if (field != null)
+                        if (await GetIsFieldIsInNVZ(fieldId.Value))
                         {
-                            bool isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
-                            if (isFieldIsInNVZ)
+                            (bool flowControl, string? errorMessage, model) = await BindWarningForApplicationRate(model, error, message, farm, organicManure, fieldId);
+                            if (!flowControl && string.IsNullOrWhiteSpace(errorMessage))
                             {
-                                (bool flowControl, string? errorMessage, model) = await BindWarningForApplicationRate(model, error, message, farm, organicManure, fieldId);
-                                if (!flowControl && string.IsNullOrWhiteSpace(errorMessage))
-                                {
-                                    TempData["ApplicationRateMethodError"] = errorMessage;
-                                    return (flowControl: false, value: View(model), model);
-                                }
+                                TempData["ApplicationRateMethodError"] = errorMessage;
+                                return (flowControl: false, value: View(model), model);
                             }
                         }
                     }
@@ -2615,6 +2611,16 @@ managementPeriod.CropID.HasValue
             return (flowControl: true, value: null, model);
         }
 
+        private async Task<bool> GetIsFieldIsInNVZ(int fieldId)
+        {
+            bool isFieldIsInNVZ = false;
+            Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
+            if (field != null)
+            {
+                isFieldIsInNVZ = field.IsWithinNVZ != null ? field.IsWithinNVZ.Value : false;
+            }
+            return isFieldIsInNVZ;
+        }
         private static void BindApplicationRateArable(OrganicManureViewModel model, Error? error, List<ManureType> manureTypeList)
         {
             if (error == null && manureTypeList.Count > 0)
