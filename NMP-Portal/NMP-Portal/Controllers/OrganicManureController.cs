@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Identity.Client;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Application;
 using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
@@ -1772,16 +1773,13 @@ managementPeriod.CropID.HasValue
 
                 if ((model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
                 {
-                    if (manureTypeList.Count > 0)
-                    {
-                        string applicableFor = Resource.lblNull;
-                        List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
+                    string applicableFor = Resource.lblNull;
+                    List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
 
-                        (bool flowControl, IActionResult? value) = await BindIncorporationMethodForApplicationMethod(model, error, applicableFor);
-                        if (!flowControl && value != null)
-                        {
-                            return value;
-                        }
+                    (bool flowControl, IActionResult? value) = await BindIncorporationMethodForApplicationMethod(model, error, applicableFor);
+                    if (!flowControl && value != null)
+                    {
+                        return value;
                     }
                 }
                 else
@@ -1790,13 +1788,7 @@ managementPeriod.CropID.HasValue
                     {
                         return redirect!;
                     }
-                    if (IsDeepAndShallowInjection(organicManureViewModel))
-                    {
-                        model.IncorporationDelay = null;
-                        model.IncorporationMethod = null;
-                        model.IncorporationDelayName = string.Empty;
-                        model.IncorporationMethodName = string.Empty;
-                    }
+                    ResetIncorporationMethodAndDelay(model, organicManureViewModel);
                 }
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
@@ -1812,6 +1804,17 @@ managementPeriod.CropID.HasValue
                 return ViewBag(model);
             }
             return RedirectToAction("DefaultNutrientValues");
+        }
+
+        private static void ResetIncorporationMethodAndDelay(OrganicManureViewModel model, OrganicManureViewModel organicManureViewModel)
+        {
+            if (IsDeepAndShallowInjection(organicManureViewModel))
+            {
+                model.IncorporationDelay = null;
+                model.IncorporationMethod = null;
+                model.IncorporationDelayName = string.Empty;
+                model.IncorporationMethodName = string.Empty;
+            }
         }
 
         private async Task<(bool flowControl, IActionResult? value)> BindIncorporationMethodForApplicationMethod(OrganicManureViewModel model, Error? error, string applicableFor)
@@ -1923,9 +1926,9 @@ managementPeriod.CropID.HasValue
             }
             else if (farmManure != null)
             {
-                ApplyFarmManureValues(model, farmManure);
+                model.DefaultFarmManureValueDate = farmManure.ModifiedOn ?? farmManure.CreatedOn;
                 ViewBag.FarmManureApiOption = Resource.lblTrue;
-                ViewBagForDefaultOrStandardValue(model);
+                ViewBagForDefaultOrStandardValue(model, farmManure);
             }
         }
 
@@ -2018,15 +2021,7 @@ managementPeriod.CropID.HasValue
                 if (!ModelState.IsValid)
                 {
                     await SetManureTypeIfAvailable(model);
-
-                    if (IsOtherManureType(model.ManureTypeId))
-                    {
-                        (farmManure, model) = BindDefaultNutrientValuesIfManureIsOther(model, farmManureList, farmManure);
-                    }
-                    else if (farmManureList.Count > 0)
-                    {
-                        BindFarmManureApiOption(model, farmManure);
-                    }
+                    BindFarmManureDataForModelStateInvalidForDefaultNutrient(ref model, farmManureList, ref farmManure);
 
                     return View(model);
                 }
@@ -2044,24 +2039,13 @@ managementPeriod.CropID.HasValue
                 // ✅ Reset nutrients
                 model.DryMatterPercent = model.N = model.P2O5 = model.NH4N =
                 model.UricAcid = model.SO3 = model.K2O = model.MgO = model.NO3N = null;
-
-                GetOrganicManureFromSession();
-
-                if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues ||
-                    model.DefaultNutrientValue == Resource.lblYes)
+                bool flowControl = false;
+                IActionResult? value = null;
+                OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+                (flowControl, value) = await HandleDefaultNutrientValues(model, farmManure, organicManureViewModel);
+                if (!flowControl && value != null)
                 {
-                    if (farmManure != null)
-                    {
-                        ApplyFarmManureValues(model, farmManure);
-                        model.IsThisDefaultValueOfRB209 = false;
-                        ViewBag.FarmManureApiOption = Resource.lblTrue;
-                    }
-                }
-                else
-                {
-                    await SetManureTypeIfAvailable(model);
-                    model.IsThisDefaultValueOfRB209 = true;
-                    ViewBag.RB209ApiOption = Resource.lblTrue;
+                    return value;
                 }
 
                 if (model.OrganicManures?.Count > 0)
@@ -2071,7 +2055,7 @@ managementPeriod.CropID.HasValue
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
 
-                (bool flowControl, IActionResult? value) = RedirectIfCheckAnswerForDefaultNutrientValues(model);
+                (flowControl, value) = RedirectIfCheckAnswerForDefaultNutrientValues(model);
                 if (!flowControl && value != null)
                 {
                     return value;
@@ -2085,6 +2069,156 @@ managementPeriod.CropID.HasValue
             }
 
             return RedirectToAction("ApplicationRateMethod");
+        }
+
+        private async Task<(bool flowControl, IActionResult? value)> HandleDefaultNutrientValues(OrganicManureViewModel model, FarmManureTypeResponse? farmManure, OrganicManureViewModel? organicManureViewModel)
+        {
+            bool flowControl = false; 
+            IActionResult? value = null;
+            bool hasDefaultNutrientValue = !string.IsNullOrWhiteSpace(model.DefaultNutrientValue);
+            if (!string.IsNullOrWhiteSpace(organicManureViewModel?.DefaultNutrientValue))
+            {
+                (flowControl, value) = await ProcessNutrientValueOptionAsync(model, farmManure, organicManureViewModel);
+                if (!flowControl && value != null)
+                {
+                    return (flowControl: false, value: value);
+                }
+            }
+            else
+            {
+                if (hasDefaultNutrientValue && (model.DefaultNutrientValue == Resource.lblYesUseTheseValues || model.DefaultNutrientValue == Resource.lblYes))
+                {
+                    await HandleDefaultNutrientValueLogicIfSelectYesToDefault(model, farmManure);
+                }
+                else
+                {
+                    (ManureType manureType, _) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+                    model.ManureType = manureType;
+                    if (hasDefaultNutrientValue && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
+                    {
+                        model.IsThisDefaultValueOfRB209 = true;
+                        ViewBag.RB209ApiOption = Resource.lblTrue;
+                        HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                        return (flowControl: false, value: View(model));
+                    }
+
+                }
+            }
+
+            return (flowControl: true, value: null);
+        }
+
+        private async Task<(bool flowControl, IActionResult? value)> ProcessNutrientValueOptionAsync(OrganicManureViewModel model, FarmManureTypeResponse? farmManure, OrganicManureViewModel organicManureViewModel)
+        {
+            bool flowControl = false; IActionResult? value = null;
+            if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues || model.DefaultNutrientValue == Resource.lblYes)
+            {
+                (flowControl, value) = BindDataIfWeSelectDefaultValueOption(model, farmManure, organicManureViewModel);
+                if (!flowControl && value != null)
+                {
+                    return (flowControl: false, value: value);
+                }
+            }
+            else
+            {
+                await SetManureTypeIfAvailable(model);
+
+                model.IsThisDefaultValueOfRB209 = true;
+                (flowControl, value) = BindRB209ApiOptionViewBeg(model, organicManureViewModel);
+                if (!flowControl && value != null)
+                {
+                    return (flowControl: false, value: value);
+                }
+            }
+
+            return (flowControl: true, value: null);
+        }
+
+        private async Task HandleDefaultNutrientValueLogicIfSelectYesToDefault(OrganicManureViewModel model, FarmManureTypeResponse? farmManure)
+        {
+            (List<FarmManureTypeResponse> farmManureTypeList, _) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
+            if (farmManureTypeList.Count > 0)
+            {
+                if (farmManure != null)
+                {
+                    CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
+                }
+                if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
+                {
+                    model.IsThisDefaultValueOfRB209 = false;
+                    ViewBag.FarmManureApiOption = Resource.lblTrue;
+                }
+            }
+        }
+
+        private (bool flowControl, IActionResult value) BindRB209ApiOptionViewBeg(OrganicManureViewModel model, OrganicManureViewModel organicManureViewModel)
+        {
+            if (organicManureViewModel.DefaultNutrientValue != model.DefaultNutrientValue && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
+            {
+                ViewBag.RB209ApiOption = Resource.lblTrue;
+                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                if (organicManureViewModel.DefaultNutrientValue != model.DefaultNutrientValue && (organicManureViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || organicManureViewModel.DefaultNutrientValue != Resource.lblYesUseTheseValues)
+                      && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
+                {
+                    return (flowControl: false, value: View(model));
+                }
+
+            }
+            if (organicManureViewModel.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
+            {
+                ViewBag.RB209ApiOption = Resource.lblTrue;
+            }
+
+            return (flowControl: true, value: null);
+        }
+
+        private (bool flowControl, IActionResult? value) BindDataIfWeSelectDefaultValueOption(OrganicManureViewModel model, FarmManureTypeResponse? farmManure, OrganicManureViewModel organicManureViewModel)
+        {
+            if (farmManure != null)
+            {
+                CopyFarmManureToManureNutrientValues(model.ManureType, farmManure);
+            }
+
+            model.IsThisDefaultValueOfRB209 = false;
+            if (organicManureViewModel.DefaultNutrientValue != model.DefaultNutrientValue && model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
+            {
+                if (farmManure != null)
+                {
+                    ViewBag.FarmManureApiOption = Resource.lblTrue;
+                }
+
+                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                (bool isSuccess, IActionResult? action) = RedirectToDefaultNutrientValues(model, organicManureViewModel);
+                if (!isSuccess && action != null)
+                {
+                    return (flowControl: false, value: action);
+                }
+            }
+
+            return (flowControl: true, value: null);
+        }
+
+        private (bool flowControl, IActionResult? value) RedirectToDefaultNutrientValues(OrganicManureViewModel model, OrganicManureViewModel organicManureViewModel)
+        {
+            if (organicManureViewModel.DefaultNutrientValue != model.DefaultNutrientValue && (organicManureViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || organicManureViewModel.DefaultNutrientValue != Resource.lblYesUseTheseStandardNutrientValues)
+                && model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
+            {
+                return (flowControl: false, value: View(model));
+            }
+
+            return (flowControl: true, value: null);
+        }
+
+        private void BindFarmManureDataForModelStateInvalidForDefaultNutrient(ref OrganicManureViewModel model, List<FarmManureTypeResponse> farmManureList, ref FarmManureTypeResponse? farmManure)
+        {
+            if (IsOtherManureType(model.ManureTypeId))
+            {
+                (farmManure, model) = BindDefaultNutrientValuesIfManureIsOther(model, farmManureList, farmManure);
+            }
+            else if (farmManureList.Count > 0)
+            {
+                BindFarmManureApiOption(model, farmManure);
+            }
         }
 
         private (bool flowControl, IActionResult? value) RedirectIfCheckAnswerForDefaultNutrientValues(OrganicManureViewModel model)
@@ -2117,7 +2251,7 @@ managementPeriod.CropID.HasValue
             }
             else if (farmManure != null)
             {
-                ViewBagForDefaultOrStandardValue(model);
+                ViewBagForDefaultOrStandardValue(model, farmManure);
             }
         }
 
@@ -2142,11 +2276,13 @@ managementPeriod.CropID.HasValue
             return (farmManure, model);
         }
 
-        private void ViewBagForDefaultOrStandardValue(OrganicManureViewModel model)
+        private void ViewBagForDefaultOrStandardValue(OrganicManureViewModel model, FarmManureTypeResponse? farmManure)
         {
             if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
             {
                 ViewBag.FarmManureApiOption = Resource.lblTrue;
+
+                ApplyFarmManureValues(model, farmManure);
             }
             else if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) || (model.IsThisDefaultValueOfRB209 != null && (model.IsThisDefaultValueOfRB209.Value)))
             {
