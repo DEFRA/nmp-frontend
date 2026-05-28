@@ -87,40 +87,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         try
         {
-            Error? error = null;
-            if (model.Year.HasValue)
-            {
-                ViewBag.EncryptedYear = _farmDataProtector.Protect(model.Year.Value.ToString());
-            }
-            if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
-            {
-                (error, List<Field> fields) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
-                if (string.IsNullOrWhiteSpace(error?.Message))
-                {
-                    if (fields.Count > 0)
-                    {
-                        int fieldCount = 0;
-                        foreach (var field in fields)
-                        {
-                            List<Crop> cropList = await _cropLogic.FetchCropsByFieldId(field.ID.Value);
-
-                            cropList = cropList.Where(x => x.Year == model.Year).ToList();
-                            if (cropList.Count == 0)
-                            {
-                                fieldCount++;
-                            }
-                        }
-                        if (fields.Count == fieldCount)
-                        {
-                            ViewBag.NoPlan = string.Format(Resource.lblYouHaveNotEnteredAnyCropInformation, model.Year);
-                        }
-                    }
-                    else
-                    {
-                        ViewBag.NoField = string.Format(Resource.lblYouHaveNotEnteredAnyField, model.Year);
-                    }
-                }
-            }
+            await SetViewBagDataForExportFieldsOrCropType(model);
             if (ViewBag.NoPlan == null && ViewBag.NoField == null)
             {
                 if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
@@ -169,21 +136,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         _logger.LogTrace("Report Controller : ExportFieldsOrCropType() post action called");
         try
         {
-            if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
-            {
-                if (model.FieldList == null || model.FieldList.Count == 0)
-                {
-                    ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
-                }
-            }
-            else
-            {
-                if (model.CropTypeList == null || model.CropTypeList.Count == 0)
-                {
-                    ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
-                }
-            }
-
+            ValidateFieldOrCropSelection(model);
             SetReportDataToSession(model);
             if (!ModelState.IsValid)
             {
@@ -676,7 +629,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                                             .ToList();
 
                                             cropData.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
-                                        }
+                            }
                                     }
 
                                 }
@@ -7069,4 +7022,65 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return result;
     }
 #pragma warning restore S6967
+
+    private async Task SetViewBagDataForExportFieldsOrCropType(ReportViewModel model)
+    {
+        Error? error = null;
+        if (model.Year.HasValue)
+        {
+            ViewBag.EncryptedYear = _farmDataProtector.Protect(model.Year.Value.ToString());
+        }
+        if ((model.IsComingFromPlan.HasValue && (!model.IsComingFromPlan.Value)))
+        {
+            (error, List<Field> fields) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
+            if (string.IsNullOrWhiteSpace(error?.Message))
+            {
+                if (fields.Count > 0)
+                {
+                    int fieldCount = await FieldCount(fields, model);
+                    if (fields.Count == fieldCount)
+                    {
+                        ViewBag.NoPlan = string.Format(Resource.lblYouHaveNotEnteredAnyCropInformation, model.Year);
+                    }
+                }
+                else
+                {
+                    ViewBag.NoField = string.Format(Resource.lblYouHaveNotEnteredAnyField, model.Year);
+                }
+            }
+        }
+    }
+    private void ValidateFieldOrCropSelection(ReportViewModel model)
+    {
+        if (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport)
+        {
+            if (model.FieldList == null || model.FieldList.Count == 0)
+            {
+                ModelState.AddModelError("FieldList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblField.ToLower()));
+            }
+        }
+        else
+        {
+            if (model.CropTypeList == null || model.CropTypeList.Count == 0)
+            {
+                ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
+            }
+        }
+    }
+    private async Task<int> FieldCount(List<Field> fields, ReportViewModel model)
+    {
+        int fieldCount = 0;
+        foreach (var field in fields)
+        {
+            List<Crop> cropList = await _cropLogic.FetchCropsByFieldId(field.ID.Value);
+
+            cropList = cropList.Where(x => x.Year == model.Year).ToList();
+            if (cropList.Count == 0)
+            {
+                fieldCount++;
+            }
+        }
+        return fieldCount;
+    }
+    
 }
