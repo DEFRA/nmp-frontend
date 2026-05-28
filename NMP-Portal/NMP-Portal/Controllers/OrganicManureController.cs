@@ -5500,8 +5500,9 @@ managementPeriod.CropID.HasValue
                 {
                     await BindNmaxWarning(model, farm, warningList, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit);
                 }
+                return (model, error);
             }
-            else if (isGetCheckAnswer)
+             if (isGetCheckAnswer)
             {
                 (decimal? availableNFromMannerOutput, _) = await GetAvailableNFromMannerOutput(model, organicManure);
 
@@ -5583,6 +5584,7 @@ managementPeriod.CropID.HasValue
 
         private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal, decimal, bool)> HandlePercentOfTotalNaxWarning(OrganicManureViewModel model, int fieldId, decimal defaultNitrogen, decimal previousApplicationsN, int? percentOfTotalNForUseInNmaxCalculation)
         {
+            
             decimal nMaxLimit = 0;
             bool hasSpecialManure = false;
             (bool flowControl, (OrganicManureViewModel, Error?) value, List<int> currentYearManureTypeIds, List<int> previousYearManureTypeIds, decimal totalN) = await CalculationWarningForPercentOfTotalN(model, fieldId, defaultNitrogen, previousApplicationsN, percentOfTotalNForUseInNmaxCalculation);
