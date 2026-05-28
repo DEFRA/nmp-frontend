@@ -5474,8 +5474,7 @@ managementPeriod.CropID.HasValue
             bool isScotland = farmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
             (_, cropTypeLinking, recommendation, scotlandNmax, residueGroup) = await BindScotlandNMaxAndNResidueGroup(fieldId, managementId, isScotland, crop, cropTypeLinking, recommendation);
 
-
-            int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+            int? nmaxLimitEnglandOrWales = FetchNmaxLimitForEnglandAndWales(model, cropTypeLinking);
             bool flowControl = false;
             bool IsNmaxWarningNeeded = IsNmaxWarningRequired(scotlandNmax, isScotland, nmaxLimitEnglandOrWales);
             if (!IsNmaxWarningNeeded)
@@ -5521,6 +5520,12 @@ managementPeriod.CropID.HasValue
             }
             return (model, error);
         }
+
+        private static int? FetchNmaxLimitForEnglandAndWales(OrganicManureViewModel model, CropTypeLinkingResponse cropTypeLinking)
+        {
+            return (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+        }
+
         private async Task<(bool, int)> IsApplicationRateAndDateAvailable(OrganicManureViewModel model, int managementId)
         {
             (ManagementPeriod managementPeriod, _) = await _cropLogic.FetchManagementperiodById(managementId);
