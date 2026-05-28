@@ -5498,7 +5498,7 @@ managementPeriod.CropID.HasValue
                 (flowControl, (OrganicManureViewModel, Error?) data, nMaxLimit) = await BindNmaxForIsNMaxWarningMessage(model, fieldDetail, isWinterOilseedRapeAutumn, crop, residueGroup, nmaxLimitEnglandOrWales, hasSpecialManure);
                 if (!flowControl)
                 {
-                    return (model, error);
+                    return data;
                 }
                 if (totalN > nMaxLimit)
                 {
@@ -5507,12 +5507,8 @@ managementPeriod.CropID.HasValue
             }
             else if (isGetCheckAnswer)
             {
-                (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model, organicManure);
+                (decimal? availableNFromMannerOutput, _) = await GetAvailableNFromMannerOutput(model, organicManure);
 
-                if (!string.IsNullOrWhiteSpace(error?.Message))
-                {
-                    return (model, error);
-                }
                 (flowControl, (OrganicManureViewModel, Error?) value, nMaxLimit) = await BindNmaxWarningIfCheckAnswerTrue(model, fieldId, fieldDetail, isWinterOilseedRapeAutumn, crop, residueGroup, nmaxLimitEnglandOrWales);
                 if (!flowControl)
                 {
