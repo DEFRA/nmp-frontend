@@ -2611,17 +2611,21 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.Crops != null && model.Crops.Any(x => newlyAddedFields.Any(y => x.FieldID == y.ID.Value)))
         {
+
             var cropFieldIds = model.Crops.Select(c => c.FieldID).ToHashSet();
 
-            foreach (var newlyAddedField in newlyAddedFields.Where(f => f.ID.HasValue && cropFieldIds.Contains(f.ID.Value)))
+            foreach (var fieldId in newlyAddedFields
+                         .Select(f => f.ID)
+                         .OfType<int>()
+                         .Where(id => cropFieldIds.Contains(id)))
             {
-
+                
                 // If a match is found, remove the corresponding row from model.Crops
-                var cropToDelete = model.Crops.First(c => c.FieldID == newlyAddedField.ID.Value);
+                var cropToDelete = model.Crops.First(c => c.FieldID == fieldId);
                 model.Crops.Remove(cropToDelete);
-                if (model.FieldList != null && model.FieldList.Contains(newlyAddedField.ID.Value.ToString()))
+                if (model.FieldList != null && model.FieldList.Contains(fieldId.ToString()))
                 {
-                    model.FieldList.Remove(newlyAddedField.ID.ToString());
+                    model.FieldList.Remove(fieldId.ToString());
                 }
 
             }
