@@ -2611,7 +2611,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.Crops != null && model.Crops.Any(x => newlyAddedFields.Any(y => x.FieldID == y.ID.Value)))
         {
-            foreach (var newlyAddedField in newlyAddedFields.Where(newlyAddedField => model.Crops.Any(c => c.FieldID == newlyAddedField.ID.Value)))
+            var cropFieldIds = model.Crops.Select(c => c.FieldID).ToHashSet();
+
+            foreach (var newlyAddedField in newlyAddedFields.Where(f => f.ID.HasValue && cropFieldIds.Contains(f.ID.Value)))
             {
 
                 // If a match is found, remove the corresponding row from model.Crops
