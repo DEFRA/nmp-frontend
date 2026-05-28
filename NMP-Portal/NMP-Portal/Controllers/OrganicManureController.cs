@@ -5456,15 +5456,14 @@ managementPeriod.CropID.HasValue
             decimal defaultNitrogen = model.OrganicManures?
                     .FirstOrDefault()?
                     .N ?? 0;
-            (ManagementPeriod managementPeriod, Error? error) = await _cropLogic.FetchManagementperiodById(managementId);
-            int cropId = managementPeriod.CropID ?? 0;
-
+            Error? error = null;
             List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
-            bool isApplicationRateAndDateAvailable = (model.ApplicationRate.HasValue && model.ApplicationDate.HasValue);
+            var (isApplicationRateAndDateAvailable, cropId) = await IsApplicationRateAndDateAvailable(model, managementId);
             if (!isApplicationRateAndDateAvailable)
             {
                 return (model, error);
             }
+
             decimal totalN = 0;
             decimal previousApplicationsN = 0;
             (Crop crop, error) = await _cropLogic.FetchCropById(cropId);
@@ -5522,7 +5521,16 @@ managementPeriod.CropID.HasValue
             }
             return (model, error);
         }
+        private async Task<(bool, int)> IsApplicationRateAndDateAvailable(OrganicManureViewModel model, int managementId)
+        {
+            (ManagementPeriod managementPeriod, _) = await _cropLogic.FetchManagementperiodById(managementId);
+            int cropId = managementPeriod.CropID ?? 0;
 
+            bool isApplicationRateAndDateAvailable = (model.ApplicationRate.HasValue && model.ApplicationDate.HasValue);
+
+            return (isApplicationRateAndDateAvailable, cropId);
+
+        }
         private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal)> BindNmaxWarningIfCheckAnswerTrue(OrganicManureViewModel model, int fieldId, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales)
         {
             decimal nMaxLimit = 0;
