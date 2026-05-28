@@ -2073,7 +2073,7 @@ managementPeriod.CropID.HasValue
 
         private async Task<(bool flowControl, IActionResult? value)> HandleDefaultNutrientValues(OrganicManureViewModel model, FarmManureTypeResponse? farmManure, OrganicManureViewModel? organicManureViewModel)
         {
-            bool flowControl = false; 
+            bool flowControl = false;
             IActionResult? value = null;
             bool hasDefaultNutrientValue = !string.IsNullOrWhiteSpace(model.DefaultNutrientValue);
             if (!string.IsNullOrWhiteSpace(organicManureViewModel?.DefaultNutrientValue))
@@ -2612,14 +2612,13 @@ managementPeriod.CropID.HasValue
                 if (!ModelState.IsValid)
                 {
                     BindApplicationRateArable(model, error, manureTypeList);
-
-                    (List<CommonResponse> manureGroupList, Error error1) = await _mannerLogic.FetchManureGroupList();
-                    model.ManureGroupName = (error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
+                    (List<CommonResponse> manureGroupList, _) = await _mannerLogic.FetchManureGroupList();
+                    model.ManureGroupName = manureGroupList.Count > 0 ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
                     return View("ApplicationRateMethod", model);
                 }
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-
+                bool flowControl = false; IActionResult? value = null;
                 if (model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
                 {
                     model.Area = null;
@@ -2651,23 +2650,19 @@ managementPeriod.CropID.HasValue
                     ResetWarnings(model, false);
                     string message = string.Empty;
 
-                    OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
-                    if (organicManureViewModel == null)
+                    (flowControl, value) = BindIsWarningMsgNeedToShow(model);
+                    if (!flowControl && value != null)
                     {
-                        return RedirectToAction(_farmList, "Farm");
-                    }
-                    if (model.ApplicationRateMethod != organicManureViewModel.ApplicationRateMethod)
-                    {
-                        model.IsWarningMsgNeedToShow = false;
+                        return value;
                     }
 
-                    (bool isSuccess, IActionResult? action, model) = await PrepareWarningMessageForApplicationRateMethod(model, error, message);
-                    if (!isSuccess && action != null)
+                    (flowControl, value, model) = await PrepareWarningMessageForApplicationRateMethod(model, error, message);
+                    if (!flowControl && value != null)
                     {
-                        return action;
+                        return value;
                     }
                 }
-                (bool flowControl, IActionResult? value, model) = HandleWarningForApplicationRateMethod(model);
+                (flowControl, value, model) = HandleWarningForApplicationRateMethod(model);
                 if (!flowControl && value != null)
                 {
                     return value;
@@ -2681,6 +2676,21 @@ managementPeriod.CropID.HasValue
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
+        }
+
+        private (bool flowControl, IActionResult value) BindIsWarningMsgNeedToShow(OrganicManureViewModel model)
+        {
+            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+            if (organicManureViewModel == null)
+            {
+                return (flowControl: false, value: RedirectToAction(_farmList, "Farm"));
+            }
+            if (model.ApplicationRateMethod != organicManureViewModel.ApplicationRateMethod)
+            {
+                model.IsWarningMsgNeedToShow = false;
+            }
+
+            return (flowControl: true, value: null);
         }
 
         private (bool flowControl, IActionResult? value, OrganicManureViewModel) HandleWarningForApplicationRateMethod(OrganicManureViewModel model)
@@ -2911,7 +2921,7 @@ managementPeriod.CropID.HasValue
             {
                 return (flowControl: false, value: error.Message, model);
             }
-            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
+            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail, organicManure);
             if (error != null)
             {
                 return (flowControl: false, value: error.Message, model);
@@ -4192,7 +4202,7 @@ managementPeriod.CropID.HasValue
                                     (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
                                     if (error == null)
                                     {
-                                        (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, true, farm, fieldDetail);
+                                        (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, true, farm, fieldDetail, organicManure);
                                         if (error == null)
                                         {
                                             (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
@@ -4946,6 +4956,37 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> SoilDrainageEndDate(OrganicManureViewModel model)
         {
             _logger.LogTrace($"Organic Manure Controller : SoilDrainageEndDate() post action called");
+            ValidateSoilDrainageEndDate();
+
+            AddErrorIfNull(model.SoilDrainageEndDate, _soilDrainageEndDateKey, Resource.MsgEnterADateBeforeContinuing);
+            ValidateMinMaxSoilDrainageDate(model);
+            if (!ModelState.IsValid)
+            {
+                return View(_soilDrainageEndDateKey, model);
+            }
+
+            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            return RedirectToAction("ConditionsAffectingNutrients");
+        }
+
+        private void ValidateMinMaxSoilDrainageDate(OrganicManureViewModel model)
+        {
+            if (model.SoilDrainageEndDate != null)
+            {
+                if (DateTime.TryParseExact(model.SoilDrainageEndDate.Value.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+                {
+                    ModelState.AddModelError(_soilDrainageEndDateKey, Resource.MsgEnterValidDate);
+                }
+
+                if (!(model.SoilDrainageEndDate.Value.Month >= (int)NMP.Commons.Enums.Month.January && model.SoilDrainageEndDate.Value.Month <= (int)NMP.Commons.Enums.Month.April))
+                {
+                    ModelState.AddModelError(_soilDrainageEndDateKey, Resource.MsgSoilDrainageEndDate1stJan30Apr);
+                }
+            }
+        }
+
+        private void ValidateSoilDrainageEndDate()
+        {
             if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilDrainageEndDateKey))
             {
                 var dateError = ModelState[_soilDrainageEndDateKey].Errors.Count > 0 ?
@@ -4970,27 +5011,6 @@ managementPeriod.CropID.HasValue
 
 
             }
-
-            AddErrorIfNull(model.SoilDrainageEndDate, _soilDrainageEndDateKey, Resource.MsgEnterADateBeforeContinuing);
-            if (model.SoilDrainageEndDate != null)
-            {
-                if (DateTime.TryParseExact(model.SoilDrainageEndDate.Value.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
-                {
-                    ModelState.AddModelError(_soilDrainageEndDateKey, Resource.MsgEnterValidDate);
-                }
-
-                if (!(model.SoilDrainageEndDate.Value.Month >= (int)NMP.Commons.Enums.Month.January && model.SoilDrainageEndDate.Value.Month <= (int)NMP.Commons.Enums.Month.April))
-                {
-                    ModelState.AddModelError(_soilDrainageEndDateKey, Resource.MsgSoilDrainageEndDate1stJan30Apr);
-                }
-            }
-            if (!ModelState.IsValid)
-            {
-                return View(_soilDrainageEndDateKey, model);
-            }
-
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction("ConditionsAffectingNutrients");
         }
 
         [HttpGet]
@@ -5429,233 +5449,285 @@ managementPeriod.CropID.HasValue
         }
 
         //warning excel sheet row no. 8
-        private async Task<(OrganicManureViewModel, Error?)> IsNMaxWarningMessage(OrganicManureViewModel model, int fieldId, int managementId, bool isGetCheckAnswer, Farm farm, FieldDetailResponse fieldDetail)
+        private async Task<(OrganicManureViewModel, Error?)> IsNMaxWarningMessage(OrganicManureViewModel model, int fieldId, int managementId, bool isGetCheckAnswer, Farm farm, FieldDetailResponse fieldDetail, OrganicManureDataViewModel organicManure)
         {
             int farmCountryId = model.FarmCountryId ?? 0;
-            int scotland = (int)NMP.Commons.Enums.FarmCountry.Scotland;
             bool isWinterOilseedRapeAutumn = false;
+            decimal defaultNitrogen = DefaultNitrogenInitilise(model);
             Error? error = null;
-            decimal defaultNitrogen = model.OrganicManures?
+            List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
+            var (isApplicationRateAndDateAvailable, cropId) = await IsApplicationRateAndDateAvailable(model, managementId);
+            if (!isApplicationRateAndDateAvailable)
+            {
+                return (model, error);
+            }
+
+            decimal totalN = 0;
+            decimal previousApplicationsN = 0;
+            (Crop crop, error) = await _cropLogic.FetchCropById(cropId);
+            CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
+            Recommendation? recommendation = null;
+            int? scotlandNmax = null;
+            int residueGroup = 0;
+            bool isScotland = farmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
+            (_, cropTypeLinking, recommendation, scotlandNmax, residueGroup) = await BindScotlandNMaxAndNResidueGroup(fieldId, managementId, isScotland, crop, cropTypeLinking, recommendation);
+
+            int? nmaxLimitEnglandOrWales = FetchNmaxLimitForEnglandAndWales(model, cropTypeLinking);
+            bool flowControl = false;
+            bool IsNmaxWarningNeeded = IsNmaxWarningRequired(scotlandNmax, isScotland, nmaxLimitEnglandOrWales);
+            if (!IsNmaxWarningNeeded)
+            {
+                return (model, error);
+            }
+
+            (_, previousApplicationsN) = await FetchPreviousApplicationN(model, managementId, error, cropId, previousApplicationsN);
+
+            int? percentOfTotalNForUseInNmaxCalculation = await BindPercentOfTotalNForUseInNmaxCalculation(model);
+            decimal nMaxLimit = 0;
+            if (percentOfTotalNForUseInNmaxCalculation != null)
+            {
+                (flowControl, (OrganicManureViewModel, Error?) value, totalN, nMaxLimit, bool hasSpecialManure) = await HandlePercentOfTotalNaxWarning(model, fieldId, defaultNitrogen, previousApplicationsN, percentOfTotalNForUseInNmaxCalculation);
+                if (!flowControl)
+                {
+                    return value;
+                }
+                (flowControl, (OrganicManureViewModel, Error?) data, nMaxLimit) = await BindNmaxForIsNMaxWarningMessage(model, fieldDetail, isWinterOilseedRapeAutumn, crop, residueGroup, nmaxLimitEnglandOrWales, hasSpecialManure);
+                if (!flowControl)
+                {
+                    return data;
+                }
+                await BindNmaxWarning(model, farm, totalN, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit);
+
+                return (model, error);
+            }
+            if (isGetCheckAnswer)
+            {
+                (decimal? availableNFromMannerOutput, _) = await GetAvailableNFromMannerOutput(model, organicManure);
+
+                (flowControl, (OrganicManureViewModel, Error?) value, nMaxLimit) = await BindNmaxWarningIfCheckAnswerTrue(model, fieldId, fieldDetail, isWinterOilseedRapeAutumn, crop, residueGroup, nmaxLimitEnglandOrWales);
+                if (!flowControl)
+                {
+                    return value;
+                }
+                decimal? totalApplicationN = previousApplicationsN + availableNFromMannerOutput;
+                bool isNeedToSetWarning = (farm.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass));
+                int? nmaxValue = isNeedToSetWarning ? nmaxLimitEnglandOrWales : scotlandNmax;
+                await PrepareNMaxWarningIfCheckAnswerTrue(model, farm, warningList, totalApplicationN, crop, nmaxValue, nMaxLimit);
+
+            }
+            return (model, error);
+        }
+
+        private static decimal DefaultNitrogenInitilise(OrganicManureViewModel model)
+        {
+            return model.OrganicManures?
                     .FirstOrDefault()?
                     .N ?? 0;
-            (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(managementId);
+        }
+
+        private static int? FetchNmaxLimitForEnglandAndWales(OrganicManureViewModel model, CropTypeLinkingResponse cropTypeLinking)
+        {
+            return (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
+        }
+
+        private async Task<(bool, int)> IsApplicationRateAndDateAvailable(OrganicManureViewModel model, int managementId)
+        {
+            (ManagementPeriod managementPeriod, _) = await _cropLogic.FetchManagementperiodById(managementId);
             int cropId = managementPeriod.CropID ?? 0;
 
-            List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
-            if (model.ApplicationRate.HasValue && model.ApplicationDate.HasValue)
+            bool isApplicationRateAndDateAvailable = (model.ApplicationRate.HasValue && model.ApplicationDate.HasValue);
+
+            return (isApplicationRateAndDateAvailable, cropId);
+
+        }
+        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal)> BindNmaxWarningIfCheckAnswerTrue(OrganicManureViewModel model, int fieldId, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales)
+        {
+            decimal nMaxLimit = 0;
+            (List<int> currentYearManureTypeIds, Error? error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+            (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                decimal totalN = 0;
-                decimal previousApplicationsN = 0;
-                (Crop crop, error) = await _cropLogic.FetchCropById(cropId);
-                CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
-                Recommendation? recommendation = null;
-                int? scotlandNmax = null;
-                int residueGroup = 0;
+                return (flowControl: false, value: (model, error), nMaxLimit);
 
-                if (farmCountryId == scotland)
+            }
+            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+            (bool flowControl, (OrganicManureViewModel, Error?) value, nMaxLimit) = await BindNmaxForIsNMaxWarningMessage(model, fieldDetail, isWinterOilseedRapeAutumn, crop, residueGroup, nmaxLimitEnglandOrWales, hasSpecialManure);
+            if (!flowControl)
+            {
+                return (flowControl: false, value: value, nMaxLimit);
+            }
+
+            return (flowControl: true, value: default, nMaxLimit);
+        }
+
+        private async Task PrepareNMaxWarningIfCheckAnswerTrue(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, decimal? totalApplicationN, Crop crop, int? nMaxValue, decimal nMaxLimit)
+        {
+            if (totalApplicationN > nMaxLimit)
+            {
+                string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
+                model.IsNMaxLimitWarning = true;
+                var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
+
+                WarningResponse? warning = warningList
+                    .FirstOrDefault(x => x.CountryID == farm.CountryID &&
+                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+
+
+                if (warning != null)
                 {
-                    Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
-                    (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
-
-                    if (recommendation != null)
-                    {
-                        residueGroup = Convert.ToInt32(recommendation.NIndex);
-                    }
-
-                    (scotlandNmax, error) = await _organicManureLogic.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(crop.CropTypeID.Value, field.SoilTypeID ?? 0, residueGroup);
-                    if (scotlandNmax == null)
-                    {
-                        scotlandNmax = Convert.ToInt32(recommendation?.CropN);
-                    }
-                }
-                else
-                {
-                    (cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-                }
-
-                if (error == null)
-                {
-                    int? nmaxLimitEnglandOrWales = null;
-
-                    nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
-
-                    if ((model.FarmCountryId != scotland && nmaxLimitEnglandOrWales != null) || (model.FarmCountryId == scotland && scotlandNmax != null))
-                    {
-                        //passing orgId
-                        if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
-                        {
-                            (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.OrganicManureId).FirstOrDefault());
-                        }
-                        else
-                        {
-                            (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, null);
-                        }
-
-                        if (error == null)
-                        {
-                            decimal nMaxLimit = 0;
-                            int? percentOfTotalNForUseInNmaxCalculation = null;
-                            (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
-                            if (manureType != null)
-                            {
-                                percentOfTotalNForUseInNmaxCalculation = manureType.PercentOfTotalNForUseInNmaxCalculation;
-                            }
-
-                            decimal currentApplicationNitrogen = 0;
-                            if (percentOfTotalNForUseInNmaxCalculation != null)
-                            {
-                                decimal decimalOfTotalNForUseInNmaxCalculation = Convert.ToDecimal(percentOfTotalNForUseInNmaxCalculation / 100.0);
-                                currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
-                                totalN = previousApplicationsN + currentApplicationNitrogen;
-
-                                //fetch current year manure type ids
-                                (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-
-                                //fetch previous year manure type ids
-                                (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
-                                if (error == null)
-                                {
-                                    nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-                                    OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-
-                                    bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
-
-                                    if (model.FarmCountryId != scotland)
-                                    {
-                                        nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
-                                    }
-                                    else
-                                    {
-                                        int? winterRainfall = null;
-                                        (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
-                                        if (HasError(error))
-                                        {
-                                            return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                                        }
-                                        else
-                                        {
-                                            winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
-                                        }
-
-                                        nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(scotlandNmax), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
-                                    }
-
-
-                                    if (totalN > nMaxLimit)
-                                    {
-
-                                        string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
-                                        model.IsNMaxLimitWarning = true;
-                                        var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
-
-                                        WarningResponse? warning = warningList
-                                            .FirstOrDefault(x => x.CountryID == farm.CountryID &&
-                                                                 string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-                                        if (warning != null)
-                                        {
-                                            if (farmCountryId != scotland && crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
-                                            {
-                                                SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
-                                            }
-                                            if (farmCountryId == scotland)
-                                            {
-                                                SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, scotlandNmax, nMaxLimit));
-                                            }
-                                        }
-
-
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (isGetCheckAnswer)
-                                {
-                                    (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
-
-                                    if (error == null)
-                                    {
-                                        (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
-                                        (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
-                                        if (error == null)
-                                        {
-                                            nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-
-                                            OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-                                            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
-                                            if (model.FarmCountryId != scotland)
-                                            {
-                                                nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
-
-                                            }
-                                            else
-                                            {
-                                                int? winterRainfall = null;
-                                                (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
-                                                if (HasError(error))
-                                                {
-                                                    return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                                                }
-                                                else
-                                                {
-                                                    winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
-                                                }
-                                                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
-
-                                            }
-
-                                            if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
-                                            {
-
-                                                string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
-                                                model.IsNMaxLimitWarning = true;
-                                                var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
-
-                                                WarningResponse? warning = warningList
-                                                    .FirstOrDefault(x => x.CountryID == farm.CountryID &&
-                                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-
-                                                if (farmCountryId != scotland && crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
-                                                {
-                                                    if (warning != null)
-                                                    {
-                                                        SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, scotlandNmax, nMaxLimit));
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                                    }
-                                }
-                            }
-
-                        }
-                        else
-                        {
-                            return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
-                        }
-
-                    }
-                }
-                else
-                {
-                    return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
+                    SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, nMaxValue, nMaxLimit));
                 }
             }
-            return (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error);
         }
+
+        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal, decimal, bool)> HandlePercentOfTotalNaxWarning(OrganicManureViewModel model, int fieldId, decimal defaultNitrogen, decimal previousApplicationsN, int? percentOfTotalNForUseInNmaxCalculation)
+        {
+
+            decimal nMaxLimit = 0;
+            bool hasSpecialManure = false;
+            (bool flowControl, (OrganicManureViewModel, Error?) value, List<int> currentYearManureTypeIds, List<int> previousYearManureTypeIds, decimal totalN) = await CalculationWarningForPercentOfTotalN(model, fieldId, defaultNitrogen, previousApplicationsN, percentOfTotalNForUseInNmaxCalculation);
+            if (!flowControl)
+            {
+                return (flowControl: false, value: (model, value.Item2), totalN, nMaxLimit, hasSpecialManure);
+            }
+
+            hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+
+            return (flowControl: true, value: default, totalN, nMaxLimit, hasSpecialManure);
+        }
+
+        private static bool IsNmaxWarningRequired(int? scotlandNmax, bool isScotland, int? nmaxLimitEnglandOrWales)
+        {
+            return ((!isScotland && nmaxLimitEnglandOrWales != null) || (isScotland && scotlandNmax != null));
+        }
+
+        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, List<int>, List<int>, decimal)> CalculationWarningForPercentOfTotalN(OrganicManureViewModel model, int fieldId, decimal defaultNitrogen, decimal previousApplicationsN, int? percentOfTotalNForUseInNmaxCalculation)
+        {
+            decimal currentApplicationNitrogen = 0;
+
+            decimal decimalOfTotalNForUseInNmaxCalculation = Convert.ToDecimal(percentOfTotalNForUseInNmaxCalculation / 100.0);
+            currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value * decimalOfTotalNForUseInNmaxCalculation);
+            decimal totalN = previousApplicationsN + currentApplicationNitrogen;
+
+            //fetch current year manure type ids
+            (List<int> currentYearManureTypeIds, _) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
+
+            //fetch previous year manure type ids
+            (List<int> previousYearManureTypeIds, _) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
+
+            return (flowControl: true, value: default, currentYearManureTypeIds, previousYearManureTypeIds, totalN);
+        }
+
+        private async Task BindNmaxWarning(OrganicManureViewModel model, Farm farm, decimal totalN, Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit)
+        {
+            if (totalN > nMaxLimit)
+            {
+                List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
+                bool isScotland = farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland;
+                string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
+                model.IsNMaxLimitWarning = true;
+                var warningKey = NMP.Commons.Enums.WarningKey.NMaxLimit.ToString();
+
+                WarningResponse? warning = warningList
+                    .FirstOrDefault(x => x.CountryID == farm.CountryID &&
+                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+                if (warning != null)
+                {
+                    if (!isScotland && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
+                    {
+                        SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
+                    }
+                    if (isScotland)
+                    {
+                        SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, scotlandNmax, nMaxLimit));
+                    }
+                }
+            }
+
+        }
+
+        private async Task<(Error?, CropTypeLinkingResponse cropTypeLinking, Recommendation? recommendation, int? scotlandNmax, int residueGroup)> BindScotlandNMaxAndNResidueGroup(int fieldId, int managementId, bool isScotland, Crop crop, CropTypeLinkingResponse cropTypeLinking, Recommendation? recommendation)
+        {
+            Error? error = null;
+            int? scotlandNmax = null; int residueGroup = 0;
+            if (isScotland)
+            {
+                Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
+                (recommendation, error) = await _cropLogic.FetchRecommendationByManagementPeriodId(managementId);
+
+                if (recommendation != null)
+                {
+                    residueGroup = Convert.ToInt32(recommendation.NIndex);
+                }
+
+                (scotlandNmax, error) = await _organicManureLogic.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(crop.CropTypeID.Value, field.SoilTypeID ?? 0, residueGroup);
+                if (scotlandNmax == null)
+                {
+                    scotlandNmax = Convert.ToInt32(recommendation?.CropN);
+                }
+            }
+            else
+            {
+                (cropTypeLinking, error) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
+            }
+
+            return (error, cropTypeLinking, recommendation, scotlandNmax, residueGroup);
+        }
+
+        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal)> BindNmaxForIsNMaxWarningMessage(OrganicManureViewModel model, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales, bool hasSpecialManure)
+        {
+            decimal nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
+
+            OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+            if (model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
+
+            }
+            else
+            {
+                int? winterRainfall = null;
+                (ExcessRainfalls excessRainfalls, Error error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
+                if (HasError(error))
+                {
+                    return (flowControl: false, value: (model, error), nMaxLimit);
+                }
+
+                winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
+
+                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(nMaxLimit), crop.Yield ?? null, fieldDetail.SoilTypeName, crop.CropInfo1 ?? null, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
+
+            }
+
+            return (flowControl: true, value: default, nMaxLimit);
+        }
+
+        private async Task<int?> BindPercentOfTotalNForUseInNmaxCalculation(OrganicManureViewModel model)
+        {
+            int? percentOfTotalNForUseInNmaxCalculation = null;
+            (ManureType manureType, _) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
+            if (manureType != null)
+            {
+                percentOfTotalNForUseInNmaxCalculation = manureType.PercentOfTotalNForUseInNmaxCalculation;
+            }
+
+            return percentOfTotalNForUseInNmaxCalculation;
+        }
+
+        private async Task<(Error? error, decimal previousApplicationsN)> FetchPreviousApplicationN(OrganicManureViewModel model, int managementId, Error? error, int cropId, decimal previousApplicationsN)
+        {
+            if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0)
+            {
+                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, model.UpdatedOrganicIds.Where(x => x.ManagementPeriodId == managementId).Select(x => x.OrganicManureId).FirstOrDefault());
+            }
+            else
+            {
+                (previousApplicationsN, error) = await _organicManureLogic.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliser(cropId, false, null, null);
+            }
+
+            return (error, previousApplicationsN);
+        }
+
         private static void SetNmaxLimitWarning(OrganicManureViewModel model, WarningResponse warningResponse, string para2 = null)
         {
             model.CropNmaxLimitWarningHeader = warningResponse.Header;
@@ -6571,49 +6643,35 @@ managementPeriod.CropID.HasValue
 
 
 
-        private async Task<(decimal?, Error?)> GetAvailableNFromMannerOutput(OrganicManureViewModel model)
+        private async Task<(decimal?, Error?)> GetAvailableNFromMannerOutput(OrganicManureViewModel model, OrganicManureDataViewModel organicManure)
         {
             Error error = new Error();
             decimal? availableNfromManner = null;
 
-            if (model.OrganicManures != null)
+
+            SetOrganicManureValues(model);
+
+            //logic for AvailableNForNMax column that will be used to get sum of previous manure applications
+
+
+            (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+            if (farmData == null && (!string.IsNullOrWhiteSpace(error?.Message)))
             {
-                SetOrganicManureValues(model);
-
-                //logic for AvailableNForNMax column that will be used to get sum of previous manure applications
-
-
-                (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                if (farmData != null && (string.IsNullOrWhiteSpace(error?.Message)))
-                {
-                    foreach (var organic in model.OrganicManures)
-                    {
-                        (string? mannerJsonString, Error? mannerOutputError) = await BindManureOutput(farmData, organic, model);
-                        if (!string.IsNullOrWhiteSpace(mannerJsonString))
-                        {
-                            (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureLogic.FetchMannerCalculateNutrient(mannerJsonString);
-                            if (error == null && mannerCalculateNutrientResponse != null)
-                            {
-                                availableNfromManner = mannerCalculateNutrientResponse.CurrentCropAvailableN;
-                                return (availableNfromManner, error);
-
-                            }
-                            else
-                            {
-                                return (availableNfromManner, error);
-                            }
-                        }
-                        else
-                        {
-                            return (availableNfromManner, mannerOutputError);
-                        }
-                    }
-                }
-                else
-                {
-                    return (availableNfromManner, error);
-                }
+                return (availableNfromManner, error);
             }
+
+            (string? mannerJsonString, Error? mannerOutputError) = await BindManureOutput(farmData, organicManure, model);
+            if (string.IsNullOrWhiteSpace(mannerJsonString))
+            {
+                return (availableNfromManner, mannerOutputError);
+            }
+            (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureLogic.FetchMannerCalculateNutrient(mannerJsonString);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                return (availableNfromManner, error);
+            }
+
+            availableNfromManner = mannerCalculateNutrientResponse.CurrentCropAvailableN;
             return (availableNfromManner, error);
         }
         private async Task<(string?, Error?)> BindManureOutput(FarmResponse farmData, OrganicManureDataViewModel organic, OrganicManureViewModel model)
@@ -6834,12 +6892,70 @@ managementPeriod.CropID.HasValue
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             return RedirectToAction("ManureApplyingDate");
         }
+
+
+        private void BindDataForRemoveOrganic(string q, string r, string s, string? t, string? u, OrganicManureViewModel? model)
+        {
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                model.EncryptedOrgManureId = q;
+            }
+            if (!string.IsNullOrWhiteSpace(r))
+            {
+                ViewBag.EncryptedFieldId = r;
+                model.FieldList = new List<string>();
+                model.FieldList.Add(_fieldDataProtector.Unprotect(r));
+            }
+            if (!string.IsNullOrWhiteSpace(s))
+            {
+                model.FieldName = _cropDataProtector.Unprotect(s);
+            }
+
+            if (!string.IsNullOrWhiteSpace(t))
+            {
+                model.EncryptedFarmId = t;
+                model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(t));
+            }
+
+            if (!string.IsNullOrWhiteSpace(u))
+            {
+                model.EncryptedHarvestYear = u;
+                model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(u));
+            }
+        }
+
+        private async Task BindViewBegForRemoveOrganicManure(OrganicManureViewModel? model)
+        {
+            if (model != null && model.FieldList != null && model.FieldList.Count > 0)
+            {
+                (List<CommonResponse> fieldList, _) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
+                if (fieldList.Count > 0)
+                {
+                    var fieldNames = fieldList
+                                     .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
+                                     .Select(field => field.Name)
+                                     .ToList();
+
+                    if (fieldNames.Count == 1)
+                    {
+                        model.FieldName = fieldNames[0];
+                    }
+                    else
+                    {
+                        model.FieldName = string.Empty;
+                        ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
+                    }
+                    ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+
+                }
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> RemoveOrganicManure(string q, string r, string s, string? t, string? u, string? v)
         {
             _logger.LogTrace($"Organic  Manure Controller : RemoveOrganicManure() action called");
             OrganicManureViewModel? model = new OrganicManureViewModel();
-            Error? error = null;
+
             try
             {
                 if (string.IsNullOrWhiteSpace(q))
@@ -6849,68 +6965,21 @@ managementPeriod.CropID.HasValue
                     {
                         return RedirectToAction(_farmList, "Farm");
                     }
-                    if (model != null && model.FieldList != null && model.FieldList.Count > 0)
-                    {
 
-                        (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
-                        if (error == null && fieldList.Count > 0)
-                        {
-                            var fieldNames = fieldList
-                                             .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                             .Select(field => field.Name)
-                                             .ToList();
+                    await BindViewBegForRemoveOrganicManure(model);
 
-                            if (fieldNames.Count == 1)
-                            {
-                                model.FieldName = fieldNames[0];
-                            }
-                            else
-                            {
-                                model.FieldName = string.Empty;
-                                ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-                            }
-                            ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
-
-                        }
-
-                    }
                 }
                 else
                 {
                     model.IsComingFromRecommendation = true;
-                    if (!string.IsNullOrWhiteSpace(q))
-                    {
-                        model.EncryptedOrgManureId = q;
-                    }
-                    if (!string.IsNullOrWhiteSpace(r))
-                    {
-                        ViewBag.EncryptedFieldId = r;
-                        model.FieldList = new List<string>();
-                        model.FieldList.Add(_fieldDataProtector.Unprotect(r));
-                    }
-                    if (!string.IsNullOrWhiteSpace(s))
-                    {
-                        model.FieldName = _cropDataProtector.Unprotect(s);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(t))
-                    {
-                        model.EncryptedFarmId = t;
-                        model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(t));
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(u))
-                    {
-                        model.EncryptedHarvestYear = u;
-                        model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(u));
-                    }
+                    BindDataForRemoveOrganic(q, r, s, t, u, model);
                     HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "OrganicManure Controller : Exception in RemoveOrganicManure() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                if (model.IsComingFromRecommendation)
+                if (model != null && model.IsComingFromRecommendation)
                 {
                     TempData[_nutrientRecommendationsError] = ex.Message;
                     return RedirectToAction(_recommendations, "Crop", new { q = model.EncryptedFarmId, r = r, s = model.EncryptedHarvestYear });
@@ -6921,7 +6990,6 @@ managementPeriod.CropID.HasValue
             }
             return View(model);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveOrganicManure(OrganicManureViewModel model)
@@ -6931,28 +6999,7 @@ managementPeriod.CropID.HasValue
             AddErrorIfNull(model.IsDeleteOrganic, "IsDeleteOrganic", Resource.MsgSelectAnOptionBeforeContinuing);
             if (!ModelState.IsValid)
             {
-                if (model.FieldList != null && model.FieldList.Count > 0)
-                {
-                    (List<CommonResponse> fieldList, error) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
-                    if (error == null && fieldList.Count > 0)
-                    {
-                        var fieldNames = fieldList
-                                         .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                         .Select(field => field.Name)
-                                         .ToList();
-
-                        if (fieldNames.Count == 1)
-                        {
-                            model.FieldName = fieldNames[0];
-                        }
-                        else
-                        {
-                            model.FieldName = string.Empty;
-                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-                        }
-                        ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
-                    }
-                }
+                await BindViewBegForRemoveOrganicManure(model);
                 return View(model);
             }
             try
@@ -6963,27 +7010,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-
-                    List<int> organicManureIds = new List<int>();
-                    if (model.IsComingFromRecommendation && (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)))
-                    {
-                        ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
-                        organicManureIds.Add(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)));
-                    }
-                    else if (model.UpdatedOrganicIds != null && model.UpdatedOrganicIds.Count > 0 && model.OrganicManures != null && model.OrganicManures.Count > 0)
-                    {
-                        foreach (string fieldId in model.FieldList)
-                        {
-                            string fieldName = (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name;
-                            foreach (var organicManure in model.UpdatedOrganicIds)
-                            {
-                                if (fieldName.Equals(organicManure.Name))
-                                {
-                                    organicManureIds.Add(organicManure.OrganicManureId.Value);
-                                }
-                            }
-                        }
-                    }
+                    List<int> organicManureIds = await BindOrganicManureIds(model);
 
                     if (organicManureIds.Count > 0)
                     {
@@ -6994,58 +7021,16 @@ managementPeriod.CropID.HasValue
 
                         string jsonString = JsonConvert.SerializeObject(result);
                         (string success, error) = await _organicManureLogic.DeleteOrganicManureByIdAsync(jsonString);
-                        if (error == null)
+                        if (!string.IsNullOrWhiteSpace(error?.Message))
                         {
-                            HttpContext.Session.Remove(_organicManureSessionKey);
-                            if (model.IsComingFromRecommendation)
-                            {
-                                if (model.FieldList != null && model.FieldList.Count > 0)
-                                {
-                                    string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
-                                    if (!string.IsNullOrWhiteSpace(encryptedFieldId))
-                                    {
-                                        return RedirectToAction(_recommendations, "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), u = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) });
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                return Redirect(Url.Action(_harvestYearOverview, "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) }) + Resource.lblOrganicMaterialApplicationsForSorting);
-                            }
-                        }
-                        else
-                        {
-                            if (model.FieldList != null && model.FieldList.Count > 0)
-                            {
-                                (List<CommonResponse> fieldList, Error fieldListError) = await _fertiliserManureLogic.FetchFieldByFarmIdAndHarvestYearAndCropGroupName(model.HarvestYear.Value, model.FarmId.Value, null);
-                                if (fieldListError == null)
-                                {
-                                    if (fieldList.Count > 0)
-                                    {
-                                        var fieldNames = fieldList
-                                                         .Where(field => model.FieldList.Contains(field.Id.ToString())).OrderBy(field => field.Name)
-                                                         .Select(field => field.Name)
-                                                         .ToList();
-
-                                        if (fieldNames.Count == 1)
-                                        {
-                                            model.FieldName = fieldNames[0];
-                                        }
-                                        else
-                                        {
-                                            model.FieldName = string.Empty;
-                                            ViewBag.SelectedFields = fieldNames.OrderBy(name => name).ToList();
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    TempData["RemoveOrganicManureError"] = fieldListError.Message;
-                                }
-                            }
-
+                            await BindViewBegForRemoveOrganicManure(model);
                             TempData["RemoveOrganicManureError"] = error.Message;
                             return View(model);
+                        }
+                        (bool flowControl, IActionResult? value) = RedirectForRemove(model);
+                        if (!flowControl && value != null)
+                        {
+                            return value;
                         }
                     }
                 }
@@ -7061,6 +7046,55 @@ managementPeriod.CropID.HasValue
 
 
         }
+
+        private async Task<List<int>> BindOrganicManureIds(OrganicManureViewModel model)
+        {
+            List<int> organicManureIds = new List<int>();
+            if (model.IsComingFromRecommendation && (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId)))
+            {
+                ViewBag.EncryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+                organicManureIds.Add(Convert.ToInt32(_cropDataProtector.Unprotect(model.EncryptedOrgManureId)));
+            }
+            else if (model.UpdatedOrganicIds?.Count > 0 && model.OrganicManures?.Count > 0)
+            {
+                foreach (string fieldId in model.FieldList)
+                {
+                    string fieldName = (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name;
+                    foreach (var organicManure in model.UpdatedOrganicIds)
+                    {
+                        if (fieldName.Equals(organicManure.Name))
+                        {
+                            organicManureIds.Add(organicManure.OrganicManureId.Value);
+                        }
+                    }
+                }
+            }
+
+            return organicManureIds;
+        }
+
+        private (bool flowControl, IActionResult? value) RedirectForRemove(OrganicManureViewModel model)
+        {
+            HttpContext.Session.Remove(_organicManureSessionKey);
+            if (model.IsComingFromRecommendation)
+            {
+                if (model.FieldList != null && model.FieldList.Count > 0)
+                {
+                    string encryptedFieldId = _fieldDataProtector.Protect(model.FieldList.FirstOrDefault());
+                    if (!string.IsNullOrWhiteSpace(encryptedFieldId))
+                    {
+                        return (flowControl: false, value: RedirectToAction(_recommendations, "Crop", new { q = model.EncryptedFarmId, r = encryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), u = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) }));
+                    }
+                }
+            }
+            else
+            {
+                return (flowControl: false, value: Redirect(Url.Action(_harvestYearOverview, "Crop", new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationRemoved), v = _cropDataProtector.Protect(Resource.lblSelectFieldToSeeItsUpdatedNutrientRecommendations) }) + Resource.lblOrganicMaterialApplicationsForSorting));
+            }
+
+            return (flowControl: true, value: null);
+        }
+
         [HttpGet]
         public IActionResult Cancel()
         {
