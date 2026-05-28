@@ -5447,15 +5447,13 @@ managementPeriod.CropID.HasValue
             return (model, error);
 
         }
-
+        
         //warning excel sheet row no. 8
         private async Task<(OrganicManureViewModel, Error?)> IsNMaxWarningMessage(OrganicManureViewModel model, int fieldId, int managementId, bool isGetCheckAnswer, Farm farm, FieldDetailResponse fieldDetail, OrganicManureDataViewModel organicManure)
         {
             int farmCountryId = model.FarmCountryId ?? 0;
             bool isWinterOilseedRapeAutumn = false;
-            decimal defaultNitrogen = model.OrganicManures?
-                    .FirstOrDefault()?
-                    .N ?? 0;
+            decimal defaultNitrogen = DefaultNitrogenInitilise(model);
             Error? error = null;
             List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
             var (isApplicationRateAndDateAvailable, cropId) = await IsApplicationRateAndDateAvailable(model, managementId);
@@ -5519,6 +5517,13 @@ managementPeriod.CropID.HasValue
 
             }
             return (model, error);
+        }
+
+        private static decimal DefaultNitrogenInitilise(OrganicManureViewModel model)
+        {
+            return model.OrganicManures?
+                    .FirstOrDefault()?
+                    .N ?? 0;
         }
 
         private static int? FetchNmaxLimitForEnglandAndWales(OrganicManureViewModel model, CropTypeLinkingResponse cropTypeLinking)
