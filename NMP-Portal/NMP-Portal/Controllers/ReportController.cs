@@ -7037,17 +7037,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (fields.Count > 0)
                 {
-                    int fieldCount = 0;
-                    foreach (var field in fields)
-                    {
-                        List<Crop> cropList = await _cropLogic.FetchCropsByFieldId(field.ID.Value);
-
-                        cropList = cropList.Where(x => x.Year == model.Year).ToList();
-                        if (cropList.Count == 0)
-                        {
-                            fieldCount++;
-                        }
-                    }
+                    int fieldCount = await FieldCount(fields, model);
                     if (fields.Count == fieldCount)
                     {
                         ViewBag.NoPlan = string.Format(Resource.lblYouHaveNotEnteredAnyCropInformation, model.Year);
@@ -7076,6 +7066,21 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 ModelState.AddModelError("CropTypeList", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
             }
         }
+    }
+    private async Task<int> FieldCount(List<Field> fields, ReportViewModel model)
+    {
+        int fieldCount = 0;
+        foreach (var field in fields)
+        {
+            List<Crop> cropList = await _cropLogic.FetchCropsByFieldId(field.ID.Value);
+
+            cropList = cropList.Where(x => x.Year == model.Year).ToList();
+            if (cropList.Count == 0)
+            {
+                fieldCount++;
+            }
+        }
+        return fieldCount;
     }
     
 }
