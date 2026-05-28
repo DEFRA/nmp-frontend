@@ -2921,7 +2921,7 @@ managementPeriod.CropID.HasValue
             {
                 return (flowControl: false, value: error.Message, model);
             }
-            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail);
+            (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, false, farm, fieldDetail, organicManure);
             if (error != null)
             {
                 return (flowControl: false, value: error.Message, model);
@@ -4202,7 +4202,7 @@ managementPeriod.CropID.HasValue
                                     (model, error) = await IsNFieldLimitWarningMessage(model, organicManure.ManagementPeriodID, Convert.ToInt32(fieldId), farm);
                                     if (error == null)
                                     {
-                                        (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, true, farm, fieldDetail);
+                                        (model, error) = await IsNMaxWarningMessage(model, Convert.ToInt32(fieldId), organicManure.ManagementPeriodID, true, farm, fieldDetail, organicManure);
                                         if (error == null)
                                         {
                                             (ManagementPeriod? managementPeriod, error) = await _cropLogic.FetchManagementperiodById(organicManure.ManagementPeriodID);
@@ -5449,7 +5449,7 @@ managementPeriod.CropID.HasValue
         }
 
         //warning excel sheet row no. 8
-        private async Task<(OrganicManureViewModel, Error?)> IsNMaxWarningMessage(OrganicManureViewModel model, int fieldId, int managementId, bool isGetCheckAnswer, Farm farm, FieldDetailResponse fieldDetail)
+        private async Task<(OrganicManureViewModel, Error?)> IsNMaxWarningMessage(OrganicManureViewModel model, int fieldId, int managementId, bool isGetCheckAnswer, Farm farm, FieldDetailResponse fieldDetail, OrganicManureDataViewModel organicManure)
         {
             int farmCountryId = model.FarmCountryId ?? 0;
             int scotland = (int)NMP.Commons.Enums.FarmCountry.Scotland;
@@ -5591,7 +5591,7 @@ managementPeriod.CropID.HasValue
                             {
                                 if (isGetCheckAnswer)
                                 {
-                                    (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model);
+                                    (decimal? availableNFromMannerOutput, error) = await GetAvailableNFromMannerOutput(model, organicManure);
 
                                     if (error == null)
                                     {
@@ -6591,40 +6591,35 @@ managementPeriod.CropID.HasValue
 
 
 
-        private async Task<(decimal?, Error?)> GetAvailableNFromMannerOutput(OrganicManureViewModel model)
+        private async Task<(decimal?, Error?)> GetAvailableNFromMannerOutput(OrganicManureViewModel model, OrganicManureDataViewModel organicManure)
         {
             Error error = new Error();
             decimal? availableNfromManner = null;
 
-            if (model.OrganicManures != null)
+
+            SetOrganicManureValues(model);
+
+            //logic for AvailableNForNMax column that will be used to get sum of previous manure applications
+
+
+            (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+            if (farmData == null && (!string.IsNullOrWhiteSpace(error?.Message)))
             {
-                SetOrganicManureValues(model);
-
-                //logic for AvailableNForNMax column that will be used to get sum of previous manure applications
-
-
-                (FarmResponse farmData, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                if (farmData == null && (!string.IsNullOrWhiteSpace(error?.Message)))
-                {
-                    return (availableNfromManner, error);
-                }
-                foreach (var organic in model.OrganicManures)
-                {
-                    (string? mannerJsonString, Error? mannerOutputError) = await BindManureOutput(farmData, organic, model);
-                    if (string.IsNullOrWhiteSpace(mannerJsonString))
-                    {
-                        return (availableNfromManner, mannerOutputError);
-                    }
-                    (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureLogic.FetchMannerCalculateNutrient(mannerJsonString);
-                    if (!string.IsNullOrWhiteSpace(error?.Message))
-                    {
-                        return (availableNfromManner, error);
-                    }
-
-                    availableNfromManner = mannerCalculateNutrientResponse.CurrentCropAvailableN;
-                    return (availableNfromManner, error);
-                }
+                return (availableNfromManner, error);
             }
+
+            (string? mannerJsonString, Error? mannerOutputError) = await BindManureOutput(farmData, organicManure, model);
+            if (string.IsNullOrWhiteSpace(mannerJsonString))
+            {
+                return (availableNfromManner, mannerOutputError);
+            }
+            (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureLogic.FetchMannerCalculateNutrient(mannerJsonString);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                return (availableNfromManner, error);
+            }
+
+            availableNfromManner = mannerCalculateNutrientResponse.CurrentCropAvailableN;
             return (availableNfromManner, error);
         }
         private async Task<(string?, Error?)> BindManureOutput(FarmResponse farmData, OrganicManureDataViewModel organic, OrganicManureViewModel model)
@@ -6932,7 +6927,7 @@ managementPeriod.CropID.HasValue
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "OrganicManure Controller : Exception in RemoveOrganicManure() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                if (model.IsComingFromRecommendation)
+                if (model != null && model.IsComingFromRecommendation)
                 {
                     TempData[_nutrientRecommendationsError] = ex.Message;
                     return RedirectToAction(_recommendations, "Crop", new { q = model.EncryptedFarmId, r = r, s = model.EncryptedHarvestYear });
