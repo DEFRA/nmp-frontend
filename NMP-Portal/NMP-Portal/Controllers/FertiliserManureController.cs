@@ -2094,7 +2094,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     RemoveFertiliserManureSession();
                     return RedirectForCheckAnswerSuccess(model, successMsg, successMsgSecond, success);
                 }
-                TempData[_checkYourAnswerErrorDataKey] = error.Message;
+                TempData[_checkYourAnswerErrorDataKey] = error?.Message;
 
             }
         }
