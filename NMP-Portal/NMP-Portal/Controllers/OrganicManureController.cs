@@ -5480,58 +5480,69 @@ managementPeriod.CropID.HasValue
             int? nmaxLimitEnglandOrWales = (model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Wales ? cropTypeLinking.NMaxLimitWales : cropTypeLinking.NMaxLimitEngland);
             bool flowControl = false;
             bool IsNmaxWarningNeeded = IsNmaxWarningRequired(scotlandNmax, isScotland, nmaxLimitEnglandOrWales);
-            if (IsNmaxWarningNeeded)
+            if (!IsNmaxWarningNeeded)
             {
-                //passing orgId
-                (_, previousApplicationsN) = await FetchPreviousApplicationN(model, managementId, error, cropId, previousApplicationsN);
+                return (model, error);
+            }
 
-                decimal nMaxLimit = 0;
-                int? percentOfTotalNForUseInNmaxCalculation = await BindPercentOfTotalNForUseInNmaxCalculation(model, error);
+            (_, previousApplicationsN) = await FetchPreviousApplicationN(model, managementId, error, cropId, previousApplicationsN);
 
-                if (percentOfTotalNForUseInNmaxCalculation != null)
+            int? percentOfTotalNForUseInNmaxCalculation = await BindPercentOfTotalNForUseInNmaxCalculation(model);
+            decimal nMaxLimit = 0;
+            if (percentOfTotalNForUseInNmaxCalculation != null)
+            {
+                (flowControl, (OrganicManureViewModel, Error?) value, totalN,  nMaxLimit) = await HandlePercentOfTotalNaxWarning(model, fieldId, fieldDetail, isWinterOilseedRapeAutumn, defaultNitrogen, previousApplicationsN, crop,residueGroup, nmaxLimitEnglandOrWales, percentOfTotalNForUseInNmaxCalculation);
+                if (!flowControl)
                 {
-                    (flowControl, (OrganicManureViewModel, Error?) value) = await HandlePercentOfTotalNaxWarning(model, fieldId, farm, fieldDetail, isWinterOilseedRapeAutumn, error, defaultNitrogen, warningList, previousApplicationsN, crop, scotlandNmax, residueGroup, nmaxLimitEnglandOrWales, percentOfTotalNForUseInNmaxCalculation);
-                    if (!flowControl)
-                    {
-                        return value;
-                    }
+                    return value;
                 }
-                else if (isGetCheckAnswer)
+                if (totalN > nMaxLimit)
                 {
-                    (flowControl, (OrganicManureViewModel, Error?) value) = await BindNmaxWarningIfCheckAnswerTrue(model, fieldId, farm, fieldDetail, organicManure, farmCountryId, isWinterOilseedRapeAutumn, warningList, previousApplicationsN, crop, scotlandNmax, residueGroup, nmaxLimitEnglandOrWales);
-                    if (!flowControl)
-                    {
-                        return value;
-                    }
-
+                    await BindNmaxWarning(model, farm, warningList, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit);
                 }
+            }
+            else if (isGetCheckAnswer)
+            {
+                (flowControl, (OrganicManureViewModel, Error?) value,nMaxLimit,decimal? availableNFromMannerOutput) = await BindNmaxWarningIfCheckAnswerTrue(model, fieldId,  fieldDetail, organicManure,isWinterOilseedRapeAutumn, crop,  residueGroup, nmaxLimitEnglandOrWales);
+                if (!flowControl)
+                {
+                    return value;
+                }
+                await PrepareNMaxWarningIfCheckAnswerTrue(model, farm, farmCountryId, warningList, previousApplicationsN, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit, availableNFromMannerOutput);
 
             }
             return (model, error);
         }
 
-        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value)> BindNmaxWarningIfCheckAnswerTrue(OrganicManureViewModel model, int fieldId, Farm farm, FieldDetailResponse fieldDetail, OrganicManureDataViewModel organicManure, int farmCountryId, bool isWinterOilseedRapeAutumn, List<WarningResponse> warningList, decimal previousApplicationsN, Crop crop, int? scotlandNmax, int residueGroup, int? nmaxLimitEnglandOrWales)
+        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value,decimal,decimal?)> BindNmaxWarningIfCheckAnswerTrue(OrganicManureViewModel model, int fieldId,  FieldDetailResponse fieldDetail, OrganicManureDataViewModel organicManure, bool isWinterOilseedRapeAutumn,  Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales)
         {
-            (decimal? availableNFromMannerOutput, Error error) = await GetAvailableNFromMannerOutput(model, organicManure);
+            decimal nMaxLimit = 0;
+            (decimal? availableNFromMannerOutput, Error? error) = await GetAvailableNFromMannerOutput(model, organicManure);
 
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                return (flowControl: false, value: (model, error));
+                return (flowControl: false, value: (model, error), nMaxLimit, availableNFromMannerOutput);
             }
 
             (List<int> currentYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value, false);
             (List<int> previousYearManureTypeIds, error) = await _organicManureLogic.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(Convert.ToInt32(fieldId), model.HarvestYear.Value - 1, false);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error));
+                return (flowControl: false, value: (model, error), nMaxLimit, availableNFromMannerOutput);
 
             }
-            (bool flowControl, (OrganicManureViewModel, Error?) value, decimal nMaxLimit) = await BindNmaxForIsNMaxWarningMessage(model, fieldDetail, isWinterOilseedRapeAutumn, error, crop, residueGroup, nmaxLimitEnglandOrWales, currentYearManureTypeIds, previousYearManureTypeIds);
+            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+            (bool flowControl, (OrganicManureViewModel, Error?) value, nMaxLimit) = await BindNmaxForIsNMaxWarningMessage(model, fieldDetail, isWinterOilseedRapeAutumn, crop, residueGroup, nmaxLimitEnglandOrWales, hasSpecialManure);
             if (!flowControl)
             {
-                return (flowControl: false, value: value);
+                return (flowControl: false, value: value, nMaxLimit, availableNFromMannerOutput);
             }
 
+            return (flowControl: true, value: default,nMaxLimit,availableNFromMannerOutput);
+        }
+
+        private async Task PrepareNMaxWarningIfCheckAnswerTrue(OrganicManureViewModel model, Farm farm, int farmCountryId, List<WarningResponse> warningList, decimal previousApplicationsN, Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit, decimal? availableNFromMannerOutput)
+        {
             if ((previousApplicationsN + availableNFromMannerOutput) > nMaxLimit)
             {
 
@@ -5543,7 +5554,7 @@ managementPeriod.CropID.HasValue
                     .FirstOrDefault(x => x.CountryID == farm.CountryID &&
                                          string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
 
-                bool isNeedToSetWarning = (farmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass));
+                bool isNeedToSetWarning = (farmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass));
                 if (isNeedToSetWarning)
                 {
                     if (warning != null)
@@ -5556,29 +5567,26 @@ managementPeriod.CropID.HasValue
                     SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, scotlandNmax, nMaxLimit));
                 }
             }
-
-            return (flowControl: true, value: default);
         }
 
-        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value)> HandlePercentOfTotalNaxWarning(OrganicManureViewModel model, int fieldId, Farm farm, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Error? error, decimal defaultNitrogen, List<WarningResponse> warningList, decimal previousApplicationsN, Crop crop, int? scotlandNmax, int residueGroup, int? nmaxLimitEnglandOrWales, int? percentOfTotalNForUseInNmaxCalculation)
+        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal, decimal)> HandlePercentOfTotalNaxWarning(OrganicManureViewModel model, int fieldId, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn,  decimal defaultNitrogen,  decimal previousApplicationsN, Crop crop,  int residueGroup, int? nmaxLimitEnglandOrWales, int? percentOfTotalNForUseInNmaxCalculation)
         {
             decimal nMaxLimit = 0;
-            (bool flowControl, (OrganicManureViewModel, Error?) value, List<int> currentYearManureTypeIds, List<int> previousYearManureTypeIds, decimal totalN) = await CalculationWarningForPercentOfTotalN(model, fieldId, farm, fieldDetail, defaultNitrogen, previousApplicationsN, percentOfTotalNForUseInNmaxCalculation);
+            (bool flowControl, (OrganicManureViewModel, Error?) value, List<int> currentYearManureTypeIds, List<int> previousYearManureTypeIds, decimal totalN) = await CalculationWarningForPercentOfTotalN(model, fieldId, defaultNitrogen, previousApplicationsN, percentOfTotalNForUseInNmaxCalculation);
             if (!flowControl)
             {
-                return (flowControl: false, value: (model, value.Item2));
-            }
-            (flowControl, (OrganicManureViewModel, Error?) data, nMaxLimit) = await BindNmaxForIsNMaxWarningMessage(model, fieldDetail, isWinterOilseedRapeAutumn, error, crop, residueGroup, nmaxLimitEnglandOrWales, currentYearManureTypeIds, previousYearManureTypeIds);
-            if (!flowControl)
-            {
-                return (flowControl: false, value: (data.Item1, data.Item2));
-            }
-            if (totalN > nMaxLimit)
-            {
-                await BindNmaxWarning(model, farm, warningList, crop, scotlandNmax, nmaxLimitEnglandOrWales, nMaxLimit);
+                return (flowControl: false, value: (model, value.Item2), totalN, nMaxLimit);
             }
 
-            return (flowControl: true, value: default);
+            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
+            (flowControl, (OrganicManureViewModel, Error?) data, nMaxLimit) = await BindNmaxForIsNMaxWarningMessage(model, fieldDetail, isWinterOilseedRapeAutumn, crop, residueGroup, nmaxLimitEnglandOrWales, hasSpecialManure);
+            if (!flowControl)
+            {
+                return (flowControl: false, value: (data.Item1, data.Item2), totalN, nMaxLimit);
+            }
+
+
+            return (flowControl: true, value: default, totalN, nMaxLimit);
         }
 
         private static bool IsNmaxWarningRequired(int? scotlandNmax, bool isScotland, int? nmaxLimitEnglandOrWales)
@@ -5586,7 +5594,7 @@ managementPeriod.CropID.HasValue
             return ((!isScotland && nmaxLimitEnglandOrWales != null) || (isScotland && scotlandNmax != null));
         }
 
-        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, List<int>, List<int>, decimal)> CalculationWarningForPercentOfTotalN(OrganicManureViewModel model, int fieldId, Farm farm, FieldDetailResponse fieldDetail, decimal defaultNitrogen, decimal previousApplicationsN, int? percentOfTotalNForUseInNmaxCalculation)
+        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, List<int>, List<int>, decimal)> CalculationWarningForPercentOfTotalN(OrganicManureViewModel model, int fieldId, decimal defaultNitrogen, decimal previousApplicationsN, int? percentOfTotalNForUseInNmaxCalculation)
         {
             decimal currentApplicationNitrogen = 0;
 
@@ -5615,7 +5623,7 @@ managementPeriod.CropID.HasValue
                                      string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
             if (warning != null)
             {
-                if (!isScotland && crop != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
+                if (!isScotland && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
                 {
                     SetNmaxLimitWarning(model, warning, string.Format(warning.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
                 }
@@ -5654,12 +5662,11 @@ managementPeriod.CropID.HasValue
             return (error, cropTypeLinking, recommendation, scotlandNmax, residueGroup);
         }
 
-        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal)> BindNmaxForIsNMaxWarningMessage(OrganicManureViewModel model, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Error? error, Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales, List<int> currentYearManureTypeIds, List<int> previousYearManureTypeIds)
+        private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal)> BindNmaxForIsNMaxWarningMessage(OrganicManureViewModel model, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales, bool hasSpecialManure)
         {
             decimal nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
 
             OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
-            bool hasSpecialManure = Functions.HasSpecialManure(currentYearManureTypeIds, null) || Functions.HasSpecialManure(previousYearManureTypeIds, null);
             if (model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
                 nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
@@ -5668,22 +5675,22 @@ managementPeriod.CropID.HasValue
             else
             {
                 int? winterRainfall = null;
-                (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
+                (ExcessRainfalls excessRainfalls, Error error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId ?? 0, model.HarvestYear ?? 0);
                 if (HasError(error))
                 {
-                    return (flowControl: false, value: (model, string.IsNullOrWhiteSpace(error?.Message) ? null : error), nMaxLimit);
+                    return (flowControl: false, value: (model, error), nMaxLimit);
                 }
 
                 winterRainfall = excessRainfalls != null ? excessRainfalls.WinterRainfall : null;
 
-                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
+                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimitScotland(Convert.ToInt32(nMaxLimit), crop.Yield ?? null, fieldDetail.SoilTypeName, crop.CropInfo1 ?? null, crop.CropTypeID.Value, crop.PotentialCut ?? 0, crop.DefoliationSequenceID, winterRainfall, residueGroup, isWinterOilseedRapeAutumn);
 
             }
 
             return (flowControl: true, value: default, nMaxLimit);
         }
 
-        private async Task<int?> BindPercentOfTotalNForUseInNmaxCalculation(OrganicManureViewModel model, Error? error)
+        private async Task<int?> BindPercentOfTotalNForUseInNmaxCalculation(OrganicManureViewModel model)
         {
             int? percentOfTotalNForUseInNmaxCalculation = null;
             (ManureType manureType, _) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
