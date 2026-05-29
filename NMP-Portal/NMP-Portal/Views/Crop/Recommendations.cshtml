@@ -7,14 +7,12 @@
     ViewData["Title"] = $"{string.Format(Resource.lblFieldPlanYear, Model.FieldName, Model.Crops[0].Year)} {Resource.lblHyphen} {title}";
 
 
-    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     int CerealsGroupId = (int)NMP.Commons.Enums.CropGroup.Cereals;
     var lastUpdate = string.Empty;
     if (Model != null && Model.Recommendations != null)
     {
         lastUpdate = Model.Recommendations[0].ModifiedOn != null ? Model.Recommendations[0].ModifiedOn.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Model.Recommendations[0].CreatedOn.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"));
     }
-    bool isPkBalanceTableDisplay = false;
     int managementTableIndex = 1;
 }
 <div class="govuk-grid-row">
