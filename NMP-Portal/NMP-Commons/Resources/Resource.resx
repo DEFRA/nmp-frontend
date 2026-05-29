@@ -3453,14 +3453,14 @@ cubic metres per hectare  not set</value>
   <data name="lblCropGroupName" xml:space="preserve">
     <value>Crop Group Name</value>
   </data>
-  <data name="contentGettingHelp4" xml:space="preserve">
+  <data name="ContentGettingHelp4" xml:space="preserve">
     <value>Tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
   </data>
   <data name="contentGettingHelp_line2" xml:space="preserve">
     <value>The helpdesk will help with issues such as:</value>
   </data>
   <data name="contentGivingFeedbackAboutThisService1" xml:space="preserve">
-    <value>To give feedback about this tool, &lt;a href="https://defragroup.eu.qualtrics.com/jfe9/preview/previewId/7f7cf227-7598-4bef-9b16-093ce6e401fe/SV_dogonGGVlp5XLEi?Q_CHL=preview&amp;Q_SurveyVersionID=current"  target="_blank"&gt;complete the feedback survey &lt;/a&gt;(open a new window).</value>
+    <value>To give feedback about this tool, &lt;a href="https://defragroup.eu.qualtrics.com/jfe9/preview/previewId/7f7cf227-7598-4bef-9b16-093ce6e401fe/SV_dogonGGVlp5XLEi?Q_CHL=preview&amp;Q_SurveyVersionID=current"  target="_blank"&gt;complete the feedback survey &lt;/a&gt;(opens in a new window).</value>
   </data>
   <data name="lblAboutGetHelpAndFeedback" xml:space="preserve">
     <value>This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed.</value>
@@ -7543,7 +7543,7 @@ livestock manure.</value>
     <value>Get help</value>
   </data>
   <data name="lblGetHelpContent" xml:space="preserve">
-    <value>Alongside this tool you should use the AHDB Nutrient Management Guide (RB209).&lt;a href="https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use" target="_blank"&gt; Get more information or help with RB209&lt;/a&gt; (open a new window).</value>
+    <value>Alongside this tool you should use the AHDB Nutrient Management Guide (RB209).&lt;a href="https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use" target="_blank"&gt; Get more information or help with RB209&lt;/a&gt; (opens in a new window).</value>
   </data>
   <data name="lblGiveFeedback" xml:space="preserve">
     <value>Give feedback</value>
