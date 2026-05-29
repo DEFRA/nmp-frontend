@@ -50,7 +50,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private readonly IFarmsNvzLogic _farmsNvzLogic = farmsNvzLogic;
     private const string _potassiumIndexValue = "PotassiumIndexValue";
     private const string _magnesiumIndexValue = "SoilAnalyses.MagnesiumIndex";
-    private const string _phosphorusIndexValue = "SoilAnalyses.PhosphorusIndex";
+    private const string _phosphorusIndexValue = "SoilAnalyses.PhosphorusIndex"; //FieldData
+    private const string _soilAnalysesMagnesiumValue = "SoilAnalyses.Magnesium";
+    private const string _soilAnalysesPhosphorusValue = "SoilAnalyses.Phosphorus";
+    private const string _soilAnalysesPotassiumValue = "SoilAnalyses.Potassium";
+    private const string _manageFarmFieldsActionName = "ManageFarmFields";
+    private const string _fieldDataBeforeUpdateKey = "FieldDataBeforeUpdate";
+    private const string _fieldDataKey = "FieldData";
     public async Task<IActionResult> Index()
     {
         _logger.LogTrace("Field Controller : Index() action called");
@@ -1325,15 +1331,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
     private void ValidateSoilAnalysesMagnesium()
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Magnesium"))
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilAnalysesMagnesiumValue))
         {
-            var InvalidFormatError = ModelState["SoilAnalyses.Magnesium"]?.Errors.Count > 0 ?
-                            ModelState["SoilAnalyses.Magnesium"]?.Errors[0].ErrorMessage.ToString() : null;
+            var InvalidFormatError = ModelState[_soilAnalysesMagnesiumValue]?.Errors.Count > 0 ?
+                            ModelState[_soilAnalysesMagnesiumValue]?.Errors[0].ErrorMessage.ToString() : null;
 
-            if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.Magnesium"].AttemptedValue, Resource.lblMagnesiumPerLitreOfSoil)))
+            if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_soilAnalysesMagnesiumValue].AttemptedValue, Resource.lblMagnesiumPerLitreOfSoil)))
             {
-                ModelState["SoilAnalyses.Magnesium"]?.Errors.Clear();
-                ModelState["SoilAnalyses.Magnesium"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9998));
+                ModelState[_soilAnalysesMagnesiumValue]?.Errors.Clear();
+                ModelState[_soilAnalysesMagnesiumValue]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9998));
 
             }
         }
@@ -1341,30 +1347,30 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     private void ValidateSoilAnalysesPhosphorus()
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Phosphorus"))
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilAnalysesPhosphorusValue))
         {
-            var InvalidFormatError = ModelState["SoilAnalyses.Phosphorus"]?.Errors.Count > 0 ?
-                            ModelState["SoilAnalyses.Phosphorus"]?.Errors[0].ErrorMessage.ToString() : null;
+            var InvalidFormatError = ModelState[_soilAnalysesPhosphorusValue]?.Errors.Count > 0 ?
+                            ModelState[_soilAnalysesPhosphorusValue]?.Errors[0].ErrorMessage.ToString() : null;
 
-            if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.Phosphorus"].AttemptedValue, Resource.lblPhosphorusPerLitreOfSoil)))
+            if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_soilAnalysesPhosphorusValue].AttemptedValue, Resource.lblPhosphorusPerLitreOfSoil)))
             {
-                ModelState["SoilAnalyses.Phosphorus"]?.Errors.Clear();
-                ModelState["SoilAnalyses.Phosphorus"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPhosphorusP, 0, 999));
+                ModelState[_soilAnalysesPhosphorusValue]?.Errors.Clear();
+                ModelState[_soilAnalysesPhosphorusValue]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPhosphorusP, 0, 999));
             }
         }
     }
 
     private void ValidateSoilAnalysesPotassium()
     {
-        if ((!ModelState.IsValid) && ModelState.ContainsKey("SoilAnalyses.Potassium"))
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilAnalysesPotassiumValue))
         {
-            var InvalidFormatError = ModelState["SoilAnalyses.Potassium"]?.Errors.Count > 0 ?
-                            ModelState["SoilAnalyses.Potassium"]?.Errors[0].ErrorMessage.ToString() : null;
+            var InvalidFormatError = ModelState[_soilAnalysesPotassiumValue]?.Errors.Count > 0 ?
+                            ModelState[_soilAnalysesPotassiumValue]?.Errors[0].ErrorMessage.ToString() : null;
 
-            if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SoilAnalyses.Potassium"].AttemptedValue, Resource.lblPotassiumPerLitreOfSoil)))
+            if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_soilAnalysesPotassiumValue].AttemptedValue, Resource.lblPotassiumPerLitreOfSoil)))
             {
-                ModelState["SoilAnalyses.Potassium"]?.Errors.Clear();
-                ModelState["SoilAnalyses.Potassium"]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9998));
+                ModelState[_soilAnalysesPotassiumValue]?.Errors.Clear();
+                ModelState[_soilAnalysesPotassiumValue]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9998));
             }
         }
     }
@@ -1945,7 +1951,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 string success = _farmDataProtector.Protect("true");
                 string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
                 RemoveFieldDataFromSession();
-                return RedirectToAction("ManageFarmFields", new { id = model.EncryptedFarmId, q = success, name = fieldName });
+                return RedirectToAction(_manageFarmFieldsActionName, new { id = model.EncryptedFarmId, q = success, name = fieldName });
             }
             else
             {
@@ -2186,15 +2192,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (!model.Potassium.HasValue)
         {
-            ModelState.AddModelError("SoilAnalyses.Potassium", Resource.MsgPotassiumNotSet);
+            ModelState.AddModelError(_soilAnalysesPotassiumValue, Resource.MsgPotassiumNotSet);
         }
         if (!model.Phosphorus.HasValue)
         {
-            ModelState.AddModelError("SoilAnalyses.Phosphorus", Resource.MsgPhosphorusNotSet);
+            ModelState.AddModelError(_soilAnalysesPhosphorusValue, Resource.MsgPhosphorusNotSet);
         }
         if (!model.Magnesium.HasValue)
         {
-            ModelState.AddModelError("SoilAnalyses.Magnesium", Resource.MsgMagnesiumNotSet);
+            ModelState.AddModelError(_soilAnalysesMagnesiumValue, Resource.MsgMagnesiumNotSet);
         }
     }
     [HttpGet]
@@ -2250,9 +2256,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         _logger.LogTrace("Field Controller : ManageFarmFields() post action called");
         if (ModelState.IsValid)
         {
-            await Task.FromResult(RedirectToAction("ManageFarmFields"));
+            await Task.FromResult(RedirectToAction(_manageFarmFieldsActionName));
         }
-        return await Task.FromResult(RedirectToAction("ManageFarmFields"));
+        return await Task.FromResult(RedirectToAction(_manageFarmFieldsActionName));
     }
 
     [HttpGet]
@@ -2265,9 +2271,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             HttpContext.Session.Remove("SoilAnalysisDataBeforeUpdate");
         }
 
-        if (HttpContext.Session.Exists("FieldDataBeforeUpdate"))
+        if (HttpContext.Session.Exists(_fieldDataBeforeUpdateKey))
         {
-            HttpContext.Session.Remove("FieldDataBeforeUpdate");
+            HttpContext.Session.Remove(_fieldDataBeforeUpdateKey);
         }
 
         FieldViewModel model = new FieldViewModel();
@@ -2436,8 +2442,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         model.NVZProgrammeID = field.NVZProgrammeID;
         if (farm != null)
         {
-            model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
-            model.IsAbove300SeaLevelForFarm = farm?.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ ? true : false;
+            model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+            model.IsAbove300SeaLevelForFarm = farm?.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
         }
         else
         {
@@ -2999,7 +3005,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
-                HttpContext.Session.SetObjectAsJson("FieldDataBeforeUpdate", model);
+                HttpContext.Session.SetObjectAsJson(_fieldDataBeforeUpdateKey, model);
             }
 
         }
@@ -3012,74 +3018,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         await FetchPscIndexName(model);
         ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
         return View(model);
-    }
-
-    private async Task FetchViewBegDataForUpdate(FieldViewModel model, bool? hasGrassInLastThreeYear, List<Crop> cropPlans, List<PreviousCroppingData>? prevCroppings, bool IsComingForFirstTime)
-    {
-        List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
-        List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
-        if (IsComingForFirstTime && hasGrassInLastThreeYear.HasValue && hasGrassInLastThreeYear == true && prevCroppings != null)
-        {
-            ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == prevCroppings
-              .Where(pc => pc.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-              .Select(pc => pc.GrassManagementOptionID)
-              .FirstOrDefault())?.Name;
-
-            ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == prevCroppings
-              .Where(pc => pc.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-              .Select(pc => pc.SoilNitrogenSupplyItemID)
-              .FirstOrDefault())?.Name;
-        }
-        else if (!IsComingForFirstTime)
-        {
-            if (model.PreviousCroppings.GrassManagementOptionID != null)
-            {
-                ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
-
-            }
-            if (model.PreviousCroppings.SoilNitrogenSupplyItemID != null)
-            {
-                ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
-            }
-        }
-        if (cropPlans.Any())
-        {
-            ViewBag.IsAnyPlan = true;
-            int highestYearOfPlan = cropPlans.Max(cp => cp.Year);
-            List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
-            if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
-            {
-                ViewBag.NoNeedToShowPreviousCroppingDetail = true;
-            }
-        }
-        var previousModel = HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldDataBeforeUpdate");
-
-        bool isDataChanged = false;
-        string action = "Action";
-
-        if (model != null && previousModel != null)
-        {
-            var oldJson = JObject.FromObject(previousModel);
-            var newJson = JObject.FromObject(model);
-
-            (oldJson["PreviousCroppings"] as JObject)?
-                .Property(action)?
-                .Remove();
-
-            (newJson["PreviousCroppings"] as JObject)?
-                .Property(action)?
-                .Remove();
-
-            oldJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
-            .Where(p => p != null).ToList().ForEach(p => p!.Remove());
-
-            newJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
-                .Where(p => p != null).ToList().ForEach(p => p!.Remove());
-
-            isDataChanged = !JToken.DeepEquals(oldJson, newJson);
-        }
-
-        ViewBag.IsDataChange = isDataChanged;
     }
 
     [HttpPost]
@@ -3178,6 +3116,75 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
+    private async Task FetchViewBegDataForUpdate(FieldViewModel model, bool? hasGrassInLastThreeYear, List<Crop> cropPlans, List<PreviousCroppingData>? prevCroppings, bool IsComingForFirstTime)
+    {
+        List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
+        List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
+        if (IsComingForFirstTime && hasGrassInLastThreeYear.HasValue && hasGrassInLastThreeYear == true && prevCroppings != null)
+        {
+            ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == prevCroppings
+              .Where(pc => pc.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+              .Select(pc => pc.GrassManagementOptionID)
+              .FirstOrDefault())?.Name;
+
+            ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == prevCroppings
+              .Where(pc => pc.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+              .Select(pc => pc.SoilNitrogenSupplyItemID)
+              .FirstOrDefault())?.Name;
+        }
+        else if (!IsComingForFirstTime)
+        {
+            if (model.PreviousCroppings.GrassManagementOptionID != null)
+            {
+                ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
+
+            }
+            if (model.PreviousCroppings.SoilNitrogenSupplyItemID != null)
+            {
+                ViewBag.SoilNitrogenSupplyItem = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.PreviousCroppings.SoilNitrogenSupplyItemID)?.Name;
+            }
+        }
+        if (cropPlans.Any())
+        {
+            ViewBag.IsAnyPlan = true;
+            int highestYearOfPlan = cropPlans.Max(cp => cp.Year);
+            List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
+            if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
+            {
+                ViewBag.NoNeedToShowPreviousCroppingDetail = true;
+            }
+        }
+        var previousModel = HttpContext.Session.GetObjectFromJson<FieldViewModel>(_fieldDataBeforeUpdateKey);
+
+        bool isDataChanged = false;
+        string action = "Action";
+
+        if (model != null && previousModel != null)
+        {
+            var oldJson = JObject.FromObject(previousModel);
+            var newJson = JObject.FromObject(model);
+
+            (oldJson["PreviousCroppings"] as JObject)?
+                .Property(action)?
+                .Remove();
+
+            (newJson["PreviousCroppings"] as JObject)?
+                .Property(action)?
+                .Remove();
+
+            oldJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
+            .Where(p => p != null).ToList().ForEach(p => p!.Remove());
+
+            newJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
+                .Where(p => p != null).ToList().ForEach(p => p!.Remove());
+
+            isDataChanged = !JToken.DeepEquals(oldJson, newJson);
+        }
+
+        ViewBag.IsDataChange = isDataChanged;
+    }
+
+
     [HttpGet]
     public IActionResult FieldRemove()
     {
@@ -3186,7 +3193,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : FieldRemove() action : No field data found in session.");
-            return RedirectToAction("ManageFarmFields", "Farm");
+            return RedirectToAction(_manageFarmFieldsActionName, "Farm");
         }
 
         return View(model);
@@ -3226,7 +3233,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 string isDeleted = _fieldDataProtector.Protect("true");
                 string name = _fieldDataProtector.Protect(field.Name);
                 RemoveFieldDataFromSession();
-                return RedirectToAction("ManageFarmFields", new { id = field.EncryptedFarmId, name = name, isDeleted = isDeleted });
+                return RedirectToAction(_manageFarmFieldsActionName, new { id = field.EncryptedFarmId, name = name, isDeleted = isDeleted });
             }
         }
 
@@ -3466,7 +3473,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> GrassLastThreeHarvestYear()
     {
         _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() action called");
-        Error error = new Error();
 
         FieldViewModel? model = LoadFieldDataFromSession();
         if (model == null)
@@ -3937,23 +3943,23 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     private FieldViewModel? LoadFieldDataFromSession()
     {
-        if (HttpContext.Session.Exists("FieldData"))
+        if (HttpContext.Session.Exists(_fieldDataKey))
         {
-            return HttpContext.Session.GetObjectFromJson<FieldViewModel>("FieldData");
+            return HttpContext.Session.GetObjectFromJson<FieldViewModel>(_fieldDataKey);
         }
         return null;
     }
 
     private void SetFieldDataToSession(FieldViewModel model)
     {
-        HttpContext.Session.SetObjectAsJson("FieldData", model);
+        HttpContext.Session.SetObjectAsJson(_fieldDataKey, model);
     }
 
     private void RemoveFieldDataFromSession()
     {
-        if (HttpContext.Session.Exists("FieldData"))
+        if (HttpContext.Session.Exists(_fieldDataKey))
         {
-            HttpContext.Session.Remove("FieldData");
+            HttpContext.Session.Remove(_fieldDataKey);
         }
     }
 
