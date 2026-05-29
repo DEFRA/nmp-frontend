@@ -5768,7 +5768,6 @@ managementPeriod.CropID.HasValue
             bool isSlurry = IsSlurry(model.ManureTypeId);
             bool isPoultry = IsPoultryManure(model.ManureTypeId);
 
-            var warningHelper = new WarningWithinPeriod();
 
             if (IsNonScotland(model))
             {
