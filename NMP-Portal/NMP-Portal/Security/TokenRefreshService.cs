@@ -11,6 +11,7 @@ namespace NMP.Portal.Security
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _config;
+        private const string _refreshTokenKey = "refresh_token";
 
         public TokenRefreshService(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
@@ -20,7 +21,7 @@ namespace NMP.Portal.Security
 
         public async Task<string> RefreshUserAccessTokenAsync(HttpContext context)
         {
-            var refreshToken = await context.GetTokenAsync("refresh_token");
+            var refreshToken = await context.GetTokenAsync(_refreshTokenKey);
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = true,
@@ -43,11 +44,11 @@ namespace NMP.Portal.Security
 
                 var formData = new FormUrlEncodedContent(new[]
                 {
-                    new KeyValuePair<string, string>("refresh_token", refreshToken),
+                    new KeyValuePair<string, string>(_refreshTokenKey, refreshToken),
                     new KeyValuePair<string, string>("redirect_uri", ""),
                     new KeyValuePair<string, string>("client_id", _config["CustomerIdentityClientId"]),
                     new KeyValuePair<string, string>("client_secret", _config["CustomerIdentityClientSecret"]),
-                    new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                    new KeyValuePair<string, string>("grant_type", _refreshTokenKey),
                     new KeyValuePair<string, string>("scope", scopes)
                 });
                 Uri uri = new Uri(uriString: issuer);
@@ -68,7 +69,7 @@ namespace NMP.Portal.Security
                 if (auth != null && auth.Principal != null && tokens != null && !string.IsNullOrEmpty(tokens.AccessToken))
                 {
                     auth.Properties?.UpdateTokenValue("access_token", tokens.AccessToken);
-                    auth.Properties?.UpdateTokenValue("refresh_token", tokens.RefreshToken);
+                    auth.Properties?.UpdateTokenValue(_refreshTokenKey, tokens.RefreshToken);
                     await context.SignInAsync(auth.Principal, auth.Properties);
                 }
             }

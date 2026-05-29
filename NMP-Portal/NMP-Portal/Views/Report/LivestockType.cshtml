@@ -2,8 +2,7 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblWhatTypeOfLivestockGroupWouldYouLikeToAdd, Model.LivestockGroupName.ToLower())} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
-    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+
     var livestockGroupName = Model.LivestockGroupName.ToLower();
     if(livestockGroupName.Equals("pigs"))
     {

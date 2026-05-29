@@ -4,8 +4,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{Resource.lblWhatIsTheEstimatedAngleOfTheBankSlope} {Resource.lblHyphen} {title}";
 
-    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.StorageCapacityWizardStep.BankSlopeAngle;
     
 }
@@ -56,7 +54,7 @@
 
                     @if (!Model.IsCheckAnswer)
                     {
-                        @if (Model.IsStoreCapacityExist == true)
+                        @if (Model.IsStoreCapacityExist)
                         {
                             <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
                                 @Resource.lblCancel

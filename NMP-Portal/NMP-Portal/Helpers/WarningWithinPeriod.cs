@@ -644,7 +644,7 @@ namespace NMP.Portal.Helpers
             return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
         }
 
-        public bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
+        public static bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
         {
             bool isWithinDateRange = false;
             if (applicationDate.HasValue && startDate.HasValue && endDate.HasValue && applicationDate.Value >= startDate.Value && applicationDate.Value <= endDate.Value)

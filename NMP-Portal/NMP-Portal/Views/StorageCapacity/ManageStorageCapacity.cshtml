@@ -15,9 +15,6 @@
 
 
 
-    var nonEmptyLists = dataLists
-    .Where(x => x.Data != null && x.Data.Any())
-    .ToList();
 
     var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
        "NVZComplianceReports");

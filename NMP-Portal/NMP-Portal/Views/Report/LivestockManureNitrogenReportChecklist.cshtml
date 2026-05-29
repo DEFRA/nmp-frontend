@@ -39,29 +39,32 @@
             <govuk-error-summary>
                 @foreach (var state in ViewData.ModelState)
                 {
-                    foreach (var error in state.Value.Errors)
-                    {
-                        if (error.ErrorMessage.Equals(string.Format(Resource.MsgDerogationForYearMustBeCompleted, Model.Year)))
-                        {
-                            errorAction = "IsGrasslandDerogation";
-                        }
-                        if (error.ErrorMessage.Equals(string.Format(Resource.MsgFarmAreaForYearMustBeCompleted, Model.Year)))
-                        {
-                            errorAction = "FarmAreaForLivestockManure";
-                        }
-                        if (error.ErrorMessage.Equals(string.Format(Resource.MsgLivestockNumbersForYearMustBeCompleted, Model.Year)))
-                        {
-                            errorAction = "#LivestockManureNitrogenReportChecklist";
-                        }
-                        if (error.ErrorMessage.Equals(string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, Model.Year)))
-                        {
-                            errorAction = "#LivestockManureNitrogenReportChecklist";
-                        }
+                    foreach (var errorMessage in state.Value.Errors.Select(error => error.ErrorMessage))
+{
+    if (errorMessage.Equals(string.Format(Resource.MsgDerogationForYearMustBeCompleted, Model.Year)))
+    {
+        errorAction = "IsGrasslandDerogation";
+    }
 
-                        <govuk-error-summary-item href="@errorAction">
-                            @error.ErrorMessage
-                        </govuk-error-summary-item>
-                    }
+    if (errorMessage.Equals(string.Format(Resource.MsgFarmAreaForYearMustBeCompleted, Model.Year)))
+    {
+        errorAction = "FarmAreaForLivestockManure";
+    }
+
+    if (errorMessage.Equals(string.Format(Resource.MsgLivestockNumbersForYearMustBeCompleted, Model.Year)))
+    {
+        errorAction = "#LivestockManureNitrogenReportChecklist";
+    }
+
+    if (errorMessage.Equals(string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, Model.Year)))
+    {
+        errorAction = "#LivestockManureNitrogenReportChecklist";
+    }
+
+    <govuk-error-summary-item href="@errorAction">
+        @errorMessage
+    </govuk-error-summary-item>
+}
                 }
             </govuk-error-summary>
         </div>
@@ -118,11 +121,18 @@
                             </div>
                             <div class="govuk-task-list__status" id="TotalFarmArea">
 
-                                @if ((Model.IsGrasslandDerogation == false && Model.TotalFarmArea != null && (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales ? Model.TotalAreaInNVZ != null : true))
-                                                            || (Model.IsGrasslandDerogation == true && Model.TotalFarmArea != null && (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales ? Model.TotalAreaInNVZ != null : true) && Model.GrassPercentage != null))
-                                {
-                                    @Resource.lblCompleted
-                                }
+                               @if (Model.IsGrasslandDerogation.HasValue&&((!Model.IsGrasslandDerogation.Value
+        && Model.TotalFarmArea != null
+        && (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales
+            || Model.TotalAreaInNVZ != null))
+    || (Model.IsGrasslandDerogation.Value
+        && Model.TotalFarmArea != null
+        && (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales
+            || Model.TotalAreaInNVZ != null)
+        && Model.GrassPercentage != null)))
+{
+    @Resource.lblCompleted
+}
                                 else
                                 {
                                     <strong class="govuk-tag govuk-tag--blue">

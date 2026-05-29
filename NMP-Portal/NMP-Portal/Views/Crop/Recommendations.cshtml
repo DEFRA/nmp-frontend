@@ -33,7 +33,7 @@
         @Html.AntiForgeryToken()
         <div class="govuk-grid-column-two-thirds-from-desktop">
 
-            @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
+            @if (ViewBag.Success != null && ViewBag.Success && TempData["successMsg"] != null)
             {
                 <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
@@ -48,7 +48,7 @@
 
                 </govuk-notification-banner>
             }
-            @if (ViewBag.IsThereAnyPreviousCropping != null && ViewBag.IsThereAnyPreviousCropping == false)
+            @if (ViewBag.IsThereAnyPreviousCropping != null && !ViewBag.IsThereAnyPreviousCropping)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>

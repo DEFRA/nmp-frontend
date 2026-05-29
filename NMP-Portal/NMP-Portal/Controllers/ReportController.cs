@@ -6623,7 +6623,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.LettuceFieldsListHint = BuildHint(cropGroups, Resource.lblLettuce, cropTypeMap);
     }
 
-    private int FetchNmaxLimit(int countryId, CropTypeLinkingResponse cropTypeLinkingResponse)
+    private static int FetchNmaxLimit(int countryId, CropTypeLinkingResponse cropTypeLinkingResponse)
     {
 
         switch ((NMP.Commons.Enums.FarmCountry)countryId)
