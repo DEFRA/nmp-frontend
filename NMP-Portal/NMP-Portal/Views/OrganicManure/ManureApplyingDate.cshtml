@@ -19,7 +19,6 @@
         pageHeader = string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, manureTypeName, Model.FieldName);
 
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
-    var backAction = "";
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.ApplicationDate;
 }
 @section BeforeContent {
