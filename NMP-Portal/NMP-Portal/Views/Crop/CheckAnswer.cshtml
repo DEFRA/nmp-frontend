@@ -565,11 +565,6 @@
                     </govuk-summary-list-row>
                     @if (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
                     {
-                        bool renderSowingDate = false;
-                        @if (!renderSowingDate)
-                        {
-                            @for (int i = 0; i < Model.Crops.Count; i++)
-                            {
 
                                 string questionText;
                                 if (!isGrass)
@@ -580,7 +575,7 @@
                                     }
                                     else
                                     {
-                                        questionText = string.Format(Resource.lblWhatIsThePlantingDate, cropName, Model.Crops[i].FieldName);
+                                        questionText = string.Format(Resource.lblWhatIsThePlantingDate, cropName, Model.Crops[0].FieldName);
                                     }
                                 }
                                 else
@@ -591,15 +586,15 @@
                                     }
                                     else
                                     {
-                                        questionText = string.Format(Resource.lblWhatIsTheSowingDateForCropInField, cropName, Model.Crops[i].FieldName);
+                                        questionText = string.Format(Resource.lblWhatIsTheSowingDateForCropInField, cropName, Model.Crops[0].FieldName);
                                     }
                                 }
-                                <govuk-summary-list-row class=@((!Model.Crops[i].SowingDate.HasValue) ? "govuk-error-message" : "")>
+                                <govuk-summary-list-row class=@((!Model.Crops[0].SowingDate.HasValue) ? "govuk-error-message" : "")>
                                     <govuk-summary-list-row-key>
                                         @questionText
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @(Model.Crops[i].SowingDate.HasValue ? Model.Crops[i].SowingDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
+                                        @(Model.Crops[0].SowingDate.HasValue ? Model.Crops[0].SowingDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         <govuk-summary-list-row-action asp-action="SowingDate" asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">
@@ -610,9 +605,8 @@
                                         </govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-                                renderSowingDate = true;
-                            }
-                        }
+                                                          
+                        
                     }
                     else if (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
                     {
@@ -675,11 +669,6 @@
 
                     @if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                     {
-                        bool renderSowingDate = false;
-                        @foreach (var crop in Model.Crops)
-                        {
-                            @if (!renderSowingDate)
-                            {
                                 var isOptional = ViewBag.IsYieldOptional != null;
                                 var isMultiple = Model.Crops.Count > 1 && Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
                                 string cropName = GetCropName(Model);
@@ -689,38 +678,38 @@
                                 {
                                     yieldLabel = isMultiple
                                         ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, cropName)
-                                        : string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, crop.FieldName);
+                                : string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, Model.Crops[0].FieldName);
                                 }
                                 else
                                 {
                                     yieldLabel = isMultiple
                                         ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, cropName)
-                                        : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, crop.FieldName);
+                                : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, Model.Crops[0].FieldName);
                                 }
 
                                 string manualyieldText;
                                 if (isOptional && isMultiple) manualyieldText = string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, cropName);
-                                else if (isOptional) manualyieldText = string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, crop.FieldName);
+                        else if (isOptional) manualyieldText = string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, Model.Crops[0].FieldName);
                                 else if (isMultiple) manualyieldText = string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, cropName);
-                                else manualyieldText = string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, crop.FieldName);
+                                else manualyieldText = string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, Model.Crops[0].FieldName);
 
-                                <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !crop.Yield.HasValue) ? "govuk-error-message" : "")>
+                        <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !Model.Crops[0].Yield.HasValue) ? "govuk-error-message" : "")>
                                     <govuk-summary-list-row-key>
 
                                         @yieldLabel
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @if (ViewBag.DefaultYield == null && (!crop.Yield.HasValue))
+                                @if (ViewBag.DefaultYield == null && (!Model.Crops[0].Yield.HasValue))
                                         {
                                             @Resource.lblNotSet
                                         }
                                         else
                                         {
-                                            @FormatYield(crop.Yield)
+                                    @FormatYield(Model.Crops[0].Yield)
                                         }
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        @if (crop.Yield == null && (Model.YieldQuestion == null) && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)))
+                                @if (Model.Crops[0].Yield == null && (Model.YieldQuestion == null) && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)))
                                         {
                                             <govuk-summary-list-row-action asp-action="YieldQuestion" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>
                                                 @Resource.lblChange
@@ -740,9 +729,9 @@
                                         }
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-                                renderSowingDate = true;
-                            }
-                        }
+                               
+                            
+                        
                     }
                     else if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                     {
@@ -798,7 +787,6 @@
                         {
                             @foreach (var crop in Model.Crops)
                             {
-
                                 <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !crop.Yield.HasValue) ? "govuk-error-message" : "")>
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)

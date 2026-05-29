@@ -133,21 +133,13 @@ namespace NMP.Portal.Helpers
                     DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
 
                     int applicationMonth = applicationDate.Month;
-
-
-                    if (startMonth <= endMonth && applicationMonth >= startMonth && applicationMonth <= endMonth && applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
-                    {
-                        isWithinClosedPeriod = true;
-                    }
+                    isWithinClosedPeriod = IsWithInClosedPeriod(applicationDate, isWithinClosedPeriod, startMonth, endMonth, closedPeriodStart, closedPeriodEnd, applicationMonth);
                     if (startMonth > endMonth)
                     {
                         if (applicationDate >= closedPeriodEnd)
                         {
                             DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                            if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEndNextYear)
-                            {
-                                isWithinClosedPeriod = true;
-                            }
+                            isWithinClosedPeriod = IsApplicationDateIsWithInClosedPeriod(applicationDate, isWithinClosedPeriod, closedPeriodStart, closedPeriodEndNextYear);
                         }
                         if (applicationDate <= closedPeriodEnd)
                         {
@@ -161,6 +153,26 @@ namespace NMP.Portal.Helpers
                     }
                     return isWithinClosedPeriod;
                 }
+            }
+
+            return isWithinClosedPeriod;
+        }
+
+        private static bool IsApplicationDateIsWithInClosedPeriod(DateTime applicationDate, bool isWithinClosedPeriod, DateTime closedPeriodStart, DateTime closedPeriodEndNextYear)
+        {
+            if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEndNextYear)
+            {
+                isWithinClosedPeriod = true;
+            }
+
+            return isWithinClosedPeriod;
+        }
+
+        private static bool IsWithInClosedPeriod(DateTime applicationDate, bool isWithinClosedPeriod, int startMonth, int endMonth, DateTime closedPeriodStart, DateTime closedPeriodEnd, int applicationMonth)
+        {
+            if (startMonth <= endMonth && applicationMonth >= startMonth && applicationMonth <= endMonth && applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
+            {
+                isWithinClosedPeriod = true;
             }
 
             return isWithinClosedPeriod;
@@ -358,18 +370,12 @@ namespace NMP.Portal.Helpers
                     if (startMonth < endMonth)
                     {
                         DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
-                        {
-                            isWithinClosedPeriodAndFebruary = true;
-                        }
+                        isWithinClosedPeriodAndFebruary = IsWithinClosedPeriodAndFebruary(applicationDate, isWithinClosedPeriodAndFebruary, endOfFebruaryDate, ClosedPeriodEndDateMinusOne);
                     }
                     if (startMonth > endMonth && applicationDate > ClosedPeriodEndDate)
                     {
                         DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
-                        {
-                            isWithinClosedPeriodAndFebruary = true;
-                        }
+                        isWithinClosedPeriodAndFebruary = IsApplicationIsInClosedPeriod(applicationDate, isWithinClosedPeriodAndFebruary, ClosedPeriodEndDate, endOfFebruaryDatePlusOne);
 
                         DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                         if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
@@ -379,6 +385,26 @@ namespace NMP.Portal.Helpers
                     }
 
                 }
+            }
+
+            return isWithinClosedPeriodAndFebruary;
+        }
+
+        private static bool? IsApplicationIsInClosedPeriod(DateTime applicationDate, bool? isWithinClosedPeriodAndFebruary, DateTime ClosedPeriodEndDate, DateTime endOfFebruaryDatePlusOne)
+        {
+            if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
+            {
+                isWithinClosedPeriodAndFebruary = true;
+            }
+
+            return isWithinClosedPeriodAndFebruary;
+        }
+
+        private static bool? IsWithinClosedPeriodAndFebruary(DateTime applicationDate, bool? isWithinClosedPeriodAndFebruary, DateTime endOfFebruaryDate, DateTime ClosedPeriodEndDateMinusOne)
+        {
+            if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+            {
+                isWithinClosedPeriodAndFebruary = true;
             }
 
             return isWithinClosedPeriodAndFebruary;
@@ -403,8 +429,9 @@ namespace NMP.Portal.Helpers
                 WarningPeriod = isSandyShallowSoil
                     ? string.Format(Resource.lbl1Septo31Oct, Resource.lblSeptember, Resource.lblOctober)
                     : string.Format(Resource.lbl15Octto31Oct, Resource.lblOctober, Resource.lblOctober);
+                return WarningPeriod;
             }
-            else if (isFieldTypeArable)
+             if (isFieldTypeArable)
             {
                 switch (cropTypeId)
                 {
