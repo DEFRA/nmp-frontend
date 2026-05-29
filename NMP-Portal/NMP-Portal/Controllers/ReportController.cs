@@ -4851,7 +4851,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             int? defaultOccupancy = 0;
             if (livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy != null)
             {
-                defaultOccupancy = (int?)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy ?? 0;
+                var livestockType = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId);
+                defaultOccupancy = (int)(livestockType?.Occupancy ?? 0);
             }
             var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
 
