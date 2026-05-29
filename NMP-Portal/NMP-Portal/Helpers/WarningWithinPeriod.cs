@@ -13,7 +13,8 @@ namespace NMP.Portal.Helpers
 {
     public class WarningWithinPeriod
     {
-        public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial, int? countryId)
+        private const string _pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+        public static string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial, int? countryId)
         {
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16, 00, 00, 00, DateTimeKind.Unspecified);
 
@@ -116,12 +117,11 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
         }
 
-        public bool ClosedPeriodWarningMessage(DateTime applicationDate, string? closedPeriod, string cropType, FieldDetailResponse fieldDetail, bool IsRegisteredOrganic)
+        public static bool ClosedPeriodWarningMessage(DateTime applicationDate, string? closedPeriod, string cropType, FieldDetailResponse fieldDetail, bool IsRegisteredOrganic)
         {
             bool isWithinClosedPeriod = false;
 
-            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+            Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -184,11 +184,10 @@ namespace NMP.Portal.Helpers
             return dtfi;
         }
 
-        public string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string? closedPeriod, decimal? applicationRate, bool isSlurry, bool isPoultryManure)
+        public static string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string? closedPeriod, decimal? applicationRate, bool isSlurry, bool isPoultryManure)
         {
             string message = string.Empty;
-            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+            Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -268,7 +267,7 @@ namespace NMP.Portal.Helpers
             endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
         }
 
-        public string ClosedPeriodForFertiliserWarningMessage(DateTime applicationDate, int cropTypeId, string soilType, string cropType)
+        public static string ClosedPeriodForFertiliserWarningMessage(DateTime applicationDate, int cropTypeId, string soilType, string cropType)
         {
             string message = string.Empty;
             int day = applicationDate.Day;
@@ -288,7 +287,7 @@ namespace NMP.Portal.Helpers
             }
             return message;
         }
-        public string NitrogenLimitForFertiliserExceptBrassicasWarningMessage(int cropType, string cropTypeName, decimal totalNitrogen, decimal nitrogenOfSingleApp)
+        public static string NitrogenLimitForFertiliserExceptBrassicasWarningMessage(int cropType, string cropTypeName, decimal totalNitrogen, decimal nitrogenOfSingleApp)
         {
             string message = string.Empty;
 
@@ -326,7 +325,7 @@ namespace NMP.Portal.Helpers
             }
             return message;
         }
-        public string NitrogenLimitForFertiliserForBrassicasWarningMessage(decimal totalNitrogen, decimal nitrogenInOneDuration = 0, decimal singleApplicationNitrogen = 0)
+        public static string NitrogenLimitForFertiliserForBrassicasWarningMessage(decimal totalNitrogen, decimal nitrogenInOneDuration = 0, decimal singleApplicationNitrogen = 0)
         {
             string message = string.Empty;
             if (totalNitrogen > 100 || singleApplicationNitrogen > 50 || nitrogenInOneDuration > 50)
@@ -337,11 +336,10 @@ namespace NMP.Portal.Helpers
             return message;
         }
 
-        public bool? CheckEndClosedPeriodAndFebruary(DateTime applicationDate, string? closedPeriod)
+        public static bool? CheckEndClosedPeriodAndFebruary(DateTime applicationDate, string? closedPeriod)
         {
             bool? isWithinClosedPeriodAndFebruary = null;
-            const string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+            Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -386,7 +384,7 @@ namespace NMP.Portal.Helpers
             return isWithinClosedPeriodAndFebruary;
         }
 
-        public string? WarningPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
+        public static string? WarningPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? WarningPeriod = null;
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16, 00, 00, 00, DateTimeKind.Unspecified);
@@ -517,7 +515,7 @@ namespace NMP.Portal.Helpers
 
             return IsWithinPeriod(applicationDate, startDay, startMonth, endDay, endMonth);
         }
-        private static Regex GetRegex() => new Regex(@"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)", RegexOptions.Compiled | RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+        private static Regex GetRegex() => new Regex(_pattern, RegexOptions.Compiled | RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
         private static (int startDay, int startMonth, int endDay, int endMonth) ExtractPeriod(Match match)
         {

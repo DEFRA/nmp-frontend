@@ -9,12 +9,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 
-    int PotatoGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
-    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
-    int LessThan60days = (int)NMP.Commons.Enums.PotatoCropInfo1.LessThan60days;
-    int GreaterThan120days = (int)NMP.Commons.Enums.PotatoCropInfo1.GreaterThan120days;
-    int PotatoVarietyGroup1 = (int)NMP.Commons.Enums.CropType.PotatoVarietyGroup1;
-    int PotatoVarietyGroup4 = (int)NMP.Commons.Enums.CropType.PotatoVarietyGroup4;
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.CropInfoOne;
 }
 
