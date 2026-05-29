@@ -35,26 +35,29 @@ namespace NMP.Portal.Controllers
         private const string _soilNutrientValueActionName = "SoilNutrientValue";
         private const string _potassiumIndexValue = "PotassiumIndexValue";
         private const string _magnesiumIndex = "MagnesiumIndex";
-        private const string _phosphorusIndex = "PhosphorusIndex";
+        private const string _phosphorusIndex = "PhosphorusIndex";  //Field
+        private const string _soilAnalysisDataKey = "SoilAnalysisData";
+        private const string _fieldSoilAnalysisDetailAction = "FieldSoilAnalysisDetail";
+        private const string _fieldController = "Field";
         private SoilAnalysisViewModel? GetSoilAnalysisFromSession()
         {
-            if (HttpContext.Session.Exists("SoilAnalysisData"))
+            if (HttpContext.Session.Exists(_soilAnalysisDataKey))
             {
-                return HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisData");
+                return HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>(_soilAnalysisDataKey);
             }
             return null;
         }
 
         private void SetSoilAnalysisDataToSession(SoilAnalysisViewModel plan)
         {
-            HttpContext.Session.SetObjectAsJson("SoilAnalysisData", plan);
+            HttpContext.Session.SetObjectAsJson(_soilAnalysisDataKey, plan);
         }
 
         private void RemoveSoilAnalysisDataFromSession()
         {
-            if (HttpContext.Session.Exists("SoilAnalysisData"))
+            if (HttpContext.Session.Exists(_soilAnalysisDataKey))
             {
-                HttpContext.Session.Remove("SoilAnalysisData");
+                HttpContext.Session.Remove(_soilAnalysisDataKey);
             }
         }
         private void ValidateSoilAnalysisIndexValues(SoilAnalysisViewModel model)
@@ -1015,7 +1018,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
-                return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis), s = (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value) ? _soilAnalysisDataProtector.Protect(Resource.lblAdd) : _soilAnalysisDataProtector.Protect(Resource.lblUpdate) });
+                return RedirectToAction(_fieldSoilAnalysisDetailAction, _fieldController, new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis), s = (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value) ? _soilAnalysisDataProtector.Protect(Resource.lblAdd) : _soilAnalysisDataProtector.Protect(Resource.lblUpdate) });
             }
             catch (Exception ex)
             {
@@ -1092,7 +1095,7 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
                 success = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
-                return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis), s = _soilAnalysisDataProtector.Protect(Resource.lblRemove) });
+                return RedirectToAction(_fieldSoilAnalysisDetailAction, _fieldController, new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis), s = _soilAnalysisDataProtector.Protect(Resource.lblRemove) });
             }
             else
             {
@@ -1148,7 +1151,7 @@ namespace NMP.Portal.Controllers
             else
             {
                 RemoveSoilAnalysisDataFromSession();
-                return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId });
+                return RedirectToAction(_fieldSoilAnalysisDetailAction, _fieldController, new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId });
             }
         }
 
@@ -1173,7 +1176,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("FieldSoilAnalysisDetail", "Field", new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId });
+                    return RedirectToAction(_fieldSoilAnalysisDetailAction, _fieldController, new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId });
                 }
             }
             catch (Exception ex)
