@@ -3090,8 +3090,6 @@ managementPeriod.CropID.HasValue
                 List<ManureType> manureTypeList = new List<ManureType>();
                 (manureTypeList, error) = await GetManureTypeList(model);
 
-                var manureType = GetAndApplyManureType(model, manureTypeList, error);
-
                 List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                 var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
                 string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
@@ -3134,7 +3132,6 @@ managementPeriod.CropID.HasValue
                 if (!ModelState.IsValid)
                 {
 
-                    var manureType = GetAndApplyManureType(model, manureTypeList, error);
                     List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                     var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
                     string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
