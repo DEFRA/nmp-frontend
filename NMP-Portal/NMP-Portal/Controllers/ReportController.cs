@@ -5209,7 +5209,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
                     model.EncryptedHarvestYear = y;
                 }
-                List<HarvestYear> harvestYearList = new List<HarvestYear>();
                 (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
 
                 if (string.IsNullOrWhiteSpace(error?.Message))
@@ -5832,7 +5831,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     Error error = null;
                     int id = Convert.ToInt32(_reportDataProtector.Unprotect(model.EncryptedId));
-                    (string success, error) = await _reportLogic.DeleteNutrientsLoadingManureByIdAsync(id);
+                    (_, error) = await _reportLogic.DeleteNutrientsLoadingManureByIdAsync(id);
                     if (!string.IsNullOrWhiteSpace(error?.Message))
                     {
                         TempData["DeleteLivestockImportExportError"] = error.Message;
@@ -6270,7 +6269,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    private List<int> GetReportYearsList(int previousYears = 4)
+    private static List<int> GetReportYearsList(int previousYears = 4)
     {
         int currentYear = DateTime.Now.Year;
         List<int> years = new List<int>();
@@ -6353,12 +6352,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private static string GetGroupName(int cropId, int countryId)
     {
         var cropGroups = (countryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? GetNmaxReportCropGroupsForScotland() : GetNmaxReportCropGroups();
-        foreach (var group in cropGroups)
-        {
-            if (group.Value.Contains(cropId))
-                return group.Key;
-        }
-        return string.Empty; // not in any group
+       
+        return cropGroups
+    .FirstOrDefault(group => group.Value.Contains(cropId))
+    .Key;
     }
 
     [HttpGet]
@@ -6400,7 +6397,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     Error? error = null;
                     int id = Convert.ToInt32(_reportDataProtector.Unprotect(model.EncryptedNLLivestockID));
-                    (string success, error) = await _reportLogic.DeleteNutrientsLoadingLivestockByIdAsync(id);
+                    (_, error) = await _reportLogic.DeleteNutrientsLoadingLivestockByIdAsync(id);
                     if (!string.IsNullOrWhiteSpace(error?.Message))
                     {
                         TempData["DeleteNLLivestockError"] = error.Message;
