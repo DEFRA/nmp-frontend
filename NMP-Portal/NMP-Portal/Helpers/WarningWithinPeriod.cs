@@ -224,19 +224,14 @@ namespace NMP.Portal.Helpers
 
                     if (startMonth < endMonth)
                     {
-                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
-                        {
-                            message = WarningMessageIfStartMonthIsLessThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, message, endDay, endMonth, endMonthFullName, endOfFebruaryDate);
-                        }
+                        message = WarningMessageIfStartMonthIsLessThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, endDay, endMonth, endMonthFullName);
+
                     }
                     if (startMonth > endMonth && applicationDate > ClosedPeriodEndDate)
                     {
-                        DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
-                        {
-                            message = WaringMessageIfStartMonthIsGreaterThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, message, endDay, endMonthFullName, ClosedPeriodEndDate, endOfFebruaryDatePlusOne);
-                        }
+
+                        message = WaringMessageIfStartMonthIsGreaterThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, endMonth, endDay, endMonthFullName);
+
                         DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                         if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                         {
@@ -266,34 +261,46 @@ namespace NMP.Portal.Helpers
             return message;
         }
 
-        private static string WaringMessageIfStartMonthIsGreaterThanEndMonth(DateTime applicationDate, decimal? applicationRate, bool isSlurry, bool isPoultryManure, string message, int endDay, string endMonthFullName, DateTime ClosedPeriodEndDate, DateTime endOfFebruaryDatePlusOne)
+        private static string WaringMessageIfStartMonthIsGreaterThanEndMonth(DateTime applicationDate, decimal? applicationRate, bool isSlurry, bool isPoultryManure, int endMonth, int endDay, string endMonthFullName)
         {
+            string message = string.Empty;
+            DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
 
-            if (isSlurry && applicationRate > 30)
+            DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+            if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
             {
-                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-            }
-            if (isPoultryManure && applicationRate > 8)
-            {
-                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                if (isSlurry && applicationRate > 30)
+                {
+                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                }
+                if (isPoultryManure && applicationRate > 8)
+                {
+                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                }
             }
 
 
             return message;
         }
 
-        private static string WarningMessageIfStartMonthIsLessThanEndMonth(DateTime applicationDate, decimal? applicationRate, bool isSlurry, bool isPoultryManure, string message, int endDay, int endMonth, string endMonthFullName, DateTime endOfFebruaryDate)
+        private static string WarningMessageIfStartMonthIsLessThanEndMonth(DateTime applicationDate, decimal? applicationRate, bool isSlurry, bool isPoultryManure, int endDay, int endMonth, string endMonthFullName)
         {
+            string message = string.Empty;
+            DateTime? endDateFebruary =   new DateTime(applicationDate.Year, 3, 1, 00, 00, 00, DateTimeKind.Unspecified);
+            DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day, 00, 00, 00, DateTimeKind.Unspecified);
 
-            if (isSlurry && applicationRate > 30)
+            DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+            if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
             {
-                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                if (isSlurry && applicationRate > 30)
+                {
+                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                }
+                if (isPoultryManure && applicationRate > 8)
+                {
+                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                }
             }
-            if (isPoultryManure && applicationRate > 8)
-            {
-                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-            }
-
 
             return message;
         }
