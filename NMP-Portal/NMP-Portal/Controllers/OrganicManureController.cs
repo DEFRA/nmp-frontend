@@ -3091,7 +3091,6 @@ managementPeriod.CropID.HasValue
                 (manureTypeList, error) = await GetManureTypeList(model);
 
                 var manureType = GetAndApplyManureType(model, manureTypeList, error);
-                bool isLiquid = manureType?.IsLiquid ?? false;
 
                 List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                 var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
@@ -3136,7 +3135,6 @@ managementPeriod.CropID.HasValue
                 {
 
                     var manureType = GetAndApplyManureType(model, manureTypeList, error);
-                    bool isLiquid = manureType?.IsLiquid ?? false;
                     List<Crop> cropsResponse = await _cropLogic.FetchCropsByFieldId(Convert.ToInt32(model.FieldList[0]));
                     var fieldType = cropsResponse.Where(x => x.Year == model.HarvestYear).Select(x => x.FieldType).FirstOrDefault();
                     string applicableForArableOrGrass = fieldType == 1 ? Resource.lblA : Resource.lblG;
@@ -7706,28 +7704,29 @@ managementPeriod.CropID.HasValue
                 {
 
                     int counter = 0;
-                    foreach (var cropId in model.DoubleCrop.Select(doubleCrop => doubleCrop.CropID))
+                    foreach (var cropId in model.DoubleCrop.Select(doubleCrop => doubleCrop.CropID).Where(cropId => cropId > 0))
                     {
-                        if (cropId > 0)
-                        {
-                            (Crop crop, error) = await _cropLogic.FetchCropById(cropId);
-                            if (string.IsNullOrWhiteSpace(error?.Message) && crop != null && model.OrganicManures != null && model.OrganicManures.Count > 0)
-                            {
-                                int index = model.OrganicManures
-                                .FindIndex(f => f.FieldID == crop.FieldID);
-                                if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && index >= 0)
-                                {
-                                    model.OrganicManures[index].IsGrass = true;
-                                    counter++;
-                                    model.IsAnyCropIsGrass = true;
-                                }
-                                else if (model.OrganicManures.Any(f => f.IsGrass && f.FieldID == crop.FieldID))
-                                {
-                                    model.OrganicManures[index].IsGrass = false;
-                                    model.OrganicManures[index].Defoliation = null;
-                                    model.OrganicManures[index].DefoliationName = null;
-                                }
+                        (Crop crop, error) = await _cropLogic.FetchCropById(cropId);
 
+                        if (string.IsNullOrWhiteSpace(error?.Message) &&
+                            crop != null &&
+                            model.OrganicManures != null &&
+                            model.OrganicManures.Count > 0)
+                        {
+                            int index = model.OrganicManures
+                                .FindIndex(f => f.FieldID == crop.FieldID);
+
+                            if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && index >= 0)
+                            {
+                                model.OrganicManures[index].IsGrass = true;
+                                counter++;
+                                model.IsAnyCropIsGrass = true;
+                            }
+                            else if (model.OrganicManures.Any(f => f.IsGrass && f.FieldID == crop.FieldID))
+                            {
+                                model.OrganicManures[index].IsGrass = false;
+                                model.OrganicManures[index].Defoliation = null;
+                                model.OrganicManures[index].DefoliationName = null;
                             }
                         }
                     }
