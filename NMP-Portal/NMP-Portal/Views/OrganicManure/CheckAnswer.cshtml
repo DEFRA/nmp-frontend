@@ -290,32 +290,7 @@
                                 
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @if (ViewBag.SelectedFields != null)
-                                {
-                                    if (ViewBag.SelectedFields.Count <= Convert.ToInt32(Resource.FieldGreaterThanX))
-                                    {
-                                        @foreach (var item in ViewBag.SelectedFields)
-                                        {
-                                            @item <br />
-                                        }
-                                    }
-                                    else
-                                    {
-                                        @string.Format(Resource.lblFarmFields, ViewBag.SelectedFields.Count)
-                                        <govuk-details>
-                                            <govuk-details-summary>
-                                                @Resource.lblViewFields
-                                            </govuk-details-summary>
-                                            <govuk-details-text>
-
-                                                @foreach (var item in ViewBag.SelectedFields)
-                                                {
-                                                    @item <br />
-                                                }
-                                            </govuk-details-text>
-                                        </govuk-details>
-                                    }
-                                }
+                            <partial name="_SelectedFields" model="ViewBag.SelectedFields" />
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>                               
                                     <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)?"FieldGroup":"Fields")" asp-controller="OrganicManure" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">@Resource.lblChange
