@@ -191,14 +191,14 @@ namespace NMP.Commons.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem..
         /// </summary>
-        public static string contentGettingHelp4 {
+        public static string ContentGettingHelp4 {
             get {
-                return ResourceManager.GetString("contentGettingHelp4", resourceCulture);
+                return ResourceManager.GetString("ContentGettingHelp4", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To give feedback about this tool, &lt;a href=&quot;https://defragroup.eu.qualtrics.com/jfe9/preview/previewId/7f7cf227-7598-4bef-9b16-093ce6e401fe/SV_dogonGGVlp5XLEi?Q_CHL=preview&amp;Q_SurveyVersionID=current&quot;  target=&quot;_blank&quot;&gt;complete the feedback survey &lt;/a&gt;(open a new window)..
+        ///   Looks up a localized string similar to To give feedback about this tool, &lt;a href=&quot;https://defragroup.eu.qualtrics.com/jfe9/preview/previewId/7f7cf227-7598-4bef-9b16-093ce6e401fe/SV_dogonGGVlp5XLEi?Q_CHL=preview&amp;Q_SurveyVersionID=current&quot;  target=&quot;_blank&quot;&gt;complete the feedback survey&lt;/a&gt; (opens in a new window)..
         /// </summary>
         public static string contentGivingFeedbackAboutThisService1 {
             get {
@@ -6381,7 +6381,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Alongside this tool you should use the AHDB Nutrient Management Guide (RB209).&lt;a href=&quot;https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use&quot; target=&quot;_blank&quot;&gt; Get more information or help with RB209&lt;/a&gt; (open a new window)..
+        ///   Looks up a localized string similar to Alongside this tool you should use the AHDB Nutrient Management Guide (RB209).&lt;a href=&quot;https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use&quot; target=&quot;_blank&quot;&gt; Get more information or help with RB209&lt;/a&gt; (opens in a new window)..
         /// </summary>
         public static string lblGetHelpContent {
             get {
