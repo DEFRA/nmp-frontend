@@ -2,7 +2,6 @@
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblAddYearCropHistoryToFieldName, Model.HarvestYear, Model.FieldName)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
-    bool needToShowCropGroupEngand = (Model.HasGrassInLastThreeYear.HasValue && (!Model.HasGrassInLastThreeYear.Value) || (Model.IsPreviousYearGrass.HasValue && !Model.IsPreviousYearGrass.Value));
     string grassText;
 
     if (!Model.HasGrassInLastThreeYear.HasValue)
@@ -94,7 +93,7 @@
                                 </govuk-summary-list-row-actions>
 
                             </govuk-summary-list-row>
-                            @if (!(Model.PreviousGrassYears?.Count == 3) && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears[0] == Model.HarvestYear))
+                            @if (Model.PreviousGrassYears?.Count != 3 && !(Model.PreviousGrassYears?.Count <= 2 && Model.PreviousGrassYears[0] == Model.HarvestYear))
                             {
                                 <govuk-summary-list-row class=@((!Model.LayDuration.HasValue)?"govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
