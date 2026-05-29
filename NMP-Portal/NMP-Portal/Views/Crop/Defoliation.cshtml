@@ -4,9 +4,6 @@
 
     var bachAction = (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
      "SwardType";
-    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
-    int potentialCutId = 0;
-
     var pageHeading = "";
     if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly)
     {

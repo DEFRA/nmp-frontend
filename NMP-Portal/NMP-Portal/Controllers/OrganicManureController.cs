@@ -5688,11 +5688,10 @@ managementPeriod.CropID.HasValue
         private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal)> BindNmaxForIsNMaxWarningMessage(OrganicManureViewModel model, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales, bool hasSpecialManure)
         {
             decimal nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-
-            OrganicManureNMaxLimitLogic organicManureNMaxLimitLogic = new OrganicManureNMaxLimitLogic();
+                        
             if (model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
-                nMaxLimit = organicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
+                nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
 
             }
             else
@@ -5769,11 +5768,10 @@ managementPeriod.CropID.HasValue
             bool isSlurry = IsSlurry(model.ManureTypeId);
             bool isPoultry = IsPoultryManure(model.ManureTypeId);
 
-            var warningHelper = new WarningWithinPeriod();
 
             if (IsNonScotland(model))
             {
-                return HandleNonScotland(model, farm, warningList, closedPeriod, warningHelper, isSlurry, isPoultry);
+                return HandleNonScotland(model, farm, warningList, closedPeriod,  isSlurry, isPoultry);
             }
 
             return await HandleScotland(model, farm, warningList, cropId, fieldId, closedPeriod, isPoultry);
@@ -5787,9 +5785,9 @@ managementPeriod.CropID.HasValue
         {
             return model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland;
         }
-        private (OrganicManureViewModel, Error?) HandleNonScotland(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, string? closedPeriod, WarningWithinPeriod warningHelper, bool isSlurry, bool isPoultry)
+        private (OrganicManureViewModel, Error?) HandleNonScotland(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, string? closedPeriod, bool isSlurry, bool isPoultry)
         {
-            if (!IsWithinClosedPeriodAndFeb(model, closedPeriod, warningHelper))
+            if (!IsWithinClosedPeriodAndFeb(model, closedPeriod))
                 return (model, null);
 
             ApplyWarnings(model, farm, warningList, isSlurry, isPoultry);
@@ -5928,12 +5926,12 @@ managementPeriod.CropID.HasValue
         {
             return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
         }
-        private static bool IsWithinClosedPeriodAndFeb(OrganicManureViewModel model, string? closedPeriod, WarningWithinPeriod helper)
+        private static bool IsWithinClosedPeriodAndFeb(OrganicManureViewModel model, string? closedPeriod)
         {
             if (!model.ApplicationDate.HasValue)
                 return false;
 
-            return helper.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, closedPeriod) == true;
+            return WarningWithinPeriod.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, closedPeriod) == true;
         }
 
         private void ApplyWarningsRanAndPoultryTotalRateLimit(OrganicManureViewModel model, Farm farm, List<WarningResponse> warningList, bool isRanExceptPoultry, decimal? totalApplicationRate, bool isPoultry, bool isInFebPeriod)
@@ -6015,7 +6013,7 @@ managementPeriod.CropID.HasValue
 
             model = updatedModel;
 
-            (model, error) = await HandleTwentyDayRule(model, fieldId, closedPeriod, new WarningWithinPeriod());
+            (model, error) = await HandleTwentyDayRule(model, fieldId, closedPeriod);
             if (error != null) return (model, error);
 
             if (IsScotland(model))
@@ -6313,12 +6311,12 @@ managementPeriod.CropID.HasValue
         }
 
         private async Task<(OrganicManureViewModel, Error?)> HandleTwentyDayRule(
-            OrganicManureViewModel model, int fieldId, string closedPeriod, WarningWithinPeriod warningMessage)
+            OrganicManureViewModel model, int fieldId, string closedPeriod)
         {
             Error? error = null;
 
             bool? isWithinClosedPeriodAndFebruary =
-                warningMessage.CheckEndClosedPeriodAndFebruary(
+                WarningWithinPeriod.CheckEndClosedPeriodAndFebruary(
                     model.ApplicationDate.Value,
                     closedPeriod);
 

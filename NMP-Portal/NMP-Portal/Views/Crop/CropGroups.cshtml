@@ -5,7 +5,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{Resource.lblCropGroupForPlan} {Resource.lblHyphen} {title}";
 
-    int otherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     int grassGroupId = (int)NMP.Commons.Enums.CropGroup.Grass;
 
     int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);

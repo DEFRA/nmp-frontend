@@ -3,10 +3,10 @@ using NMP.Commons.Helpers;
 
 namespace NMP.Portal.Helpers
 {
-    public class OrganicManureNMaxLimitLogic
+    public static class OrganicManureNMaxLimitLogic
     {
 #pragma warning disable S107
-        public int NMaxLimit(int nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId,
+        public static int NMaxLimit(int nmaxLimit, decimal? yield, string soilType, int? cropInfo1, int cropTypeId,
             int potentialCut, bool hasSpecialManure, int? defoliationSequenceId)
         {
 
