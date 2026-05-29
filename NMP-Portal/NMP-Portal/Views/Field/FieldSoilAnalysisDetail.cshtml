@@ -205,7 +205,7 @@
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@Resource.lblHighCloverContent</td>
-                                    <td class="govuk-table__cell">@(Model.PreviousCroppings.HasGreaterThan30PercentClover.Value == true ? Resource.lblYes : Resource.lblNo)</td>
+                                    <td class="govuk-table__cell">@(Model.PreviousCroppings.HasGreaterThan30PercentClover.Value ? Resource.lblYes : Resource.lblNo)</td>
                                 </tr>
                             }
 
