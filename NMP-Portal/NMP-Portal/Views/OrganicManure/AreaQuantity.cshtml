@@ -4,8 +4,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{Resource.lblEnterTheAreaAndQuantity} {Resource.lblHyphen} {title}";
     
-    var isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? true : false;
-
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {

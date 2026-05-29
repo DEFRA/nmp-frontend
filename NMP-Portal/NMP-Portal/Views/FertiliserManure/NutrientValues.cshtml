@@ -5,7 +5,6 @@
 
     string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    var count = 0;
 
     var isFieldsEmpty = false;
     if (ViewData["IsPostRequest"] != null)

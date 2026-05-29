@@ -95,7 +95,7 @@
                             <govuk-summary-list-row-key>
                                 @Resource.lblAutumnCropNitrogenUptake
                             </govuk-summary-list-row-key>
-                            @if (Model.AutumnCropNitrogenUptakes.All(x => x.AutumnCropNitrogenUptake == Model.AutumnCropNitrogenUptakes.First().AutumnCropNitrogenUptake))
+                            @if (Model.AutumnCropNitrogenUptakes.All(x => x.AutumnCropNitrogenUptake == Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake))
                             {
                                 <govuk-summary-list-row-value>@string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake.ToString("#,0.#")))</govuk-summary-list-row-value>
                             }
