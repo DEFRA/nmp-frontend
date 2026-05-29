@@ -2,8 +2,6 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblAddLivestockDetailsFor, Model.Year)} {Resource.lblHyphen} {Resource.lblAddLivestockNumber}";
-    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 
     var cattle = (int)NMP.Commons.Enums.LivestockGroup.Cattle;
     var pigs = (int)NMP.Commons.Enums.LivestockGroup.Pigs;
@@ -41,7 +39,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "BackLivestockCheckAnswer") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackLivestockCheckAnswer") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockCheckAnswer"] != null)
 {
@@ -368,7 +366,7 @@
                     }
                     else
                     {
-                        @if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+                        @if (ViewBag.IsDataChange != null && ViewBag.IsDataChange)
                         {
                             <a asp-action="Cancel" asp-controller="Report">@Resource.lblCancel</a>
                         }

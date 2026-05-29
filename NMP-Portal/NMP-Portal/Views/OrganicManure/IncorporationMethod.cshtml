@@ -59,7 +59,7 @@
                     {
                         @foreach (var item in ViewBag.IncorporationMethod)
                         {
-                            @if (!(item.ID == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated))
+                            @if (item.ID != (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
                             {
                                 <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
                             }
