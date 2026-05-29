@@ -782,32 +782,26 @@
                     }
                     else if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields)
                     {
-                        bool renderSowingDate = false;
-                        @if (!renderSowingDate)
-                        {
-                            @foreach (var crop in Model.Crops)
-                            {
-                                <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !crop.Yield.HasValue) ? "govuk-error-message" : "")>
+                       
+                                <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !Model.Crops[0].Yield.HasValue) ? "govuk-error-message" : "")>
                                     <govuk-summary-list-row-key>
                                         @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
-                                        @if (ViewBag.DefaultYield != null && (!crop.Yield.HasValue))
+                                        @if (ViewBag.DefaultYield != null && (!Model.Crops[0].Yield.HasValue))
                                         {
                                             @Resource.lblNotSet
                                         }
                                         else
                                         {
-                                            @FormatYield(crop.Yield)
+                                    @FormatYield(Model.Crops[0].Yield)
                                         }
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
                                         @* <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action> *@
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-                                renderSowingDate = true;
-                            }
-                        }
+                               
                     }
                     @if (Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && ((Model.CropInfo1 == null && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))) || Model.CropInfo1 != null && Model.CropInfo1 != 0))
                     {

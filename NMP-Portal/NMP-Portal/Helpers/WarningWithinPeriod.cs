@@ -78,7 +78,7 @@ namespace NMP.Portal.Helpers
             return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
         }
 
-        public static string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId,  bool isPerennial, int? countryId)
+        public static string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, bool isPerennial, int? countryId)
         {
             string? closedPeriod = null;
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
@@ -224,13 +224,19 @@ namespace NMP.Portal.Helpers
 
                     if (startMonth < endMonth)
                     {
-                        message = WarningMessageIfStartMonthIsLessThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, message, endDay, endMonth, endMonthFullName, endOfFebruaryDate);
+                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+                        {
+                            message = WarningMessageIfStartMonthIsLessThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, message, endDay, endMonth, endMonthFullName, endOfFebruaryDate);
+                        }
                     }
                     if (startMonth > endMonth && applicationDate > ClosedPeriodEndDate)
                     {
                         DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        message = WaringMessageIfStartMonthIsGreaterThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, message, endDay, endMonthFullName, ClosedPeriodEndDate, endOfFebruaryDatePlusOne);
-
+                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
+                        {
+                            message = WaringMessageIfStartMonthIsGreaterThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, message, endDay, endMonthFullName, ClosedPeriodEndDate, endOfFebruaryDatePlusOne);
+                        }
                         DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                         if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                         {
@@ -246,51 +252,48 @@ namespace NMP.Portal.Helpers
 
         private static string BindWarningForEndClosedPeriod(decimal? applicationRate, bool isSlurry, bool isPoultryManure, string message, int endDay, string endMonthFullName)
         {
-            
-                if (isSlurry && applicationRate > 30)
-                {
-                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                }
-                if (isPoultryManure && applicationRate > 8)
-                {
-                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                }
-            
+
+            if (isSlurry && applicationRate > 30)
+            {
+                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+            }
+            if (isPoultryManure && applicationRate > 8)
+            {
+                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+            }
+
 
             return message;
         }
 
         private static string WaringMessageIfStartMonthIsGreaterThanEndMonth(DateTime applicationDate, decimal? applicationRate, bool isSlurry, bool isPoultryManure, string message, int endDay, string endMonthFullName, DateTime ClosedPeriodEndDate, DateTime endOfFebruaryDatePlusOne)
         {
-            if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
+
+            if (isSlurry && applicationRate > 30)
             {
-                if (isSlurry && applicationRate > 30)
-                {
-                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                }
-                if (isPoultryManure && applicationRate > 8)
-                {
-                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                }
+                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
             }
+            if (isPoultryManure && applicationRate > 8)
+            {
+                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+            }
+
 
             return message;
         }
 
         private static string WarningMessageIfStartMonthIsLessThanEndMonth(DateTime applicationDate, decimal? applicationRate, bool isSlurry, bool isPoultryManure, string message, int endDay, int endMonth, string endMonthFullName, DateTime endOfFebruaryDate)
         {
-            DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-            if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+
+            if (isSlurry && applicationRate > 30)
             {
-                if (isSlurry && applicationRate > 30)
-                {
-                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                }
-                if (isPoultryManure && applicationRate > 8)
-                {
-                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                }
+                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
             }
+            if (isPoultryManure && applicationRate > 8)
+            {
+                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+            }
+
 
             return message;
         }
@@ -459,7 +462,7 @@ namespace NMP.Portal.Helpers
                     : string.Format(Resource.lbl15Octto31Oct, Resource.lblOctober, Resource.lblOctober);
                 return WarningPeriod;
             }
-             if (isFieldTypeArable)
+            if (isFieldTypeArable)
             {
                 switch (cropTypeId)
                 {
