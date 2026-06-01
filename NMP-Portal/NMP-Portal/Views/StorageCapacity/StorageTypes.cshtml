@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer==true && !Model.IsMaterialTypeChange) ? "CheckAnswer" : "StoreName")" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer && !Model.IsMaterialTypeChange) ? "CheckAnswer" : "StoreName")" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnStorageTypes"] != null)
 {
@@ -61,37 +61,8 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                <p class="govuk-body cancel-link">
-                    @if (!Model.IsCheckAnswer)
-                    {
-                        @if (Model.IsStoreCapacityExist == true)
-                        {
-                            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else
-                        {
-                            @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
-                            {
-                                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
-                                    @Resource.lblCancel
-                                </a>
-                            }
-                            else
-                            {
-                                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
-                                    @Resource.lblCancel
-                                </a>
-                            }
-                        }
-                    }
-                    else
-                    {
-                        <a asp-action="CheckAnswer" asp-controller="StorageCapacity">@Resource.lblCancel</a>
-                    }
-                </p>
-
+               
+                 @await Html.PartialAsync("~/views/StorageCapacity/_CancelLink.cshtml", Model)
             </div>
 
         </div>

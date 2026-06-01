@@ -7,8 +7,7 @@
                              Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImporting :
                              Resource.lblExporting);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
-    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);    
+ 
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.ManureType;
 }
 

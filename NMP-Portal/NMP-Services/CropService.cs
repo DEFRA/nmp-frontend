@@ -18,7 +18,8 @@ namespace NMP.Services;
 public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ICropService
 {
     private readonly ILogger<CropService> _logger = logger;
-
+    private const string _applicationJson = "application/json";
+    private const string _string = "string";
     public async Task<List<PotatoVarietyResponse>> FetchPotatoVarietiesServiceAsync()
     {
 
@@ -165,11 +166,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.AddCropNutrientManagementPlanAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddCropNutrientManagementPlanAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != _string)
             {
                 var cropResponsss = responseWrapper?.Data?.Recommendations;
                 if (cropResponsss != null)
@@ -599,7 +600,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         {
             HttpClient httpClient = await GetNMPAPIClient();
             var jsonContent = JsonConvert.SerializeObject(cropIdsRequest);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var content = new StringContent(jsonContent, Encoding.UTF8, _applicationJson);
             var url = string.Format(ApiurlHelper.DeleteCropPlanByIdsAPI, "");
             var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
             {
@@ -641,7 +642,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data == true)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data)
             {
                 isCropsGroupNameExist = true;
             }
@@ -668,11 +669,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(ApiurlHelper.UpdateCropAPI, new StringContent(cropData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateCropAPI, new StringContent(cropData, Encoding.UTF8, _applicationJson));
             
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != _string)
             {
                 var cropResponse = responseWrapper?.Data?.updatedCrops.ToObject<List<Crop>>();
                 if (cropResponse != null)
@@ -740,7 +741,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         {
             HttpClient httpClient = await GetNMPAPIClient();
             var jsonContent = JsonConvert.SerializeObject(fieldIdsRequest);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var content = new StringContent(jsonContent, Encoding.UTF8, _applicationJson);
             var url = ApiurlHelper.FetchGrassGrowthClassesAsyncAPI;
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
             {
@@ -1137,11 +1138,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
 
             string jsonData = JsonConvert.SerializeObject(requestData);
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.CopyCropNutrientManagementPlanAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.CopyCropNutrientManagementPlanAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != _string)
             {
                 var cropResponses = responseWrapper?.Data?.Recommendations;
                 if (cropResponses != null)
@@ -1172,11 +1173,11 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(ApiurlHelper.MergeCropAPI, new StringContent(cropData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.MergeCropAPI, new StringContent(cropData, Encoding.UTF8, _applicationJson));
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != _string)
             {
                 success = responseWrapper?.Data;
             }

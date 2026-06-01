@@ -2333,8 +2333,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             HashSet<int> brassicaCrops = WarningWithinPeriod.BrassicaCrops();
             Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
             string? closedPeriod = await GetClosedPeriodAsync(model, cropTypeId, field.NVZProgrammeID ?? 0, model.HarvestYear ?? 0);
-            WarningWithinPeriod warningMessage = new WarningWithinPeriod();
-            bool isWithinClosedPeriod = warningMessage.IsApplicationDateWithinDateRange(model.Date.Value, startDate, endDate);
+   
+            bool isWithinClosedPeriod = WarningWithinPeriod.IsApplicationDateWithinDateRange(model.Date.Value, startDate, endDate);
             bool isCropBrassicaAndWithInClosedPeriod = brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod;
             (string startPeriod, string endPeriod) = _fertiliserManureLogic.BindStartPeriodAndEndPeriod(closedPeriod);
             //warning excel sheet row no. 25

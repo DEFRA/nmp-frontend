@@ -14,8 +14,6 @@
     ViewData["Title"] = (Model != null && (!string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId)))
     ? $"{heading} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" :
     $"{heading} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
-    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.Date;
 }
 

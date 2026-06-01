@@ -11,7 +11,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NMP.Portal.Helpers
 {
-    public class WarningWithinPeriod
+    public static class WarningWithinPeriod
     {
         private const string _pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
         public static string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial, int? countryId)
@@ -644,7 +644,7 @@ namespace NMP.Portal.Helpers
             return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
         }
 
-        public bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
+        public static bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
         {
             bool isWithinDateRange = false;
             if (applicationDate.HasValue && startDate.HasValue && endDate.HasValue && applicationDate.Value >= startDate.Value && applicationDate.Value <= endDate.Value)
