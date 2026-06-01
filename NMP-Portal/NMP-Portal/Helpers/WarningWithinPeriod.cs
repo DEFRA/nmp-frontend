@@ -11,9 +11,10 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NMP.Portal.Helpers
 {
-    public class WarningWithinPeriod
+    public static class WarningWithinPeriod
     {
-        public string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial, int? countryId)
+        private const string _pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
+        public static string? ClosedPeriodNonOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, bool isPerennial, int? countryId)
         {
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16, 00, 00, 00, DateTimeKind.Unspecified);
 
@@ -77,7 +78,7 @@ namespace NMP.Portal.Helpers
             return string.Format(Resource.lbl1Octto31Jan, Resource.lblOctober, Resource.lblJanuary);
         }
 
-        public string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial, int? countryId)
+        public static string? ClosedPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, bool isPerennial, int? countryId)
         {
             string? closedPeriod = null;
             var isSandyShallowSoil = fieldDetail.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.LightSand ||
@@ -116,12 +117,11 @@ namespace NMP.Portal.Helpers
             return closedPeriod;
         }
 
-        public bool ClosedPeriodWarningMessage(DateTime applicationDate, string? closedPeriod, string cropType, FieldDetailResponse fieldDetail, bool IsRegisteredOrganic)
+        public static bool ClosedPeriodWarningMessage(DateTime applicationDate, string? closedPeriod, string cropType, FieldDetailResponse fieldDetail, bool IsRegisteredOrganic)
         {
             bool isWithinClosedPeriod = false;
 
-            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+            Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -133,34 +133,52 @@ namespace NMP.Portal.Helpers
                     DateTime closedPeriodEnd = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
 
                     int applicationMonth = applicationDate.Month;
-
-
-                    if (startMonth <= endMonth && applicationMonth >= startMonth && applicationMonth <= endMonth && applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
-                    {
-                        isWithinClosedPeriod = true;
-                    }
+                    isWithinClosedPeriod = IsWithInClosedPeriod(applicationDate, isWithinClosedPeriod, startMonth, endMonth, closedPeriodStart, closedPeriodEnd, applicationMonth);
                     if (startMonth > endMonth)
                     {
                         if (applicationDate >= closedPeriodEnd)
                         {
                             DateTime closedPeriodEndNextYear = new DateTime(applicationDate.Year + 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                            if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEndNextYear)
-                            {
-                                isWithinClosedPeriod = true;
-                            }
+                            isWithinClosedPeriod = IsApplicationDateIsGreaterThanClosedPeriod(applicationDate, isWithinClosedPeriod, closedPeriodStart, closedPeriodEndNextYear);
                         }
                         if (applicationDate <= closedPeriodEnd)
                         {
                             DateTime closedPeriodStartPreviousYear = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
-
-                            if (applicationDate >= closedPeriodStartPreviousYear && applicationDate <= closedPeriodEnd)
-                            {
-                                isWithinClosedPeriod = true;
-                            }
+                            isWithinClosedPeriod = IsApplicationDateIsLessThanClosedPeriod(applicationDate, isWithinClosedPeriod, closedPeriodEnd, closedPeriodStartPreviousYear);
                         }
                     }
                     return isWithinClosedPeriod;
                 }
+            }
+
+            return isWithinClosedPeriod;
+        }
+
+        private static bool IsApplicationDateIsLessThanClosedPeriod(DateTime applicationDate, bool isWithinClosedPeriod, DateTime closedPeriodEnd, DateTime closedPeriodStartPreviousYear)
+        {
+            if (applicationDate >= closedPeriodStartPreviousYear && applicationDate <= closedPeriodEnd)
+            {
+                isWithinClosedPeriod = true;
+            }
+
+            return isWithinClosedPeriod;
+        }
+
+        private static bool IsApplicationDateIsGreaterThanClosedPeriod(DateTime applicationDate, bool isWithinClosedPeriod, DateTime closedPeriodStart, DateTime closedPeriodEndNextYear)
+        {
+            if (applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEndNextYear)
+            {
+                isWithinClosedPeriod = true;
+            }
+
+            return isWithinClosedPeriod;
+        }
+
+        private static bool IsWithInClosedPeriod(DateTime applicationDate, bool isWithinClosedPeriod, int startMonth, int endMonth, DateTime closedPeriodStart, DateTime closedPeriodEnd, int applicationMonth)
+        {
+            if (startMonth <= endMonth && applicationMonth >= startMonth && applicationMonth <= endMonth && applicationDate >= closedPeriodStart && applicationDate <= closedPeriodEnd)
+            {
+                isWithinClosedPeriod = true;
             }
 
             return isWithinClosedPeriod;
@@ -184,11 +202,10 @@ namespace NMP.Portal.Helpers
             return dtfi;
         }
 
-        public string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string? closedPeriod, decimal? applicationRate, bool isSlurry, bool isPoultryManure)
+        public static string EndClosedPeriodAndFebruaryWarningMessage(DateTime applicationDate, string? closedPeriod, decimal? applicationRate, bool isSlurry, bool isPoultryManure)
         {
             string message = string.Empty;
-            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+            Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -207,49 +224,81 @@ namespace NMP.Portal.Helpers
 
                     if (startMonth < endMonth)
                     {
-                        DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
-                        {
-                            if (isSlurry && applicationRate > 30)
-                            {
-                                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                            }
-                            if (isPoultryManure && applicationRate > 8)
-                            {
-                                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                            }
-                        }
+                        message = WarningMessageIfStartMonthIsLessThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, endDay, endMonth, endMonthFullName);
+
                     }
                     if (startMonth > endMonth && applicationDate > ClosedPeriodEndDate)
                     {
-                        DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
-                        {
-                            if (isSlurry && applicationRate > 30)
-                            {
-                                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                            }
-                            if (isPoultryManure && applicationRate > 8)
-                            {
-                                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                            }
-                        }
+
+                        message = WaringMessageIfStartMonthIsGreaterThanEndMonth(applicationDate, applicationRate, isSlurry, isPoultryManure, endMonth, endDay, endMonthFullName);
 
                         DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                         if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
                         {
-                            if (isSlurry && applicationRate > 30)
-                            {
-                                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                            }
-                            if (isPoultryManure && applicationRate > 8)
-                            {
-                                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
-                            }
+                            message = BindWarningForEndClosedPeriod(applicationRate, isSlurry, isPoultryManure, message, endDay, endMonthFullName);
                         }
-
                     }
 
+                }
+            }
+
+            return message;
+        }
+
+        private static string BindWarningForEndClosedPeriod(decimal? applicationRate, bool isSlurry, bool isPoultryManure, string message, int endDay, string endMonthFullName)
+        {
+
+            if (isSlurry && applicationRate > 30)
+            {
+                message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+            }
+            if (isPoultryManure && applicationRate > 8)
+            {
+                message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+            }
+
+
+            return message;
+        }
+
+        private static string WaringMessageIfStartMonthIsGreaterThanEndMonth(DateTime applicationDate, decimal? applicationRate, bool isSlurry, bool isPoultryManure, int endMonth, int endDay, string endMonthFullName)
+        {
+            string message = string.Empty;
+            DateTime ClosedPeriodEndDate = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+
+            DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+            if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
+            {
+                if (isSlurry && applicationRate > 30)
+                {
+                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                }
+                if (isPoultryManure && applicationRate > 8)
+                {
+                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                }
+            }
+
+
+            return message;
+        }
+
+        private static string WarningMessageIfStartMonthIsLessThanEndMonth(DateTime applicationDate, decimal? applicationRate, bool isSlurry, bool isPoultryManure, int endDay, int endMonth, string endMonthFullName)
+        {
+            string message = string.Empty;
+            DateTime? endDateFebruary =   new DateTime(applicationDate.Year, 3, 1, 00, 00, 00, DateTimeKind.Unspecified);
+            DateTime endOfFebruaryDate = new DateTime(applicationDate.Year, endDateFebruary.Value.Month, endDateFebruary.Value.Day, 00, 00, 00, DateTimeKind.Unspecified);
+
+            DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+            if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+            {
+                if (isSlurry && applicationRate > 30)
+                {
+                    message = string.Format(Resource.MsgApplicationRateForSlurryAndPoultryDetail, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
+                }
+                if (isPoultryManure && applicationRate > 8)
+                {
+                    message = string.Format(Resource.MsgTheNVZActionProgrammeStatesThatTheARPoultry, string.Format(Resource.lblEndClosedPeriod, endDay, endMonthFullName));
                 }
             }
 
@@ -268,7 +317,7 @@ namespace NMP.Portal.Helpers
             endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
         }
 
-        public string ClosedPeriodForFertiliserWarningMessage(DateTime applicationDate, int cropTypeId, string soilType, string cropType)
+        public static string ClosedPeriodForFertiliserWarningMessage(DateTime applicationDate, int cropTypeId, string soilType, string cropType)
         {
             string message = string.Empty;
             int day = applicationDate.Day;
@@ -288,7 +337,7 @@ namespace NMP.Portal.Helpers
             }
             return message;
         }
-        public string NitrogenLimitForFertiliserExceptBrassicasWarningMessage(int cropType, string cropTypeName, decimal totalNitrogen, decimal nitrogenOfSingleApp)
+        public static string NitrogenLimitForFertiliserExceptBrassicasWarningMessage(int cropType, string cropTypeName, decimal totalNitrogen, decimal nitrogenOfSingleApp)
         {
             string message = string.Empty;
 
@@ -326,7 +375,7 @@ namespace NMP.Portal.Helpers
             }
             return message;
         }
-        public string NitrogenLimitForFertiliserForBrassicasWarningMessage(decimal totalNitrogen, decimal nitrogenInOneDuration = 0, decimal singleApplicationNitrogen = 0)
+        public static string NitrogenLimitForFertiliserForBrassicasWarningMessage(decimal totalNitrogen, decimal nitrogenInOneDuration = 0, decimal singleApplicationNitrogen = 0)
         {
             string message = string.Empty;
             if (totalNitrogen > 100 || singleApplicationNitrogen > 50 || nitrogenInOneDuration > 50)
@@ -337,11 +386,10 @@ namespace NMP.Portal.Helpers
             return message;
         }
 
-        public bool? CheckEndClosedPeriodAndFebruary(DateTime applicationDate, string? closedPeriod)
+        public static bool? CheckEndClosedPeriodAndFebruary(DateTime applicationDate, string? closedPeriod)
         {
             bool? isWithinClosedPeriodAndFebruary = null;
-            const string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+            Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
             if (closedPeriod != null)
             {
                 Match match = regex.Match(closedPeriod);
@@ -360,18 +408,12 @@ namespace NMP.Portal.Helpers
                     if (startMonth < endMonth)
                     {
                         DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
-                        {
-                            isWithinClosedPeriodAndFebruary = true;
-                        }
+                        isWithinClosedPeriodAndFebruary = IsWithinClosedPeriodAndFebruary(applicationDate, isWithinClosedPeriodAndFebruary, endOfFebruaryDate, ClosedPeriodEndDateMinusOne);
                     }
                     if (startMonth > endMonth && applicationDate > ClosedPeriodEndDate)
                     {
                         DateTime endOfFebruaryDatePlusOne = new DateTime(applicationDate.Year, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
-                        if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
-                        {
-                            isWithinClosedPeriodAndFebruary = true;
-                        }
+                        isWithinClosedPeriodAndFebruary = IsApplicationIsInClosedPeriod(applicationDate, isWithinClosedPeriodAndFebruary, ClosedPeriodEndDate, endOfFebruaryDatePlusOne);
 
                         DateTime ClosedPeriodEndDateMinusOne = new DateTime(applicationDate.Year - 1, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
                         if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
@@ -386,7 +428,27 @@ namespace NMP.Portal.Helpers
             return isWithinClosedPeriodAndFebruary;
         }
 
-        public string? WarningPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
+        private static bool? IsApplicationIsInClosedPeriod(DateTime applicationDate, bool? isWithinClosedPeriodAndFebruary, DateTime ClosedPeriodEndDate, DateTime endOfFebruaryDatePlusOne)
+        {
+            if (applicationDate > ClosedPeriodEndDate && applicationDate < endOfFebruaryDatePlusOne)
+            {
+                isWithinClosedPeriodAndFebruary = true;
+            }
+
+            return isWithinClosedPeriodAndFebruary;
+        }
+
+        private static bool? IsWithinClosedPeriodAndFebruary(DateTime applicationDate, bool? isWithinClosedPeriodAndFebruary, DateTime endOfFebruaryDate, DateTime ClosedPeriodEndDateMinusOne)
+        {
+            if (applicationDate > ClosedPeriodEndDateMinusOne && applicationDate < endOfFebruaryDate)
+            {
+                isWithinClosedPeriodAndFebruary = true;
+            }
+
+            return isWithinClosedPeriodAndFebruary;
+        }
+
+        public static string? WarningPeriodOrganicFarm(FieldDetailResponse fieldDetail, int harvestYear, int cropTypeId, int? cropInfo1, bool isPerennial)
         {
             string? WarningPeriod = null;
             DateTime september16 = new DateTime(harvestYear - 1, 9, 16, 00, 00, 00, DateTimeKind.Unspecified);
@@ -405,8 +467,9 @@ namespace NMP.Portal.Helpers
                 WarningPeriod = isSandyShallowSoil
                     ? string.Format(Resource.lbl1Septo31Oct, Resource.lblSeptember, Resource.lblOctober)
                     : string.Format(Resource.lbl15Octto31Oct, Resource.lblOctober, Resource.lblOctober);
+                return WarningPeriod;
             }
-            else if (isFieldTypeArable)
+            if (isFieldTypeArable)
             {
                 switch (cropTypeId)
                 {
@@ -444,18 +507,7 @@ namespace NMP.Portal.Helpers
 
                     case (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape:      // Winter oilseed rape
 
-                        if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Augto31Oct, Resource.lblAugust, Resource.lblOctober);
-                        }
-                        if (isSandyShallowSoil && (sowingDate < september16))
-                        {
-                            WarningPeriod = string.Format(Resource.lbl16Septo31Oct, Resource.lblSeptember, Resource.lblOctober);
-                        }
-                        if (!isSandyShallowSoil)
-                        {
-                            WarningPeriod = string.Format(Resource.lbl1Octto31Oct, Resource.lblOctober, Resource.lblOctober);
-                        }
+                        WarningPeriod = BindWarningForOrganicFarm(WarningPeriod, september16, isSandyShallowSoil, sowingDate);
                         break;
 
                     default:
@@ -464,6 +516,24 @@ namespace NMP.Portal.Helpers
                         break;
                 }
             }
+            return WarningPeriod;
+        }
+
+        private static string? BindWarningForOrganicFarm(string? WarningPeriod, DateTime september16, bool isSandyShallowSoil, DateTime? sowingDate)
+        {
+            if (isSandyShallowSoil && (sowingDate >= september16 || sowingDate == null))
+            {
+                WarningPeriod = string.Format(Resource.lbl1Augto31Oct, Resource.lblAugust, Resource.lblOctober);
+            }
+            if (isSandyShallowSoil && (sowingDate < september16))
+            {
+                WarningPeriod = string.Format(Resource.lbl16Septo31Oct, Resource.lblSeptember, Resource.lblOctober);
+            }
+            if (!isSandyShallowSoil)
+            {
+                WarningPeriod = string.Format(Resource.lbl1Octto31Oct, Resource.lblOctober, Resource.lblOctober);
+            }
+
             return WarningPeriod;
         }
 
@@ -517,7 +587,7 @@ namespace NMP.Portal.Helpers
 
             return IsWithinPeriod(applicationDate, startDay, startMonth, endDay, endMonth);
         }
-        private static Regex GetRegex() => new Regex(@"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)", RegexOptions.Compiled | RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+        private static Regex GetRegex() => new Regex(_pattern, RegexOptions.Compiled | RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
         private static (int startDay, int startMonth, int endDay, int endMonth) ExtractPeriod(Match match)
         {
@@ -574,7 +644,7 @@ namespace NMP.Portal.Helpers
             return new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
         }
 
-        public bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
+        public static bool IsApplicationDateWithinDateRange(DateTime? applicationDate, DateTime? startDate, DateTime? endDate)
         {
             bool isWithinDateRange = false;
             if (applicationDate.HasValue && startDate.HasValue && endDate.HasValue && applicationDate.Value >= startDate.Value && applicationDate.Value <= endDate.Value)

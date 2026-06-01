@@ -44,7 +44,7 @@
             </govuk-button>
 
             <p class="govuk-body cancel-link">
-                <a asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "FieldSoilAnalysisDetail") asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a>
+                <a asp-action=@(ViewBag.IsDataChange ? "Cancel" : "FieldSoilAnalysisDetail") asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a>
             </p>
 
 

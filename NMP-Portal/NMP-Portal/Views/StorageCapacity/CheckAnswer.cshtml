@@ -10,11 +10,11 @@
     int earthBankedLagoon = (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon;
     int storageBag = (int)NMP.Commons.Enums.StorageTypes.StorageBag;
     int solidManureStorage = (int)NMP.Commons.Enums.MaterialState.SolidManureStorage;
-    var weightCapacity = Math.Round((Model.Length * Model.Width * Model.Depth) * (Model.SolidManureDensity) ?? 0);
+    
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "BackStoreCapacityCheckAnswer") asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackStoreCapacityCheckAnswer") asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnCheckAnswer"] != null)
 {
@@ -404,7 +404,7 @@
                     }
                     else
                     {
-                        if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+                        if (ViewBag.IsDataChange != null && ViewBag.IsDataChange)
                         {
                             <a asp-action="Cancel" asp-controller="StorageCapacity">@Resource.lblCancel</a>
                         }

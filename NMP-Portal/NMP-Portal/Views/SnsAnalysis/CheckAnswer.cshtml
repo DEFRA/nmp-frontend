@@ -252,7 +252,7 @@
                                 }
                             }
                         }
-                        @if (!(Model.SnsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables))
+                        @if (Model.SnsCategoryId != (int)NMP.Commons.Enums.SnsCategories.Vegetables)
                         {
                             <govuk-summary-list-row class=@((!Model.IsEstimateOfNitrogenMineralisation.HasValue)?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>

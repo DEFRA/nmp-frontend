@@ -1183,9 +1183,9 @@
                             }
 
 
-                            @foreach (var mp in cropManagementPeriods)
+                            @foreach (var organicManure in cropManagementPeriods.Select(mp => mp.OrganicManures))
                             {
-                                @if (mp.OrganicManures != null && mp.OrganicManures.Count > 0)
+                                @if (organicManure != null && organicManure.Count > 0)
                                 {
                                     <div class="govuk-grid-row">
                                         <div class="govuk-grid-column-full">
@@ -1215,7 +1215,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="govuk-table__body">
-                                                        @foreach (var orgManure in mp.OrganicManures)
+                                                        @foreach (var orgManure in organicManure)
                                                         {
                                                             <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell">@rowNumber</td>
@@ -1257,7 +1257,7 @@
                                                         @{
                                                             rowNumber = 1;
                                                         }
-                                                        @foreach (var orgManure in mp.OrganicManures)
+                                                        @foreach (var orgManure in organicManure)
                                                         {
                                                             <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell">@rowNumber</td>
@@ -1338,7 +1338,7 @@
                                     }
                                     else
                                     {
-                                        @foreach (var orgManure in mp.OrganicManures)
+                                        @foreach (var orgManure in organicManure)
                                         {
                                             <div class="govuk-grid-row">
                                                 <div class="govuk-grid-column-full">
@@ -1685,9 +1685,14 @@
                         var cropManagementPeriods = crop.ManagementPeriods.Where(mp => mp.CropID == crop.ID);
                         @if (cropManagementPeriods != null)
                         {
-                            @foreach (var mp in cropManagementPeriods)
+                            @foreach (var recommendation in cropManagementPeriods
+                                .Select(mp => mp.Recommendation)
+                                .Where(recommendation =>
+                                    recommendation != null &&
+                                    recommendation.RecommendationComments != null &&
+                                    recommendation.RecommendationComments.Count > 0))
                             {
-                                @if (mp.Recommendation != null && mp.Recommendation.RecommendationComments != null && mp.Recommendation.RecommendationComments.Count > 0)
+                                @if (recommendation != null && recommendation.RecommendationComments != null && recommendation.RecommendationComments.Count > 0)
                                 {
                                     <div class="govuk-grid-row pagebreak">
                                         <div class="govuk-grid-column-full">
@@ -1695,42 +1700,42 @@
 
                                             @if (Model.Nutrients != null)
                                             {
-                                                @foreach (var nutrient in Model.Nutrients)
+                                                @foreach (var nutrientId in Model.Nutrients.Select(nutrient => nutrient.nutrientId))
                                                 {
-                                                    var commentsForNutrient = mp.Recommendation.RecommendationComments
-                                                    .Where(rc => rc.Nutrient == nutrient.nutrientId)
+                                                    var commentsForNutrient = recommendation.RecommendationComments
+                                                    .Where(rc => rc.Nutrient == nutrientId)
                                                     .ToList();
-                                                    // var commentsText = string.Join("<br />", commentsForNutrient.Select(rc => rc.Comment));  // rc.Comment is the comment text
-                                                    if (commentsForNutrient != null && commentsForNutrient.Count > 0)
+
+                                                    if (commentsForNutrient.Count > 0)
                                                     {
                                                         <h4 class="govuk-heading-s">
-                                                            @if (nutrient.nutrientId == (int)NMP.Commons.Enums.Nutrients.Nitrogen)
+                                                            @if (nutrientId == (int)NMP.Commons.Enums.Nutrients.Nitrogen)
                                                             {
                                                                 @Resource.lblNitrogen
                                                             }
-                                                            else if (nutrient.nutrientId == (int)NMP.Commons.Enums.Nutrients.Phosphate)
+                                                            else if (nutrientId == (int)NMP.Commons.Enums.Nutrients.Phosphate)
                                                             {
                                                                 @Resource.lblPhosphateP2O5
                                                             }
-                                                            else if (nutrient.nutrientId == (int)NMP.Commons.Enums.Nutrients.Sulphur)
+                                                            else if (nutrientId == (int)NMP.Commons.Enums.Nutrients.Sulphur)
                                                             {
                                                                 @Resource.lblSulphurSO3
                                                             }
-                                                            else if (nutrient.nutrientId == (int)NMP.Commons.Enums.Nutrients.Lime)
+                                                            else if (nutrientId == (int)NMP.Commons.Enums.Nutrients.Lime)
                                                             {
                                                                 @Resource.lblLime
                                                             }
-                                                            else if (nutrient.nutrientId == (int)NMP.Commons.Enums.Nutrients.Magnesium)
+                                                            else if (nutrientId == (int)NMP.Commons.Enums.Nutrients.Magnesium)
                                                             {
                                                                 @Resource.lblMagnesiumMg
                                                             }
-                                                            else if (nutrient.nutrientId == (int)NMP.Commons.Enums.Nutrients.Potash)
+                                                            else if (nutrientId == (int)NMP.Commons.Enums.Nutrients.Potash)
                                                             {
                                                                 @Resource.lblPotashK2O
                                                             }
                                                         </h4>
 
-                                                        if (nutrient.nutrientId != (int)NMP.Commons.Enums.Nutrients.Sodium)
+                                                        if (nutrientId != (int)NMP.Commons.Enums.Nutrients.Sodium)
                                                         {
                                                             @foreach (var comment in commentsForNutrient)
                                                             {
@@ -1746,8 +1751,8 @@
                                         </div>
                                     </div>
                                 }
-                                
                             }
+                            
                         }
                     }
 

@@ -5,7 +5,6 @@
     ViewData["Title"] = $"{string.Format(Resource.lblHowWillTheseFieldsBeManaged, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))} {Resource.lblHyphen} {title}";
     
     var bachAction = "SwardType";
-    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassManagement;
 }
 

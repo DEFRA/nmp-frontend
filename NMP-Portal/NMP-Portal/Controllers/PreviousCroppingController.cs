@@ -403,7 +403,7 @@ namespace NMP.Portal.Controllers
             }
 
             lastHarvestYear = model.HarvestYear ?? 0;
-            model.IsPreviousYearGrass = (model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear)) ? true : false;
+            model.IsPreviousYearGrass = model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear);
             PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
             if (model.IsCheckAnswer && previousCroppingData != null && previousCroppingData.PreviousGrassYears != null && model.PreviousGrassYears != null &&
                 (!model.PreviousGrassYears.OrderBy(x => x).SequenceEqual(previousCroppingData.PreviousGrassYears.OrderBy(x => x))))
@@ -724,7 +724,7 @@ namespace NMP.Portal.Controllers
                     id = null;
                     if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
-                        id = previousCropList.Where(x => x.HarvestYear == year).Select(x => x.ID).FirstOrDefault(); ;
+                        id = previousCropList.Where(x => x.HarvestYear == year).Select(x => x.ID).FirstOrDefault();
                     }
                     var newPreviousCropping = new PreviousCropping
                     {
@@ -746,7 +746,7 @@ namespace NMP.Portal.Controllers
                     id = null;
                     if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
-                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 1).Select(x => x.ID).FirstOrDefault(); ;
+                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 1).Select(x => x.ID).FirstOrDefault();
                     }
                     if (!model.PreviousGrassYears.Any(x => x == model.HarvestYear - 1))
                     {
@@ -765,7 +765,7 @@ namespace NMP.Portal.Controllers
                     id = null;
                     if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
-                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault(); ;
+                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault();
                     }
                     if (!model.PreviousGrassYears.Any(x => x == model.HarvestYear - 2))
                     {
@@ -787,7 +787,7 @@ namespace NMP.Portal.Controllers
                 id = null;
                 if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                 {
-                    id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear.Value).Select(x => x.ID).FirstOrDefault(); ;
+                    id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear.Value).Select(x => x.ID).FirstOrDefault();
                 }
                 var newPreviousCropping = new PreviousCropping
                 {
@@ -900,7 +900,7 @@ namespace NMP.Portal.Controllers
                     id = null;
                     if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
                     {
-                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault(); ;
+                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault();
                     }
                     newPreviousCropping = new PreviousCropping
                     {

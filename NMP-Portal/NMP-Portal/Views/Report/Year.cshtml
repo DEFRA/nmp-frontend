@@ -17,8 +17,6 @@
     }
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
 
-    var currentYear = DateTime.Now.Year;
-    var nextYear = DateTime.Now.Year + 1;
     var backAction = (Model.ReportOption == (int)NMP.Commons.Enums.ReportOption.FieldRecordsAndPlan)
         ? "ReportOptions" : "NVZComplianceReports";
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.Year;

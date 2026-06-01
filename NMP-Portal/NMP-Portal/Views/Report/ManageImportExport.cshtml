@@ -3,8 +3,7 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblOrganicMaterialImportsAndExportsYear, Model.Year)} {Resource.lblHyphen} {Resource.lblImportsExportsOfLivestockManure}";
-    var currentYear = DateTime.Now.Year;
-    var previousYear = DateTime.Now.Year - 1;
+   
 }
 
 @section BeforeContent {

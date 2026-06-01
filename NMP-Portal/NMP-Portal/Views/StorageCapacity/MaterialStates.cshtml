@@ -4,7 +4,7 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{Resource.lblWhatKindOfManureStoreDoYouWantToAdd} {Resource.lblHyphen} {title}";
     var backAction = "";
-    if (Model.IsCheckAnswer == true)
+    if (Model.IsCheckAnswer)
     {
         backAction = "CheckAnswer";
     }
@@ -20,7 +20,7 @@
         }
         else
         {
-            if (Model.IsStoreCapacityExist == true || !string.IsNullOrWhiteSpace(Model.IsRemovedRecently))
+            if (Model.IsStoreCapacityExist || !string.IsNullOrWhiteSpace(Model.IsRemovedRecently))
             {
                 backAction = "ManageStorageCapacity";
             }
@@ -78,7 +78,7 @@
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckAnswer)
                     {
-                        @if (Model.IsStoreCapacityExist == true)
+                        @if (Model.IsStoreCapacityExist)
                         {
                             <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
                                 @Resource.lblCancel
