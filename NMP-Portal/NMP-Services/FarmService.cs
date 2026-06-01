@@ -19,7 +19,7 @@ namespace NMP.Services;
 public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFarmService
 {
     private readonly ILogger<FarmService> _logger = logger;
-    private const string _applicationJson = _applicationJson;
+    private const string _applicationJson = "application/json";
 
     public async Task<(List<Farm>, Error?)> FetchFarmByOrgIdAsync(Guid orgId)
     {
