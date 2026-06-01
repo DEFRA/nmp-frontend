@@ -4,8 +4,6 @@
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? string.Format(Resource.lblUpdateField) : Resource.lblAddField;
     ViewData["Title"] = $"{string.Format(Resource.lblLastHarvestYearForFieldName,Model.Name)} {Resource.lblHyphen} {title}";
-    var currentYear = System.DateTime.Now.Year;
-    var previousYear = currentYear-1;
 
     var backAction = "";
     if (Model.IsCheckAnswer)

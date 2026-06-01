@@ -93,14 +93,15 @@
     bool needToShowIncorporationsBtn = true;
     @if (Model.ApplicationMethod != null)
     {
-        needToShowIncorporationsBtn = (Model.ApplicationMethod.Value == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethod.Value == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm) ? false : true;
+        needToShowIncorporationsBtn = Model.ApplicationMethod.Value != (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm && Model.ApplicationMethod.Value != (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm;
     }
     bool needToShowIncorporationDelayBtn = true;
     if (Model.IncorporationMethod != null)
     {
-        needToShowIncorporationDelayBtn = (Model.IncorporationMethod.Value == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ||
-        Model.IncorporationMethod.Value == (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection ||
-        Model.IncorporationMethod.Value == (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection) ? false : true;
+       needToShowIncorporationDelayBtn =
+    Model.IncorporationMethod.Value != (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated
+    && Model.IncorporationMethod.Value != (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection
+    && Model.IncorporationMethod.Value != (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection;
     }
     bool isAutumnNUptakeZero = Model.AutumnCropNitrogenUptakes?.All(x => x.AutumnCropNitrogenUptake == 0) ?? true;
 
@@ -142,10 +143,47 @@
         SO3 = Model.ManureType.SO3,
         MgO = Model.ManureType.MgO
     });
-    
+
+     bool showOrgManureWarning =
+        Model.IsOrgManureNfieldLimitWarning &&
+        !string.IsNullOrWhiteSpace(Model.NmaxWarningPara1) &&
+        !Model.NmaxWarningPara1.Equals(Resource.lblPara1PAS100);
+
+    bool showNMaxWarning =
+        Model.IsNMaxLimitWarning &&
+        !string.IsNullOrWhiteSpace(Model.CropNmaxLimitWarningPara1);
+
+    bool showClosedPeriodWarning =
+        Model.IsClosedPeriodWarning &&
+        !string.IsNullOrWhiteSpace(Model.ClosedPeriodWarningPara1);
+
+    bool showJulyToSeptWarning =
+        Model.IsApplicationJulyToSeptWarning &&
+        !string.IsNullOrWhiteSpace(Model.ApplicationJulyToSeptPara1);
+
+    bool showEndFebWarning =
+        Model.IsEndClosedPeriodFebruaryWarning &&
+        !string.IsNullOrWhiteSpace(Model.EndClosedPeriodEndFebWarningPara1);
+
+    bool showEndFebWithinThreeWeeksWarning =
+        Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks &&
+        !string.IsNullOrWhiteSpace(Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1);
+
+    bool showStartPeriodWarning =
+        Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150 &&
+        !string.IsNullOrWhiteSpace(Model.StartClosedPeriodEndFebWarningPara1);
+
+    bool showNotificationBanner =
+        showOrgManureWarning ||
+        showNMaxWarning ||
+        showClosedPeriodWarning ||
+        showJulyToSeptWarning ||
+        showEndFebWarning ||
+        showEndFebWithinThreeWeeksWarning ||
+        showStartPeriodWarning;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange==true? "Cancel" : "BackCheckAnswer") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
 }
 <form class="form-with-overlay"  asp-action=@(!string.IsNullOrEmpty(Model.EncryptedOrgManureId) ? "OrganicManureUpdate" : "CheckAnswer") asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -165,52 +203,56 @@
                 </govuk-error-summary>
             }
             
-            @if ((Model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsOrgManureNfieldLimitWarning) || Model.IsNMaxLimitWarning || Model.IsClosedPeriodWarning || Model.IsEndClosedPeriodFebruaryWarning || Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+            @if (showNotificationBanner)
             {
                 <govuk-notification-banner>
                     <govuk-notification-banner-title>
                         @Resource.lblImportant
                     </govuk-notification-banner-title>
-                    
-                    @if (Model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsOrgManureNfieldLimitWarning)
-                    {
-                       @*  We don't have to show this warning on check answer page (mentioned on scotland warning excel sheet row no. 6) *@
-                        <p class="govuk-notification-banner__heading">
-                            @if (Model.NmaxWarningPara1 != null)
-                            {
-                                @Model.NmaxWarningPara1
-                            }
-                        </p>
-                    }
-                    @if (Model.IsNMaxLimitWarning)
+            
+                    @if (showOrgManureWarning)
                     {
                         <p class="govuk-notification-banner__heading">
-                            @if (Model.CropNmaxLimitWarningPara1 != null)
-                            {
-                                @Model.CropNmaxLimitWarningPara1
-                            }
+                            @Model.NmaxWarningPara1
                         </p>
                     }
-
-                    @if (Model.IsClosedPeriodWarning)
+            
+                    @if (showNMaxWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Model.CropNmaxLimitWarningPara1
+                        </p>
+                    }
+            
+                    @if (showClosedPeriodWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.ClosedPeriodWarningPara1
                         </p>
                     }
-                    @if (Model.IsEndClosedPeriodFebruaryWarning)
+            
+                    @if (showJulyToSeptWarning)
+                    {
+                        <p class="govuk-notification-banner__heading">
+                            @Model.ApplicationJulyToSeptPara1
+                        </p>
+                    }
+            
+                    @if (showEndFebWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.EndClosedPeriodEndFebWarningPara1
                         </p>
                     }
-                    @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+            
+                    @if (showEndFebWithinThreeWeeksWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1
                         </p>
                     }
-                    @if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+            
+                    @if (showStartPeriodWarning)
                     {
                         <p class="govuk-notification-banner__heading">
                             @Model.StartClosedPeriodEndFebWarningPara1
@@ -218,7 +260,6 @@
                     }
                 </govuk-notification-banner>
             }
-
             <h1 class="govuk-heading-l">
                 @GetManureText(Resource.lblCheckYourAnswers,string.Format(Resource.lblUpdateAnOrganicMaterialApplicationForHarvestYear, Model.HarvestYear))
 
@@ -249,32 +290,7 @@
                                 
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @if (ViewBag.SelectedFields != null)
-                                {
-                                    if (ViewBag.SelectedFields.Count <= Convert.ToInt32(Resource.FieldGreaterThanX))
-                                    {
-                                        @foreach (var item in ViewBag.SelectedFields)
-                                        {
-                                            @item <br />
-                                        }
-                                    }
-                                    else
-                                    {
-                                        @string.Format(Resource.lblFarmFields, ViewBag.SelectedFields.Count)
-                                        <govuk-details>
-                                            <govuk-details-summary>
-                                                @Resource.lblViewFields
-                                            </govuk-details-summary>
-                                            <govuk-details-text>
-
-                                                @foreach (var item in ViewBag.SelectedFields)
-                                                {
-                                                    @item <br />
-                                                }
-                                            </govuk-details-text>
-                                        </govuk-details>
-                                    }
-                                }
+                            <partial name="_SelectedFields" model="ViewBag.SelectedFields" />
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>                               
                                     <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)?"FieldGroup":"Fields")" asp-controller="OrganicManure" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">@Resource.lblChange
@@ -416,41 +432,51 @@
                         @if (Model.IsSameDefoliationForAll.HasValue && Model.IsSameDefoliationForAll.Value)
                         {
                             bool renderDefoliation = false;
-                            @foreach (var defoliation in Model.DefoliationList)
-                            {
-                                @if (!renderDefoliation)
-                                {
-                                    <govuk-summary-list-row class=@((!defoliation.Defoliation.HasValue)?"govuk-error-message":"")>
-                                        <govuk-summary-list-row-key>
-                                            @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1)
-                                            {
-                                               @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
-                                            }
-                                            else{
-                                                @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, defoliation.FieldName)
-                                            }
-                                        </govuk-summary-list-row-key>
-                                        <govuk-summary-list-row-value>
+                            @foreach (var defoliation in Model.DefoliationList.Where(_ => !renderDefoliation))
+{
+    <govuk-summary-list-row class=@((!defoliation.Defoliation.HasValue) ? "govuk-error-message" : "")>
+        <govuk-summary-list-row-key>
+            @if (Model.GrassCropCount.HasValue && Model.GrassCropCount > 1)
+            {
+                @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
+            }
+            else
+            {
+                @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, defoliation.FieldName)
+            }
+        </govuk-summary-list-row-key>
 
-                                            @(defoliation.Defoliation.HasValue ? defoliation.DefoliationName : Resource.lblNotSet)
-                                        </govuk-summary-list-row-value>
-                                        <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="OrganicManure" asp-route-q="@Model.DefoliationEncryptedCounter">@Resource.lblChange
-                                               <span class="govuk-visually-hidden">
-                                                  @if (Model.GrassCropCount.HasValue&&Model.GrassCropCount>1)
-                                                  {
-                                                     @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
-                                                  }
-                                                  else{
-                                                      @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, defoliation.FieldName)
-                                                  }
-                                               </span>
-                                            </govuk-summary-list-row-action>
-                                        </govuk-summary-list-row-actions>
-                                    </govuk-summary-list-row>
-                                    renderDefoliation = true;
-                                }
-                            }
+        <govuk-summary-list-row-value>
+            @(defoliation.Defoliation.HasValue
+                ? defoliation.DefoliationName
+                : Resource.lblNotSet)
+        </govuk-summary-list-row-value>
+
+        <govuk-summary-list-row-actions>
+            <govuk-summary-list-row-action
+                asp-action="Defoliation"
+                asp-controller="OrganicManure"
+                asp-route-q="@Model.DefoliationEncryptedCounter">
+
+                @Resource.lblChange
+
+                <span class="govuk-visually-hidden">
+                    @if (Model.GrassCropCount.HasValue && Model.GrassCropCount > 1)
+                    {
+                        @Resource.lblWhichCutOrGrazingInThisApplicationForAllField
+                    }
+                    else
+                    {
+                        @string.Format(Resource.lblWhichCutOrGrazingInThisApplicationForInField, defoliation.FieldName)
+                    }
+                </span>
+
+            </govuk-summary-list-row-action>
+        </govuk-summary-list-row-actions>
+    </govuk-summary-list-row>
+
+    renderDefoliation = true;
+}
                         }
                         else
                         {
@@ -804,7 +830,7 @@
                                 @Resource.lblAutumnCropNitrogenUptake
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                 @if (Model.AutumnCropNitrogenUptakes.All(x => x.AutumnCropNitrogenUptake == Model.AutumnCropNitrogenUptakes.First().AutumnCropNitrogenUptake))
+                                 @if (Model.AutumnCropNitrogenUptakes.All(x => x.AutumnCropNitrogenUptake == Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake))
                                 {
                                     @string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake.ToString("#,0.#")))
                                 }
@@ -963,7 +989,7 @@
                 }
                 else
                 {
-                    @if(ViewBag.IsDataChange != null && ViewBag.IsDataChange==true)
+                    @if(ViewBag.IsDataChange != null && ViewBag.IsDataChange)
                     {
                     <a asp-action="Cancel" asp-controller="OrganicManure">@Resource.lblCancel</a>
                     }

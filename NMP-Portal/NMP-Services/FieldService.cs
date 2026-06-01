@@ -474,6 +474,10 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
                 if (responseWrapper?.Data?.FieldDetails is JToken fieldDetails)
                 {
                     fieldDetail = fieldDetails.ToObject<FieldDetailResponse>() ?? new FieldDetailResponse();
+                    if (fieldDetail.SowingDate.HasValue)
+                    {
+                        fieldDetail.SowingDate = fieldDetail.SowingDate.Value.ToLocalTime();
+                    }
                 }
             }
             else

@@ -2,9 +2,7 @@
 @model NMP.Commons.ViewModels.SnsAnalysisViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)} {Resource.lblHyphen} {Resource.AddASoilMineralNitrogenAnalysisResult}";
-    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-   
+    
     var action = "";
     var controller = "";
     if (Model.IsCheckAnswer)

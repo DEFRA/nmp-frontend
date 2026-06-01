@@ -160,4 +160,11 @@ public class OrganicManureViewModel
     public List<DefoliationList>? DefoliationList { get; set; }
     public bool IsDoubleCropValueChange { get; set; } = false;
     public string? FarmGroupManureId { get; set; } = string.Empty;
+    public bool IsApplicationJulyToSeptWarning { get; set; } = false;
+    public string? ApplicationJulyToSeptPara1 { get; set; } = string.Empty;
+    public string? ApplicationJulyToSeptPara2 { get; set; } = string.Empty;
+    public string? ApplicationJulyToSeptPara3 { get; set; } = string.Empty;
+    public string? ApplicationJulyToSeptHeader { get; set; } = string.Empty;
+    public int ApplicationJulyToSeptCodeID { get; set; }
+    public int ApplicationJulyToSeptLevelID { get; set; }
 }

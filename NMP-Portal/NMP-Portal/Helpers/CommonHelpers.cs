@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using NMP.Commons.Enums;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -136,6 +137,54 @@ namespace NMP.Portal.Helpers
 
             };
             return rec;
+        }
+        public static string BindDefoliationName(int defoliation, string description)
+        {
+            string selectedDefoliation;
+            string[] defoliationParts = description.Split(',')
+                                                                      .Select(x => x.Trim())
+                                                                      .ToArray();
+
+            selectedDefoliation = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                                 ? $"{Enum.GetName(typeof(NMP.Commons.Enums.PotentialCut), defoliation)} -{defoliationParts[defoliation - 1]}"
+                                 : $"{defoliation}";
+            var parts = selectedDefoliation.Split('-');
+            if (parts.Length == 2)
+            {
+                var left = parts[0].Trim();
+                var right = parts[1].Trim();
+
+                if (!string.IsNullOrWhiteSpace(right))
+                {
+                    right = char.ToUpper(right[0]) + right.Substring(1);
+                }
+
+                selectedDefoliation = $"{left} - {right}";
+            }
+
+            return selectedDefoliation;
+        }
+        public static List<SelectListItem> BindAllDefoliationWithName(List<int> defoliationList, DefoliationSequenceResponse defoliationSequence)
+        {
+            string description = defoliationSequence.DefoliationSequenceDescription;
+            string[] defoliationParts = description.Split(',')
+                                                    .Select(x => x.Trim())
+                                                    .ToArray();
+            List<SelectListItem> allDefoliationWithName = new List<SelectListItem>();
+            foreach (int defoliation in defoliationList)
+            {
+                string text = (defoliation > 0 && defoliation <= defoliationParts.Length)
+                ? $"{Enum.GetName(typeof(PotentialCut), defoliation)} - {defoliationParts[defoliation - 1]}"
+                : defoliation.ToString();
+
+                allDefoliationWithName.Add(new SelectListItem
+                {
+                    Text = text,
+                    Value = defoliation.ToString()
+                });
+            }
+
+            return allDefoliationWithName;
         }
     }
 }

@@ -4,7 +4,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year)} {Resource.lblHyphen} {title}";
 
-    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassSeason;
 }
 

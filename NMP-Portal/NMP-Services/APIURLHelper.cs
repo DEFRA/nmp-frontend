@@ -150,10 +150,10 @@ internal static class ApiurlHelper
     public const string FetchAllScotlandNMaxValuesAsyncAPI = "scotland-nmax-values/getAll";
     //Manner APi Url
     public const string FetchMannerApplicationMethodByIdAsyncAPI = "vendors/manner/application-methods/{0}";
-    public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";//    vendors/manner/incorporation-delays/by-incorp-method/{0}";
+    public const string FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI = "vendors/manner/incorporation-delays/by-incorp-method-and-applicable-for/{0}?applicableFor={1}";
     public const string FetchMannerIncorporationDelaysByIdAsyncAPI = "vendors/manner/incorporation-delays/{0}";
     public const string FetchMannerIncorporationMethodByIdAsyncAPI = "vendors/manner/incorporation-methods/{0}";
-    public const string FetchMannerIncorporationMethodsByApplicationIdAsyncAPI = "vendors/manner/incorporation-methods/by-app-method-and-applicable-for/{0}?applicableFor={1}"; //"vendors/manner/incorporation-methods/by-app-method/{0}";
+    public const string FetchMannerIncorporationMethodsByApplicationIdAsyncAPI = "vendors/manner/incorporation-methods/by-app-method-and-applicable-for/{0}?applicableFor={1}";
     public const string FetchMannerApplicationMethodsByApplicableForAsyncAPI = "vendors/manner/application-methods?isLiquid={0}&fieldType={1}";
     public const string FetchMannerWindspeedsAsyncAPI = "vendors/manner/windspeeds";
     public const string FetchMannerWindspeedByIdAsyncAPI = "vendors/manner/windspeeds/{0}";
@@ -245,6 +245,7 @@ internal static class ApiurlHelper
     public const string FetchNvzActionProgramsByCountryIdAsyncAPI = "vendors/rb209/Soil/NvzActionProgram/{0}";
     public const string FetchFarmAndFarmsNvzByFarmIdAsyncAPI = "farms-nvz-data/{0}";
     public const string FetchOrganicManureClosedPeriodAsyncAPI = "organic-manure/get-closed-period/{0}?fieldType={1}&harvestYear={2}&sowingDate={3}&countryId={4}&cropGroupId={5}&cropTypeId={6}&isPerennial={7}";
+    public const string FetchOrganicManureClosedPeriodNoSowingDateAsyncAPI = "organic-manure/get-closed-period/{0}?fieldType={1}&harvestYear={2}&countryId={3}&cropGroupId={4}&cropTypeId={5}&isPerennial={6}";
     public const string FetchFertiliserManureClosedPeriodAsyncAPI = "fertiliser-manures/get-closed-period/{0}?CropTypeId={1}";
     public const string FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI = "fertiliser-manures/get-closed-period/{0}?CropTypeId={1}&NvzId={2}";
 

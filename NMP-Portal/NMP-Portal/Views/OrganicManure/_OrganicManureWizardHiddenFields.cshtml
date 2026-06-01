@@ -272,7 +272,16 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StartClosedPeriodEndFebWarningHeader" value="@Model.StartClosedPeriodEndFebWarningHeader" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StartClosedPeriodEndFebWarningCodeID" value="@Model.StartClosedPeriodEndFebWarningCodeID" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StartClosedPeriodEndFebWarningLevelID" value="@Model.StartClosedPeriodEndFebWarningLevelID" />
-     @* warning model properties end *@
+     
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsApplicationJulyToSeptWarning" value="@Model.IsApplicationJulyToSeptWarning.ToString().ToLower()" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationJulyToSeptPara1" value="@Model.ApplicationJulyToSeptPara1" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationJulyToSeptPara2" value="@Model.ApplicationJulyToSeptPara2" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationJulyToSeptPara3" value="@Model.ApplicationJulyToSeptPara3" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationJulyToSeptHeader" value="@Model.ApplicationJulyToSeptHeader" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationJulyToSeptCodeID" value="@Model.ApplicationJulyToSeptCodeID" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationJulyToSeptLevelID" value="@Model.ApplicationJulyToSeptLevelID" />
+
+    @* warning model properties end *@
 
     @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
     {

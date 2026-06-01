@@ -52,7 +52,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange == true ? "Cancel" : "BackLivestockImportExportCheckAnswer") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackLivestockImportExportCheckAnswer") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnCheckYourAnswers"] != null)
 {
@@ -654,7 +654,7 @@
                     }
                     else
                     {
-                        if (ViewBag.IsDataChange != null && ViewBag.IsDataChange == true)
+                        if (ViewBag.IsDataChange != null && ViewBag.IsDataChange)
                         {
                             <a asp-action="Cancel" asp-controller="Report">@Resource.lblCancel</a>
                         }

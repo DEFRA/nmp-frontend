@@ -4,7 +4,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))} {Resource.lblHyphen} {title}";
 
-    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
 
     var valueNewSward = (int)NMP.Commons.Enums.CurrentSward.NewSward;
     var valueExistingSward = (int)NMP.Commons.Enums.CurrentSward.ExistingSward;

@@ -2,7 +2,8 @@
 @model NMP.Commons.ViewModels.FertiliserManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
-    ViewData["Title"] = $"{Resource.lblForMultipleDefoliation} {Resource.lblHyphen} {title}";
+    string heading = Resource.lblForMultipleDefoliation;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     string backAction = "FieldGroup";
@@ -48,7 +49,7 @@
             <govuk-radios for="@Model.IsSameDefoliationForAll">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblForMultipleDefoliation
+                        @heading
                     </govuk-radios-fieldset-legend>
 
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>

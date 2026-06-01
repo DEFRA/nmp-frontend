@@ -4,7 +4,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{Resource.lblVarietyNameWithOptional} {Resource.lblHyphen} {title}";
 
-    int potatoGroupId = (int)NMP.Commons.Enums.CropGroup.Potatoes;
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.Variety;
 }
 

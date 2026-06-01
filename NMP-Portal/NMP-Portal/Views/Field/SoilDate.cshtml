@@ -4,10 +4,7 @@
 @{
 
     ViewData["Title"] = $"{string.Format(Resource.lblDateSampleTaken, Model.Name)} {Resource.lblHyphen} {Resource.lblAddField}";
-    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-    var backAction = Model.IsSoilReleasingClay == true ? "SoilReleasingClay" :
-                    "SulphurDeficient";
+    
     ViewBag.CurrentStep = (int)FieldWizardSteps.SoilAnalysisDate;
 }
 

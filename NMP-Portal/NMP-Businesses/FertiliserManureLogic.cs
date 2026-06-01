@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
 using NMP.Commons.Helpers;
@@ -8,10 +9,13 @@ using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Diagnostics.Metrics;
+using System.Net;
+using System.Reflection;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFertiliserManureService fertiliserManureService, IWarningLogic warningLogic,IOrganicManureLogic organicManureLogic, ICropLogic cropLogic, IFieldLogic fieldLogic) : IFertiliserManureLogic
+public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFertiliserManureService fertiliserManureService, IWarningLogic warningLogic, IOrganicManureLogic organicManureLogic, ICropLogic cropLogic, IFieldLogic fieldLogic) : IFertiliserManureLogic
 {
     private readonly ILogger<FertiliserManureLogic> _logger = logger;
     private readonly IFertiliserManureService _fertiliserManureService = fertiliserManureService;
@@ -103,9 +107,9 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
     }
 
     //warning logic
-    public  (string, string, string) BindStartEndDateAndWarningPeriod(FertiliserManureViewModel model, DateTime endDate, string closedPeriod)
+    public (string, string, string) BindStartEndDateAndWarningPeriod(FertiliserManureViewModel model, DateTime endDate, string closedPeriod)
     {
-        string startPeriod=string.Empty; string endPeriod = string.Empty;
+        string startPeriod = string.Empty; string endPeriod = string.Empty;
         string warningPeriod = string.Empty;
         string[] periods = closedPeriod.Split(" to ");
 
@@ -119,7 +123,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
         return (warningPeriod, startPeriod, endPeriod);
     }
 
-    public  (string, string) BindStartPeriodAndEndPeriod(string closedPeriod)
+    public (string, string) BindStartPeriodAndEndPeriod(string closedPeriod)
     {
         string startPeriod = string.Empty;
         string endPeriod = string.Empty;
@@ -159,7 +163,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
         return (error, nitrogenInFourWeek);
     }
-    private async Task<(bool, WarningResponse, FertiliserManureViewModel)> BindResidueWarning(FertiliserManureViewModel model, decimal totalNitrogen, int managementId,bool isScotland, bool hasValidResidue, bool isNitrogenRateExceeded)
+    private async Task<(bool, WarningResponse, FertiliserManureViewModel)> BindResidueWarning(FertiliserManureViewModel model, decimal totalNitrogen, int managementId, bool isScotland, bool hasValidResidue, bool isNitrogenRateExceeded)
     {
         (bool isResidueGroupOne, bool isResidueGroupTwo, bool isResidueGroupThree, bool isResidueGroup4To6) = await BindResidueGroupCondtition(managementId, isScotland);
         WarningResponse warningResponse = new WarningResponse();
@@ -195,12 +199,12 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
         if (isNitrogenRateExceeded)
         {
 
-            model=SetClosedPeriodWarning(model, warningResponse, warningResponse.Para2);
+            model = SetClosedPeriodWarning(model, warningResponse, warningResponse.Para2);
         }
 
-        return (isNitrogenRateExceeded, warningResponse,model);
+        return (isNitrogenRateExceeded, warningResponse, model);
     }
-    public  FertiliserManureViewModel SetClosedPeriodWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2 = null)
+    public FertiliserManureViewModel SetClosedPeriodWarning(FertiliserManureViewModel model, WarningResponse warningResponse, string para2 = null)
     {
         model.IsNitrogenExceedWarning = true;
         model.ClosedPeriodNitrogenExceedWarningHeader = warningResponse.Header;
@@ -299,13 +303,13 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
             if (isNitrogenRateExceeded)
             {
-                 warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRate.ToString());
+                warningResponse = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(model.FarmCountryId ?? 0, NMP.Commons.Enums.WarningKey.InorgNMaxRate.ToString());
 
                 model = SetClosedPeriodWarning(model, warningResponse, string.Format(warningResponse.Para2, startPeriod, endPeriod, maxNitrogenRate));
             }
         }
 
-        return (model,warningResponse);
+        return (model, warningResponse);
     }
     public async Task<(FertiliserManureViewModel, WarningResponse)> BindOilseedRapeWarnings(FertiliserManureViewModel model, int managementId, decimal totalNitrogen, string startPeriod, decimal PreviousApplicationsNitrogen, bool isWithinWarningPeriod, int cropTypeId)
     {
@@ -335,7 +339,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
             }
             else
             {
-                (isNitrogenRateExceeded, warningResponse, model) = await BindResidueWarning(model, totalNitrogen, managementId,isScotland, hasValidResidue, isNitrogenRateExceeded);
+                (isNitrogenRateExceeded, warningResponse, model) = await BindResidueWarning(model, totalNitrogen, managementId, isScotland, hasValidResidue, isNitrogenRateExceeded);
             }
         }
 
@@ -383,9 +387,8 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
         model.CropNmaxLimitWarningPara3 = warningResponse.Para3;
         return model;
     }
-    public async Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> BindNmaxWarnings(FertiliserManureViewModel model, decimal totalNitrogenApplied, int farmCountryId,  Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit)
+    public async Task<(bool flowControl, (FertiliserManureViewModel, Error?) value)> BindNmaxWarnings(FertiliserManureViewModel model, decimal totalNitrogenApplied, int farmCountryId, Crop crop, int? scotlandNmax, int? nmaxLimitEnglandOrWales, decimal nMaxLimit)
     {
-        Error? error = null;
         if (totalNitrogenApplied > nMaxLimit)
         {
             string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
@@ -396,7 +399,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
             if (!isScotland && crop.CropTypeID != null && (crop.CropTypeID.Value != (int)NMP.Commons.Enums.CropTypes.Grass || crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
             {
 
-               model= SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
+                model = SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, nmaxLimitEnglandOrWales, nMaxLimit));
 
 
             }
@@ -405,10 +408,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
                 SetNMaxWarning(model, warningResponse, string.Format(warningResponse.Para2, cropTypeName, scotlandNmax, nMaxLimit));
             }
         }
-        else
-        {
-            return (flowControl: false, value: (model, error));
-        }
+
 
         return (flowControl: true, value: default);
     }
@@ -443,4 +443,61 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
         return (model, warningResponse);
     }
+    //Double crop start
+    public bool IsInitialLoadAfterFieldChange(FertiliserManureViewModel model, string q)
+    {
+        return string.IsNullOrWhiteSpace(q) &&
+               model.FertiliserManures != null &&
+               model.FertiliserManures.Count > 0 &&
+               (model.IsAnyChangeInField || model.IsCropGroupChange);
+    }
+
+    public bool IsRedirectWithDoubleCropData(FertiliserManureViewModel model, string q)
+    {
+        return !string.IsNullOrWhiteSpace(q) &&
+               model.DoubleCrop != null &&
+               model.DoubleCrop.Count > 0;
+    }
+    //Double crop end
+
+
+
+    //Defoliation start
+    public async Task<(FertiliserManureViewModel, List<Crop>)> HandleDefoliationList(FertiliserManureViewModel model)
+    {
+        if (model.DefoliationList != null && model.DefoliationList.Count > 0 && model.DefoliationCurrentCounter < model.DefoliationList.Count)
+        {
+            model.FieldID = model.DefoliationList[model.DefoliationCurrentCounter].FieldID;
+            model.FieldName = model.DefoliationList[model.DefoliationCurrentCounter].FieldName;
+        }
+        List<Crop> cropList = new List<Crop>();
+        bool isDefoliationListNeedToCreate = (model.DefoliationList == null || model.IsAnyChangeInField ||
+        (model.DefoliationList != null && model.FertiliserManures.Where(x => x.IsGrass).Select(x => x.FieldID).Any(fieldId => !model.DefoliationList.Select(d => d.FieldID).Contains(fieldId.Value))));
+        if (isDefoliationListNeedToCreate)
+        {
+            model.DefoliationList ??= new List<DefoliationList>();
+
+
+            return (model, cropList);
+        }
+
+        return (model, cropList);
+    }
+    public bool IsComingFirstTimeForDefoliationGet(FertiliserManureViewModel model, string q)
+    {
+        return string.IsNullOrWhiteSpace(q) &&
+               (model.DefoliationList == null ||
+                model.DefoliationList.Count == 0 ||
+                (model.IsAnyChangeInSameDefoliationFlag && model.DefoliationCurrentCounter == 0) ||
+                model.IsAnyChangeInField ||
+                model.IsCropGroupChange);
+    }
+
+    public bool IsRedirectRequestForDefoliationGet(FertiliserManureViewModel model, string q)
+    {
+        return !string.IsNullOrWhiteSpace(q) &&
+               model.FertiliserManures != null &&
+               model.FertiliserManures.Count > 0;
+    }
+    //Defoliation end
 }

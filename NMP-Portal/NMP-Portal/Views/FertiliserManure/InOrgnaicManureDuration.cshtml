@@ -19,7 +19,6 @@
     }
     string title = (!string.IsNullOrEmpty(Model.EncryptedFertId)) ? Resource.lblUpdateInorganicFeriliser : Resource.lblAddInorganicFeriliser;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    var count = 0;
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.FertiliserWizardSteps.Date;
 }
 

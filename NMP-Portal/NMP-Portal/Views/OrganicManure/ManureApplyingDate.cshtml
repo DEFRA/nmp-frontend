@@ -2,7 +2,7 @@
 @model NMP.Commons.ViewModels.OrganicManureViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
-   
+
     string manureTypeName;
 
     if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials ||
@@ -19,7 +19,6 @@
         pageHeader = string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, manureTypeName, Model.FieldName);
 
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
-    var backAction = "";
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.ApplicationDate;
 }
 @section BeforeContent {
@@ -36,63 +35,25 @@
 
         <form class="form" action="ManureApplyingDate" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
-   @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
-            @if (Model.IsWarningMsgNeedToShow)
-            {
-                <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    @if (Model.IsClosedPeriodWarning)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Model.ClosedPeriodWarningPara1
-                        </p>
-                        <p class="govuk-body">@Model.ClosedPeriodWarningPara2</p>
-                        if (@Model.ClosedPeriodWarningPara3 != null)
-                        {
-                            <p class="govuk-body">@Model.ClosedPeriodWarningPara3</p>
-                        }
-                    }
-                    @if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
-                    {
-                        <p class="govuk-notification-banner__heading">
-                            @Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1
-                        </p>
-                        <p class="govuk-body">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2</p>
-                        @if (Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 != null)
-                        {
-                            <p class="govuk-body">@Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 </p>
-                        }
-                    }
-                    @* @if (Model.IsClosedPeriodWarning)
-                {
-                <p class="govuk-body">
-                @Resource.MsgYouCanContinueButYouShouldConsider
-                </p>
-                } *@
+            @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
+            @await Html.PartialAsync("~/Views/OrganicManure/_ManureApplicationDateWarning.cshtml", Model)
 
-
-                </govuk-notification-banner>
-
-            }
-
-            <govuk-date-input for="ApplicationDate" >                
-                <govuk-date-input-fieldset>                    
+            <govuk-date-input for="ApplicationDate">
+                <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @pageHeader                     
-                    </govuk-date-input-fieldset-legend>                   
+                        @pageHeader
+                    </govuk-date-input-fieldset-legend>
                     <govuk-date-input-hint>
                         @if (Model.HighReadilyAvailableNitrogen == true && Model.ClosedPeriodForUI != null && Model.IsWithinNVZ == true)
                         {
                             <p class="govuk-body">@Resource.lblYourClosedPeriodForSpreadingOrganicMaterials</p>
-                            <p class ="govuk-body">
+                            <p class="govuk-body">
                                 <strong>@Model.ClosedPeriodForUI</strong><br />
                                 @Resource.lblBasedOnYourCropSoilTypeFarmDetails
                             </p>
                         }
-                        <p class ="govuk-body">
-                        @Resource.MsgManureApplyingDateDontHaveExactDate
+                        <p class="govuk-body">
+                            @Resource.MsgManureApplyingDateDontHaveExactDate
                         </p>
                         @string.Format(Resource.lblSampleDate, DateTime.Now.Year - 1)
                     </govuk-date-input-hint>

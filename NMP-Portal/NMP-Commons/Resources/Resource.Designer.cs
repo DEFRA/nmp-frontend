@@ -11186,6 +11186,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The green compost or green/food compost applied must be produced in accordance with the standards set out in PAS 100 and must not contain livestock manure.
+        /// </summary>
+        public static string lblPara1PAS100 {
+            get {
+                return ResourceManager.GetString("lblPara1PAS100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Peas.
         /// </summary>
         public static string lblPeas {

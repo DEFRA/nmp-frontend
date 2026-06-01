@@ -38,6 +38,9 @@ namespace NMP.Portal.Controllers
         private const string _rainfallActionName = "Rainfall";
         private const string _farmDataBeforeUpdateSessionKey = "FarmDataBeforeUpdate";
         private const string _organisationId = "organisationId";
+        private const string _elevationActionName = "Elevation";
+        private const string _farmDataKey = "FarmData"; 
+        private const string _addressListKey = "AddressList";
 
         public IActionResult Index()
         {
@@ -876,7 +879,7 @@ namespace NMP.Portal.Controllers
             {
                 model.NVZFields = (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ;
                 SetFarmToSession(model);
-                return await Task.FromResult(RedirectToAction("Elevation"));
+                return await Task.FromResult(RedirectToAction(_elevationActionName));
             }
             return View(model);
         }
@@ -907,7 +910,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("NitrateVulnerableZones");
             }
-            return RedirectToAction("Elevation");
+            return RedirectToAction(_elevationActionName);
         }
         [HttpGet]
         public async Task<IActionResult> NitrateVulnerableZones()
@@ -948,7 +951,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction(_checkAnswerActionName);
             }
 
-            return RedirectToAction("Elevation");
+            return RedirectToAction(_elevationActionName);
         }
 
         [HttpGet]
@@ -979,7 +982,7 @@ namespace NMP.Portal.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View("Elevation", farm);
+                return View(_elevationActionName, farm);
             }
 
             SetFarmToSession(farm);
@@ -1246,7 +1249,7 @@ namespace NMP.Portal.Controllers
                 SetFarmToSession(model);
                 if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                 {
-                    return RedirectToAction("Elevation");
+                    return RedirectToAction(_elevationActionName);
                 }
                 return RedirectToAction("Organic");
             }
@@ -1800,23 +1803,23 @@ namespace NMP.Portal.Controllers
 
         private FarmViewModel? GetFarmFromSession()
         {
-            if (HttpContext.Session.Exists("FarmData"))
+            if (HttpContext.Session.Exists(_farmDataKey))
             {
-                return HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                return HttpContext.Session.GetObjectFromJson<FarmViewModel>(_farmDataKey);
             }
             return null;
         }
 
         private void SetFarmToSession(FarmViewModel farm)
         {
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson(_farmDataKey, farm);
         }
 
         private void RemoveFarmSession()
         {
-            if (HttpContext.Session.Exists("FarmData"))
+            if (HttpContext.Session.Exists(_farmDataKey))
             {
-                HttpContext.Session.Remove("FarmData");
+                HttpContext.Session.Remove(_farmDataKey);
             }
         }
 
@@ -1844,23 +1847,23 @@ namespace NMP.Portal.Controllers
 
         private List<AddressLookupResponse>? GetAddressesFromSession()
         {
-            if (HttpContext.Session.Exists("AddressList"))
+            if (HttpContext.Session.Exists(_addressListKey))
             {
-                return HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
+                return HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>(_addressListKey);
             }
             return null;
         }
 
         private void SetAddressesToSession(List<AddressLookupResponse> addresses)
         {
-            HttpContext.Session.SetObjectAsJson("AddressList", addresses);
+            HttpContext.Session.SetObjectAsJson(_addressListKey, addresses);
         }
 
         private void RemoveAddressesSession()
         {
-            if (HttpContext.Session.Exists("AddressList"))
+            if (HttpContext.Session.Exists(_addressListKey))
             {
-                HttpContext.Session.Remove("AddressList");
+                HttpContext.Session.Remove(_addressListKey);
             }
         }
         private async Task<List<SelectListItem>> GetNvzActionProgramItemsByCountryIdAsync(int countryId)

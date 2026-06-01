@@ -2,10 +2,6 @@
 @model NMP.Commons.ViewModels.PlanViewModel
 @{
 
-    var bachAction = (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.NoIWillEnterTheDateLater) ? "SowingDateQuestion" :
-     "SwardType";
-    int OtherGroupId = (int)NMP.Commons.Enums.CropGroup.Other;
-
     var pageHeading = "";
     if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly)
     {
