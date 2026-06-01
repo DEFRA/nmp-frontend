@@ -164,10 +164,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
-        if (responseWrapper?.Data["exists"])
-        {
-            isFarmExist = true;
-        }
+        isFarmExist = (bool?)responseWrapper?.Data?["exists"] == true;
 
         return isFarmExist;
     }
