@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange)) ? "CheckAnswer": "RecentSoilAnalysisQuestion")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsRecentSoilAnalysisQuestionChange)) ? "CheckAnswer" : "RecentSoilAnalysisQuestion")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SulphurDeficient" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -23,7 +23,7 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblDoYouExpectSulphurDeficiency, Model.Name)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblAHDBNutrientManagementGuide</govuk-radios-hint>
+                    <govuk-radios-hint>@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblFASSRUCTechnicalNotesGuide : Resource.lblAHDBNutrientManagementGuide)</govuk-radios-hint>
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>

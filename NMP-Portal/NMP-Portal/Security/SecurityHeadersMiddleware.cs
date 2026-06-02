@@ -13,7 +13,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         context.Response.Headers.Remove("X-Powered-By");
         context.Response.Headers.Remove("Server");
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
-        // TODO Change the value depending of your needs
+        // Change the value depending of your needs
         context.Response.Headers.Append("Referrer-Policy", new StringValues("strict-origin"));
 
         // Strict Transport Security (HSTS) - Enforces HTTPS
@@ -56,7 +56,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
-        // TODO change the value of each rule and check the documentation to see if new rules are available
+        // Change the value of each rule and check the documentation to see if new rules are available
         //context.Response.Headers.Add("Content-Security-Policy", new StringValues(
         //    "base-uri 'self';" +
         //    "block-all-mixed-content;" +

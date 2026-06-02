@@ -14,9 +14,9 @@ using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class ReportService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IReportService
+public class ReportService(ILogger<ReportService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IReportService
 {
-    private readonly ILogger<FarmService> _logger = logger;
+    private readonly ILogger<ReportService> _logger = logger;
     private const string _applicationJson = "application/json";
 
     public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsServiceAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
