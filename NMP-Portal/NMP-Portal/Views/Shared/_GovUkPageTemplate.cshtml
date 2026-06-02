@@ -35,6 +35,7 @@
 
         return result;
     }
+     bool hasBeenRendered = ViewBag.ErrorSummaryHasBeenRendered as bool? ?? false; 
 }
 <!DOCTYPE html>
 <html lang="@htmlLang" class="@Classes("govuk-template", rebrand ? "govuk-template--rebranded" : string.Empty, ViewBag.HtmlClasses)">
@@ -83,7 +84,8 @@
     <div class="@Classes("govuk-width-container", ViewBag.ContainerClasses)">
         @await RenderSectionAsync("BeforeContent", required: false)
         <main class="@Classes("govuk-main-wrapper", ViewBag.MainClasses)" id="main-content" role="main" lang="@ViewBag.MainLang" prepend-error-summary="false">
-            @if (ViewBag.ErrorSummaryHasBeenRendered != true)
+            
+            @if (!hasBeenRendered)
             {
                 <govuk-error-summary />
             }
