@@ -3367,96 +3367,123 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult HasGrassInLastThreeYear(FieldViewModel model)
     {
         _logger.LogTrace("Field Controller : HasGrassInLastThreeYear() post action called");
+
         if (model.PreviousCroppings.HasGrassInLastThreeYear == null)
         {
-            ModelState.AddModelError("PreviousCroppings.HasGrassInLastThreeYear", Resource.MsgSelectAnOptionBeforeContinuing);
+            ModelState.AddModelError(
+                "PreviousCroppings.HasGrassInLastThreeYear",
+                Resource.MsgSelectAnOptionBeforeContinuing);
         }
+
         if (!ModelState.IsValid)
         {
             return View(model);
         }
 
         FieldViewModel? fieldData = LoadFieldDataFromSession();
-        bool isAnyChangeInHasGrassLastThreeYearFlag = false;
-        if (fieldData != null && fieldData.PreviousCroppings != null &&
-               model.PreviousCroppings != null &&
-               fieldData.PreviousCroppings.HasGrassInLastThreeYear != model.PreviousCroppings.HasGrassInLastThreeYear)
-        {
-            isAnyChangeInHasGrassLastThreeYearFlag = true;
-        }
 
-        if (model.IsCheckAnswer && fieldData != null)
+        bool hasGrassChanged = HasGrassFlagChanged(model, fieldData);
+
+        if (model.IsCheckAnswer)
         {
-            if (isAnyChangeInHasGrassLastThreeYearFlag)
+            IActionResult? checkAnswerResult = HandleCheckAnswer(model, hasGrassChanged, fieldData);
+
+            if (checkAnswerResult != null)
             {
-                model.IsHasGrassInLastThreeYearChange = true;
-                if ((model.PreviousCroppings.HasGrassInLastThreeYear != null && (!model.PreviousCroppings.HasGrassInLastThreeYear.Value)))
-                {
-                    model.CropGroupId = null;
-                    model.CropGroup = string.Empty;
-                    model.CropTypeID = null;
-                    model.CropType = string.Empty;
-                    model.PreviousCroppings.HarvestYear = null;
-                    model.PreviousCroppings.GrassManagementOptionID = null;
-                    model.PreviousCroppings.HasGreaterThan30PercentClover = null;
-                    model.PreviousCroppings.SoilNitrogenSupplyItemID = null;
-                    model.PreviousGrassYears = null;
-                    model.IsPreviousYearGrass = null;
-                    SetFieldDataToSession(model);
-                    return RedirectToAction(_cropGroupsActionName);
-                }
-                else
-                {
-                    if (model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && model.PreviousCroppings.HasGrassInLastThreeYear.Value)
-                    {
-                        SetFieldDataToSession(model);
-                        return RedirectToAction("GrassLastThreeHarvestYear");
-                    }
-                }
-            }
-            else
-            {
-                model.IsHasGrassInLastThreeYearChange = false;
-                SetFieldDataToSession(model);
-                if (!model.IsLastHarvestYearChange)
-                {
-                    return RedirectToAction(_checkAnswerActionName);
-                }
+                return checkAnswerResult;
             }
         }
 
         SetFieldDataToSession(model);
 
-        if (model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && model.PreviousCroppings.HasGrassInLastThreeYear.Value)
+        if (model.PreviousCroppings.HasGrassInLastThreeYear == true)
         {
             return RedirectToAction("GrassLastThreeHarvestYear");
         }
-        else
+
+        ClearGrassData(model);
+
+        if (model.IsCheckAnswer && !model.IsLastHarvestYearChange)
         {
-            model.PreviousCroppings.HarvestYear = null;
-            model.PreviousCroppings.GrassManagementOptionID = null;
-            model.PreviousCroppings.HasGreaterThan30PercentClover = null;
-            model.PreviousCroppings.SoilNitrogenSupplyItemID = null;
-            model.PreviousGrassYears = null;
-            model.IsPreviousYearGrass = null;
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+        if (hasGrassChanged)
+        {
+            ClearCropData(model);
+            SetFieldDataToSession(model);
+        }
+
+        return RedirectToAction(_cropGroupsActionName);
+    }
+
+    private static bool HasGrassFlagChanged(FieldViewModel model, FieldViewModel? fieldData)
+    {
+        return fieldData?.PreviousCroppings != null
+               && model.PreviousCroppings != null
+               && fieldData.PreviousCroppings.HasGrassInLastThreeYear !=
+                  model.PreviousCroppings.HasGrassInLastThreeYear;
+    }
+
+    private IActionResult? HandleCheckAnswer(
+        FieldViewModel model,
+        bool hasGrassChanged,
+        FieldViewModel? fieldData)
+    {
+        if (fieldData == null)
+        {
+            return null;
+        }
+
+        if (!hasGrassChanged)
+        {
+            model.IsHasGrassInLastThreeYearChange = false;
             SetFieldDataToSession(model);
 
-            if (model.IsCheckAnswer && (!model.IsLastHarvestYearChange))
+            if (!model.IsLastHarvestYearChange)
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
 
-            if (isAnyChangeInHasGrassLastThreeYearFlag)
-            {
-                model.CropGroupId = null;
-                model.CropGroup = string.Empty;
-                model.CropTypeID = null;
-                model.CropType = string.Empty;
-                SetFieldDataToSession(model);
-            }
+            return null;
+        }
 
+        model.IsHasGrassInLastThreeYearChange = true;
+
+        if (model.PreviousCroppings.HasGrassInLastThreeYear == false)
+        {
+            ClearCropData(model);
+            ClearGrassData(model);
+
+            SetFieldDataToSession(model);
             return RedirectToAction(_cropGroupsActionName);
         }
+
+        if (model.PreviousCroppings.HasGrassInLastThreeYear == true)
+        {
+            SetFieldDataToSession(model);
+            return RedirectToAction("GrassLastThreeHarvestYear");
+        }
+
+        return null;
+    }
+
+    private static void ClearGrassData(FieldViewModel model)
+    {
+        model.PreviousCroppings.HarvestYear = null;
+        model.PreviousCroppings.GrassManagementOptionID = null;
+        model.PreviousCroppings.HasGreaterThan30PercentClover = null;
+        model.PreviousCroppings.SoilNitrogenSupplyItemID = null;
+        model.PreviousGrassYears = null;
+        model.IsPreviousYearGrass = null;
+    }
+
+    private static void ClearCropData(FieldViewModel model)
+    {
+        model.CropGroupId = null;
+        model.CropGroup = string.Empty;
+        model.CropTypeID = null;
+        model.CropType = string.Empty;
     }
 
     private static List<int> GetLastThreeYears(int lastHarvestYear)
