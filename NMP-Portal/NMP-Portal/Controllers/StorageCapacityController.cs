@@ -1443,39 +1443,44 @@ namespace NMP.Portal.Controllers
             }
             if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank)
             {
-                if (model.IsCircumference == null)
+                ValidateCircularTankForCheckAnswer(model);
+            }
+        }
+
+        private void ValidateCircularTankForCheckAnswer(StorageCapacityViewModel model)
+        {
+            if (model.IsCircumference == null)
+            {
+                ModelState.AddModelError("IsCircumference", Resource.MsgDoYouWantToEnterTheCircumferenceOrDiameterNotSet);
+            }
+            else
+            {
+                if (model.IsCircumference == true)
                 {
-                    ModelState.AddModelError("IsCircumference", Resource.MsgDoYouWantToEnterTheCircumferenceOrDiameterNotSet);
+                    if (model.Circumference == null)
+                    {
+                        ModelState.AddModelError("Circumference", Resource.MsgWhatIsTheCircumferenceNotSet);
+                    }
+                    model.Diameter = null;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 }
                 else
                 {
-                    if (model.IsCircumference == true)
+                    if (model.Diameter == null)
                     {
-                        if (model.Circumference == null)
-                        {
-                            ModelState.AddModelError("Circumference", Resource.MsgWhatIsTheCircumferenceNotSet);
-                        }
-                        model.Diameter = null;
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                        ModelState.AddModelError("Diameter", Resource.MsgWhatIsTheDiameterNotSet);
                     }
-                    else
-                    {
-                        if (model.Diameter == null)
-                        {
-                            ModelState.AddModelError("Diameter", Resource.MsgWhatIsTheDiameterNotSet);
-                        }
-                        model.Circumference = null;
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                    }
+                    model.Circumference = null;
+                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 }
-                if (model.Depth == null)
-                {
-                    ModelState.AddModelError("Depth", Resource.MsgWhatIsTheDepthNotSet);
-                }
-                if (model.IsCovered == null)
-                {
-                    ModelState.AddModelError("IsCovered", string.Format(Resource.MsgIsCoveredNotSet, model.StoreName));
-                }
+            }
+            if (model.Depth == null)
+            {
+                ModelState.AddModelError("Depth", Resource.MsgWhatIsTheDepthNotSet);
+            }
+            if (model.IsCovered == null)
+            {
+                ModelState.AddModelError("IsCovered", string.Format(Resource.MsgIsCoveredNotSet, model.StoreName));
             }
         }
 
