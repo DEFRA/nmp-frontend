@@ -83,7 +83,7 @@
     <div class="@Classes("govuk-width-container", ViewBag.ContainerClasses)">
         @await RenderSectionAsync("BeforeContent", required: false)
         <main class="@Classes("govuk-main-wrapper", ViewBag.MainClasses)" id="main-content" role="main" lang="@ViewBag.MainLang" prepend-error-summary="false">
-           @if (ViewBag.ErrorSummaryHasBeenRendered is not true)
+            @if (ViewBag.ErrorSummaryHasBeenRendered != true)
             {
                 <govuk-error-summary />
             }
