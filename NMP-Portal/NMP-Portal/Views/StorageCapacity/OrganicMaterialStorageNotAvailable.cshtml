@@ -2,14 +2,12 @@
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
-    ViewData["Title"] = $"{Resource.lblYouHaveNotEnteredAnyOrganicMaterialStorage} {Resource.lblHyphen} {title}";
-    var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
-       "NVZComplianceReports");
+    ViewData["Title"] = $"{Resource.lblYouHaveNotEnteredAnyOrganicMaterialStorage} {Resource.lblHyphen} {title}";   
 
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="NVZComplianceReports" asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnOrganicMaterialStorageNotAvailable"] != null)
 {
