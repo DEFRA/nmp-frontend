@@ -20,6 +20,8 @@ namespace NMP.Services;
 public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IOrganicManureService
 {
     private readonly ILogger<OrganicManureService> _logger = logger;
+    private const string _applicationJson = "application/json";
+    private const string _dateFormat = "yyyy-MM-dd";
     public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYearServiceAsync(int farmId, int harvestYear)
     {
         List<ManureCropTypeResponse> cropTypeList = new List<ManureCropTypeResponse>();
@@ -118,7 +120,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.AddOrganicManuresAsyncAPI, new StringContent(organicManureData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddOrganicManuresAsyncAPI, new StringContent(organicManureData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -185,7 +187,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI, new StringContent(jsonString, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI, new StringContent(jsonString, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -478,8 +480,8 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
     {
         Error? error = null;
         decimal totalN = 0;
-        string fromdate = startDate.ToString("yyyy-MM-dd");
-        string toDate = endDate.ToString("yyyy-MM-dd");
+        string fromdate = startDate.ToString(_dateFormat);
+        string toDate = endDate.ToString(_dateFormat);
 
         string url = ApiurlHelper.FetchTotalNByManagementIdAndAppDateAsyncAPI;
 
@@ -495,8 +497,8 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
     {
         Error? error = null;
         decimal totalN = 0;
-        string fromdate = startDate.ToString("yyyy-MM-dd");
-        string toDate = endDate.ToString("yyyy-MM-dd");
+        string fromdate = startDate.ToString(_dateFormat);
+        string toDate = endDate.ToString(_dateFormat);
         try
         {
             string url = ApiurlHelper.FetchTotalNByCropIdAndAppDateAsyncAPI;
@@ -758,7 +760,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerAutumnCropNitrogenUptakeAsyncAPI, new StringContent(jsonString, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerAutumnCropNitrogenUptakeAsyncAPI, new StringContent(jsonString, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -823,7 +825,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerCalculateNutrientAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerCalculateNutrientAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -888,8 +890,8 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
     {
         Error? error = null;
         decimal totalN = 0;
-        string fromdate = startDate.ToString("yyyy-MM-dd");
-        string toDate = endDate.ToString("yyyy-MM-dd");
+        string fromdate = startDate.ToString(_dateFormat);
+        string toDate = endDate.ToString(_dateFormat);
         try
         {
             string url = ApiurlHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI;
@@ -915,8 +917,8 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
     {
         Error? error = null;
         decimal totalN = 0;
-        string fromdate = startDate.ToString("yyyy-MM-dd");
-        string toDate = endDate.ToString("yyyy-MM-dd");
+        string fromdate = startDate.ToString(_dateFormat);
+        string toDate = endDate.ToString(_dateFormat);
         try
         {
             string url = ApiurlHelper.FetchTotalNBasedOnFieldIdAndAppDateAsyncAPI;
@@ -1011,7 +1013,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var content = new StringContent(orgManureIds, Encoding.UTF8, "application/json");
+            var content = new StringContent(orgManureIds, Encoding.UTF8, _applicationJson);
             var url = ApiurlHelper.DeleteOrganicManureByAPI;
             var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
             {
@@ -1056,10 +1058,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper?.Data["exists"] == true)
-                {
-                    isFarmManureTypeExist = true;
-                }
+                isFarmManureTypeExist = (bool?)responseWrapper?.Data?["exists"] == true;
             }
             else
             {
@@ -1115,7 +1114,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(ApiurlHelper.UpdateOrganicManureAsyncAPI, new StringContent(organicManureData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateOrganicManureAsyncAPI, new StringContent(organicManureData, Encoding.UTF8, _applicationJson));
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
