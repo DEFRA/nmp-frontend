@@ -2637,48 +2637,11 @@ managementPeriod.CropID.HasValue
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
                 bool flowControl = false; IActionResult? value = null;
-                if (model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
-                {
-                    model.Area = null;
-                    model.Quantity = null;
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                    return RedirectToAction("ManualApplicationRate");
-                }
-                else if (model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-                {
-                    model.ApplicationRate = null;
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                    return RedirectToAction("AreaQuantity");
-                }
-                else if (model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
-                {
-                    model.ApplicationRate = manureTypeList.FirstOrDefault(x => x.Id == model.ManureTypeId)?.ApplicationRateArable;
-                    model.Area = null;
-                    model.Quantity = null;
-                    if (model.OrganicManures?.Count > 0)
-                    {
-                        model.OrganicManures.ForEach(x =>
-                        {
-                            x.AreaSpread = null;
-                            x.ManureQuantity = null;
-                            x.ApplicationRate = model.ApplicationRate.Value;
-                        });
-                    }
+                (var shouldContinue, var result, model) = await HandleApplicationRateMethodSelection(model, manureTypeList, error);
 
-                    ResetWarnings(model, false);
-                    string message = string.Empty;
-
-                    (flowControl, value) = BindIsWarningMsgNeedToShow(model);
-                    if (!flowControl && value != null)
-                    {
-                        return value;
-                    }
-
-                    (flowControl, value, model) = await PrepareWarningMessageForApplicationRateMethod(model, error, message);
-                    if (!flowControl && value != null)
-                    {
-                        return value;
-                    }
+                if (!shouldContinue && result != null)
+                {
+                    return result;
                 }
                 (flowControl, value, model) = HandleWarningForApplicationRateMethod(model);
                 if (!flowControl && value != null)
@@ -2695,7 +2658,61 @@ managementPeriod.CropID.HasValue
                 return View(model);
             }
         }
+        private async Task<(bool ShouldContinue, IActionResult? Result, OrganicManureViewModel Model)> HandleApplicationRateMethodSelection(
+        OrganicManureViewModel model, List<ManureType> manureTypeList, Error? error)
+        {
+            switch ((NMP.Commons.Enums.ApplicationRate)model.ApplicationRateMethod!.Value)
+            {
+                case NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate:
+                    model.Area = null;
+                    model.Quantity = null;
+                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
 
+                    return (false, RedirectToAction("ManualApplicationRate"), model);
+
+                case NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity:
+                    model.ApplicationRate = null;
+                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+
+                    return (false, RedirectToAction("AreaQuantity"), model);
+
+                case NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate:
+
+                    model.ApplicationRate = manureTypeList
+                        .FirstOrDefault(x => x.Id == model.ManureTypeId)?
+                        .ApplicationRateArable;
+
+                    model.Area = null;
+                    model.Quantity = null;
+
+                    if (model.OrganicManures?.Count > 0)
+                    {
+                        model.OrganicManures.ForEach(x =>
+                        {
+                            x.AreaSpread = null;
+                            x.ManureQuantity = null;
+                            x.ApplicationRate = model.ApplicationRate!.Value;
+                        });
+                    }
+
+                    ResetWarnings(model, false);
+
+                    var (flowControl, value) = BindIsWarningMsgNeedToShow(model);
+
+                    if (!flowControl && value != null)
+                    {
+                        return (false, value, model);
+                    }
+
+                    return await PrepareWarningMessageForApplicationRateMethod(
+                        model,
+                        error,
+                        string.Empty);
+
+                default:
+                    return (true, null, model);
+            }
+        }
         private (bool flowControl, IActionResult value) BindIsWarningMsgNeedToShow(OrganicManureViewModel model)
         {
             OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
