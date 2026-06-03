@@ -6,14 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const printButton = document.getElementById("cropReportPrintButton");
     if (printButton) {
         printButton.addEventListener("click", function () {
-            window.print();
+            globalThis.print();
         });
     }
 
     const backButton = document.getElementById("BackToPreviousPage");
     if (backButton) {
         backButton.addEventListener("click", function () {
-            window.history.back();
+            globalThis.history.back();
         });
     }
 
