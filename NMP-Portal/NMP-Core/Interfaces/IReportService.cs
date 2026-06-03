@@ -26,4 +26,5 @@ public interface IReportService
 
     Task<(NutrientsLoadingLiveStock, Error)> UpdateNutrientsLoadingLiveStockServiceAsync(NutrientsLoadingLiveStock nutrientsLoadingLiveStockData);
     Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropIdServiceAsync(int cropId);
+    Task<(List<ReportYearLastUpdatedDateResponse>, Error?)> FetchLastUpdatedDateByFarmIdAndYearAsync(int farmId, string years);
 }

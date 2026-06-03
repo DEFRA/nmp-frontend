@@ -7766,4 +7766,7 @@ livestock manure.</value>
   <data name="lblFASSRUCTechnicalNotesGuide" xml:space="preserve">
     <value>The FAS SRUC Technical Notes recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
   </data>
+  <data name="lblLastUpdatedOn" xml:space="preserve">
+    <value>(Last updated on {0})</value>
+  </data>
 </root>

@@ -402,5 +402,23 @@ public class ReportService(ILogger<ReportService> logger, IHttpContextAccessor h
 
         return (data ?? new OrganicManureFertiliserResponse(), error);
     }
+    public async Task<(List<ReportYearLastUpdatedDateResponse>, Error?)> FetchLastUpdatedDateByFarmIdAndYearAsync(int farmId, string years)
+    {
+        var (data, error) = await SendRequestAsync<List<ReportYearLastUpdatedDateResponse>>(
+           client => client.GetAsync(
+               string.Format(ApiurlHelper.FetchYearsAndLastUpdatedDateByFarmIDAndYearAsyncAPI, farmId, years)
+           ),
+           wrapper =>
+           {
+               if (wrapper?.Data is JArray array)
+               {
+                   return array.ToObject<List<ReportYearLastUpdatedDateResponse>>();
+               }
+           
+               return null;
+           }, _logger
+        );
 
+        return (data ?? null, error);
+    }
 }
