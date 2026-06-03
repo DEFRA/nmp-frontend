@@ -1694,7 +1694,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             if (IsQueryValid(q, r, s))
             {
-                await InitializeModel(q, r, s, u, model);
+                await InitializeModel(q, r, u, model);
                 error = await LoadFertiliserData(q!, r!, s!, t!, model);
             }
             else
@@ -1796,7 +1796,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                !string.IsNullOrWhiteSpace(r) &&
                !string.IsNullOrWhiteSpace(s);
     }
-    private async Task InitializeModel(string q, string r, string s, string? u, FertiliserManureViewModel model)
+    private async Task InitializeModel(string q, string r, string? u, FertiliserManureViewModel model)
     {
         model.IsComingFromRecommendation = !string.IsNullOrWhiteSpace(u);
         model.EncryptedFertId = q;
@@ -1905,10 +1905,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             model.FieldID = filtered.Select(x => Convert.ToInt32(x.Value)).First();
         }
     }
-    private async Task HandleDoubleCrop(
-    FertiliserManureViewModel model,
-    FertiliserManureDataViewModel fertiliserManure,
-    int year)
+    private async Task HandleDoubleCrop(FertiliserManureViewModel model, FertiliserManureDataViewModel fertiliserManure, int year)
     {
         if (model.FieldList == null) return;
 
@@ -1928,31 +1925,22 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         if (!model.IsDoubleCropAvailable) return;
 
-        var (managementPeriod, error) =
-            await _cropLogic.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
+        var (managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
 
-        if (error != null || managementPeriod == null)
-            throw new Exception(error?.Message);
+        var (crop, _) =
+        await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
 
-        var (crop, cropError) =
-            await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-
-        if (cropError != null)
-        throw new Exception(cropError?.Message);
-
-        var (cropListFull, listError) =
-            await _cropLogic.FetchCropPlanByFieldIdAndYear(crop.FieldID.Value, year);
-
-        if (cropListFull == null || cropListFull.Count != 2)
-        throw new Exception(listError?.Message);
-
-        var cropTypeName =
+        var (cropListFull, _) = await _cropLogic.FetchCropPlanByFieldIdAndYear(crop.FieldID.Value, year);
+        if (cropListFull == null || cropListFull.Count == 2)
+        {
+            var cropTypeName =
             await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
+            if (model.DoubleCrop == null)
+                model.DoubleCrop = new List<DoubleCrop>();
 
-        if (model.DoubleCrop == null)
-            model.DoubleCrop = new List<DoubleCrop>();
+            await PrepareDoubleCropList(model, cropTypeName, 1, crop);
+        }
 
-        await PrepareDoubleCropList(model, cropTypeName, 1, crop);
     }
     private async Task ProcessDefoliation(
     FertiliserManureViewModel model,
@@ -2178,7 +2166,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return error;
     }
 
-    
+
 
     private IActionResult RedirectForErrorOnCheckAnswer(FertiliserManureViewModel? model, string message)
     {
@@ -2408,7 +2396,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             HashSet<int> brassicaCrops = WarningWithinPeriod.BrassicaCrops();
             Field field = await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId));
             string? closedPeriod = await GetClosedPeriodAsync(model, cropTypeId, field.NVZProgrammeID ?? 0, model.HarvestYear ?? 0);
-   
+
             bool isWithinClosedPeriod = WarningWithinPeriod.IsApplicationDateWithinDateRange(model.Date.Value, startDate, endDate);
             bool isCropBrassicaAndWithInClosedPeriod = brassicaCrops.Contains(cropTypeId) && isWithinClosedPeriod;
             (string startPeriod, string endPeriod) = _fertiliserManureLogic.BindStartPeriodAndEndPeriod(closedPeriod);
