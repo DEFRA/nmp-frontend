@@ -1528,8 +1528,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 TempData[_tempDataForSuccessMsg] = _reportDataProtector.Unprotect(q);
             }
-            ViewBag.Years = yearList.OrderByDescending(x => x);
-
+            yearList = yearList.OrderByDescending(x => x).ToList();
+            ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
+            
             SetReportDataToSession(model);
         }
         catch (Exception ex)
@@ -1592,7 +1593,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     }
                 }
             }
-            ViewBag.Years = yearList.OrderByDescending(x => x);
+            yearList = yearList.OrderByDescending(x => x).ToList();
+            ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -1618,7 +1620,28 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return View(model);
         }
     }
+    
+    private async Task<List<ReportYearLastUpdatedDateResponse>> FetchYearsWithLastUpdatedDate(
+    int farmId,
+    List<int> years)
+    {
+        string yrs = string.Join(",", years);
 
+        Error? error = null;
+
+        (List<ReportYearLastUpdatedDateResponse> reportYears, error) =
+            await _reportLogic.FetchLastUpdatedDateByFarmIdAndYearAsync(farmId, yrs);
+
+        return reportYears.Select(x => new ReportYearLastUpdatedDateResponse
+        {
+            Year = x.Year,
+            LastUpdatedDate = x.LastUpdatedDate != null
+                ? string.Format(
+                    Resource.lblLastUpdatedOn,
+                    x.LastUpdatedDate)
+                : null
+        }).ToList();
+    }
     [HttpGet]
     public async Task<IActionResult> IsGrasslandDerogation()
     {

@@ -45,4 +45,5 @@ public interface IReportLogic
     Task ProcessScotland(ProcessScotlandContext ctx);
     Task<string> GetPreviousCropAsync(int fieldId, int year);
     Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId);
+    Task<(List<ReportYearLastUpdatedDateResponse>, Error?)> FetchLastUpdatedDateByFarmIdAndYearAsync(int farmId, string years);
 }

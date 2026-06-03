@@ -757,5 +757,10 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
         _logger.LogTrace("Fetching organic manure and fertiliser list by cropId");
         return await _reportService.FetchOrganicManureFertiliserByCropIdServiceAsync(cropId);
     }
+    public async Task<(List<ReportYearLastUpdatedDateResponse>, Error?)> FetchLastUpdatedDateByFarmIdAndYearAsync(int farmId, string years)
+    {
+        _logger.LogTrace("Fetching last update dates for livestock N farm limit report by farmId and year");
+        return await _reportService.FetchLastUpdatedDateByFarmIdAndYearAsync(farmId, years);
+    }
 }
 
