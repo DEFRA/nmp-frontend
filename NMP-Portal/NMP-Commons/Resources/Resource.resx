@@ -7763,6 +7763,9 @@ livestock manure.</value>
   <data name="lblPara1PAS100" xml:space="preserve">
     <value>The green compost or green/food compost applied must be produced in accordance with the standards set out in PAS 100 and must not contain livestock manure</value>
   </data>
+  <data name="lblFASSRUCTechnicalNotesGuide" xml:space="preserve">
+    <value>The FAS SRUC Technical Notes recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
+  </data>
   <data name="TransferFarmFromAnotherCompany" xml:space="preserve">
     <value>Transfer farm from another company</value>
   </data>

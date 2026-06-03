@@ -19,8 +19,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedOrgManureId)) ? Resource.lblUpdateOrganicManure : Resource.lblAddOrganicManure;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 
-    var DefaultNutrientValues = true;
-    var NotDefaultNutrientValues = false;
     string backAction;
 
     if (Model.IsCheckAnswer && Model.IsDefaultNutrientOptionChange)

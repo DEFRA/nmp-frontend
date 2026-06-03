@@ -16,6 +16,7 @@ namespace NMP.Services;
 public class FertiliserManureService : Service, IFertiliserManureService
 {
     private readonly ILogger<FertiliserManureService> _logger;
+    private const string _logError = "{Code} : {Message} : {Stack} : {Path}";
     public FertiliserManureService(ILogger<FertiliserManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
     {
         _logger = logger;
@@ -105,7 +106,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
                     error = responseWrapper?.Error?.ToObject<Error>();
                     if (error != null)
                     {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                        _logger.LogError(_logError, error.Code, error.Message, error.Stack, error.Path);
                     }
                 }
             }
@@ -162,7 +163,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper?.Error is JToken errorToken)
                 {
                     error = errorToken.ToObject<Error>() ?? new Error();                    
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                        _logger.LogError(_logError, error.Code, error.Message, error.Stack, error.Path);
                     
                 }
             }
@@ -218,7 +219,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
 
                 if (error != null)
                 {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                    _logger.LogError(_logError, error.Code, error.Message, error.Stack, error.Path);
 
                 }
             }
@@ -293,7 +294,7 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 if (responseWrapper?.Error is JToken errorToken)
                 {
                     error = errorToken.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}",
+                    _logger.LogError(_logError,
                         error?.Code, error?.Message, error?.Stack, error?.Path);
                 }
             }

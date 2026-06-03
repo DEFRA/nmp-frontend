@@ -9,7 +9,7 @@
 
     int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);
 
-    var action = "HarvestYearForPlan";
+    var action = "";
     if (Model.IsCheckAnswer)
     {
         action = "CheckAnswer";
@@ -20,7 +20,7 @@
     }
     else
     {
-        action = "HarvestYearForPlan";
+        action = "PlansAndRecordsOverview";
     }
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.CropGroup;
 
@@ -28,7 +28,7 @@
 
 
 @section BeforeContent {
-    @if (index >= 0 && index == Model.HarvestYear.Count - 1)
+    @if ((index >= 0 && index == Model.HarvestYear.Count - 1) || action.Equals("PlansAndRecordsOverview"))
     {
         <govuk-back-link asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 
