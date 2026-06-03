@@ -1925,7 +1925,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         if (!model.IsDoubleCropAvailable) return;
 
-        var (managementPeriod, error) = await _cropLogic.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
+        var (managementPeriod, _) = await _cropLogic.FetchManagementperiodById(fertiliserManure.ManagementPeriodID);
 
         var (crop, _) =
         await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
