@@ -1529,9 +1529,15 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 TempData[_tempDataForSuccessMsg] = _reportDataProtector.Unprotect(q);
             }
             yearList = yearList.OrderByDescending(x => x).ToList();
-            ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
-            
-            SetReportDataToSession(model);
+            if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
+            {
+                ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
+            }
+            else
+            {
+                ViewBag.Years = yearList;
+            }
+                SetReportDataToSession(model);
         }
         catch (Exception ex)
         {
