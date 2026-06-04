@@ -43,12 +43,6 @@
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
 
-            @if (TempData["IsSameDefoliationForAllError"] != null)
-            {
-                <govuk-error-summary>
-                    <govuk-error-summary-item href="#">@TempData["IsSameDefoliationForAllError"]</govuk-error-summary-item>
-                </govuk-error-summary>
-            }
 
             <govuk-radios asp-for="@Model.IsSameDefoliationForAll">
                 <govuk-radios-fieldset>
