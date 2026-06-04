@@ -10,6 +10,10 @@
     {
         backAction = "CheckAnswer";
     }
+    else if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
+    {
+        backAction = "DoubleCrop";
+    }
     else
     {
         if (Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
@@ -18,7 +22,7 @@
         }
         if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
         {
-            backAction="OtherMaterialName";
+            backAction = "OtherMaterialName";
         }
         else
         {
@@ -29,40 +33,24 @@
 }
 
 @section BeforeContent {
-    @if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsDoubleCropValueChange) && (!Model.IsManureTypeChange))
-    {
-        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
-    }
-    else if (Model.IsDoubleCropAvailable || (Model.IsCheckAnswer && Model.IsDoubleCropValueChange))
-    {
-        <govuk-back-link asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>
-    }
-    else
-    {
-        if (Model.FieldGroup == Resource.lblSelectSpecificFields)
-        {
-            backAction = "Fields";
-        }
-        else
-        {
-            backAction = "FieldGroup";
-        }
-        <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
-    }
+    <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
-<div class="govuk-grid-row">
-    @if (TempData["IsSameDefoliationForAllError"] != null)
-    {
-        <govuk-error-summary>
-            <govuk-error-summary-item>@TempData["IsSameDefoliationForAllError"]</govuk-error-summary-item>
-        </govuk-error-summary>
-    }
-    <form asp-action="IsSameDefoliationForAll" asp-controller="OrganicManure" method="post" autocomplete="off">
-        @Html.AntiForgeryToken()
 
-       @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
+
+<form asp-action="IsSameDefoliationForAll" asp-controller="OrganicManure" method="post" autocomplete="off">
+    <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios for="@Model.IsSameDefoliationForAll">
+            @Html.AntiForgeryToken()
+            @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
+
+            @if (TempData["IsSameDefoliationForAllError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["IsSameDefoliationForAllError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+
+            <govuk-radios asp-for="@Model.IsSameDefoliationForAll">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblForMultipleDefoliation
@@ -89,5 +77,5 @@
                 }
             </p>
         </div>
-    </form>
-</div>
+    </div>
+</form>
