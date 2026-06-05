@@ -2321,7 +2321,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ViewBag.Success = null;
         }
 
-        
+
     }
 
     private async Task SetSuccessContent(string q, string? s, FieldViewModel model, List<SoilAnalysisResponse> soilAnalysisResponse, string statusFor)
@@ -2378,7 +2378,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         }
 
-        
+
     }
 
     void SuccessMessageWithSoilAnalysis(string? s, List<SoilAnalysisResponse> soilAnalysisResponse, List<Crop> crop)
@@ -2388,7 +2388,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
 
             var soil = soilAnalysisResponse.FirstOrDefault();
-            if (crop != null && crop.Count > 0 && soil != null)
+            if (crop.Count > 0 && soil != null)
             {
                 var matchedCrop = crop.FirstOrDefault(x => x.Year >= soil.Year);
 
@@ -2464,8 +2464,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         model.NVZProgrammeID = field.NVZProgrammeID;
         if (farm != null)
         {
-            model.IsWithinNVZForFarm = farm?.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-            model.IsAbove300SeaLevelForFarm = farm?.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+            model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+            model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
         }
         else
         {
@@ -2482,7 +2482,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         List<SoilAnalysisResponse> soilAnalysisResponse = (await _fieldLogic.FetchSoilAnalysisByFieldId(decryptedFieldId, Resource.lblFalse)).OrderByDescending(x => x.CreatedOn).ToList();
 
-        if (soilAnalysisResponse != null && soilAnalysisResponse.Count > 0)
+        if (soilAnalysisResponse.Count > 0)
         {
             soilAnalysisResponse.ForEach(m => m.EncryptedSoilAnalysisId = _fieldDataProtector.Protect(m.ID.ToString()));
             ViewBag.SoilAnalysisList = soilAnalysisResponse;
@@ -2544,7 +2544,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         }
 
-        
+
     }
     async Task PrevCroppingExcludingPlans(List<Crop> cropPlans, List<PreviousCroppingData> prevCroppings)
     {
@@ -2571,7 +2571,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         ViewBag.PreviousCroppingsList = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
 
-        if (tasks != null && tasks.Count > 0)
+        if (tasks.Count > 0)
         {
             var completedTasks = (await Task.WhenAll(tasks)).OrderByDescending(x => x.HarvestYear).ToList();
             var hasGrass = completedTasks.Any(t => t.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass);
@@ -2642,21 +2642,26 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         else
         {
-
-            int highestYearOfPlan = cropPlans.Max(cp => cp.Year);
-            List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
-            if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
-            {
-                ViewBag.NoNeedToShowPreviousCroppingDetail = true;
-            }
-            else
-            {
-                isPreviousCroppingBindRequired = true;
-            }
+            isPreviousCroppingBindRequired = CheckPreviousCroppingNeedToShow(cropPlans, isPreviousCroppingBindRequired);
 
         }
 
         return (error, prevCroppings, isPreviousCroppingBindRequired);
+    }
+
+    private bool CheckPreviousCroppingNeedToShow(List<Crop> cropPlans, bool isPreviousCroppingBindRequired)
+    {
+        List<int> yearsToCheck = YearsToCheck(cropPlans);
+        if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
+        {
+            ViewBag.NoNeedToShowPreviousCroppingDetail = true;
+        }
+        else
+        {
+            isPreviousCroppingBindRequired = true;
+        }
+
+        return isPreviousCroppingBindRequired;
     }
 
     [HttpGet]
@@ -2827,18 +2832,17 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
-                if (model != null)
-                {
-                    if (model.PreviousGrassYears == null)
-                    {
-                        model.PreviousGrassYears = new List<int>();
-                    }
-                    BindPreviousGrassesData(model);
-                    ResetSoilOverChalkAndReleasingClay(model);
 
-                    SetFieldDataToSession(model);//get plans of field
-                    await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
+                if (model.PreviousGrassYears == null)
+                {
+                    model.PreviousGrassYears = new List<int>();
                 }
+                BindPreviousGrassesData(model);
+                ResetSoilOverChalkAndReleasingClay(model);
+
+                SetFieldDataToSession(model);//get plans of field
+                await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
+
             }
 
             if (!string.IsNullOrWhiteSpace(fieldId))
@@ -2885,8 +2889,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             bool onlyFieldUpdate = false;
             if (cropPlans.Any())
             {
-                int highestYearOfPlan = cropPlans.Max(cp => cp.Year);
-                List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
+                List<int> yearsToCheck = YearsToCheck(cropPlans);
                 if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
                 {
                     onlyFieldUpdate = true;
@@ -2988,20 +2991,17 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         else
         {
-
-            int highestYearOfPlan = cropPlans.Max(cp => cp.Year);
-            List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
-            if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
-            {
-                ViewBag.NoNeedToShowPreviousCroppingDetail = true;
-            }
-            else
-            {
-                isPreviousCroppingBindRequired = true;
-            }
+            isPreviousCroppingBindRequired = CheckPreviousCroppingNeedToShow(cropPlans, isPreviousCroppingBindRequired);
         }
 
         return (cropPlans, error, decrptedFieldId, hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired);
+    }
+
+    private static List<int> YearsToCheck(List<Crop> cropPlans)
+    {
+        int highestYearOfPlan = cropPlans.Max(cp => cp.Year);
+        List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
+        return yearsToCheck;
     }
 
     async Task ModelInitialisationByFieldId(string? fieldId, string farmId, FieldViewModel model, List<Crop> cropPlans, int decrptedFieldId, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings)
@@ -3039,8 +3039,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         if (farm != null)
         {
-            model.FarmRB209CountryID = farm?.RB209CountryID;
-            model.FarmName = farm?.Name;
+            model.FarmRB209CountryID = farm.RB209CountryID;
+            model.FarmName = farm.Name;
             model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
             model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
         }
@@ -3087,7 +3087,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             //grass
             model.IsPreviousYearGrass = grassCroppings.Any(x => x.HarvestYear == model.LastHarvestYear);
-            model.PreviousCroppings = grassCroppings.FirstOrDefault();
+            model.PreviousCroppings = grassCroppings[0];
             hasGrassInLastThreeYear = true;
 
         }
@@ -3149,7 +3149,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
         }
 
-        
+
     }
 
     void PrevGrassAndCropping(FieldViewModel model)
@@ -3256,8 +3256,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (cropPlans.Any())
         {
             ViewBag.IsAnyPlan = true;
-            int highestYearOfPlan = cropPlans.Max(cp => cp.Year);
-            List<int> yearsToCheck = new List<int> { highestYearOfPlan - 1, highestYearOfPlan - 2, highestYearOfPlan - 3 };
+            List<int> yearsToCheck = YearsToCheck(cropPlans);
             if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
             {
                 ViewBag.NoNeedToShowPreviousCroppingDetail = true;
@@ -3992,6 +3991,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        SetLastHarvestYearViewBag();
+        return View(model);
+
+    }
+
+    private void SetLastHarvestYearViewBag()
+    {
         DateTime currentDate = System.DateTime.Now;
         DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1, 00, 00, 00, DateTimeKind.Unspecified);
         DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31, 00, 00, 00, DateTimeKind.Unspecified);
@@ -4015,8 +4021,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         ViewBag.LastHarvestYear = lastHarvestYear;
         ViewBag.SecondLastHarvestYear = secondLastHarvestYear;
-        return View(model);
-
     }
 
     [HttpPost]
@@ -4031,29 +4035,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         if (!ModelState.IsValid)
         {
-            DateTime currentDate = System.DateTime.Now;
-            DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1, 00, 00, 00, DateTimeKind.Unspecified);
-            DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31, 00, 00, 00, DateTimeKind.Unspecified);
-            int secondLastHarvestYear = System.DateTime.Now.Year - 1;
-            int lastHarvestYear = System.DateTime.Now.Year;
-
-            if (currentDate.Date >= startOfCurrentHarvestYear.Date && currentDate.Date <= endOfCurrentHarvestYear.Date) // Between April and February
-            {
-                secondLastHarvestYear = currentDate.Year - 1;
-                lastHarvestYear = currentDate.Year;
-            }
-            else if (currentDate.Date < startOfCurrentHarvestYear.Date)
-            {
-                secondLastHarvestYear = currentDate.Year - 2;
-                lastHarvestYear = currentDate.Year - 1;
-            }
-            else if (currentDate.Date > endOfCurrentHarvestYear.Date)
-            {
-                secondLastHarvestYear = currentDate.Year;
-                lastHarvestYear = currentDate.Year + 1;
-            }
-            ViewBag.LastHarvestYear = lastHarvestYear;
-            ViewBag.SecondLastHarvestYear = secondLastHarvestYear;
+            SetLastHarvestYearViewBag();
             return View(_lastHarvestYearActionName, model);
         }
 
