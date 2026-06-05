@@ -288,42 +288,60 @@ namespace NMP.Portal.Controllers
             }
             ValidateMinMaxValueForSoilMineralNitrogenAnalysis(model);
         }
+        private void ValidateSoilMineralNitrogenField(
+    string modelStateKey,
+    string displayLabel,
+    string validationLabel,
+    int minValue,
+    int maxValue)
+{
+    if (!ModelState.IsValid && ModelState.ContainsKey(modelStateKey))
+    {
+        var invalidFormatError = ModelState[modelStateKey]?.Errors.Count > 0
+            ? ModelState[modelStateKey]?.Errors[0].ErrorMessage
+            : null;
+
+        if (invalidFormatError != null &&
+            invalidFormatError.Equals(
+                string.Format(
+                    Resource.lblEnterNumericValue,
+                    ModelState[modelStateKey].AttemptedValue,
+                    displayLabel)))
+        {
+            ModelState[modelStateKey]?.Errors.Clear();
+
+            ModelState[modelStateKey]?.Errors.Add(
+                string.Format(
+                    Resource.MsgValidateSoilMineralNitrogenMinMax,
+                    validationLabel,
+                    minValue,
+                    maxValue));
+        }
+    }
+}
 
         private void ValidateSoilMineralNitrogenAnalysis()
         {
-            if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilMineralNitrogenAt030CMProp))
-            {
-                var InvalidFormatError = ModelState[_soilMineralNitrogenAt030CMProp].Errors.Count > 0 ?
-                                ModelState[_soilMineralNitrogenAt030CMProp].Errors[0].ErrorMessage.ToString() : null;
+            ValidateSoilMineralNitrogenField(
+                _soilMineralNitrogenAt030CMProp,
+                Resource.lblSoilMineralNitrogenAt030CM,
+                Resource.lblSoilMineralNitrogenAt030CMInLowerCase,
+                0,
+                999);
 
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_soilMineralNitrogenAt030CMProp].AttemptedValue, Resource.lblSoilMineralNitrogenAt030CM)))
-                {
-                    ModelState[_soilMineralNitrogenAt030CMProp].Errors.Clear();
-                    ModelState[_soilMineralNitrogenAt030CMProp].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt030CMInLowerCase, 0, 999));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilMineralNitrogenAt3060CMProp))
-            {
-                var InvalidFormatError = ModelState[_soilMineralNitrogenAt3060CMProp].Errors.Count > 0 ?
-                                ModelState[_soilMineralNitrogenAt3060CMProp].Errors[0].ErrorMessage.ToString() : null;
+            ValidateSoilMineralNitrogenField(
+                _soilMineralNitrogenAt3060CMProp,
+                Resource.lblSoilMineralNitrogenAt3060CM,
+                Resource.lblSoilMineralNitrogenAt3060LowerCase,
+                0,
+                999);
 
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_soilMineralNitrogenAt3060CMProp].AttemptedValue, Resource.lblSoilMineralNitrogenAt3060CM)))
-                {
-                    ModelState[_soilMineralNitrogenAt3060CMProp].Errors.Clear();
-                    ModelState[_soilMineralNitrogenAt3060CMProp].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt3060LowerCase, 0, 999));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilMineralNitrogenAt6090CMProp))
-            {
-                var InvalidFormatError = ModelState[_soilMineralNitrogenAt6090CMProp].Errors.Count > 0 ?
-                                ModelState[_soilMineralNitrogenAt6090CMProp].Errors[0].ErrorMessage.ToString() : null;
-
-                if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_soilMineralNitrogenAt6090CMProp].AttemptedValue, Resource.lblSoilMineralNitrogenAt6090CM)))
-                {
-                    ModelState[_soilMineralNitrogenAt6090CMProp].Errors.Clear();
-                    ModelState[_soilMineralNitrogenAt6090CMProp].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt6090AtLowerCase, 0, 999));
-                }
-            }
+            ValidateSoilMineralNitrogenField(
+                _soilMineralNitrogenAt6090CMProp,
+                Resource.lblSoilMineralNitrogenAt6090CM,
+                Resource.lblSoilMineralNitrogenAt6090AtLowerCase,
+                0,
+                999);
         }
 
         private void ValidateMinMaxValueForSoilMineralNitrogenAnalysis(SnsAnalysisViewModel model)
