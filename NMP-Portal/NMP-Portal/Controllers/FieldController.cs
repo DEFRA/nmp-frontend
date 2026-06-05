@@ -3996,33 +3996,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     }
 
-    private void SetLastHarvestYearViewBag()
-    {
-        DateTime currentDate = System.DateTime.Now;
-        DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1, 00, 00, 00, DateTimeKind.Unspecified);
-        DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31, 00, 00, 00, DateTimeKind.Unspecified);
-        int secondLastHarvestYear = System.DateTime.Now.Year - 1;
-        int lastHarvestYear = System.DateTime.Now.Year;
-
-        if (currentDate.Date >= startOfCurrentHarvestYear.Date && currentDate.Date <= endOfCurrentHarvestYear.Date) // Between April and February
-        {
-            secondLastHarvestYear = currentDate.Year - 1;
-            lastHarvestYear = currentDate.Year;
-        }
-        else if (currentDate.Date < startOfCurrentHarvestYear.Date)
-        {
-            secondLastHarvestYear = currentDate.Year - 2;
-            lastHarvestYear = currentDate.Year - 1;
-        }
-        else if (currentDate.Date > endOfCurrentHarvestYear.Date)
-        {
-            secondLastHarvestYear = currentDate.Year;
-            lastHarvestYear = currentDate.Year + 1;
-        }
-        ViewBag.LastHarvestYear = lastHarvestYear;
-        ViewBag.SecondLastHarvestYear = secondLastHarvestYear;
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult LastHarvestYear(FieldViewModel model)
@@ -4058,6 +4031,34 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction("CropGroups");
         }
     }
+
+    private void SetLastHarvestYearViewBag()
+    {
+        DateTime currentDate = System.DateTime.Now;
+        DateTime startOfCurrentHarvestYear = new DateTime(currentDate.Year, 4, 1, 00, 00, 00, DateTimeKind.Unspecified);
+        DateTime endOfCurrentHarvestYear = new DateTime(currentDate.Year + 1, 3, 31, 00, 00, 00, DateTimeKind.Unspecified);
+        int secondLastHarvestYear = System.DateTime.Now.Year - 1;
+        int lastHarvestYear = System.DateTime.Now.Year;
+
+        if (currentDate.Date >= startOfCurrentHarvestYear.Date && currentDate.Date <= endOfCurrentHarvestYear.Date) // Between April and February
+        {
+            secondLastHarvestYear = currentDate.Year - 1;
+            lastHarvestYear = currentDate.Year;
+        }
+        else if (currentDate.Date < startOfCurrentHarvestYear.Date)
+        {
+            secondLastHarvestYear = currentDate.Year - 2;
+            lastHarvestYear = currentDate.Year - 1;
+        }
+        else if (currentDate.Date > endOfCurrentHarvestYear.Date)
+        {
+            secondLastHarvestYear = currentDate.Year;
+            lastHarvestYear = currentDate.Year + 1;
+        }
+        ViewBag.LastHarvestYear = lastHarvestYear;
+        ViewBag.SecondLastHarvestYear = secondLastHarvestYear;
+    }
+
 
     private FieldViewModel? LoadFieldDataFromSession()
     {
