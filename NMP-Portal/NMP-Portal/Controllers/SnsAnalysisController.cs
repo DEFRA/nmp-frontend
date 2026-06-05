@@ -277,6 +277,20 @@ namespace NMP.Portal.Controllers
 
         private void ValidateSoilMineralNitrogenAnalysisProperties(SnsAnalysisViewModel model)
         {
+            ValidateSoilMineralNitrogenAnalysis();
+            if (model.SoilMineralNitrogenAt030CM == null)
+            {
+                ModelState.AddModelError(_soilMineralNitrogenAt030CMProp, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
+            }
+            if (model.SoilMineralNitrogenAt3060CM == null)
+            {
+                ModelState.AddModelError(_soilMineralNitrogenAt3060CMProp, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
+            }
+            ValidateMinMaxValueForSoilMineralNitrogenAnalysis(model);
+        }
+
+        private void ValidateSoilMineralNitrogenAnalysis()
+        {
             if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilMineralNitrogenAt030CMProp))
             {
                 var InvalidFormatError = ModelState[_soilMineralNitrogenAt030CMProp].Errors.Count > 0 ?
@@ -310,15 +324,6 @@ namespace NMP.Portal.Controllers
                     ModelState[_soilMineralNitrogenAt6090CMProp].Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogenAt6090AtLowerCase, 0, 999));
                 }
             }
-            if (model.SoilMineralNitrogenAt030CM == null)
-            {
-                ModelState.AddModelError(_soilMineralNitrogenAt030CMProp, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt030CM));
-            }
-            if (model.SoilMineralNitrogenAt3060CM == null)
-            {
-                ModelState.AddModelError(_soilMineralNitrogenAt3060CMProp, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM));
-            }
-            ValidateMinMaxValueForSoilMineralNitrogenAnalysis(model);
         }
 
         private void ValidateMinMaxValueForSoilMineralNitrogenAnalysis(SnsAnalysisViewModel model)
@@ -492,111 +497,6 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> SoilNitrogenSupplyIndex()
-        {
-            _logger.LogTrace($"Field Controller : SoilNitrogenSupplyIndex() action called");
-
-            try
-            {
-                if (!HasSnsDataInSession())
-                {
-                    return RedirectToAction(_farmListAction, "Farm");
-                }
-                
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-
-
-                //sns logic
-                var postMeasurementData = new MeasurementData();
-                var postMeasurementDataForScotland = new MeasurementDataForScotland();
-                int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
-                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables || model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                {
-                    BindMeasurementDataForVegetable(model, ref postMeasurementData, ref postMeasurementDataForScotland);
-
-                }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
-                {
-                    postMeasurementData = BindMesaurmentDataForWinterCereal(model);
-
-                }
-                else if (model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight && snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
-                {
-                    postMeasurementData = BindMesaurmentDataForWinterOilseedRape(model);
-                }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
-                {
-                    model.CropHeight = null;
-                    if (model.SoilOrganicMatter != null)
-                    {
-                        model.AdjustmentValue = null;
-                    }
-                    if (model.SoilOrganicMatter == null && model.AdjustmentValue == null)
-                    {
-                        model.AdjustmentValue = 0;
-                    }
-                    postMeasurementData = new MeasurementData
-                    {
-                        CropTypeId = model.CropTypeId ?? 0,
-                        Step1ArablePotato = new Step1ArablePotato
-                        {
-                            Depth0To30Cm = model.SoilMineralNitrogenAt030CM,
-                            Depth30To60Cm = model.SoilMineralNitrogenAt3060CM,
-                            Depth60To90Cm = model.SoilMineralNitrogenAt6090CM
-                        },
-                        Step2 = new Step2
-                        {
-                            ShootNumber = model.NumberOfShoots > 0 ? model.NumberOfShoots : null,
-                            GreenAreaIndex = model.GreenAreaIndex > 0 ? model.GreenAreaIndex : 0,
-                            CropHeight = model.CropHeight > 0 ? model.CropHeight : null
-                        },
-                        Step3 = new Step3
-                        {
-                            Adjustment = model.AdjustmentValue,
-                            OrganicMatterPercentage = model.SoilOrganicMatter > 0 ? model.SoilOrganicMatter : null
-                        }
-                    };
-                }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
-                {
-                    postMeasurementData = BindMesaurmentDataForOtherArableAndPotatoes(model);
-
-                }
-                else
-                {
-                    return RedirectToAction(_checkAnswerAction);
-                }
-                if (model.FarmRB209CountryId != (int)NMP.Commons.Enums.RB209Country.Scotland)
-                {
-                    (SnsResponse snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
-                    if (string.IsNullOrWhiteSpace(error?.Message))
-                    {
-                        model.SnsIndex = snsResponse.SnsIndex;
-                        model.SnsValue = snsResponse.SnsValue;
-                        HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-                    }
-                }
-                else
-                {
-                    (SnsResponseForScotland snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodForScotlandAsync(postMeasurementDataForScotland);
-                    if (string.IsNullOrWhiteSpace(error?.Message))
-                    {
-                        model.SnsIndex = snsResponse.ResidueGroupId;
-                        model.NitrogenResidueGroup = snsResponse.ResidueGroup;
-                        HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-                    }
-                }
-                return View(model);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in SoilNitrogenSupplyIndex() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
-            }
-        }
 
         private static MeasurementData BindMesaurmentDataForOtherArableAndPotatoes(SnsAnalysisViewModel model)
         {
@@ -739,6 +639,111 @@ namespace NMP.Portal.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SoilNitrogenSupplyIndex()
+        {
+            _logger.LogTrace($"Field Controller : SoilNitrogenSupplyIndex() action called");
+
+            try
+            {
+                if (!HasSnsDataInSession())
+                {
+                    return RedirectToAction(_farmListAction, "Farm");
+                }
+
+                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+
+
+                //sns logic
+                var postMeasurementData = new MeasurementData();
+                var postMeasurementDataForScotland = new MeasurementDataForScotland();
+                int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
+                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables || model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    BindMeasurementDataForVegetable(model, ref postMeasurementData, ref postMeasurementDataForScotland);
+
+                }
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
+                {
+                    postMeasurementData = BindMesaurmentDataForWinterCereal(model);
+
+                }
+                else if (model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight && snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
+                {
+                    postMeasurementData = BindMesaurmentDataForWinterOilseedRape(model);
+                }
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
+                {
+                    model.CropHeight = null;
+                    if (model.SoilOrganicMatter != null)
+                    {
+                        model.AdjustmentValue = null;
+                    }
+                    if (model.SoilOrganicMatter == null && model.AdjustmentValue == null)
+                    {
+                        model.AdjustmentValue = 0;
+                    }
+                    postMeasurementData = new MeasurementData
+                    {
+                        CropTypeId = model.CropTypeId ?? 0,
+                        Step1ArablePotato = new Step1ArablePotato
+                        {
+                            Depth0To30Cm = model.SoilMineralNitrogenAt030CM,
+                            Depth30To60Cm = model.SoilMineralNitrogenAt3060CM,
+                            Depth60To90Cm = model.SoilMineralNitrogenAt6090CM
+                        },
+                        Step2 = new Step2
+                        {
+                            ShootNumber = model.NumberOfShoots > 0 ? model.NumberOfShoots : null,
+                            GreenAreaIndex = model.GreenAreaIndex > 0 ? model.GreenAreaIndex : 0,
+                            CropHeight = model.CropHeight > 0 ? model.CropHeight : null
+                        },
+                        Step3 = new Step3
+                        {
+                            Adjustment = model.AdjustmentValue,
+                            OrganicMatterPercentage = model.SoilOrganicMatter > 0 ? model.SoilOrganicMatter : null
+                        }
+                    };
+                }
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
+                {
+                    postMeasurementData = BindMesaurmentDataForOtherArableAndPotatoes(model);
+
+                }
+                else
+                {
+                    return RedirectToAction(_checkAnswerAction);
+                }
+                if (model.FarmRB209CountryId != (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    (SnsResponse snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
+                    if (string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        model.SnsIndex = snsResponse.SnsIndex;
+                        model.SnsValue = snsResponse.SnsValue;
+                        HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                    }
+                }
+                else
+                {
+                    (SnsResponseForScotland snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodForScotlandAsync(postMeasurementDataForScotland);
+                    if (string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        model.SnsIndex = snsResponse.ResidueGroupId;
+                        model.NitrogenResidueGroup = snsResponse.ResidueGroup;
+                        HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                    }
+                }
+                return View(model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in SoilNitrogenSupplyIndex() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                TempData[_errorTempDataKey] = ex.Message;
+                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
+            }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
@@ -1142,7 +1147,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction(_farmListAction, "Farm");
                 }
-                
+
                 SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
                 List<CropGroupResponse> cropGroups = await _fieldLogic.FetchCropGroups();
                 ViewBag.CropGroupList = cropGroups;
@@ -1568,41 +1573,43 @@ namespace NMP.Portal.Controllers
             {
                 var value = ModelState[_sampleDepthAction]?.AttemptedValue;
 
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    ModelState[_sampleDepthAction]?.Errors.Clear();
 
-                    if (!decimal.TryParse(value, out decimal num))
-                    {
-                        ModelState[_sampleDepthAction]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSampleDepth, 1, 90));
-                    }
-                    else if (num % 1 != 0)
-                    {
-                        ModelState[_sampleDepthAction]?.Errors.Add(string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 1, 90));
-                    }
-                }
+                ValidateWholeNumber(value, _sampleDepthAction, Resource.lblSampleDepth, 1, 90);
+
             }
 
             if (!ModelState.IsValid && ModelState.ContainsKey(_soilMineralNitrogen) && ModelState[_soilMineralNitrogen] != null)
             {
                 var value = ModelState[_soilMineralNitrogen]?.AttemptedValue;
 
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    ModelState[_soilMineralNitrogen]?.Errors.Clear();
+                ValidateWholeNumber(value, _soilMineralNitrogen, Resource.lblSoilMineralNitrogen, 0, 999);
+            }
+        }
+        private void ValidateWholeNumber(string? value, string modelStateKey, string fieldLabel, int minValue, int maxValue)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                ModelState[modelStateKey]?.Errors.Clear();
 
-                    if (!decimal.TryParse(value, out decimal num))
-                    {
-                        ModelState[_soilMineralNitrogen]?.Errors.Add(string.Format(Resource.MsgValidateSoilMineralNitrogenMinMax, Resource.lblSoilMineralNitrogen, 0, 999));
-                    }
-                    else if (num % 1 != 0)
-                    {
-                        ModelState[_soilMineralNitrogen]?.Errors.Add(string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999));
-                    }
+                if (!decimal.TryParse(value, out decimal num))
+                {
+                    ModelState[modelStateKey]?.Errors.Add(
+                        string.Format(
+                            Resource.MsgValidateSoilMineralNitrogenMinMax,
+                            fieldLabel,
+                            minValue,
+                            maxValue));
+                }
+                else if (num % 1 != 0)
+                {
+                    ModelState[modelStateKey]?.Errors.Add(
+                        string.Format(
+                            Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces,
+                            minValue,
+                            maxValue));
                 }
             }
         }
-
         private void ValidateMinMaxSampleDepth(SnsAnalysisViewModel model)
         {
             if (model.SampleDepth != null)
