@@ -657,64 +657,6 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> SoilNitrogenSupplyIndex()
-        {
-            _logger.LogTrace($"Field Controller : SoilNitrogenSupplyIndex() action called");
-
-            try
-            {
-                if (!HasSnsDataInSession())
-                {
-                    return RedirectToAction(_farmListAction, "Farm");
-                }
-
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-
-
-                //sns logic
-                var postMeasurementData = new MeasurementData();
-                var postMeasurementDataForScotland = new MeasurementDataForScotland();
-                int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
-                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables || model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                {
-                    BindMeasurementDataForVegetable(model, ref postMeasurementData, ref postMeasurementDataForScotland);
-
-                }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
-                {
-                    postMeasurementData = BindMesaurmentDataForWinterCereal(model);
-
-                }
-                else if (model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight && snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
-                {
-                    postMeasurementData = BindMesaurmentDataForWinterOilseedRape(model);
-                }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
-                {
-                    postMeasurementData = BindMesaurmentDataForWinterOilseedRapeOnly(model);
-                }
-                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
-                {
-                    postMeasurementData = BindMesaurmentDataForOtherArableAndPotatoes(model);
-                }
-                else
-                {
-                    return RedirectToAction(_checkAnswerAction);
-                }
-
-                await BindSnsIndex(model, postMeasurementData, postMeasurementDataForScotland);
-
-                return View(model);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in SoilNitrogenSupplyIndex() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
-            }
-        }
 
         private async Task BindSnsIndex(SnsAnalysisViewModel model, MeasurementData postMeasurementData, MeasurementDataForScotland postMeasurementDataForScotland)
         {
@@ -776,6 +718,64 @@ namespace NMP.Portal.Controllers
             return postMeasurementData;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> SoilNitrogenSupplyIndex()
+        {
+            _logger.LogTrace($"Field Controller : SoilNitrogenSupplyIndex() action called");
+
+            try
+            {
+                if (!HasSnsDataInSession())
+                {
+                    return RedirectToAction(_farmListAction, "Farm");
+                }
+
+                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+
+
+                //sns logic
+                var postMeasurementData = new MeasurementData();
+                var postMeasurementDataForScotland = new MeasurementDataForScotland();
+                int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
+                if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables || model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                {
+                    BindMeasurementDataForVegetable(model, ref postMeasurementData, ref postMeasurementDataForScotland);
+
+                }
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
+                {
+                    postMeasurementData = BindMesaurmentDataForWinterCereal(model);
+
+                }
+                else if (model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight && snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
+                {
+                    postMeasurementData = BindMesaurmentDataForWinterOilseedRape(model);
+                }
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
+                {
+                    postMeasurementData = BindMesaurmentDataForWinterOilseedRapeOnly(model);
+                }
+                else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
+                {
+                    postMeasurementData = BindMesaurmentDataForOtherArableAndPotatoes(model);
+                }
+                else
+                {
+                    return RedirectToAction(_checkAnswerAction);
+                }
+
+                await BindSnsIndex(model, postMeasurementData, postMeasurementDataForScotland);
+
+                return View(model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in SoilNitrogenSupplyIndex() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                TempData[_errorTempDataKey] = ex.Message;
+                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
+            }
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]

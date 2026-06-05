@@ -518,43 +518,52 @@ namespace NMP.Portal.Controllers
         {
             if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblCircumference) && model.IsCircumference.Value)
             {
-
-                var circumferenceError = ModelState[Resource.lblCircumference]?.Errors.Count > 0 ?
-                                ModelState[Resource.lblCircumference]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (circumferenceError != null && circumferenceError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblCircumference]?.RawValue, Resource.lblCircumference)))
-                {
-                    ModelState[Resource.lblCircumference]?.Errors.Clear();
-                    ModelState[Resource.lblDiameter]?.Errors.Clear();
-                    decimal decimalValue;
-                    if (decimal.TryParse(ModelState[Resource.lblCircumference]?.RawValue?.ToString(), out decimalValue))
-                    {
-                        ModelState[Resource.lblCircumference]?.Errors.Add(circumferenceError);
-                    }
-                    else
-                    {
-                        ModelState[Resource.lblCircumference]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
-                    }
-                }
+                BindModelStateErrorForCircumference();
             }
             else if (!model.IsCircumference.Value && (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDiameter))
             {
-                var diameterError = ModelState[Resource.lblDiameter]?.Errors.Count > 0 ?
-                                ModelState[Resource.lblDiameter]?.Errors[0].ErrorMessage.ToString() : null;
+                BindModelStateErrorForDiameter();
+            }
+        }
 
-                if (diameterError != null && diameterError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDiameter]?.RawValue, Resource.lblDiameter)))
+        private void BindModelStateErrorForDiameter()
+        {
+            var diameterError = ModelState[Resource.lblDiameter]?.Errors.Count > 0 ?
+                            ModelState[Resource.lblDiameter]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (diameterError != null && diameterError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDiameter]?.RawValue, Resource.lblDiameter)))
+            {
+                ModelState[Resource.lblCircumference]?.Errors.Clear();
+                ModelState[Resource.lblDiameter]?.Errors.Clear();
+                decimal decimalValue;
+                if (decimal.TryParse(ModelState[Resource.lblDiameter]?.RawValue?.ToString(), out decimalValue))
                 {
-                    ModelState[Resource.lblCircumference]?.Errors.Clear();
-                    ModelState[Resource.lblDiameter]?.Errors.Clear();
-                    decimal decimalValue;
-                    if (decimal.TryParse(ModelState[Resource.lblDiameter]?.RawValue?.ToString(), out decimalValue))
-                    {
-                        ModelState[Resource.lblDiameter]?.Errors.Add(diameterError);
-                    }
-                    else
-                    {
-                        ModelState[Resource.lblDiameter]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
-                    }
+                    ModelState[Resource.lblDiameter]?.Errors.Add(diameterError);
+                }
+                else
+                {
+                    ModelState[Resource.lblDiameter]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                }
+            }
+        }
+
+        private void BindModelStateErrorForCircumference()
+        {
+            var circumferenceError = ModelState[Resource.lblCircumference]?.Errors.Count > 0 ?
+                            ModelState[Resource.lblCircumference]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (circumferenceError != null && circumferenceError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblCircumference]?.RawValue, Resource.lblCircumference)))
+            {
+                ModelState[Resource.lblCircumference]?.Errors.Clear();
+                ModelState[Resource.lblDiameter]?.Errors.Clear();
+                decimal decimalValue;
+                if (decimal.TryParse(ModelState[Resource.lblCircumference]?.RawValue?.ToString(), out decimalValue))
+                {
+                    ModelState[Resource.lblCircumference]?.Errors.Add(circumferenceError);
+                }
+                else
+                {
+                    ModelState[Resource.lblCircumference]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
                 }
             }
         }
