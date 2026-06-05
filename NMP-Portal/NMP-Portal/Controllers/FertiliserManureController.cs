@@ -3419,7 +3419,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         model.FieldName =
             (await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value)).Name;
     }
-    private void UpdateManagementPeriodId(
+    private static void UpdateManagementPeriodId(
     FertiliserManureViewModel model,
     List<ManagementPeriod> managementPeriodList,
     int? defoliation,
