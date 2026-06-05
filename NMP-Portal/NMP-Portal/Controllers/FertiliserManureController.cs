@@ -3146,7 +3146,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (flowControl: false, value: RedirectToAction(_fieldGroupActionName));
     }
 
-    private async Task BindDefoliationData(FertiliserManureViewModel? model)
+    private async Task BindDefoliationDataByModelCounter(FertiliserManureViewModel? model)
     {
         model.DefoliationCurrentCounter = 0;
         model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
@@ -3179,7 +3179,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             if (_fertiliserManureLogic.IsComingFirstTimeForDefoliationGet(model, q))
             {
-                await BindDefoliationData(model);
+                await BindDefoliationDataByModelCounter(model);
             }
             else if (_fertiliserManureLogic.IsRedirectRequestForDefoliationGet(model, q))
             {
@@ -3390,7 +3390,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             selectedDefoliation);
     }
 
-    private void UpdateFertiliserDefoliation(
+    private static void UpdateFertiliserDefoliation(
         FertiliserManureViewModel model,
         int? fieldId,
         int? defoliation,
@@ -3408,7 +3408,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         fertiliser.DefoliationName = defoliationName;
     }
 
-    private async void SetNextField(FertiliserManureViewModel model, int currentIndex)
+    private async Task SetNextField(FertiliserManureViewModel model, int currentIndex)
     {
         if (currentIndex + 1 >= model.DefoliationList.Count)
         {
@@ -3444,7 +3444,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
     }
 
-    private void UpdateCheckAnswerManagementPeriod(
+    private static void UpdateCheckAnswerManagementPeriod(
         FertiliserManureViewModel model,
         List<ManagementPeriod> managementPeriodList,
         int newManagementPeriodId)
