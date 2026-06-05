@@ -9,7 +9,7 @@
     }
     if (Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
     {
-        heading = Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ?Resource.lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit :Resource.lblWhichYearWouldYouLikeToCreateALivestockReport;
+        heading = Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit : Resource.lblWhichYearWouldYouLikeToCreateALivestockReport;
     }
     if (Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.ExistingManureStorageCapacityReport)
     {
@@ -56,28 +56,41 @@
     <form asp-action="Year" asp-controller="Report" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
         @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
-        
+
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
-                    <govuk-radios asp-for="@Model.Year">
-                        <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                                @heading
-                            </govuk-radios-fieldset-legend>
-                            <govuk-radios-hint>
-                                @Resource.lblSelectOneOption
-                            </govuk-radios-hint>
-                            @if (ViewBag.Years != null)
+                <govuk-radios asp-for="@Model.Year">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @heading
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>
+                            @Resource.lblSelectOneOption
+                        </govuk-radios-hint>
+                        @if (ViewBag.Years != null)
+                        {
+                            foreach (var year in ViewBag.Years)
                             {
-                                foreach (int year in ViewBag.Years)
+                                @if (Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
+                                {
+                                    <govuk-radios-item value="@year.Year">
+                                        @year.Year
+                                        <span class="govuk-hint" id="lastUpdated">
+                                            @year.LastUpdatedDate
+                                        </span>
+                                    </govuk-radios-item>
+                                }
+                                else
                                 {
                                     <govuk-radios-item value="@year">
                                         @year
                                     </govuk-radios-item>
                                 }
+
                             }
-                        </govuk-radios-fieldset>
-                    </govuk-radios>                
+                        }
+                    </govuk-radios-fieldset>
+                </govuk-radios>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
