@@ -3238,153 +3238,15 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             if (!model.NeedToShowSameDefoliationForAll || (model.IsSameDefoliationForAll.HasValue && !model.IsSameDefoliationForAll.Value))
             {
-                for (int i = 0; i < model.DefoliationList.Count; i++)
+                (bool flowControl, IActionResult value, error) = await BindDefoliations(model, error);
+                if (!flowControl)
                 {
-                    if (model.FieldID == model.DefoliationList[i].FieldID)
-                    {
-                        (Crop crop, error) = await _cropLogic.FetchCropById(model.DefoliationList[i].CropID);
-                        if (error == null && crop != null && crop.DefoliationSequenceID != null)
-                        {
-                            if (crop.DefoliationSequenceID != null && model.DefoliationList[i].Defoliation != null)
-                            {
-                                (string? selectedDefoliation, error) = await GetDefoliationName(model.DefoliationList[i].Defoliation.Value, crop.DefoliationSequenceID.Value);
-                                if (error == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
-                                {
-                                    model.DefoliationList[i].DefoliationName = selectedDefoliation;
-                                    if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
-                                    {
-                                        int index = model.FertiliserManures
-                                        .FindIndex(f => f.IsGrass && f.FieldID == crop.FieldID);
-
-                                        if (index >= 0)
-                                        {
-                                            model.FertiliserManures[index].Defoliation = model.DefoliationList[model.DefoliationCurrentCounter].Defoliation;
-                                            model.FertiliserManures[index].DefoliationName = selectedDefoliation;
-                                        }
-                                    }
-                                }
-                            }
-
-                            (List<ManagementPeriod> managementPeriodList, error) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, false);
-                            if (managementPeriodList != null)
-                            {
-                                if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
-                                {
-                                    int filteredManId = managementPeriodList.Where(fm => model.UpdatedFertiliserIds.Any(mp => mp.ManagementPeriodId == fm.ID)).Select(x => x.ID.Value).FirstOrDefault();
-
-                                    if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
-                                    {
-                                        foreach (var item in model.UpdatedFertiliserIds)
-                                        {
-                                            if (item.ManagementPeriodId == filteredManId)
-                                            {
-                                                item.ManagementPeriodId = managementPeriodList.Where(x => x.Defoliation == model.DefoliationList[i].Defoliation).Select(x => x.ID.Value).First();
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                                if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
-                                {
-                                    int index = model.FertiliserManures
-                                    .FindIndex(f => f.IsGrass && f.FieldID == crop.FieldID);
-
-                                    if (index >= 0)
-                                    {
-                                        model.FertiliserManures[index].ManagementPeriodID = managementPeriodList.Where(x => x.Defoliation == model.DefoliationList[i].Defoliation).Select(x => x.ID.Value).First();
-                                    }
-                                }
-                            }
-                        }
-
-                        model.DefoliationCurrentCounter++;
-
-                        if (i + 1 < model.DefoliationList.Count)
-                        {
-                            model.FieldID = model.DefoliationList[i + 1].FieldID;
-                            model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value)).Name;
-                        }
-                        break;
-                    }
-                }
-                model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
-                SetFertiliserManureToSession(model);
-                if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField))
-                {
-                    return RedirectToAction(_checkAnswerActionName);
+                    return value;
                 }
             }
             else if (model.IsSameDefoliationForAll.HasValue && (model.IsSameDefoliationForAll.Value))
             {
-                model.DefoliationCurrentCounter = 1;
-                for (int i = 0; i < model.DefoliationList.Count; i++)
-                {
-                    (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(model.DefoliationList[i].ManagementPeriodID);
-                    if (error == null && managementPeriod != null)
-                    {
-                        (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-                        if (error == null && crop != null && crop.DefoliationSequenceID != null)
-                        {
-                            int fieldId = crop.FieldID.Value;
-                            (List<ManagementPeriod> managementPeriodList, error) = await _cropLogic.FetchManagementperiodByCropId(managementPeriod.CropID.Value, false);
-
-                            if (managementPeriodList.Count > 0)
-                            {
-                                if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
-                                {
-                                    int filteredManId = managementPeriodList
-                                 .Where(fm => model.UpdatedFertiliserIds.Any(mp => mp.ManagementPeriodId == fm.ID))
-                                 .Select(x => x.ID.Value)
-                                 .FirstOrDefault();
-
-                                    if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
-                                    {
-                                        foreach (var item in model.UpdatedFertiliserIds)
-                                        {
-                                            if (item.ManagementPeriodId == filteredManId)
-                                            {
-                                                item.ManagementPeriodId = managementPeriodList.Where(x => x.Defoliation == model.DefoliationList[0].Defoliation).Select(x => x.ID.Value).First();
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
-                                {
-                                    int index = model.FertiliserManures
-                                    .FindIndex(f => f.IsGrass && f.FieldID == fieldId);
-
-                                    if (index >= 0)
-                                    {
-                                        model.FertiliserManures[index].ManagementPeriodID = managementPeriodList.Where(x => x.Defoliation == model.DefoliationList[0].Defoliation).Select(x => x.ID.Value).First();
-                                    }
-                                }
-                            }
-                            if (crop.DefoliationSequenceID != null && model.DefoliationList[0].Defoliation != null)
-                            {
-                                (string? selectedDefoliation, error) = await GetDefoliationName(model.DefoliationList[0].Defoliation.Value, crop.DefoliationSequenceID.Value);
-                                if (error == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
-                                {
-                                    model.DefoliationList[i].DefoliationName = selectedDefoliation;
-                                    model.DefoliationList[i].Defoliation = model.DefoliationList[0].Defoliation;
-                                    if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
-                                    {
-                                        int index = model.FertiliserManures
-                                        .FindIndex(f => f.IsGrass && f.FieldID == fieldId);
-
-                                        if (index >= 0)
-                                        {
-                                            model.FertiliserManures[index].Defoliation = model.DefoliationList[0].Defoliation;
-                                            model.FertiliserManures[index].DefoliationName = selectedDefoliation;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+                error = await BindManagementPeriodAndDefoliation(model, error);
 
                 SetFertiliserManureToSession(model);
                 if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
@@ -3427,8 +3289,164 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             TempData["DefoliationError"] = ex.Message;
             return View(model);
         }
+
+       
     }
 
+    async Task<(bool flowControl, IActionResult value, Error? error)> BindDefoliations(FertiliserManureViewModel model, Error? error)
+    {
+        for (int i = 0; i < model.DefoliationList.Count; i++)
+        {
+            if (model.FieldID == model.DefoliationList[i].FieldID)
+            {
+                (Crop crop, error) = await _cropLogic.FetchCropById(model.DefoliationList[i].CropID);
+                if (error == null && crop != null && crop.DefoliationSequenceID != null)
+                {
+                    if (crop.DefoliationSequenceID != null && model.DefoliationList[i].Defoliation != null)
+                    {
+                        (string? selectedDefoliation, error) = await GetDefoliationName(model.DefoliationList[i].Defoliation.Value, crop.DefoliationSequenceID.Value);
+                        if (error == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
+                        {
+                            model.DefoliationList[i].DefoliationName = selectedDefoliation;
+                            if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
+                            {
+                                int index = model.FertiliserManures
+                                .FindIndex(f => f.IsGrass && f.FieldID == crop.FieldID);
+
+                                if (index >= 0)
+                                {
+                                    model.FertiliserManures[index].Defoliation = model.DefoliationList[model.DefoliationCurrentCounter].Defoliation;
+                                    model.FertiliserManures[index].DefoliationName = selectedDefoliation;
+                                }
+                            }
+                        }
+                    }
+
+                    (List<ManagementPeriod> managementPeriodList, error) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, false);
+                    if (managementPeriodList != null)
+                    {
+                        if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
+                        {
+                            int filteredManId = managementPeriodList.Where(fm => model.UpdatedFertiliserIds.Any(mp => mp.ManagementPeriodId == fm.ID)).Select(x => x.ID.Value).FirstOrDefault();
+
+                            if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                            {
+                                foreach (var item in model.UpdatedFertiliserIds)
+                                {
+                                    if (item.ManagementPeriodId == filteredManId)
+                                    {
+                                        item.ManagementPeriodId = managementPeriodList.Where(x => x.Defoliation == model.DefoliationList[i].Defoliation).Select(x => x.ID.Value).First();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
+                        {
+                            int index = model.FertiliserManures
+                            .FindIndex(f => f.IsGrass && f.FieldID == crop.FieldID);
+
+                            if (index >= 0)
+                            {
+                                model.FertiliserManures[index].ManagementPeriodID = managementPeriodList.Where(x => x.Defoliation == model.DefoliationList[i].Defoliation).Select(x => x.ID.Value).First();
+                            }
+                        }
+                    }
+                }
+
+                model.DefoliationCurrentCounter++;
+
+                if (i + 1 < model.DefoliationList.Count)
+                {
+                    model.FieldID = model.DefoliationList[i + 1].FieldID;
+                    model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value)).Name;
+                }
+                break;
+            }
+        }
+        model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+        SetFertiliserManureToSession(model);
+        if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField))
+        {
+            return (flowControl: false, value: RedirectToAction(_checkAnswerActionName), error);
+        }
+
+        return (flowControl: true, value: null, error);
+    }
+
+    async Task<Error?> BindManagementPeriodAndDefoliation(FertiliserManureViewModel model, Error? error)
+    {
+        model.DefoliationCurrentCounter = 1;
+        for (int i = 0; i < model.DefoliationList.Count; i++)
+        {
+            (ManagementPeriod managementPeriod, error) = await _cropLogic.FetchManagementperiodById(model.DefoliationList[i].ManagementPeriodID);
+            if (error == null && managementPeriod != null)
+            {
+                (Crop crop, error) = await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
+                if (error == null && crop != null && crop.DefoliationSequenceID != null)
+                {
+                    int fieldId = crop.FieldID.Value;
+                    (List<ManagementPeriod> managementPeriodList, error) = await _cropLogic.FetchManagementperiodByCropId(managementPeriod.CropID.Value, false);
+
+                    if (managementPeriodList.Count > 0)
+                    {
+                        if (model.IsCheckAnswer && (!string.IsNullOrWhiteSpace(model.EncryptedFertId)))
+                        {
+                            int filteredManId = managementPeriodList
+                         .Where(fm => model.UpdatedFertiliserIds.Any(mp => mp.ManagementPeriodId == fm.ID))
+                         .Select(x => x.ID.Value)
+                         .FirstOrDefault();
+
+                            if (model.UpdatedFertiliserIds != null && model.UpdatedFertiliserIds.Count > 0)
+                            {
+                                foreach (var item in model.UpdatedFertiliserIds)
+                                {
+                                    if (item.ManagementPeriodId == filteredManId)
+                                    {
+                                        item.ManagementPeriodId = managementPeriodList.Where(x => x.Defoliation == model.DefoliationList[0].Defoliation).Select(x => x.ID.Value).First();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
+                        {
+                            int index = model.FertiliserManures
+                            .FindIndex(f => f.IsGrass && f.FieldID == fieldId);
+
+                            if (index >= 0)
+                            {
+                                model.FertiliserManures[index].ManagementPeriodID = managementPeriodList.Where(x => x.Defoliation == model.DefoliationList[0].Defoliation).Select(x => x.ID.Value).First();
+                            }
+                        }
+                    }
+                    if (crop.DefoliationSequenceID != null && model.DefoliationList[0].Defoliation != null)
+                    {
+                        (string? selectedDefoliation, error) = await GetDefoliationName(model.DefoliationList[0].Defoliation.Value, crop.DefoliationSequenceID.Value);
+                        if (error == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
+                        {
+                            model.DefoliationList[i].DefoliationName = selectedDefoliation;
+                            model.DefoliationList[i].Defoliation = model.DefoliationList[0].Defoliation;
+                            if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
+                            {
+                                int index = model.FertiliserManures
+                                .FindIndex(f => f.IsGrass && f.FieldID == fieldId);
+
+                                if (index >= 0)
+                                {
+                                    model.FertiliserManures[index].Defoliation = model.DefoliationList[0].Defoliation;
+                                    model.FertiliserManures[index].DefoliationName = selectedDefoliation;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+        return error;
+    }
     private async Task BindViewBegForDefoliationList(FertiliserManureViewModel model)
     {
         (List<SelectListItem> defoliationList, _) = await GetDefoliationList(model);
