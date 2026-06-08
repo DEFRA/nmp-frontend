@@ -17,7 +17,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="FarmName" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-input asp-for="@Model.FarmName">
+            <govuk-input for="@Model.FarmName">
                 <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>
                 <govuk-input-hint>@Resource.lblFarmNamePageHint</govuk-input-hint>
             </govuk-input>
