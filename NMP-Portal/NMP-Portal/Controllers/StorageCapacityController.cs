@@ -447,126 +447,14 @@ namespace NMP.Portal.Controllers
                             ValidateDimensions(model);
                             ValidateIsCoveredProeprty(model);
                         }
-                        if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank)
-                        {
-                            if (model.IsCircumference == null)
-                            {
-                                ModelState.AddModelError("CircumferenceOrDiameter", Resource.MsgSelectCircumferenceOrDiameterBeforeContinuing);
-                            }
-                            else
-                            {
-                                if (model.IsCircumference == true)
-                                {
-                                    if (model.Circumference == null)
-                                    {
-                                        ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblCircumference.ToLower()));
-                                    }
-                                    else
-                                    {
-                                        if (model.Circumference <= 0)
-                                        {
-                                            ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblCircumference));
-                                        }
-                                        if (model.Circumference > 999)
-                                        {
-                                            ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 999));
-                                        }
-                                    }
-                                    model.Diameter = null;
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                                }
-                                else
-                                {
-                                    if (model.Diameter == null)
-                                    {
-                                        ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDiameter.ToLower()));
-                                    }
-                                    else
-                                    {
-                                        if (model.Diameter <= 0)
-                                        {
-                                            ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblDiameter));
-                                        }
-                                        if (model.Diameter > 999)
-                                        {
-                                            ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 999));
-                                        }
-                                    }
-                                    model.Circumference = null;
-                                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                                }
-                            }
-                            ValidateDepth(model);
-                            ValidateIsCoveredProeprty(model);
-                        }
+                        ValidateCircularTank(model);
                     }
-
                 }
 
                 if (model.StorageTypeID != (int)NMP.Commons.Enums.StorageTypes.StorageBag && (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank && model.IsCircumference.HasValue))
                 {
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblCircumference) && model.IsCircumference.Value)
-                    {
-
-                        var circumferenceError = ModelState[Resource.lblCircumference]?.Errors.Count > 0 ?
-                                        ModelState[Resource.lblCircumference]?.Errors[0].ErrorMessage.ToString() : null;
-
-                        if (circumferenceError != null && circumferenceError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblCircumference]?.RawValue, Resource.lblCircumference)))
-                        {
-                            ModelState[Resource.lblCircumference]?.Errors.Clear();
-                            ModelState[Resource.lblDiameter]?.Errors.Clear();
-                            decimal decimalValue;
-                            if (decimal.TryParse(ModelState[Resource.lblCircumference]?.RawValue?.ToString(), out decimalValue))
-                            {
-                                ModelState[Resource.lblCircumference]?.Errors.Add(circumferenceError);
-                            }
-                            else
-                            {
-                                ModelState[Resource.lblCircumference]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
-                            }
-                        }
-                    }
-                    else if (!model.IsCircumference.Value && (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDiameter))
-                    {
-                        var diameterError = ModelState[Resource.lblDiameter]?.Errors.Count > 0 ?
-                                        ModelState[Resource.lblDiameter]?.Errors[0].ErrorMessage.ToString() : null;
-
-                        if (diameterError != null && diameterError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDiameter]?.RawValue, Resource.lblDiameter)))
-                        {
-                            ModelState[Resource.lblCircumference]?.Errors.Clear();
-                            ModelState[Resource.lblDiameter]?.Errors.Clear();
-                            decimal decimalValue;
-                            if (decimal.TryParse(ModelState[Resource.lblDiameter]?.RawValue?.ToString(), out decimalValue))
-                            {
-                                ModelState[Resource.lblDiameter]?.Errors.Add(diameterError);
-                            }
-                            else
-                            {
-                                ModelState[Resource.lblDiameter]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
-                            }
-                        }
-                    }
-                    if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDepth))
-                    {
-
-                        var depthError = ModelState[Resource.lblDepth]?.Errors.Count > 0 ?
-                                        ModelState[Resource.lblDepth]?.Errors[0].ErrorMessage.ToString() : null;
-
-                        if (depthError != null && depthError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDepth]?.RawValue, Resource.lblDepth)))
-                        {
-                            ModelState[Resource.lblDepth]?.Errors.Clear();
-                            decimal decimalValue;
-                            if (decimal.TryParse(ModelState[Resource.lblDepth]?.RawValue?.ToString(), out decimalValue))
-                            {
-                                ModelState[Resource.lblDepth]?.Errors.Add(depthError);
-                            }
-                            else
-                            {
-                                ModelState[Resource.lblDepth]?.Errors.Add(Resource.MsgEnterAValueBetween0And99);
-                            }
-                        }
-                    }
-
+                    BindModelStateErrorForCircumferenceAndDiameter(model);
+                    BindModelStateErrorForDepth();
                 }
 
                 if (!ModelState.IsValid)
@@ -574,38 +462,10 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                StorageCapacityViewModel? storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-                {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
-
+                StorageCapacityViewModel? storageModel = FetchPreviousSessionData();
 
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
-                {
-                    if (model.IsCheckAnswer && (storageModel != null && model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
-                    {
-                        return RedirectToAction(_checkAnswer);
-                    }
-                    return RedirectToAction("WeightCapacity");
-                }
-                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
-                {
-                    if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
-                    {
-                        if (model.IsCheckAnswer && (storageModel != null && model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && model.IsCovered == storageModel.IsCovered && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
-                        {
-                            return RedirectToAction(_checkAnswer);
-                        }
-                        return RedirectToAction("BankSlopeAngle");
-                    }
-                    else
-                    {
-                        return RedirectToAction(_checkAnswer);
-                    }
-                }
-                return RedirectToAction(_checkAnswer);
+                return RedirectForDimension(model, storageModel);
             }
             catch (Exception ex)
             {
@@ -614,6 +474,190 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
         }
+
+        private IActionResult RedirectForDimension(StorageCapacityViewModel model, StorageCapacityViewModel? storageModel)
+        {
+            if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+            {
+                if (model.IsCheckAnswer && (storageModel != null && model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
+                {
+                    return RedirectToAction(_checkAnswer);
+                }
+                return RedirectToAction("WeightCapacity");
+            }
+            if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
+            {
+                if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
+                {
+                    if (model.IsCheckAnswer && (storageModel != null && model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && model.IsCovered == storageModel.IsCovered && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
+                    {
+                        return RedirectToAction(_checkAnswer);
+                    }
+                    return RedirectToAction("BankSlopeAngle");
+                }
+                else
+                {
+                    return RedirectToAction(_checkAnswer);
+                }
+            }
+            return RedirectToAction(_checkAnswer);
+        }
+
+        private StorageCapacityViewModel? FetchPreviousSessionData()
+        {
+            StorageCapacityViewModel? storageModel = new StorageCapacityViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+            {
+                storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
+            }
+
+            return storageModel;
+        }
+
+        private void BindModelStateErrorForCircumferenceAndDiameter(StorageCapacityViewModel model)
+        {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblCircumference) && model.IsCircumference.Value)
+            {
+                BindModelStateErrorForCircumference();
+            }
+            else if (!model.IsCircumference.Value && (!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDiameter))
+            {
+                BindModelStateErrorForDiameter();
+            }
+        }
+
+        private void BindModelStateErrorForDiameter()
+        {
+            var diameterError = ModelState[Resource.lblDiameter]?.Errors.Count > 0 ?
+                            ModelState[Resource.lblDiameter]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (diameterError != null && diameterError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDiameter]?.RawValue, Resource.lblDiameter)))
+            {
+                ModelState[Resource.lblCircumference]?.Errors.Clear();
+                ModelState[Resource.lblDiameter]?.Errors.Clear();
+                decimal decimalValue;
+                if (decimal.TryParse(ModelState[Resource.lblDiameter]?.RawValue?.ToString(), out decimalValue))
+                {
+                    ModelState[Resource.lblDiameter]?.Errors.Add(diameterError);
+                }
+                else
+                {
+                    ModelState[Resource.lblDiameter]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                }
+            }
+        }
+
+        private void BindModelStateErrorForCircumference()
+        {
+            var circumferenceError = ModelState[Resource.lblCircumference]?.Errors.Count > 0 ?
+                            ModelState[Resource.lblCircumference]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (circumferenceError != null && circumferenceError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblCircumference]?.RawValue, Resource.lblCircumference)))
+            {
+                ModelState[Resource.lblCircumference]?.Errors.Clear();
+                ModelState[Resource.lblDiameter]?.Errors.Clear();
+                decimal decimalValue;
+                if (decimal.TryParse(ModelState[Resource.lblCircumference]?.RawValue?.ToString(), out decimalValue))
+                {
+                    ModelState[Resource.lblCircumference]?.Errors.Add(circumferenceError);
+                }
+                else
+                {
+                    ModelState[Resource.lblCircumference]?.Errors.Add(Resource.MsgEnterAValueBetween0And999);
+                }
+            }
+        }
+
+        private void BindModelStateErrorForDepth()
+        {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(Resource.lblDepth))
+            {
+
+                var depthError = ModelState[Resource.lblDepth]?.Errors.Count > 0 ?
+                                ModelState[Resource.lblDepth]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (depthError != null && depthError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[Resource.lblDepth]?.RawValue, Resource.lblDepth)))
+                {
+                    ModelState[Resource.lblDepth]?.Errors.Clear();
+                    decimal decimalValue;
+                    if (decimal.TryParse(ModelState[Resource.lblDepth]?.RawValue?.ToString(), out decimalValue))
+                    {
+                        ModelState[Resource.lblDepth]?.Errors.Add(depthError);
+                    }
+                    else
+                    {
+                        ModelState[Resource.lblDepth]?.Errors.Add(Resource.MsgEnterAValueBetween0And99);
+                    }
+                }
+            }
+        }
+
+        private void ValidateCircularTank(StorageCapacityViewModel model)
+        {
+            if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.CircularTank)
+            {
+                if (model.IsCircumference == null)
+                {
+                    ModelState.AddModelError("CircumferenceOrDiameter", Resource.MsgSelectCircumferenceOrDiameterBeforeContinuing);
+                }
+                else
+                {
+                    if (model.IsCircumference == true)
+                    {
+                        ValidateCircumference(model);
+                        model.Diameter = null;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                    }
+                    else
+                    {
+                        ValidateDiameter(model);
+                        model.Circumference = null;
+                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                    }
+                }
+                ValidateDepth(model);
+                ValidateIsCoveredProeprty(model);
+            }
+        }
+
+        private void ValidateCircumference(StorageCapacityViewModel model)
+        {
+            if (model.Circumference == null)
+            {
+                ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblCircumference.ToLower()));
+            }
+            else
+            {
+                if (model.Circumference <= 0)
+                {
+                    ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblCircumference));
+                }
+                if (model.Circumference > 999)
+                {
+                    ModelState.AddModelError(Resource.lblCircumference, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 999));
+                }
+            }
+        }
+
+        private void ValidateDiameter(StorageCapacityViewModel model)
+        {
+            if (model.Diameter == null)
+            {
+                ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.MsgEnterTheDimensionOfYourStorageBeforeContinuing, Resource.lblDiameter.ToLower()));
+            }
+            else
+            {
+                if (model.Diameter <= 0)
+                {
+                    ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.lblValueMustBeGreaterThanZero, Resource.lblDiameter));
+                }
+                if (model.Diameter > 999)
+                {
+                    ModelState.AddModelError(Resource.lblDiameter, string.Format(Resource.MsgEnterAValueBetweenValue, 1, 999));
+                }
+            }
+        }
+
         private void ValidateDimensions(StorageCapacityViewModel model)
         {
             ValidateLengthWidthAndDepth(model);

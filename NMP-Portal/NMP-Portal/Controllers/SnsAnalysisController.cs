@@ -657,6 +657,67 @@ namespace NMP.Portal.Controllers
             }
         }
 
+
+        private async Task BindSnsIndex(SnsAnalysisViewModel model, MeasurementData postMeasurementData, MeasurementDataForScotland postMeasurementDataForScotland)
+        {
+            if (model.FarmRB209CountryId != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (SnsResponse snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
+                if (string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    model.SnsIndex = snsResponse.SnsIndex;
+                    model.SnsValue = snsResponse.SnsValue;
+                    HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                }
+            }
+            else
+            {
+                (SnsResponseForScotland snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodForScotlandAsync(postMeasurementDataForScotland);
+                if (string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    model.SnsIndex = snsResponse.ResidueGroupId;
+                    model.NitrogenResidueGroup = snsResponse.ResidueGroup;
+                    HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                }
+            }
+        }
+
+        private static MeasurementData BindMesaurmentDataForWinterOilseedRapeOnly(SnsAnalysisViewModel model)
+        {
+            MeasurementData postMeasurementData;
+            model.CropHeight = null;
+            if (model.SoilOrganicMatter != null)
+            {
+                model.AdjustmentValue = null;
+            }
+            if (model.SoilOrganicMatter == null && model.AdjustmentValue == null)
+            {
+                model.AdjustmentValue = 0;
+            }
+            postMeasurementData = new MeasurementData
+            {
+                CropTypeId = model.CropTypeId ?? 0,
+                Step1ArablePotato = new Step1ArablePotato
+                {
+                    Depth0To30Cm = model.SoilMineralNitrogenAt030CM,
+                    Depth30To60Cm = model.SoilMineralNitrogenAt3060CM,
+                    Depth60To90Cm = model.SoilMineralNitrogenAt6090CM
+                },
+                Step2 = new Step2
+                {
+                    ShootNumber = model.NumberOfShoots > 0 ? model.NumberOfShoots : null,
+                    GreenAreaIndex = model.GreenAreaIndex > 0 ? model.GreenAreaIndex : 0,
+                    CropHeight = model.CropHeight > 0 ? model.CropHeight : null
+                },
+                Step3 = new Step3
+                {
+                    Adjustment = model.AdjustmentValue,
+                    OrganicMatterPercentage = model.SoilOrganicMatter > 0 ? model.SoilOrganicMatter : null
+                }
+            };
+            return postMeasurementData;
+        }
+
         [HttpGet]
         public async Task<IActionResult> SoilNitrogenSupplyIndex()
         {
@@ -692,66 +753,19 @@ namespace NMP.Portal.Controllers
                 }
                 else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
                 {
-                    model.CropHeight = null;
-                    if (model.SoilOrganicMatter != null)
-                    {
-                        model.AdjustmentValue = null;
-                    }
-                    if (model.SoilOrganicMatter == null && model.AdjustmentValue == null)
-                    {
-                        model.AdjustmentValue = 0;
-                    }
-                    postMeasurementData = new MeasurementData
-                    {
-                        CropTypeId = model.CropTypeId ?? 0,
-                        Step1ArablePotato = new Step1ArablePotato
-                        {
-                            Depth0To30Cm = model.SoilMineralNitrogenAt030CM,
-                            Depth30To60Cm = model.SoilMineralNitrogenAt3060CM,
-                            Depth60To90Cm = model.SoilMineralNitrogenAt6090CM
-                        },
-                        Step2 = new Step2
-                        {
-                            ShootNumber = model.NumberOfShoots > 0 ? model.NumberOfShoots : null,
-                            GreenAreaIndex = model.GreenAreaIndex > 0 ? model.GreenAreaIndex : 0,
-                            CropHeight = model.CropHeight > 0 ? model.CropHeight : null
-                        },
-                        Step3 = new Step3
-                        {
-                            Adjustment = model.AdjustmentValue,
-                            OrganicMatterPercentage = model.SoilOrganicMatter > 0 ? model.SoilOrganicMatter : null
-                        }
-                    };
+                    postMeasurementData = BindMesaurmentDataForWinterOilseedRapeOnly(model);
                 }
                 else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
                 {
                     postMeasurementData = BindMesaurmentDataForOtherArableAndPotatoes(model);
-
                 }
                 else
                 {
                     return RedirectToAction(_checkAnswerAction);
                 }
-                if (model.FarmRB209CountryId != (int)NMP.Commons.Enums.RB209Country.Scotland)
-                {
-                    (SnsResponse snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodAsync(postMeasurementData);
-                    if (string.IsNullOrWhiteSpace(error?.Message))
-                    {
-                        model.SnsIndex = snsResponse.SnsIndex;
-                        model.SnsValue = snsResponse.SnsValue;
-                        HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-                    }
-                }
-                else
-                {
-                    (SnsResponseForScotland snsResponse, Error error) = await _fieldLogic.FetchSNSIndexByMeasurementMethodForScotlandAsync(postMeasurementDataForScotland);
-                    if (string.IsNullOrWhiteSpace(error?.Message))
-                    {
-                        model.SnsIndex = snsResponse.ResidueGroupId;
-                        model.NitrogenResidueGroup = snsResponse.ResidueGroup;
-                        HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-                    }
-                }
+
+                await BindSnsIndex(model, postMeasurementData, postMeasurementDataForScotland);
+
                 return View(model);
 
             }
