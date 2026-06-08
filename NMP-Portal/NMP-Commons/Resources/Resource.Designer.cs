@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -9332,11 +9332,173 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How estimating nutrient supply from organic materials works using MANNER-NPK.
+        ///   Looks up a localized string similar to This tool helps you to:.
         /// </summary>
-        public static string lblMannerEstimateContent1 {
+        public static string lblMannerEstimateAboutPageContent1 {
             get {
-                return ResourceManager.GetString("lblMannerEstimateContent1", resourceCulture);
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to the potential financial value of the organic material.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent10 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What you will need.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent11 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to field name and soil type.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent12 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to manure application details, including application rate, application method and soil incorporation.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent13 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent13", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrate Vulnerable Zone (NVZ) warnings.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent14 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent14", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tool will warn you of possible breaches of the NVZ rules as you create estimates..
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent15 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent15", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can save your data, edit it, and reuse it. You can also save or print estimates as PDF files..
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent16 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent16", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can manually add the results from an estimate to a nutrient management plan, if you need to..
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent17 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent17", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to farm name, address and postcode.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent18 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent18", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue to create an estimate.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent19 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent19", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to estimate the nutrients supplied from applications of organic materials.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent2 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to compare different organic material applications to see how nutrient supply could be affected.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent3 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to see the financial value of organic material applications - how much you would save compared to buying inorganic fertiliser.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent4 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimates include:.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent5 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to total nitrogen (N).
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent6 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to crop available nitrogen (N).
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent7 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nitrogen (N) losses.
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent8 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to total, and crop available phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO).
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent9 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent9", resourceCulture);
             }
         }
         
