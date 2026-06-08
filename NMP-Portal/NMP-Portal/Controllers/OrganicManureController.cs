@@ -5705,7 +5705,7 @@ managementPeriod.CropID.HasValue
         private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal)> BindNmaxForIsNMaxWarningMessage(OrganicManureViewModel model, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales, bool hasSpecialManure)
         {
             decimal nMaxLimit = nmaxLimitEnglandOrWales ?? 0;
-                        
+
             if (model.FarmCountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
                 nMaxLimit = OrganicManureNMaxLimitLogic.NMaxLimit(Convert.ToInt32(nMaxLimit), crop.Yield == null ? null : crop.Yield.Value, fieldDetail.SoilTypeName, crop.CropInfo1 == null ? null : crop.CropInfo1.Value, crop.CropTypeID.Value, crop.PotentialCut ?? 0, hasSpecialManure, crop.DefoliationSequenceID);
@@ -5876,7 +5876,7 @@ managementPeriod.CropID.HasValue
             // 28-day pre-closed window
             DateTime preStart = closedStartDate.AddDays(-28);
             DateTime preEnd = closedStartDate.AddDays(-1);
-                        
+
             bool isInFebPeriod = WarningWithinPeriod.IsApplicationDateWithinDateRange(applicationDate, febStart, febEnd);
 
 
@@ -6139,7 +6139,7 @@ managementPeriod.CropID.HasValue
         }
         private static bool IsWithinRange(int harvestYear, DateTime applicationDate, int startMonth, int startDay, int endMonth, int endDay)
         {
-      
+
             DateTime start = new DateTime(harvestYear, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
 
             DateTime end = new DateTime(harvestYear, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
@@ -7078,7 +7078,7 @@ managementPeriod.CropID.HasValue
                 foreach (string fieldId in model.FieldList)
                 {
                     string fieldName = (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name;
-                    
+
                     organicManureIds.AddRange(model.UpdatedOrganicIds.Where(organicManure => fieldName.Equals(organicManure.Name)).Select(organicManure => organicManure.OrganicManureId!.Value));
                 }
             }
@@ -8391,7 +8391,7 @@ managementPeriod.CropID.HasValue
                         }
 
                         int counter = model.DefoliationList.Count + 1;
-                        
+
                         foreach (int fieldId in model.OrganicManures.Where(x => x.IsGrass && x.FieldID.HasValue).Select(x => x.FieldID.Value))
                         {
                             bool isFieldAlreadyPresent = model.DefoliationList.Any(dc => dc.FieldID == fieldId);
@@ -8993,11 +8993,12 @@ managementPeriod.CropID.HasValue
 
             var names = seq.DefoliationSequenceDescription.Split(',').Select(p => p.Trim()).ToArray();
 
-            var list = defoNumbers.Select(num => new SelectListItem
-            {
-                Text = Functions.FormatDefoliationLabel(num, names),
-                Value = num.ToString()
-            }).ToList();
+            var list = defoNumbers
+    .OrderBy(num => num).Select(num => new SelectListItem
+    {
+        Text = Functions.FormatDefoliationLabel(num, names),
+        Value = num.ToString()
+    }).ToList();
 
             return (list, null);
         }
@@ -9358,7 +9359,6 @@ managementPeriod.CropID.HasValue
                     Value = value(x),
                     Text = text(x)
                 })
-                .OrderBy(x => x.Text)
                 .ToList();
         }
         private static void CopyFarmManureToManureNutrientValues(ManureType target, FarmManureTypeResponse? source)

@@ -2005,7 +2005,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
 
             (var NutrientsLoadingFarmDetailsData, error) = await BindNutrientsLoadingFarmDetailData(model);
-            if (NutrientsLoadingFarmDetailsData != null && error == null)
+            if (NutrientsLoadingFarmDetailsData != null && string.IsNullOrWhiteSpace(error?.Message))
             {
                 (_, _) = await _reportLogic.UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
 
@@ -6559,7 +6559,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         NutrientsLoadingFarmDetail? savedNutrientsLoadingFarmDetailsData = null;
         var (NutrientsLoadingFarmDetailsData, error) = await BindNutrientsLoadingFarmDetailData(model);
-        if (NutrientsLoadingFarmDetailsData != null && error == null)
+        if (NutrientsLoadingFarmDetailsData != null && string.IsNullOrWhiteSpace(error?.Message))
         {
             (savedNutrientsLoadingFarmDetailsData, error) =
            await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
