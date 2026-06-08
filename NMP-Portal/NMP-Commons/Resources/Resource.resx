@@ -7328,8 +7328,8 @@ livestock manure.</value>
   <data name="lblPlanningAndEstimating" xml:space="preserve">
     <value>Planning and estimating</value>
   </data>
-  <data name="lblMannerEstimateContent1" xml:space="preserve">
-    <value>How estimating nutrient supply from organic materials works using MANNER-NPK</value>
+  <data name="lblMannerEstimateAboutPageContent1" xml:space="preserve">
+    <value>This tool helps you to:</value>
   </data>
   <data name="lblMannerEstimateContent2" xml:space="preserve">
     <value>MANNER-NPK (Manure Nitrogen Evaluation Routine) estimates the nutrient supply from applications of organic materials.</value>
@@ -7768,5 +7768,62 @@ livestock manure.</value>
   </data>
   <data name="lblLastUpdatedOn" xml:space="preserve">
     <value>(Last updated on {0})</value>
+  </data>
+  <data name="lblNutrientSupplyEstimates" xml:space="preserve">
+    <value>Nutrient supply estimates</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent2" xml:space="preserve">
+    <value>estimate the nutrients supplied from applications of organic materials</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent3" xml:space="preserve">
+    <value>compare different organic material applications to see how nutrient supply could be affected</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent4" xml:space="preserve">
+    <value>see the financial value of organic material applications - how much you would save compared to buying inorganic fertiliser</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent5" xml:space="preserve">
+    <value>Estimates include:</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent6" xml:space="preserve">
+    <value>total nitrogen (N)</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent7" xml:space="preserve">
+    <value>crop available nitrogen (N)</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent8" xml:space="preserve">
+    <value>nitrogen (N) losses</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent9" xml:space="preserve">
+    <value>total, and crop available phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO)</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent10" xml:space="preserve">
+    <value>the potential financial value of the organic material</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent11" xml:space="preserve">
+    <value>What you will need</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent12" xml:space="preserve">
+    <value>field name and soil type</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent13" xml:space="preserve">
+    <value>manure application details, including application rate, application method and soil incorporation</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent14" xml:space="preserve">
+    <value>Nitrate Vulnerable Zone (NVZ) warnings</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent15" xml:space="preserve">
+    <value>The tool will warn you of possible breaches of the NVZ rules as you create estimates.</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent16" xml:space="preserve">
+    <value>You can save your data, edit it, and reuse it. You can also save or print estimates as PDF files.</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent17" xml:space="preserve">
+    <value>You can manually add the results from an estimate to a nutrient management plan, if you need to.</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent18" xml:space="preserve">
+    <value>farm name, address and postcode</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent19" xml:space="preserve">
+    <value>Continue to create an estimate</value>
   </data>
 </root>
