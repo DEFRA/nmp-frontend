@@ -2635,6 +2635,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to all farms.
+        /// </summary>
+        public static string lblBackToAllFarms {
+            get {
+                return ResourceManager.GetString("lblBackToAllFarms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to {0}.
         /// </summary>
         public static string lblBackToFarmName {
@@ -3508,6 +3517,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a nutrient management plan or NVZ report.
+        /// </summary>
+        public static string lblCreateANutrientManagementPlanOrNVZReport {
+            get {
+                return ResourceManager.GetString("lblCreateANutrientManagementPlanOrNVZReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a nutrient supply estimate.
         /// </summary>
         public static string lblCreateANutrientSupplyEstimate {
@@ -3576,6 +3594,15 @@ namespace NMP.Commons.Resources {
         public static string lblCreateHoldingNitrogenLimitForYear {
             get {
                 return ResourceManager.GetString("lblCreateHoldingNitrogenLimitForYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports for a farm..
+        /// </summary>
+        public static string lblCreateNutrientManagementPlansAndNitrateVulnerableZone {
+            get {
+                return ResourceManager.GetString("lblCreateNutrientManagementPlansAndNitrateVulnerableZone", resourceCulture);
             }
         }
         
@@ -5331,6 +5358,15 @@ namespace NMP.Commons.Resources {
         public static string lblEstimateOfNitrogenMineralisationQuestion {
             get {
                 return ResourceManager.GetString("lblEstimateOfNitrogenMineralisationQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimate the nutrient supply and potential financial value from organic materials using MANNER-NPK..
+        /// </summary>
+        public static string lblEstimateTheNutrientSupplyAndPotentialFinancialValue {
+            get {
+                return ResourceManager.GetString("lblEstimateTheNutrientSupplyAndPotentialFinancialValue", resourceCulture);
             }
         }
         
@@ -8369,6 +8405,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last updated.
+        /// </summary>
+        public static string lblLastUpdate {
+            get {
+                return ResourceManager.GetString("lblLastUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last updated: {0}..
         /// </summary>
         public static string lblLastUpdated {
@@ -10574,6 +10619,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient management planning.
+        /// </summary>
+        public static string lblNutrientManagementPlanning {
+            get {
+                return ResourceManager.GetString("lblNutrientManagementPlanning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports.
+        /// </summary>
+        public static string lblNutrientManagementPlansAndNitrateVulnerableZoneReports {
+            get {
+                return ResourceManager.GetString("lblNutrientManagementPlansAndNitrateVulnerableZoneReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} nutrient recommendations.
         /// </summary>
         public static string lblNutrientRecommendations {
@@ -10606,6 +10669,15 @@ namespace NMP.Commons.Resources {
         public static string lblNutrients {
             get {
                 return ResourceManager.GetString("lblNutrients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimates.
+        /// </summary>
+        public static string lblNutrientSupplyEstimates {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimates", resourceCulture);
             }
         }
         
@@ -11110,6 +11182,15 @@ namespace NMP.Commons.Resources {
         public static string lblOrgMaterialApplicationForFieldName {
             get {
                 return ResourceManager.GetString("lblOrgMaterialApplicationForFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to or to save an NVZ report..
+        /// </summary>
+        public static string lblOrToSaveAnNVZReport {
+            get {
+                return ResourceManager.GetString("lblOrToSaveAnNVZReport", resourceCulture);
             }
         }
         
@@ -13090,6 +13171,15 @@ namespace NMP.Commons.Resources {
         public static string lblSelectADifferentCrop {
             get {
                 return ResourceManager.GetString("lblSelectADifferentCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a farm to create or update a nutrient management plan,.
+        /// </summary>
+        public static string lblSelectAFarmToCreateOrUpdateANutrientManagementPlan {
+            get {
+                return ResourceManager.GetString("lblSelectAFarmToCreateOrUpdateANutrientManagementPlan", resourceCulture);
             }
         }
         
