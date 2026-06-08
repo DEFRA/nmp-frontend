@@ -49,7 +49,6 @@ public class AcceptTermsController(ILogger<AcceptTermsController> logger, IAccep
             if (model.IsTermsOfUseAccepted)
             {
                 return RedirectToAction("Index", "Dashboard");
-                //return RedirectToAction("FarmList", "Farm");
             }
             
             return View("Accept", model);
