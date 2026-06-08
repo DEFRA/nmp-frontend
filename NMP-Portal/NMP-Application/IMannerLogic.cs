@@ -57,4 +57,6 @@ public interface IMannerLogic
     Task<(string, Error)> FetchApplicationMethodById(int Id);
     Task<(string, Error)> FetchIncorporationMethodById(int Id);
     Task<(string, Error)> FetchIncorporationDelayById(int Id);
+    MannerEstimationStep14ViewModel GetMannerEstimationStep14();
+    MannerEstimationStep14ViewModel SetMannerEstimationStep14(MannerEstimationStep14ViewModel mannerEstimationStep14);
 }
