@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -493,11 +493,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I accept the Terms of Use.
+        ///   Looks up a localized string similar to I agree to the terms of use.
         /// </summary>
-        public static string lbl_I_accept_to_the_terms_of_use {
+        public static string lbl_I_agree_to_the_terms_of_use {
             get {
-                return ResourceManager.GetString("lbl_I_accept_to_the_terms_of_use", resourceCulture);
+                return ResourceManager.GetString("lbl_I_agree_to_the_terms_of_use", resourceCulture);
             }
         }
         
@@ -835,11 +835,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd. (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB)..
+        ///   Looks up a localized string similar to Plan and manage nutrient applications (&apos;this tool) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd.(&apos;Defra and partners&apos;)..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent1 {
             get {
                 return ResourceManager.GetString("lblAboutRecommendationGuidenceAdviceContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB)..
+        /// </summary>
+        public static string lblAboutRecommendationGuidenceAdviceContent1Additional {
+            get {
+                return ResourceManager.GetString("lblAboutRecommendationGuidenceAdviceContent1Additional", resourceCulture);
             }
         }
         
@@ -1263,6 +1272,15 @@ namespace NMP.Commons.Resources {
         public static string lblACropAndNutrientManagementReport {
             get {
                 return ResourceManager.GetString("lblACropAndNutrientManagementReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A cross border holding has land in more than one part of Great Britain..
+        /// </summary>
+        public static string lblACrossBorderHoldingHasLandInMore {
+            get {
+                return ResourceManager.GetString("lblACrossBorderHoldingHasLandInMore", resourceCulture);
             }
         }
         
@@ -3742,6 +3760,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to crop details, including yields and sowing dates if you have them.
+        /// </summary>
+        public static string lblCropDetailsIncludingYieldsAndSowingDatesIfYouHaveThem {
+            get {
+                return ResourceManager.GetString("lblCropDetailsIncludingYieldsAndSowingDatesIfYouHaveThem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cropped area.
         /// </summary>
         public static string lblCropedArea {
@@ -4066,7 +4093,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Farmers with a cross-border holding (a farm with land in more than one part of Great Britain) will need to set up 2 separate farms - one in each region - and manage them separately within NMPT-GB..
+        ///   Looks up a localized string similar to Farmers with a cross-border holding (a farm with land in more than one part of Great Britain) will need to set up 2 separate farms - one in each region - and manage them separately within this tool..
         /// </summary>
         public static string lblCrossBorderHoldingsContent1 {
             get {
@@ -4075,7 +4102,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For instance, if your holding has land in both England and Scotland, you would need to create 2 farms in NMPT-GB..
+        ///   Looks up a localized string similar to For instance, if your holding has land in both England and Scotland, you would need to create 2 farms in this tool..
         /// </summary>
         public static string lblCrossBorderHoldingsContent2 {
             get {
@@ -4084,7 +4111,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This means that NMPT-GB will be using the appropriate calculations and following the relevant regulations for each farm..
+        ///   Looks up a localized string similar to This means that this tool will be using the appropriate calculations and following the relevant regulations for each farm..
         /// </summary>
         public static string lblCrossBorderHoldingsContent3 {
             get {
@@ -4368,6 +4395,15 @@ namespace NMP.Commons.Resources {
         public static string lblDetailsAboutYourFieldsCropsAndRecommendations {
             get {
                 return ResourceManager.GetString("lblDetailsAboutYourFieldsCropsAndRecommendations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to details of how grass fields have been managed in the last three years.
+        /// </summary>
+        public static string lblDetailsOfHowGrassFieldsHaveBeenManaged {
+            get {
+                return ResourceManager.GetString("lblDetailsOfHowGrassFieldsHaveBeenManaged", resourceCulture);
             }
         }
         
@@ -4908,6 +4944,15 @@ namespace NMP.Commons.Resources {
         public static string lblEnforcementProcedure {
             get {
                 return ResourceManager.GetString("lblEnforcementProcedure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to England and Wales - &lt;a target=&quot;_blank&quot; href=&quot;https://ahdb.org.uk/nutrient-management-guide-rb209&quot;&gt;Nutrient Management Guide (RB209)&lt;/a&gt;. (opens in a new window).
+        /// </summary>
+        public static string lblEnglandAndWalesUrl {
+            get {
+                return ResourceManager.GetString("lblEnglandAndWalesUrl", resourceCulture);
             }
         }
         
@@ -5943,6 +5988,15 @@ namespace NMP.Commons.Resources {
         public static string lblFarmName {
             get {
                 return ResourceManager.GetString("lblFarmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to farm name, address and postcode.
+        /// </summary>
+        public static string lblFarmNameAddressAndPostcode {
+            get {
+                return ResourceManager.GetString("lblFarmNameAddressAndPostcode", resourceCulture);
             }
         }
         
@@ -8468,6 +8522,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to last year&apos;s crop type for each field.
+        /// </summary>
+        public static string lblLastYearCropTypeForEachField {
+            get {
+                return ResourceManager.GetString("lblLastYearCropTypeForEachField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Late sown (15th September to 24th August).
         /// </summary>
         public static string lblLateSownContent {
@@ -8644,6 +8707,15 @@ namespace NMP.Commons.Resources {
         public static string lblLivestockDetailsYear {
             get {
                 return ResourceManager.GetString("lblLivestockDetailsYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to livestock details.
+        /// </summary>
+        public static string lblLivestocketDails {
+            get {
+                return ResourceManager.GetString("lblLivestocketDails", resourceCulture);
             }
         }
         
@@ -9584,6 +9656,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to manure application details, including application rate, application method and soil incorporation.
+        /// </summary>
+        public static string lblManureApplicationDetailsIncludingApplicationRate {
+            get {
+                return ResourceManager.GetString("lblManureApplicationDetailsIncludingApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manure applying date.
         /// </summary>
         public static string lblManureApplyingDate {
@@ -9661,6 +9742,15 @@ namespace NMP.Commons.Resources {
         public static string lblManureStorage {
             get {
                 return ResourceManager.GetString("lblManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to manure storage details.
+        /// </summary>
+        public static string lblManureStorageDetails {
+            get {
+                return ResourceManager.GetString("lblManureStorageDetails", resourceCulture);
             }
         }
         
@@ -10192,6 +10282,15 @@ namespace NMP.Commons.Resources {
         public static string lblNitrateVulnerableZones {
             get {
                 return ResourceManager.GetString("lblNitrateVulnerableZones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrate Vulnerable Zone (NVZ) warnings.
+        /// </summary>
+        public static string lblNitrateVulnerableZoneWarnings {
+            get {
+                return ResourceManager.GetString("lblNitrateVulnerableZoneWarnings", resourceCulture);
             }
         }
         
@@ -11411,6 +11510,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Our release schedule shows you when new features will be added and when the tool is updated..
+        /// </summary>
+        public static string lblOurReleaseScheduleShowsYouWhenNewFeatures {
+            get {
+                return ResourceManager.GetString("lblOurReleaseScheduleShowsYouWhenNewFeatures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to kg per hectare.
         /// </summary>
         public static string lblOutpurKgPerHectare {
@@ -12518,7 +12626,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a  href =&quot;/ReleaseSchedule&quot;&gt;Read the release schedule for testing and new features&lt;/a&gt;.
+        ///   Looks up a localized string similar to &lt;a  href =&quot;/ReleaseSchedule&quot;&gt;Read the release schedule&lt;/a&gt; (opens in a new window).
         /// </summary>
         public static string lblReadScheduleLink {
             get {
@@ -13283,7 +13391,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NMPT-GB will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here. Creating a plan or report will also save your data..
+        ///   Looks up a localized string similar to You can save your data, edit it, and reuse it. You can also save or print plans and reports as PDF files..
         /// </summary>
         public static string lblSaving_your_data_line1 {
             get {
@@ -13297,6 +13405,15 @@ namespace NMP.Commons.Resources {
         public static string lblSBI {
             get {
                 return ResourceManager.GetString("lblSBI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scotland - &lt;a target=&quot;_blank&quot; href=&quot;https://www.fas.scot/technical-notes/#fertiliser&quot;&gt;Scotland Rural College (SRUC) Technical Notes&lt;/a&gt;. (opens in a new window), part of the Scottish Government&apos;s Farm Advisory Service.
+        /// </summary>
+        public static string lblScotlandRecommendationTool {
+            get {
+                return ResourceManager.GetString("lblScotlandRecommendationTool", resourceCulture);
             }
         }
         
@@ -14327,6 +14444,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some NVZ reports also require:.
+        /// </summary>
+        public static string lblSomeNVZReportsAlsoRequire {
+            get {
+                return ResourceManager.GetString("lblSomeNVZReportsAlsoRequire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Some of the fields.
         /// </summary>
         public static string lblSomeOfTheFields {
@@ -15130,6 +15256,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The recommendations from this tool come from:.
+        /// </summary>
+        public static string lblTheRecommendationsFromThisToolComeFrom {
+            get {
+                return ResourceManager.GetString("lblTheRecommendationsFromThisToolComeFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals..
         /// </summary>
         public static string lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem {
@@ -15234,6 +15369,33 @@ namespace NMP.Commons.Resources {
         public static string lblTheseValuesAreUsedToCalculateHowEffective {
             get {
                 return ResourceManager.GetString("lblTheseValuesAreUsedToCalculateHowEffective", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to the sizes of your fields in hectares.
+        /// </summary>
+        public static string lblTheSizesOfYourFieldsInHectares {
+            get {
+                return ResourceManager.GetString("lblTheSizesOfYourFieldsInHectares", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tool gives fertiliser recommendations for all major nutrients and lime, and for most agricultural and horticultural crops..
+        /// </summary>
+        public static string lblTheToolGivesFertiliserRecommendationsForAllMajorNutrients {
+            get {
+                return ResourceManager.GetString("lblTheToolGivesFertiliserRecommendationsForAllMajorNutrients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tool will warn you of possible breaches of the NVZ rules as you make nutrient management plans..
+        /// </summary>
+        public static string lblTheToolWillWarnYouOfPossibleBreachesOfTheNVZ {
+            get {
+                return ResourceManager.GetString("lblTheToolWillWarnYouOfPossibleBreachesOfTheNVZ", resourceCulture);
             }
         }
         
@@ -18190,6 +18352,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What you will need.
+        /// </summary>
+        public static string lblWhatYouWillNeed {
+            get {
+                return ResourceManager.GetString("lblWhatYouWillNeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When are you applying inorganic fertiliser on the {0}?.
         /// </summary>
         public static string lblWhenAreYouApplyingInOrganicfertiliser {
@@ -19126,6 +19297,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can not currently import field data from the RPA..
+        /// </summary>
+        public static string lblYouCanNotCurrentlyImportFieldDataFromTheRPA {
+            get {
+                return ResourceManager.GetString("lblYouCanNotCurrentlyImportFieldDataFromTheRPA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can view your recommendations.
         /// </summary>
         public static string lblYouCanViewYourRecommendations {
@@ -19477,7 +19657,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the  &lt;a href=&quot;https://www.gov.uk/government/organisations/rural-payments-agency&quot; target=&quot;_blank&quot;&gt; Rural Payments Agency&lt;/a&gt; (RPA) or the Environment Agency (EA)..
+        ///   Looks up a localized string similar to This tool will never share your data with any other organisations. In particular, please note that this tool does not share data with the Rural Payments Agency (RPA)..
         /// </summary>
         public static string lblYourDataContentSecond {
             get {
@@ -19509,6 +19689,15 @@ namespace NMP.Commons.Resources {
         public static string lblYourFields {
             get {
                 return ResourceManager.GetString("lblYourFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to your most recent soil analysis data.
+        /// </summary>
+        public static string lblYourMostRecentSoilAnalysisData {
+            get {
+                return ResourceManager.GetString("lblYourMostRecentSoilAnalysisData", resourceCulture);
             }
         }
         
