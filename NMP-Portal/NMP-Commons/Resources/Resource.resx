@@ -7826,6 +7826,36 @@ livestock manure.</value>
   <data name="lblMannerEstimateAboutPageContent19" xml:space="preserve">
     <value>Continue to create an estimate</value>
   </data>
+  <data name="lblNutrientManagementPlanning" xml:space="preserve">
+    <value>Nutrient management planning</value>
+  </data>
+  <data name="lblCreateNutrientManagementPlansAndNitrateVulnerableZone" xml:space="preserve">
+    <value>Create nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports for a farm.</value>
+  </data>
+  <data name="lblNutrientSupplyEstimates" xml:space="preserve">
+    <value>Nutrient supply estimates</value>
+  </data>
+  <data name="lblEstimateTheNutrientSupplyAndPotentialFinancialValue" xml:space="preserve">
+    <value>Estimate the nutrient supply and potential financial value from organic materials using MANNER-NPK.</value>
+  </data>
+  <data name="lblCreateANutrientManagementPlanOrNVZReport" xml:space="preserve">
+    <value>Create a nutrient management plan or NVZ report</value>
+  </data>
+  <data name="lblBackToAllFarms" xml:space="preserve">
+    <value>Back to all farms</value>
+  </data>
+  <data name="lblLastUpdate" xml:space="preserve">
+    <value>Last updated</value>
+  </data>
+  <data name="lblNutrientManagementPlansAndNitrateVulnerableZoneReports" xml:space="preserve">
+    <value>Nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports</value>
+  </data>
+  <data name="lblSelectAFarmToCreateOrUpdateANutrientManagementPlan" xml:space="preserve">
+    <value>Select a farm to create or update a nutrient management plan,</value>
+  </data>
+  <data name="lblOrToSaveAnNVZReport" xml:space="preserve">
+    <value>or to save an NVZ report.</value>
+  </data>
   <data name="CopyExistingFarmAndFieldDetailsContent1" xml:space="preserve">
     <value>Do you want to use existing farm and field details?</value>
   </data>
