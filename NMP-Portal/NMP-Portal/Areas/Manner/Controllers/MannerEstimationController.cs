@@ -12,6 +12,7 @@ using NMP.Commons.ViewModels;
 using NMP.Portal.Controllers;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace NMP.Portal.Areas.Manner.Controllers
@@ -29,6 +30,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private readonly IDataProtector _mannerEstimationProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.MannerEstimationController");
         private const string _mannerEstimationSessionName = "MannerEstimation";
         private const string _mannerEstimationControllerForLog = "MannerEstimation  Controller : ";
+        private const string _organisationId = "organisationId";
 
         public IActionResult Index()
         {
@@ -41,7 +43,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction("FarmList", "Farm", new { area = "" });
             }
-            return RedirectToAction("FarmName");
+            return RedirectToAction("CopyExistingFarmAndFieldDetails");
         }
 
         public IActionResult MannerEstimationCancel()
@@ -702,6 +704,124 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> CopyExistingFarmAndFieldDetails()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyExistingFarmAndFieldDetails() action called");
+            MannerEstimationStep14ViewModel model = _mannerLogic.GetMannerEstimationStep14();
+            try
+            {
+                if (model == null)
+                {
+                    _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyExistingFarmAndFieldDetails() action");
+                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                }
+
+                List<SelectListItem> farmsWithFields = await BindAllFarmList();
+                if (farmsWithFields.Count > 0)
+                {
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("FarmName");
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in CopyExistingFarmAndFieldDetails() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in CopyExistingFarmAndFieldDetails() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CopyExistingFarmAndFieldDetails(MannerEstimationStep14ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyExistingFarmAndFieldDetails() post action called");
+            try
+            {
+                if (!model.IsCopyExistingFarmAndFieldDetails.HasValue)
+                {
+                    ModelState.AddModelError("IsCopyExistingFarmAndFieldDetails", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep14();
+                    await BindAllFarmList();
+                    return View(model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep14(model);
+                string action = "FarmName";
+                if (model.IsCopyExistingFarmAndFieldDetails.HasValue && model.IsCopyExistingFarmAndFieldDetails.Value)
+                {
+                    action = "FarmToCopy";
+                }
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction(action);
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in CopyExistingFarmAndFieldDetails() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in CopyExistingFarmAndFieldDetails() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+
+        private async Task<List<SelectListItem>> BindAllFarmList()
+        {
+            Claim? claim = HttpContext.User.FindFirst(_organisationId);
+            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
+            Guid.TryParse(orgId, out Guid organisationId);
+            (List<Farm> farmList, _) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
+            List<SelectListItem> farmsWithFields = new List<SelectListItem>();
+            foreach (var farm in farmList)
+            {
+                (_, var fields) = await _fieldLogic.FetchFieldByFarmId(farm.ID, true.ToString());
+
+                if (fields != null && fields.Any())
+                {
+                    farmsWithFields.Add(new SelectListItem
+                    {
+                        Value = farm.ID.ToString(),
+                        Text = farm.Name
+                    });
+                }
+            }
+            return farmsWithFields;
+        }
+        [HttpGet]
+        public async Task<IActionResult> FarmToCopy()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  FarmToCopy() action called");
+            try
+            {
+                return View();
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FarmToCopy() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FarmToCopy() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

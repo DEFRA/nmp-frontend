@@ -1,33 +1,32 @@
 ﻿@using NMP.Commons.Enums
 @using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
-@model MannerEstimationStep2ViewModel
+@model MannerEstimationStep14ViewModel
 
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)} {Resource.lblHyphen} {title}";
-    ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.Country;
+    ViewData["Title"] = $"{Resource.CopyExistingFarmAndFieldDetailsContent1} {Resource.lblHyphen} {title}";
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "FarmName")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "MannerHubPage")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="Country" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="CopyExistingFarmAndFieldDetails" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios for="@Model.CountryID">
+            <govuk-radios for="@Model.IsCopyExistingFarmAndFieldDetails">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)
+                        @Resource.CopyExistingFarmAndFieldDetailsContent1
                     </govuk-radios-fieldset-legend>
-                    @if (ViewBag.CountryList != null)
-                    {
-                        @foreach (var item in ViewBag.CountryList)
-                        {
-                            <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
-                        }
-                    }
+                    <govuk-radios-hint>@Resource.CopyExistingFarmAndFieldDetailsContent2</govuk-radios-hint>
+
+                    <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+
                 </govuk-radios-fieldset>
             </govuk-radios>
 

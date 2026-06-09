@@ -7856,4 +7856,13 @@ livestock manure.</value>
   <data name="lblOrToSaveAnNVZReport" xml:space="preserve">
     <value>or to save an NVZ report.</value>
   </data>
+  <data name="CopyExistingFarmAndFieldDetailsContent1" xml:space="preserve">
+    <value>Do you want to use existing farm and field details?</value>
+  </data>
+  <data name="CopyExistingFarmAndFieldDetailsContent2" xml:space="preserve">
+    <value>You can start with rainfall, field and soil details from an existing farm and one of its fields. You can change any of these details just for this estimate.</value>
+  </data>
+  <data name="lblWhichFarmWouldYouLikeToUse" xml:space="preserve">
+    <value>Which farm would you like to use?</value>
+  </data>
 </root>
