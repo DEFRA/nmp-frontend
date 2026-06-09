@@ -380,5 +380,20 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         return await _mannerService.FetchIncorporationMethodsByApplicationId(appId, applicableFor);
     }
 
+    public MannerEstimationStep14ViewModel SetMannerEstimationStep14(MannerEstimationStep14ViewModel mannerEstimationStep14)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep14 = mannerEstimationStep14;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep14();
+    }
+
+
+    public MannerEstimationStep14ViewModel GetMannerEstimationStep14()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep14.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        return mannerEstimationViewModel.MannerEstimationStep14;
+    }
 
 }

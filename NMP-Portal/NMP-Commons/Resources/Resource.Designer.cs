@@ -322,6 +322,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to use existing farm and field details?.
+        /// </summary>
+        public static string CopyExistingFarmAndFieldDetailsContent1 {
+            get {
+                return ResourceManager.GetString("CopyExistingFarmAndFieldDetailsContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can start with rainfall, field and soil details from an existing farm and one of its fields. You can change any of these details just for this estimate..
+        /// </summary>
+        public static string CopyExistingFarmAndFieldDetailsContent2 {
+            get {
+                return ResourceManager.GetString("CopyExistingFarmAndFieldDetailsContent2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to x-ms-cpim-csrf.
         /// </summary>
         public static string CpimCsrfCookieName {
@@ -18294,6 +18312,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhichFarmInformationAndPlanningReportDoYouWantToCreate {
             get {
                 return ResourceManager.GetString("lblWhichFarmInformationAndPlanningReportDoYouWantToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which farm would you like to use?.
+        /// </summary>
+        public static string lblWhichFarmWouldYouLikeToUse {
+            get {
+                return ResourceManager.GetString("lblWhichFarmWouldYouLikeToUse", resourceCulture);
             }
         }
         

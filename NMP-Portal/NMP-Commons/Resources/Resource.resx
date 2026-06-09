@@ -7826,4 +7826,13 @@ livestock manure.</value>
   <data name="lblMannerEstimateAboutPageContent19" xml:space="preserve">
     <value>Continue to create an estimate</value>
   </data>
+  <data name="CopyExistingFarmAndFieldDetailsContent1" xml:space="preserve">
+    <value>Do you want to use existing farm and field details?</value>
+  </data>
+  <data name="CopyExistingFarmAndFieldDetailsContent2" xml:space="preserve">
+    <value>You can start with rainfall, field and soil details from an existing farm and one of its fields. You can change any of these details just for this estimate.</value>
+  </data>
+  <data name="lblWhichFarmWouldYouLikeToUse" xml:space="preserve">
+    <value>Which farm would you like to use?</value>
+  </data>
 </root>
