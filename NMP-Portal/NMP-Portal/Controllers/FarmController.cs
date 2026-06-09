@@ -23,12 +23,13 @@ namespace NMP.Portal.Controllers
 {
     [Authorize]
     public class FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
-        IFarmLogic farmLogic) : Controller
+        IFarmLogic farmLogic, IAboutServiceLogic aboutServiceLogic) : Controller
     {
         private readonly ILogger<FarmController> _logger = logger;
         private readonly IDataProtector _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
         private readonly IAddressLookupLogic _addressLookupLogic = addressLookupLogic;
         private readonly IFarmLogic _farmLogic = farmLogic;
+        private readonly IAboutServiceLogic _aboutServiceLogic = aboutServiceLogic;
         private const string _farmListActionName = "FarmList";
         private const string _checkAnswerActionName = "CheckAnswer";
         private const string _rainfallActionName = "Rainfall";
@@ -78,6 +79,7 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = "false";
                 }
                 ViewBag.IsAnyRecordInMannerEstimate = false;
+                ViewBag.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService();
             }
             catch (HttpRequestException hre)
             {

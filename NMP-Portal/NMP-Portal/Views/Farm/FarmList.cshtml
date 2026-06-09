@@ -3,9 +3,18 @@
 @model FarmsViewModel
 @{
     ViewData["Title"] = Resource.lblYourFarms;
+    var backController = "";
+    if (ViewBag.DoNotShowAboutThisService)
+    {
+        backController = "Dashboard";
+    }
+    else
+    {
+        backController = "AboutService";
+    }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="Index" asp-controller="Dashboard">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="Index" asp-controller=@backController>@Resource.lblBack</govuk-back-link>
 }
 
 @if (TempData["Error"] != null)
