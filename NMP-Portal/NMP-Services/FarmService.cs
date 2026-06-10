@@ -424,7 +424,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
             if (response.IsSuccessStatusCode &&
                 responseWrapper?.Data != null)
             {
-                List<T>? farms = responseWrapper.Data.Farms?.ToObject<List<T>>();
+                List<T>? farms = responseWrapper?.Data?.Farms?.ToObject<List<T>>();
 
                 if (farms?.Any() == true)
                 {
