@@ -7932,4 +7932,13 @@ livestock manure.</value>
   <data name="lblChooseOneOption" xml:space="preserve">
     <value>Choose one option</value>
   </data>
+  <data name="MsgSelectAnJourneyName" xml:space="preserve">
+    <value>Select a farm</value>
+  </data>
+  <data name="MsgSelectWheatherYouWantToUseExisting" xml:space="preserve">
+    <value>Select whether you want to use existing farm and field details.</value>
+  </data>
+  <data name="MsgSelectTheCountryTheFarmIsIn" xml:space="preserve">
+    <value>Select the country the farm is in</value>
+  </data>
 </root>
