@@ -1486,12 +1486,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             int maxYear = yearList.Max();
 
             //fetch plan by farmId
-            List<PlanSummaryResponse> PlanYearList = await _cropLogic.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
-            if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
-            {
-                List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
-                yearList.AddRange(maxYearList);
-            }
+            await FetchYearsList(model, yearList, maxYear);
 
             if (model.FieldAndPlanReportOption != null)
             {
@@ -1528,16 +1523,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 TempData[_tempDataForSuccessMsg] = _reportDataProtector.Unprotect(q);
             }
-            yearList = yearList.OrderByDescending(x => x).ToList();
-            if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
-            {
-                ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
-            }
-            else
-            {
-                ViewBag.Years = yearList;
-            }
-                SetReportDataToSession(model);
+            await BindYearsViewBag(model, yearList);
+            SetReportDataToSession(model);
         }
         catch (Exception ex)
         {
@@ -1555,6 +1542,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return View(model);
     }
+
+    private async Task FetchYearsList(ReportViewModel model, List<int> yearList, int maxYear)
+    {
+        List<PlanSummaryResponse> PlanYearList = await _cropLogic.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
+        if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
+        {
+            List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
+            yearList.AddRange(maxYearList);
+        }
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Year(ReportViewModel model)
@@ -1568,15 +1566,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             List<int> yearList = GetReportYearsList();
             int maxYear = yearList.Max();
+            await FetchYearsList(model, yearList, maxYear);
             if ((model.NVZReportOption != null && model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.NmaxReport) ||
                 (model.FieldAndPlanReportOption != null && model.FieldAndPlanReportOption == (int)NMP.Commons.Enums.FieldAndPlanReportOption.CropFieldManagementReport))
             {
-                List<PlanSummaryResponse> PlanYearList = await _cropLogic.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
-                if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
-                {
-                    List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
-                    yearList.AddRange(maxYearList);
-                }
+                await FetchYearsList(model, yearList, maxYear);
             }
             if (model.NVZReportOption != null)
             {
@@ -1599,8 +1593,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     }
                 }
             }
-            yearList = yearList.OrderByDescending(x => x).ToList();
-            ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
+            await BindYearsViewBag(model, yearList);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -7109,6 +7102,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
         }
         return fieldCount;
+    }
+    private async Task BindYearsViewBag(ReportViewModel model, List<int> yearList)
+    {
+        yearList = yearList.OrderByDescending(x => x).ToList();
+        if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
+        {
+            ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
+        }
+        else
+        {
+            ViewBag.Years = yearList;
+        }
+
     }
 
 }
