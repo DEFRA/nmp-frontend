@@ -22629,6 +22629,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a farm.
+        /// </summary>
+        public static string MsgSelectAnJourneyName {
+            get {
+                return ResourceManager.GetString("MsgSelectAnJourneyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select an option before continuing.
         /// </summary>
         public static string MsgSelectAnOptionBeforeContinuing {
@@ -22692,6 +22701,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select the country the farm is in.
+        /// </summary>
+        public static string MsgSelectTheCountryTheFarmIsIn {
+            get {
+                return ResourceManager.GetString("MsgSelectTheCountryTheFarmIsIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the farm information and planning report you want to create..
         /// </summary>
         public static string MsgSelectTheFarmInformationAndPlanningReportYouWantToCreate {
@@ -22706,6 +22724,15 @@ namespace NMP.Commons.Resources {
         public static string MsgSelectTheReportYouWantToCreate {
             get {
                 return ResourceManager.GetString("MsgSelectTheReportYouWantToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select whether you want to use existing farm and field details..
+        /// </summary>
+        public static string MsgSelectWheatherYouWantToUseExisting {
+            get {
+                return ResourceManager.GetString("MsgSelectWheatherYouWantToUseExisting", resourceCulture);
             }
         }
         

@@ -96,7 +96,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-               
+
                 return View(model);
             }
 
@@ -146,7 +146,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (model.CountryID == 0)
                 {
-                    ModelState.AddModelError("CountryID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCountry.ToLower()));
+                    ModelState.AddModelError("CountryID", Resource.MsgSelectTheCountryTheFarmIsIn);
                 }
 
                 if (!ModelState.IsValid)
@@ -158,7 +158,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 model = await _mannerLogic.SetMannerEstimationStep2(model);
 
-                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("FarmingRules");
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("PostCode");
             }
             catch (HttpRequestException hre)
             {
@@ -221,7 +221,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (model.Postcode == null)
                 {
-                    ModelState.AddModelError("Postcode", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCountry.ToLower()));
+                    ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
                 }
 
                 if (!ModelState.IsValid)
@@ -794,7 +794,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!model.IsCopyExistingFarmAndFieldDetails.HasValue)
                 {
-                    ModelState.AddModelError("IsCopyExistingFarmAndFieldDetails", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("IsCopyExistingFarmAndFieldDetails", Resource.MsgSelectWheatherYouWantToUseExisting);
                 }
 
                 if (!ModelState.IsValid)
@@ -884,7 +884,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (!model.FarmId.HasValue)
                 {
-                    ModelState.AddModelError("FarmId", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("FarmId", string.Format(Resource.MsgSelectAnJourneyName, Resource.lblFarm));
                 }
 
                 if (!ModelState.IsValid)
@@ -963,7 +963,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (!model.FieldId.HasValue)
                 {
-                    ModelState.AddModelError("FieldId", Resource.MsgSelectAnOptionBeforeContinuing);
+                    ModelState.AddModelError("FieldId", string.Format(Resource.MsgSelectAnJourneyName, Resource.lblField));
                 }
 
                 if (!ModelState.IsValid)
