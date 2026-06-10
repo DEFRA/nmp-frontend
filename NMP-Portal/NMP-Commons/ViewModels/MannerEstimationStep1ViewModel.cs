@@ -13,5 +13,6 @@ namespace NMP.Commons.ViewModels
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmName))]
         public string FarmName { get; set; } = string.Empty;
         public bool IsCheckAnswer { get; set; } = false;
+        public bool IsFarmCopied { get; set; } = false;
     }
 }

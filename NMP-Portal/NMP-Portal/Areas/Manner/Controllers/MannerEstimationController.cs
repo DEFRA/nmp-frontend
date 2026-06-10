@@ -41,8 +41,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             RemoveMannerEstimationSession();
             if (!string.IsNullOrWhiteSpace(q))
             {
-                return RedirectToAction("FarmList", "Farm", new { area = "" });
+                return RedirectToAction("Index", "Dashboard", new { area = "" });
             }
+
+            //check if any manner data
+            //return View();
+
             return RedirectToAction("CopyExistingFarmAndFieldDetails");
         }
 
@@ -63,27 +67,39 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         [HttpGet]
-        public IActionResult FarmName()
+        public async Task<IActionResult> FarmName()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() action called");
             MannerEstimationStep1ViewModel model = _mannerLogic.GetMannerEstimationStep1();
+            List<SelectListItem> farmsWithFields = await BindAllFarmList();
+            if (farmsWithFields.Count > 0)
+            {
+                model.IsFarmCopied = true;
+            }
             ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult FarmName(MannerEstimationStep1ViewModel model)
+        public async Task<IActionResult> FarmName(MannerEstimationStep1ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() post action called");
+            ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
 
             if (string.IsNullOrWhiteSpace(model.FarmName))
             {
                 ModelState.AddModelError("FarmName", Resource.MsgEnterTheFarmName);
             }
+            List<SelectListItem> farmsWithFields = await BindAllFarmList();
+            if (farmsWithFields.Count > 0)
+            {
+                model.IsFarmCopied = true;
+            }
 
             if (!ModelState.IsValid)
             {
+               
                 return View(model);
             }
 
@@ -96,6 +112,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> Country()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  Country() action called");
+
+
             MannerEstimationStep2ViewModel model = _mannerLogic.GetMannerEstimationStep2();
             try
             {
@@ -126,6 +144,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> Country(MannerEstimationStep2ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  Country() post action called");
+
             try
             {
                 if (model.CountryID == 0)
@@ -161,6 +180,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public IActionResult FarmingRules()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmingRules() action called");
+
             MannerEstimationStep2ViewModel model = _mannerLogic.GetMannerEstimationStep2();
             return View(model);
         }
@@ -170,6 +190,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
         public IActionResult FarmingRules(MannerEstimationStep2ViewModel model)
         {
+
             if (model.IsCheckAnswer)
             {
                 return RedirectToAction(_checkAnswerActionName);
@@ -181,6 +202,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [HttpGet]
         public IActionResult PostCode()
         {
+
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  PostCode() action called");
             MannerEstimationStep3ViewModel model = _mannerLogic.GetMannerEstimationStep3();
 
@@ -196,6 +218,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostCode(MannerEstimationStep3ViewModel model)
         {
+
             _logger.LogTrace($"{_mannerEstimationControllerForLog} PostCode() post action called");
             try
             {
@@ -235,6 +258,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> AverageAnnualRainfall()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() action called");
+
             try
             {
                 MannerEstimationStep4ViewModel model = await _mannerLogic.GetMannerEstimationStep4();
@@ -266,6 +290,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() post action called");
 
+
             model = await _mannerLogic.GetMannerEstimationStep4();
             if (!ModelState.IsValid)
             {
@@ -284,6 +309,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfallManual() action called");
             MannerEstimationStep4ViewModel model = await _mannerLogic.GetMannerEstimationStep4();
+
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AverageAnnualRainfallManual() action");
@@ -299,6 +325,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfallManual() post action called");
             ValidateRainfall(model);
+
 
             if (!ModelState.IsValid)
             {
@@ -345,6 +372,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FieldName() action called");
             MannerEstimationStep5ViewModel model = _mannerLogic.GetMannerEstimationStep5();
+
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in FieldName() action");
@@ -359,6 +387,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public IActionResult FieldName(MannerEstimationStep5ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FieldName() post action called");
+
 
             if (string.IsNullOrWhiteSpace(model.FieldName))
             {
@@ -380,6 +409,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} NVZField() action called");
             MannerEstimationStep6ViewModel model = _mannerLogic.GetMannerEstimationStep6();
+
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in NVZField() action");
@@ -393,6 +423,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public IActionResult NVZField(MannerEstimationStep6ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} NVZField() post action called");
+
 
             if (!model.IsWithinNVZ.HasValue)
             {
@@ -413,6 +444,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> SoilType()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilType() action called");
+
             MannerEstimationStep7ViewModel model = _mannerLogic.GetMannerEstimationStep7();
             if (model == null)
             {
@@ -450,6 +482,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropGroup() action called");
             MannerEstimationStep8ViewModel model = _mannerLogic.GetMannerEstimationStep8();
+
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CropGroup() action");
@@ -464,6 +497,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> CropGroup(MannerEstimationStep8ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropGroup() post action called");
+
 
             if (model.CropGroupId == null)
             {
@@ -486,6 +520,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> CropType()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropType() action called");
+
             MannerEstimationStep9ViewModel model = _mannerLogic.GetMannerEstimationStep9();
             if (model == null)
             {
@@ -501,6 +536,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> CropType(MannerEstimationStep9ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropType() post action called");
+
 
             if (model.CropTypeId == null)
             {
@@ -529,6 +565,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public IActionResult IsEarlySown()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} IsEarlySown() action called");
+
             MannerEstimationStep10ViewModel model = _mannerLogic.GetMannerEstimationStep10();
             if (model == null)
             {
@@ -543,6 +580,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public IActionResult IsEarlySown(MannerEstimationStep10ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} IsEarlySown() post action called");
+
 
             if (model.IsEarlySown == null)
             {
@@ -562,6 +600,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> ManureGroup()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureGroup() action called");
+
             MannerEstimationStep11ViewModel model = _mannerLogic.GetMannerEstimationStep11();
             if (model == null)
             {
@@ -582,6 +621,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> ManureGroup(MannerEstimationStep11ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureGroup() post action called");
+
 
             if (model.ManureGroupId == null)
             {
@@ -645,6 +685,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> ManureType()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureType() action called");
+
             MannerEstimationStep12ViewModel model = _mannerLogic.GetMannerEstimationStep12();
             if (model == null)
             {
@@ -664,6 +705,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> ManureType(MannerEstimationStep12ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureType() post action called");
+
 
             if (model.ManureTypeId == null)
             {
@@ -697,6 +739,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public IActionResult ApplicationDate()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationDate() action called");
+
             MannerEstimationStep13ViewModel model = _mannerLogic.GetMannerEstimationStep13();
             if (model == null)
             {
@@ -710,8 +753,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyExistingFarmAndFieldDetails() action called");
             MannerEstimationStep14ViewModel model = _mannerLogic.GetMannerEstimationStep14();
+            ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
             try
             {
+
                 if (model == null)
                 {
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyExistingFarmAndFieldDetails() action");
@@ -748,6 +793,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyExistingFarmAndFieldDetails() post action called");
             try
             {
+                ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
+
                 if (!model.IsCopyExistingFarmAndFieldDetails.HasValue)
                 {
                     ModelState.AddModelError("IsCopyExistingFarmAndFieldDetails", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -804,13 +851,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return farmsWithFields;
         }
+
         [HttpGet]
         public async Task<IActionResult> FarmToCopy()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FarmToCopy() action called");
+            MannerEstimationStep15ViewModel model = _mannerLogic.GetMannerEstimationStep15();
             try
             {
-                return View();
+                List<SelectListItem> farmsWithFields = await BindAllFarmList();
+                if (farmsWithFields.Count > 0)
+                {
+                    ViewBag.FarmList = farmsWithFields;
+                }
+                return View(model);
             }
             catch (HttpRequestException hre)
             {
@@ -823,5 +877,125 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FarmToCopy(MannerEstimationStep15ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  FarmToCopy() post action called");
+            try
+            {
+                if (!model.FarmId.HasValue)
+                {
+                    ModelState.AddModelError("FarmId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep15();
+                    List<SelectListItem> farmsWithFields = await BindAllFarmList();
+                    if (farmsWithFields.Count > 0)
+                    {
+                        ViewBag.FarmList = farmsWithFields;
+                    }
+                    return View(model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep15(model);
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("FieldToCopy");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FarmToCopy() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FarmToCopy() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+        private async Task<List<SelectListItem>> BindAllFieldList(int farmId)
+        {
+            List<SelectListItem> fieldList = new List<SelectListItem>();
+            (_, var fields) = await _fieldLogic.FetchFieldByFarmId(farmId, true.ToString());
+
+            foreach (var field in fields)
+            {
+                fieldList.Add(new SelectListItem
+                {
+                    Value = field.ID.ToString(),
+                    Text = field.Name
+                });
+            }
+            return fieldList;
+        }
+        [HttpGet]
+        public async Task<IActionResult> FieldToCopy()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  FieldToCopy() action called");
+            MannerEstimationStep16ViewModel model = _mannerLogic.GetMannerEstimationStep16();
+            try
+            {
+                List<SelectListItem> fieldList = await BindAllFieldList(model.FarmId.Value);
+                if (fieldList.Count > 0)
+                {
+                    ViewBag.FieldList = fieldList;
+                }
+                return View(model);
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FieldToCopy() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FieldToCopy(MannerEstimationStep16ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  FieldToCopy() post action called");
+            try
+            {
+                if (!model.FieldId.HasValue)
+                {
+                    ModelState.AddModelError("FieldId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep16();
+                    List<SelectListItem> fieldList = await BindAllFieldList(model.FarmId.Value);
+                    if (fieldList.Count > 0)
+                    {
+                        ViewBag.FieldList = fieldList;
+                    }
+                    return View(model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep16(model);
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CropGroup");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FieldToCopy() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+
     }
 }

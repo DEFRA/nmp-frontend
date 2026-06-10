@@ -7926,4 +7926,10 @@ livestock manure.</value>
   <data name="lblTheToolWillWarnYouOfPossibleBreachesOfTheNVZ" xml:space="preserve">
     <value>The tool will warn you of possible breaches of the NVZ rules as you make nutrient management plans.</value>
   </data>
+  <data name="lblWhichFieldWouldYouLikeToUse" xml:space="preserve">
+    <value>Which field would you like to use?</value>
+  </data>
+  <data name="lblChooseOneOption" xml:space="preserve">
+    <value>Choose one option</value>
+  </data>
 </root>

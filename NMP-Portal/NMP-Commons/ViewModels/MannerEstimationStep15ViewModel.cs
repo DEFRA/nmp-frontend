@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep8ViewModel
+    public class MannerEstimationStep15ViewModel
     {
-        public int? CropGroupId { get; set; }
+        public int? FarmId { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
-        public string CropGroupName { get; set; } = string.Empty;
-        public bool IsFarmCopied { get; set; } = false;
     }
 }

@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -3162,6 +3162,15 @@ namespace NMP.Commons.Resources {
         public static string lblCheckYourYearData {
             get {
                 return ResourceManager.GetString("lblCheckYourYearData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose one option.
+        /// </summary>
+        public static string lblChooseOneOption {
+            get {
+                return ResourceManager.GetString("lblChooseOneOption", resourceCulture);
             }
         }
         
@@ -18681,6 +18690,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhichFieldWouldYouLikeToCopy {
             get {
                 return ResourceManager.GetString("lblWhichFieldWouldYouLikeToCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which field would you like to use?.
+        /// </summary>
+        public static string lblWhichFieldWouldYouLikeToUse {
+            get {
+                return ResourceManager.GetString("lblWhichFieldWouldYouLikeToUse", resourceCulture);
             }
         }
         
