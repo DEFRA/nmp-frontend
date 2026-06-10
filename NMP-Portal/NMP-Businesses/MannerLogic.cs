@@ -47,6 +47,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep1.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep1.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
         return mannerEstimationViewModel.MannerEstimationStep1;
     }
 
@@ -65,7 +66,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep2();
     }
-    
+
     private async Task<int?> FetchFarmRB209CoutryId(int countryId)
     {
         Country? country = await FetchCountryById(countryId);
@@ -191,7 +192,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep7.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
         mannerEstimationViewModel.MannerEstimationStep7.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
-        mannerEstimationViewModel.MannerEstimationStep7.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId??0;
+        mannerEstimationViewModel.MannerEstimationStep7.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         return mannerEstimationViewModel.MannerEstimationStep7;
     }
 
@@ -207,6 +208,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep8.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep8.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
         return mannerEstimationViewModel.MannerEstimationStep8;
     }
 
@@ -254,7 +256,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep11.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
-        mannerEstimationViewModel.MannerEstimationStep11.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId??0;
+        mannerEstimationViewModel.MannerEstimationStep11.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId ?? 0;
         return mannerEstimationViewModel.MannerEstimationStep11;
     }
 
@@ -270,9 +272,9 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep12.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
-        mannerEstimationViewModel.MannerEstimationStep12.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId??0;
+        mannerEstimationViewModel.MannerEstimationStep12.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep12.ManureGroupName = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupName;
-        mannerEstimationViewModel.MannerEstimationStep12.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId??0;
+        mannerEstimationViewModel.MannerEstimationStep12.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId ?? 0;
         return mannerEstimationViewModel.MannerEstimationStep12;
     }
 
@@ -394,6 +396,37 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep14.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
         return mannerEstimationViewModel.MannerEstimationStep14;
+    }
+    public MannerEstimationStep15ViewModel SetMannerEstimationStep15(MannerEstimationStep15ViewModel mannerEstimationStep15)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep15 = mannerEstimationStep15;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep15();
+    }
+
+
+    public MannerEstimationStep15ViewModel GetMannerEstimationStep15()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep15.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        return mannerEstimationViewModel.MannerEstimationStep15;
+    }
+    public MannerEstimationStep16ViewModel SetMannerEstimationStep16(MannerEstimationStep16ViewModel mannerEstimationStep16)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep16 = mannerEstimationStep16;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep16();
+    }
+
+
+    public MannerEstimationStep16ViewModel GetMannerEstimationStep16()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep16.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep16.FarmId = mannerEstimationViewModel.MannerEstimationStep15.FarmId;
+        return mannerEstimationViewModel.MannerEstimationStep16;
     }
 
 }

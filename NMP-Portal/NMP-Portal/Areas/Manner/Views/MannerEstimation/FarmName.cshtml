@@ -7,10 +7,19 @@
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.FarmName;
+    string backAction = "MannerHubPage";
+    if (Model.IsCheckAnswer)
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (Model.IsFarmCopied)
+    {
+        backAction = "CopyExistingFarmAndFieldDetails";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "MannerHubPage")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">

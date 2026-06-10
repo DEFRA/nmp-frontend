@@ -1,30 +1,30 @@
-﻿
-@using NMP.Commons.Resources
+﻿@using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
-@model MannerEstimationStep15ViewModel
+@model MannerEstimationStep16ViewModel
 
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblWhichFarmWouldYouLikeToUse} {Resource.lblHyphen} {title}";
-    
+    ViewData["Title"] = $"{Resource.lblWhichFieldWouldYouLikeToUse} {Resource.lblHyphen} {title}";    
+
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CopyExistingFarmAndFieldDetails")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "FarmToCopy")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="FarmToCopy" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="FieldToCopy" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios for="@Model.FarmId">
+            <govuk-radios for="@Model.FieldId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblWhichFarmWouldYouLikeToUse
+                        @Resource.lblWhichFieldWouldYouLikeToUse
                     </govuk-radios-fieldset-legend>
-                    
-                    @if (ViewBag.FarmList != null)
+                    <govuk-radios-hint>@Resource.lblChooseOneOption</govuk-radios-hint>
+
+                    @if (ViewBag.FieldList != null)
                     {
-                        @foreach (var item in ViewBag.FarmList)
+                        @foreach (var item in ViewBag.FieldList)
                         {
                             <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
                         }
@@ -34,7 +34,7 @@
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-           
+
         </form>
         <partial name="_CancelLink" model="@Model.IsCheckAnswer" />
     </div>
