@@ -4,8 +4,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblWhichFieldWouldYouLikeToUse} {Resource.lblHyphen} {title}";
-    ViewBag.IsCheckAnswer = Model.IsCheckAnswer;
+    ViewData["Title"] = $"{Resource.lblWhichFieldWouldYouLikeToUse} {Resource.lblHyphen} {title}";    
 
 }
 @section BeforeContent {
@@ -37,7 +36,6 @@
             </govuk-button>
 
         </form>
-
-        <partial name="_CancelLink" />
+        <partial name="_CancelLink" model="@Model.IsCheckAnswer" />
     </div>
 </div>

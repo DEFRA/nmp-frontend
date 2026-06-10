@@ -6,7 +6,7 @@
 @{
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblWhichFarmWouldYouLikeToUse} {Resource.lblHyphen} {title}";
-    ViewBag.IsCheckAnswer = Model.IsCheckAnswer;
+    
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CopyExistingFarmAndFieldDetails")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
@@ -36,6 +36,6 @@
             </govuk-button>
            
         </form>
-        <partial name="_CancelLink" />
+        <partial name="_CancelLink" model="@Model.IsCheckAnswer" />
     </div>
 </div>
