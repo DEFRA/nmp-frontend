@@ -117,4 +117,10 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         _logger.LogTrace("Add farm average yields");
         return await _farmAverageYieldLogic.AddFarmAverageYieldsAsync(farmAverageYieldData);
     }
+
+    public async Task<(List<FarmListSummary>, Error?)> FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(Guid orgId)
+    {
+        _logger.LogTrace("Fetching farms with last updated date for Organization ID: {OrgId}", orgId);
+        return await _farmService.FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(orgId);
+    }
 }

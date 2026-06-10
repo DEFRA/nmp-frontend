@@ -429,4 +429,44 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (farmsAndNvz, error);
     }
+
+    public async Task<(List<FarmListSummary>, Error?)> FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(Guid orgId)
+    {
+        List<FarmListSummary> farmList = new List<FarmListSummary>();
+        Error? error = null;
+        try
+        {
+            string url = string.Format(ApiurlHelper.FetchAllFarmsWithLastUpdatedDateByOrgIdAPI, orgId);
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(url);
+
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            {
+                List<FarmListSummary>? farms = responseWrapper?.Data?.Farms?.ToObject<List<FarmListSummary>>();
+                if (farms != null && farms.Count > 0)
+                {
+                    farmList.AddRange(farms);
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            _logger.LogError(hre, hre.Message);
+        }
+        catch (Exception ex)
+        {
+            error = new Error();
+            error.Message = ex.Message;
+            _logger.LogError(ex, ex.Message);
+        }
+        return (farmList, error);
+    }
 }

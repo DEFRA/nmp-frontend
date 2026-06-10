@@ -58,7 +58,7 @@ namespace NMP.Portal.Controllers
                 Claim? claim = HttpContext.User.FindFirst(_organisationId);
                 string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
                 Guid.TryParse(orgId, out Guid organisationId);
-                (List<Farm> farms, error) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
+                (List<FarmListSummary> farms, error) = await _farmLogic.FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(organisationId);
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     ViewBag.Error = error.Message;
@@ -66,8 +66,15 @@ namespace NMP.Portal.Controllers
                 }
                 if (farms != null && farms.Count > 0)
                 {
-                    model.Farms.AddRange(farms);
-                    model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
+                    model.Farms.AddRange(
+                        farms.Select(f => new Farm
+                        {
+                            ID = f.ID,
+                            Name = f.Name,
+                            ModifiedOn = f.ModifiedOn,
+                            EncryptedFarmId = _dataProtector.Protect(f.ID.ToString())
+                        })
+                    );
                 }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
