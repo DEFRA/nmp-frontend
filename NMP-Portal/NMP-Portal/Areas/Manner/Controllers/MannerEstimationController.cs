@@ -44,9 +44,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return RedirectToAction("Index", "Dashboard", new { area = "" });
             }
 
-            //check if any manner data
-            //return View();
-
             return RedirectToAction("CopyExistingFarmAndFieldDetails");
         }
 

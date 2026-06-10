@@ -1,11 +1,11 @@
-﻿
-@using NMP.Commons.Resources
+﻿@using NMP.Commons.Resources
 @using NMP.Commons.ViewModels
 @model MannerEstimationStep16ViewModel
 
 @{
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblWhichFieldWouldYouLikeToUse} {Resource.lblHyphen} {title}";
+    ViewBag.IsCheckAnswer = Model.IsCheckAnswer;
 
 }
 @section BeforeContent {
@@ -22,7 +22,7 @@
                         @Resource.lblWhichFieldWouldYouLikeToUse
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.lblChooseOneOption</govuk-radios-hint>
-                    
+
                     @if (ViewBag.FieldList != null)
                     {
                         @foreach (var item in ViewBag.FieldList)
@@ -35,17 +35,9 @@
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-           
+
         </form>
-        <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-        </p>
+
+        <partial name="_CancelLink" />
     </div>
 </div>
