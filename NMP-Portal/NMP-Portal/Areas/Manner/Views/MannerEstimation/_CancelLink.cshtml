@@ -1,6 +1,8 @@
 ﻿@using NMP.Commons.Resources
-<p class= "govuk-body cancel-link" >
-    @if (!ViewBag.IsCheckAnswer)
+@model bool
+
+<p class="govuk-body cancel-link">
+    @if (!Model)
     {
         <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
     }
