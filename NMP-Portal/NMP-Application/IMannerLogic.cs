@@ -63,4 +63,6 @@ public interface IMannerLogic
     MannerEstimationStep15ViewModel SetMannerEstimationStep15(MannerEstimationStep15ViewModel mannerEstimationStep15);
     MannerEstimationStep16ViewModel GetMannerEstimationStep16();
     MannerEstimationStep16ViewModel SetMannerEstimationStep16(MannerEstimationStep16ViewModel mannerEstimationStep16);
+    MannerEstimationStep17ViewModel GetMannerEstimationStep17();
+    MannerEstimationStep17ViewModel SetMannerEstimationStep17(MannerEstimationStep17ViewModel mannerEstimationStep17);
 }

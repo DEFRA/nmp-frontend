@@ -236,7 +236,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction(_checkAnswerActionName);
                 }
-                return RedirectToAction("AverageAnnualRainfall");
+                return RedirectToAction("IsFarmOrganic");
             }
             catch (HttpRequestException hre)
             {
@@ -993,6 +993,53 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
+        [HttpGet]
+        public async Task<IActionResult> IsFarmOrganic()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  IsFarmOrganic() action called");
+            MannerEstimationStep17ViewModel model = _mannerLogic.GetMannerEstimationStep17();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IsFarmOrganic() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            return View(model);
 
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> IsFarmOrganic(MannerEstimationStep17ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  IsFarmOrganic() post action called");
+            try
+            {
+                if (!model.IsFarmOrganic.HasValue)
+                {
+                    ModelState.AddModelError("IsFarmOrganic", Resource.MsgSelectWhetherYouAreARegisteredOrganicProducer);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep17(model);
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("AverageAnnualRainfall");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in IsFarmOrganic() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in IsFarmOrganic() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
     }
 }

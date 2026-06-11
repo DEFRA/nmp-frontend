@@ -1,0 +1,35 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.MannerEstimationStep17ViewModel
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{Resource.lblRegisteredOrganicProducer} {Resource.lblHyphen} {title}";
+    var organicProducer = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var noOrganicProducer = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "AverageAnnualRainfall")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="IsFarmOrganic" asp-controller="MannerEstimation" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">     
+            <govuk-radios class="govuk-radios--inline" for="@Model.IsFarmOrganic">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblRegisteredOrganicProducer
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-item value="@organicProducer">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@noOrganicProducer">@Resource.lblNo</govuk-radios-item>
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+
+            <partial name="_CancelLink" model="@Model.IsCheckAnswer" />
+        </div>
+
+    </div>
+</form>
