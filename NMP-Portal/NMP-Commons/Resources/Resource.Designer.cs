@@ -22737,6 +22737,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select whether you are a registered organic producer..
+        /// </summary>
+        public static string MsgSelectWhetherYouAreARegisteredOrganicProducer {
+            get {
+                return ResourceManager.GetString("MsgSelectWhetherYouAreARegisteredOrganicProducer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select yes if you had any imports or exports of livestock manure.
         /// </summary>
         public static string MsgSelectYesIfYouHadAnyImportsOrExportsOfLivestockManure {

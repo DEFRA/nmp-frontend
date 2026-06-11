@@ -17,7 +17,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="CopyExistingFarmAndFieldDetails" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios for="@Model.IsCopyExistingFarmAndFieldDetails">
+            <govuk-radios class="govuk-radios--inline" for="@Model.IsCopyExistingFarmAndFieldDetails">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.CopyExistingFarmAndFieldDetailsContent1
@@ -34,15 +34,7 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-        </p>
+
+        <partial name="_CancelLink" model="@Model.IsCheckAnswer" />
     </div>
 </div>

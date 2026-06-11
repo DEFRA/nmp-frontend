@@ -27,6 +27,7 @@ namespace NMP.Commons.ViewModels
             MannerEstimationStep14 = new MannerEstimationStep14ViewModel();
             MannerEstimationStep15 = new MannerEstimationStep15ViewModel();
             MannerEstimationStep16 = new MannerEstimationStep16ViewModel();
+            MannerEstimationStep17 = new MannerEstimationStep17ViewModel();
         }
         public bool IsCheckAnswer { get; set; } = false;
         public string? Country { get; set; }
@@ -51,5 +52,6 @@ namespace NMP.Commons.ViewModels
         public MannerEstimationStep14ViewModel MannerEstimationStep14 { get; set; }
         public MannerEstimationStep15ViewModel MannerEstimationStep15 { get; set; }
         public MannerEstimationStep16ViewModel MannerEstimationStep16 { get; set; }
+        public MannerEstimationStep17ViewModel MannerEstimationStep17 { get; set; }
     }
 }

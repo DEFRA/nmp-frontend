@@ -429,4 +429,18 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         return mannerEstimationViewModel.MannerEstimationStep16;
     }
 
+    public MannerEstimationStep17ViewModel GetMannerEstimationStep17()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep17.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        return mannerEstimationViewModel.MannerEstimationStep17;
+    }
+    public MannerEstimationStep17ViewModel SetMannerEstimationStep17(MannerEstimationStep17ViewModel mannerEstimationStep17)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep17 = mannerEstimationStep17;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep17();
+    }
+
 }

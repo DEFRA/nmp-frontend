@@ -7941,4 +7941,7 @@ livestock manure.</value>
   <data name="MsgSelectTheCountryTheFarmIsIn" xml:space="preserve">
     <value>Select the country the farm is in</value>
   </data>
+  <data name="MsgSelectWhetherYouAreARegisteredOrganicProducer" xml:space="preserve">
+    <value>Select whether you are a registered organic producer.</value>
+  </data>
 </root>
