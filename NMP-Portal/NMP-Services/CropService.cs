@@ -806,14 +806,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
     }
 
     //grass
-    public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutServiceAsync(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward)
+    public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutServiceAsync(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward,int countryId)
     {
         Error? error = null;
         List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestUrl = string.Format(ApiurlHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, HttpUtility.UrlEncode(swardTypeId.ToString()), HttpUtility.UrlEncode(swardManagementId.ToString()), HttpUtility.UrlEncode(numberOfCut.ToString()), HttpUtility.UrlEncode(isNewSward.ToString()));
+            var requestUrl = string.Format(ApiurlHelper.FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI, HttpUtility.UrlEncode(swardTypeId.ToString()), HttpUtility.UrlEncode(swardManagementId.ToString()), HttpUtility.UrlEncode(numberOfCut.ToString()), HttpUtility.UrlEncode(isNewSward.ToString()), countryId);
             var response = await httpClient.GetAsync(requestUrl);            
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

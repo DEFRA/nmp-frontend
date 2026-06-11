@@ -122,10 +122,10 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
         return await _cropService.FetchDefoliationSequencesByIdServiceAsync(defoliationId);
     }
 
-    public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward)
+    public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward, int countryId)
     {
-        _logger.LogTrace("Fetching defoliation sequences for SwardTypeId: {SwardTypeId}, SwardManagementId: {SwardManagementId}, NumberOfCut: {NumberOfCut}, IsNewSward: {IsNewSward}", swardTypeId, swardManagementId, numberOfCut, isNewSward);
-        return await _cropService.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutServiceAsync(swardTypeId, swardManagementId, numberOfCut, isNewSward);
+        _logger.LogTrace("Fetching defoliation sequences for SwardTypeId: {SwardTypeId}, SwardManagementId: {SwardManagementId}, NumberOfCut: {NumberOfCut}, IsNewSward: {IsNewSward},CountryId: {countryId}", swardTypeId, swardManagementId, numberOfCut, isNewSward, countryId);
+        return await _cropService.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutServiceAsync(swardTypeId, swardManagementId, numberOfCut, isNewSward,countryId);
     }
 
     public async Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds)

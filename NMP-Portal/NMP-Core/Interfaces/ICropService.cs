@@ -29,7 +29,7 @@ public interface ICropService
     Task<List<GrassSeasonResponse>> FetchGrassSeasonsServiceAsync();
     Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClassServiceAsync(List<int> fieldIds);
 
-    Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutServiceAsync(int swardTypeId,int swardManagementId, int numberOfCut,bool isNewSward);
+    Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutServiceAsync(int swardTypeId,int swardManagementId, int numberOfCut,bool isNewSward,int countryId);
     Task<(List<PotentialCutResponse>,Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementIdServiceAsync(int swardTypeId, int swardManagementId);
     Task<(List<SwardManagementResponse>,Error)> FetchSwardManagementsServiceAsync();
     Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesServiceAsync();
