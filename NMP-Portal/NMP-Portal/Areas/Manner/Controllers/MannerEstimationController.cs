@@ -998,27 +998,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  IsFarmOrganic() action called");
             MannerEstimationStep17ViewModel model = _mannerLogic.GetMannerEstimationStep17();
-            try
+            if (model == null)
             {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IsFarmOrganic() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            return View(model);
 
-                if (model == null)
-                {
-                    _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IsFarmOrganic() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-                }
-                return View(model);
 
-            }
-            catch (HttpRequestException hre)
-            {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in IsFarmOrganic() action");
-                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in IsFarmOrganic() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
-            }
         }
 
         [HttpPost]
