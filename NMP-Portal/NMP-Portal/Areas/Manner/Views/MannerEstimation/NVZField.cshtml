@@ -19,7 +19,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="NVZField" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsWithinNVZ">
+            <govuk-radios class="govuk-radios--inline" for="@Model.IsWithinNVZ">
 
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">

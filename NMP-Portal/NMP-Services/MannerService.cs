@@ -525,4 +525,30 @@ responseWrapper?.Data is not null)
         }
         return (incorporationDelay, error);
     }
+    public async Task<(List<CommonResponse>?, Error?)> FetchTopsoilList()
+    {
+        Error? error = null;
+        List<CommonResponse>? topSoilList = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = ApiurlHelper.FetchAllMannerTopSoilListAsyncAPI;
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper?.Data != null)
+            {
+                topSoilList = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+
+            }
+
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (topSoilList, error);
+    }
 }

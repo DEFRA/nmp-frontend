@@ -17920,11 +17920,29 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the subsoil type in {0}?.
+        /// </summary>
+        public static string lblWhatIsTheSubSoilInFieldName {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheSubSoilInFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the sward type for {0} in {1}?.
         /// </summary>
         public static string lblWhatIsTheSwardTypeForTheseFields {
             get {
                 return ResourceManager.GetString("lblWhatIsTheSwardTypeForTheseFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the top soil in {0}?.
+        /// </summary>
+        public static string lblWhatIsTheTopSoilInFieldName {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheTopSoilInFieldName", resourceCulture);
             }
         }
         
