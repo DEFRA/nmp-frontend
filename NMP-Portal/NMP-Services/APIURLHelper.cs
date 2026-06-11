@@ -177,6 +177,7 @@ internal static class ApiurlHelper
     public const string FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI = "soil-type-soil-texture/{0}";
     public const string FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&confirm={3}&isGreenFoodCompost={4}";
     public const string FetchFarmsNVZByFarmIdAsyncAPI = "farmsNVZ/{0}";
+    public const string FetchAllMannerTopSoilListAsyncAPI = "vendors/manner/top-soils";
 
     //UserExtension API Urls
     public const string FetchUserExtensionAPI = "user-extension";

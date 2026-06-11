@@ -7944,4 +7944,10 @@ livestock manure.</value>
   <data name="MsgSelectWhetherYouAreARegisteredOrganicProducer" xml:space="preserve">
     <value>Select whether you are a registered organic producer.</value>
   </data>
+  <data name="lblWhatIsTheTopSoilInFieldName" xml:space="preserve">
+    <value>What is the top soil in {0}?</value>
+  </data>
+  <data name="lblWhatIsTheSubSoilInFieldName" xml:space="preserve">
+    <value>What is the subsoil type in {0}?</value>
+  </data>
 </root>

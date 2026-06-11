@@ -65,4 +65,9 @@ public interface IMannerLogic
     MannerEstimationStep16ViewModel SetMannerEstimationStep16(MannerEstimationStep16ViewModel mannerEstimationStep16);
     MannerEstimationStep17ViewModel GetMannerEstimationStep17();
     MannerEstimationStep17ViewModel SetMannerEstimationStep17(MannerEstimationStep17ViewModel mannerEstimationStep17);
+    MannerEstimationStep18ViewModel GetMannerEstimationStep18();
+    MannerEstimationStep18ViewModel SetMannerEstimationStep18(MannerEstimationStep18ViewModel mannerEstimationStep18);
+    Task<(List<CommonResponse>?, Error?)> FetchTopsoilList();
+    MannerEstimationStep19ViewModel GetMannerEstimationStep19();
+    MannerEstimationStep19ViewModel SetMannerEstimationStep19(MannerEstimationStep19ViewModel mannerEstimationStep19);
 }
