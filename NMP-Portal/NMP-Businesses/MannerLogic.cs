@@ -443,4 +443,38 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         return GetMannerEstimationStep17();
     }
 
+    public MannerEstimationStep18ViewModel GetMannerEstimationStep18()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep18.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep18.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
+        return mannerEstimationViewModel.MannerEstimationStep18;
+    }
+    public MannerEstimationStep18ViewModel SetMannerEstimationStep18(MannerEstimationStep18ViewModel mannerEstimationStep18)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep18 = mannerEstimationStep18;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep18();
+    }
+
+    public async Task<(List<CommonResponse>?, Error?)> FetchTopsoilList()
+    {
+        _logger.LogTrace("Fetch manner top soil list");
+        return await _mannerService.FetchTopsoilList();
+    }
+    public MannerEstimationStep19ViewModel GetMannerEstimationStep19()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep19.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        return mannerEstimationViewModel.MannerEstimationStep19;
+    }
+    public MannerEstimationStep19ViewModel SetMannerEstimationStep19(MannerEstimationStep19ViewModel mannerEstimationStep19)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep19 = mannerEstimationStep19;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep19();
+    }
+
 }

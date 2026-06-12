@@ -434,7 +434,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             model = _mannerLogic.SetMannerEstimationStep6(model);
 
-            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("SoilType");
+            return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("TopSoil");
         }
 
         [HttpGet]
@@ -1040,6 +1040,95 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
+        }
+
+        private async Task BindAllTopsoilList()
+        {
+            (List<CommonResponse>? topsoilList, _) = await _mannerLogic.FetchTopsoilList();
+
+            ViewBag.TopsoilList = topsoilList?.Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString(),
+                Text = x.Name
+            }).ToList();
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> TopSoil()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  TopSoil() action called");
+            MannerEstimationStep18ViewModel model = _mannerLogic.GetMannerEstimationStep18();
+            try
+            {
+                await BindAllTopsoilList();
+                return View(model);
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in TopSoil() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in TopSoil() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TopSoil(MannerEstimationStep18ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  TopSoil() post action called");
+            try
+            {
+                if (!model.TopSoilId.HasValue)
+                {
+                    ModelState.AddModelError("TopSoilId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep18();
+                    await BindAllTopsoilList();
+                    return View(model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep18(model);
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("SubSoil");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in TopSoil() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in TopSoil() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> SubSoil()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  SubSoil() action called");
+            MannerEstimationStep19ViewModel model = _mannerLogic.GetMannerEstimationStep19();
+            try
+            {
+                return View(model);
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in SubSoil() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in TopSSubSoiloil() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
