@@ -33,7 +33,7 @@ public interface ICropLogic
     Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward, int countryId);
     Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId);
     Task<(List<SwardManagementResponse>, Error)> FetchSwardManagements();
-    Task<(List<SwardTypeResponse>, Error)> FetchSwardTypes();
+    Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesByCountry(int countryId);
     Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId);
 
     Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId, bool isShortSummary);

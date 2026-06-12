@@ -906,14 +906,14 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return (swardManagementResponses, error);
     }
 
-    public async Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesServiceAsync()
+    public async Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesServiceByCountryAsync(int countryId)
     {
         List<SwardTypeResponse> swardTypeResponses = new List<SwardTypeResponse>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchSwardTypesAsyncAPI);
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSwardTypesAsyncAPI,countryId));
             
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

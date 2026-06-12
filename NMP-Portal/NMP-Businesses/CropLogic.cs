@@ -218,10 +218,10 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
         return await _cropService.FetchSwardTypeBySwardTypeIdServiceAsync(swardTypeId);
     }
 
-    public async Task<(List<SwardTypeResponse>, Error)> FetchSwardTypes()
+    public async Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesByCountry(int countryId)
     {
-        _logger.LogTrace("Fetching sward types");
-        return await _cropService.FetchSwardTypesServiceAsync();
+        _logger.LogTrace("Fetching sward types by countryId:{countryId}", countryId);
+        return await _cropService.FetchSwardTypesServiceByCountryAsync(countryId);
     }
 
     public async Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId)

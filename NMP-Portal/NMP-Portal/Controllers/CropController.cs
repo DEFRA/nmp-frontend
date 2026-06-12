@@ -5383,7 +5383,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<(PlanViewModel, Error?)> BindSwardType(PlanViewModel model)
     {
         Error? error = null;
-        (List<SwardTypeResponse> swardTypeResponses, error) = await _cropLogic.FetchSwardTypes();
+        (List<SwardTypeResponse> swardTypeResponses, error) = await _cropLogic.FetchSwardTypesByCountry(model.FarmRB209CountryID.Value);
         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             return (model, error);
@@ -5671,7 +5671,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropLogic.FetchSwardTypes();
+            (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropLogic.FetchSwardTypesByCountry(model.FarmRB209CountryID.Value);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_sowingDateError] = error.Message;
@@ -5703,7 +5703,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!ModelState.IsValid)
         {
-            (List<SwardTypeResponse> swardTypeResponses, _) = await _cropLogic.FetchSwardTypes();
+            (List<SwardTypeResponse> swardTypeResponses, _) = await _cropLogic.FetchSwardTypesByCountry(model.FarmRB209CountryID.Value);
             ViewBag.SwardType = swardTypeResponses;
             return View(model);
         }
