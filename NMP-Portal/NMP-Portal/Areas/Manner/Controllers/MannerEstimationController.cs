@@ -236,7 +236,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction(_checkAnswerActionName);
                 }
-                return RedirectToAction("IsFarmOrganic");
+                return RedirectToAction("AverageAnnualRainfall");
             }
             catch (HttpRequestException hre)
             {
@@ -298,7 +298,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-            return RedirectToAction("FieldName");
+            return RedirectToAction("IsFarmOrganic");
         }
 
         [HttpGet]
@@ -334,7 +334,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-            return RedirectToAction("FieldName");
+            return RedirectToAction("IsFarmOrganic");
         }
 
         private void ValidateRainfall(MannerEstimationStep4ViewModel model)
@@ -1027,7 +1027,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 model = _mannerLogic.SetMannerEstimationStep17(model);
 
-                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("AverageAnnualRainfall");
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("FieldName");
             }
             catch (HttpRequestException hre)
             {

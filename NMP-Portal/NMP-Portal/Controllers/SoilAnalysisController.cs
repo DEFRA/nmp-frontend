@@ -653,7 +653,7 @@ namespace NMP.Portal.Controllers
             }
 
             (string PhosphorusIndexValue, error) = await _soilLogic.FetchSoilNutrientIndex(phosphorusId, model.Phosphorus, model.PhosphorusMethodologyID.Value, model.FarmRB209CountryID.Value);
-            if (!string.IsNullOrWhiteSpace(error.Message))
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 ViewBag.Error = error.Message;
                 return (flowControl: false, value: View(model));

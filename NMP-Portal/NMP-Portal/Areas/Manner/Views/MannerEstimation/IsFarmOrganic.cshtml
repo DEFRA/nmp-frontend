@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "NVZField")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "AverageAnnualRainfall")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="IsFarmOrganic" asp-controller="MannerEstimation" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
