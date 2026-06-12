@@ -124,7 +124,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
 
     public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward, int countryId)
     {
-        _logger.LogTrace("Fetching defoliation sequences for SwardTypeId: {SwardTypeId}, SwardManagementId: {SwardManagementId}, NumberOfCut: {NumberOfCut}, IsNewSward: {IsNewSward},CountryId: {countryId}", swardTypeId, swardManagementId, numberOfCut, isNewSward, countryId);
+        _logger.LogTrace("Fetching defoliation sequences for SwardTypeId: {SwardTypeId}, SwardManagementId: {SwardManagementId}, NumberOfCut: {NumberOfCut}, IsNewSward: {IsNewSward},CountryId: {CountryId}", swardTypeId, swardManagementId, numberOfCut, isNewSward, countryId);
         return await _cropService.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutServiceAsync(swardTypeId, swardManagementId, numberOfCut, isNewSward,countryId);
     }
 
@@ -220,7 +220,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
 
     public async Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesByCountry(int countryId)
     {
-        _logger.LogTrace("Fetching sward types by countryId:{countryId}", countryId);
+        _logger.LogTrace("Fetching sward types by CountryId:{CountryId}", countryId);
         return await _cropService.FetchSwardTypesServiceByCountryAsync(countryId);
     }
 
