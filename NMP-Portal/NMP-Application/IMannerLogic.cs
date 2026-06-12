@@ -70,4 +70,7 @@ public interface IMannerLogic
     Task<(List<CommonResponse>?, Error?)> FetchTopsoilList();
     MannerEstimationStep19ViewModel GetMannerEstimationStep19();
     MannerEstimationStep19ViewModel SetMannerEstimationStep19(MannerEstimationStep19ViewModel mannerEstimationStep19);
+    Task<(List<CommonResponse>?, Error?)> FetchSubsoilList();
+    MannerEstimationStep20ViewModel GetMannerEstimationStep20();
+    Task<MannerEstimationStep20ViewModel> SetMannerEstimationStep20(MannerEstimationStep20ViewModel mannerEstimationStep20);
 }

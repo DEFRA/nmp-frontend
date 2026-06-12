@@ -16,11 +16,12 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerService, IHttpContextAccessor httpContextAccessor) : IMannerLogic
+public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerService, IOrganicManureLogic organicManureLogic, IHttpContextAccessor httpContextAccessor) : IMannerLogic
 {
     private readonly ILogger<MannerLogic> _logger = logger;
     private readonly IMannerService _mannerService = mannerService;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
     private const string _mannerEstimationSessionName = "MannerEstimation";
     public async Task<int> FetchCategoryIdByCropTypeIdAsync(int cropTypeId)
     {
@@ -466,7 +467,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     public MannerEstimationStep19ViewModel GetMannerEstimationStep19()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep19.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep19.FieldName = mannerEstimationViewModel.MannerEstimationStep7.FieldName;
         return mannerEstimationViewModel.MannerEstimationStep19;
     }
     public MannerEstimationStep19ViewModel SetMannerEstimationStep19(MannerEstimationStep19ViewModel mannerEstimationStep19)
@@ -476,5 +477,66 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep19();
     }
+    public async Task<(List<CommonResponse>?, Error?)> FetchSubsoilList()
+    {
+        _logger.LogTrace("Fetch manner sub soil list");
+        return await _mannerService.FetchSubsoilList();
+    }
+    public MannerEstimationStep20ViewModel GetMannerEstimationStep20()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep20.CropTypeName = mannerEstimationViewModel.MannerEstimationStep9.CropTypeName;
+        mannerEstimationViewModel.MannerEstimationStep20.FieldName = mannerEstimationViewModel.MannerEstimationStep7.FieldName;
+        return mannerEstimationViewModel.MannerEstimationStep20;
+    }
+    public async Task<MannerEstimationStep20ViewModel> SetMannerEstimationStep20(MannerEstimationStep20ViewModel mannerEstimationStep20)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep20 = mannerEstimationStep20;
+        mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId =await BindMannerCropTypeId(mannerEstimationStep20,mannerEstimationViewModel.MannerEstimationStep9.CropTypeId.Value);
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep20();
+    }
+    private async Task<int?> BindMannerCropTypeId(MannerEstimationStep20ViewModel model,int cropTypeId)
+    {
+        (CropTypeLinkingResponse cropTypeLinkingResponse, _) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropTypeId);
+        if (IsCropCereal(cropTypeId))
+        {
+            return GetWinterCerealCategory(model.SowingDate.Value, cropTypeLinkingResponse);
+        }
+        else if (model.CropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape)
+        {
+            return GetWinterOilseedRapeCategory(model.SowingDate.Value, cropTypeLinkingResponse);
+        }
+        return null;
+    }
+    private static int GetWinterCerealCategory(DateTime sowingDate, CropTypeLinkingResponse cropTypeLinkingResponse)
+    {
+        DateTime cutoff = new DateTime(sowingDate.Year, 9, 15);
 
+        return sowingDate.Date <= cutoff
+            ? cropTypeLinkingResponse.MannerCropTypeID
+            : cropTypeLinkingResponse.LateSownMannerCropTypeID.Value;
+    }
+
+    private static int GetWinterOilseedRapeCategory(DateTime establishmentDate, CropTypeLinkingResponse cropTypeLinkingResponse)
+    {
+        DateTime cutoff = new DateTime(establishmentDate.Year, 9, 15);
+
+        return establishmentDate.Date <= cutoff
+            ? cropTypeLinkingResponse.MannerCropTypeID
+            : cropTypeLinkingResponse.LateSownMannerCropTypeID.Value;
+    }
+    private static bool IsCropCereal(int cropTypeId)
+    {
+        return cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterWheat ||
+            cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterBarley ||
+            cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOats ||
+            cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterRye ||
+            cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterTriticale ||
+            cropTypeId == (int)NMP.Commons.Enums.CropTypes.WholecropWinterBarley ||
+            cropTypeId == (int)NMP.Commons.Enums.CropTypes.ForageWinterRye ||
+            cropTypeId == (int)NMP.Commons.Enums.CropTypes.ForageWinterTriticale ||
+            cropTypeId == (int)NMP.Commons.Enums.CropTypes.WholecropWinterOats;
+    }
 }
