@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading =string.Format(Resource.lblWhichWouldYouLikeToUse,Model.CropGroupName.ToLower());
+    string heading = Resource.lblCropTypeForPlan;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
@@ -16,7 +16,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="CropType" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios asp-for="@Model.CropTypeId">
+            <govuk-radios for="@Model.CropTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @heading

@@ -7950,4 +7950,13 @@ livestock manure.</value>
   <data name="lblWhatIsTheSubSoilInFieldName" xml:space="preserve">
     <value>What is the subsoil type in {0}?</value>
   </data>
+  <data name="lblWhatTypeOfLivestockManureAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of Livestock manure are you using in this application?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingOrganicMaterialOnFieldName" xml:space="preserve">
+    <value>When are you applying organic material on {0}?</value>
+  </data>
+  <data name="lblHowAreYouApplyingTheManureType" xml:space="preserve">
+    <value>How are you applying the {0}?</value>
+  </data>
 </root>

@@ -539,4 +539,17 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
             cropTypeId == (int)NMP.Commons.Enums.CropTypes.ForageWinterTriticale ||
             cropTypeId == (int)NMP.Commons.Enums.CropTypes.WholecropWinterOats;
     }
+    public MannerEstimationStep21ViewModel GetMannerEstimationStep21()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep21.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+        return mannerEstimationViewModel.MannerEstimationStep21;
+    }
+    public async Task<MannerEstimationStep21ViewModel> SetMannerEstimationStep21(MannerEstimationStep21ViewModel mannerEstimationStep21)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep21 = mannerEstimationStep21;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep21();
+    }
 }
