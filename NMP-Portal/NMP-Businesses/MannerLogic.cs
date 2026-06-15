@@ -504,7 +504,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         {
             return GetWinterCerealCategory(model.SowingDate.Value, cropTypeLinkingResponse);
         }
-        else if (model.CropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape)
+        else if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape)
         {
             return GetWinterOilseedRapeCategory(model.SowingDate.Value, cropTypeLinkingResponse);
         }
@@ -512,7 +512,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     }
     private static int GetWinterCerealCategory(DateTime sowingDate, CropTypeLinkingResponse cropTypeLinkingResponse)
     {
-        DateTime cutoff = new DateTime(sowingDate.Year, 9, 15);
+        DateTime cutoff = new DateTime(sowingDate.Year, 9, 15,0,0,0, DateTimeKind.Unspecified);
 
         return sowingDate.Date <= cutoff
             ? cropTypeLinkingResponse.MannerCropTypeID
@@ -521,7 +521,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
 
     private static int GetWinterOilseedRapeCategory(DateTime establishmentDate, CropTypeLinkingResponse cropTypeLinkingResponse)
     {
-        DateTime cutoff = new DateTime(establishmentDate.Year, 9, 15);
+        DateTime cutoff = new DateTime(establishmentDate.Year, 9, 15, 0, 0, 0, DateTimeKind.Unspecified);
 
         return establishmentDate.Date <= cutoff
             ? cropTypeLinkingResponse.MannerCropTypeID

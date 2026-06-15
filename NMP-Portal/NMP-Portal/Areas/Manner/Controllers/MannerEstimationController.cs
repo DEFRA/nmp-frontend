@@ -11,6 +11,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Portal.Controllers;
+using NMP.Portal.Helpers;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Security.Claims;
@@ -1215,7 +1216,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model = _mannerLogic.GetMannerEstimationStep20();
                     return View(model);
                 }
-                model =await _mannerLogic.SetMannerEstimationStep20(model);
+                model = await _mannerLogic.SetMannerEstimationStep20(model);
 
                 return RedirectToAction("ManureGroup");
 
@@ -1228,12 +1229,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
         private async Task<MannerEstimationStep20ViewModel> ValidateSowingDatePost(MannerEstimationStep20ViewModel model)
         {
-            ValidateDateFormatErrors(model);
-            ValidateRequiredDate(model);
-            return model;
-        }
-        private void ValidateDateFormatErrors(MannerEstimationStep20ViewModel model)
-        {
             if (!ModelState.IsValid && ModelState.ContainsKey(_sowingDate))
             {
                 var entry = ModelState[_sowingDate];
@@ -1241,26 +1236,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (error != null && IsDateFormatError(error))
                 {
-                    entry.Errors.Clear();
-                    entry.Errors.Add(Resource.MsgTheDateMustInclude);
+                    entry?.Errors.Clear();
+                    entry?.Errors.Add(Resource.MsgTheDateMustInclude);
                 }
             }
+            ValidateRequiredDate(model);
+            return model;
         }
         private static bool IsDateFormatError(string error)
         {
-            string[] patterns =
-            {
-        Resource.MsgDateMustBeARealDate,
-        Resource.MsgDateMustIncludeAMonth,
-        Resource.MsgDateMustIncludeAMonthAndYear,
-        Resource.MsgDateMustIncludeADayAndYear,
-        Resource.MsgDateMustIncludeAYear,
-        Resource.MsgDateMustIncludeADay,
-        Resource.MsgDateMustIncludeADayAndMonth
-    };
-
+            string[] patterns = CommonHelpers.DatePattern();
             return patterns.Any(p => error.Equals(string.Format(p, _sowingDate)));
         }
+
+
+
         private void ValidateRequiredDate(MannerEstimationStep20ViewModel model)
         {
             if (model.SowingDate == null)
@@ -1268,7 +1258,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError(_sowingDate, Resource.MsgEnterADateBeforeContinuing);
             }
         }
-      
-      
+
+
     }
 }
