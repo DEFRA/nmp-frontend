@@ -350,23 +350,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 var RainfallError = ModelState[key]?.Errors.Count > 0 ?
                                 ModelState[key]?.Errors[0].ErrorMessage.ToString() : null;
 
-                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblAverageAnnualRainfallForError)))
+                if (RainfallError != null)
                 {
                     ModelState[key]?.Errors.Clear();
-                    ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
+                    if (RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblAverageAnnualRainfallForError)))
+                    {
+                        ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
+                    }
+                    else if (RainfallError.Equals(Resource.MsgTheValueIsInvalid))
+                    {
+                        ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
+                    }
                 }
             }
 
-
-            if (model.AverageAnnualRainfall == 0)
-            {
-                ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
-            }
-
-            if (model.AverageAnnualRainfall < 0)
-            {
-                ModelState.AddModelError(key, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-            }
         }
 
         [HttpGet]
@@ -759,7 +756,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 AddErrorIfNull(model.ApplicationDate, _applicationDateKey, Resource.MsgEnterADateBeforeContinuing);
-            
+
                 if (!ModelState.IsValid)
                 {
                     model = _mannerLogic.GetMannerEstimationStep13();
@@ -777,7 +774,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
-    
+
         private void AddErrorIfNull(object? value, string key, string errorMessage)
         {
             if (value is null || (value is string str && string.IsNullOrWhiteSpace(str)))
