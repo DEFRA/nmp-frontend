@@ -7270,6 +7270,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How are you applying the {0}?.
+        /// </summary>
+        public static string lblHowAreYouApplyingTheManureType {
+            get {
+                return ResourceManager.GetString("lblHowAreYouApplyingTheManureType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How are you going to apply the {0}?.
         /// </summary>
         public static string lblHowAreYouGoingToApplyTheManure {
@@ -18190,6 +18199,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of Livestock manure are you using in this application?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockManureAreYouUsingInThisApplication {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockManureAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of livestock would you like to add for {0}?.
         /// </summary>
         public static string lblWhatTypeOfLivestockWouldYouLikeToAddFor {
@@ -18429,6 +18447,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhenAreYouApplyingManureOnThisField {
             get {
                 return ResourceManager.GetString("lblWhenAreYouApplyingManureOnThisField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When are you applying organic material on {0}?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingOrganicMaterialOnFieldName {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingOrganicMaterialOnFieldName", resourceCulture);
             }
         }
         
@@ -21234,6 +21261,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rainfall must be between 1 and 3000 without decimal places..
+        /// </summary>
+        public static string MsgEnterRainfallBetween1And3000 {
+            get {
+                return ResourceManager.GetString("MsgEnterRainfallBetween1And3000", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter shoot number between 0 to 1500.
         /// </summary>
         public static string MsgEnterShootNumberBetween0To1500 {
@@ -22994,6 +23030,15 @@ namespace NMP.Commons.Resources {
         public static string MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional {
             get {
                 return ResourceManager.GetString("MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value &apos;&apos; is invalid..
+        /// </summary>
+        public static string MsgTheValueIsInvalid {
+            get {
+                return ResourceManager.GetString("MsgTheValueIsInvalid", resourceCulture);
             }
         }
         

@@ -35,6 +35,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _mannerEstimationControllerForLog = "MannerEstimation  Controller : ";
         private const string _organisationId = "organisationId";
         private const string _sowingDate = "SowingDate";
+        private const string _applicationDateKey = "ApplicationDate";
 
         public IActionResult Index()
         {
@@ -325,7 +326,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> AverageAnnualRainfallManual(MannerEstimationStep4ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfallManual() post action called");
-            ValidateRainfall(model);
+            ValidateRainfall();
 
 
             if (!ModelState.IsValid)
@@ -341,7 +342,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return RedirectToAction("IsFarmOrganic");
         }
 
-        private void ValidateRainfall(MannerEstimationStep4ViewModel model)
+        private void ValidateRainfall()
         {
             string key = Resource.lblAverageAnnualRainfallForError;
             if ((!ModelState.IsValid) && ModelState.ContainsKey(key))
@@ -349,23 +350,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 var RainfallError = ModelState[key]?.Errors.Count > 0 ?
                                 ModelState[key]?.Errors[0].ErrorMessage.ToString() : null;
 
-                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblAverageAnnualRainfallForError)))
+                if (RainfallError != null)
                 {
                     ModelState[key]?.Errors.Clear();
-                    ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
+                    if (RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblAverageAnnualRainfallForError)))
+                    {
+                        ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
+                    }
+                    else if (RainfallError.Equals(Resource.MsgTheValueIsInvalid))
+                    {
+                        ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
+                    }
                 }
             }
 
-
-            if (model.AverageAnnualRainfall == 0)
-            {
-                ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
-            }
-
-            if (model.AverageAnnualRainfall < 0)
-            {
-                ModelState.AddModelError(key, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-            }
         }
 
         [HttpGet]
@@ -749,6 +747,40 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
             return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplicationDate(MannerEstimationStep13ViewModel model)
+        {
+            _logger.LogTrace($"Manner Estimation Controller : ApplicationDate() post action called");
+            try
+            {
+                AddErrorIfNull(model.ApplicationDate, _applicationDateKey, Resource.MsgEnterADateBeforeContinuing);
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep13();
+                    return View(model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep13(model);
+                return RedirectToAction("ApplicationMethod");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "Manner Estimation Controller  : Exception in ApplicationDate() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+
+        }
+
+        private void AddErrorIfNull(object? value, string key, string errorMessage)
+        {
+            if (value is null || (value is string str && string.IsNullOrWhiteSpace(str)))
+            {
+                ModelState.AddModelError(key, errorMessage);
+            }
         }
         [HttpGet]
         public async Task<IActionResult> CopyExistingFarmAndFieldDetails()
@@ -1259,6 +1291,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult ApplicationMethod()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationMethod() action called");
 
+            MannerEstimationStep21ViewModel model = _mannerLogic.GetMannerEstimationStep21();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ApplicationMethod() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            return View(model);
+        }
     }
 }

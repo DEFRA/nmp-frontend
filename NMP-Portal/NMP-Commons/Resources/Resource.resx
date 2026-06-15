@@ -7950,4 +7950,19 @@ livestock manure.</value>
   <data name="lblWhatIsTheSubSoilInFieldName" xml:space="preserve">
     <value>What is the subsoil type in {0}?</value>
   </data>
+  <data name="lblWhatTypeOfLivestockManureAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of Livestock manure are you using in this application?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingOrganicMaterialOnFieldName" xml:space="preserve">
+    <value>When are you applying organic material on {0}?</value>
+  </data>
+  <data name="lblHowAreYouApplyingTheManureType" xml:space="preserve">
+    <value>How are you applying the {0}?</value>
+  </data>
+  <data name="MsgEnterRainfallBetween1And3000" xml:space="preserve">
+    <value>Rainfall must be between 1 and 3000 without decimal places.</value>
+  </data>
+  <data name="MsgTheValueIsInvalid" xml:space="preserve">
+    <value>The value '' is invalid.</value>
+  </data>
 </root>

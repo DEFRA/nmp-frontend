@@ -46,6 +46,9 @@ public class Farm
     public string? Telephone { get; set; }
     public string? Mobile { get; set; }
     public string? Email { get; set; }
+    [Range(1, 3000,
+    ErrorMessageResourceType = typeof(Resource),
+    ErrorMessageResourceName = nameof(Resource.MsgEnterRainfallBetween1And3000))]
     public int? Rainfall { get; set; }
     public Guid? OrganisationID { get; set; }
     public decimal TotalFarmArea { get; set; } = 0;

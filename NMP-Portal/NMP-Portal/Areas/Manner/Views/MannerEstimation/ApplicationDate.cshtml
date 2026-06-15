@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate; 
-    string pageHeader = string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName);
+    string pageHeader = string.Format(Resource.lblWhenAreYouApplyingOrganicMaterialOnFieldName,  Model.FieldName);
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
 }
 
@@ -17,7 +17,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="ApplicationDate" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-date-input asp-for="ApplicationDate">
+            <govuk-date-input for="ApplicationDate">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @pageHeader
@@ -34,9 +34,9 @@
                     <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
                 </govuk-date-input-fieldset>
             </govuk-date-input>
-        @*     <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button> 
         </form>
         <p class="govuk-body cancel-link">
             @if (Model.IsCheckAnswer)

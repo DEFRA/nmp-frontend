@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading = Resource.lblWhatTypeOfOrganicMaterialWouldYouLikeUse;
+    string heading = Resource.lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     string backAction = (Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), Model.CropTypeId) ? "SowingDate" : "CropType");
     var cancelAction = Model.IsCheckAnswer ? "CheckAnswer" : "MannerEstimationCancel";

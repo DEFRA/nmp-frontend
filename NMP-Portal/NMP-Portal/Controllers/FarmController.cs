@@ -36,7 +36,7 @@ namespace NMP.Portal.Controllers
         private const string _farmDataBeforeUpdateSessionKey = "FarmDataBeforeUpdate";
         private const string _organisationId = "organisationId";
         private const string _elevationActionName = "Elevation";
-        private const string _farmDataKey = "FarmData"; 
+        private const string _farmDataKey = "FarmData";
         private const string _addressListKey = "AddressList";
 
         public IActionResult Index()
@@ -836,22 +836,13 @@ namespace NMP.Portal.Controllers
             string key = "Rainfall";
             if ((!ModelState.IsValid) && ModelState.ContainsKey(key))
             {
-
                 var RainfallError = ModelState[key]?.Errors.Count > 0 ?
                                 ModelState[key]?.Errors[0].ErrorMessage.ToString() : null;
 
                 if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblRainfall)))
                 {
                     ModelState[key]?.Errors.Clear();
-                    decimal decimalValue;
-                    if (decimal.TryParse(ModelState[key]?.RawValue?.ToString(), out decimalValue))
-                    {
-                        ModelState[key]?.Errors.Add(RainfallError);
-                    }
-                    else
-                    {
-                        ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
-                    }
+                    ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
                 }
             }
 
@@ -861,10 +852,6 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
             }
 
-            if (farm.Rainfall != null && farm.Rainfall < 0)
-            {
-                ModelState.AddModelError(key, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-            }
         }
 
         [HttpGet]
