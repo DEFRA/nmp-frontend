@@ -851,6 +851,12 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
             }
+            else if (farm.Rainfall < 1 || farm.Rainfall > 3000)
+            {
+
+                ModelState.AddModelError(key, Resource.MsgEnterRainfallBetween1And3000);
+
+            }
 
         }
 
