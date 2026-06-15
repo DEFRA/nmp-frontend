@@ -326,7 +326,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> AverageAnnualRainfallManual(MannerEstimationStep4ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfallManual() post action called");
-            ValidateRainfall();
+            ValidateRainfall(model);
 
 
             if (!ModelState.IsValid)
@@ -342,7 +342,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return RedirectToAction("IsFarmOrganic");
         }
 
-        private void ValidateRainfall()
+        private void ValidateRainfall(MannerEstimationStep4ViewModel model)
         {
             string key = Resource.lblAverageAnnualRainfallForError;
             if ((!ModelState.IsValid) && ModelState.ContainsKey(key))
@@ -364,6 +364,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
+            if(model.AverageAnnualRainfall<1||model.AverageAnnualRainfall>3000)
+            {
+                ModelState.AddModelError(key, Resource.MsgEnterRainfallBetween1And3000);
+            }
         }
 
         [HttpGet]
