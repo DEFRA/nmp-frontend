@@ -1236,8 +1236,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (error != null && IsDateFormatError(error))
                 {
-                    entry?.Errors.Clear();
-                    entry?.Errors.Add(Resource.MsgTheDateMustInclude);
+                    entry.Errors.Clear();
+                    entry.Errors.Add(Resource.MsgTheDateMustInclude);
                 }
             }
             ValidateRequiredDate(model);
