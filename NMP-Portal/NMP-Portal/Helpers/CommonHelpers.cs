@@ -186,5 +186,18 @@ namespace NMP.Portal.Helpers
 
             return allDefoliationWithName;
         }
+        public static string[] DatePattern()
+        {
+            return new[]
+            {
+        Resource.MsgDateMustBeARealDate,
+        Resource.MsgDateMustIncludeAMonth,
+        Resource.MsgDateMustIncludeAMonthAndYear,
+        Resource.MsgDateMustIncludeADayAndYear,
+        Resource.MsgDateMustIncludeAYear,
+        Resource.MsgDateMustIncludeADay,
+        Resource.MsgDateMustIncludeADayAndMonth
+    };
+        }
     }
 }

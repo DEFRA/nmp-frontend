@@ -1,0 +1,53 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.MannerEstimationStep20ViewModel
+@{
+    string pageHeading = string.Format(Resource.lblWhatIsThePlantingDate, Model.CropTypeName, Model.FieldName);
+
+    ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="CropType" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="SowingDate" asp-controller="MannerEstimation" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @if (TempData["SowingDateError"] != null)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["SowingDateError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            </div>
+        </div>
+    }
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <govuk-date-input for="@Model.SowingDate">
+                <govuk-date-input-fieldset>
+                    <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @pageHeading
+                    </govuk-date-input-fieldset-legend>
+                    <govuk-date-input-hint>
+                        @string.Format(Resource.MsgDateExample, DateTime.Now.Year - 1)
+                    </govuk-date-input-hint>
+                    <govuk-date-input-day maxlength="2" pattern="[0-9]*"></govuk-date-input-day>
+                    <govuk-date-input-month maxlength="2" pattern="[0-9]*"></govuk-date-input-month>
+                    <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
+                </govuk-date-input-fieldset>
+            </govuk-date-input>
+
+                  
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+
+            </p>
+        </div>
+
+    </div>
+</form>
