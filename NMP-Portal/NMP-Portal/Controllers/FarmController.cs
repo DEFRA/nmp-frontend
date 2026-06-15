@@ -842,15 +842,7 @@ namespace NMP.Portal.Controllers
                 if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblRainfall)))
                 {
                     ModelState[key]?.Errors.Clear();
-                    decimal decimalValue;
-                    if (decimal.TryParse(ModelState[key]?.RawValue?.ToString(), out decimalValue))
-                    {
-                        ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
-                    }
-                    else
-                    {
-                        ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
-                    }
+                    ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
                 }
             }
 
@@ -859,7 +851,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
             }
-            
+
         }
 
         [HttpGet]
