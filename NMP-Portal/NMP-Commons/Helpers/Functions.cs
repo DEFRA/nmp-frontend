@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using NMP.Commons.Enums;
+using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 namespace NMP.Commons.Helpers
 {
@@ -58,6 +60,14 @@ namespace NMP.Commons.Helpers
         }
 
         public static int ApplyYieldBonus(decimal? yield, decimal threshold, decimal step, int increment)
+        {
+            if (yield.HasValue && yield > threshold)
+            {
+                return (int)Math.Round(((yield.Value - threshold) / step) * increment);
+            }
+            return 0;
+        }
+        public static decimal ApplyYieldBonusScotland(decimal? yield, decimal threshold, decimal step, decimal increment)
         {
             if (yield.HasValue && yield > threshold)
             {
@@ -202,5 +212,45 @@ namespace NMP.Commons.Helpers
 
         public static string FormatPart(string? part) =>
             string.IsNullOrWhiteSpace(part) ? string.Empty : $"{part}, ";
+
+        public static Error HandleException(this ILogger logger, Exception ex, Error? error)
+        {
+            error ??= new Error();
+            error.Message = ex.Message;
+            logger.LogError(ex, ex.Message);
+            return error;
+        }
+
+        public static Error HandleHttpRequestException(this ILogger logger, HttpRequestException hre, Error? error)
+        {
+            error ??= new Error();
+            error.Message = Resource.MsgServiceNotAvailable;
+            logger.LogError(hre, hre.Message);
+            return error;
+        }
+        public static bool IsWinterOilseedRapeAutumn(int cropTypeId, int harvestYear, DateTime applicationDate)
+        {
+            bool isAutumn = false;
+            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && applicationDate >= new DateTime(harvestYear - 1, 8, 1, 00, 00, 00, DateTimeKind.Unspecified) && applicationDate <= new DateTime(harvestYear - 1, 12, 31, 00, 00, 00, DateTimeKind.Unspecified)) //Winter Oilseed Rape - autumn nitrogen
+            {
+                isAutumn = true;
+            }
+            return isAutumn;
+        }
+        public static void BindCounter<T>(
+    List<T> list,
+    IDataProtector protector,
+    Action<T, int, string> setValues)
+        {
+            if (list != null && list.Count > 0)
+            {
+                int counter = 1;
+                list.ForEach(item =>
+                {
+                    var encrypted = protector.Protect($"{counter}");
+                    setValues(item, counter++, encrypted);
+                });
+            }
+        }
     }
 }

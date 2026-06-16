@@ -1,0 +1,102 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.WarningMessageViewModel
+
+@{
+    var para3Warning = Model.Warnings.LastOrDefault(x =>
+        !string.IsNullOrWhiteSpace(x.Para3));
+}
+@if (Model?.Warnings != null && Model.Warnings.Any())
+{
+    <govuk-notification-banner>
+
+        <govuk-notification-banner-title>
+            @Resource.lblImportant
+        </govuk-notification-banner-title>
+
+        @if (Model.Warnings.Count == 1)
+        {
+            var warning = Model.Warnings[0];
+
+            <p class="govuk-notification-banner__heading">
+                @warning.Header
+            </p>
+
+            <p class="govuk-body">
+                @warning.Para2
+            </p>
+
+            @if (!string.IsNullOrWhiteSpace(warning.Para3))
+            {
+                <p class="govuk-body">
+                    @warning.Para3
+                </p>
+            }
+        }
+        else
+        {
+            <p class="govuk-notification-banner__heading">
+
+                @if (Model.IsWales)
+                {
+                    @Resource.lblThisApplicationMayBreachMoreThanOneWaterResourceRegulation
+                }
+                else
+                {
+                    @Resource.lblThisApplicationMayBreachMoreThanOneNVZRule
+                }
+
+            </p>
+
+            <ul class="govuk-list govuk-list--bullet">
+
+                @foreach (var warning in Model.Warnings)
+                {
+                    <li>@warning.Header</li>
+                }
+
+            </ul>
+
+            <govuk-details>
+
+                <govuk-details-summary>
+
+                    @if (Model.IsWales)
+                    {
+                        @Resource.lblMoreAboutTheseWaterResourceRegulation
+                    }
+                    else
+                    {
+                        @Resource.lblMoreAboutTheseNVZRules
+                    }
+
+                </govuk-details-summary>
+
+                <govuk-details-text>
+
+                    @foreach (var warning in Model.Warnings)
+                    {
+                        <h2 class="govuk-heading-s">
+                            @warning.Header
+                        </h2>
+
+                        <p class="govuk-body">
+                            @warning.Para2
+                        </p>
+                    }
+
+                </govuk-details-text>
+
+            </govuk-details>
+
+            
+
+            @if (para3Warning != null)
+            {
+                <p class="govuk-body">
+                    @para3Warning.Para3
+                </p>
+            }
+        }
+
+    </govuk-notification-banner>
+}

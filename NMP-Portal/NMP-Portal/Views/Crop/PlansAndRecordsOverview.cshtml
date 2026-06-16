@@ -43,7 +43,7 @@
     }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
-            @if (ViewBag.Success != null && ViewBag.Success == true && TempData["successMsg"] != null)
+            @if (ViewBag.Success != null && ViewBag.Success&& TempData["successMsg"] != null)
             {
                 <govuk-notification-banner type="NotificationBannerType.Success">
                     <p class="govuk-notification-banner__heading">
@@ -72,7 +72,7 @@
                                     <td class="govuk-table__cell">
                                         @if (@Model.HarvestYear[i].LastModifiedOn != null)
                                         {
-                                            @Model.HarvestYear[i].LastModifiedOn?.ToString("dd MMM yyyy");
+                                            @Model.HarvestYear[i].LastModifiedOn?.ToString("dd MMM yyyy")
                                         }
                                         else
                                         {
@@ -80,7 +80,7 @@
                                         }
                                     </td>
                                     <td class="govuk-table__cell">
-                                        @if (Model.HarvestYear[i].IsAnyPlan != null && Model.HarvestYear[i].IsAnyPlan)
+                                        @if (Model.HarvestYear[i].IsAnyPlan)
                                         {
                                             <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear">
                                                 @string.Format(Resource.lblViewEditThePlan, Model.HarvestYear[i].Year)

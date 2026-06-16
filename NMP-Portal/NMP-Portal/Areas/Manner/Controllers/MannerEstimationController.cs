@@ -18,9 +18,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class MannerEstimationController(ILogger<CropController> logger, IFarmLogic farmLogic, IMannerLogic mannerLogic, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic) : Controller
+    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IFarmLogic farmLogic, IMannerLogic mannerLogic, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic) : Controller
     {
-        private readonly ILogger<CropController> _logger = logger;
+        private readonly ILogger<MannerEstimationController> _logger = logger;
         private readonly IFarmLogic _farmLogic = farmLogic;
         private readonly IMannerLogic _mannerLogic = mannerLogic;
 

@@ -5,8 +5,7 @@
     
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
     ViewData["Title"] = $"{Resource.lblHowWasTheGrassTypicallyManagedEachYear} {Resource.lblHyphen} {title}";
-    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
-    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    
     var backAction = "";
     if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
     {

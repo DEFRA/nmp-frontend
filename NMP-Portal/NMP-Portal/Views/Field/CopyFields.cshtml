@@ -2,7 +2,6 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.FieldViewModel
 @{
-    //ViewData["Title"] = Resource.lblWhichFieldWouldYouLikeToCopy;
     ViewData["Title"] = $"{Resource.lblWhichFieldWouldYouLikeToCopy} {Resource.lblHyphen} {Resource.lblAddField}";
     ViewBag.CurrentStep = (int)FieldWizardSteps.CopiedField;
 }

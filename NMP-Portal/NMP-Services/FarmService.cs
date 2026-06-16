@@ -19,6 +19,7 @@ namespace NMP.Services;
 public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFarmService
 {
     private readonly ILogger<FarmService> _logger = logger;
+    private const string _applicationJson = "application/json";
 
     public async Task<(List<Farm>, Error?)> FetchFarmByOrgIdAsync(Guid orgId)
     {
@@ -47,13 +48,13 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -67,7 +68,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         {
             if (farmData == null || farmData.Farm == null)
             {
-                error ??= new Error();
+                error = new Error();
                 error.Message = Resource.MsgInvalidFarmData;
                 return (farm, error);
             }
@@ -76,14 +77,14 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
             bool IsFarmExist = await IsFarmExistAsync(farmData.Farm.Name, farmData.Farm.Postcode, farmData.Farm.ID, orgId);
             if (IsFarmExist)
             {
-                error ??= new Error();
+                error = new Error();
                 error.Message = string.Format(Resource.MsgFarmAlreadyExist, farmData.Farm.Name, farmData.Farm.Postcode);
                 return (farm, error);
             }
 
             string jsonData = JsonConvert.SerializeObject(farmData);
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.AddFarmAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddFarmAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -140,13 +141,13 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
+            error = new Error();
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
         }
@@ -163,10 +164,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string resultFarmExist = await farmExist.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(resultFarmExist);
-        if (responseWrapper?.Data["exists"] == true)
-        {
-            isFarmExist = true;
-        }
+        isFarmExist = (bool?)responseWrapper?.Data?["exists"] == true;
 
         return isFarmExist;
     }
@@ -179,9 +177,13 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         var response = await httpClient.GetAsync(url);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (response.IsSuccessStatusCode &&  responseWrapper?.Data?.avarageAnnualRainfall != null)
         {
-            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall != null ? responseWrapper.Data.avarageAnnualRainfall.value : 0;
+            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall.value;
+        }
+        else
+        {
+            rainfallAverage = 0;
         }
 
         return rainfallAverage;
@@ -205,7 +207,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.PutAsync(ApiurlHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+        var response = await httpClient.PutAsync(ApiurlHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -235,15 +237,15 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        
+        if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
         {
-            message = responseWrapper.Data["message"].Value;
+            message = data["message"]?.Value<string>() ?? string.Empty;
         }
         else
         {
             error = _logger.ExtractError(responseWrapper, error);
         }
-
         return (message, error);
     }
     public async Task<(List<Country>, Error)> FetchCountryAsync()
@@ -281,15 +283,15 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+        if (response.IsSuccessStatusCode && responseWrapper?.Data?.ExcessRainfall is JToken excessRainfall)
         {
-            excessRainfalls = responseWrapper.Data.ExcessRainfall.ToObject<ExcessRainfalls>();
+            excessRainfalls = excessRainfall.ToObject<ExcessRainfalls>() ?? new ExcessRainfalls();
         }
         else
         {
             error = _logger.ExtractError(responseWrapper, error);
         }
-
         return (excessRainfalls, error);
     }
     public async Task<(List<CommonResponse>, Error)> FetchExcessWinterRainfallOptionAsync()
@@ -302,10 +304,9 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        if (response.IsSuccessStatusCode && responseWrapper?.Data?.ExcessWinterRainFallOptions is JToken excessWinterRainFallOptions)
         {
-            excessWinterRainfallOption = responseWrapper.Data.ExcessWinterRainFallOptions.ToObject<List<CommonResponse>>();
-
+            excessWinterRainfallOption = excessWinterRainFallOptions.ToObject<List<CommonResponse>>() ?? new List<CommonResponse>();
         }
         else
         {
@@ -323,13 +324,13 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         string url = string.Empty;
         HttpResponseMessage response = null;
         url = string.Format(ApiurlHelper.AddOrUpdateExcessWinterRainfallAPI, farmId, year);
-        if (isUpdated != null && isUpdated)
+        if (isUpdated)
         {
-            response = await httpClient.PutAsync(url, new StringContent(excessWinterRainfallData, Encoding.UTF8, "application/json"));
+            response = await httpClient.PutAsync(url, new StringContent(excessWinterRainfallData, Encoding.UTF8, _applicationJson));
         }
         else
         {
-            response = await httpClient.PostAsync(url, new StringContent(excessWinterRainfallData, Encoding.UTF8, "application/json"));
+            response = await httpClient.PostAsync(url, new StringContent(excessWinterRainfallData, Encoding.UTF8, _applicationJson));
         }
 
         string result = await response.Content.ReadAsStringAsync();
