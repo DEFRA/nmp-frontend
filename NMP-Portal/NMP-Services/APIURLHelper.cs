@@ -261,4 +261,5 @@ internal static class ApiurlHelper
     public const string FetchFertiliserTotalNByManagementPeriodIDIsAutumnAsyncAPI = "fertiliser-manures/total-nitrogen-by-autumn/{0}?isAutumn={1}";
     public const string FetchYearsAndLastUpdatedDateByFarmIDAndYearAsyncAPI = "farms/last-updated/{0}?years={1}";
     public const string FetchAllFarmsWithLastUpdatedDateByOrgIdAPI = "/farmsWithLastUpdatedDate/{0}";
+    public const string FetchAllMannerEstimationsAsyncAPI = "/manner-estimations";
 }

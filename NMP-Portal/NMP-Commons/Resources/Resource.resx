@@ -7950,4 +7950,22 @@ livestock manure.</value>
   <data name="lblWhatIsTheSubSoilInFieldName" xml:space="preserve">
     <value>What is the subsoil type in {0}?</value>
   </data>
+  <data name="lblDoYouWantToStartWithACopyOn" xml:space="preserve">
+    <value>Do you want to start with a copy on an existing estimate?</value>
+  </data>
+  <data name="lblYouCanChangeAnyOfTheDetailsInTheCopy" xml:space="preserve">
+    <value>You can change any of the details in the copy</value>
+  </data>
+  <data name="lblWhichEstimateWouldYouLikeToCopy" xml:space="preserve">
+    <value>Which estimate would you like to copy?</value>
+  </data>
+  <data name="lblRemoveANutrientSupplyEstimate" xml:space="preserve">
+    <value>remove a nutrient supply estimate</value>
+  </data>
+  <data name="lblUpdateOrMakeACopy" xml:space="preserve">
+    <value>Update or make a copy</value>
+  </data>
+  <data name="MsgSelectAnEstimateToContinue" xml:space="preserve">
+    <value>Select an estimate to continue.</value>
+  </data>
 </root>

@@ -1,0 +1,49 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep22ViewModel
+
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{Resource.lblDoYouWantToStartWithACopyOn} {Resource.lblHyphen} {title}";
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "CopyEstimate")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="CopyFromEstimates" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-radios for="@Model.MannerEstimationId">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblWhichEstimateWouldYouLikeToCopy
+                    </govuk-radios-fieldset-legend>
+                    
+                    @if(ViewBag.MannerEstimations != null)
+                    {
+                        @foreach (var estimation in ViewBag.MannerEstimations)
+                        {
+                            <govuk-radios-item value="@estimation.ID">@estimation.FarmName</govuk-radios-item>
+                        }
+                    }
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            @if (!Model.IsCheckAnswer)
+            {
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+            else
+            {
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            }
+        </p>
+    </div>
+</div>

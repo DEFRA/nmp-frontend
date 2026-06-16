@@ -30,8 +30,11 @@ namespace NMP.Commons.ViewModels
             MannerEstimationStep17 = new MannerEstimationStep17ViewModel();
             MannerEstimationStep18 = new MannerEstimationStep18ViewModel();
             MannerEstimationStep19 = new MannerEstimationStep19ViewModel();
+            MannerEstimationStep21 = new MannerEstimationStep21ViewModel();
+            MannerEstimationStep22 = new MannerEstimationStep22ViewModel();
         }
         public bool IsCheckAnswer { get; set; } = false;
+        public bool? IsCopyEstimate { get; set; }
         public string? Country { get; set; }
         public int? CropGroupID { get; set; }
         public string? CropGroup { get; set; }
@@ -57,5 +60,7 @@ namespace NMP.Commons.ViewModels
         public MannerEstimationStep17ViewModel MannerEstimationStep17 { get; set; }
         public MannerEstimationStep18ViewModel MannerEstimationStep18 { get; set; }
         public MannerEstimationStep19ViewModel MannerEstimationStep19 { get; set; }
+        public MannerEstimationStep21ViewModel MannerEstimationStep21 { get; set; }
+        public MannerEstimationStep22ViewModel MannerEstimationStep22 { get; set; }
     }
 }

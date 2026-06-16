@@ -395,6 +395,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep14.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep14.IsCopyEstimate = mannerEstimationViewModel.IsCopyEstimate;
         return mannerEstimationViewModel.MannerEstimationStep14;
     }
     public MannerEstimationStep15ViewModel SetMannerEstimationStep15(MannerEstimationStep15ViewModel mannerEstimationStep15)
@@ -475,6 +476,38 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         mannerEstimationViewModel.MannerEstimationStep19 = mannerEstimationStep19;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep19();
+    }
+    public MannerEstimationStep21ViewModel GetMannerEstimationStep21()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep21.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        return mannerEstimationViewModel.MannerEstimationStep21;
+    }
+    public MannerEstimationStep21ViewModel SetMannerEstimationStep21(MannerEstimationStep21ViewModel mannerEstimationStep21)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep21 = mannerEstimationStep21;
+        mannerEstimationViewModel.IsCopyEstimate = mannerEstimationStep21.IsCopyEstimate;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep21();
+    }
+    public MannerEstimationStep22ViewModel GetMannerEstimationStep22()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep22.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        return mannerEstimationViewModel.MannerEstimationStep22;
+    }
+    public MannerEstimationStep22ViewModel SetMannerEstimationStep22(MannerEstimationStep22ViewModel mannerEstimationStep22)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep22 = mannerEstimationStep22;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep22();
+    }
+    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList()
+    {
+        _logger.LogTrace("MannerLogic : FetchMannerEstimationsList() called");
+        return await _mannerService.FetchMannerEstimationsList();
     }
 
 }

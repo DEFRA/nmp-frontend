@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -4755,6 +4755,15 @@ namespace NMP.Commons.Resources {
         public static string lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet {
             get {
                 return ResourceManager.GetString("lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplicationsNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to start with a copy on an existing estimate?.
+        /// </summary>
+        public static string lblDoYouWantToStartWithACopyOn {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToStartWithACopyOn", resourceCulture);
             }
         }
         
@@ -13031,6 +13040,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove a nutrient supply estimate.
+        /// </summary>
+        public static string lblRemoveANutrientSupplyEstimate {
+            get {
+                return ResourceManager.GetString("lblRemoveANutrientSupplyEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This will remove {0} from {1}. You will not be able to get it back..
         /// </summary>
         public static string lblRemoveContent {
@@ -16552,6 +16570,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update or make a copy.
+        /// </summary>
+        public static string lblUpdateOrMakeACopy {
+            get {
+                return ResourceManager.GetString("lblUpdateOrMakeACopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update plan.
         /// </summary>
         public static string lblUpdatePlan {
@@ -18586,6 +18613,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which estimate would you like to copy?.
+        /// </summary>
+        public static string lblWhichEstimateWouldYouLikeToCopy {
+            get {
+                return ResourceManager.GetString("lblWhichEstimateWouldYouLikeToCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which farm information and planning report do you want to create?.
         /// </summary>
         public static string lblWhichFarmInformationAndPlanningReportDoYouWantToCreate {
@@ -19275,6 +19311,15 @@ namespace NMP.Commons.Resources {
         public static string lblYouCanApplyUpTo170kgPerHectareOfNitrogen {
             get {
                 return ResourceManager.GetString("lblYouCanApplyUpTo170kgPerHectareOfNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can change any of the details in the copy.
+        /// </summary>
+        public static string lblYouCanChangeAnyOfTheDetailsInTheCopy {
+            get {
+                return ResourceManager.GetString("lblYouCanChangeAnyOfTheDetailsInTheCopy", resourceCulture);
             }
         }
         
@@ -22643,6 +22688,15 @@ namespace NMP.Commons.Resources {
         public static string MsgSelectANameOfFieldBeforeContinuing {
             get {
                 return ResourceManager.GetString("MsgSelectANameOfFieldBeforeContinuing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select an estimate to continue..
+        /// </summary>
+        public static string MsgSelectAnEstimateToContinue {
+            get {
+                return ResourceManager.GetString("MsgSelectAnEstimateToContinue", resourceCulture);
             }
         }
         

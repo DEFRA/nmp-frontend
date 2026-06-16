@@ -551,4 +551,27 @@ responseWrapper?.Data is not null)
 
         return (topSoilList, error);
     }
+
+    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList()
+    {
+        List<MannerEstimation> mannerEstimationsList = new List<MannerEstimation>();
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchAllMannerEstimationsAsyncAPI);
+
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            var mannerEstimations = responseWrapper?.Data?.records.ToObject<List<MannerEstimation>>();
+            mannerEstimationsList.AddRange(mannerEstimations);
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerEstimationsList, error);
+    }
 }
