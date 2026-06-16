@@ -1344,10 +1344,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (applicationMethodList.Count == 1)
             {
                 model.ApplicationMethodId = applicationMethodList[0].ID;
-                model = await _mannerLogic.SetMannerEstimationStep23(model);
+                 await _mannerLogic.SetMannerEstimationStep23(model);
                 return RedirectToAction("DefaultNutrientValues");
             }
-            model = await _mannerLogic.SetMannerEstimationStep23(model);
+             await _mannerLogic.SetMannerEstimationStep23(model);
 
             return View(model);
         }
@@ -1366,12 +1366,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    List<ApplicationMethodResponse> applicationMethodList = await BindViewBegForApplicationMethod(model);
+                    await BindViewBegForApplicationMethod(model);
                     model = _mannerLogic.GetMannerEstimationStep23();
                     return View(model);
                 }
 
-                model = await _mannerLogic.SetMannerEstimationStep23(model);
+                await _mannerLogic.SetMannerEstimationStep23(model);
 
                 return RedirectToAction("DefaultNutrientValues");
             }
