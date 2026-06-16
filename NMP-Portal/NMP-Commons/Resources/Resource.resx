@@ -3453,17 +3453,14 @@ cubic metres per hectare  not set</value>
   <data name="lblCropGroupName" xml:space="preserve">
     <value>Crop Group Name</value>
   </data>
-  <data name="contentGettingHelp1" xml:space="preserve">
-    <value>If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 0845 646 2469.</value>
-  </data>
-  <data name="contentGettingHelp2" xml:space="preserve">
-    <value>Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
+  <data name="ContentGettingHelp4" xml:space="preserve">
+    <value>Tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem.</value>
   </data>
   <data name="contentGettingHelp_line2" xml:space="preserve">
     <value>The helpdesk will help with issues such as:</value>
   </data>
   <data name="contentGivingFeedbackAboutThisService1" xml:space="preserve">
-    <value>If you would like to give us feedback about this tool, then please email &lt;a  href="mailto:nmpt@defra.gov.uk"&gt;nmpt@defra.gov.uk&lt;/a&gt;.</value>
+    <value>To give feedback about this tool, &lt;a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_9ACQjlmuNrzP44m"  target="_blank"&gt;complete the feedback survey&lt;/a&gt; (opens in a new window).</value>
   </data>
   <data name="lblAboutGetHelpAndFeedback" xml:space="preserve">
     <value>This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed.</value>
@@ -3478,7 +3475,7 @@ cubic metres per hectare  not set</value>
     <value>Get help or give feedback</value>
   </data>
   <data name="lblGettingHelp" xml:space="preserve">
-    <value>Getting help with the tool</value>
+    <value>Get help or give feedback on this tool</value>
   </data>
   <data name="lblGivingFeedbackAboutThisService" xml:space="preserve">
     <value>Giving feedback about this tool</value>
@@ -7534,6 +7531,26 @@ livestock manure.</value>
   </data>
   <data name="msgViewAhdbGuidence" xml:space="preserve">
     <value>View the AHDB guidance</value>
+  </data>
+  <data name="contentGettingHelp1" xml:space="preserve">
+    <value>If you have a technical issue, logic problem, or have a question
+ about recommendations or reports provided by this tool, contact the help desk:</value>
+  </data>
+  <data name="lblGetHelp" xml:space="preserve">
+    <value>Get help</value>
+  </data>
+  <data name="lblGetHelpContent" xml:space="preserve">
+    <value>Alongside this tool you should use the AHDB Nutrient Management Guide (RB209).&lt;a href="https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use" target="_blank"&gt; Get more information or help with RB209&lt;/a&gt; (opens in a new window).</value>
+  </data>
+  <data name="lblGiveFeedback" xml:space="preserve">
+    <value>Give feedback</value>
+  </data>
+  <data name="ContentGettingHelp2" xml:space="preserve">
+    <value>email &lt;a href="mailto:helpdesk@rsk-bsl.co.uk"&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;, or
+</value>
+  </data>
+  <data name="ContentGettingHelp3" xml:space="preserve">
+    <value>telephone 0845 646 2469</value>
   </data>
   <data name="lblWhichSoilAnalysisMethodWasUsed" xml:space="preserve">
     <value>Which soil analysis method was used?</value>
