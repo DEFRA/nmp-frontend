@@ -5,7 +5,7 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">        
-         <h1 class="govuk-heading-xl">
+        @* <h1 class="govuk-heading-xl">
             Plan and Manage Nutrient Applications Tool - Update
         </h1>
         <p class="govuk-body">This is a pre-production environment.</p>
@@ -21,10 +21,10 @@
         </h2>
         <p class="govuk-body">For our private beta users, we are currently implementing further updates. Your version of the tool will be ready shortly. Thank you for your patience and continued feedback.</p>
         <p class="govuk-body">Further communications will be issued in the next few weeks.</p>
-
+    *@
         
        
-       @*  
+         
        @if (ViewBag.Error != null || ViewBag.ServiceError != null)
         {
             <govuk-error-summary>
@@ -81,6 +81,6 @@
                     <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
                 </svg>
             </govuk-button-link>
-        } *@
+        } 
     </div>
 </div>
