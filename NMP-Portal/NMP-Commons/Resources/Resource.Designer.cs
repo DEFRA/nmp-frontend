@@ -5472,6 +5472,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} for {1}.
+        /// </summary>
+        public static string lblEstimationForFarm {
+            get {
+                return ResourceManager.GetString("lblEstimationForFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Excess winter rainfall.
         /// </summary>
         public static string lblExcessWinterRainfall {
@@ -11026,6 +11035,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimate created.
+        /// </summary>
+        public static string lblNutrientSupplyEstimateCreated {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimateCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient supply estimates.
         /// </summary>
         public static string lblNutrientSupplyEstimates {
@@ -13731,6 +13749,15 @@ namespace NMP.Commons.Resources {
         public static string lblSelectTheFarmAddress {
             get {
                 return ResourceManager.GetString("lblSelectTheFarmAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the farm, field and crop tab, or an application details tab, to update the results..
+        /// </summary>
+        public static string lblSelectTheFarmFieldAndCropTabOrAnApplication {
+            get {
+                return ResourceManager.GetString("lblSelectTheFarmFieldAndCropTabOrAnApplication", resourceCulture);
             }
         }
         

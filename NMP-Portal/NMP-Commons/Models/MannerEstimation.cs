@@ -11,6 +11,9 @@ namespace NMP.Commons.Models
     public class MannerEstimation
     {
         public int? ID { get; set; }
+
+        public string? Name { get; set; }
+        public Guid? OrganisationID { get; set; }
         public string? FarmName { get; set; }
 
         public int? CountryID { get; set; }

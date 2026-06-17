@@ -20,13 +20,19 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblWhichEstimateWouldYouLikeToCopy
                     </govuk-radios-fieldset-legend>
-                    
-                    @if(ViewBag.MannerEstimations != null)
+
+                    @if (ViewBag.MannerEstimations != null)
                     {
                         @foreach (var estimation in ViewBag.MannerEstimations)
                         {
-                            <govuk-radios-item value="@estimation.ID">@estimation.FarmName</govuk-radios-item>
-                        }
+                            <govuk-radios-item value="@estimation.ID">
+                                @estimation.FarmName
+                                <govuk-radios-item-hint>
+                                    @string.Format(Resource.lblLastUpdatedDate, (estimation.ModifiedOn ?? estimation.CreatedOn).ToString("dd MMMM yyyy"))
+                                </govuk-radios-item-hint>
+                    </govuk-radios-item>
+
+                                        }
                     }
                 </govuk-radios-fieldset>
             </govuk-radios>

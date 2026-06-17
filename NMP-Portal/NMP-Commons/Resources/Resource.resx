@@ -8000,4 +8000,13 @@ livestock manure.</value>
   <data name="MsgSelectAnEstimateToContinue" xml:space="preserve">
     <value>Select an estimate to continue.</value>
   </data>
+  <data name="lblNutrientSupplyEstimateCreated" xml:space="preserve">
+    <value>Nutrient supply estimate created</value>
+  </data>
+  <data name="lblSelectTheFarmFieldAndCropTabOrAnApplication" xml:space="preserve">
+    <value>Select the farm, field and crop tab, or an application details tab, to update the results.</value>
+  </data>
+  <data name="lblEstimationForFarm" xml:space="preserve">
+    <value>{0} for {1}</value>
+  </data>
 </root>

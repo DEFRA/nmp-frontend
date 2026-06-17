@@ -1351,10 +1351,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (applicationMethodList.Count == 1)
             {
                 model.ApplicationMethodId = applicationMethodList[0].ID;
-                 await _mannerLogic.SetMannerEstimationStep23(model);
+                await _mannerLogic.SetMannerEstimationStep23(model);
                 return RedirectToAction("DefaultNutrientValues");
             }
-             await _mannerLogic.SetMannerEstimationStep23(model);
+            await _mannerLogic.SetMannerEstimationStep23(model);
 
             return View(model);
         }
@@ -1539,7 +1539,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
                 model = _mannerLogic.SetMannerEstimationStep21(model);
-                if(!model.IsCopyEstimate.Value)
+                if (!model.IsCopyEstimate.Value)
                 {
                     return RedirectToAction("CopyExistingFarmAndFieldDetails");
                 }
@@ -1573,12 +1573,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyFromEstimates() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList();
-
-                if (string.IsNullOrWhiteSpace(error?.Message))
-                {
-                    ViewBag.MannerEstimations = mannerEstimations;
-                }
+                await LoadMannerEstimations();
                 return View(model);
             }
             catch (HttpRequestException hre)
@@ -1609,17 +1604,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (!ModelState.IsValid)
                 {
                     model = _mannerLogic.GetMannerEstimationStep22();
-                    var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList();
-                    if (string.IsNullOrWhiteSpace(error?.Message))
-                    {
-                        ViewBag.MannerEstimations = mannerEstimations;
-                    }
+                    await LoadMannerEstimations();
                     return View("CopyFromEstimates", model);
                 }
 
                 model = _mannerLogic.SetMannerEstimationStep22(model);
+                //call copy api to copy the selected estimate to current estimate
 
-                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("MannerHubPage");
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
             }
             catch (HttpRequestException hre)
             {
@@ -1633,5 +1626,34 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
+
+        [HttpGet]
+        public IActionResult MannerEstimationResult(string? q)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  MannerEstimationResult() action called");
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                ViewBag.Success = _mannerEstimationProtector.Unprotect(q);
+            }
+            return View();
+        }
+        private async Task LoadMannerEstimations()
+        {
+            var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList();
+
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                return;
+            }
+
+            foreach (var estimation in mannerEstimations)
+            {
+                estimation.FarmName = string.Format(Resource.lblEstimationForFarm, estimation.Name, estimation.FarmName);
+            }
+
+            ViewBag.MannerEstimations = mannerEstimations.OrderBy(x => x.Name);
+        }
+
+
     }
 }
