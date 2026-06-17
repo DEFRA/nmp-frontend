@@ -1,0 +1,19 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.OrganicManureViewModel
+@{
+    // var isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
+    // ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+}
+@section BeforeContent {
+   
+    <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    
+}
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body">In process</p>
+    </div>
+
+</div>

@@ -82,5 +82,10 @@ public interface IMannerLogic
     Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25);
     Task<MannerEstimationStep26ViewModel> GetMannerEstimationStep26();
     Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26);
+    Task<MannerEstimationStep27ViewModel> GetMannerEstimationStep27();
+    Task<MannerEstimationStep27ViewModel> SetMannerEstimationStep27(MannerEstimationStep27ViewModel mannerEstimationStep27);
+    Task<MannerEstimationStep28ViewModel> GetMannerEstimationStep28();
+    Task<MannerEstimationStep28ViewModel> SetMannerEstimationStep28(MannerEstimationStep28ViewModel mannerEstimationStep28);
+    Task<Error?> CopiedFarmAndFieldData(int farmId, int fieldId);
 
 }

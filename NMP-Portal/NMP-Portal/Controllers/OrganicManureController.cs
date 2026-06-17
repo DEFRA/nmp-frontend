@@ -2843,7 +2843,7 @@ managementPeriod.CropID.HasValue
             {
                 if (!ModelState.IsValid)
                 {
-                    ReplaceNumericError(_applicationRateKey, Resource.lblApplicationRate, Resource.MsgEnterDataOnlyInNumber);
+                    ReplaceNumericError(_applicationRateKey, Resource.lblApplicationRate,string.Format(Resource.MsgEnterDataOnlyInNumber,Resource.lblRate));
                 }
                 ValidateApplicationRate(model);
 
