@@ -201,21 +201,5 @@ namespace NMP.Portal.Helpers
     };
         }
 
-        private void ValidateK2OMgOAndSO3(MannerEstimationStep25ViewModel model)
-        {
-            if (model.K2O != null && (model.K2O < 0 || model.K2O > 99))
-            {
-                Modelstate.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 99));
-            }
-            if (model.MgO != null && (model.MgO < 0 || model.MgO > 99))
-            {
-                ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblMagnesiumMgO, 99));
-            }
-
-            if (model.SO3 != null && (model.SO3 < 0 || model.SO3 > 99))
-            {
-                ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 99));
-            }
-        }
     }
 }
