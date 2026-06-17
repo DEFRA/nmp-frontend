@@ -1032,7 +1032,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-o9                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy() action");
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy() action");
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
