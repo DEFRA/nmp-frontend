@@ -30,6 +30,11 @@ namespace NMP.Commons.ViewModels
             MannerEstimationStep17 = new MannerEstimationStep17ViewModel();
             MannerEstimationStep18 = new MannerEstimationStep18ViewModel();
             MannerEstimationStep19 = new MannerEstimationStep19ViewModel();
+            MannerEstimationStep20 = new MannerEstimationStep20ViewModel();
+            MannerEstimationStep23 = new MannerEstimationStep23ViewModel();
+            MannerEstimationStep24 = new MannerEstimationStep24ViewModel();
+            MannerEstimationStep25 = new MannerEstimationStep25ViewModel();
+            MannerEstimationStep26 = new MannerEstimationStep26ViewModel();
             MannerEstimationStep21 = new MannerEstimationStep21ViewModel();
             MannerEstimationStep22 = new MannerEstimationStep22ViewModel();
         }
@@ -60,6 +65,11 @@ namespace NMP.Commons.ViewModels
         public MannerEstimationStep17ViewModel MannerEstimationStep17 { get; set; }
         public MannerEstimationStep18ViewModel MannerEstimationStep18 { get; set; }
         public MannerEstimationStep19ViewModel MannerEstimationStep19 { get; set; }
+        public MannerEstimationStep20ViewModel MannerEstimationStep20 { get; set; }
+        public MannerEstimationStep23ViewModel MannerEstimationStep23 { get; set; }
+        public MannerEstimationStep24ViewModel MannerEstimationStep24 { get; set; }
+        public MannerEstimationStep25ViewModel MannerEstimationStep25 { get; set; }
+        public MannerEstimationStep26ViewModel MannerEstimationStep26 { get; set; }
         public MannerEstimationStep21ViewModel MannerEstimationStep21 { get; set; }
         public MannerEstimationStep22ViewModel MannerEstimationStep22 { get; set; }
     }

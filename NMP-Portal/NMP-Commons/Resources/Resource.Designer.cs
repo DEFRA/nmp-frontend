@@ -160,7 +160,8 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you experience a technical problem with any of the functionality in this tool, you can email &lt;a  href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt; or call 0845 646 2469..
+        ///   Looks up a localized string similar to If you have a technical issue, logic problem, or have a question
+        /// about recommendations or reports provided by this tool, contact the help desk:.
         /// </summary>
         public static string contentGettingHelp1 {
             get {
@@ -169,16 +170,35 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem..
+        ///   Looks up a localized string similar to email &lt;a href=&quot;mailto:helpdesk@rsk-bsl.co.uk&quot;&gt;helpdesk@rsk-bsl.co.uk&lt;/a&gt;, or
+        ///.
         /// </summary>
-        public static string contentGettingHelp2 {
+        public static string ContentGettingHelp2 {
             get {
-                return ResourceManager.GetString("contentGettingHelp2", resourceCulture);
+                return ResourceManager.GetString("ContentGettingHelp2", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you would like to give us feedback about this tool, then please email &lt;a  href=&quot;mailto:nmpt@defra.gov.uk&quot;&gt;nmpt@defra.gov.uk&lt;/a&gt;..
+        ///   Looks up a localized string similar to telephone 0845 646 2469.
+        /// </summary>
+        public static string ContentGettingHelp3 {
+            get {
+                return ResourceManager.GetString("ContentGettingHelp3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tell us what you were trying to do, what happened, and what you expected. This will help us to identify the problem..
+        /// </summary>
+        public static string ContentGettingHelp4 {
+            get {
+                return ResourceManager.GetString("ContentGettingHelp4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To give feedback about this tool, &lt;a href=&quot;https://defragroup.eu.qualtrics.com/jfe/form/SV_9ACQjlmuNrzP44m&quot;  target=&quot;_blank&quot;&gt;complete the feedback survey&lt;/a&gt; (opens in a new window)..
         /// </summary>
         public static string contentGivingFeedbackAboutThisService1 {
             get {
@@ -6685,6 +6705,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get help.
+        /// </summary>
+        public static string lblGetHelp {
+            get {
+                return ResourceManager.GetString("lblGetHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Get help or give feedback.
         /// </summary>
         public static string lblGetHelpAndFeedback {
@@ -6694,11 +6723,29 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Getting help with the tool.
+        ///   Looks up a localized string similar to Alongside this tool you should use the AHDB Nutrient Management Guide (RB209).&lt;a href=&quot;https://ahdb.org.uk/knowledge-library/rb209-section-1-principles-of-nutrient-management-and-fertiliser-use&quot; target=&quot;_blank&quot;&gt; Get more information or help with RB209&lt;/a&gt; (opens in a new window)..
+        /// </summary>
+        public static string lblGetHelpContent {
+            get {
+                return ResourceManager.GetString("lblGetHelpContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get help or give feedback on this tool.
         /// </summary>
         public static string lblGettingHelp {
             get {
                 return ResourceManager.GetString("lblGettingHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give feedback.
+        /// </summary>
+        public static string lblGiveFeedback {
+            get {
+                return ResourceManager.GetString("lblGiveFeedback", resourceCulture);
             }
         }
         
@@ -7275,6 +7322,15 @@ namespace NMP.Commons.Resources {
         public static string lblHowAccessibleThisWebsiteIs {
             get {
                 return ResourceManager.GetString("lblHowAccessibleThisWebsiteIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How are you applying the {0}?.
+        /// </summary>
+        public static string lblHowAreYouApplyingTheManureType {
+            get {
+                return ResourceManager.GetString("lblHowAreYouApplyingTheManureType", resourceCulture);
             }
         }
         
@@ -18217,6 +18273,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of Livestock manure are you using in this application?.
+        /// </summary>
+        public static string lblWhatTypeOfLivestockManureAreYouUsingInThisApplication {
+            get {
+                return ResourceManager.GetString("lblWhatTypeOfLivestockManureAreYouUsingInThisApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of livestock would you like to add for {0}?.
         /// </summary>
         public static string lblWhatTypeOfLivestockWouldYouLikeToAddFor {
@@ -18456,6 +18521,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhenAreYouApplyingManureOnThisField {
             get {
                 return ResourceManager.GetString("lblWhenAreYouApplyingManureOnThisField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When are you applying organic material on {0}?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingOrganicMaterialOnFieldName {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingOrganicMaterialOnFieldName", resourceCulture);
             }
         }
         
@@ -21279,6 +21353,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rainfall must be between 1 and 3000 without decimal places..
+        /// </summary>
+        public static string MsgEnterRainfallBetween1And3000 {
+            get {
+                return ResourceManager.GetString("MsgEnterRainfallBetween1And3000", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter shoot number between 0 to 1500.
         /// </summary>
         public static string MsgEnterShootNumberBetween0To1500 {
@@ -23048,6 +23131,15 @@ namespace NMP.Commons.Resources {
         public static string MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional {
             get {
                 return ResourceManager.GetString("MsgTheNVZActionProgrammeStatesThatTheARPoultryAdditional", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value &apos;&apos; is invalid..
+        /// </summary>
+        public static string MsgTheValueIsInvalid {
+            get {
+                return ResourceManager.GetString("MsgTheValueIsInvalid", resourceCulture);
             }
         }
         

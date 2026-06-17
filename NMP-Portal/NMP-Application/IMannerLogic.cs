@@ -70,6 +70,19 @@ public interface IMannerLogic
     Task<(List<CommonResponse>?, Error?)> FetchTopsoilList();
     MannerEstimationStep19ViewModel GetMannerEstimationStep19();
     MannerEstimationStep19ViewModel SetMannerEstimationStep19(MannerEstimationStep19ViewModel mannerEstimationStep19);
+    Task<(List<CommonResponse>?, Error?)> FetchSubsoilList();
+    MannerEstimationStep20ViewModel GetMannerEstimationStep20();
+    Task<MannerEstimationStep20ViewModel> SetMannerEstimationStep20(MannerEstimationStep20ViewModel mannerEstimationStep20);
+    MannerEstimationStep23ViewModel GetMannerEstimationStep23();
+    Task<MannerEstimationStep23ViewModel> SetMannerEstimationStep23(MannerEstimationStep23ViewModel mannerEstimationStep23);
+    ManureType? GetAndApplyManureType(int manureTypeId, List<ManureType> manureTypeList);
+    Task<MannerEstimationStep24ViewModel> GetMannerEstimationStep24();
+    Task<MannerEstimationStep24ViewModel> SetMannerEstimationStep24(MannerEstimationStep24ViewModel mannerEstimationStep24);
+    Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25();
+    Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25);
+    Task<MannerEstimationStep26ViewModel> GetMannerEstimationStep26();
+    Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26);
+
 
     MannerEstimationStep21ViewModel GetMannerEstimationStep21();
     MannerEstimationStep21ViewModel SetMannerEstimationStep21(MannerEstimationStep21ViewModel mannerEstimationStep21);

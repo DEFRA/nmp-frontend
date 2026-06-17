@@ -1557,17 +1557,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private static bool IsDateFormatError(string error)
     {
-        string[] patterns =
-        {
-        Resource.MsgDateMustBeARealDate,
-        Resource.MsgDateMustIncludeAMonth,
-        Resource.MsgDateMustIncludeAMonthAndYear,
-        Resource.MsgDateMustIncludeADayAndYear,
-        Resource.MsgDateMustIncludeAYear,
-        Resource.MsgDateMustIncludeADay,
-        Resource.MsgDateMustIncludeADayAndMonth
-    };
-
+        string[] patterns = CommonHelpers.DatePattern();
         return patterns.Any(p => error.Equals(string.Format(p, _sowingDate)));
     }
     private void ValidateRequiredDate(PlanViewModel model)

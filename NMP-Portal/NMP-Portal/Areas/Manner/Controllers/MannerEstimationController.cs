@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NMP.Application;
 using NMP.Businesses;
+using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Portal.Controllers;
+using NMP.Portal.Helpers;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Security.Claims;
@@ -19,11 +21,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IFarmLogic farmLogic, IMannerLogic mannerLogic, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic) : Controller
+    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IFarmLogic farmLogic, IMannerLogic mannerLogic, ICropLogic cropLogic, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic) : Controller
     {
         private readonly ILogger<MannerEstimationController> _logger = logger;
         private readonly IFarmLogic _farmLogic = farmLogic;
         private readonly IMannerLogic _mannerLogic = mannerLogic;
+        private readonly ICropLogic _cropLogic = cropLogic;
 
         private readonly IFieldLogic _fieldLogic = fieldLogic;
         private const string _checkAnswerActionName = "CheckAnswer";
@@ -31,6 +34,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _mannerEstimationSessionName = "MannerEstimation";
         private const string _mannerEstimationControllerForLog = "MannerEstimation  Controller : ";
         private const string _organisationId = "organisationId";
+        private const string _sowingDate = "SowingDate";
+        private const string _applicationDateKey = "ApplicationDate";
 
         public IActionResult Index()
         {
@@ -352,22 +357,23 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 var RainfallError = ModelState[key]?.Errors.Count > 0 ?
                                 ModelState[key]?.Errors[0].ErrorMessage.ToString() : null;
 
-                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblAverageAnnualRainfallForError)))
+                if (RainfallError != null)
                 {
                     ModelState[key]?.Errors.Clear();
-                    ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
+                    if (RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblAverageAnnualRainfallForError)))
+                    {
+                        ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
+                    }
+                    else if (RainfallError.Equals(Resource.MsgTheValueIsInvalid))
+                    {
+                        ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
+                    }
                 }
             }
 
-
-            if (model.AverageAnnualRainfall == 0)
+            if (model.AverageAnnualRainfall < 1 || model.AverageAnnualRainfall > 3000)
             {
-                ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
-            }
-
-            if (model.AverageAnnualRainfall < 0)
-            {
-                ModelState.AddModelError(key, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                ModelState.AddModelError(key, Resource.MsgEnterRainfallBetween1And3000);
             }
         }
 
@@ -555,11 +561,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             model.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupId ?? 0);
+            model.CropTypeName = await _fieldLogic.FetchCropTypeById(model.CropTypeId ?? 0);
             model = _mannerLogic.SetMannerEstimationStep9(model);
 
             if (model.CropTypeId != null && Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), model.CropTypeId))
             {
-                return RedirectToAction("IsEarlySown");
+                return RedirectToAction("SowingDate");
             }
 
             return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("ManureGroup");
@@ -751,6 +758,40 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
             return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplicationDate(MannerEstimationStep13ViewModel model)
+        {
+            _logger.LogTrace($"Manner Estimation Controller : ApplicationDate() post action called");
+            try
+            {
+                AddErrorIfNull(model.ApplicationDate, _applicationDateKey, Resource.MsgEnterADateBeforeContinuing);
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep13();
+                    return View(model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep13(model);
+                return RedirectToAction("ApplicationMethod");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "Manner Estimation Controller  : Exception in ApplicationDate() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+
+        }
+
+        private void AddErrorIfNull(object? value, string key, string errorMessage)
+        {
+            if (value is null || (value is string str && string.IsNullOrWhiteSpace(str)))
+            {
+                ModelState.AddModelError(key, errorMessage);
+            }
         }
         [HttpGet]
         public async Task<IActionResult> CopyExistingFarmAndFieldDetails()
@@ -1117,6 +1158,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
+        private async Task BindAllSubsoilList()
+        {
+            (List<CommonResponse>? subsoilList, _) = await _mannerLogic.FetchSubsoilList();
+
+            ViewBag.SubsoilList = subsoilList?.Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString(),
+                Text = x.Name
+            }).ToList();
+
+        }
         [HttpGet]
         public async Task<IActionResult> SubSoil()
         {
@@ -1124,6 +1176,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             MannerEstimationStep19ViewModel model = _mannerLogic.GetMannerEstimationStep19();
             try
             {
+                await BindAllSubsoilList();
                 return View(model);
             }
             catch (HttpRequestException hre)
@@ -1133,9 +1186,293 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in TopSSubSoiloil() action");
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in SubSoil() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubSoil(MannerEstimationStep19ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  SubSoil() post action called");
+            try
+            {
+                if (!model.SubSoilId.HasValue)
+                {
+                    ModelState.AddModelError("SubSoilId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep19();
+                    await BindAllSubsoilList();
+                    return View(model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep19(model);
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CropGroup");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in SubSoil() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in SubSoil() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> SowingDate(string q)
+        {
+            _logger.LogTrace("Crop Controller : SowingDate action called");
+            MannerEstimationStep20ViewModel model = _mannerLogic.GetMannerEstimationStep20();
+            try
+            {
+                return View(model);
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in SowingDate() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in SowingDate() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SowingDate(MannerEstimationStep20ViewModel model)
+        {
+            _logger.LogTrace("Manner estimation Controller : SowingDate() post action called");
+            try
+            {
+                model = await ValidateSowingDatePost(model);
+                ValidateCropSpecificRules(model);
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep20();
+                    return View(model);
+                }
+                model = await _mannerLogic.SetMannerEstimationStep20(model);
+
+                return RedirectToAction("ManureGroup");
+
+            }
+            catch (Exception ex)
+            {
+                TempData["SowingDateError"] = ex.Message;
+                return View(model);
+            }
+        }
+        private async Task<MannerEstimationStep20ViewModel> ValidateSowingDatePost(MannerEstimationStep20ViewModel model)
+        {
+            if (!ModelState.IsValid && ModelState.ContainsKey(_sowingDate))
+            {
+                var entry = ModelState[_sowingDate];
+                var error = entry?.Errors.FirstOrDefault()?.ErrorMessage;
+
+                if (error != null && IsDateFormatError(error))
+                {
+                    entry.Errors.Clear();
+                    entry.Errors.Add(Resource.MsgTheDateMustInclude);
+                }
+            }
+            ValidateRequiredDate(model);
+            return model;
+        }
+        private static bool IsDateFormatError(string error)
+        {
+            string[] patterns = CommonHelpers.DatePattern();
+            return patterns.Any(p => error.Equals(string.Format(p, _sowingDate)));
+        }
+
+        private void ValidateCropSpecificRules(MannerEstimationStep20ViewModel model)
+        {
+            MannerEstimationStep9ViewModel mannerEstimationStep9ViewModel = _mannerLogic.GetMannerEstimationStep9();
+            var cropType = mannerEstimationStep9ViewModel.CropTypeId;
+
+            bool isWinterCrop =
+                cropType == (int)NMP.Commons.Enums.CropTypes.WinterWheat ||
+                cropType == (int)NMP.Commons.Enums.CropTypes.WinterTriticale ||
+                cropType == (int)NMP.Commons.Enums.CropTypes.ForageWinterTriticale ||
+                cropType == (int)NMP.Commons.Enums.CropTypes.WholecropWinterWheat;
+
+            var date = model.SowingDate;
+
+            if (isWinterCrop && date != null && date.Value.Month is >= 2 and <= 6)
+            {
+                ModelState.AddModelError("SowingDate",
+                    string.Format(Resource.MsgForSowingDate, model.CropTypeName));
+            }
+        }
+
+        private void ValidateRequiredDate(MannerEstimationStep20ViewModel model)
+        {
+            if (model.SowingDate == null)
+            {
+                ModelState.AddModelError(_sowingDate, Resource.MsgEnterADateBeforeContinuing);
+            }
+        }
+        private async Task<List<ApplicationMethodResponse>> BindViewBegForApplicationMethod(MannerEstimationStep23ViewModel model)
+        {
+            (var manureType, _) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+            bool isLiquid = manureType?.IsLiquid ?? false;
+
+            int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
+            (List<ApplicationMethodResponse> applicationMethodList, _) = await _mannerLogic.FetchApplicationMethodList(fieldType, isLiquid);
+            if (applicationMethodList.Count > 0)
+            {
+                ViewBag.ApplicationMethodList = applicationMethodList.OrderBy(a => a.SortOrder).ToList();
+            }
+
+            return applicationMethodList;
+        }
+        [HttpGet]
+        public async Task<IActionResult> ApplicationMethod()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationMethod() action called");
+
+            MannerEstimationStep23ViewModel model = _mannerLogic.GetMannerEstimationStep23();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ApplicationMethod() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            List<ApplicationMethodResponse> applicationMethodList = await BindViewBegForApplicationMethod(model);
+
+            model.ApplicationMethodCount = applicationMethodList.Count;
+            if (applicationMethodList.Count == 1)
+            {
+                model.ApplicationMethodId = applicationMethodList[0].ID;
+                 await _mannerLogic.SetMannerEstimationStep23(model);
+                return RedirectToAction("DefaultNutrientValues");
+            }
+             await _mannerLogic.SetMannerEstimationStep23(model);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplicationMethod(MannerEstimationStep23ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  ApplicationMethod() post action called");
+            try
+            {
+                if (!model.ApplicationMethodId.HasValue)
+                {
+                    ModelState.AddModelError("ApplicationMethodId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    await BindViewBegForApplicationMethod(model);
+                    model = _mannerLogic.GetMannerEstimationStep23();
+                    return View(model);
+                }
+
+                await _mannerLogic.SetMannerEstimationStep23(model);
+
+                return RedirectToAction("DefaultNutrientValues");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in ApplicationMethod() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in ApplicationMethod() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> DefaultNutrientValues()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} DefaultNutrientValues() action called");
+
+            MannerEstimationStep24ViewModel model = await _mannerLogic.GetMannerEstimationStep24();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in DefaultNutrientValues() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DefaultNutrientValues(MannerEstimationStep24ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  DefaultNutrientValues() post action called");
+            try
+            {
+                if (!model.DefaultNutrientValue.HasValue)
+                {
+                    ModelState.AddModelError("DefaultNutrientValue", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = await _mannerLogic.GetMannerEstimationStep24();
+                    return View(model);
+                }
+
+                model = await _mannerLogic.SetMannerEstimationStep24(model);
+
+                if (!model.DefaultNutrientValue.Value)
+                {
+                    return RedirectToAction("ManualNutrientValues");
+                }
+                return RedirectToAction("ApplicationRateMethod");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in DefaultNutrientValues() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in DefaultNutrientValues() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> ManualNutrientValues()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ManualNutrientValues() action called");
+
+            MannerEstimationStep25ViewModel model = await _mannerLogic.GetMannerEstimationStep25();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManualNutrientValues() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ApplicationRateMethod()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationRateMethod() action called");
+
+            MannerEstimationStep26ViewModel model = await _mannerLogic.GetMannerEstimationStep26();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ApplicationRateMethod() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+
+            return View(model);
         }
 
         [HttpGet]

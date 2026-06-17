@@ -551,6 +551,32 @@ responseWrapper?.Data is not null)
 
         return (topSoilList, error);
     }
+    public async Task<(List<CommonResponse>?, Error?)> FetchSubsoilList()
+    {
+        Error? error = null;
+        List<CommonResponse>? subSoilList = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = ApiurlHelper.FetchAllMannerSubSoilListAsyncAPI;
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper?.Data != null)
+            {
+                subSoilList = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+
+            }
+
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (subSoilList, error);
+    }
 
     public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList()
     {

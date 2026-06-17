@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading =string.Format(Resource.lblWhatTypeOfManureGroupWouldYouLikeUse,Model.ManureGroupName);
+    string heading =Resource.lblWhatTypeOfLivestockManureAreYouUsingInThisApplication;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
@@ -16,7 +16,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="ManureType" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios asp-for="@Model.ManureTypeId">
+            <govuk-radios for="@Model.ManureTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @heading
