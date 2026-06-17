@@ -524,6 +524,10 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     private static int GetWinterOilseedRapeCategory(DateTime establishmentDate, CropTypeLinkingResponse cropTypeLinkingResponse)
     {
         DateTime cutoff = new DateTime(establishmentDate.Year, 9, 15, 0, 0, 0, DateTimeKind.Unspecified);
+        return establishmentDate.Date <= cutoff
+           ? cropTypeLinkingResponse.MannerCropTypeID
+           : cropTypeLinkingResponse.LateSownMannerCropTypeID.Value;
+    }
     public MannerEstimationStep21ViewModel GetMannerEstimationStep21()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
@@ -557,10 +561,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         return await _mannerService.FetchMannerEstimationsList();
     }
 
-        return establishmentDate.Date <= cutoff
-            ? cropTypeLinkingResponse.MannerCropTypeID
-            : cropTypeLinkingResponse.LateSownMannerCropTypeID.Value;
-    }
+       
     private static bool IsCropCereal(int cropTypeId)
     {
         return cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterWheat ||
