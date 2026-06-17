@@ -1569,36 +1569,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
-                    ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
-                    ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
-                    ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
-                    ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
-                    ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
-                    ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
-                    ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
-                    ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
+                    ValidateManualNutrientValues();
                 }
 
-                AddErrorIfNull(model.DryMatterPercent, _dryMatterPercentKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
-
-                AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
-
-                AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
-
-                AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
-
-                AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
-
-                AddErrorIfNull(model.P2O5, "P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
-
-                AddErrorIfNull(model.K2O, "K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
-
-                AddErrorIfNull(model.SO3, "SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
-
-                AddErrorIfNull(model.MgO, "MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
-
-
+                CheckNutrientValuesIfNull(model);
                 ValidateNutrientValues(model);
 
                 if (!ModelState.IsValid)
@@ -1607,7 +1581,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                model = await _mannerLogic.SetMannerEstimationStep25(model);
+                await _mannerLogic.SetMannerEstimationStep25(model);
 
 
                 return RedirectToAction("ApplicationRateMethod");
@@ -1624,6 +1598,41 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
+
+        private void CheckNutrientValuesIfNull(MannerEstimationStep25ViewModel model)
+        {
+            AddErrorIfNull(model.DryMatterPercent, _dryMatterPercentKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
+
+            AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
+
+            AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
+
+            AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
+
+            AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
+
+            AddErrorIfNull(model.P2O5, "P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
+
+            AddErrorIfNull(model.K2O, "K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
+
+            AddErrorIfNull(model.SO3, "SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
+
+            AddErrorIfNull(model.MgO, "MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
+        }
+
+        private void ValidateManualNutrientValues()
+        {
+            ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
+            ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
+            ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
+            ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
+            ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
+            ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
+            ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
+            ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
+            ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
+        }
+
         [HttpGet]
         public async Task<IActionResult> ApplicationRateMethod()
         {
