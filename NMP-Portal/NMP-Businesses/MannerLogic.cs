@@ -194,6 +194,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         mannerEstimationViewModel.MannerEstimationStep7.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
         mannerEstimationViewModel.MannerEstimationStep7.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep7.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
+        mannerEstimationViewModel.MannerEstimationStep23.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
         return mannerEstimationViewModel.MannerEstimationStep7;
     }
 
@@ -493,11 +494,11 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep20 = mannerEstimationStep20;
-        mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId =await BindMannerCropTypeId(mannerEstimationStep20,mannerEstimationViewModel.MannerEstimationStep9.CropTypeId.Value);
+        mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = await BindMannerCropTypeId(mannerEstimationStep20, mannerEstimationViewModel.MannerEstimationStep9.CropTypeId.Value);
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep20();
     }
-    private async Task<int?> BindMannerCropTypeId(MannerEstimationStep20ViewModel model,int cropTypeId)
+    private async Task<int?> BindMannerCropTypeId(MannerEstimationStep20ViewModel model, int cropTypeId)
     {
         (CropTypeLinkingResponse cropTypeLinkingResponse, _) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropTypeId);
         if (IsCropCereal(cropTypeId))
@@ -512,7 +513,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     }
     private static int GetWinterCerealCategory(DateTime sowingDate, CropTypeLinkingResponse cropTypeLinkingResponse)
     {
-        DateTime cutoff = new DateTime(sowingDate.Year, 9, 15,0,0,0, DateTimeKind.Unspecified);
+        DateTime cutoff = new DateTime(sowingDate.Year, 9, 15, 0, 0, 0, DateTimeKind.Unspecified);
 
         return sowingDate.Date <= cutoff
             ? cropTypeLinkingResponse.MannerCropTypeID
@@ -539,17 +540,94 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
             cropTypeId == (int)NMP.Commons.Enums.CropTypes.ForageWinterTriticale ||
             cropTypeId == (int)NMP.Commons.Enums.CropTypes.WholecropWinterOats;
     }
-    public MannerEstimationStep21ViewModel GetMannerEstimationStep21()
+    public MannerEstimationStep23ViewModel GetMannerEstimationStep23()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep21.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
-        return mannerEstimationViewModel.MannerEstimationStep21;
+        mannerEstimationViewModel.MannerEstimationStep23.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+        mannerEstimationViewModel.MannerEstimationStep23.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
+        mannerEstimationViewModel.MannerEstimationStep23.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep23.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
+        mannerEstimationViewModel.MannerEstimationStep23.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+
+        return mannerEstimationViewModel.MannerEstimationStep23;
     }
-    public async Task<MannerEstimationStep21ViewModel> SetMannerEstimationStep21(MannerEstimationStep21ViewModel mannerEstimationStep21)
+    public async Task<MannerEstimationStep23ViewModel> SetMannerEstimationStep23(MannerEstimationStep23ViewModel mannerEstimationStep23)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep21 = mannerEstimationStep21;
+        mannerEstimationViewModel.MannerEstimationStep23 = mannerEstimationStep23;
         SetMannerEstimationToSession(mannerEstimationViewModel);
-        return GetMannerEstimationStep21();
+        return GetMannerEstimationStep23();
+    }
+    public async Task<MannerEstimationStep24ViewModel> GetMannerEstimationStep24()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep24.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+
+        (mannerEstimationViewModel.MannerEstimationStep24.ManureType, _) =await FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
+        mannerEstimationViewModel.MannerEstimationStep24.ApplicationMethodCount = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodCount;
+        return mannerEstimationViewModel.MannerEstimationStep24;
+    }
+    public async Task<MannerEstimationStep24ViewModel> SetMannerEstimationStep24(MannerEstimationStep24ViewModel mannerEstimationStep24)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep24 = mannerEstimationStep24;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return await GetMannerEstimationStep24();
+    }
+
+    public ManureType? GetAndApplyManureType(int manureTypeId, List<ManureType> manureTypeList)
+    {
+        ManureType? manureType = manureTypeList
+            .FirstOrDefault(x => x.Id == manureTypeId);
+
+        return manureType;
+    }
+
+    public async Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep25.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+        (List<ManureType> manureTypeList, _) = await FetchManureTypeList(mannerEstimationViewModel.MannerEstimationStep2.CountryID, mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId.Value);
+        ManureType? manureType = GetAndApplyManureType(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value, manureTypeList);
+        if (manureType != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep25.MgO = manureType.MgO;
+            mannerEstimationViewModel.MannerEstimationStep25.N = manureType.TotalN;
+            mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent = manureType.DryMatter;
+            mannerEstimationViewModel.MannerEstimationStep25.P2O5 = manureType.P2O5;
+            mannerEstimationViewModel.MannerEstimationStep25.SO3 = manureType.SO3;
+            mannerEstimationViewModel.MannerEstimationStep25.K2O = manureType.K2O;
+            mannerEstimationViewModel.MannerEstimationStep25.NH4N = manureType.NH4N;
+            mannerEstimationViewModel.MannerEstimationStep25.NO3N = manureType.NO3N;
+        }
+        return mannerEstimationViewModel.MannerEstimationStep25;
+    }
+    public async Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep25 = mannerEstimationStep25;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return await GetMannerEstimationStep25();
+    }
+    public async Task<MannerEstimationStep26ViewModel> GetMannerEstimationStep26()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep26.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+        mannerEstimationViewModel.MannerEstimationStep26.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
+        (List<ManureType> manureTypeList, _) = await FetchManureTypeList(mannerEstimationViewModel.MannerEstimationStep2.CountryID, mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId.Value);
+        ManureType? manureType = GetAndApplyManureType(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value, manureTypeList);
+        if (manureType != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+        }
+        return mannerEstimationViewModel.MannerEstimationStep26;
+    }
+    public async Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep26 = mannerEstimationStep26;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return await GetMannerEstimationStep26();
     }
 }

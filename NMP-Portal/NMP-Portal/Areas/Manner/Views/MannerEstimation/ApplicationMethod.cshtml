@@ -1,5 +1,5 @@
 ﻿@using NMP.Commons.Resources
-@model NMP.Commons.ViewModels.MannerEstimationStep21ViewModel
+@model NMP.Commons.ViewModels.MannerEstimationStep23ViewModel
 @{
     string title = Resource.lblMannerEstimate;
     string heading = string.Format(Resource.lblHowAreYouApplyingTheManureType, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName);
@@ -31,18 +31,18 @@
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption                        
                     </govuk-radios-hint>
-                    @* @if (ViewBag.ApplicationMethodList != null && ViewBag.ApplicationMethodList.Count > 0)
+                    @if (ViewBag.ApplicationMethodList != null && ViewBag.ApplicationMethodList.Count > 0)
                     {
                         @foreach (var applicationMethod in ViewBag.ApplicationMethodList)
                         {
                             <govuk-radios-item value="@applicationMethod.ID">@applicationMethod.Name</govuk-radios-item>
                         }
-                    } *@
+                    }
                 </govuk-radios-fieldset>
             </govuk-radios>
-           @*  <govuk-button type="submit" class="margin-bottom-forty">
+            <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
 
             <p class="govuk-body cancel-link">
                 <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
