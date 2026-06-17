@@ -1449,18 +1449,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
         private void ReplaceNumericError(string key, string validationLabel, string displayLabel)
         {
-            if (!ModelState.ContainsKey(key) || ModelState[key].Errors.Count == 0)
+            if (ModelState.ContainsKey(key))
             {
-                return;
+                var errorMessage = ModelState[key].Errors[0].ErrorMessage;
+                string expectedMessage = string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, validationLabel);
+                if (string.Equals(errorMessage, expectedMessage))
+                {
+                    ModelState[key].Errors.Clear();
+                    ModelState[key].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, displayLabel));
+                }
             }
-            var errorMessage = ModelState[key].Errors[0].ErrorMessage;
-            string expectedMessage = string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, validationLabel);
-            if (!string.Equals(errorMessage, expectedMessage))
-            {
-                return;
-            }
-            ModelState[key].Errors.Clear();
-            ModelState[key].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, displayLabel));
         }
         private void ValidateNutrientValues(MannerEstimationStep25ViewModel model)
         {
@@ -1474,14 +1472,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             ValidateDryMatter(model);
-
-            if (model.N != null && (model.N < 0 || model.N > 297))
-            {
-                ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
-            }
+            MinMaxValidationForDryMatterAndTotalN(model.N, "N", Resource.lblTotalNitrogenN.ToLower(), 0, 297);
             ValidateNH4NUricAcidNO3NAndP2O5(model);
 
-            ValidateK2OMgOAndSO3(model);
         }
 
         private void ValidateDryMatter(MannerEstimationStep25ViewModel model)
@@ -1491,21 +1484,24 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
                     model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry)
                 {
-                    MinMaxValidation(model, 0, 25);
+                    MinMaxValidationForDryMatterAndTotalN(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter.ToLower(), 0, 25);
                 }
                 else
                 {
-                    MinMaxValidation(model, 0, 99);
+                    MinMaxValidationForDryMatterAndTotalN(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter.ToLower(), 0, 99);
                 }
             }
 
         }
 
-        private void MinMaxValidation(MannerEstimationStep25ViewModel model, int minValue, int maxValue)
+        private void MinMaxValidationForDryMatterAndTotalN(decimal? value,
+    string fieldName,
+    string displayName, decimal minValue,
+    decimal maxValue)
         {
-            if (model.DryMatterPercent < minValue || model.DryMatterPercent > maxValue)
+            if (value < minValue || value > maxValue)
             {
-                ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter.ToLower(), maxValue));
+                ModelState.AddModelError(fieldName, string.Format(Resource.MsgMinMaxValidation, displayName, maxValue));
             }
         }
 
@@ -1515,6 +1511,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateMaxValue(model.UricAcid, "UricAcid", Resource.lblUricAcid, 99);
             ValidateMaxValue(model.NO3N, "NO3N", Resource.lblNitrate, 99);
             ValidateMaxValue(model.P2O5, "P2O5", Resource.lblPhosphateP2O5, 99);
+            ValidateMaxValue(model.K2O, "K2O", Resource.lblPotashK2O, 99);
+            ValidateMaxValue(model.MgO, "MgO", Resource.lblMagnesiumMgO, 99);
+            ValidateMaxValue(model.SO3, "SO3", Resource.lblSulphurSO3, 99);
         }
         private void ValidateMaxValue(
     decimal? value,
@@ -1527,23 +1526,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError(
                     fieldName,
                     string.Format(Resource.MsgMinMaxValidation, displayName, max));
-            }
-        }
-
-        private void ValidateK2OMgOAndSO3(MannerEstimationStep25ViewModel model)
-        {
-            if (model.K2O != null && (model.K2O < 0 || model.K2O > 99))
-            {
-                ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 99));
-            }
-            if (model.MgO != null && (model.MgO < 0 || model.MgO > 99))
-            {
-                ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblMagnesiumMgO, 99));
-            }
-
-            if (model.SO3 != null && (model.SO3 < 0 || model.SO3 > 99))
-            {
-                ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 99));
             }
         }
         [HttpGet]
