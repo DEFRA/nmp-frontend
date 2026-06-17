@@ -1491,42 +1491,42 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
                     model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry)
                 {
-                    if (model.DryMatterPercent < 0 || model.DryMatterPercent > 25)
-                    {
-                        ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter.ToLower(), 25));
-                    }
+                    MinMaxValidation(model, 0, 25);
                 }
                 else
                 {
-                    if (model.DryMatterPercent < 0 || model.DryMatterPercent > 99)
-                    {
-                        ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter, 99));
-                    }
+                    MinMaxValidation(model, 0, 99);
                 }
             }
 
         }
 
+        private void MinMaxValidation(MannerEstimationStep25ViewModel model, int minValue, int maxValue)
+        {
+            if (model.DryMatterPercent < minValue || model.DryMatterPercent > maxValue)
+            {
+                ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter.ToLower(), maxValue));
+            }
+        }
+
         private void ValidateNH4NUricAcidNO3NAndP2O5(MannerEstimationStep25ViewModel model)
         {
-            if (model.NH4N != null && (model.NH4N < 0 || model.NH4N > 99))
+            ValidateMaxValue(model.NH4N, "NH4N", Resource.lblAmmonium, 99);
+            ValidateMaxValue(model.UricAcid, "UricAcid", Resource.lblUricAcid, 99);
+            ValidateMaxValue(model.NO3N, "NO3N", Resource.lblNitrate, 99);
+            ValidateMaxValue(model.P2O5, "P2O5", Resource.lblPhosphateP2O5, 99);
+        }
+        private void ValidateMaxValue(
+    decimal? value,
+    string fieldName,
+    string displayName,
+    decimal max)
+        {
+            if (value.HasValue && (value.Value < 0 || value.Value > max))
             {
-                ModelState.AddModelError("NH4N", string.Format(Resource.MsgMinMaxValidation, Resource.lblAmmonium, 99));
-            }
-
-            if (model.UricAcid != null && (model.UricAcid < 0 || model.UricAcid > 99))
-            {
-                ModelState.AddModelError("UricAcid", string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
-            }
-
-            if (model.NO3N != null && (model.NO3N < 0 || model.NO3N > 99))
-            {
-                ModelState.AddModelError("NO3N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrate, 99));
-            }
-
-            if (model.P2O5 != null && (model.P2O5 < 0 || model.P2O5 > 99))
-            {
-                ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 99));
+                ModelState.AddModelError(
+                    fieldName,
+                    string.Format(Resource.MsgMinMaxValidation, displayName, max));
             }
         }
 
