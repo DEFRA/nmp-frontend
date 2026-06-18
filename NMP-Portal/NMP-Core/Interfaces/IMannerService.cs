@@ -26,4 +26,5 @@ public interface IMannerService
     Task<(List<CommonResponse>?, Error?)> FetchTopsoilList();
     Task<(List<CommonResponse>?, Error?)> FetchSubsoilList();
     Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList();
+    Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
 }

@@ -40,6 +40,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _applicationRateMethodAction = "ApplicationRateMethod";
         private const string _incorporationMethodAction = "IncorporationMethod";
         private const string _applicationRateKey = "ApplicationRate";
+        private const string _farmNameKey = "FarmName";
 
         public IActionResult Index()
         {
@@ -60,7 +61,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View();
             }
 
-            return RedirectToAction("CopyExistingFarmAndFieldDetails");
+            return RedirectToAction("Name");
         }
 
         public IActionResult MannerEstimationCancel()
@@ -102,7 +103,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (string.IsNullOrWhiteSpace(model.FarmName))
             {
-                ModelState.AddModelError("FarmName", Resource.MsgEnterTheFarmName);
+                ModelState.AddModelError(_farmNameKey, Resource.MsgEnterTheFarmName);
             }
             List<SelectListItem> farmsWithFields = await BindAllFarmList();
             if (farmsWithFields.Count > 0)
@@ -819,7 +820,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("FarmName");
+                    return RedirectToAction(_farmNameKey);
                 }
 
             }
@@ -857,7 +858,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
                 model = _mannerLogic.SetMannerEstimationStep14(model);
-                string action = "FarmName";
+                string action = _farmNameKey;
                 if (model.IsCopyExistingFarmAndFieldDetails.HasValue && model.IsCopyExistingFarmAndFieldDetails.Value)
                 {
                     action = "FarmToCopy";
@@ -1262,7 +1263,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 model = await ValidateSowingDatePost(model);
-                ValidateCropSpecificRules(model);
+                if (model.SowingDate != null)
+                { ValidateCropSpecificRules(model); }
                 model = await _mannerLogic.SetMannerEstimationStep20(model);
                 if (!ModelState.IsValid)
                 {
@@ -1440,7 +1442,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction("ManualNutrientValues");
                 }
-                return RedirectToAction("ApplicationRateMethod");
+                return RedirectToAction(_applicationRateMethodAction);
             }
             catch (HttpRequestException hre)
             {
@@ -1573,7 +1575,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 await _mannerLogic.SetMannerEstimationStep25(model);
 
 
-                return RedirectToAction("ApplicationRateMethod");
+                return RedirectToAction(_applicationRateMethodAction);
             }
             catch (HttpRequestException hre)
             {
@@ -1803,7 +1805,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = _mannerLogic.SetMannerEstimationStep21(model);
                 if (!model.IsCopyEstimate.Value)
                 {
-                    return RedirectToAction("CopyExistingFarmAndFieldDetails");
+                    return RedirectToAction("Name");
                 }
 
                 return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CopyFromEstimates");
@@ -1874,7 +1876,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 //call copy api to copy the selected estimate to current estimate
 
 
-                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("Name");
             }
             catch (HttpRequestException hre)
             {
@@ -1915,7 +1917,249 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             ViewBag.MannerEstimations = mannerEstimations.OrderBy(x => x.Name);
         }
+        private async Task<(List<IncorporationMethodResponse>, Error?)> BindViewBegForIncorporationMethod(MannerEstimationStep29ViewModel model)
+        {
+            string applicableFor = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Resource.lblG : Resource.lblA;
+            if(model.ApplicationMethodId==(int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm||
+                model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm)
+            {
+                applicableFor = Resource.lblNull;
+            }
+            (List<IncorporationMethodResponse> incorporationMethods, Error? error) = await _mannerLogic.FetchIncorporationMethodsByApplicationId(model.ApplicationMethodId.Value, applicableFor);
+            if (incorporationMethods != null)
+            {
+                ViewBag.IncorporationMethod = incorporationMethods.OrderBy(i => i.SortOrder).ToList();
+            }
+            return (incorporationMethods, error);
+        }
+        [HttpGet]
+        public async Task<IActionResult> IncorporationMethod()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} IncorporationMethod() action called");
 
+            MannerEstimationStep29ViewModel model = _mannerLogic.GetMannerEstimationStep29();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IncorporationMethod() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            _mannerLogic.SetMannerEstimationStep29(model);
+            (List<IncorporationMethodResponse> incorporationMethods, Error? error) = await BindViewBegForIncorporationMethod(model);
+            if (error != null)
+            {
+                TempData["ApplicationRateMethodError"] = error.Message;
+                return RedirectToAction(_applicationRateMethodAction);
+            }
+            if (incorporationMethods.Count == 1)
+            {
+                model.IncorporationMethodId = incorporationMethods[0].ID;
+                _mannerLogic.SetMannerEstimationStep29(model);
+                return RedirectToAction("IncorporationDelay");
+            }
+            _mannerLogic.SetMannerEstimationStep29(model);
 
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> IncorporationMethod(MannerEstimationStep29ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  IncorporationMethod() post action called");
+            try
+            {
+                if (!model.IncorporationMethodId.HasValue)
+                {
+                    ModelState.AddModelError("IncorporationMethodId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep29();
+                    (_, Error? error) = await BindViewBegForIncorporationMethod(model);
+                    if (error != null)
+                    {
+                        TempData["IncorporationMethodError"] = error.Message;
+                    }
+                    return View(model);
+                }
+
+                _mannerLogic.SetMannerEstimationStep29(model);
+
+                return RedirectToAction("IncorporationDelay");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in IncorporationMethod() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in IncorporationMethod() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+        private async Task<(List<IncorprationDelaysResponse>, Error?)> BindViewBegForIncorporationDelay(MannerEstimationStep30ViewModel model)
+        {
+            (ManureType? manureType, Error? error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+            bool isLiquid = manureType?.IsLiquid ?? false;
+            string applicableFor = isLiquid ? Resource.lblL : Resource.lblS;
+            if (manureType?.Id == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
+            {
+                applicableFor = Resource.lblP;
+            }
+
+            if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials ||
+                model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
+            {
+                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+                {
+                    applicableFor = Resource.lblL;
+                }
+                else
+                {
+                    applicableFor = Resource.lblS;
+                }
+            }
+            if(model.IncorporationMethodId==(int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated||
+                model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection||
+                model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection)
+            {
+                applicableFor = Resource.lblNull;
+            }
+            (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _mannerLogic.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethodId ?? 0, applicableFor);
+            if (error == null && incorporationDelaysList.Count > 0)
+            {
+                ViewBag.IncorporationDelaysList = incorporationDelaysList;
+            }
+            return (incorporationDelaysList, error);
+        }
+        [HttpGet]
+        public async Task<IActionResult> IncorporationDelay()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} IncorporationDelay() action called");
+
+            MannerEstimationStep30ViewModel model = _mannerLogic.GetMannerEstimationStep30();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IncorporationDelay() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+            _mannerLogic.SetMannerEstimationStep30(model);
+            (List<IncorprationDelaysResponse> incorporationDelaysList, Error? error) = await BindViewBegForIncorporationDelay(model);
+            if (error != null)
+            {
+                TempData["IncorporationMethodError"] = error.Message;
+                return RedirectToAction("IncorporationMethod");
+            }
+            if (incorporationDelaysList.Count == 1)
+            {
+                model.IncorporationDelayId = incorporationDelaysList[0].ID;
+                _mannerLogic.SetMannerEstimationStep30(model);
+                return RedirectToAction("ConditionsAffectingNutrients");
+            }
+            _mannerLogic.SetMannerEstimationStep30(model);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> IncorporationDelay(MannerEstimationStep30ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  IncorporationDelay() post action called");
+            try
+            {
+                if (!model.IncorporationDelayId.HasValue)
+                {
+                    ModelState.AddModelError("IncorporationDelayId", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    (_, Error? error) = await BindViewBegForIncorporationDelay(model);
+                    if (error != null)
+                    {
+                        TempData["IncorporationDelayError"] = error.Message;
+                    }
+                    model = _mannerLogic.GetMannerEstimationStep30();
+                    return View(model);
+                }
+
+                _mannerLogic.SetMannerEstimationStep30(model);
+
+                return RedirectToAction("ConditionsAffectingNutrients");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in IncorporationDelay() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in IncorporationDelay() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> ConditionsAffectingNutrients()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() action called");
+
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Name()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} Name() action called");
+            MannerEstimationStep31ViewModel model = _mannerLogic.GetMannerEstimationStep31();
+            ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Name(MannerEstimationStep31ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() post action called");
+            ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
+            await ValidationForName(model);
+            model = _mannerLogic.SetMannerEstimationStep31(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+             model = _mannerLogic.GetMannerEstimationStep31();
+
+            string action = _farmNameKey;
+            List<SelectListItem> farmsWithFields = await BindAllFarmList();
+            if(model.IsCopyEstimate.HasValue&&model.IsCopyEstimate.Value)
+            {
+                return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+            }
+            else if (farmsWithFields.Count > 0)
+            {
+                action = "CopyExistingFarmAndFieldDetails";
+            }
+            return RedirectToAction(action);
+        }
+
+        private async Task ValidationForName(MannerEstimationStep31ViewModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.Name))
+            {
+                ModelState.AddModelError("Name", Resource.MsgEnterTheName);
+            }
+
+            Claim? claim = HttpContext.User.FindFirst(_organisationId);
+            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
+            Guid.TryParse(orgId, out Guid organisationId);
+            bool isExist = await _mannerLogic.FetchIsExistMannerEstimationsByOrgIdAndName(organisationId, model.Name);
+            if (isExist)
+            {
+                ModelState.AddModelError("Name", Resource.MsgNameAlreadyExist);
+            }
+        }
     }
 }
