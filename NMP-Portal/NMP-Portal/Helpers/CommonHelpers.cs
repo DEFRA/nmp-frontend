@@ -3,6 +3,7 @@ using NMP.Commons.Enums;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using System.Xml.Linq;
 
 namespace NMP.Portal.Helpers
@@ -199,5 +200,6 @@ namespace NMP.Portal.Helpers
         Resource.MsgDateMustIncludeADayAndMonth
     };
         }
+
     }
 }

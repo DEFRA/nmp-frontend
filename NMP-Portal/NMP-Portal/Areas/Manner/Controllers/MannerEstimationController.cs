@@ -36,6 +36,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _organisationId = "organisationId";
         private const string _sowingDate = "SowingDate";
         private const string _applicationDateKey = "ApplicationDate";
+        private const string _dryMatterPercentKey = "DryMatterPercent";
+        private const string _applicationRateMethodAction = "ApplicationRateMethod";
+        private const string _incorporationMethodAction = "IncorporationMethod";
+        private const string _applicationRateKey = "ApplicationRate";
 
         public IActionResult Index()
         {
@@ -1019,7 +1023,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
                 model = _mannerLogic.SetMannerEstimationStep16(model);
-
+                MannerEstimationStep15ViewModel mannerEstimationStep15ViewModel = _mannerLogic.GetMannerEstimationStep15();
+                if (mannerEstimationStep15ViewModel.FarmId != null && model.FieldId != null)
+                {
+                    await _mannerLogic.CopiedFarmAndFieldData(mannerEstimationStep15ViewModel.FarmId.Value, model.FieldId.Value);
+                }
                 return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CropGroup");
             }
             catch (HttpRequestException hre)
@@ -1248,12 +1256,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model = await ValidateSowingDatePost(model);
                 ValidateCropSpecificRules(model);
+                model = await _mannerLogic.SetMannerEstimationStep20(model);
                 if (!ModelState.IsValid)
                 {
                     model = _mannerLogic.GetMannerEstimationStep20();
                     return View(model);
                 }
-                model = await _mannerLogic.SetMannerEstimationStep20(model);
 
                 return RedirectToAction("ManureGroup");
 
@@ -1344,10 +1352,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (applicationMethodList.Count == 1)
             {
                 model.ApplicationMethodId = applicationMethodList[0].ID;
-                 await _mannerLogic.SetMannerEstimationStep23(model);
+                await _mannerLogic.SetMannerEstimationStep23(model);
                 return RedirectToAction("DefaultNutrientValues");
             }
-             await _mannerLogic.SetMannerEstimationStep23(model);
+            await _mannerLogic.SetMannerEstimationStep23(model);
 
             return View(model);
         }
@@ -1439,6 +1447,87 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
+        private void ReplaceNumericError(string key, string validationLabel, string displayLabel)
+        {
+            if (ModelState.ContainsKey(key))
+            {
+                var errorMessage = ModelState[key].Errors[0].ErrorMessage;
+                string expectedMessage = string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, validationLabel);
+                if (string.Equals(errorMessage, expectedMessage))
+                {
+                    ModelState[key].Errors.Clear();
+                    ModelState[key].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, displayLabel));
+                }
+            }
+        }
+        private void ValidateNutrientValues(MannerEstimationStep25ViewModel model)
+        {
+            if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
+            {
+                decimal totalValue = model.NH4N.Value + model.UricAcid.Value + model.NO3N.Value;
+                if (model.N < totalValue)
+                {
+                    ModelState.AddModelError("N", Resource.lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate);
+                }
+            }
+
+            ValidateDryMatter(model);
+            MinMaxValidationForDryMatterAndTotalN(model.N, "N", Resource.lblTotalNitrogenN.ToLower(), 0, 297);
+            ValidateNH4NUricAcidNO3NAndP2O5(model);
+
+        }
+
+        private void ValidateDryMatter(MannerEstimationStep25ViewModel model)
+        {
+            if (model.DryMatterPercent != null)
+            {
+                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
+                    model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry)
+                {
+                    MinMaxValidationForDryMatterAndTotalN(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter.ToLower(), 0, 25);
+                }
+                else
+                {
+                    MinMaxValidationForDryMatterAndTotalN(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter.ToLower(), 0, 99);
+                }
+            }
+
+        }
+
+        private void MinMaxValidationForDryMatterAndTotalN(decimal? value,
+    string fieldName,
+    string displayName, decimal minValue,
+    decimal maxValue)
+        {
+            if (value < minValue || value > maxValue)
+            {
+                ModelState.AddModelError(fieldName, string.Format(Resource.MsgMinMaxValidation, displayName, maxValue));
+            }
+        }
+
+        private void ValidateNH4NUricAcidNO3NAndP2O5(MannerEstimationStep25ViewModel model)
+        {
+            ValidateMaxValue(model.NH4N, "NH4N", Resource.lblAmmonium, 99);
+            ValidateMaxValue(model.UricAcid, "UricAcid", Resource.lblUricAcid, 99);
+            ValidateMaxValue(model.NO3N, "NO3N", Resource.lblNitrate, 99);
+            ValidateMaxValue(model.P2O5, "P2O5", Resource.lblPhosphateP2O5, 99);
+            ValidateMaxValue(model.K2O, "K2O", Resource.lblPotashK2O, 99);
+            ValidateMaxValue(model.MgO, "MgO", Resource.lblMagnesiumMgO, 99);
+            ValidateMaxValue(model.SO3, "SO3", Resource.lblSulphurSO3, 99);
+        }
+        private void ValidateMaxValue(
+    decimal? value,
+    string fieldName,
+    string displayName,
+    decimal max)
+        {
+            if (value.HasValue && (value.Value < 0 || value.Value > max))
+            {
+                ModelState.AddModelError(
+                    fieldName,
+                    string.Format(Resource.MsgMinMaxValidation, displayName, max));
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> ManualNutrientValues()
         {
@@ -1453,6 +1542,79 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManualNutrientValues(MannerEstimationStep25ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  ManualNutrientValues() post action called");
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    ValidateManualNutrientValues();
+                }
+
+                CheckNutrientValuesIfNull(model);
+                ValidateNutrientValues(model);
+
+                if (!ModelState.IsValid)
+                {
+                    model = await _mannerLogic.GetMannerEstimationStep25();
+                    return View(model);
+                }
+
+                await _mannerLogic.SetMannerEstimationStep25(model);
+
+
+                return RedirectToAction("ApplicationRateMethod");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in ManualNutrientValues() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in ManualNutrientValues() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+
+        private void CheckNutrientValuesIfNull(MannerEstimationStep25ViewModel model)
+        {
+            AddErrorIfNull(model.DryMatterPercent, _dryMatterPercentKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
+
+            AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
+
+            AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
+
+            AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
+
+            AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
+
+            AddErrorIfNull(model.P2O5, "P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
+
+            AddErrorIfNull(model.K2O, "K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
+
+            AddErrorIfNull(model.SO3, "SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
+
+            AddErrorIfNull(model.MgO, "MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
+        }
+
+        private void ValidateManualNutrientValues()
+        {
+            ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
+            ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
+            ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
+            ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
+            ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
+            ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
+            ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
+            ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
+            ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
+        }
+
         [HttpGet]
         public async Task<IActionResult> ApplicationRateMethod()
         {
@@ -1466,6 +1628,140 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApplicationRateMethod(MannerEstimationStep26ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} : ApplicationRateMethod() post action called");
+            try
+            {
+                AddErrorIfNull(model.ApplicationRateMethod, _applicationRateMethodAction, Resource.MsgSelectAnOptionBeforeContinuing);
+
+
+                await _mannerLogic.SetMannerEstimationStep26(model);
+                if (!ModelState.IsValid)
+                {
+                    model = await _mannerLogic.GetMannerEstimationStep26();
+                    return View(_applicationRateMethodAction, model);
+                }
+                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
+                {
+                    return RedirectToAction("ManualApplicationRate");
+                }
+                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+                {
+                    return RedirectToAction("AreaQuantity");
+                }
+                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
+                {
+                    return RedirectToAction(_incorporationMethodAction);
+
+                }
+
+                return RedirectToAction(_incorporationMethodAction);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "MannerEstimation  Controller : Exception in ApplicationRateMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> ManualApplicationRate()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ManualApplicationRate() action called");
+
+            MannerEstimationStep27ViewModel model = await _mannerLogic.GetMannerEstimationStep27();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManualApplicationRate() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManualApplicationRate(MannerEstimationStep27ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} : ManualApplicationRate() post action called");
+            try
+            {
+                AddErrorIfNull(model.ApplicationRate, _applicationRateKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblApplicationRate));
+                if (model.ApplicationRate != null)
+                {
+                    if (model.ApplicationRate < 0)
+                        ModelState.AddModelError(_applicationRateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+
+                    if (model.ApplicationRate > 250)
+                        ModelState.AddModelError(_applicationRateKey, Resource.MsgForApplicationRate);
+                }
+                await _mannerLogic.SetMannerEstimationStep27(model);
+                if (!ModelState.IsValid)
+                {
+                    model = await _mannerLogic.GetMannerEstimationStep27();
+                    return View(model);
+                }
+
+                return RedirectToAction(_incorporationMethodAction);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "MannerEstimation  Controller : Exception in ApplicationRateMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> AreaQuantity()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} AreaQuantity() action called");
+
+            MannerEstimationStep28ViewModel model = await _mannerLogic.GetMannerEstimationStep28();
+            if (model == null)
+            {
+                _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AreaQuantity() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            }
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AreaQuantity(MannerEstimationStep28ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} : AreaQuantity() post action called");
+            try
+            {
+                AddErrorIfNull(model.AreaSpread, "AreaSpread", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblArea));
+                AddErrorIfNull(model.ManureQuantity, "ManureQuantity", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblQuantity));
+
+
+                if (!ModelState.IsValid)
+                {
+                    model = await _mannerLogic.GetMannerEstimationStep28();
+                    return View(model);
+                }
+
+                await _mannerLogic.SetMannerEstimationStep28(model);
+                return RedirectToAction(_incorporationMethodAction);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "MannerEstimation  Controller : Exception in AreaQuantity() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> IncorporationMethod()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} IncorporationMethod() action called");
+
+            return View();
         }
     }
 }
