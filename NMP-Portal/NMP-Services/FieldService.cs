@@ -278,14 +278,13 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
 
     public async Task<bool> IsFieldExistServiceAsync(int farmId, string name, int? fieldId = null)
     {
-        bool isFieldExist = false;
         HttpClient httpClient = await GetNMPAPIClient();
         string url = fieldId == null ? string.Format(ApiurlHelper.IsFieldExistAsyncAPI, farmId, HttpUtility.UrlEncode(name)) : string.Format(ApiurlHelper.IsFieldExistByFieldIdAsyncAPI, farmId, HttpUtility.UrlEncode(name), fieldId);
         var response = await httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        isFieldExist = responseWrapper?.Data?["exists"] ?? false;
+        bool isFieldExist = responseWrapper?.Data?["exists"] ?? false;
 
         return isFieldExist;
     }

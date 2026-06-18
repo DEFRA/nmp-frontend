@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -12790,6 +12790,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reference must be unique from any previous estimations..
+        /// </summary>
+        public static string lblReferenceMustBeUniqueFromAnyPreviousEstimations {
+            get {
+                return ResourceManager.GetString("lblReferenceMustBeUniqueFromAnyPreviousEstimations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you a registered organic producer?.
         /// </summary>
         public static string lblRegisteredOrganicProducer {
@@ -18498,6 +18507,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What would you like to call this estimation reference?.
+        /// </summary>
+        public static string lblWhatWouldYouLikeTocallThisEstimationReference {
+            get {
+                return ResourceManager.GetString("lblWhatWouldYouLikeTocallThisEstimationReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What you will need.
         /// </summary>
         public static string lblWhatYouWillNeed {
@@ -21497,6 +21515,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the name..
+        /// </summary>
+        public static string MsgEnterTheName {
+            get {
+                return ResourceManager.GetString("MsgEnterTheName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the name of the person or organisation you are {0} from.
         /// </summary>
         public static string MsgEnterTheNameOfThePersonOrOrganisationYouAreFrom {
@@ -22294,6 +22321,24 @@ namespace NMP.Commons.Resources {
         public static string MsgMLCMinMaxValidation {
             get {
                 return ResourceManager.GetString("MsgMLCMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This name has already been added. You or someone else may have already added it..
+        /// </summary>
+        public static string MsgNameAlreadyExist {
+            get {
+                return ResourceManager.GetString("MsgNameAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a name that is no more than 250 characters long.
+        /// </summary>
+        public static string MsgNameMinMaxValidation {
+            get {
+                return ResourceManager.GetString("MsgNameMinMaxValidation", resourceCulture);
             }
         }
         

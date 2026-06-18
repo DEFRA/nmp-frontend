@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
+using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -726,6 +727,55 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return error;
+    }
+    public MannerEstimationStep29ViewModel GetMannerEstimationStep29()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep29.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+        mannerEstimationViewModel.MannerEstimationStep29.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
+        mannerEstimationViewModel.MannerEstimationStep29.ApplicationMethodId = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId;
+        mannerEstimationViewModel.MannerEstimationStep29.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        return mannerEstimationViewModel.MannerEstimationStep29;
+    }
+    public MannerEstimationStep29ViewModel SetMannerEstimationStep29(MannerEstimationStep29ViewModel mannerEstimationStep29)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep29 = mannerEstimationStep29;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return  GetMannerEstimationStep29();
+    }
+    public MannerEstimationStep30ViewModel GetMannerEstimationStep30()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep30.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+        mannerEstimationViewModel.MannerEstimationStep30.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
+        
+        return mannerEstimationViewModel.MannerEstimationStep30;
+    }
+    public MannerEstimationStep30ViewModel SetMannerEstimationStep30(MannerEstimationStep30ViewModel mannerEstimationStep30)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep30 = mannerEstimationStep30;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return  GetMannerEstimationStep30();
+    }
+    public async Task<bool> FetchIsExistMannerEstimationsByOrgIdAndName(Guid organisationId, string name)
+    {
+        _logger.LogTrace("ManureLogic : FetchIsExistMannerEstimationsByOrgIdAndName() called");
+        return await _mannerService.FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(organisationId, name);
+    }
+    public MannerEstimationStep31ViewModel GetMannerEstimationStep31()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep31.IsCopyEstimate = mannerEstimationViewModel.MannerEstimationStep21.IsCopyEstimate;
+        return mannerEstimationViewModel.MannerEstimationStep31;
+    }
+    public MannerEstimationStep31ViewModel SetMannerEstimationStep31(MannerEstimationStep31ViewModel mannerEstimationStep31)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep31= mannerEstimationStep31;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep31();
     }
 
 }

@@ -8,22 +8,10 @@
     ViewData["Title"] = $"{Resource.CopyExistingFarmAndFieldDetailsContent1} {Resource.lblHyphen} {title}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-    var backAction = "";
-    if (Model.IsCheckAnswer)
-    {
-        backAction = "CheckAnswer";
-    }
-    else if(Model.IsCopyEstimate==false)
-    {
-        backAction = "CopyEstimate";
-    }
-    else
-    {
-        backAction = "MannerHubPage";
-    }
+    
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="Name" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">

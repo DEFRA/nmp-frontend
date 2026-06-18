@@ -8009,4 +8009,19 @@ livestock manure.</value>
   <data name="lblEstimationForFarm" xml:space="preserve">
     <value>{0} for {1}</value>
   </data>
+  <data name="MsgEnterTheName" xml:space="preserve">
+    <value>Enter the name.</value>
+  </data>
+  <data name="MsgNameMinMaxValidation" xml:space="preserve">
+    <value>Enter a name that is no more than 250 characters long</value>
+  </data>
+  <data name="MsgNameAlreadyExist" xml:space="preserve">
+    <value>This name has already been added. You or someone else may have already added it.</value>
+  </data>
+  <data name="lblWhatWouldYouLikeTocallThisEstimationReference" xml:space="preserve">
+    <value>What would you like to call this estimation reference?</value>
+  </data>
+  <data name="lblReferenceMustBeUniqueFromAnyPreviousEstimations" xml:space="preserve">
+    <value>Reference must be unique from any previous estimations.</value>
+  </data>
 </root>

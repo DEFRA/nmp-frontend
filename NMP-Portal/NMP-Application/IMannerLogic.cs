@@ -95,4 +95,12 @@ public interface IMannerLogic
     MannerEstimationStep22ViewModel GetMannerEstimationStep22();
     MannerEstimationStep22ViewModel SetMannerEstimationStep22(MannerEstimationStep22ViewModel mannerEstimationStep22);
     Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList();
+    MannerEstimationStep29ViewModel GetMannerEstimationStep29();
+    MannerEstimationStep29ViewModel SetMannerEstimationStep29(MannerEstimationStep29ViewModel mannerEstimationStep29);
+
+    MannerEstimationStep30ViewModel GetMannerEstimationStep30();
+    MannerEstimationStep30ViewModel SetMannerEstimationStep30(MannerEstimationStep30ViewModel mannerEstimationStep30);
+    Task<bool> FetchIsExistMannerEstimationsByOrgIdAndName(Guid organisationId, string name);
+    MannerEstimationStep31ViewModel GetMannerEstimationStep31();
+    MannerEstimationStep31ViewModel SetMannerEstimationStep31(MannerEstimationStep31ViewModel mannerEstimationStep31);
 }
