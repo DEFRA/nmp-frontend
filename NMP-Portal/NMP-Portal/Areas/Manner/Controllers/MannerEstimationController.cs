@@ -45,12 +45,19 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             return View();
         }
-        public IActionResult MannerHubPage(string? q)
+        public async Task<IActionResult> MannerHubPage(string? q)
         {
             RemoveMannerEstimationSession();
             if (!string.IsNullOrWhiteSpace(q))
             {
                 return RedirectToAction("Index", "Dashboard", new { area = "" });
+            }
+            var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList();
+
+            if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
+            {
+                ViewBag.MannerEstimations = mannerEstimations;
+                return View();
             }
 
             return RedirectToAction("CopyExistingFarmAndFieldDetails");
@@ -1729,39 +1736,186 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AreaQuantity(MannerEstimationStep28ViewModel model)
+
+        [HttpGet]
+        public async Task<IActionResult> CopyEstimate()
         {
-            _logger.LogTrace($"{_mannerEstimationControllerForLog} : AreaQuantity() post action called");
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyEstimate() action called");
+
+
+            MannerEstimationStep21ViewModel model = _mannerLogic.GetMannerEstimationStep21();
             try
             {
-                AddErrorIfNull(model.AreaSpread, "AreaSpread", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblArea));
-                AddErrorIfNull(model.ManureQuantity, "ManureQuantity", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblQuantity));
-
-
-                if (!ModelState.IsValid)
+                if (model == null)
                 {
-                    model = await _mannerLogic.GetMannerEstimationStep28();
-                    return View(model);
+                    _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyEstimate() action");
+                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                }
+                bool isEstimateExist = false;
+                var (estimations, error) = await _mannerLogic.FetchMannerEstimationsList();
+
+                if (string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    isEstimateExist = estimations.Count > 0;
                 }
 
-                await _mannerLogic.SetMannerEstimationStep28(model);
-                return RedirectToAction(_incorporationMethodAction);
+                if (isEstimateExist)
+                {
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("CopyExistingFarmAndFieldDetails");
+                }
+
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in CopyEstimate() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MannerEstimation  Controller : Exception in AreaQuantity() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                ViewBag.Error = ex.Message;
-                return View(model);
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in CopyEstimate() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> IncorporationMethod()
-        {
-            _logger.LogTrace($"{_mannerEstimationControllerForLog} IncorporationMethod() action called");
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CopyEstimate(MannerEstimationStep21ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyEstimate() post action called");
+
+            try
+            {
+                if (model.IsCopyEstimate == null)
+                {
+                    ModelState.AddModelError("IsCopyEstimate", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep21();
+                    return View("CopyEstimate", model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep21(model);
+                if (!model.IsCopyEstimate.Value)
+                {
+                    return RedirectToAction("CopyExistingFarmAndFieldDetails");
+                }
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("CopyFromEstimates");
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in CopyEstimate() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in CopyEstimate() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CopyFromEstimates()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyFromEstimates() action called");
+
+
+            MannerEstimationStep22ViewModel model = _mannerLogic.GetMannerEstimationStep22();
+            try
+            {
+                if (model == null)
+                {
+                    _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyFromEstimates() action");
+                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                }
+                await LoadMannerEstimations();
+                return View(model);
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in CopyFromEstimates() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in CopyFromEstimates() action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CopyFromEstimates(MannerEstimationStep22ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyFromEstimates() post action called");
+
+            try
+            {
+                if (model.MannerEstimationId == null)
+                {
+                    ModelState.AddModelError("MannerEstimationId", Resource.MsgSelectAnEstimateToContinue);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerLogic.GetMannerEstimationStep22();
+                    await LoadMannerEstimations();
+                    return View("CopyFromEstimates", model);
+                }
+
+                model = _mannerLogic.SetMannerEstimationStep22(model);
+                //call copy api to copy the selected estimate to current estimate
+
+
+                return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in CopyFromEstimates() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in CopyFromEstimates() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+        }
+
+        [HttpGet]
+        public IActionResult MannerEstimationResult(string? q)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  MannerEstimationResult() action called");
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                ViewBag.Success = _mannerEstimationProtector.Unprotect(q);
+            }
             return View();
         }
+        private async Task LoadMannerEstimations()
+        {
+            var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList();
+
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                return;
+            }
+
+            foreach (var estimation in mannerEstimations)
+            {
+                estimation.FarmName = string.Format(Resource.lblEstimationForFarm, estimation.Name, estimation.FarmName);
+            }
+
+            ViewBag.MannerEstimations = mannerEstimations.OrderBy(x => x.Name);
+        }
+
+
     }
 }

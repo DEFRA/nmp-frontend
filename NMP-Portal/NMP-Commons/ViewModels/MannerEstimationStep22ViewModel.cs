@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep14ViewModel
+    public class MannerEstimationStep22ViewModel
     {
-        public bool? IsCopyExistingFarmAndFieldDetails { get; set; }
+        public int? MannerEstimationId { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
-        public bool? IsCopyEstimate { get; set; }
     }
 }
