@@ -1557,17 +1557,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private static bool IsDateFormatError(string error)
     {
-        string[] patterns =
-        {
-        Resource.MsgDateMustBeARealDate,
-        Resource.MsgDateMustIncludeAMonth,
-        Resource.MsgDateMustIncludeAMonthAndYear,
-        Resource.MsgDateMustIncludeADayAndYear,
-        Resource.MsgDateMustIncludeAYear,
-        Resource.MsgDateMustIncludeADay,
-        Resource.MsgDateMustIncludeADayAndMonth
-    };
-
+        string[] patterns = CommonHelpers.DatePattern();
         return patterns.Any(p => error.Equals(string.Format(p, _sowingDate)));
     }
     private void ValidateRequiredDate(PlanViewModel model)
@@ -5383,7 +5373,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<(PlanViewModel, Error?)> BindSwardType(PlanViewModel model)
     {
         Error? error = null;
-        (List<SwardTypeResponse> swardTypeResponses, error) = await _cropLogic.FetchSwardTypes();
+        (List<SwardTypeResponse> swardTypeResponses, error) = await _cropLogic.FetchSwardTypesByCountry(model.FarmRB209CountryID.Value);
         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
             return (model, error);
@@ -5563,7 +5553,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<PlanViewModel> BindDefoliationSequenceForCurrentSward(PlanViewModel model)
     {
-        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward);
+        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
         if (defoliationSequenceResponses != null && defoliationSequenceResponses.Count > 0)
         {
             model.DefoliationSequenceId = defoliationSequenceResponses[0].DefoliationSequenceId;
@@ -5671,7 +5661,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropLogic.FetchSwardTypes();
+            (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropLogic.FetchSwardTypesByCountry(model.FarmRB209CountryID.Value);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_sowingDateError] = error.Message;
@@ -5703,7 +5693,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!ModelState.IsValid)
         {
-            (List<SwardTypeResponse> swardTypeResponses, _) = await _cropLogic.FetchSwardTypes();
+            (List<SwardTypeResponse> swardTypeResponses, _) = await _cropLogic.FetchSwardTypesByCountry(model.FarmRB209CountryID.Value);
             ViewBag.SwardType = swardTypeResponses;
             return View(model);
         }
@@ -5917,7 +5907,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
-            (defoliationSequenceResponses, Error error) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward);
+            (defoliationSequenceResponses, Error error) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_defoliationError] = error.Message;
@@ -5959,7 +5949,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             if (!ModelState.IsValid)
             {
-                (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward);
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
                 ViewBag.DefoliationSequenceResponses = defoliationSequenceResponses;
                 return View(model);
             }

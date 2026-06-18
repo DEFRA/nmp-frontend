@@ -16,7 +16,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="AverageAnnualRainfallManual" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-input asp-for=@Model.AverageAnnualRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
+            <govuk-input for=@Model.AverageAnnualRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
                     @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblmm)</span>
@@ -24,7 +24,7 @@
                 <govuk-input-hint>@Resource.lblRainfallValueHint</govuk-input-hint>
                 <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
             </govuk-input>
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>

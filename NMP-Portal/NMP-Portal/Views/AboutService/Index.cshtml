@@ -1,50 +1,48 @@
 ﻿@using NMP.Commons.Resources;
 @model NMP.Commons.ViewModels.AboutServiceViewModel;
 @{
-    ViewData["Title"] = Resource.lblAboutTheNutrientManagementPlanningToolGB;
+    ViewData["Title"] = Resource.lblNutrientManagementPlansAndNitrateVulnerableZoneReports;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="Index" asp-controller="Home">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="Index" asp-controller="Dashboard">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">
-            @Resource.lblAboutTheNutrientManagementPlanningToolGB
+            @Resource.lblNutrientManagementPlansAndNitrateVulnerableZoneReports
         </h1>
-        <h2 class="govuk-heading-m">@Resource.lblAboutTheNutrientManagementPlanningToolGBLine1</h2>
-        <p class="govuk-body">@Resource.lblAbout_this_service_line1</p>
-        <p class="govuk-body">@Resource.lblAboutTheNutrientManagementPlanningToolGBLine2</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>@Resource.lblSoilAnalysisData</li>
-            <li>@Resource.lblAboutTheNutrientManagementPlanningToolGBLine3</li>
-            <li>@Resource.lblCropInformation</li>
-            <li>@Resource.lblAboutTheNutrientManagementPlanningToolGBLine4</li>
-        </ul>
-        <p class="govuk-body">@Resource.lblAboutTheNutrientManagementPlanningToolGBLine5</p>       
-        <ul class="govuk-list govuk-list--bullet">
-            <li>@Resource.lblLivestockInformation</li>
-            <li>@Resource.lblAboutTheNutrientManagementPlanningToolGBLine6</li>
-        </ul>
+        <h2 class="govuk-heading-m">@Resource.lblWhatYouWillNeed</h2>
 
-        <h2 class="govuk-heading-m">@Resource.lblRegulations</h2>
-        <p class="govuk-body">@Resource.lblRegulations_line1</p>
-        <p class="govuk-body">@Resource.lblRegulations_line2</p>
-        <ul class ="govuk-list govuk-list--bullet">
-            <li>@Html.Raw(Resource.lblEnglandNVZWaterFarmingRules)</li>
-            <li>@Html.Raw(Resource.lblWalesWaterResourceRegulations)</li>
-            <li>@Html.Raw(Resource.lblEnglandNVZActionProgramme)</li>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@Resource.lblFarmNameAddressAndPostcode</li>
+            <li>@Resource.lblTheSizesOfYourFieldsInHectares</li>
+            <li>@Resource.lblCropDetailsIncludingYieldsAndSowingDatesIfYouHaveThem</li>
+            <li>@Resource.lblManureApplicationDetailsIncludingApplicationRate</li>
+            <li>@Resource.lblYourMostRecentSoilAnalysisData</li>
+            <li>@Resource.lblLastYearCropTypeForEachField</li>
+            <li>@Resource.lblDetailsOfHowGrassFieldsHaveBeenManaged</li>
         </ul>
-        <h2 class="govuk-heading-m">@Resource.lblSoilAnalysis</h2>
-        <p class="govuk-body">@Resource.lblSoil_Analysis_line1</p>        
-        <p class="govuk-body">@Resource.lblSoil_Analysis_line3</p>
-        <p class="govuk-body">@Resource.lblSoil_Analysis_line4</p>
-        <p class="govuk-body">@Resource.lblSoil_Analysis_line5</p>
+        <p class="govuk-body">
+            @Resource.lblSomeNVZReportsAlsoRequire
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@Resource.lblLivestocketDails</li>
+            <li>@Resource.lblManureStorageDetails</li>
+        </ul>
 
         <h2 class="govuk-heading-m">@Resource.lblCrossBorderHoldings</h2>
+        <p class="govuk-body">@Resource.lblACrossBorderHoldingHasLandInMore</p>
         <p class="govuk-body">@Resource.lblCrossBorderHoldingsContent1</p>
         <p class="govuk-body">@Resource.lblCrossBorderHoldingsContent2</p>
         <p class="govuk-body">@Resource.lblCrossBorderHoldingsContent3</p>
+
+        <h2 class="govuk-heading-m">
+            @Resource.lblNitrateVulnerableZoneWarnings
+        </h2>
+        <p class="govuk-body">
+            @Resource.lblTheToolWillWarnYouOfPossibleBreachesOfTheNVZ
+        </p>
 
         <h2 class="govuk-heading-m">@Resource.lblSaving_your_data</h2>
         <p class="govuk-body">@Resource.lblSaving_your_data_line1</p>

@@ -23,19 +23,20 @@ namespace NMP.Portal.Controllers
 {
     [Authorize]
     public class FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
-        IFarmLogic farmLogic) : Controller
+        IFarmLogic farmLogic, IAboutServiceLogic aboutServiceLogic) : Controller
     {
         private readonly ILogger<FarmController> _logger = logger;
         private readonly IDataProtector _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
         private readonly IAddressLookupLogic _addressLookupLogic = addressLookupLogic;
         private readonly IFarmLogic _farmLogic = farmLogic;
+        private readonly IAboutServiceLogic _aboutServiceLogic = aboutServiceLogic;
         private const string _farmListActionName = "FarmList";
         private const string _checkAnswerActionName = "CheckAnswer";
         private const string _rainfallActionName = "Rainfall";
         private const string _farmDataBeforeUpdateSessionKey = "FarmDataBeforeUpdate";
         private const string _organisationId = "organisationId";
         private const string _elevationActionName = "Elevation";
-        private const string _farmDataKey = "FarmData"; 
+        private const string _farmDataKey = "FarmData";
         private const string _addressListKey = "AddressList";
 
         public IActionResult Index()
@@ -57,7 +58,7 @@ namespace NMP.Portal.Controllers
                 Claim? claim = HttpContext.User.FindFirst(_organisationId);
                 string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
                 Guid.TryParse(orgId, out Guid organisationId);
-                (List<Farm> farms, error) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
+                (List<FarmListSummary> farms, error) = await _farmLogic.FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(organisationId);
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     ViewBag.Error = error.Message;
@@ -65,8 +66,15 @@ namespace NMP.Portal.Controllers
                 }
                 if (farms != null && farms.Count > 0)
                 {
-                    model.Farms.AddRange(farms);
-                    model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
+                    model.Farms.AddRange(
+                        farms.Select(f => new Farm
+                        {
+                            ID = f.ID,
+                            Name = f.Name,
+                            ModifiedOn = f.ModifiedOn,
+                            EncryptedFarmId = _dataProtector.Protect(f.ID.ToString())
+                        })
+                    );
                 }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
@@ -78,6 +86,7 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = "false";
                 }
                 ViewBag.IsAnyRecordInMannerEstimate = false;
+                ViewBag.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService();
             }
             catch (HttpRequestException hre)
             {
@@ -827,22 +836,13 @@ namespace NMP.Portal.Controllers
             string key = "Rainfall";
             if ((!ModelState.IsValid) && ModelState.ContainsKey(key))
             {
-
                 var RainfallError = ModelState[key]?.Errors.Count > 0 ?
                                 ModelState[key]?.Errors[0].ErrorMessage.ToString() : null;
 
                 if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblRainfall)))
                 {
                     ModelState[key]?.Errors.Clear();
-                    decimal decimalValue;
-                    if (decimal.TryParse(ModelState[key]?.RawValue?.ToString(), out decimalValue))
-                    {
-                        ModelState[key]?.Errors.Add(RainfallError);
-                    }
-                    else
-                    {
-                        ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
-                    }
+                    ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
                 }
             }
 
@@ -851,11 +851,13 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
             }
-
-            if (farm.Rainfall != null && farm.Rainfall < 0)
+            else if (farm.Rainfall < 1 || farm.Rainfall > 3000)
             {
-                ModelState.AddModelError(key, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+
+                ModelState.AddModelError(key, Resource.MsgEnterRainfallBetween1And3000);
+
             }
+
         }
 
         [HttpGet]

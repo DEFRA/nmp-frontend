@@ -163,8 +163,8 @@ internal static class ApiurlHelper
     public const string FetchMannerMoistureTypeByIdAsyncAPI = "vendors/manner/moisture-types/{0}";
     public const string FetchMannerManureGroupListAsyncAPI = "vendors/manner/manure-groups";
     public const string FetchMannerManureGroupByIdAsyncAPI = "vendors/manner/manure-groups/{0}";
-    public const string FetchMannerAutumnCropNitrogenUptakeAsyncAPI = "vendors/manner/autumn-crop-nitrogen-uptake";
-    public const string FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI = "vendors/manner/rainfall-post-application";
+    public const string FetchMannerAutumnCropNitrogenUptakeAsyncAPI = "vendors/manner/crop-types/autumn-crop-nitrogen-uptake";
+    public const string FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI = "vendors/manner/climates/rainfall-post-application";
     public const string FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI = "vendors/manner/manure-types?manureGroupId={0}&countryId={1}";
     public const string FetchMannerManureTypeByManureTypeIdAsyncAPI = "vendors/manner/manure-types/{0}";
     public const string FetchMannerRainfallAverageAsyncAPI = "vendors/manner/climates/avarage-annual-rainfall/{0}";
@@ -177,6 +177,8 @@ internal static class ApiurlHelper
     public const string FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI = "soil-type-soil-texture/{0}";
     public const string FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&confirm={3}&isGreenFoodCompost={4}";
     public const string FetchFarmsNVZByFarmIdAsyncAPI = "farmsNVZ/{0}";
+    public const string FetchAllMannerTopSoilListAsyncAPI = "vendors/manner/top-soils";
+    public const string FetchAllMannerSubSoilListAsyncAPI = "vendors/manner/sub-soils";
 
     //UserExtension API Urls
     public const string FetchUserExtensionAPI = "user-extension";
@@ -195,10 +197,10 @@ internal static class ApiurlHelper
     public const string FetchCropPlanByFieldIdAndYearAsyncAPI = "crops/plan/{0}?year={1}";
 
     //Grass API Urls
-    public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}/{3}";
+    public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAsyncAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}/{3}/{4}";
     public const string FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsyncAPI = "vendors/rb209/Grass/PotentialCuts/{0}/{1}";
     public const string FetchSwardManagementsAsyncAPI = "vendors/rb209/Grass/SwardManagements";
-    public const string FetchSwardTypesAsyncAPI = "vendors/rb209/Grass/SwardTypes";
+    public const string FetchSwardTypesAsyncAPI = "vendors/rb209/Grass/SwardTypesByCountryId/{0}";
     public const string FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassIdAsyncAPI = "vendors/rb209/Grass/YieldRangesEnglandAndWales/{0}/{1}";
     public const string FetchDefoliationSequencesByIdAsyncAPI = "vendors/rb209/Grass/DefoliationSequence/{0}";
     public const string FetchSwardManagementBySwardTypeIdAsyncAPI = "vendors/rb209/Grass/SwardManagements/{0}";
@@ -259,4 +261,6 @@ internal static class ApiurlHelper
     public const string FetchOrganicManuresFertilisersByCropIdAsyncAPI = "crops/organic-inorganic/{0}";
     public const string FetchFertiliserTotalNByManagementPeriodIDIsAutumnAsyncAPI = "fertiliser-manures/total-nitrogen-by-autumn/{0}?isAutumn={1}";
     public const string FetchYearsAndLastUpdatedDateByFarmIDAndYearAsyncAPI = "farms/last-updated/{0}?years={1}";
+    public const string FetchAllFarmsWithLastUpdatedDateByOrgIdAPI = "/farmsWithLastUpdatedDate/{0}";
+    public const string FetchAllMannerEstimationsAsyncAPI = "/manner-estimations";
 }

@@ -1,0 +1,21 @@
+﻿@using NMP.Commons.Resources
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+        @if (ViewBag.Success != null && ViewBag.Success == "true")
+        {
+            <govuk-notification-banner type="NotificationBannerType.Success">
+                @* <govuk-notification-banner-title>@Resource.lblSuccess</govuk-notification-banner-title> *@
+                <h3 class="govuk-notification-banner__heading">
+                    @Resource.lblNutrientSupplyEstimateCreated
+                </h3>
+                <p class="">@Resource.lblSelectTheFarmFieldAndCropTabOrAnApplication</p>
+            </govuk-notification-banner>
+        }
+        <h1 class="govuk-heading-l margin-bottom-twenty">
+            Estimate of nutrient supply from organic material results: Need to work on this page
+        </h1>
+
+    </div>
+</div>

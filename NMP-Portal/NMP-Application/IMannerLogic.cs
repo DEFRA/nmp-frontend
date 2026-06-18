@@ -57,4 +57,42 @@ public interface IMannerLogic
     Task<(string, Error)> FetchApplicationMethodById(int Id);
     Task<(string, Error)> FetchIncorporationMethodById(int Id);
     Task<(string, Error)> FetchIncorporationDelayById(int Id);
+    MannerEstimationStep14ViewModel GetMannerEstimationStep14();
+    MannerEstimationStep14ViewModel SetMannerEstimationStep14(MannerEstimationStep14ViewModel mannerEstimationStep14);
+    MannerEstimationStep15ViewModel GetMannerEstimationStep15();
+    MannerEstimationStep15ViewModel SetMannerEstimationStep15(MannerEstimationStep15ViewModel mannerEstimationStep15);
+    MannerEstimationStep16ViewModel GetMannerEstimationStep16();
+    MannerEstimationStep16ViewModel SetMannerEstimationStep16(MannerEstimationStep16ViewModel mannerEstimationStep16);
+    MannerEstimationStep17ViewModel GetMannerEstimationStep17();
+    MannerEstimationStep17ViewModel SetMannerEstimationStep17(MannerEstimationStep17ViewModel mannerEstimationStep17);
+    MannerEstimationStep18ViewModel GetMannerEstimationStep18();
+    MannerEstimationStep18ViewModel SetMannerEstimationStep18(MannerEstimationStep18ViewModel mannerEstimationStep18);
+    Task<(List<CommonResponse>?, Error?)> FetchTopsoilList();
+    MannerEstimationStep19ViewModel GetMannerEstimationStep19();
+    MannerEstimationStep19ViewModel SetMannerEstimationStep19(MannerEstimationStep19ViewModel mannerEstimationStep19);
+    Task<(List<CommonResponse>?, Error?)> FetchSubsoilList();
+    MannerEstimationStep20ViewModel GetMannerEstimationStep20();
+    Task<MannerEstimationStep20ViewModel> SetMannerEstimationStep20(MannerEstimationStep20ViewModel mannerEstimationStep20);
+    MannerEstimationStep23ViewModel GetMannerEstimationStep23();
+    Task<MannerEstimationStep23ViewModel> SetMannerEstimationStep23(MannerEstimationStep23ViewModel mannerEstimationStep23);
+    ManureType? GetAndApplyManureType(int manureTypeId, List<ManureType> manureTypeList);
+    Task<MannerEstimationStep24ViewModel> GetMannerEstimationStep24();
+    Task<MannerEstimationStep24ViewModel> SetMannerEstimationStep24(MannerEstimationStep24ViewModel mannerEstimationStep24);
+    Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25();
+    Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25);
+    Task<MannerEstimationStep26ViewModel> GetMannerEstimationStep26();
+    Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26);
+    Task<MannerEstimationStep27ViewModel> GetMannerEstimationStep27();
+    Task<MannerEstimationStep27ViewModel> SetMannerEstimationStep27(MannerEstimationStep27ViewModel mannerEstimationStep27);
+    Task<MannerEstimationStep28ViewModel> GetMannerEstimationStep28();
+    Task<MannerEstimationStep28ViewModel> SetMannerEstimationStep28(MannerEstimationStep28ViewModel mannerEstimationStep28);
+    Task<Error?> CopiedFarmAndFieldData(int farmId, int fieldId);
+
+
+    MannerEstimationStep21ViewModel GetMannerEstimationStep21();
+    MannerEstimationStep21ViewModel SetMannerEstimationStep21(MannerEstimationStep21ViewModel mannerEstimationStep21);
+
+    MannerEstimationStep22ViewModel GetMannerEstimationStep22();
+    MannerEstimationStep22ViewModel SetMannerEstimationStep22(MannerEstimationStep22ViewModel mannerEstimationStep22);
+    Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList();
 }

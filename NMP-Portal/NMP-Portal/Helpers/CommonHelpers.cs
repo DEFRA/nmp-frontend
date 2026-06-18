@@ -3,6 +3,7 @@ using NMP.Commons.Enums;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using System.Xml.Linq;
 
 namespace NMP.Portal.Helpers
@@ -186,5 +187,19 @@ namespace NMP.Portal.Helpers
 
             return allDefoliationWithName;
         }
+        public static string[] DatePattern()
+        {
+            return new[]
+            {
+        Resource.MsgDateMustBeARealDate,
+        Resource.MsgDateMustIncludeAMonth,
+        Resource.MsgDateMustIncludeAMonthAndYear,
+        Resource.MsgDateMustIncludeADayAndYear,
+        Resource.MsgDateMustIncludeAYear,
+        Resource.MsgDateMustIncludeADay,
+        Resource.MsgDateMustIncludeADayAndMonth
+    };
+        }
+
     }
 }

@@ -13,5 +13,7 @@ namespace NMP.Commons.ViewModels
         public int FarmRB209CountryId { get; set; }
         public int? CropGroupId { get; set; }
         public string CropGroupName { get; set; } = string.Empty;
+        public string CropTypeName { get; set; } = string.Empty;
+        public int? MannerCropTypeId { get; set; }
     }
 }

@@ -10,7 +10,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "FarmingRules")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "Country")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -19,10 +19,10 @@
 
         <form asp-action="PostCode" method="post" asp-controller="MannerEstimation" autocomplete="on">
             @Html.AntiForgeryToken()
-            <govuk-input input-class="govuk-input--width-5" asp-for="@Model.Postcode">
+            <govuk-input input-class="govuk-input--width-5" for="@Model.Postcode">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l ">@string.Format(Resource.lblWhatIsPostcode, Model.FarmName)</govuk-input-label>
             </govuk-input>
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button  margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>

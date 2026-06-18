@@ -11,5 +11,6 @@ namespace NMP.Commons.ViewModels
         public int? CropGroupId { get; set; }
         public bool IsCheckAnswer { get; set; } = false;
         public string CropGroupName { get; set; } = string.Empty;
+        public bool IsFarmCopied { get; set; } = false;
     }
 }

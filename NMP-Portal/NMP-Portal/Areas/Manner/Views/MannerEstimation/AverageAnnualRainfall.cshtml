@@ -17,7 +17,7 @@
         <form asp-action="AverageAnnualRainfall" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
             <h1 class="govuk-heading-l">@string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</h1>
-            <p class="govuk-body">@Resource.lblAverageAnnualRainfallHint</p>
+            <p class="govuk-body">@Resource.lblYourAverageAnualRainfall</p>
             <div class="text-group margin-bottom-forty">
                 <p class="govuk-heading-s">@Resource.lblAverageAnnualRainfall</p>
                 <p class="govuk-body">
@@ -30,16 +30,8 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            @if (Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-
+            <p class="govuk-body cancel-link">
                 <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-        </p>
+            </p>
     </div>
 </div>

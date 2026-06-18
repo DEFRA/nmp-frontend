@@ -11,7 +11,9 @@ namespace NMP.Commons.Models
     public class MannerEstimation
     {
         public int? ID { get; set; }
+
         public string? Name { get; set; }
+        public Guid? OrganisationID { get; set; }
         public string? FarmName { get; set; }
 
         public int? CountryID { get; set; }
@@ -21,10 +23,11 @@ namespace NMP.Commons.Models
         public string? FieldName { get; set; }
         public bool? IsWithinNVZ { get; set; }
         public int? NVZProgrammeID   { get; set; }
-        public int? SoilTypeID { get; set; }
-        public int? CropTypeID { get; set; }
-        public bool? IsEarlySown { get; set; }
-        public string? FieldComments { get; set; }
+        public int? TopSoilID { get; set; }
+        public int? SubSoilID { get; set; }
+        public int? CropTypeID { get; set; }  
+        public int? MannerCropTypeID { get; set; }
+        public DateTime? SowingDate { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }

@@ -2843,7 +2843,7 @@ managementPeriod.CropID.HasValue
             {
                 if (!ModelState.IsValid)
                 {
-                    ReplaceNumericError(_applicationRateKey, Resource.lblApplicationRate, Resource.MsgEnterDataOnlyInNumber);
+                    ReplaceNumericError(_applicationRateKey, Resource.lblApplicationRate,string.Format(Resource.MsgEnterDataOnlyInNumber,Resource.lblRate));
                 }
                 ValidateApplicationRate(model);
 
@@ -5568,7 +5568,6 @@ managementPeriod.CropID.HasValue
             return (isApplicationRateAndDateAvailable, cropId);
 
         }
-
 #pragma warning disable S107
         private async Task<(bool flowControl, (OrganicManureViewModel, Error?) value, decimal)> BindNmaxWarningIfCheckAnswerTrue(OrganicManureViewModel model, int fieldId, FieldDetailResponse fieldDetail, bool isWinterOilseedRapeAutumn, Crop crop, int residueGroup, int? nmaxLimitEnglandOrWales, int? scotlandNmax)
         {
@@ -5731,7 +5730,6 @@ managementPeriod.CropID.HasValue
 
             return (flowControl: true, value: default, nMaxLimit);
         }
-#pragma warning restore S107
 
         private async Task<int?> BindPercentOfTotalNForUseInNmaxCalculation(OrganicManureViewModel model)
         {

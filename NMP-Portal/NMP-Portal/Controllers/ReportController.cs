@@ -1619,7 +1619,21 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return View(model);
         }
     }
-    
+
+    private async Task BindYearsViewBag(ReportViewModel model, List<int> yearList)
+    {
+        yearList = yearList.OrderByDescending(x => x).ToList();
+        if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
+        {
+            ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
+        }
+        else
+        {
+            ViewBag.Years = yearList;
+        }
+
+    }
+
     private async Task<List<ReportYearLastUpdatedDateResponse>> FetchYearsWithLastUpdatedDate(
     int farmId,
     List<int> years)
@@ -6473,13 +6487,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    private ReportViewModel ResetReportDataFromSession(bool isLivestock)
+    private ReportViewModel? ResetReportDataFromSession(bool isLivestock)
     {
         ReportViewModel? model = GetReportDataFromSession();
 
         if (model == null)
         {
-            return null;
+            return model;
         }
 
         if (isLivestock)
@@ -6892,7 +6906,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return View(model);
         }
 
-        return View(model);
+        //return View(model);
     }
 
     private async Task<ReportViewModel> GetFarmByEncryptedFarmId(string? f, string? h)
@@ -7102,19 +7116,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
         }
         return fieldCount;
-    }
-    private async Task BindYearsViewBag(ReportViewModel model, List<int> yearList)
-    {
-        yearList = yearList.OrderByDescending(x => x).ToList();
-        if (model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
-        {
-            ViewBag.Years = await FetchYearsWithLastUpdatedDate(model.FarmId.Value, yearList);
-        }
-        else
-        {
-            ViewBag.Years = yearList;
-        }
-
     }
 
 }

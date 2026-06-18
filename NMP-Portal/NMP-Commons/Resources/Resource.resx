@@ -3468,9 +3468,6 @@ cubic metres per hectare  not set</value>
   <data name="lblAboutRecommendationGuidenceAdvice" xml:space="preserve">
     <value>About the recommendations, guidance and advice</value>
   </data>
-  <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
-    <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd. (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB).</value>
-  </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent2" xml:space="preserve">
     <value>While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage, injury, or liabilities howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to this tool, including the information contained in or omitted from this tool.</value>
   </data>
@@ -3511,7 +3508,7 @@ cubic metres per hectare  not set</value>
     <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
   </data>
   <data name="lblReadScheduleLink" xml:space="preserve">
-    <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule for testing and new features&lt;/a&gt;</value>
+    <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule&lt;/a&gt; (opens in a new window)</value>
   </data>
   <data name="lblReleaseSchedule" xml:space="preserve">
     <value>Release schedule</value>
@@ -3768,8 +3765,8 @@ cubic metres per hectare  not set</value>
   <data name="lblHelp_with_the_service_recommendations_line3" xml:space="preserve">
     <value>We will reply to your email or call as quickly as we can.</value>
   </data>
-  <data name="lbl_I_accept_to_the_terms_of_use" xml:space="preserve">
-    <value>I accept the Terms of Use</value>
+  <data name="lbl_I_agree_to_the_terms_of_use" xml:space="preserve">
+    <value>I agree to the terms of use</value>
   </data>
   <data name="lblMore_information" xml:space="preserve">
     <value>More information</value>
@@ -3781,7 +3778,7 @@ cubic metres per hectare  not set</value>
     <value>Saving your data</value>
   </data>
   <data name="lblSaving_your_data_line1" xml:space="preserve">
-    <value>NMPT-GB will save the data you input regularly. There will be a Check Your Answers page at the end of each section, and when you select Submit here, your data will be saved up to this point. You will then be able to leave and resume here. Creating a plan or report will also save your data.</value>
+    <value>You can save your data, edit it, and reuse it. You can also save or print plans and reports as PDF files.</value>
   </data>
   <data name="lblSoil_Analysis_line1" xml:space="preserve">
     <value>Good management of pH, soil phosphate, potash and magnesium depends on soil sampling and analysis. Soil sampling and analysis should be carried out every 3 to 5 years, at an appropriate time in the crop rotation.</value>
@@ -4633,13 +4630,13 @@ cubic metres per hectare  not set</value>
     <value>Cross-border holdings</value>
   </data>
   <data name="lblCrossBorderHoldingsContent1" xml:space="preserve">
-    <value>Farmers with a cross-border holding (a farm with land in more than one part of Great Britain) will need to set up 2 separate farms - one in each region - and manage them separately within NMPT-GB.</value>
+    <value>Farmers with a cross-border holding (a farm with land in more than one part of Great Britain) will need to set up 2 separate farms - one in each region - and manage them separately within this tool.</value>
   </data>
   <data name="lblCrossBorderHoldingsContent2" xml:space="preserve">
-    <value>For instance, if your holding has land in both England and Scotland, you would need to create 2 farms in NMPT-GB.</value>
+    <value>For instance, if your holding has land in both England and Scotland, you would need to create 2 farms in this tool.</value>
   </data>
   <data name="lblCrossBorderHoldingsContent3" xml:space="preserve">
-    <value>This means that NMPT-GB will be using the appropriate calculations and following the relevant regulations for each farm.</value>
+    <value>This means that this tool will be using the appropriate calculations and following the relevant regulations for each farm.</value>
   </data>
   <data name="lblLivestockInformation" xml:space="preserve">
     <value>livestock information</value>
@@ -6843,7 +6840,7 @@ livestock manure.</value>
     <value>This tool only gathers the data required to provide you with nutrient recommendations.</value>
   </data>
   <data name="lblYourDataContentSecond" xml:space="preserve">
-    <value>This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the  &lt;a href="https://www.gov.uk/government/organisations/rural-payments-agency" target="_blank"&gt; Rural Payments Agency&lt;/a&gt; (RPA) or the Environment Agency (EA).</value>
+    <value>This tool will never share your data with any other organisations. In particular, please note that this tool does not share data with the Rural Payments Agency (RPA).</value>
   </data>
   <data name="lblNutrientCanHaveOnlyOneDecimalPlace" xml:space="preserve">
     <value>Enter the {0} to one decimal place</value>
@@ -7325,8 +7322,8 @@ livestock manure.</value>
   <data name="lblPlanningAndEstimating" xml:space="preserve">
     <value>Planning and estimating</value>
   </data>
-  <data name="lblMannerEstimateContent1" xml:space="preserve">
-    <value>How estimating nutrient supply from organic materials works using MANNER-NPK</value>
+  <data name="lblMannerEstimateAboutPageContent1" xml:space="preserve">
+    <value>This tool helps you to:</value>
   </data>
   <data name="lblMannerEstimateContent2" xml:space="preserve">
     <value>MANNER-NPK (Manure Nitrogen Evaluation Routine) estimates the nutrient supply from applications of organic materials.</value>
@@ -7785,5 +7782,231 @@ livestock manure.</value>
   </data>
   <data name="lblLastUpdatedOn" xml:space="preserve">
     <value>(Last updated on {0})</value>
+  </data>
+  <data name="lblNutrientSupplyEstimates" xml:space="preserve">
+    <value>Nutrient supply estimates</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent2" xml:space="preserve">
+    <value>estimate the nutrients supplied from applications of organic materials</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent3" xml:space="preserve">
+    <value>compare different organic material applications to see how nutrient supply could be affected</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent4" xml:space="preserve">
+    <value>see the financial value of organic material applications - how much you would save compared to buying inorganic fertiliser</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent5" xml:space="preserve">
+    <value>Estimates include:</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent6" xml:space="preserve">
+    <value>total nitrogen (N)</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent7" xml:space="preserve">
+    <value>crop available nitrogen (N)</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent8" xml:space="preserve">
+    <value>nitrogen (N) losses</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent9" xml:space="preserve">
+    <value>total, and crop available phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO)</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent10" xml:space="preserve">
+    <value>the potential financial value of the organic material</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent11" xml:space="preserve">
+    <value>What you will need</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent12" xml:space="preserve">
+    <value>field name and soil type</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent13" xml:space="preserve">
+    <value>manure application details, including application rate, application method and soil incorporation</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent14" xml:space="preserve">
+    <value>Nitrate Vulnerable Zone (NVZ) warnings</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent15" xml:space="preserve">
+    <value>The tool will warn you of possible breaches of the NVZ rules as you create estimates.</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent16" xml:space="preserve">
+    <value>You can save your data, edit it, and reuse it. You can also save or print estimates as PDF files.</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent17" xml:space="preserve">
+    <value>You can manually add the results from an estimate to a nutrient management plan, if you need to.</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent18" xml:space="preserve">
+    <value>farm name, address and postcode</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent19" xml:space="preserve">
+    <value>Continue to create an estimate</value>
+  </data>
+  <data name="lblNutrientManagementPlanning" xml:space="preserve">
+    <value>Nutrient management planning</value>
+  </data>
+  <data name="lblCreateNutrientManagementPlansAndNitrateVulnerableZone" xml:space="preserve">
+    <value>Create nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports for a farm.</value>
+  </data>
+  <data name="lblEstimateTheNutrientSupplyAndPotentialFinancialValue" xml:space="preserve">
+    <value>Estimate the nutrient supply and potential financial value from organic materials using MANNER-NPK.</value>
+  </data>
+  <data name="lblCreateANutrientManagementPlanOrNVZReport" xml:space="preserve">
+    <value>Create a nutrient management plan or NVZ report</value>
+  </data>
+  <data name="lblBackToAllFarms" xml:space="preserve">
+    <value>Back to all farms</value>
+  </data>
+  <data name="lblLastUpdate" xml:space="preserve">
+    <value>Last updated</value>
+  </data>
+  <data name="lblNutrientManagementPlansAndNitrateVulnerableZoneReports" xml:space="preserve">
+    <value>Nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports</value>
+  </data>
+  <data name="lblSelectAFarmToCreateOrUpdateANutrientManagementPlan" xml:space="preserve">
+    <value>Select a farm to create or update a nutrient management plan,</value>
+  </data>
+  <data name="lblOrToSaveAnNVZReport" xml:space="preserve">
+    <value>or to save an NVZ report.</value>
+  </data>
+  <data name="CopyExistingFarmAndFieldDetailsContent1" xml:space="preserve">
+    <value>Do you want to use existing farm and field details?</value>
+  </data>
+  <data name="CopyExistingFarmAndFieldDetailsContent2" xml:space="preserve">
+    <value>You can start with rainfall, field and soil details from an existing farm and one of its fields. You can change any of these details just for this estimate.</value>
+  </data>
+  <data name="lblWhichFarmWouldYouLikeToUse" xml:space="preserve">
+    <value>Which farm would you like to use?</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdviceContent1Additional" xml:space="preserve">
+    <value>Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB).</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
+    <value>Plan and manage nutrient applications ('this tool) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd.('Defra and partners').</value>
+  </data>
+  <data name="lblTheToolGivesFertiliserRecommendationsForAllMajorNutrients" xml:space="preserve">
+    <value>The tool gives fertiliser recommendations for all major nutrients and lime, and for most agricultural and horticultural crops.</value>
+  </data>
+  <data name="lblTheRecommendationsFromThisToolComeFrom" xml:space="preserve">
+    <value>The recommendations from this tool come from:</value>
+  </data>
+  <data name="lblEnglandAndWalesUrl" xml:space="preserve">
+    <value>England and Wales - &lt;a target="_blank" href="https://ahdb.org.uk/nutrient-management-guide-rb209"&gt;Nutrient Management Guide (RB209)&lt;/a&gt;. (opens in a new window)</value>
+  </data>
+  <data name="lblScotlandRecommendationTool" xml:space="preserve">
+    <value>Scotland - &lt;a target="_blank" href="https://www.fas.scot/technical-notes/#fertiliser"&gt;Scotland Rural College (SRUC) Technical Notes&lt;/a&gt;. (opens in a new window), part of the Scottish Government's Farm Advisory Service</value>
+  </data>
+  <data name="lblYouCanNotCurrentlyImportFieldDataFromTheRPA" xml:space="preserve">
+    <value>You can not currently import field data from the RPA.</value>
+  </data>
+  <data name="lblOurReleaseScheduleShowsYouWhenNewFeatures" xml:space="preserve">
+    <value>Our release schedule shows you when new features will be added and when the tool is updated.</value>
+  </data>
+  <data name="lblWhatYouWillNeed" xml:space="preserve">
+    <value>What you will need</value>
+  </data>
+  <data name="lblFarmNameAddressAndPostcode" xml:space="preserve">
+    <value>farm name, address and postcode</value>
+  </data>
+  <data name="lblTheSizesOfYourFieldsInHectares" xml:space="preserve">
+    <value>the sizes of your fields in hectares</value>
+  </data>
+  <data name="lblCropDetailsIncludingYieldsAndSowingDatesIfYouHaveThem" xml:space="preserve">
+    <value>crop details, including yields and sowing dates if you have them</value>
+  </data>
+  <data name="lblManureApplicationDetailsIncludingApplicationRate" xml:space="preserve">
+    <value>manure application details, including application rate, application method and soil incorporation</value>
+  </data>
+  <data name="lblYourMostRecentSoilAnalysisData" xml:space="preserve">
+    <value>your most recent soil analysis data</value>
+  </data>
+  <data name="lblLastYearCropTypeForEachField" xml:space="preserve">
+    <value>last year's crop type for each field</value>
+    <comment>last year's crop type for each field</comment>
+  </data>
+  <data name="lblDetailsOfHowGrassFieldsHaveBeenManaged" xml:space="preserve">
+    <value>details of how grass fields have been managed in the last three years</value>
+  </data>
+  <data name="lblSomeNVZReportsAlsoRequire" xml:space="preserve">
+    <value>Some NVZ reports also require:</value>
+  </data>
+  <data name="lblLivestocketDails" xml:space="preserve">
+    <value>livestock details</value>
+  </data>
+  <data name="lblManureStorageDetails" xml:space="preserve">
+    <value>manure storage details</value>
+  </data>
+  <data name="lblACrossBorderHoldingHasLandInMore" xml:space="preserve">
+    <value>A cross border holding has land in more than one part of Great Britain.</value>
+  </data>
+  <data name="lblNitrateVulnerableZoneWarnings" xml:space="preserve">
+    <value>Nitrate Vulnerable Zone (NVZ) warnings</value>
+  </data>
+  <data name="lblTheToolWillWarnYouOfPossibleBreachesOfTheNVZ" xml:space="preserve">
+    <value>The tool will warn you of possible breaches of the NVZ rules as you make nutrient management plans.</value>
+  </data>
+  <data name="lblWhichFieldWouldYouLikeToUse" xml:space="preserve">
+    <value>Which field would you like to use?</value>
+  </data>
+  <data name="lblChooseOneOption" xml:space="preserve">
+    <value>Choose one option</value>
+  </data>
+  <data name="MsgSelectAnJourneyName" xml:space="preserve">
+    <value>Select a farm</value>
+  </data>
+  <data name="MsgSelectWheatherYouWantToUseExisting" xml:space="preserve">
+    <value>Select whether you want to use existing farm and field details.</value>
+  </data>
+  <data name="MsgSelectTheCountryTheFarmIsIn" xml:space="preserve">
+    <value>Select the country the farm is in</value>
+  </data>
+  <data name="MsgSelectWhetherYouAreARegisteredOrganicProducer" xml:space="preserve">
+    <value>Select whether you are a registered organic producer.</value>
+  </data>
+  <data name="lblWhatIsTheTopSoilInFieldName" xml:space="preserve">
+    <value>What is the top soil in {0}?</value>
+  </data>
+  <data name="lblWhatIsTheSubSoilInFieldName" xml:space="preserve">
+    <value>What is the subsoil type in {0}?</value>
+  </data>
+  <data name="lblWhatTypeOfLivestockManureAreYouUsingInThisApplication" xml:space="preserve">
+    <value>What type of Livestock manure are you using in this application?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingOrganicMaterialOnFieldName" xml:space="preserve">
+    <value>When are you applying organic material on {0}?</value>
+  </data>
+  <data name="lblHowAreYouApplyingTheManureType" xml:space="preserve">
+    <value>How are you applying the {0}?</value>
+  </data>
+  <data name="MsgEnterRainfallBetween1And3000" xml:space="preserve">
+    <value>Rainfall must be between 1 and 3000 without decimal places.</value>
+  </data>
+  <data name="MsgTheValueIsInvalid" xml:space="preserve">
+    <value>The value '' is invalid.</value>
+  </data>
+  <data name="lblDoYouWantToStartWithACopyOn" xml:space="preserve">
+    <value>Do you want to start with a copy on an existing estimate?</value>
+  </data>
+  <data name="lblYouCanChangeAnyOfTheDetailsInTheCopy" xml:space="preserve">
+    <value>You can change any of the details in the copy</value>
+  </data>
+  <data name="lblWhichEstimateWouldYouLikeToCopy" xml:space="preserve">
+    <value>Which estimate would you like to copy?</value>
+  </data>
+  <data name="lblRemoveANutrientSupplyEstimate" xml:space="preserve">
+    <value>remove a nutrient supply estimate</value>
+  </data>
+  <data name="lblUpdateOrMakeACopy" xml:space="preserve">
+    <value>Update or make a copy</value>
+  </data>
+  <data name="MsgSelectAnEstimateToContinue" xml:space="preserve">
+    <value>Select an estimate to continue.</value>
+  </data>
+  <data name="lblNutrientSupplyEstimateCreated" xml:space="preserve">
+    <value>Nutrient supply estimate created</value>
+  </data>
+  <data name="lblSelectTheFarmFieldAndCropTabOrAnApplication" xml:space="preserve">
+    <value>Select the farm, field and crop tab, or an application details tab, to update the results.</value>
+  </data>
+  <data name="lblEstimationForFarm" xml:space="preserve">
+    <value>{0} for {1}</value>
   </data>
 </root>
