@@ -1262,7 +1262,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 model = await ValidateSowingDatePost(model);
-                ValidateCropSpecificRules(model);
+                if (model.SowingDate != null)
+                { ValidateCropSpecificRules(model); }
                 model = await _mannerLogic.SetMannerEstimationStep20(model);
                 if (!ModelState.IsValid)
                 {
@@ -1917,8 +1918,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
         private async Task<(List<IncorporationMethodResponse>, Error?)> BindViewBegForIncorporationMethod(MannerEstimationStep29ViewModel model)
         {
-            string fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Resource.lblG : Resource.lblA;
-            (List<IncorporationMethodResponse> incorporationMethods, Error? error) = await _mannerLogic.FetchIncorporationMethodsByApplicationId(model.ApplicationMethodId.Value, fieldType);
+            string applicableFor = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Resource.lblG : Resource.lblA;
+            if(model.ApplicationMethodId==(int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm||
+                model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm)
+            {
+                applicableFor = Resource.lblNull;
+            }
+            (List<IncorporationMethodResponse> incorporationMethods, Error? error) = await _mannerLogic.FetchIncorporationMethodsByApplicationId(model.ApplicationMethodId.Value, applicableFor);
             if (incorporationMethods != null)
             {
                 ViewBag.IncorporationMethod = incorporationMethods.OrderBy(i => i.SortOrder).ToList();
@@ -1946,6 +1952,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (incorporationMethods.Count == 1)
             {
                 model.IncorporationMethodId = incorporationMethods[0].ID;
+                _mannerLogic.SetMannerEstimationStep29(model);
+                return RedirectToAction("IncorporationDelay");
             }
             _mannerLogic.SetMannerEstimationStep29(model);
 
@@ -1977,7 +1985,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 _mannerLogic.SetMannerEstimationStep29(model);
 
-                return RedirectToAction("ConditionNutrientAffecting");
+                return RedirectToAction("IncorporationDelay");
             }
             catch (HttpRequestException hre)
             {
@@ -2013,7 +2021,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     applicableFor = Resource.lblS;
                 }
             }
-
+            if(model.IncorporationMethodId==(int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated||
+                model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection||
+                model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection)
+            {
+                applicableFor = Resource.lblNull;
+            }
             (List<IncorprationDelaysResponse> incorporationDelaysList, error) = await _mannerLogic.FetchIncorporationDelaysByMethodIdAndApplicableFor(model.IncorporationMethodId ?? 0, applicableFor);
             if (error == null && incorporationDelaysList.Count > 0)
             {
@@ -2042,6 +2055,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (incorporationDelaysList.Count == 1)
             {
                 model.IncorporationDelayId = incorporationDelaysList[0].ID;
+                _mannerLogic.SetMannerEstimationStep30(model);
+                return RedirectToAction("ConditionsAffectingNutrients");
             }
             _mannerLogic.SetMannerEstimationStep30(model);
             return View(model);
