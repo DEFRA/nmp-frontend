@@ -52,7 +52,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction("Index", "Dashboard", new { area = "" });
             }
-            var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList();
+            Guid organisationId = GetOrganisationId();
+            var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList(organisationId);
 
             if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
             {
@@ -880,9 +881,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private async Task<List<SelectListItem>> BindAllFarmList()
         {
-            Claim? claim = HttpContext.User.FindFirst(_organisationId);
-            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
-            Guid.TryParse(orgId, out Guid organisationId);
+            Guid organisationId = GetOrganisationId();
             (List<Farm> farmList, _) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
             List<SelectListItem> farmsWithFields = new List<SelectListItem>();
             foreach (var farm in farmList)
@@ -1752,7 +1751,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
                 bool isEstimateExist = false;
-                var (estimations, error) = await _mannerLogic.FetchMannerEstimationsList();
+                Guid organisationId = GetOrganisationId();
+                var (estimations, error) = await _mannerLogic.FetchMannerEstimationsList(organisationId);
 
                 if (string.IsNullOrWhiteSpace(error?.Message))
                 {
@@ -1901,7 +1901,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
         private async Task LoadMannerEstimations()
         {
-            var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList();
+            Guid organisationId = GetOrganisationId();
+            var (mannerEstimations, error) = await _mannerLogic.FetchMannerEstimationsList(organisationId);
 
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
@@ -1916,6 +1917,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ViewBag.MannerEstimations = mannerEstimations.OrderBy(x => x.Name);
         }
 
-
+        private Guid GetOrganisationId()
+        {
+            Claim? claim = HttpContext.User.FindFirst(_organisationId);
+            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
+            Guid.TryParse(orgId, out Guid organisationId);
+            return organisationId;
+        }
     }
 }

@@ -557,10 +557,10 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep22();
     }
-    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList()
+    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerEstimationsList() called");
-        return await _mannerService.FetchMannerEstimationsList();
+        _logger.LogTrace("MannerLogic : FetchMannerEstimationsList() by organisation id called");
+        return await _mannerService.FetchMannerEstimationsList(orgId);
     }
 
        

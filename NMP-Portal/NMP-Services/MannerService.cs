@@ -578,7 +578,7 @@ responseWrapper?.Data is not null)
         return (subSoilList, error);
     }
 
-    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList()
+    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
         List<MannerEstimation> mannerEstimationsList = new List<MannerEstimation>();
         Error? error = null;
