@@ -584,7 +584,8 @@ responseWrapper?.Data is not null)
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(ApiurlHelper.FetchAllMannerEstimationsAsyncAPI);
+        string url = string.Format(ApiurlHelper.FetchAllMannerEstimationsAsyncAPI, orgId);
+        var response = await httpClient.GetAsync(url);
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -600,4 +601,15 @@ responseWrapper?.Data is not null)
 
         return (mannerEstimationsList, error);
     }
+    public async Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name)
+    {
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI,organisationId, name));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        bool isExist = responseWrapper?.Data?["exists"] ?? false;
+
+        return isExist;
+    }
+
 }
