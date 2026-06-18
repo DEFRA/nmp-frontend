@@ -2,7 +2,7 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep27ViewModel
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblEnterTheApplicationRate} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{Resource.lblWhatIsTheApplicationRate} {Resource.lblHyphen} {title}";
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {
@@ -27,7 +27,7 @@
 
             <govuk-input for="@Model.ApplicationRate" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                    @Resource.lblEnterTheApplicationRate
+                    @Resource.lblWhatIsTheApplicationRate
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>

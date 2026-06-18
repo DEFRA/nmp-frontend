@@ -40,6 +40,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _applicationRateMethodAction = "ApplicationRateMethod";
         private const string _incorporationMethodAction = "IncorporationMethod";
         private const string _applicationRateKey = "ApplicationRate";
+        private const string _farmNameKey = "FarmName";
 
         public IActionResult Index()
         {
@@ -102,7 +103,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (string.IsNullOrWhiteSpace(model.FarmName))
             {
-                ModelState.AddModelError("FarmName", Resource.MsgEnterTheFarmName);
+                ModelState.AddModelError(_farmNameKey, Resource.MsgEnterTheFarmName);
             }
             List<SelectListItem> farmsWithFields = await BindAllFarmList();
             if (farmsWithFields.Count > 0)
@@ -819,7 +820,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("FarmName");
+                    return RedirectToAction(_farmNameKey);
                 }
 
             }
@@ -857,7 +858,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
                 model = _mannerLogic.SetMannerEstimationStep14(model);
-                string action = "FarmName";
+                string action = _farmNameKey;
                 if (model.IsCopyExistingFarmAndFieldDetails.HasValue && model.IsCopyExistingFarmAndFieldDetails.Value)
                 {
                     action = "FarmToCopy";
@@ -1441,7 +1442,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction("ManualNutrientValues");
                 }
-                return RedirectToAction("ApplicationRateMethod");
+                return RedirectToAction(_applicationRateMethodAction);
             }
             catch (HttpRequestException hre)
             {
@@ -1574,7 +1575,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 await _mannerLogic.SetMannerEstimationStep25(model);
 
 
-                return RedirectToAction("ApplicationRateMethod");
+                return RedirectToAction(_applicationRateMethodAction);
             }
             catch (HttpRequestException hre)
             {
@@ -1947,7 +1948,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (error != null)
             {
                 TempData["ApplicationRateMethodError"] = error.Message;
-                return RedirectToAction("ApplicationRateMethod");
+                return RedirectToAction(_applicationRateMethodAction);
             }
             if (incorporationMethods.Count == 1)
             {
@@ -2131,7 +2132,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
              model = _mannerLogic.GetMannerEstimationStep31();
 
-            string action = "FarmName";
+            string action = _farmNameKey;
             List<SelectListItem> farmsWithFields = await BindAllFarmList();
             if(model.IsCopyEstimate.HasValue&&model.IsCopyEstimate.Value)
             {
@@ -2154,7 +2155,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             Claim? claim = HttpContext.User.FindFirst(_organisationId);
             string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
             Guid.TryParse(orgId, out Guid organisationId);
-            (List<Farm> farmList, _) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
             bool isExist = await _mannerLogic.FetchIsExistMannerEstimationsByOrgIdAndName(organisationId, model.Name);
             if (isExist)
             {

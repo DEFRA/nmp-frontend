@@ -14,16 +14,15 @@
         {
             backAction = "CopyFromEstimates";
         }
-        else
-            @if (Model.IsCopyEstimate == false)
-            {
-                backAction = "CopyEstimate";
-            }
+        else if (Model.IsCopyEstimate == false)
+        {
+            backAction = "CopyEstimate";
+        }
     }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -39,10 +38,10 @@
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-           
 
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            
+           
+            <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+
         </p>
     </div>
 </div>
