@@ -801,7 +801,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the SRUC Technical Notes..
+        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the FAS SRUC Technical Notes..
         /// </summary>
         public static string lblAboutRecommendationForScotlandContent1 {
             get {
@@ -5769,7 +5769,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You should follow the guidance in the &lt;a href=&quot;https://www.fas.scot/technical-notes/&quot;  target=&quot;_blank&quot;&gt;Technical Notes&lt;/a&gt; (opens in a new window) when making plans for your nutrients and crops..
+        ///   Looks up a localized string similar to You should follow the guidance in the &lt;a href=&quot;https://www.fas.scot/technical-notes/&quot;  target=&quot;_blank&quot;&gt;FAS SRUC Technical Notes&lt;/a&gt; (opens in a new window) when making plans for your nutrients and crops..
         /// </summary>
         public static string lblFarmingRuleForScotlandContent8 {
             get {
@@ -6876,7 +6876,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Crop need is based on guidance in the SRUC Technical Notes. Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine)..
+        ///   Looks up a localized string similar to Crop need is based on guidance in the FAS SRUC Technical Notes. Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine)..
         /// </summary>
         public static string lblGuidanceForScotland {
             get {
@@ -11548,7 +11548,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a href=&quot;https://www.fas.scot/downloads/managing-soil-phosphorus/&quot;  target=&quot;_blank&quot;&gt;View the SRUC technical notes&lt;/a&gt; (open in a new window)..
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://www.fas.scot/downloads/managing-soil-phosphorus/&quot;  target=&quot;_blank&quot;&gt;View the FAS SRUC technical notes&lt;/a&gt; (open in a new window)..
         /// </summary>
         public static string lblPhosphorusSorptionCapacityContentFive {
             get {
@@ -11557,7 +11557,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can also read the SRUC Technical Notes TN715 to TN718, and TN770 (specific to your area) on the Farm Advisory Service Website..
+        ///   Looks up a localized string similar to You can also read the FAS SRUC Technical Notes TN715 to TN718, and TN770 (specific to your area) on the Farm Advisory Service Website..
         /// </summary>
         public static string lblPhosphorusSorptionCapacityContentFour {
             get {
@@ -12502,7 +12502,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This version will give recommendations based on the Scottish Technical Notes. It will help users to create NVZ reports based on Scottish rules..
+        ///   Looks up a localized string similar to This version will give recommendations based on the Scottish FAS SRUC Technical Notes. It will help users to create NVZ reports based on Scottish rules..
         /// </summary>
         public static string lblReleaseScheduleContentFourteen {
             get {
@@ -13258,7 +13258,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select one option. These are the crop types from the SRUC Technical Notes..
+        ///   Looks up a localized string similar to Select one option. These are the crop types from the FAS SRUC Technical Notes..
         /// </summary>
         public static string lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes {
             get {

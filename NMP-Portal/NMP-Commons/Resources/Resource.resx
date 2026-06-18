@@ -6897,7 +6897,7 @@ livestock manure.</value>
     <value>The Scottish version of the nutrient management planning tool is currently in development. This will be released to all users in early 2026, after user testing.</value>
   </data>
   <data name="lblReleaseScheduleContentFourteen" xml:space="preserve">
-    <value>This version will give recommendations based on the Scottish Technical Notes. It will help users to create NVZ reports based on Scottish rules.</value>
+    <value>This version will give recommendations based on the Scottish FAS SRUC Technical Notes. It will help users to create NVZ reports based on Scottish rules.</value>
   </data>
   <data name="lblReleaseScheduleContentFifteen" xml:space="preserve">
     <value>Next available functionality</value>
@@ -7137,7 +7137,7 @@ livestock manure.</value>
     <value>Lettuce fields</value>
   </data>
   <data name="lblAboutRecommendationForScotlandContent1" xml:space="preserve">
-    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the SRUC Technical Notes.</value>
+    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the FAS SRUC Technical Notes.</value>
   </data>
   <data name="lblAboutRecommendationForScotlandContent2" xml:space="preserve">
     <value>While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​</value>
@@ -7170,7 +7170,7 @@ livestock manure.</value>
     <value>Read more about &lt;a href="https://www.gov.scot/policies/agriculture-and-the-environment/nvz/"  target="_blank"&gt;Nitrate Vulnerable Zones (NVZs)&lt;/a&gt; (opens in a new window).</value>
   </data>
   <data name="lblFarmingRuleForScotlandContent8" xml:space="preserve">
-    <value>You should follow the guidance in the &lt;a href="https://www.fas.scot/technical-notes/"  target="_blank"&gt;Technical Notes&lt;/a&gt; (opens in a new window) when making plans for your nutrients and crops.</value>
+    <value>You should follow the guidance in the &lt;a href="https://www.fas.scot/technical-notes/"  target="_blank"&gt;FAS SRUC Technical Notes&lt;/a&gt; (opens in a new window) when making plans for your nutrients and crops.</value>
   </data>
   <data name="lblFarmingRuleForEnglandContent1" xml:space="preserve">
     <value>They include about 55% of land in England.</value>
@@ -7179,7 +7179,7 @@ livestock manure.</value>
     <value>About Nitrate Vulnerable Zones (NVZs)</value>
   </data>
   <data name="lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes" xml:space="preserve">
-    <value>Select one option. These are the crop types from the SRUC Technical Notes.</value>
+    <value>Select one option. These are the crop types from the FAS SRUC Technical Notes.</value>
   </data>
   <data name="MsgFieldNameMaxLengthValidation" xml:space="preserve">
     <value>Enter a field name that is no more than 50 characters long.</value>
@@ -7488,10 +7488,10 @@ livestock manure.</value>
     <value>&lt;a href="https://map.environment.gov.scot/Soil_maps/?layer=16"  target="_blank"&gt;View the map&lt;/a&gt; (open a new window)</value>
   </data>
   <data name="lblPhosphorusSorptionCapacityContentFour" xml:space="preserve">
-    <value>You can also read the SRUC Technical Notes TN715 to TN718, and TN770 (specific to your area) on the Farm Advisory Service Website.</value>
+    <value>You can also read the FAS SRUC Technical Notes TN715 to TN718, and TN770 (specific to your area) on the Farm Advisory Service Website.</value>
   </data>
   <data name="lblPhosphorusSorptionCapacityContentFive" xml:space="preserve">
-    <value>&lt;a href="https://www.fas.scot/downloads/managing-soil-phosphorus/"  target="_blank"&gt;View the SRUC technical notes&lt;/a&gt; (open in a new window).</value>
+    <value>&lt;a href="https://www.fas.scot/downloads/managing-soil-phosphorus/"  target="_blank"&gt;View the FAS SRUC technical notes&lt;/a&gt; (open in a new window).</value>
   </data>
   <data name="lblPhosphorusSorptionCapacityContentSix" xml:space="preserve">
     <value>If you are still unsure, use PSC Index 1.</value>
@@ -7637,7 +7637,7 @@ livestock manure.</value>
     <value>Previous crop in {0}</value>
   </data>
   <data name="lblGuidanceForScotland" xml:space="preserve">
-    <value>Crop need is based on guidance in the SRUC Technical Notes. Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
+    <value>Crop need is based on guidance in the FAS SRUC Technical Notes. Supply from manures calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
   </data>
   <data name="lblWinterRainfall" xml:space="preserve">
     <value>Winter rainfall</value>
