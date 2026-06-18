@@ -7982,4 +7982,31 @@ livestock manure.</value>
   <data name="MsgTheValueIsInvalid" xml:space="preserve">
     <value>The value '' is invalid.</value>
   </data>
+  <data name="lblDoYouWantToStartWithACopyOn" xml:space="preserve">
+    <value>Do you want to start with a copy on an existing estimate?</value>
+  </data>
+  <data name="lblYouCanChangeAnyOfTheDetailsInTheCopy" xml:space="preserve">
+    <value>You can change any of the details in the copy</value>
+  </data>
+  <data name="lblWhichEstimateWouldYouLikeToCopy" xml:space="preserve">
+    <value>Which estimate would you like to copy?</value>
+  </data>
+  <data name="lblRemoveANutrientSupplyEstimate" xml:space="preserve">
+    <value>remove a nutrient supply estimate</value>
+  </data>
+  <data name="lblUpdateOrMakeACopy" xml:space="preserve">
+    <value>Update or make a copy</value>
+  </data>
+  <data name="MsgSelectAnEstimateToContinue" xml:space="preserve">
+    <value>Select an estimate to continue.</value>
+  </data>
+  <data name="lblNutrientSupplyEstimateCreated" xml:space="preserve">
+    <value>Nutrient supply estimate created</value>
+  </data>
+  <data name="lblSelectTheFarmFieldAndCropTabOrAnApplication" xml:space="preserve">
+    <value>Select the farm, field and crop tab, or an application details tab, to update the results.</value>
+  </data>
+  <data name="lblEstimationForFarm" xml:space="preserve">
+    <value>{0} for {1}</value>
+  </data>
 </root>
