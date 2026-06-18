@@ -6904,9 +6904,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             _logger.LogTrace(ex, "Report Controller : Exception in FarmAverageYieldValues() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnFarmAverageYieldValue"] = ex.Message;
             return View(model);
-        }
-
-        //return View(model);
+        }        
     }
 
     private async Task<ReportViewModel> GetFarmByEncryptedFarmId(string? f, string? h)
