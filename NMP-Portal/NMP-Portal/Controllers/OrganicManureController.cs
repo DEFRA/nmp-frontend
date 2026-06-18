@@ -5730,7 +5730,7 @@ managementPeriod.CropID.HasValue
 
             return (flowControl: true, value: default, nMaxLimit);
         }
-#pragma warning restore S107
+
         private async Task<int?> BindPercentOfTotalNForUseInNmaxCalculation(OrganicManureViewModel model)
         {
             int? percentOfTotalNForUseInNmaxCalculation = null;
