@@ -1763,7 +1763,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MannerEstimation  Controller : Exception in ApplicationRateMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogError(ex, "MannerEstimation  Controller : Exception in AreaQuantity() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
