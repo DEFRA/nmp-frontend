@@ -1845,7 +1845,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError(
                     _quantityKey,
                     string.Format(
-                        Resource.MsgEnterDataOnlyInNumber,
+                        Resource.MsgForApplicationRate,
                         Resource.MsgQuantity));
 
                 return;
