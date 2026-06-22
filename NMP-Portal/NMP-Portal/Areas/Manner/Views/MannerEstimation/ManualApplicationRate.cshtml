@@ -25,7 +25,8 @@
                 </govuk-error-summary>
             }
 
-            <govuk-input for="@Model.ApplicationRate" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for="@Model.ApplicationRate" type="number" inputmode="decimal"
+                         pattern="^\d{1,10}(\.\d{1,2})?$" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
                     @Resource.lblWhatIsTheApplicationRate
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
