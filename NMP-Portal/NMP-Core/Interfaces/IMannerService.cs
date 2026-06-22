@@ -25,7 +25,7 @@ public interface IMannerService
     Task<(string?, Error?)> FetchIncorporationDelayById(int Id);
     Task<(List<CommonResponse>?, Error?)> FetchTopsoilList();
     Task<(List<CommonResponse>?, Error?)> FetchSubsoilList();
-    Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList();
+    Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId);
     Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
     Task<bool> FetchIsPerennialByCropTypeIdServiceAsync(int cropTypeId);
     Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);
