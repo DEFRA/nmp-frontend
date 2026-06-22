@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NMP.Application;
 using NMP.Businesses;
@@ -41,6 +42,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _incorporationMethodAction = "IncorporationMethod";
         private const string _applicationRateKey = "ApplicationRate";
         private const string _farmNameKey = "FarmName";
+        private const string _areaKey = "AreaSpread";
+        private const string _quantityKey = "ManureQuantity";
 
         public IActionResult Index()
         {
@@ -1263,8 +1266,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model = await ValidateSowingDatePost(model);
                 if (model.SowingDate != null)
-                { ValidateCropSpecificRules(model); }
-                model = await _mannerLogic.SetMannerEstimationStep20(model);
+                { ValidateCropSpecificRules(model);
+                    model = await _mannerLogic.SetMannerEstimationStep20(model);
+                }
                 if (!ModelState.IsValid)
                 {
                     model = _mannerLogic.GetMannerEstimationStep20();
@@ -1736,6 +1740,149 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AreaQuantity(MannerEstimationStep28ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} : AreaQuantity() post action called");
+            try
+            {
+                AddErrorIfNull(model.AreaSpread, "AreaSpread", string.Format(Resource.MsgEnterAValidArea, Resource.lblArea));
+                AddErrorIfNull(model.ManureQuantity, "ManureQuantity", string.Format(Resource.MsgEnterAValidQuantity, Resource.lblQuantity));
+                ValidateAreaQuantity(model);
+
+                await _mannerLogic.SetMannerEstimationStep28(model);
+                if (!ModelState.IsValid)
+                {
+                    model = await _mannerLogic.GetMannerEstimationStep28();
+                    return View("AreaQuantity", model);
+                }
+                model.ApplicationRate = Math.Round((model.ManureQuantity.Value / model.AreaSpread.Value), 1);
+                return RedirectToAction(_incorporationMethodAction);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "MannerEstimation  Controller : Exception in ApplicationRateMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+        }
+        private void ValidateAreaQuantity(MannerEstimationStep28ViewModel model)
+        {
+            ValidateArea(model);
+            ValidateQuantity();
+
+            ValidateAreaRules(model);
+            ValidateQuantityRules(model);
+            if (model.AreaSpread > 0 && model.ManureQuantity > 0)
+            {
+                model.ApplicationRate = model.ManureQuantity.Value / model.AreaSpread.Value;
+
+                if (model.ApplicationRate > 250)
+                {
+                    ModelState.AddModelError(_quantityKey, Resource.MsgForApplicationRate);
+                }
+            }
+        }
+
+
+
+        private void ValidateArea(MannerEstimationStep28ViewModel model)
+        {
+            if (!ModelState.TryGetValue(_areaKey, out var state))
+                return;
+
+            var rawValue = state.RawValue?.ToString();
+            var firstError = state.Errors.FirstOrDefault()?.ErrorMessage;
+
+            if (string.IsNullOrEmpty(rawValue))
+                return;
+
+            // Max 10 digits (integer part)
+            if (rawValue.Split('.')[0].Length > 10)
+            {
+
+                ModelState.AddModelError(_areaKey,
+                    string.Format(Resource.lblValueMustNotExeedXDigit, Resource.lblArea, 10));
+                return;
+            }
+
+            // Max 2 decimal places
+            if (model.AreaSpread.HasValue && Math.Round(model.AreaSpread.Value, 2) != model.AreaSpread.Value)
+            {
+                ModelState.AddModelError(_areaKey,
+                     string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblArea.ToLower()));
+                return;
+            }
+
+            var expectedError = string.Format(Resource.lblEnterNumericValue, rawValue, Resource.lblAreas);
+
+            if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
+            {
+                state.Errors.Clear();
+                state.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblArea));
+            }
+        }
+
+
+        private void ValidateQuantity()
+        {
+            if (!ModelState.TryGetValue(_quantityKey, out var state))
+                return;
+
+            var rawValue = state.RawValue?.ToString();
+            var firstError = state.Errors.FirstOrDefault()?.ErrorMessage;
+
+            if (string.IsNullOrEmpty(rawValue))
+                return;
+
+            // No decimal allowed
+            if (rawValue.Contains("."))
+            {
+                ModelState.AddModelError(_quantityKey,
+                    string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
+                return;
+            }
+
+            // Max 10 digits
+            if (rawValue.Length > 10)
+            {
+                ModelState.AddModelError(_quantityKey,
+                 string.Format(Resource.lblValueMustNotExeedXDigit, Resource.lblQuantity, 10));
+                return;
+            }
+                        
+            var expectedError = string.Format(Resource.lblEnterNumericValue, rawValue, Resource.lblQuantity);
+
+            if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
+            {
+                state.Errors.Clear();
+                state.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
+            }
+        }
+        
+
+        private void ValidateAreaRules(MannerEstimationStep28ViewModel model)
+        {
+            if (!model.AreaSpread.HasValue)
+                return;
+
+            if (model.AreaSpread == 0)
+                ModelState.AddModelError(_areaKey, Resource.MsgAreaMustBeGreaterThanZero);
+
+            if (model.AreaSpread < 0)
+                ModelState.AddModelError(_areaKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+        }
+
+
+        private void ValidateQuantityRules(MannerEstimationStep28ViewModel model)
+        {
+            if (!model.ManureQuantity.HasValue)
+                return;
+
+            if (model.ManureQuantity < 0)
+                ModelState.AddModelError(_quantityKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
         }
 
         [HttpGet]
