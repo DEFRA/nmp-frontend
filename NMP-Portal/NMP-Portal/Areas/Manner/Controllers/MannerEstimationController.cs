@@ -1829,30 +1829,39 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private void ValidateQuantity()
         {
             if (!ModelState.TryGetValue(_quantityKey, out var state))
+            {
                 return;
-
-            var rawValue = state.RawValue?.ToString();
+            }
             var firstError = state.Errors.FirstOrDefault()?.ErrorMessage;
+            var rawValue = state.RawValue?.ToString();
 
-            if (string.IsNullOrEmpty(rawValue))
-                return;
-
-            // No decimal allowed
-            if (rawValue.Contains("."))
+            if (string.IsNullOrWhiteSpace(rawValue))
             {
-                ModelState.AddModelError(_quantityKey,
-                    string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
                 return;
             }
 
-            // Max 10 digits
-            if (rawValue.Length > 10)
+            if (rawValue.Contains('.'))
             {
-                ModelState.AddModelError(_quantityKey,
-                 string.Format(Resource.lblValueMustNotExeedXDigit, Resource.lblQuantity, 10));
+                ModelState.AddModelError(
+                    _quantityKey,
+                    string.Format(
+                        Resource.MsgEnterDataOnlyInNumber,
+                        Resource.MsgQuantity));
+
                 return;
             }
-                        
+
+            const int maxLength = 10;
+
+            if (rawValue.Length > maxLength)
+            {
+                ModelState.AddModelError(
+                    _quantityKey,
+                    string.Format(
+                        Resource.lblValueMustNotExeedXDigit,
+                        Resource.lblQuantity,
+                        maxLength));
+            }
             var expectedError = string.Format(Resource.lblEnterNumericValue, rawValue, Resource.lblQuantity);
 
             if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
