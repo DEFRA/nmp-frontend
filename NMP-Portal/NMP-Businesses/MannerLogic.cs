@@ -237,11 +237,11 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     public MannerEstimationStep9ViewModel SetMannerEstimationStep9(MannerEstimationStep9ViewModel mannerEstimationStep9)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep9 = mannerEstimationStep9;
         if (mannerEstimationStep9.CropTypeId != mannerEstimationViewModel.MannerEstimationStep9.CropTypeId)
         {
             mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = null;
         }
+        mannerEstimationViewModel.MannerEstimationStep9 = mannerEstimationStep9;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep9();
     }
@@ -308,11 +308,11 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     public MannerEstimationStep13ViewModel SetMannerEstimationStep13(MannerEstimationStep13ViewModel mannerEstimationStep13)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep13 = mannerEstimationStep13;
         if (mannerEstimationStep13.ApplicationDate != mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate)
         {
             mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = null;
         }
+        mannerEstimationViewModel.MannerEstimationStep13 = mannerEstimationStep13;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep13();
     }
