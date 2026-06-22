@@ -13,5 +13,6 @@ namespace NMP.Commons.ViewModels
         public string? ManureTypeName { get; set; }
         public decimal? AreaSpread { get; set; }
         public decimal? ManureQuantity { get; set; }
+        public decimal? ApplicationRate { get; set; }
     }
 }
