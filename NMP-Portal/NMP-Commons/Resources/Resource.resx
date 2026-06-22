@@ -8024,4 +8024,7 @@ livestock manure.</value>
   <data name="lblReferenceMustBeUniqueFromAnyPreviousEstimations" xml:space="preserve">
     <value>Reference must be unique from any previous estimations.</value>
   </data>
+  <data name="lblWhatIsTheApplicationRate" xml:space="preserve">
+    <value>What is the application rate?</value>
+  </data>
 </root>

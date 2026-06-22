@@ -4,8 +4,8 @@
 @model MannerEstimationStep13ViewModel
 
 @{
-    string title = Resource.lblMannerEstimate; 
-    string pageHeader = string.Format(Resource.lblWhenAreYouApplyingOrganicMaterialOnFieldName,  Model.FieldName);
+    string title = Resource.lblMannerEstimate;
+    string pageHeader = string.Format(Resource.lblWhenAreYouApplyingOrganicMaterialOnFieldName, Model.FieldName);
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
 }
 
@@ -23,6 +23,15 @@
                         @pageHeader
                     </govuk-date-input-fieldset-legend>
                     <govuk-date-input-hint>
+
+                        @if (ViewBag.ClosedPeriod != null)
+                        {
+                            <p class="govuk-body">@Resource.lblYourClosedPeriodForSpreadingOrganicMaterials</p>
+                            <p class="govuk-body">
+                                <strong>@ViewBag.ClosedPeriod</strong><br />
+                                @Resource.lblBasedOnYourCropSoilTypeFarmDetails
+                            </p>
+                        }
                         <p class="govuk-body">
                             @Resource.MsgManureApplyingDateDontHaveExactDate
                         </p>
@@ -36,7 +45,7 @@
             </govuk-date-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> 
+            </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
             <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>

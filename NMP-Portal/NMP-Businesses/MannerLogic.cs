@@ -298,6 +298,13 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         mannerEstimationViewModel.MannerEstimationStep13.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep13.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep13.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+
+        mannerEstimationViewModel.MannerEstimationStep13.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep13.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep13.TopSoilId = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId;
+        mannerEstimationViewModel.MannerEstimationStep13.SubSoilId = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId;
+        mannerEstimationViewModel.MannerEstimationStep13.SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate;
+
         return mannerEstimationViewModel.MannerEstimationStep13;
     }
 
@@ -777,5 +784,14 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep31();
     }
-
+    public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
+    {
+        _logger.LogTrace("MannerLogic : FetchIsPerennialByCropTypeId() called");
+        return await _mannerService.FetchIsPerennialByCropTypeIdServiceAsync(cropTypeId);
+    }
+    public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
+    {
+        _logger.LogTrace("MannerLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");
+        return await _mannerService.FetchSoilTypeSoilTextureByTopSoilSubSoilId(topSoilId, subSoilId);
+    }
 }

@@ -252,5 +252,144 @@ namespace NMP.Commons.Helpers
                 });
             }
         }
+        private static int? GetHarvestYear(DateTime? sowingDate)
+        {
+            if (!sowingDate.HasValue)
+                return null;
+
+            return sowingDate.Value.Month >= 8
+                ? sowingDate.Value.Year + 1
+                : sowingDate.Value.Year;
+        }
+        public static string GetMannerClosedPeriod(int? soilTypeId, int fieldType, DateTime? sowingDate, int countryId, int? cropGroupId = null, int? cropTypeId = null, bool isPerennial = false)
+        {
+            string closedPeriod = string.Empty;
+            int? harvestYear = GetHarvestYear(sowingDate);
+            bool isSandyShallowSoil;
+            if(soilTypeId==null)
+            {
+                isSandyShallowSoil = false;
+            }
+            else
+            {
+                if (countryId == 2) // Scotland
+                {
+                    isSandyShallowSoil = soilTypeId is 10 or 11 or 12;
+                }
+                else
+                {
+                    isSandyShallowSoil = soilTypeId is 0 or 1;
+                }
+            }
+            
+            DateTime? september16 = harvestYear.HasValue
+                ? new DateTime(harvestYear.Value - 1, 9, 16)
+                : null;
+
+            DateTime? october1 = harvestYear.HasValue
+                ? new DateTime(harvestYear.Value - 1, 10, 1)
+                : null;
+
+            // Scotland
+            if (countryId == 2)
+            {
+                if (fieldType == 2) // Grass
+                {
+                    closedPeriod = isSandyShallowSoil
+                        ? "1 September to 31 December"
+                        : "15 October to 31 January";
+                }
+                else if (fieldType == 1) // Arable
+                {
+                    if (isSandyShallowSoil)
+                    {
+                        if (cropGroupId == 0) // cereals
+                        {
+                            if (!sowingDate.HasValue ||
+                                !september16.HasValue ||
+                                sowingDate >= september16)
+                            {
+                                closedPeriod = "1 August to 31 December";
+                            }
+                            else
+                            {
+                                closedPeriod = "16 September to 31 December";
+                            }
+                        }
+                        else if (cropTypeId == 20) // winter oilseed rape
+                        {
+                            if (!sowingDate.HasValue ||
+                                !october1.HasValue ||
+                                sowingDate >= october1)
+                            {
+                                closedPeriod = "1 August to 31 December";
+                            }
+                            else
+                            {
+                                closedPeriod = "1 October to 31 December";
+                            }
+                        }
+                        else
+                        {
+                            closedPeriod = "1 August to 31 December";
+                        }
+                    }
+                    else
+                    {
+                        closedPeriod = "1 October to 31 January";
+                    }
+                }
+            }
+            // England / Wales
+            else
+            {
+                if (fieldType == 2) // Grass
+                {
+                    if (isSandyShallowSoil)
+                    {
+                        closedPeriod = "1 September to 31 December";
+                    }
+                    else if (countryId == 3) // Wales
+                    {
+                        closedPeriod = "15 October to 15 January";
+                    }
+                    else
+                    {
+                        closedPeriod = "15 October to 31 January";
+                    }
+                }
+                else if (fieldType == 1) // Arable
+                {
+                    if (isPerennial &&
+                        sowingDate.HasValue &&
+                        harvestYear.HasValue &&
+                        sowingDate.Value.Year < harvestYear.Value)
+                    {
+                        closedPeriod = isSandyShallowSoil
+                            ? "16 September to 31 December"
+                            : "1 October to 31 January";
+                    }
+                    else if (isSandyShallowSoil)
+                    {
+                        if (!sowingDate.HasValue ||
+                            !september16.HasValue ||
+                            sowingDate >= september16)
+                        {
+                            closedPeriod = "1 August to 31 December";
+                        }
+                        else
+                        {
+                            closedPeriod = "16 September to 31 December";
+                        }
+                    }
+                    else
+                    {
+                        closedPeriod = "1 October to 31 January";
+                    }
+                }
+            }
+
+            return closedPeriod;
+        }
     }
 }

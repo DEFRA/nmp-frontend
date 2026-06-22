@@ -27,4 +27,6 @@ public interface IMannerService
     Task<(List<CommonResponse>?, Error?)> FetchSubsoilList();
     Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList();
     Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
+    Task<bool> FetchIsPerennialByCropTypeIdServiceAsync(int cropTypeId);
+    Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);
 }

@@ -610,5 +610,72 @@ responseWrapper?.Data is not null)
 
         return isExist;
     }
+    public async Task<bool> FetchIsPerennialByCropTypeIdServiceAsync(int cropTypeId)
+    {
+        Error? error = null;
+        bool isPerennial = false;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    CropTypeLinkingResponse? cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
+                    isPerennial = cropTypeLinkingResponse?.IsPerennial ?? false;
+                }
+            }
+            else
+            {
+                _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, error);
+        }
+        return isPerennial;
+    }
+    
+    public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
+    {
+        int? soilTypeId = null;
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            string url = string.Empty;
+            
+            url = string.Format(ApiurlHelper.FetchSoilTypeIdByTopSoilIdAndSubSoilIdAsyncAPI, topSoilId, subSoilId);
+            
+            var response = await httpClient.GetAsync(url);
 
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            {
+                soilTypeId = responseWrapper?.Data?.SoilTypeId?.ToObject<int?>();
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            error = _logger.HandleException(ex, error);
+        }
+        return (soilTypeId, error);
+    }
 }

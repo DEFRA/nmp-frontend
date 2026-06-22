@@ -13,5 +13,14 @@ namespace NMP.Commons.ViewModels
         public string ManureTypeName { get; set; } = string.Empty;
         public bool IsCheckAnswer { get; set; } = false;
         public int FarmRB209CountryId { get; set; }
+        public int? CropTypeId { get; set; }
+        public int? CropGroupId { get; set; }
+        public int? TopSoilId { get; set; }
+        public int? SubSoilId { get; set; }
+        public DateTime? SowingDate { get; set; }
+
+        public bool IsWarningMsgNeedToShow { get; set; } = false;
+        public bool IsClosedPeriodWarning { get; set; } = false;
+
     }
 }

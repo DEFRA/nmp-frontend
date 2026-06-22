@@ -41,6 +41,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _incorporationMethodAction = "IncorporationMethod";
         private const string _applicationRateKey = "ApplicationRate";
         private const string _farmNameKey = "FarmName";
+        private const string _dateStringLiteral = "yyyy-MM-dd";
 
         public IActionResult Index()
         {
@@ -752,7 +753,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("ApplicationDate");
         }
         [HttpGet]
-        public IActionResult ApplicationDate()
+        public async Task<IActionResult> ApplicationDate()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationDate() action called");
 
@@ -762,6 +763,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            bool isPerennial = await _mannerLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
+            int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
+
+            var (soilTypeId, error) = await _mannerLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(model.TopSoilId ?? 0, model.SubSoilId ?? 0);
+
+            string closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, model.SowingDate, model.FarmRB209CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
+            ViewBag.ClosedPeriod = closedPeriod;
+            model.IsWarningMsgNeedToShow = false;
+            model.IsClosedPeriodWarning = false;
             return View(model);
         }
         [HttpPost]
@@ -1920,7 +1930,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private async Task<(List<IncorporationMethodResponse>, Error?)> BindViewBegForIncorporationMethod(MannerEstimationStep29ViewModel model)
         {
             string applicableFor = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Resource.lblG : Resource.lblA;
-            if(model.ApplicationMethodId==(int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm||
+            if (model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm ||
                 model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm)
             {
                 applicableFor = Resource.lblNull;
@@ -2022,8 +2032,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     applicableFor = Resource.lblS;
                 }
             }
-            if(model.IncorporationMethodId==(int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated||
-                model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection||
+            if (model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ||
+                model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection ||
                 model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection)
             {
                 applicableFor = Resource.lblNull;
@@ -2130,11 +2140,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return View(model);
             }
-             model = _mannerLogic.GetMannerEstimationStep31();
+            model = _mannerLogic.GetMannerEstimationStep31();
 
             string action = _farmNameKey;
             List<SelectListItem> farmsWithFields = await BindAllFarmList();
-            if(model.IsCopyEstimate.HasValue&&model.IsCopyEstimate.Value)
+            if (model.IsCopyEstimate.HasValue && model.IsCopyEstimate.Value)
             {
                 return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
             }
