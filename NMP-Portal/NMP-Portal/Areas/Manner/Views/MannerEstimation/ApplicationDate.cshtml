@@ -17,6 +17,8 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="ApplicationDate" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
+
+            @await Html.PartialAsync("_MannerApplicationDateWarning", Model)
             <govuk-date-input for="ApplicationDate">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
