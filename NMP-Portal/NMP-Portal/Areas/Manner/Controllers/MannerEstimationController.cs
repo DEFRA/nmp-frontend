@@ -2837,6 +2837,27 @@ namespace NMP.Portal.Areas.Manner.Controllers
             );
 
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConditionsAffectingNutrients(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() post action called");
+            if (!ModelState.IsValid)
+            {
+                return View(_conditionsAffectingNutrients, model);
+            }
+            try
+            {
 
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog} Exception in ConditionsAffectingNutrients() : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                TempData["ConditionsAffectingNutrientsError"] = ex.Message;
+                return View(model);
+            }
+
+        }
     }
 }

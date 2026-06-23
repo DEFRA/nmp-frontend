@@ -806,4 +806,61 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep32();
     }
+
+    public bool AddMannerEstimation()
+    {
+        bool success = false;
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        var mannerEstimate = new MannerEstimation
+        {
+            Name = mannerEstimationViewModel.MannerEstimationStep31.Name,
+            OrganisationID = Guid.NewGuid(),
+            FarmName = mannerEstimationViewModel.MannerEstimationStep1.FarmName,
+            CountryID = mannerEstimationViewModel.MannerEstimationStep2.CountryID,
+            Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode,
+            AverageAnuualRainfall = mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall,
+            FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName,
+            IsWithinNVZ = mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ,
+            NVZProgrammeID = 2,
+            TopSoilID = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId,
+            SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
+            CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
+            MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
+            SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate
+        };
+
+        var application = new MannerEstimationApplication
+        {
+            ManureTypeID = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId,
+            ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate.Value,
+
+            N = mannerEstimationViewModel.MannerEstimationStep25.N,
+            P2O5 = mannerEstimationViewModel.MannerEstimationStep25.P2O5,
+            K2O = mannerEstimationViewModel.MannerEstimationStep25.K2O,
+            MgO = mannerEstimationViewModel.MannerEstimationStep25.MgO,
+            SO3 = mannerEstimationViewModel.MannerEstimationStep25.SO3,
+
+            DryMatterPercent = mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent,
+            UricAcid = mannerEstimationViewModel.MannerEstimationStep25.UricAcid??0,
+
+            ApplicationRate = mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate,
+            AreaSpread = mannerEstimationViewModel.MannerEstimationStep28.AreaSpread,
+            ManureQuantity = mannerEstimationViewModel.MannerEstimationStep28.ManureQuantity,
+
+            IncorporationMethodID = mannerEstimationViewModel.MannerEstimationStep29.IncorporationMethodId,
+            IncorporationDelayID = mannerEstimationViewModel.MannerEstimationStep30.IncorporationDelayId,
+            WindspeedID = mannerEstimationViewModel.MannerEstimationStep32.WindspeedId,
+            RainfallWithinSixHoursID = mannerEstimationViewModel.MannerEstimationStep32.RainfallWithinSixHoursId,
+            MoistureID = mannerEstimationViewModel.MannerEstimationStep32.MoistureTypeId,
+
+            AutumnCropNitrogenUptake = mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake,
+            EndOfDrainageDate = mannerEstimationViewModel.MannerEstimationStep32.SoilDrainageEndDate,
+            RainfallPostApplication = mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall,
+
+        };
+
+
+
+        return suceess;
+    }
 }
