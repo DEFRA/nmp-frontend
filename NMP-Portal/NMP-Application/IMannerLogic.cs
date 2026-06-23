@@ -103,4 +103,6 @@ public interface IMannerLogic
     Task<bool> FetchIsExistMannerEstimationsByOrgIdAndName(Guid organisationId, string name);
     MannerEstimationStep31ViewModel GetMannerEstimationStep31();
     MannerEstimationStep31ViewModel SetMannerEstimationStep31(MannerEstimationStep31ViewModel mannerEstimationStep31);
+    MannerEstimationStep32ViewModel GetMannerEstimationStep32();
+    MannerEstimationStep32ViewModel SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32);
 }

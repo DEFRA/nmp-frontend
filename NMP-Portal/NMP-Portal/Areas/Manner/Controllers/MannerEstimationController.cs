@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Newtonsoft.Json;
 using NMP.Application;
 using NMP.Businesses;
 using NMP.Commons.Enums;
@@ -14,6 +16,7 @@ using NMP.Commons.ViewModels;
 using NMP.Portal.Controllers;
 using NMP.Portal.Helpers;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -22,13 +25,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IFarmLogic farmLogic, IMannerLogic mannerLogic, ICropLogic cropLogic, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic) : Controller
+    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IOrganicManureLogic organicManureLogic, IFarmLogic farmLogic, IMannerLogic mannerLogic, ICropLogic cropLogic, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic) : Controller
     {
         private readonly ILogger<MannerEstimationController> _logger = logger;
         private readonly IFarmLogic _farmLogic = farmLogic;
         private readonly IMannerLogic _mannerLogic = mannerLogic;
         private readonly ICropLogic _cropLogic = cropLogic;
-
+        private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
         private readonly IFieldLogic _fieldLogic = fieldLogic;
         private const string _checkAnswerActionName = "CheckAnswer";
         private readonly IDataProtector _mannerEstimationProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.MannerEstimationController");
@@ -44,6 +47,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _farmNameKey = "FarmName";
         private const string _areaKey = "AreaSpread";
         private const string _quantityKey = "ManureQuantity";
+        private const string _dateStringLiteral = "yyyy-MM-dd";
+        private const string _conditionsAffectingNutrients = "ConditionsAffectingNutrients";
+        private const string _soilDrainageEndDateKey = "SoilDrainageEndDate";
+        private const string _totalRainfallKey = "TotalRainfall";
+        private const string _autumnCropNitrogenUptakeKey = "AutumnCropNitrogenUptake";
 
         public IActionResult Index()
         {
@@ -1266,7 +1274,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model = await ValidateSowingDatePost(model);
                 if (model.SowingDate != null)
-                { ValidateCropSpecificRules(model);
+                {
+                    ValidateCropSpecificRules(model);
                     model = await _mannerLogic.SetMannerEstimationStep20(model);
                 }
                 if (!ModelState.IsValid)
@@ -1870,7 +1879,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 state.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
             }
         }
-        
+
 
         private void ValidateAreaRules(MannerEstimationStep28ViewModel model)
         {
@@ -2077,7 +2086,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private async Task<(List<IncorporationMethodResponse>, Error?)> BindViewBegForIncorporationMethod(MannerEstimationStep29ViewModel model)
         {
             string applicableFor = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Resource.lblG : Resource.lblA;
-            if(model.ApplicationMethodId==(int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm||
+            if (model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm ||
                 model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm)
             {
                 applicableFor = Resource.lblNull;
@@ -2179,8 +2188,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     applicableFor = Resource.lblS;
                 }
             }
-            if(model.IncorporationMethodId==(int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated||
-                model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection||
+            if (model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ||
+                model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection ||
                 model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection)
             {
                 applicableFor = Resource.lblNull;
@@ -2259,13 +2268,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
-        [HttpGet]
-        public async Task<IActionResult> ConditionsAffectingNutrients()
-        {
-            _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() action called");
 
-            return View();
-        }
         [HttpGet]
         public async Task<IActionResult> Name()
         {
@@ -2287,11 +2290,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return View(model);
             }
-             model = _mannerLogic.GetMannerEstimationStep31();
+            model = _mannerLogic.GetMannerEstimationStep31();
 
             string action = _farmNameKey;
             List<SelectListItem> farmsWithFields = await BindAllFarmList();
-            if(model.IsCopyEstimate.HasValue&&model.IsCopyEstimate.Value)
+            if (model.IsCopyEstimate.HasValue && model.IsCopyEstimate.Value)
             {
                 return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
             }
@@ -2325,5 +2328,515 @@ namespace NMP.Portal.Areas.Manner.Controllers
             Guid.TryParse(orgId, out Guid organisationId);
             return organisationId;
         }
+        private async Task<int> BuildAutumnCropNitrogenUptakeAsync(MannerEstimationStep32ViewModel model)
+        {
+
+            var (link, _) = await _organicManureLogic
+                .FetchCropTypeLinkingByCropTypeId(model.CropTypeId.Value);
+
+            var payload = new
+            {
+                cropTypeId = link.MannerCropTypeID,
+                applicationMonth = model.ApplicationDate.Value.Month
+            };
+
+            string json = JsonConvert.SerializeObject(payload);
+
+            var (uptake, _) = await _organicManureLogic.FetchAutumnCropNitrogenUptake(json);
+
+            return uptake.value;
+        }
+        private IActionResult? HandleError(Error? error, MannerEstimationStep32ViewModel model)
+        {
+            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+            {
+                ViewBag.Error = error.Message;
+                return View(model);
+            }
+
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AutumnCropNitrogenUptake()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} AutumnCropNitrogenUptake() action called");
+            MannerEstimationStep32ViewModel model = _mannerLogic.GetMannerEstimationStep32();
+
+            ViewBag.FieldName = model.FieldName;
+            ViewBag.CropTypeName = model.CropTypeName;
+
+
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AutumnCropNitrogenUptake(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} AutumnCropNitrogenUptake() post action called");
+            if (!ModelState.IsValid)
+            {
+                ReplaceNumericError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.lblAutumnCropNitrogenNUptake);
+            }
+
+            if (model.AutumnCropNitrogenUptake == null)
+            {
+                ModelState.AddModelError(
+                    _autumnCropNitrogenUptakeKey,
+                    Resource.MsgEnterAValueBeforeContinue);
+            }
+            else
+            {
+                var value = model.AutumnCropNitrogenUptake.Value;
+
+                if (value < 0)
+                {
+                    ModelState.AddModelError(
+                        _autumnCropNitrogenUptakeKey,
+                        Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
+
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.FieldName = model.FieldName;
+                ViewBag.CropTypeName = model.CropTypeName;
+                model = _mannerLogic.GetMannerEstimationStep32();
+                return View(_autumnCropNitrogenUptakeKey, model);
+            }
+
+
+            _mannerLogic.SetMannerEstimationStep32(model);
+            return RedirectToAction(_conditionsAffectingNutrients);
+
+
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SoilDrainageEndDate()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilDrainageEndDate() action called");
+            MannerEstimationStep32ViewModel? model = _mannerLogic.GetMannerEstimationStep32();
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SoilDrainageEndDate(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilDrainageEndDate() post action called");
+            ValidateSoilDrainageEndDate();
+
+            AddErrorIfNull(model.SoilDrainageEndDate, _soilDrainageEndDateKey, Resource.MsgEnterADateBeforeContinuing);
+            ValidateMinMaxSoilDrainageDate(model);
+            if (!ModelState.IsValid)
+            {
+                model = _mannerLogic.GetMannerEstimationStep32();
+                return View(_soilDrainageEndDateKey, model);
+            }
+
+            _mannerLogic.SetMannerEstimationStep32(model);
+            return RedirectToAction(_conditionsAffectingNutrients);
+        }
+
+        private void ValidateMinMaxSoilDrainageDate(MannerEstimationStep32ViewModel model)
+        {
+            if (model.SoilDrainageEndDate == null)
+            {
+                return;
+            }
+
+            var date = model.SoilDrainageEndDate.Value;
+
+            if (DateTime.TryParseExact(
+                    date.Date.ToString(),
+                    "dd-MM-yyyy",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out _))
+            {
+                ModelState.AddModelError(
+                    _soilDrainageEndDateKey,
+                    Resource.MsgEnterValidDate);
+            }
+
+            if (!(date.Month >= (int)NMP.Commons.Enums.Month.January && date.Month <= (int)NMP.Commons.Enums.Month.April))
+            {
+                ModelState.AddModelError(
+                    _soilDrainageEndDateKey,
+                    Resource.MsgSoilDrainageEndDate1stJan30Apr);
+            }
+        }
+        private void ValidateSoilDrainageEndDate()
+        {
+            if (ModelState.IsValid || !ModelState.ContainsKey(_soilDrainageEndDateKey))
+            {
+                return;
+            }
+
+            var errors = ModelState[_soilDrainageEndDateKey]?.Errors;
+
+            if (errors == null || errors.Count == 0)
+            {
+                return;
+            }
+
+            var dateError = errors[0].ErrorMessage;
+
+            if (dateError == string.Format(Resource.MsgDateMustBeARealDate, _soilDrainageEndDateKey))
+            {
+                errors.Clear();
+                errors.Add(Resource.MsgEnterValidDate);
+                return;
+            }
+
+            var missingDateMessages = new[]
+            {
+        string.Format(Resource.MsgDateMustIncludeAMonth, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeAMonthAndYear, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeADayAndYear, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeAYear, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeADay, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeADayAndMonth, _soilDrainageEndDateKey)
+    };
+
+            if (missingDateMessages.Contains(dateError))
+            {
+                errors.Clear();
+                errors.Add(Resource.MsgTheDateMustInclude);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RainfallWithinSixHour()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} RainfallWithinSixHour() action called");
+            MannerEstimationStep32ViewModel? model = _mannerLogic.GetMannerEstimationStep32();
+
+            (List<RainTypeResponse> rainType, Error error) = await _organicManureLogic.FetchRainTypeList();
+            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+            {
+                ViewBag.Error = error.Message;
+            }
+            else
+            {
+                ViewBag.RainTypes = rainType;
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RainfallWithinSixHour(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} RainfallWithinSixHour() post action called");
+            AddErrorIfNull(model.RainfallWithinSixHoursId, "RainfallWithinSixHoursId", Resource.MsgSelectAnOptionBeforeContinuing);
+            if (!ModelState.IsValid)
+            {
+                model = _mannerLogic.GetMannerEstimationStep32();
+                return View("RainfallWithinSixHour", model);
+            }
+
+            _mannerLogic.SetMannerEstimationStep32(model);
+            return RedirectToAction(_conditionsAffectingNutrients);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EffectiveRainfall()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() action called");
+            MannerEstimationStep32ViewModel? model = _mannerLogic.GetMannerEstimationStep32();
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EffectiveRainfall(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() post action called");
+            if (!ModelState.IsValid)
+            {
+                model = _mannerLogic.GetMannerEstimationStep32();
+                return View("EffectiveRainfall", model);
+            }
+
+            _mannerLogic.SetMannerEstimationStep32(model);
+            return RedirectToAction(_conditionsAffectingNutrients);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EffectiveRainfallManual()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} EffectiveRainfallManual() action called");
+            MannerEstimationStep32ViewModel? model = _mannerLogic.GetMannerEstimationStep32();
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EffectiveRainfallManual(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} EffectiveRainfallManual() post action called");
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(_totalRainfallKey))
+            {
+                var RainfallError = ModelState[_totalRainfallKey]?.Errors.Count > 0 ?
+                                ModelState[_totalRainfallKey]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_totalRainfallKey].RawValue, _totalRainfallKey)))
+                {
+                    ModelState[_totalRainfallKey]?.Errors.Clear();
+                    decimal decimalValue;
+                    if (decimal.TryParse(ModelState[_totalRainfallKey].RawValue.ToString(), out decimalValue))
+                    {
+                        ModelState[_totalRainfallKey]?.Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
+                    }
+                    else
+                    {
+                        ModelState[_totalRainfallKey]?.Errors.Add(Resource.MsgForEffectiveRainfallManual);
+                    }
+                }
+            }
+
+            AddErrorIfNull(model.TotalRainfall, _totalRainfallKey, Resource.MsgEnterRainfallAmountBeforeContinuing);
+
+            if (model.TotalRainfall != null && model.TotalRainfall < 0)
+            {
+                ModelState.AddModelError(_totalRainfallKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model = _mannerLogic.GetMannerEstimationStep32();
+                return View("EffectiveRainfallManual", model);
+            }
+
+            _mannerLogic.SetMannerEstimationStep32(model);
+            return RedirectToAction(_conditionsAffectingNutrients);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Windspeed()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} Windspeed() action called");
+            MannerEstimationStep32ViewModel? model = _mannerLogic.GetMannerEstimationStep32();
+            (List<WindspeedResponse> windspeeds, Error? error) = await _organicManureLogic.FetchWindspeedList();
+
+            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+            {
+                ViewBag.Error = error.Message;
+            }
+            else
+            {
+                ViewBag.Windspeeds = windspeeds;
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Windspeed(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} Windspeed() post action called");
+            AddErrorIfNull(model.WindspeedId, "WindspeedID", Resource.MsgSelectAWindConditionBeforeContinuing);
+
+            if (!ModelState.IsValid)
+            {
+                model = _mannerLogic.GetMannerEstimationStep32();
+                return await Task.FromResult(View("Windspeed", model));
+            }
+
+
+            _mannerLogic.SetMannerEstimationStep32(model);
+            return RedirectToAction(_conditionsAffectingNutrients);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TopsoilMoisture()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} TopsoilMoisture() action called");
+            MannerEstimationStep32ViewModel? model = _mannerLogic.GetMannerEstimationStep32();
+
+            (List<MoistureTypeResponse> moisterTypes, Error error) = await _organicManureLogic.FetchMoisterTypeList();
+            if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
+            {
+                ViewBag.Error = error.Message;
+            }
+            else
+            {
+                ViewBag.moisterTypes = moisterTypes;
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TopsoilMoisture(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  TopsoilMoisture() post action called");
+            AddErrorIfNull(model.MoistureTypeId, "MoistureTypeId", Resource.MsgSelectATopsoilWetnessConditionBeforeContinuing);
+
+            if (!ModelState.IsValid)
+            {
+                model = _mannerLogic.GetMannerEstimationStep32();
+                return View("TopsoilMoisture", model);
+            }
+
+            _mannerLogic.SetMannerEstimationStep32(model);
+            return RedirectToAction(_conditionsAffectingNutrients);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ConditionsAffectingNutrients()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() action called");
+            MannerEstimationStep32ViewModel? model = _mannerLogic.GetMannerEstimationStep32();
+            Error error = new Error();
+            try
+            {
+                //Autumn crop Nitrogen uptake
+                model.AutumnCropNitrogenUptake ??= await BuildAutumnCropNitrogenUptakeAsync(model);
+
+                //Soil drainage end date
+                if (model.SoilDrainageEndDate == null)
+                {
+                    BindSoilDraingeDate(model);
+                }
+
+                // Rainfall within 6 hours
+                RainTypeResponse rainType;
+
+                if (model.RainfallWithinSixHoursId.HasValue)
+                {
+                    (rainType, error) = await _organicManureLogic
+                        .FetchRainTypeById(model.RainfallWithinSixHoursId.Value);
+                }
+                else
+                {
+                    (rainType, error) = await _organicManureLogic
+                        .FetchRainTypeDefault();
+                }
+
+                var result = HandleError(error, model);
+                if (result != null)
+                {
+                    return result;
+                }
+                model.RainfallWithinSixHoursId ??= rainType.ID;
+                model.RainfallWithinSixHours = rainType.Name;
+
+
+                if (model.PostCode != null)
+                {
+                    // Effective rainfall after application
+                    string halfPostCode = model.PostCode[..4].Trim();
+
+
+                    if (model.ApplicationDate.HasValue &&
+                        model.SoilDrainageEndDate.HasValue &&
+                        model.TotalRainfall == null)
+                    {
+                        var rainfallPostCodeApplication = new
+                        {
+                            applicationDate = model.ApplicationDate.Value.ToString(_dateStringLiteral),
+                            endOfSoilDrainageDate = model.SoilDrainageEndDate.Value.ToString(_dateStringLiteral),
+                            climateDataPostcode = halfPostCode
+                        };
+
+                        model.TotalRainfall = await _organicManureLogic
+                            .FetchRainfallByPostcodeAndDateRange(
+                                JsonConvert.SerializeObject(rainfallPostCodeApplication));
+                    }
+                }
+
+
+                // Windspeed during application
+                WindspeedResponse? windspeed;
+
+                (windspeed, Error? errorForWindSpeed) = model.WindspeedId.HasValue
+                    ? await _organicManureLogic.FetchWindspeedById(model.WindspeedId.Value)
+                    : await _organicManureLogic.FetchWindspeedDataDefault();
+
+                 result = HandleError(errorForWindSpeed, model);
+                if (result != null)
+                {
+                    return result;
+                }
+                model.WindspeedId = windspeed?.ID;
+                model.Windspeed = windspeed?.Name;
+
+
+                // Topsoil moisture
+                MoistureTypeResponse moistureType;
+
+                if (model.MoistureTypeId.HasValue)
+                {
+                    (moistureType, error) = await _organicManureLogic
+                        .FetchMoisterTypeById(model.MoistureTypeId.Value);
+                }
+                else
+                {
+                    (moistureType, error) = await _organicManureLogic
+                        .FetchMoisterTypeDefaultByApplicationDate(
+                            model.ApplicationDate!.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                }
+
+                result = HandleError(error, model);
+                if (result != null)
+                {
+                    return result;
+                }
+                model.MoistureTypeId ??= moistureType.ID;
+                model.MoistureType = moistureType.Name;
+                _mannerLogic.SetMannerEstimationStep32(model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Manner Estimation Controller : Exception in ConditionsAffectingNutrients() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                ViewBag.Error = ex.Message;
+                return View(model);
+            }
+
+
+            return View(model);
+        }
+
+        private static void BindSoilDraingeDate(MannerEstimationStep32ViewModel model)
+        {
+
+            var applicationDate = model.ApplicationDate.Value;
+
+            var targetYear = applicationDate.Month >= 8
+                ? applicationDate.AddYears(1).Year
+                : applicationDate.Year;
+
+            model.SoilDrainageEndDate = new DateTime(
+                targetYear,
+                (int)NMP.Commons.Enums.Month.March,
+                31,
+                0,
+                0,
+                0,
+                DateTimeKind.Utc
+            );
+
+        }
+
     }
 }
