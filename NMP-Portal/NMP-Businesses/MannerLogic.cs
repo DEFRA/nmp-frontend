@@ -237,6 +237,10 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     public MannerEstimationStep9ViewModel SetMannerEstimationStep9(MannerEstimationStep9ViewModel mannerEstimationStep9)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (mannerEstimationStep9.CropTypeId != mannerEstimationViewModel.MannerEstimationStep9.CropTypeId)
+        {
+            mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = null;
+        }
         mannerEstimationViewModel.MannerEstimationStep9 = mannerEstimationStep9;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep9();
@@ -314,6 +318,10 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     public MannerEstimationStep13ViewModel SetMannerEstimationStep13(MannerEstimationStep13ViewModel mannerEstimationStep13)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (mannerEstimationStep13.ApplicationDate != mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate)
+        {
+            mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = null;
+        }
         mannerEstimationViewModel.MannerEstimationStep13 = mannerEstimationStep13;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep13();
@@ -574,7 +582,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         return await _mannerService.FetchMannerEstimationsList(orgId);
     }
 
-       
+
     private static bool IsCropCereal(int cropTypeId)
     {
         return cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterWheat ||
@@ -752,7 +760,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep29 = mannerEstimationStep29;
         SetMannerEstimationToSession(mannerEstimationViewModel);
-        return  GetMannerEstimationStep29();
+        return GetMannerEstimationStep29();
     }
     public MannerEstimationStep30ViewModel GetMannerEstimationStep30()
     {
@@ -767,7 +775,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep30 = mannerEstimationStep30;
         SetMannerEstimationToSession(mannerEstimationViewModel);
-        return  GetMannerEstimationStep30();
+        return GetMannerEstimationStep30();
     }
     public async Task<bool> FetchIsExistMannerEstimationsByOrgIdAndName(Guid organisationId, string name)
     {
@@ -783,9 +791,30 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     public MannerEstimationStep31ViewModel SetMannerEstimationStep31(MannerEstimationStep31ViewModel mannerEstimationStep31)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep31= mannerEstimationStep31;
+        mannerEstimationViewModel.MannerEstimationStep31 = mannerEstimationStep31;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep31();
+    }
+
+    public MannerEstimationStep32ViewModel GetMannerEstimationStep32()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep32.ApplicationMethodId = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId;
+        mannerEstimationViewModel.MannerEstimationStep32.IncorporationMethodId = mannerEstimationViewModel.MannerEstimationStep29.IncorporationMethodId;
+        mannerEstimationViewModel.MannerEstimationStep32.ApplicationRateMethod = mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod;
+        mannerEstimationViewModel.MannerEstimationStep32.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
+        mannerEstimationViewModel.MannerEstimationStep32.PostCode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
+        mannerEstimationViewModel.MannerEstimationStep32.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = mannerEstimationViewModel.MannerEstimationStep9.CropTypeName;
+        mannerEstimationViewModel.MannerEstimationStep32.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
+        return mannerEstimationViewModel.MannerEstimationStep32;
+    }
+    public MannerEstimationStep32ViewModel SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep32 = mannerEstimationStep32;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep32();
     }
     public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
     {
