@@ -2379,7 +2379,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AutumnCropNitrogenUptake() post action called");
             if (!ModelState.IsValid)
             {
-                ReplaceNumericError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.MsgEnterValidNumericValueBeforeContinuing);
+                ReplaceNumericError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.lblAutumnCropNitrogenNUptake);
             }
 
             if (model.AutumnCropNitrogenUptake == null)
@@ -2713,7 +2713,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.AutumnCropNitrogenUptake ??= await BuildAutumnCropNitrogenUptakeAsync(model);
 
                 //Soil drainage end date
-                BindSoilDraingeDate(model);
+                if (model.SoilDrainageEndDate == null)
+                {
+                    BindSoilDraingeDate(model);
+                }
 
                 // Rainfall within 6 hours
                 RainTypeResponse rainType;
@@ -2816,17 +2819,23 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private static void BindSoilDraingeDate(MannerEstimationStep32ViewModel model)
         {
-            if (model.SoilDrainageEndDate == null)
-            {
-                if (model.ApplicationDate.Value.Month >= 8)
-                {
-                    model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Commons.Enums.Month.March, 31, 0, 0, 0, DateTimeKind.Utc);
-                }
-                else
-                {
-                    model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Commons.Enums.Month.March, 31, 0, 0, 0, DateTimeKind.Utc);
-                }
-            }
+
+            var applicationDate = model.ApplicationDate.Value;
+
+            var targetYear = applicationDate.Month >= 8
+                ? applicationDate.AddYears(1).Year
+                : applicationDate.Year;
+
+            model.SoilDrainageEndDate = new DateTime(
+                targetYear,
+                (int)NMP.Commons.Enums.Month.March,
+                31,
+                0,
+                0,
+                0,
+                DateTimeKind.Utc
+            );
+
         }
 
     }
