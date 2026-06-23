@@ -2399,12 +2399,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         Resource.MsgEnterANumberWhichIsGreaterThanZero);
                 }
 
-                if (value % 1 != 0)
-                {
-                    ModelState.AddModelError(
-                        _autumnCropNitrogenUptakeKey,
-                        Resource.lblEnterANumberWhichIsAnIntegerValue);
-                }
             }
 
             if (!ModelState.IsValid)
@@ -2719,17 +2713,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.AutumnCropNitrogenUptake ??= await BuildAutumnCropNitrogenUptakeAsync(model);
 
                 //Soil drainage end date
-                if (model.SoilDrainageEndDate == null)
-                {
-                    if (model.ApplicationDate.Value.Month >= 8)
-                    {
-                        model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Commons.Enums.Month.March, 31, 0, 0, 0, DateTimeKind.Utc);
-                    }
-                    else
-                    {
-                        model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Commons.Enums.Month.March, 31, 0, 0, 0, DateTimeKind.Utc);
-                    }
-                }
+                BindSoilDraingeDate(model);
 
                 // Rainfall within 6 hours
                 RainTypeResponse rainType;
@@ -2785,7 +2769,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ? await _organicManureLogic.FetchWindspeedById(model.WindspeedId.Value)
                     : await _organicManureLogic.FetchWindspeedDataDefault();
 
-                var redirect = HandleError(errorForWindSpeed, model);
+                 result = HandleError(errorForWindSpeed, model);
                 if (result != null)
                 {
                     return result;
@@ -2830,6 +2814,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        
+        private static void BindSoilDraingeDate(MannerEstimationStep32ViewModel model)
+        {
+            if (model.SoilDrainageEndDate == null)
+            {
+                if (model.ApplicationDate.Value.Month >= 8)
+                {
+                    model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.AddYears(1).Year, (int)NMP.Commons.Enums.Month.March, 31, 0, 0, 0, DateTimeKind.Utc);
+                }
+                else
+                {
+                    model.SoilDrainageEndDate = new DateTime(model.ApplicationDate.Value.Year, (int)NMP.Commons.Enums.Month.March, 31, 0, 0, 0, DateTimeKind.Utc);
+                }
+            }
+        }
+
     }
 }
