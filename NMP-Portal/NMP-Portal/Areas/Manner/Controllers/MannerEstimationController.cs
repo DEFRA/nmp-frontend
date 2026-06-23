@@ -2330,9 +2330,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
         private async Task<int> BuildAutumnCropNitrogenUptakeAsync(MannerEstimationStep32ViewModel model)
         {
-            var result = new List<AutumnCropNitrogenUptakeDetail>();
 
-            var (link, error) = await _organicManureLogic
+            var (link, _) = await _organicManureLogic
                 .FetchCropTypeLinkingByCropTypeId(model.CropTypeId.Value);
 
             var payload = new
@@ -2343,7 +2342,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             string json = JsonConvert.SerializeObject(payload);
 
-            var (uptake, err2) = await _organicManureLogic.FetchAutumnCropNitrogenUptake(json);
+            var (uptake, _) = await _organicManureLogic.FetchAutumnCropNitrogenUptake(json);
 
             return uptake.value;
         }
@@ -2385,21 +2384,27 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (model.AutumnCropNitrogenUptake == null)
             {
-                ModelState.AddModelError(_autumnCropNitrogenUptakeKey, Resource.MsgEnterAValueBeforeContinue);
+                ModelState.AddModelError(
+                    _autumnCropNitrogenUptakeKey,
+                    Resource.MsgEnterAValueBeforeContinue);
             }
-            if (model.AutumnCropNitrogenUptake != null && model.AutumnCropNitrogenUptake < 0)
+            else
             {
-                ModelState.AddModelError(_autumnCropNitrogenUptakeKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-            }
-            if (model.AutumnCropNitrogenUptake != null)
-            {
-                decimal value = model.AutumnCropNitrogenUptake.Value;
+                var value = model.AutumnCropNitrogenUptake.Value;
+
+                if (value < 0)
+                {
+                    ModelState.AddModelError(
+                        _autumnCropNitrogenUptakeKey,
+                        Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                }
 
                 if (value % 1 != 0)
                 {
-                    ModelState.AddModelError(_autumnCropNitrogenUptakeKey, Resource.lblEnterANumberWhichIsAnIntegerValue);
+                    ModelState.AddModelError(
+                        _autumnCropNitrogenUptakeKey,
+                        Resource.lblEnterANumberWhichIsAnIntegerValue);
                 }
-
             }
 
             if (!ModelState.IsValid)
@@ -2449,45 +2454,69 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private void ValidateMinMaxSoilDrainageDate(MannerEstimationStep32ViewModel model)
         {
-            if (model.SoilDrainageEndDate != null)
+            if (model.SoilDrainageEndDate == null)
             {
-                if (DateTime.TryParseExact(model.SoilDrainageEndDate.Value.Date.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
-                {
-                    ModelState.AddModelError(_soilDrainageEndDateKey, Resource.MsgEnterValidDate);
-                }
+                return;
+            }
 
-                if (!(model.SoilDrainageEndDate.Value.Month >= (int)NMP.Commons.Enums.Month.January && model.SoilDrainageEndDate.Value.Month <= (int)NMP.Commons.Enums.Month.April))
-                {
-                    ModelState.AddModelError(_soilDrainageEndDateKey, Resource.MsgSoilDrainageEndDate1stJan30Apr);
-                }
+            var date = model.SoilDrainageEndDate.Value;
+
+            if (DateTime.TryParseExact(
+                    date.Date.ToString(),
+                    "dd-MM-yyyy",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out _))
+            {
+                ModelState.AddModelError(
+                    _soilDrainageEndDateKey,
+                    Resource.MsgEnterValidDate);
+            }
+
+            if (!(date.Month >= (int)NMP.Commons.Enums.Month.January && date.Month <= (int)NMP.Commons.Enums.Month.April))
+            {
+                ModelState.AddModelError(
+                    _soilDrainageEndDateKey,
+                    Resource.MsgSoilDrainageEndDate1stJan30Apr);
             }
         }
-
         private void ValidateSoilDrainageEndDate()
         {
-            if ((!ModelState.IsValid) && ModelState.ContainsKey(_soilDrainageEndDateKey))
+            if (ModelState.IsValid || !ModelState.ContainsKey(_soilDrainageEndDateKey))
             {
-                var dateError = ModelState[_soilDrainageEndDateKey]?.Errors.Count > 0 ?
-                                ModelState[_soilDrainageEndDateKey]?.Errors[0].ErrorMessage.ToString() : null;
+                return;
+            }
 
-                if (dateError != null && dateError.Equals(string.Format(Resource.MsgDateMustBeARealDate, _soilDrainageEndDateKey)))
-                {
-                    ModelState[_soilDrainageEndDateKey]?.Errors.Clear();
-                    ModelState[_soilDrainageEndDateKey]?.Errors.Add(Resource.MsgEnterValidDate);
-                }
-                if (dateError != null && (
-                    dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonth, _soilDrainageEndDateKey)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAMonthAndYear, _soilDrainageEndDateKey)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndYear, _soilDrainageEndDateKey)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeAYear, _soilDrainageEndDateKey)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADay, _soilDrainageEndDateKey)) ||
-                     dateError.Equals(string.Format(Resource.MsgDateMustIncludeADayAndMonth, _soilDrainageEndDateKey))))
-                {
-                    ModelState[_soilDrainageEndDateKey]?.Errors.Clear();
-                    ModelState[_soilDrainageEndDateKey]?.Errors.Add(Resource.MsgTheDateMustInclude);
-                }
+            var errors = ModelState[_soilDrainageEndDateKey]?.Errors;
 
+            if (errors == null || errors.Count == 0)
+            {
+                return;
+            }
 
+            var dateError = errors[0].ErrorMessage;
+
+            if (dateError == string.Format(Resource.MsgDateMustBeARealDate, _soilDrainageEndDateKey))
+            {
+                errors.Clear();
+                errors.Add(Resource.MsgEnterValidDate);
+                return;
+            }
+
+            var missingDateMessages = new[]
+            {
+        string.Format(Resource.MsgDateMustIncludeAMonth, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeAMonthAndYear, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeADayAndYear, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeAYear, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeADay, _soilDrainageEndDateKey),
+        string.Format(Resource.MsgDateMustIncludeADayAndMonth, _soilDrainageEndDateKey)
+    };
+
+            if (missingDateMessages.Contains(dateError))
+            {
+                errors.Clear();
+                errors.Add(Resource.MsgTheDateMustInclude);
             }
         }
 
@@ -2790,56 +2819,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ConditionsAffectingNutrients(MannerEstimationStep32ViewModel model)
-        //{
-        //    _logger.LogTrace($"Organic Manure Controller : ConditionsAffectingNutrients() post action called");
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(_conditionsAffectingNutrients, model);
-        //    }
-        //    try
-        //    {
-        //        if (model.OrganicManures.Count > 0)
-        //        {
-        //            int i = 0;
-        //            foreach (var orgManure in model.OrganicManures)
-        //            {
-        //                if (model.AutumnCropNitrogenUptakes != null && model.AutumnCropNitrogenUptakes.Count > 0)
-        //                {
-
-        //                    var matchingUptake = model.AutumnCropNitrogenUptakes?
-        //                 .FirstOrDefault(uptake => uptake.FieldName == orgManure.FieldName);
-
-        //                    if (matchingUptake != null)
-        //                    {
-        //                        orgManure.AutumnCropNitrogenUptake = matchingUptake.AutumnCropNitrogenUptake;
-        //                    }
-        //                    else
-        //                    {
-        //                        orgManure.AutumnCropNitrogenUptake = 0;
-        //                    }
-        //                }
-        //                orgManure.SoilDrainageEndDate = model.SoilDrainageEndDate.Value;
-        //                orgManure.RainfallWithinSixHoursID = model.RainfallWithinSixHoursID.Value;
-        //                orgManure.Rainfall = model.TotalRainfall.Value;
-        //                orgManure.WindspeedID = model.WindspeedID.Value;
-        //                orgManure.MoistureID = model.MoistureTypeId.Value;
-
-        //                i++;
-        //            }
-        //        }
-        //        HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Organic Manure Controller : Exception in ConditionsAffectingNutrients() : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-        //        TempData["ConditionsAffectingNutrientsError"] = ex.Message;
-        //        return View(model);
-        //    }
-        //    return RedirectToAction(_checkAnswer);
-
-        //}
+        
     }
 }
