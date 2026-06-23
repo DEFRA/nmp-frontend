@@ -32,7 +32,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            var mannerEstimations = responseWrapper?.Data?.records.ToObject<List<MannerEstimation>>();
+            var mannerEstimations = responseWrapper?.Data?.ToObject<List<MannerEstimation>>();
             mannerEstimationsList.AddRange(mannerEstimations);
         }
         else
