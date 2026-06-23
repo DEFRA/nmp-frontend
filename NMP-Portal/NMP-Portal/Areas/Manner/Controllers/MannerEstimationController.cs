@@ -2745,7 +2745,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         .FetchRainTypeDefault();
                 }
 
-                HandleError(error, model);
+                var result = HandleError(error, model);
+                if (result != null)
+                {
+                    return result;
+                }
                 model.RainfallWithinSixHoursId ??= rainType.ID;
                 model.RainfallWithinSixHours = rainType.Name;
 
@@ -2781,8 +2785,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ? await _organicManureLogic.FetchWindspeedById(model.WindspeedId.Value)
                     : await _organicManureLogic.FetchWindspeedDataDefault();
 
-                HandleError(errorForWindSpeed, model);
-
+                var redirect = HandleError(errorForWindSpeed, model);
+                if (result != null)
+                {
+                    return result;
+                }
                 model.WindspeedId = windspeed?.ID;
                 model.Windspeed = windspeed?.Name;
 
@@ -2802,7 +2809,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                             model.ApplicationDate!.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
                 }
 
-                HandleError(error, model);
+                result = HandleError(error, model);
+                if (result != null)
+                {
+                    return result;
+                }
                 model.MoistureTypeId ??= moistureType.ID;
                 model.MoistureType = moistureType.Name;
                 _mannerLogic.SetMannerEstimationStep32(model);
