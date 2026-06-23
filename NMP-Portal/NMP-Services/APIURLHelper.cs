@@ -264,4 +264,5 @@ internal static class ApiurlHelper
     public const string FetchAllFarmsWithLastUpdatedDateByOrgIdAPI = "/farmsWithLastUpdatedDate/{0}";
     public const string FetchAllMannerEstimationsAsyncAPI = "/manner-estimations/{0}";
     public const string FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI = "manner-estimations/exists?organisationId={0}&name={1}";
+    public const string AddMannerEstimationAsyncAPI = "manner-estimations";
 }
