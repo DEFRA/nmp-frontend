@@ -32,7 +32,7 @@ namespace NMP.Application
         MannerEstimationStep8ViewModel SetMannerEstimationStep8(MannerEstimationStep8ViewModel mannerEstimationStep8);
 
         MannerEstimationStep9ViewModel GetMannerEstimationStep9();
-        MannerEstimationStep9ViewModel SetMannerEstimationStep9(MannerEstimationStep9ViewModel mannerEstimationStep9);
+        Task<MannerEstimationStep9ViewModel> SetMannerEstimationStep9(MannerEstimationStep9ViewModel mannerEstimationStep9);
         MannerEstimationStep10ViewModel GetMannerEstimationStep10();
         MannerEstimationStep10ViewModel SetMannerEstimationStep10(MannerEstimationStep10ViewModel mannerEstimationStep10);
         MannerEstimationStep11ViewModel GetMannerEstimationStep11();

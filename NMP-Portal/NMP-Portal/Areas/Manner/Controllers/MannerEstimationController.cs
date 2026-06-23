@@ -579,7 +579,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             model.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupId ?? 0);
             model.CropTypeName = await _fieldLogic.FetchCropTypeById(model.CropTypeId ?? 0);
-            model = _mannerEstimationLogic.SetMannerEstimationStep9(model);
+            model =await _mannerEstimationLogic.SetMannerEstimationStep9(model);
 
             if (model.CropTypeId != null && Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), model.CropTypeId))
             {
