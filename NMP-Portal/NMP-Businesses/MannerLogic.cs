@@ -826,4 +826,14 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         _logger.LogTrace("MannerLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");
         return await _mannerService.FetchSoilTypeSoilTextureByTopSoilSubSoilId(topSoilId, subSoilId);
     }
+    public async Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchMannerApplicationsByMannerEstimationId() called");
+        return await _mannerService.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId);
+    }
+    public async Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchMannerApplicationById() called");
+        return await _mannerService.FetchMannerApplicationById(mannerApplicationId);
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace NMP.Commons.ViewModels
 
         public bool? IsFarmOrganic { get; set; }
         public int? ManureTypeId { get; set; }
+        public int? ManureGroupId { get; set; }
 
         public string? ClosedPeriod { get; set; }
 
@@ -51,6 +53,9 @@ namespace NMP.Commons.ViewModels
         public string? EndClosedPeriodFebruaryExistWithinThreeWeeksHeader { get; set; } = string.Empty;
         public int EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID { get; set; }
         public int EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID { get; set; }
+
+        public int? MannerEstimationId { get; set; }
+        public int? MannerEstimationApplicationsId { get; set; }
 
     }
 }

@@ -29,4 +29,7 @@ public interface IMannerService
     Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
     Task<bool> FetchIsPerennialByCropTypeIdServiceAsync(int cropTypeId);
     Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);
+
+    Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);
+    Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
 }
