@@ -1901,7 +1901,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    model = await _mannerLogic.GetMannerEstimationStep25();
+                    model = await _mannerEstimationLogic.GetMannerEstimationStep25();
                     ValidateManualNutrientValues();
                 }
 
@@ -2577,7 +2577,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    model = _mannerLogic.GetMannerEstimationStep30();
+                    model = _mannerEstimationLogic.GetMannerEstimationStep30();
                     (_, Error? error) = await BindViewBegForIncorporationDelay(model);
                     if (error != null)
                     {
