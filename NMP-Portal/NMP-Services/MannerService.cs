@@ -8,6 +8,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Text;
 using System.Web;
 namespace NMP.Services;
 
@@ -578,134 +579,7 @@ responseWrapper?.Data is not null)
         return (subSoilList, error);
     }
 
-    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId)
-    {
-        List<MannerEstimation> mannerEstimationsList = new List<MannerEstimation>();
-        Error? error = null;
-
-        HttpClient httpClient = await GetNMPAPIClient();
-        string url = string.Format(ApiurlHelper.FetchAllMannerEstimationsAsyncAPI, orgId);
-        var response = await httpClient.GetAsync(url);
-
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-        {
-            var mannerEstimations = responseWrapper?.Data?.ToObject<List<MannerEstimation>>();
-            mannerEstimationsList.AddRange(mannerEstimations);
-        }
-        else
-        {
-            error = _logger.ExtractError(responseWrapper, error);
-        }
-
-        return (mannerEstimationsList, error);
-    }
-    public async Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name)
-    {
-        HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI,organisationId, name));
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        bool isExist = responseWrapper?.Data?["exists"] ?? false;
-
-        return isExist;
-    }
-    public async Task<bool> FetchIsPerennialByCropTypeIdServiceAsync(int cropTypeId)
-    {
-        Error? error = null;
-        bool isPerennial = false;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    CropTypeLinkingResponse? cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                    isPerennial = cropTypeLinkingResponse?.IsPerennial ?? false;
-                }
-            }
-            else
-            {
-                _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            _logger.HandleException(ex, error);
-        }
-        return isPerennial;
-    }
-    
-    public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
-    {
-        int? soilTypeId = null;
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Empty;
-            
-            url = string.Format(ApiurlHelper.FetchSoilTypeIdByTopSoilIdAndSubSoilIdAsyncAPI, topSoilId, subSoilId);
-            
-            var response = await httpClient.GetAsync(url);
-
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-            {
-                soilTypeId = responseWrapper?.Data?.SoilTypeId?.ToObject<int?>();
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (soilTypeId, error);
-    }
-
-   
-
-    public async Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId)
-    {
-        List<MannerEstimationApplication> mannerEstimationApplications = new List<MannerEstimationApplication>();
-        Error? error = null;
-        HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerApplicationMethodsByApplicableForAsyncAPI, mannerEstimationId));
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-        if (response.IsSuccessStatusCode)
-        {
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                var applications = responseWrapper?.Data?.ToObject<List<MannerEstimationApplication>>();
-                mannerEstimationApplications.AddRange(applications);
-            }
-        }
-        else
-        {
-            error = _logger.ExtractError(responseWrapper, error);
-        }
-
-        return (mannerEstimationApplications, error);
-    }
+        
     public async Task<(MannerEstimationApplication?, Error?)> FetchMannerApplicationById(int mannerApplicationId)
     {
         MannerEstimationApplication? mannerEstimationApplication = null;
