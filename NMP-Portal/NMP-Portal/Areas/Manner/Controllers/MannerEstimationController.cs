@@ -1901,6 +1901,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    model = await _mannerLogic.GetMannerEstimationStep25();
                     ValidateManualNutrientValues();
                 }
 
@@ -2048,6 +2049,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                     if (model.ApplicationRate > 250)
                         ModelState.AddModelError(_applicationRateKey, Resource.MsgForApplicationRate);
+                    if (model.ApplicationRate != Math.Round(model.ApplicationRate.Value, 2))
+                    {
+                        ModelState.AddModelError(_applicationRateKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblApplicationRate));
+                    }
                 }
                 await _mannerEstimationLogic.SetMannerEstimationStep27(model);
                 if (!ModelState.IsValid)
@@ -2096,8 +2101,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model = await _mannerEstimationLogic.GetMannerEstimationStep28();
                     return View("AreaQuantity", model);
                 }
-                model.ApplicationRate = Math.Round((model.ManureQuantity.Value / model.AreaSpread.Value), 1);
+                model.ApplicationRate = Math.Round((model.ManureQuantity.Value / model.AreaSpread.Value), 2);
                 return RedirectToAction(_incorporationMethodAction);
+               
             }
             catch (Exception ex)
             {
@@ -2177,17 +2183,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return;
             }
-
-            if (rawValue.Contains('.'))
-            {
-                ModelState.AddModelError(
-                    _quantityKey,
-                    string.Format(
-                        Resource.MsgForApplicationRate,
-                        Resource.MsgQuantity));
-
-                return;
-            }
+                       
 
             const int maxLength = 10;
 
@@ -2220,6 +2216,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (model.AreaSpread < 0)
                 ModelState.AddModelError(_areaKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+
+            if (model.AreaSpread != Math.Round(model.AreaSpread.Value, 2))
+            {
+                ModelState.AddModelError(_areaKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblAreas));
+            }
         }
 
 
@@ -2230,6 +2231,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (model.ManureQuantity < 0)
                 ModelState.AddModelError(_quantityKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            if (model.ManureQuantity != Math.Round(model.ManureQuantity.Value, 2))
+            {
+                ModelState.AddModelError(_quantityKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblQuantity));
+            }
         }
 
         [HttpGet]
@@ -2572,6 +2577,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    model = _mannerLogic.GetMannerEstimationStep30();
                     (_, Error? error) = await BindViewBegForIncorporationDelay(model);
                     if (error != null)
                     {

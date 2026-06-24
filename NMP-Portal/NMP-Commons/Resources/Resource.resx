@@ -8027,4 +8027,7 @@ livestock manure.</value>
   <data name="lblWhatIsTheApplicationRate" xml:space="preserve">
     <value>What is the application rate?</value>
   </data>
+  <data name="MsgEnterAnPropertyOnlyTwoDecimal" xml:space="preserve">
+    <value>{0} must not exceed two decimal places.</value>
+  </data>
 </root>
