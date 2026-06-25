@@ -9,6 +9,7 @@ namespace NMP.Commons.Helpers
 {
     public static class Functions
     {
+        private const string _1AugustTo31December = "1 August to 31 December";
         public static Error? ExtractError(this ILogger logger, ResponseWrapper? wrapper, Error? error)
         {
             if (wrapper != null && wrapper.Error != null)
@@ -261,135 +262,183 @@ namespace NMP.Commons.Helpers
                 ? sowingDate.Value.Year + 1
                 : sowingDate.Value.Year;
         }
-        public static string GetMannerClosedPeriod(int? soilTypeId, int fieldType, DateTime? sowingDate, int countryId, int? cropGroupId = null, int? cropTypeId = null, bool isPerennial = false)
+        public static string GetMannerClosedPeriod(
+    int? soilTypeId,
+    int fieldType,
+    DateTime? sowingDate,
+    int countryId,
+    int? cropGroupId = null,
+    int? cropTypeId = null,
+    bool isPerennial = false)
         {
-            string closedPeriod = string.Empty;
             int? harvestYear = GetHarvestYear(sowingDate);
-            bool isSandyShallowSoil;
-            if(soilTypeId==null)
-            {
-                isSandyShallowSoil = false;
-            }
-            else
-            {
-                if (countryId == 2) // Scotland
-                {
-                    isSandyShallowSoil = soilTypeId is 10 or 11 or 12;
-                }
-                else
-                {
-                    isSandyShallowSoil = soilTypeId is 0 or 1;
-                }
-            }
-            
+
+            bool isSandyShallowSoil = IsSandyShallowSoil(soilTypeId, countryId);
+
             DateTime? september16 = harvestYear.HasValue
-                ? new DateTime(harvestYear.Value - 1, 9, 16)
+                ? new DateTime(harvestYear.Value - 1, 9, 16, 00, 00, 00, DateTimeKind.Unspecified)
                 : null;
 
             DateTime? october1 = harvestYear.HasValue
-                ? new DateTime(harvestYear.Value - 1, 10, 1)
+                ? new DateTime(harvestYear.Value - 1, 10, 1, 00, 00, 00, DateTimeKind.Unspecified)
                 : null;
 
-            // Scotland
-            if (countryId == 2)
+            return countryId == 2
+                ? GetScotlandClosedPeriod(
+                    fieldType,
+                    isSandyShallowSoil,
+                    sowingDate,
+                    cropGroupId,
+                    cropTypeId,
+                    september16,
+                    october1)
+                : GetEnglandWalesClosedPeriod(
+                    fieldType,
+                    isSandyShallowSoil,
+                    sowingDate,
+                    countryId,
+                    harvestYear,
+                    isPerennial,
+                    september16);
+        }
+        private static bool IsSandyShallowSoil(int? soilTypeId, int countryId)
+        {
+            if (!soilTypeId.HasValue)
+                return false;
+
+            return countryId == 2
+                ? soilTypeId is 10 or 11 or 12
+                : soilTypeId is 0 or 1;
+        }
+        private static string GetScotlandClosedPeriod(
+    int fieldType,
+    bool isSandyShallowSoil,
+    DateTime? sowingDate,
+    int? cropGroupId,
+    int? cropTypeId,
+    DateTime? september16,
+    DateTime? october1)
+        {
+            if (fieldType == 2)
             {
-                if (fieldType == 2) // Grass
-                {
-                    closedPeriod = isSandyShallowSoil
-                        ? "1 September to 31 December"
-                        : "15 October to 31 January";
-                }
-                else if (fieldType == 1) // Arable
-                {
-                    if (isSandyShallowSoil)
-                    {
-                        if (cropGroupId == 0) // cereals
-                        {
-                            if (!sowingDate.HasValue ||
-                                !september16.HasValue ||
-                                sowingDate >= september16)
-                            {
-                                closedPeriod = "1 August to 31 December";
-                            }
-                            else
-                            {
-                                closedPeriod = "16 September to 31 December";
-                            }
-                        }
-                        else if (cropTypeId == 20) // winter oilseed rape
-                        {
-                            if (!sowingDate.HasValue ||
-                                !october1.HasValue ||
-                                sowingDate >= october1)
-                            {
-                                closedPeriod = "1 August to 31 December";
-                            }
-                            else
-                            {
-                                closedPeriod = "1 October to 31 December";
-                            }
-                        }
-                        else
-                        {
-                            closedPeriod = "1 August to 31 December";
-                        }
-                    }
-                    else
-                    {
-                        closedPeriod = "1 October to 31 January";
-                    }
-                }
-            }
-            // England / Wales
-            else
-            {
-                if (fieldType == 2) // Grass
-                {
-                    if (isSandyShallowSoil)
-                    {
-                        closedPeriod = "1 September to 31 December";
-                    }
-                    else if (countryId == 3) // Wales
-                    {
-                        closedPeriod = "15 October to 15 January";
-                    }
-                    else
-                    {
-                        closedPeriod = "15 October to 31 January";
-                    }
-                }
-                else if (fieldType == 1) // Arable
-                {
-                    if (isPerennial &&
-                        sowingDate.HasValue &&
-                        harvestYear.HasValue &&
-                        sowingDate.Value.Year < harvestYear.Value)
-                    {
-                        closedPeriod = isSandyShallowSoil
-                            ? "16 September to 31 December"
-                            : "1 October to 31 January";
-                    }
-                    else if (isSandyShallowSoil)
-                    {
-                        if (!sowingDate.HasValue ||
-                            !september16.HasValue ||
-                            sowingDate >= september16)
-                        {
-                            closedPeriod = "1 August to 31 December";
-                        }
-                        else
-                        {
-                            closedPeriod = "16 September to 31 December";
-                        }
-                    }
-                    else
-                    {
-                        closedPeriod = "1 October to 31 January";
-                    }
-                }
+                return isSandyShallowSoil
+                    ? "1 September to 31 December"
+                    : "15 October to 31 January";
             }
 
-            return closedPeriod;
+            if (fieldType == 1)
+            {
+                return GetScotlandArableClosedPeriod(
+                    isSandyShallowSoil,
+                    sowingDate,
+                    cropGroupId,
+                    cropTypeId,
+                    september16,
+                    october1);
+            }
+
+            return string.Empty;
+        }
+        private static string GetScotlandArableClosedPeriod(
+    bool isSandyShallowSoil,
+    DateTime? sowingDate,
+    int? cropGroupId,
+    int? cropTypeId,
+    DateTime? september16,
+    DateTime? october1)
+        {
+            if (!isSandyShallowSoil)
+                return "1 October to 31 January";
+
+            if (cropGroupId == 0)
+            {
+                return IsOnOrAfter(sowingDate, september16)
+                    ? _1AugustTo31December
+                    : "16 September to 31 December";
+            }
+
+            if (cropTypeId == 20)
+            {
+                return IsOnOrAfter(sowingDate, october1)
+                    ? _1AugustTo31December
+                    : "1 October to 31 December";
+            }
+
+            return _1AugustTo31December;
+        }
+        private static string GetEnglandWalesClosedPeriod(
+    int fieldType,
+    bool isSandyShallowSoil,
+    DateTime? sowingDate,
+    int countryId,
+    int? harvestYear,
+    bool isPerennial,
+    DateTime? september16)
+        {
+            if (fieldType == 2)
+            {
+                return GetGrassClosedPeriod(
+                    isSandyShallowSoil,
+                    countryId);
+            }
+
+            if (fieldType == 1)
+            {
+                return GetEnglandWalesArableClosedPeriod(
+                    isSandyShallowSoil,
+                    sowingDate,
+                    harvestYear,
+                    isPerennial,
+                    september16);
+            }
+
+            return string.Empty;
+        }
+        private static string GetGrassClosedPeriod(
+    bool isSandyShallowSoil,
+    int countryId)
+        {
+            if (isSandyShallowSoil)
+                return "1 September to 31 December";
+
+            return countryId == 3
+                ? "15 October to 15 January"
+                : "15 October to 31 January";
+        }
+        private static string GetEnglandWalesArableClosedPeriod(
+    bool isSandyShallowSoil,
+    DateTime? sowingDate,
+    int? harvestYear,
+    bool isPerennial,
+    DateTime? september16)
+        {
+            bool isEstablishedPerennial =
+                isPerennial &&
+                sowingDate.HasValue &&
+                harvestYear.HasValue &&
+                sowingDate.Value.Year < harvestYear.Value;
+
+            if (isEstablishedPerennial)
+            {
+                return isSandyShallowSoil
+                    ? "16 September to 31 December"
+                    : "1 October to 31 January";
+            }
+
+            if (!isSandyShallowSoil)
+                return "1 October to 31 January";
+
+            return IsOnOrAfter(sowingDate, september16)
+                ? _1AugustTo31December
+                : "16 September to 31 December";
+        }
+        private static bool IsOnOrAfter(
+    DateTime? sowingDate,
+    DateTime? comparisonDate)
+        {
+            return !sowingDate.HasValue ||
+                   !comparisonDate.HasValue ||
+                   sowingDate >= comparisonDate;
         }
     }
 }

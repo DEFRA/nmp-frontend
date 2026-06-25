@@ -73,7 +73,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             {
                 if (responseWrapper?.Data is not null)
                 {
-                    success = responseWrapper?.Data?.savedMannerEstimation ?? false;
+                    success = responseWrapper.Data?.savedMannerEstimation ?? false;
                 }
             }
             else
