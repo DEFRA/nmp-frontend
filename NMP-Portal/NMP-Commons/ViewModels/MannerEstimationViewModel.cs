@@ -52,6 +52,10 @@ namespace NMP.Commons.ViewModels
         public bool? EnglishRues { get; set; }
         public string? CropType { get; set; }
         public string? SoilType { get; set; }
+
+        public int? MannerEstimationId { get; set; }
+        public int? MannerEstimationApplicationsId { get; set; }
+
         public MannerEstimationStep1ViewModel MannerEstimationStep1 { get; set; }
         public MannerEstimationStep2ViewModel MannerEstimationStep2 { get; set; }
         public MannerEstimationStep3ViewModel MannerEstimationStep3 { get; set; }

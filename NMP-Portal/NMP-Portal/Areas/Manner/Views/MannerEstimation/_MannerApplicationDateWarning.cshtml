@@ -1,0 +1,46 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+
+@model NMP.Commons.ViewModels.MannerEstimationStep13ViewModel
+
+@{
+    var warningModel = new WarningMessageViewModel
+    {
+        IsWales = Model.FarmRB209CountryId ==
+                   (int)NMP.Commons.Enums.FarmCountry.Wales
+    };
+
+    if (Model.IsClosedPeriodWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.ClosedPeriodWarningPara1,
+            Para2 = Model.ClosedPeriodWarningPara2,
+            Para3 = Model.ClosedPeriodWarningPara3
+        });
+    }
+
+    if (Model.IsApplicationJulyToSeptWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.ApplicationJulyToSeptPara1,
+            Para2 = Model.ApplicationJulyToSeptPara2,
+            Para3 = Model.ApplicationJulyToSeptPara3
+        });
+    }
+
+    if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1,
+            Para2 = Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2,
+            Para3 = Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3
+        });
+    }
+}
+
+@await Html.PartialAsync(
+"~/Views/OrganicManure/_WarningMessagePartial.cshtml",
+    warningModel)

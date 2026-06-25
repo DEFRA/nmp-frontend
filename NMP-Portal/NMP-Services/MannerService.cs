@@ -8,6 +8,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Text;
 using System.Web;
 namespace NMP.Services;
 
@@ -576,40 +577,6 @@ responseWrapper?.Data is not null)
         }
 
         return (subSoilList, error);
-    }
-
-    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId)
-    {
-        List<MannerEstimation> mannerEstimationsList = new List<MannerEstimation>();
-        Error? error = null;
-
-        HttpClient httpClient = await GetNMPAPIClient();
-        string url = string.Format(ApiurlHelper.FetchAllMannerEstimationsAsyncAPI, orgId);
-        var response = await httpClient.GetAsync(url);
-
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-        {
-            var mannerEstimations = responseWrapper?.Data?.ToObject<List<MannerEstimation>>();
-            mannerEstimationsList.AddRange(mannerEstimations);
-        }
-        else
-        {
-            error = _logger.ExtractError(responseWrapper, error);
-        }
-
-        return (mannerEstimationsList, error);
-    }
-    public async Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name)
-    {
-        HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI,organisationId, name));
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        bool isExist = responseWrapper?.Data?["exists"] ?? false;
-
-        return isExist;
     }
 
 }
