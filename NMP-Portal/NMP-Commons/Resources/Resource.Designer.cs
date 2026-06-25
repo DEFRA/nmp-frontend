@@ -20309,6 +20309,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The calculated Application Rate cannot be less than 0 or greater than 250..
+        /// </summary>
+        public static string MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty {
+            get {
+                return ResourceManager.GetString("MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check your nutrient recommendations..
         /// </summary>
         public static string MsgCheckYourNutrientRecommendations {

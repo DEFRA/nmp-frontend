@@ -1792,11 +1792,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateQuantityRules(model);
             if (model.AreaSpread > 0 && model.ManureQuantity > 0)
             {
-                model.ApplicationRate = model.ManureQuantity.Value / model.AreaSpread.Value;
+                model.ApplicationRate = Math.Round(model.ManureQuantity.Value / model.AreaSpread.Value, 2);
 
-                if (model.ApplicationRate > 250)
+                if (model.ApplicationRate <= 0 || model.ApplicationRate > 250)
                 {
-                    ModelState.AddModelError(_quantityKey, Resource.MsgForApplicationRate);
+                    ModelState.AddModelError(_quantityKey, Resource.MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty);
                 }
             }
         }

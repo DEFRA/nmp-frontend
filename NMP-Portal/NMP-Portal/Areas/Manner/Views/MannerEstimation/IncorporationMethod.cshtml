@@ -5,9 +5,18 @@
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
 }
 @section BeforeContent {
-
-    <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-
+  @if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
+  {
+      <govuk-back-link asp-action="ManualApplicationRate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+  }
+  else if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+  {
+      <govuk-back-link asp-action="AreaQuantity" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+  }
+  else
+  {
+      <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+  }
 }
 
 <div class="govuk-grid-row">

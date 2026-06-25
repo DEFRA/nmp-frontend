@@ -743,6 +743,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         mannerEstimationViewModel.MannerEstimationStep29.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
         mannerEstimationViewModel.MannerEstimationStep29.ApplicationMethodId = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId;
         mannerEstimationViewModel.MannerEstimationStep29.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep29.ApplicationRateMethod = mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod;
         return mannerEstimationViewModel.MannerEstimationStep29;
     }
     public MannerEstimationStep29ViewModel SetMannerEstimationStep29(MannerEstimationStep29ViewModel mannerEstimationStep29)
