@@ -2848,7 +2848,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             try
             {
-                (bool success, Error? error) = await _mannerEstimationLogic.AddMannerEstimation();
+                Guid organisationId = GetOrganisationId();
+                (bool success, Error? error) = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
                 if(!string.IsNullOrWhiteSpace(error?.Message)&&!success)
                 {
                     TempData["ConditionsAffectingNutrientsError"] = error.Message;

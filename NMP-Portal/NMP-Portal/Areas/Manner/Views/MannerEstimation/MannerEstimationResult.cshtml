@@ -5,8 +5,7 @@
 
         @if (ViewBag.Success != null && ViewBag.Success == "true")
         {
-            <govuk-notification-banner type="NotificationBannerType.Success">
-                @* <govuk-notification-banner-title>@Resource.lblSuccess</govuk-notification-banner-title> *@
+            <govuk-notification-banner type="NotificationBannerType.Success">                
                 <h3 class="govuk-notification-banner__heading">
                     @Resource.lblNutrientSupplyEstimateCreated
                 </h3>
@@ -14,7 +13,7 @@
             </govuk-notification-banner>
         }
         <h1 class="govuk-heading-l margin-bottom-twenty">
-            Estimate of nutrient supply from organic material results: Need to work on this page
+            @Resource.lblEstimateOfNutrientSupplyFromOrganicMaterialResults
         </h1>
 
     </div>

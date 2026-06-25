@@ -8027,4 +8027,7 @@ livestock manure.</value>
   <data name="lblWhatIsTheApplicationRate" xml:space="preserve">
     <value>What is the application rate?</value>
   </data>
+  <data name="lblEstimateOfNutrientSupplyFromOrganicMaterialResults" xml:space="preserve">
+    <value>Estimate of nutrient supply from organic material results</value>
+  </data>
 </root>

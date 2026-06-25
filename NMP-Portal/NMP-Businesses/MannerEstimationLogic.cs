@@ -3,8 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NMP.Application;
+using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
+using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
@@ -12,6 +14,7 @@ using NMP.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,6 +31,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
     private const string _mannerEstimationSessionName = "MannerEstimation";
+    private const string _dateStringLiteral = "yyyy-MM-dd";
 
     public MannerEstimationStep1ViewModel SetMannerEstimationStep1(MannerEstimationStep1ViewModel mannerEstimationStep1)
     {
@@ -682,14 +686,14 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return GetMannerEstimationStep32();
     }
 
-    public async Task<(bool, Error?)> AddMannerEstimation()
+    public async Task<(bool, Error?)> AddMannerEstimation(Guid organisationId)
     {
-        bool success = false;
+        bool success = false; 
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         var mannerEstimate = new MannerEstimation
         {
             Name = mannerEstimationViewModel.MannerEstimationStep31.Name,
-            OrganisationID = Guid.NewGuid(),
+            OrganisationID = organisationId,
             FarmName = mannerEstimationViewModel.MannerEstimationStep1.FarmName,
             CountryID = mannerEstimationViewModel.MannerEstimationStep2.CountryID,
             Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode,
@@ -712,6 +716,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         decimal? sO3 = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.SO3 : mannerEstimationViewModel.MannerEstimationStep25.SO3;
         decimal? dryMatter = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.DryMatter : mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent;
         decimal? uricAcid = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.Uric : mannerEstimationViewModel.MannerEstimationStep25.UricAcid;
+
+        decimal? nH4N = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.NH4N : mannerEstimationViewModel.MannerEstimationStep25.NH4N;
+        decimal? nO3N = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.NO3N : mannerEstimationViewModel.MannerEstimationStep25.NO3N;
 
         if (mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
         {
@@ -736,9 +743,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             DryMatterPercent = dryMatter,
             UricAcid = uricAcid ?? 0,
 
+            NH4N = nH4N,
+            NO3N = nO3N,
+
             ApplicationRate = mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate,
             AreaSpread = mannerEstimationViewModel.MannerEstimationStep28.AreaSpread,
             ManureQuantity = mannerEstimationViewModel.MannerEstimationStep28.ManureQuantity,
+            ApplicationMethodID = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId,
 
             IncorporationMethodID = mannerEstimationViewModel.MannerEstimationStep29.IncorporationMethodId,
             IncorporationDelayID = mannerEstimationViewModel.MannerEstimationStep30.IncorporationDelayId,
@@ -752,16 +763,119 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         };
 
+        (string? mannerRequestbody, Error? error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
+        if (!string.IsNullOrEmpty(error?.Message))
+        {
+            return (false, error);
+        }
+
+        (MannerCalculateNutrientResponse mannerOutput, error) = await _organicManureLogic.FetchMannerCalculateNutrient(mannerRequestbody);
+        if (error == null && mannerOutput != null)
+        {
+            mannerEstimationApplication.TotalN = mannerOutput.TotalN;
+            mannerEstimationApplication.CropAvailableNCurrentCrop = mannerOutput.CurrentCropAvailableN;
+            mannerEstimationApplication.CropAvailableNitrogenFollowingCropYearTwo = mannerOutput.FollowingCropYear2AvailableN;
+
+            mannerEstimationApplication.TotalP2O5 = mannerOutput.TotalP2O5;
+            mannerEstimationApplication.CropAvailableP2O5 = mannerOutput.CropAvailableP2O5;
+
+            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3;
+            mannerEstimationApplication.TotalMgO = mannerOutput.TotalMgO;
+
+            mannerEstimationApplication.TotalK2O = mannerOutput.TotalK2O;
+            mannerEstimationApplication.CropAvailableK2O = mannerOutput.CropAvailableK2O;
+
+            mannerEstimationApplication.NitrogenUseEfficiency = mannerOutput.NitrogenEfficiencePercentage;
+
+            mannerEstimationApplication.MineralisedNitrogenLosses = mannerOutput.MineralisedN;
+            mannerEstimationApplication.LostNitrateLosses = mannerOutput.NitrateNLoss;
+            mannerEstimationApplication.LostAmmonia = mannerOutput.AmmoniaNLoss;
+            mannerEstimationApplication.LostDenitrified = mannerOutput.DenitrifiedNLoss;
+        }
+
         string jsonData = JsonConvert.SerializeObject(new
         {
             MannerEstimation = mannerEstimate,
             MannerEstimationApplication = mannerEstimationApplication
         });
 
-        (success, Error? error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
+        (success, error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
         return (success, error);
     }
 
+    private async Task<(string?, Error?)> BindManureOutput(MannerEstimation mannerEstimation, MannerEstimationApplication mannerEstimationApplication)
+    {
+        Error? error = null;
+        bool isMannerScotland = mannerEstimation.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland;
+        int rb209CountryId = mannerEstimation.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ||
+            mannerEstimation.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
+        string? manureName = string.Empty;
+        bool? isLiquid = false;
+        (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationApplication.ManureTypeID.Value);
+        if (manureType != null)
+        {
+            manureName = manureType.Name;
+            isLiquid = manureType.IsLiquid ?? false;
+        }
+        var mannerOutput = new
+        {
+            runType = isMannerScotland ? (int)NMP.Commons.Enums.RunType.MannerScotland : (int)NMP.Commons.Enums.RunType.MannerEngland,
+            postcode = mannerEstimation.Postcode.Split(" ")[0],
+            countryID = rb209CountryId,
+            field = new
+            {
+                fieldID = 0,
+                fieldName = mannerEstimation.FieldName,
+                MannerCropTypeID = mannerEstimation.MannerCropTypeID,
+                topsoilID = mannerEstimation.TopSoilID,
+                subsoilID = mannerEstimation.SubSoilID,
+                isInNVZ = mannerEstimation.IsWithinNVZ
+            },
+            manureApplications = new[]
+                                      {
+                                                new
+                                                {
+                                                    manureDetails = new
+                                                    {
+                                                        manureID = mannerEstimationApplication.ManureTypeID,
+                                                        name = manureName,
+                                                        isLiquid = isLiquid,
+                                                        dryMatter = mannerEstimationApplication.DryMatterPercent,
+                                                        totalN = mannerEstimationApplication.N,
+                                                        nH4N = mannerEstimationApplication.NH4N,
+                                                        uric = mannerEstimationApplication.UricAcid,
+                                                        nO3N = mannerEstimationApplication.NO3N,
+                                                        p2O5 = mannerEstimationApplication.P2O5,
+                                                        k2O = mannerEstimationApplication.K2O,
+                                                        sO3 = mannerEstimationApplication.SO3,
+                                                        mgO = mannerEstimationApplication.MgO
+                                                    },
+                                                    applicationDate = mannerEstimationApplication.ApplicationDate.ToString(_dateStringLiteral),
+                                                    applicationRate = new
+                                                    {
+                                                        value = mannerEstimationApplication.ApplicationRate,
+                                                        unit = isLiquid.Value ? Resource.lblMeterCubePerHectare : Resource.lblTonnesPerHectare
+                                                    },
+                                                    applicationMethodID = mannerEstimationApplication.ApplicationMethodID,
+                                                    incorporationMethodID = mannerEstimationApplication.IncorporationMethodID,
+                                                    incorporationDelayID = mannerEstimationApplication.IncorporationDelayID,
+                                                    autumnCropNitrogenUptake = new
+                                                    {
+                                                        value = mannerEstimationApplication.AutumnCropNitrogenUptake,
+                                                        unit = Resource.lblKgPerHectare
+                                                    },
+                                                    endOfDrainageDate = mannerEstimationApplication.EndOfDrainageDate?.ToString(_dateStringLiteral),
+                                                    rainfallPostApplication = mannerEstimationApplication.RainfallPostApplication,
+                                                    windspeedID = mannerEstimationApplication.WindspeedID,
+                                                    rainTypeID = mannerEstimationApplication.RainfallWithinSixHoursID,
+                                                    topsoilMoistureID = mannerEstimationApplication.MoistureID
+                                                }
+                                            }
+        };
+        return (JsonConvert.SerializeObject(mannerOutput), error);
+
+
+    }
     private async Task<int?> BindMannerCropTypeId(MannerEstimationStep20ViewModel model, int cropTypeId)
     {
         (CropTypeLinkingResponse cropTypeLinkingResponse, _) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropTypeId);
