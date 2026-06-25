@@ -317,7 +317,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() post action called");
 
 
-            model = await _mannerLogic.GetMannerEstimationStep4();
             if (!ModelState.IsValid)
             {
                 model = await _mannerLogic.GetMannerEstimationStep4();
