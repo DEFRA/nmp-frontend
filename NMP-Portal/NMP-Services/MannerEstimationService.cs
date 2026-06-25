@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace NMP.Services;
 
@@ -72,7 +73,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             {
                 if (responseWrapper?.Data is not null)
                 {
-                    success = responseWrapper?.Data?.savedMannerEstimation ?? false;
+                    success = responseWrapper.Data?.savedMannerEstimation ?? false;
                 }
             }
             else
@@ -93,4 +94,88 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         return (success, error);
 
     }
+
+    public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
+    {
+        int? soilTypeId = null;
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            string url = string.Empty;
+
+            url = string.Format(ApiurlHelper.FetchSoilTypeIdByTopSoilIdAndSubSoilIdAsyncAPI, topSoilId, subSoilId);
+
+            var response = await httpClient.GetAsync(url);
+
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            {
+                soilTypeId = responseWrapper?.Data?.SoilTypeId?.ToObject<int?>();
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            error = _logger.HandleException(ex, error);
+        }
+        return (soilTypeId, error);
+    }
+    public async Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId)
+    {
+        List<MannerEstimationApplication> mannerEstimationApplications = new List<MannerEstimationApplication>();
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerApplicationsByEstimationIdAsyncAPI, mannerEstimationId));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                var applications = responseWrapper?.Data?.MannerEstimationApplications.ToObject<List<MannerEstimationApplication>>();
+                mannerEstimationApplications.AddRange(applications);
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerEstimationApplications, error);
+    }
+    public async Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId)
+    {
+        MannerEstimationApplication mannerEstimationApplication = new MannerEstimationApplication();
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(mannerApplicationId.ToString())));
+
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                mannerEstimationApplication = responseWrapper?.Data?.ToObject<MannerEstimationApplication>();
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerEstimationApplication, error);
+    }
 }
+

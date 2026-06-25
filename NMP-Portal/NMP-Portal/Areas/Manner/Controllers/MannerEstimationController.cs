@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Identity.Client;
+using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
 using NMP.Application;
 using NMP.Businesses;
@@ -25,14 +27,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class MannerEstimationController(ILogger<MannerEstimationController> logger,IMannerEstimationLogic mannerEstimationLogic, IOrganicManureLogic organicManureLogic, IFarmLogic farmLogic, IMannerLogic mannerLogic,  IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic) : Controller
+    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IDataProtectionProvider dataProtectionProvider,  IMannerEstimationLogicDependencies dependencies) : Controller
     {
         private readonly ILogger<MannerEstimationController> _logger = logger;
-        private readonly IFarmLogic _farmLogic = farmLogic;
-        private readonly IMannerLogic _mannerLogic = mannerLogic;
-        private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
-        private readonly IFieldLogic _fieldLogic = fieldLogic;
         private readonly IMannerEstimationLogic _mannerEstimationLogic = mannerEstimationLogic;
+
+        private readonly IOrganicManureLogic _organicManureLogic = dependencies.OrganicManureLogic;
+        private readonly IFarmLogic _farmLogic = dependencies.FarmLogic;
+        private readonly ICropLogic _cropLogic = dependencies.CropLogic;
+        private readonly IFieldLogic _fieldLogic = dependencies.FieldLogic;
+        private readonly IMannerLogic _mannerLogic = dependencies.MannerLogic;
+        private readonly IWarningLogic _warningLogic = dependencies.WarningLogic;
+
         private const string _checkAnswerActionName = "CheckAnswer";
         private readonly IDataProtector _mannerEstimationProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.MannerEstimationController");
         private const string _mannerEstimationSessionName = "MannerEstimation";
@@ -125,7 +131,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-
+                model = _mannerEstimationLogic.GetMannerEstimationStep1();
                 return View(model);
             }
 
@@ -317,9 +323,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() post action called");
 
 
-            model = await _mannerEstimationLogic.GetMannerEstimationStep4();
             if (!ModelState.IsValid)
             {
+                model = await _mannerEstimationLogic.GetMannerEstimationStep4();
                 return View(model);
             }
 
@@ -423,6 +429,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerEstimationLogic.GetMannerEstimationStep5();
                 return View(model);
             }
 
@@ -459,6 +466,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerEstimationLogic.GetMannerEstimationStep6();
                 return View(model);
             }
 
@@ -533,6 +541,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerEstimationLogic.GetMannerEstimationStep8();
                 ViewBag.CropGroupList = await _fieldLogic.FetchCropGroups();
                 return View(model);
             }
@@ -572,14 +581,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-
+                model = _mannerEstimationLogic.GetMannerEstimationStep9();
                 ViewBag.CropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryId);
                 return View(model);
             }
 
             model.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupId ?? 0);
             model.CropTypeName = await _fieldLogic.FetchCropTypeById(model.CropTypeId ?? 0);
-            model =await _mannerEstimationLogic.SetMannerEstimationStep9(model);
+            model = await _mannerEstimationLogic.SetMannerEstimationStep9(model);
 
             if (model.CropTypeId != null && Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), model.CropTypeId))
             {
@@ -764,7 +773,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return model.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("ApplicationDate");
         }
         [HttpGet]
-        public IActionResult ApplicationDate()
+        public async Task<IActionResult> ApplicationDate()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationDate() action called");
 
@@ -774,24 +783,56 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
+            int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
+
+            var (soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(model.TopSoilId ?? 0, model.SubSoilId ?? 0);
+            if (string.IsNullOrEmpty(error?.Message))
+            {
+                string closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, model.SowingDate, model.FarmRB209CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
+                ViewBag.ClosedPeriod = closedPeriod;
+                model.ClosedPeriod = closedPeriod;
+            }
+
+            model.IsWarningMsgNeedToShow = false;
+            model.IsClosedPeriodWarning = false;
+            model.IsApplicationJulyToSeptWarning = false;
+            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
+            model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ApplicationDate(MannerEstimationStep13ViewModel model)
+        public async Task<IActionResult> ApplicationDate(MannerEstimationStep13ViewModel formData)
         {
             _logger.LogTrace($"Manner Estimation Controller : ApplicationDate() post action called");
+            MannerEstimationStep13ViewModel model = new MannerEstimationStep13ViewModel();
             try
             {
-                AddErrorIfNull(model.ApplicationDate, _applicationDateKey, Resource.MsgEnterADateBeforeContinuing);
+                AddErrorIfNull(formData.ApplicationDate, _applicationDateKey, Resource.MsgEnterADateBeforeContinuing);
 
                 if (!ModelState.IsValid)
                 {
-                    model = _mannerEstimationLogic.GetMannerEstimationStep13();
-                    return View(model);
+                    formData = _mannerEstimationLogic.GetMannerEstimationStep13();
+                    return View(formData);
+                }
+                model = _mannerEstimationLogic.GetMannerEstimationStep13();
+                model.ApplicationDate = formData.ApplicationDate;
+                var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
+
+                //non organic farm, high N, NVZ
+                if (!string.IsNullOrWhiteSpace(model.ClosedPeriod) && string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    int harvestYear = GetHarvestYearFromApplicationDate(model.ApplicationDate ?? DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
+
+                    await CheckApplicationDateWarnings(model, manureType, harvestYear);
+                    (bool flowControl, IActionResult? value) = BindPropertiesForManureApplyingDate(model);
+                    if (!flowControl && value != null)
+                    {
+                        return value;
+                    }
                 }
 
-                model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
                 return RedirectToAction("ApplicationMethod");
             }
             catch (Exception ex)
@@ -801,6 +842,296 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
+        }
+
+        private async Task CheckApplicationDateWarnings(MannerEstimationStep13ViewModel model, ManureType? manureType, int harvestYear)
+        {
+            DateTime endDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+            if (!(model.IsFarmOrganic ?? false) && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
+            {
+                (var startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+                await HandleNonOrganicHighNWarning(startDate, endDate, model);
+            }
+
+            // Organic farm, high N, NVZ
+            if ((model.IsFarmOrganic ?? false) && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
+            {
+                (var startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+                await HandleOrganicHighNWarning(startDate, endDate, model);
+            }
+
+            // England-specific warning for Winter Oilseed Rape or Grass
+            await EndOctoberToEndClosedPeriodWarning(endDate, model, harvestYear);
+
+            await EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(model);
+
+            if (model.FarmRB209CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                //01 July to 30 September scotland warning
+                await HandleScotlandHighN(model, harvestYear);
+
+                //There have been 20 days or less since the last application livestock manure
+                if (IsLivestockCondition(model))
+                {
+                    await HandleLivestockManureRule(model);
+                }
+            }
+            _mannerEstimationLogic.SetMannerEstimationStep13(model);
+        }
+
+        private async Task EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(MannerEstimationStep13ViewModel model)
+        {
+            Error? error = null;
+
+            bool? isWithinClosedPeriodAndFebruary = WarningWithinPeriod.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, model.ClosedPeriod);
+            if (isWithinClosedPeriodAndFebruary == true)
+            {
+                (List<MannerEstimationApplication> mannerApplications, error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(model.MannerEstimationId ?? 0);
+                var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
+
+                bool isSlurry = IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
+                bool isPoultryManure =
+                    model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
+
+                if (isSlurry || isPoultryManure)
+                {
+                    // warning excel sheet row no. 21
+                    model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+
+                    WarningResponse warning =
+                        await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                            model.FarmRB209CountryId,
+                            NMP.Commons.Enums.WarningKey
+                                .AllowWeeksBetweenSlurryPoultryApplications.ToString());
+
+                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
+                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
+                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
+                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
+                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
+                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
+                }
+            }
+
+
+
+
+        }
+        private static bool IsSlurryType(int? manureTypeId)
+        {
+            return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion;
+        }
+
+        private async Task HandleLivestockManureRule(MannerEstimationStep13ViewModel model)
+        {
+            (List<MannerEstimationApplication> mannerApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(model.MannerEstimationId ?? 0);
+            if (mannerApplications.Count > 0)
+            {
+                var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
+                (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(mannerApplicationWithin21Days.ManureTypeID ?? 0);
+                if (manureType.ManureGroupId == (int)NMP.Commons.Enums.ManureGroup.LivestockManure)
+                {
+                    await ApplyLivestockWarning(model);
+                }
+            }
+
+        }
+        private async Task HandleScotlandHighN(MannerEstimationStep13ViewModel model, int harvestYear)
+        {
+
+            if (model.CropTypeId != (int)NMP.Commons.Enums.CropTypes.Grass)
+            {
+                if (IsWithinRange(harvestYear, model.ApplicationDate.Value, 7, 1, 7, 31) && (model.SowingDate == null || (model.SowingDate.Value - model.ApplicationDate.Value).TotalDays >= 43))
+                {
+                    await ScotlandJulyHighNWarning(model);
+                }
+
+                if (IsWithinRange(harvestYear - 1, model.ApplicationDate.Value, 8, 1, 9, 30) &&
+                    (model.SowingDate == null || (model.SowingDate.Value - model.ApplicationDate.Value).TotalDays >= 43))
+                {
+                    await ScotlandJulyHighNWarning(model);
+                }
+            }
+
+        }
+        private async Task<(MannerEstimationStep13ViewModel, Error?)> ScotlandJulyHighNWarning(MannerEstimationStep13ViewModel model)
+        {
+            //scotland warning excel sheet row no. 26
+            WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                model.FarmRB209CountryId, NMP.Commons.Enums.WarningKey.RanManureJulyToSep.ToString());
+            model.ApplicationJulyToSeptHeader = warning.Header;
+            model.ApplicationJulyToSeptCodeID = warning.WarningCodeID;
+            model.ApplicationJulyToSeptLevelID = warning.WarningLevelID;
+            model.ApplicationJulyToSeptPara1 = warning.Para1;
+            model.ApplicationJulyToSeptPara2 = warning.Para2;
+            model.ApplicationJulyToSeptPara3 = warning.Para3;
+            model.IsApplicationJulyToSeptWarning = true;
+
+            return (model, null);
+        }
+        private static bool IsWithinRange(int harvestYear, DateTime applicationDate, int startMonth, int startDay, int endMonth, int endDay)
+        {
+
+            DateTime start = new DateTime(harvestYear, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
+
+            DateTime end = new DateTime(harvestYear, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
+
+            return WarningWithinPeriod.IsApplicationDateWithinDateRange(applicationDate, start, end);
+        }
+
+        private async Task ApplyLivestockWarning(MannerEstimationStep13ViewModel model)
+        {
+            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+
+            var warning =
+                await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                    model.FarmRB209CountryId,
+                    NMP.Commons.Enums.WarningKey
+                        .AllowWeeksBetweenSlurryPoultryApplications.ToString());
+
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
+            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
+        }
+
+        private (bool flowControl, IActionResult? value) BindPropertiesForManureApplyingDate(MannerEstimationStep13ViewModel model)
+        {
+            if (model.IsClosedPeriodWarning || model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks || model.IsApplicationJulyToSeptWarning)
+            {
+                if (!model.IsWarningMsgNeedToShow)
+                {
+                    model.IsWarningMsgNeedToShow = true;
+                    model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
+                    return (flowControl: false, value: View(model));
+                }
+            }
+            else
+            {
+                model.IsWarningMsgNeedToShow = false;
+                model.IsClosedPeriodWarning = false;
+                model.IsApplicationJulyToSeptWarning = false;
+                model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
+            }
+            _mannerEstimationLogic.SetMannerEstimationStep13(model);
+            return (flowControl: true, value: null);
+        }
+        private static bool IsLivestockCondition(MannerEstimationStep13ViewModel model)
+        {
+            return (model.ManureGroupId ==
+                       (int)NMP.Commons.Enums.ManureGroup.LivestockManure) &&
+                   model.IsWithinNVZ.Value;
+        }
+        private static int GetHarvestYearFromApplicationDate(DateTime applicationDate)
+        {
+            return applicationDate.Month >= 8
+                ? applicationDate.Year + 1
+                : applicationDate.Year;
+        }
+        private static (DateTime StartDate, DateTime EndDate) GetClosedPeriodDates(string closedPeriod, DateTime applicationDate)
+        {
+            int harvestYear = GetHarvestYearFromApplicationDate(applicationDate);
+
+            string[] parts = closedPeriod.Split(" to ");
+
+            string startPart = parts[0]; // e.g. "1 October"
+            string endPart = parts[1];   // e.g. "31 January"
+
+            var startTokens = startPart.Split(' ');
+            var endTokens = endPart.Split(' ');
+
+            int startDay = int.Parse(startTokens[0]);
+            int startMonth = DateTime.ParseExact(
+                startTokens[1],
+                "MMMM",
+                CultureInfo.InvariantCulture).Month;
+
+            int endDay = int.Parse(endTokens[0]);
+            int endMonth = DateTime.ParseExact(
+                endTokens[1],
+                "MMMM",
+                CultureInfo.InvariantCulture).Month;
+
+            // Determine years
+            int startYear = harvestYear - 1;
+            int endYear = endMonth < startMonth
+                ? harvestYear          // crosses year boundary
+                : harvestYear - 1;     // same calendar year
+
+            DateTime startDate = new(startYear, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
+            DateTime endDate = new(endYear, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
+
+            return (startDate, endDate);
+        }
+        private async Task HandleNonOrganicHighNWarning(DateTime startDate, DateTime endDate, MannerEstimationStep13ViewModel model)
+        {
+            bool isWithinClosedPeriod = WarningWithinPeriod.IsApplicationDateWithinDateRange(
+                model.ApplicationDate, startDate, endDate);
+
+            if (isWithinClosedPeriod)
+            {
+                //warning excel sheet row no. 10
+                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                    model.FarmRB209CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriod.ToString());
+                model.ClosedPeriodWarningHeader = warning.Header;
+                model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
+                model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
+                model.ClosedPeriodWarningPara1 = warning.Para1;
+                model.ClosedPeriodWarningPara2 = warning.Para2;
+                model.ClosedPeriodWarningPara3 = warning.Para3;
+                model.IsClosedPeriodWarning = true;
+            }
+        }
+
+        private async Task HandleOrganicHighNWarning(DateTime startDate, DateTime endDate,
+            MannerEstimationStep13ViewModel model)
+        {
+            bool isWithinClosedPeriod = false;
+
+            isWithinClosedPeriod = WarningWithinPeriod.IsApplicationDateWithinDateRange(model.ApplicationDate, startDate, endDate);
+            HashSet<int> cropTypeIdsForTrigger = WarningWithinPeriod.FilteredCropForWarning();
+            if (isWithinClosedPeriod && !cropTypeIdsForTrigger.Contains(model.CropTypeId ?? 0))
+            {
+                //warning excel sheet row no. 12
+                model.IsClosedPeriodWarning = true;
+                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                    model.FarmRB209CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriodOrganicFarm.ToString());
+                model.ClosedPeriodWarningHeader = warning.Header;
+                model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
+                model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
+                model.ClosedPeriodWarningPara1 = warning.Para1;
+                model.ClosedPeriodWarningPara3 = warning.Para3;
+            }
+
+
+
+        }
+
+        private async Task EndOctoberToEndClosedPeriodWarning(DateTime endDate, MannerEstimationStep13ViewModel model, int harvestYear)
+        {
+            DateTime endOfOctober = new DateTime(harvestYear-1, 10, 31, 0, 0, 0, DateTimeKind.Utc);
+            if ((model.CropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape ||
+                 model.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass) &&
+                WarningWithinPeriod.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, endDate) &&
+                (model.FarmRB209CountryId == (int)NMP.Commons.Enums.FarmCountry.England))
+            {
+                //warning excel sheet row no. 17
+                WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                    model.FarmRB209CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureDateOnly.ToString());
+                model.ClosedPeriodWarningHeader = warning.Header;
+                model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
+                model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
+                model.IsClosedPeriodWarning = true;
+                model.ClosedPeriodWarningPara1 = warning.Para1;
+                model.ClosedPeriodWarningPara3 = warning.Para3;
+            }
         }
 
         private void AddErrorIfNull(object? value, string key, string errorMessage)
@@ -1089,6 +1420,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    model = _mannerEstimationLogic.GetMannerEstimationStep17();
                     return View(model);
                 }
 
@@ -1395,8 +1727,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    await BindViewBegForApplicationMethod(model);
                     model = _mannerEstimationLogic.GetMannerEstimationStep23();
+                    await BindViewBegForApplicationMethod(model);
                     return View(model);
                 }
 
@@ -1572,6 +1904,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    model = await _mannerEstimationLogic.GetMannerEstimationStep25();
                     ValidateManualNutrientValues();
                 }
 
@@ -1719,6 +2052,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                     if (model.ApplicationRate > 250)
                         ModelState.AddModelError(_applicationRateKey, Resource.MsgForApplicationRate);
+                    if (model.ApplicationRate != Math.Round(model.ApplicationRate.Value, 2))
+                    {
+                        ModelState.AddModelError(_applicationRateKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblApplicationRate));
+                    }
                 }
                 await _mannerEstimationLogic.SetMannerEstimationStep27(model);
                 if (!ModelState.IsValid)
@@ -1767,8 +2104,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model = await _mannerEstimationLogic.GetMannerEstimationStep28();
                     return View("AreaQuantity", model);
                 }
-                model.ApplicationRate = Math.Round((model.ManureQuantity.Value / model.AreaSpread.Value), 1);
+                model.ApplicationRate = Math.Round((model.ManureQuantity.Value / model.AreaSpread.Value), 2);
                 return RedirectToAction(_incorporationMethodAction);
+
             }
             catch (Exception ex)
             {
@@ -1786,11 +2124,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateQuantityRules(model);
             if (model.AreaSpread > 0 && model.ManureQuantity > 0)
             {
-                model.ApplicationRate = model.ManureQuantity.Value / model.AreaSpread.Value;
+                model.ApplicationRate = Math.Round(model.ManureQuantity.Value / model.AreaSpread.Value, 2);
 
-                if (model.ApplicationRate > 250)
+                if (model.ApplicationRate <= 0 || model.ApplicationRate > 250)
                 {
-                    ModelState.AddModelError(_quantityKey, Resource.MsgForApplicationRate);
+                    ModelState.AddModelError(_quantityKey, Resource.MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty);
                 }
             }
         }
@@ -1849,16 +2187,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return;
             }
 
-            if (rawValue.Contains('.'))
-            {
-                ModelState.AddModelError(
-                    _quantityKey,
-                    string.Format(
-                        Resource.MsgForApplicationRate,
-                        Resource.MsgQuantity));
-
-                return;
-            }
 
             const int maxLength = 10;
 
@@ -1891,6 +2219,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (model.AreaSpread < 0)
                 ModelState.AddModelError(_areaKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+
+            if (model.AreaSpread != Math.Round(model.AreaSpread.Value, 2))
+            {
+                ModelState.AddModelError(_areaKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblAreas));
+            }
         }
 
 
@@ -1901,6 +2234,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (model.ManureQuantity < 0)
                 ModelState.AddModelError(_quantityKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+            if (model.ManureQuantity != Math.Round(model.ManureQuantity.Value, 2))
+            {
+                ModelState.AddModelError(_quantityKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblQuantity));
+            }
         }
 
         [HttpGet]
@@ -2243,6 +2580,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    model = _mannerEstimationLogic.GetMannerEstimationStep30();
                     (_, Error? error) = await BindViewBegForIncorporationDelay(model);
                     if (error != null)
                     {
@@ -2403,9 +2741,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerEstimationLogic.GetMannerEstimationStep32();
                 ViewBag.FieldName = model.FieldName;
                 ViewBag.CropTypeName = model.CropTypeName;
-                model = _mannerEstimationLogic.GetMannerEstimationStep32();
                 return View(_autumnCropNitrogenUptakeKey, model);
             }
 
@@ -2772,7 +3110,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ? await _organicManureLogic.FetchWindspeedById(model.WindspeedId.Value)
                     : await _organicManureLogic.FetchWindspeedDataDefault();
 
-                 result = HandleError(errorForWindSpeed, model);
+                result = HandleError(errorForWindSpeed, model);
                 if (result != null)
                 {
                     return result;
@@ -2817,6 +3155,37 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConditionsAffectingNutrients(MannerEstimationStep32ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() post action called");
+            if (!ModelState.IsValid)
+            {
+                return View(_conditionsAffectingNutrients, model);
+            }
+            try
+            {
+                Guid organisationId = GetOrganisationId();
+                (bool success, Error? error) = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
+                if(!string.IsNullOrWhiteSpace(error?.Message)&&!success)
+                {
+                    TempData["ConditionsAffectingNutrientsError"] = error.Message;
+                    return View(model);
+                }
+
+                return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in ConditionsAffectingNutrients() post action");
+                TempData["ConditionsAffectingNutrientsError"] = ex.Message;
+                return View(model);
+            }
+
+        }
         private static void BindSoilDraingeDate(MannerEstimationStep32ViewModel model)
         {
 
@@ -2837,36 +3206,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             );
 
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConditionsAffectingNutrients(MannerEstimationStep32ViewModel model)
-        {
-            _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() post action called");
-            if (!ModelState.IsValid)
-            {
-                return View(_conditionsAffectingNutrients, model);
-            }
-            try
-            {
-                Guid organisationId = GetOrganisationId();
-                (bool success, Error? error) = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
-                if(!string.IsNullOrWhiteSpace(error?.Message)&&!success)
-                {
-                    TempData["ConditionsAffectingNutrientsError"] = error.Message;
-                    return View(model);
-                }
-                
-                    return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
-                
-               
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in ConditionsAffectingNutrients() post action");
-                TempData["ConditionsAffectingNutrientsError"] = ex.Message;
-                return View(model);
-            }
-
-        }
+        
     }
 }

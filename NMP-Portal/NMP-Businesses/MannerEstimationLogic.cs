@@ -294,6 +294,19 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep13.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep13.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep13.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
+
+        mannerEstimationViewModel.MannerEstimationStep13.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep13.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep13.TopSoilId = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId;
+        mannerEstimationViewModel.MannerEstimationStep13.SubSoilId = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId;
+        mannerEstimationViewModel.MannerEstimationStep13.SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate;
+        mannerEstimationViewModel.MannerEstimationStep13.IsFarmOrganic = mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic;
+        mannerEstimationViewModel.MannerEstimationStep13.IsWithinNVZ = mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ;
+        mannerEstimationViewModel.MannerEstimationStep13.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
+        mannerEstimationViewModel.MannerEstimationStep13.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
+
+        mannerEstimationViewModel.MannerEstimationStep13.MannerEstimationId = mannerEstimationViewModel.MannerEstimationId;
+        mannerEstimationViewModel.MannerEstimationStep13.MannerEstimationApplicationsId = mannerEstimationViewModel.MannerEstimationApplicationsId;
         return mannerEstimationViewModel.MannerEstimationStep13;
     }
 
@@ -904,6 +917,22 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return establishmentDate.Date <= cutoff
            ? cropTypeLinkingResponse.MannerCropTypeID
            : cropTypeLinkingResponse.LateSownMannerCropTypeID.Value;
+    }
+    
+    public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
+    {
+        _logger.LogTrace("MannerLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");
+        return await _mannerEstimationService.FetchSoilTypeSoilTextureByTopSoilSubSoilId(topSoilId, subSoilId);
+    }
+    public async Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchMannerApplicationsByMannerEstimationId() called");
+        return await _mannerEstimationService.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId);
+    }
+    public async Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchMannerApplicationById() called");
+        return await _mannerEstimationService.FetchMannerApplicationById(mannerApplicationId);
     }
 }
 

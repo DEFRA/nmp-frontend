@@ -20318,6 +20318,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The calculated Application Rate cannot be less than 0 or greater than 250..
+        /// </summary>
+        public static string MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty {
+            get {
+                return ResourceManager.GetString("MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check your nutrient recommendations..
         /// </summary>
         public static string MsgCheckYourNutrientRecommendations {
@@ -21169,6 +21178,15 @@ namespace NMP.Commons.Resources {
         public static string MsgEnterAnApplicationRateTo1DecimalPlace {
             get {
                 return ResourceManager.GetString("MsgEnterAnApplicationRateTo1DecimalPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must not exceed two decimal places..
+        /// </summary>
+        public static string MsgEnterAnPropertyOnlyTwoDecimal {
+            get {
+                return ResourceManager.GetString("MsgEnterAnPropertyOnlyTwoDecimal", resourceCulture);
             }
         }
         

@@ -13,5 +13,11 @@ namespace NMP.Core.Interfaces
         Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId);
         Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
         Task<(bool, Error?)> AddMannerEstimationServiceAsync(string MannerData);
+
+        Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);
+
+        Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);
+        Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
+
     }
 }

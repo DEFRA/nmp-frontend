@@ -579,5 +579,4 @@ responseWrapper?.Data is not null)
         return (subSoilList, error);
     }
 
-
 }
