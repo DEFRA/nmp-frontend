@@ -125,7 +125,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-
+                model = _mannerLogic.GetMannerEstimationStep1();
                 return View(model);
             }
 
@@ -317,9 +317,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() post action called");
 
 
-            model = await _mannerLogic.GetMannerEstimationStep4();
             if (!ModelState.IsValid)
             {
+                model = await _mannerLogic.GetMannerEstimationStep4();
                 return View(model);
             }
 
@@ -423,6 +423,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerLogic.GetMannerEstimationStep5();
                 return View(model);
             }
 
@@ -459,6 +460,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerLogic.GetMannerEstimationStep6();
                 return View(model);
             }
 
@@ -533,6 +535,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerLogic.GetMannerEstimationStep8();
                 ViewBag.CropGroupList = await _fieldLogic.FetchCropGroups();
                 return View(model);
             }
@@ -572,7 +575,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-
+                model = _mannerLogic.GetMannerEstimationStep9();
                 ViewBag.CropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryId);
                 return View(model);
             }
@@ -1089,6 +1092,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    model = _mannerLogic.GetMannerEstimationStep17();
                     return View(model);
                 }
 
@@ -1395,8 +1399,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    await BindViewBegForApplicationMethod(model);
                     model = _mannerLogic.GetMannerEstimationStep23();
+                    await BindViewBegForApplicationMethod(model);
                     return View(model);
                 }
 
@@ -1792,11 +1796,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateQuantityRules(model);
             if (model.AreaSpread > 0 && model.ManureQuantity > 0)
             {
-                model.ApplicationRate = model.ManureQuantity.Value / model.AreaSpread.Value;
+                model.ApplicationRate = Math.Round(model.ManureQuantity.Value / model.AreaSpread.Value, 2);
 
-                if (model.ApplicationRate > 250)
+                if (model.ApplicationRate <= 0 || model.ApplicationRate > 250)
                 {
-                    ModelState.AddModelError(_quantityKey, Resource.MsgForApplicationRate);
+                    ModelState.AddModelError(_quantityKey, Resource.MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty);
                 }
             }
         }
@@ -2409,9 +2413,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerLogic.GetMannerEstimationStep32();
                 ViewBag.FieldName = model.FieldName;
                 ViewBag.CropTypeName = model.CropTypeName;
-                model = _mannerLogic.GetMannerEstimationStep32();
                 return View(_autumnCropNitrogenUptakeKey, model);
             }
 

@@ -14,5 +14,6 @@ namespace NMP.Commons.ViewModels
         public string ManureTypeName { get; set; } = string.Empty;
         public int? ManureTypeId { get; set; }
         public string? OtherMaterialName { get; set; }
+        public int? ApplicationRateMethod { get; set; }
     }
 }
