@@ -804,11 +804,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
            ? cropTypeLinkingResponse.MannerCropTypeID
            : cropTypeLinkingResponse.LateSownMannerCropTypeID.Value;
     }
-    public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
-    {
-        _logger.LogTrace("MannerLogic : FetchIsPerennialByCropTypeId() called");
-        return await _mannerEstimationService.FetchIsPerennialByCropTypeIdServiceAsync(cropTypeId);
-    }
+    
     public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
     {
         _logger.LogTrace("MannerLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");

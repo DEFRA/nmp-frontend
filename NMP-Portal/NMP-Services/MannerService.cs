@@ -579,29 +579,4 @@ responseWrapper?.Data is not null)
         return (subSoilList, error);
     }
 
-        
-    public async Task<(MannerEstimationApplication?, Error?)> FetchMannerApplicationById(int mannerApplicationId)
-    {
-        MannerEstimationApplication? mannerEstimationApplication = null;
-        Error? error = null;
-
-        HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(mannerApplicationId.ToString())));
-
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode)
-        {
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                mannerEstimationApplication = responseWrapper?.Data?.ToObject<MannerEstimationApplication>();
-            }
-        }
-        else
-        {
-            error = _logger.ExtractError(responseWrapper, error);
-        }
-
-        return (mannerEstimationApplication, error);
-    }
 }

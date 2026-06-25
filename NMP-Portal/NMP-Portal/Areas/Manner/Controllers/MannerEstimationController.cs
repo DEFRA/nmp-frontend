@@ -27,15 +27,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IOrganicManureLogic organicManureLogic, IFarmLogic farmLogic, IMannerLogic mannerLogic, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IWarningLogic warningLogic) : Controller
+    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IDataProtectionProvider dataProtectionProvider,  IMannerEstimationLogicDependencies dependencies) : Controller
     {
         private readonly ILogger<MannerEstimationController> _logger = logger;
-        private readonly IFarmLogic _farmLogic = farmLogic;
-        private readonly IMannerLogic _mannerLogic = mannerLogic;
-        private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
-        private readonly IFieldLogic _fieldLogic = fieldLogic;
         private readonly IMannerEstimationLogic _mannerEstimationLogic = mannerEstimationLogic;
-        private readonly IWarningLogic _warningLogic = warningLogic;
+
+        private readonly IOrganicManureLogic _organicManureLogic = dependencies.OrganicManureLogic;
+        private readonly IFarmLogic _farmLogic = dependencies.FarmLogic;
+        private readonly ICropLogic _cropLogic = dependencies.CropLogic;
+        private readonly IFieldLogic _fieldLogic = dependencies.FieldLogic;
+        private readonly IMannerLogic _mannerLogic = dependencies.MannerLogic;
+        private readonly IWarningLogic _warningLogic = dependencies.WarningLogic;
+
         private const string _checkAnswerActionName = "CheckAnswer";
         private readonly IDataProtector _mannerEstimationProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.MannerEstimationController");
         private const string _mannerEstimationSessionName = "MannerEstimation";
@@ -128,7 +131,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-
+                model = _mannerEstimationLogic.GetMannerEstimationStep1();
                 return View(model);
             }
 
@@ -320,9 +323,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() post action called");
 
 
-            model = await _mannerEstimationLogic.GetMannerEstimationStep4();
             if (!ModelState.IsValid)
             {
+                model = await _mannerEstimationLogic.GetMannerEstimationStep4();
                 return View(model);
             }
 
@@ -426,6 +429,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerEstimationLogic.GetMannerEstimationStep5();
                 return View(model);
             }
 
@@ -462,6 +466,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerEstimationLogic.GetMannerEstimationStep6();
                 return View(model);
             }
 
@@ -536,6 +541,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerEstimationLogic.GetMannerEstimationStep8();
                 ViewBag.CropGroupList = await _fieldLogic.FetchCropGroups();
                 return View(model);
             }
@@ -575,7 +581,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
-
+                model = _mannerEstimationLogic.GetMannerEstimationStep9();
                 ViewBag.CropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryId);
                 return View(model);
             }
@@ -777,7 +783,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            bool isPerennial = await _mannerEstimationLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
+            bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
             int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
 
             var (soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(model.TopSoilId ?? 0, model.SubSoilId ?? 0);
@@ -1414,6 +1420,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    model = _mannerEstimationLogic.GetMannerEstimationStep17();
                     return View(model);
                 }
 
@@ -1720,8 +1727,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    await BindViewBegForApplicationMethod(model);
                     model = _mannerEstimationLogic.GetMannerEstimationStep23();
+                    await BindViewBegForApplicationMethod(model);
                     return View(model);
                 }
 
@@ -2117,11 +2124,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateQuantityRules(model);
             if (model.AreaSpread > 0 && model.ManureQuantity > 0)
             {
-                model.ApplicationRate = model.ManureQuantity.Value / model.AreaSpread.Value;
+                model.ApplicationRate = Math.Round(model.ManureQuantity.Value / model.AreaSpread.Value, 2);
 
-                if (model.ApplicationRate > 250)
+                if (model.ApplicationRate <= 0 || model.ApplicationRate > 250)
                 {
-                    ModelState.AddModelError(_quantityKey, Resource.MsgForApplicationRate);
+                    ModelState.AddModelError(_quantityKey, Resource.MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty);
                 }
             }
         }
@@ -2734,9 +2741,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (!ModelState.IsValid)
             {
+                model = _mannerEstimationLogic.GetMannerEstimationStep32();
                 ViewBag.FieldName = model.FieldName;
                 ViewBag.CropTypeName = model.CropTypeName;
-                model = _mannerEstimationLogic.GetMannerEstimationStep32();
                 return View(_autumnCropNitrogenUptakeKey, model);
             }
 

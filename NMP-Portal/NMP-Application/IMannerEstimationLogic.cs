@@ -88,7 +88,6 @@ namespace NMP.Application
         MannerEstimationStep32ViewModel GetMannerEstimationStep32();
         MannerEstimationStep32ViewModel SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32);
         Task<(bool, Error?)> AddMannerEstimation();
-        Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
         Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);
         Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);
         Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);

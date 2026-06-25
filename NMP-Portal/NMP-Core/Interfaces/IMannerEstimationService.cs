@@ -14,7 +14,6 @@ namespace NMP.Core.Interfaces
         Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
         Task<(bool, Error?)> AddMannerEstimationServiceAsync(string MannerData);
 
-        Task<bool> FetchIsPerennialByCropTypeIdServiceAsync(int cropTypeId);
         Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);
 
         Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);

@@ -94,39 +94,6 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         return (success, error);
 
     }
-    public async Task<bool> FetchIsPerennialByCropTypeIdServiceAsync(int cropTypeId)
-    {
-        Error? error = null;
-        bool isPerennial = false;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAsyncAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    CropTypeLinkingResponse? cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                    isPerennial = cropTypeLinkingResponse?.IsPerennial ?? false;
-                }
-            }
-            else
-            {
-                _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            _logger.HandleException(ex, error);
-        }
-        return isPerennial;
-    }
 
     public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
     {
