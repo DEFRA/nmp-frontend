@@ -5463,6 +5463,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Estimate of nutrient supply from organic material results.
+        /// </summary>
+        public static string lblEstimateOfNutrientSupplyFromOrganicMaterialResults {
+            get {
+                return ResourceManager.GetString("lblEstimateOfNutrientSupplyFromOrganicMaterialResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Estimate the nutrient supply and potential financial value from organic materials using MANNER-NPK..
         /// </summary>
         public static string lblEstimateTheNutrientSupplyAndPotentialFinancialValue {

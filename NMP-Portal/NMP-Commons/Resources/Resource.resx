@@ -8033,4 +8033,7 @@ livestock manure.</value>
   <data name="MsgCalculateApplicationRateMustNotBeGreaterThanTwoFifty" xml:space="preserve">
     <value>The calculated Application Rate cannot be less than 0 or greater than 250.</value>
   </data>
+  <data name="lblEstimateOfNutrientSupplyFromOrganicMaterialResults" xml:space="preserve">
+    <value>Estimate of nutrient supply from organic material results</value>
+  </data>
 </root>

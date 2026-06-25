@@ -819,7 +819,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = _mannerEstimationLogic.GetMannerEstimationStep13();
                 model.ApplicationDate = formData.ApplicationDate;
                 var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
-
+              _mannerEstimationLogic.SetMannerEstimationStep13(model);
                 //non organic farm, high N, NVZ
                 if (!string.IsNullOrWhiteSpace(model.ClosedPeriod) && string.IsNullOrWhiteSpace(error?.Message))
                 {
@@ -3166,8 +3166,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             try
             {
-                (bool success, Error? error) = await _mannerEstimationLogic.AddMannerEstimation();
-                if (!string.IsNullOrWhiteSpace(error?.Message) && !success)
+                Guid organisationId = GetOrganisationId();
+                (bool success, Error? error) = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
+                if(!string.IsNullOrWhiteSpace(error?.Message)&&!success)
                 {
                     TempData["ConditionsAffectingNutrientsError"] = error.Message;
                     return View(model);
