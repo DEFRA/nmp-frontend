@@ -719,7 +719,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
             CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
             MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
-            SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate
+            SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate,
+            NitrogenProductName=Resource.lblTrue,
+            PotashProductName = Resource.lblTrue,
+            PhosphateProductName = Resource.lblTrue,
         };
 
         bool isDefaultnutrient = mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue ?? false;
@@ -793,7 +796,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationApplication.TotalP2O5 = mannerOutput.TotalP2O5;
             mannerEstimationApplication.CropAvailableP2O5 = mannerOutput.CropAvailableP2O5;
 
-            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3;
+            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3; 
+            mannerEstimationApplication.CropAvailableSO3 = mannerOutput.CropAvailableSO3 ?? 0;
+
             mannerEstimationApplication.TotalMgO = mannerOutput.TotalMgO;
 
             mannerEstimationApplication.TotalK2O = mannerOutput.TotalK2O;
