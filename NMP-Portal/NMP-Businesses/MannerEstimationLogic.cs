@@ -722,10 +722,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
             CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
             MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
-            SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate,
-            NitrogenProductName=Resource.lblTrue,
-            PotashProductName = Resource.lblTrue,
-            PhosphateProductName = Resource.lblTrue,
+            SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate
         };
 
         bool isDefaultnutrient = mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue ?? false;
