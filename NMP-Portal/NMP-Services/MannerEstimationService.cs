@@ -54,9 +54,9 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return isExist;
     }
-    public async Task<(bool, Error?)> AddMannerEstimationServiceAsync(string MannerData)
+    public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationServiceAsync(string MannerData)
     {
-        bool success = false;
+        MannerEstimationApplication? mannerEstimationApplication = null;
         Error? error = null;
         try
         {
@@ -74,7 +74,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             {
                 if (responseWrapper?.Data is not null)
                 {
-                    success = responseWrapper.Data?.savedMannerEstimation ?? false;
+                    mannerEstimationApplication = responseWrapper.Data?.ToObject<MannerEstimationApplication>();
                 }
             }
             else
@@ -92,7 +92,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             _logger.HandleException(ex, error);
         }
 
-        return (success, error);
+        return (mannerEstimationApplication, error);
 
     }
 
@@ -184,7 +184,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(mannerEstimationId.ToString())));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimationResultByIdAsyncAPI, HttpUtility.UrlEncode(mannerEstimationId.ToString())));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

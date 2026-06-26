@@ -75,6 +75,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
             {
+                foreach (var estimation in mannerEstimations)
+                {
+                    estimation.EncryptedId = _mannerEstimationProtector.Protect(estimation.ID.ToString());
+                }
+
                 ViewBag.MannerEstimations = mannerEstimations;
                 return View();
             }
@@ -2422,7 +2427,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     TempData["Error"] = error.Message;
                     return RedirectToAction("MannerHubPage");
                 }
-                ViewBag.MannerEstimationResult = MannerEstimationResultResponse;
+                ViewBag.LastUpdatedOn = MannerEstimationResultResponse.LastUpdatedOn;
+                ViewBag.MannerEstimations = MannerEstimationResultResponse;
 
             }
             if (!string.IsNullOrWhiteSpace(r))
@@ -2444,7 +2450,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             foreach (var estimation in mannerEstimations)
             {
-                estimation.EncryptedId = _mannerEstimationProtector.Protect(estimation.ID.ToString());
                 estimation.FarmName = string.Format(Resource.lblEstimationForFarm, estimation.Name, estimation.FarmName);
             }
 
@@ -3197,14 +3202,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 Guid organisationId = GetOrganisationId();
-                (bool success, Error? error) = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
-                if (!string.IsNullOrWhiteSpace(error?.Message) && !success)
+                (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
+                if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimationApplicationResult!=null)
                 {
                     TempData["ConditionsAffectingNutrientsError"] = error.Message;
                     return View(model);
                 }
 
-                return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue),r = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+                return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(mannerEstimationApplicationResult.MannerEstimationID.ToString()),r = _mannerEstimationProtector.Protect(Resource.lblTrue) });
 
 
             }

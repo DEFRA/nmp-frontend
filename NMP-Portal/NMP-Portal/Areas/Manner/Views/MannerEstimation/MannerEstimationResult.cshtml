@@ -23,7 +23,7 @@
         </h1>
     </div>
 </div>
-@* <p>@string.Format(Resource.lblLastUpdatedDate, ViewBag.LastUpdatedDate)</p> *@
+<p class="govuk-body">@string.Format(Resource.lblLastUpdatedDate, ViewBag.LastUpdatedOn)</p>
 <div class="govuk-grid-row margin-bottom-thirty">
     <div class="govuk-grid-column-two-thirds-from-desktop">
         <h2 class="govuk-heading-s">@Resource.lblOptionForManner</h2>
@@ -51,15 +51,18 @@
                                 <th scope="row" class="govuk-table__header">@Resource.lblApplicationDate</th>
                             </tr>
                         </thead>
-                        @foreach (var item in ViewBag.MannerEstimations)
+                        <tbody class="govuk-table__body">
+                        @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                         {
-                            <tbody class="govuk-table__body">
                                 <tr>
                                     <td class="govuk-table__cell">@item.ManureTypeName</td>
-                                    <td class="govuk-table__cell">@item.ApplicationDate..Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                    @* <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td> *@
+                                        <td class="govuk-table__cell">
+    @item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
+</td>
                                 </tr>
-                            </tbody>
-                        }
+                            }
+                        </tbody>
                     </table>
                 </div>
                 <div class="margin-bottom-forty">
@@ -75,18 +78,18 @@
                                     <th scope="row" class="govuk-table__header">@Resource.lblNitrogenUseEfficiency</th>
                                 </tr>
                             </thead>
-                            @foreach (var item in ViewBag.MannerEstimations)
+                            <tbody class="govuk-table__body">
+                            @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                             {
-                                <tbody class="govuk-table__body">
                                     <tr>
 
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalN, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNCurrentCrop, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
-                                        <td class="govuk-table__cell">@string.Format("{0:P0}", item.NitrogenUseEfficiency)</td>
+                                        <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.NitrogenUseEfficiency,Resource.lblPercentage)</td>
                                     </tr>
-                                </tbody>
-                            }
+                                }
+                            </tbody>
                         </table>
                     </div>
 
@@ -102,17 +105,17 @@
                                     <th scope="row" class="govuk-table__header">@Resource.lblLostDenitrifiedN</th>
                                 </tr>
                             </thead>
-                            @foreach (var item in ViewBag.MannerEstimations)
-                            {
                                 <tbody class="govuk-table__body">
+                                @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                            {
                                     <tr>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.MineralisedNitrogenLosses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostNitrateLosses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostAmmonia, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostDenitrified, Resource.lblkg)</td>
                                     </tr>
-                                </tbody>
                             }
+                                </tbody>
                         </table>
                     </div>
 
@@ -130,9 +133,9 @@
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotalMagnesium</th>
                             </tr>
                         </thead>
-                        @foreach (var item in ViewBag.MannerEstimations)
-                        {
                             <tbody class="govuk-table__body">
+                        @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                        {
                                 <tr>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalP2O5, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableP2O5, Resource.lblkg)</td>
@@ -142,8 +145,8 @@
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableSO3, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalMgO, Resource.lblkg)</td>
                                 </tr>
-                            </tbody>
                         }
+                            </tbody>
                     </table>
 
                 </div>

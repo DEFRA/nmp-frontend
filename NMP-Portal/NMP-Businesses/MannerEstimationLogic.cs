@@ -703,9 +703,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return GetMannerEstimationStep32();
     }
 
-    public async Task<(bool, Error?)> AddMannerEstimation(Guid organisationId)
+    public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimation(Guid organisationId)
     {
-        bool success = false; 
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         var mannerEstimate = new MannerEstimation
         {
@@ -783,7 +782,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (string? mannerRequestbody, Error? error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
         if (!string.IsNullOrEmpty(error?.Message))
         {
-            return (false, error);
+            return (null, error);
         }
 
         (MannerCalculateNutrientResponse mannerOutput, error) = await _organicManureLogic.FetchMannerCalculateNutrient(mannerRequestbody);
@@ -818,8 +817,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             MannerEstimationApplication = mannerEstimationApplication
         });
 
-        (success, error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
-        return (success, error);
+        (MannerEstimationApplication? mannerEstimationApplicationResult, error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
+        return (mannerEstimationApplication, error);
     }
 
     private async Task<(string?, Error?)> BindManureOutput(MannerEstimation mannerEstimation, MannerEstimationApplication mannerEstimationApplication)

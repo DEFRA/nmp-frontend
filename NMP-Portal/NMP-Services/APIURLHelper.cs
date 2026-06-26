@@ -179,6 +179,7 @@ internal static class ApiurlHelper
     public const string FetchFarmsNVZByFarmIdAsyncAPI = "farmsNVZ/{0}";
     public const string FetchAllMannerTopSoilListAsyncAPI = "vendors/manner/top-soils";
     public const string FetchAllMannerSubSoilListAsyncAPI = "vendors/manner/sub-soils";
+    public const string FetchMannerEstimationResultByIdAsyncAPI = "manner-estimations/manner-estimation-related-data/{0}";
 
     //UserExtension API Urls
     public const string FetchUserExtensionAPI = "user-extension";
