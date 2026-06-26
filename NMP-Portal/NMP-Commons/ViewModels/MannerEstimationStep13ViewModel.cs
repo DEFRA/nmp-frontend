@@ -13,6 +13,7 @@ namespace NMP.Commons.ViewModels
         public string FieldName { get; set; } = string.Empty;
         public string ManureTypeName { get; set; } = string.Empty;
         public bool IsCheckAnswer { get; set; } = false;
+        public int CountryId { get; set; }
         public int FarmRB209CountryId { get; set; }
         public int? CropTypeId { get; set; }
         public int? CropGroupId { get; set; }
