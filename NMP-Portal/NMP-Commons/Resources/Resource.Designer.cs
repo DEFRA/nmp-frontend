@@ -1494,6 +1494,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add another organic material application to this estimate.
+        /// </summary>
+        public static string lblAddAnotherOrganicMaterialApplicationToThisEstimate {
+            get {
+                return ResourceManager.GetString("lblAddAnotherOrganicMaterialApplicationToThisEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add another year.
         /// </summary>
         public static string lblAddAnotherYear {
@@ -2286,6 +2295,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application details.
+        /// </summary>
+        public static string lblApplicationDetails {
+            get {
+                return ResourceManager.GetString("lblApplicationDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application method.
         /// </summary>
         public static string lblApplicationMethod {
@@ -2696,6 +2714,15 @@ namespace NMP.Commons.Resources {
         public static string lblBackToAllFarms {
             get {
                 return ResourceManager.GetString("lblBackToAllFarms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to all nutrient supply estimates.
+        /// </summary>
+        public static string lblBackToAllNutrientSupplyEstimates {
+            get {
+                return ResourceManager.GetString("lblBackToAllNutrientSupplyEstimates", resourceCulture);
             }
         }
         
@@ -3767,6 +3794,53 @@ namespace NMP.Commons.Resources {
         public static string lblCropArea {
             get {
                 return ResourceManager.GetString("lblCropArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop available nitrogen (N)
+        ///current crop.
+        /// </summary>
+        public static string lblCropAvailableNitrogenCurrentCrop {
+            get {
+                return ResourceManager.GetString("lblCropAvailableNitrogenCurrentCrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop available nitrogen (N)
+        ///following crop year 2.
+        /// </summary>
+        public static string lblCropAvailableNitrogenFollowingCropYear2 {
+            get {
+                return ResourceManager.GetString("lblCropAvailableNitrogenFollowingCropYear2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop available phosphate (P2O5).
+        /// </summary>
+        public static string lblCropAvailablePhosphate {
+            get {
+                return ResourceManager.GetString("lblCropAvailablePhosphate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop available potash (K2O).
+        /// </summary>
+        public static string lblCropAvailablePotash {
+            get {
+                return ResourceManager.GetString("lblCropAvailablePotash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop available sulphur (SO3).
+        /// </summary>
+        public static string lblCropAvailableSulphur {
+            get {
+                return ResourceManager.GetString("lblCropAvailableSulphur", resourceCulture);
             }
         }
         
@@ -5598,6 +5672,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export or print this estimate.
+        /// </summary>
+        public static string lblExportOrPrintThisEstimate {
+            get {
+                return ResourceManager.GetString("lblExportOrPrintThisEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exports.
         /// </summary>
         public static string lblExports {
@@ -5810,6 +5893,15 @@ namespace NMP.Commons.Resources {
         public static string lblFarmersName {
             get {
                 return ResourceManager.GetString("lblFarmersName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Farm, field and crop.
+        /// </summary>
+        public static string lblFarmFieldAndCrop {
+            get {
+                return ResourceManager.GetString("lblFarmFieldAndCrop", resourceCulture);
             }
         }
         
@@ -6476,6 +6568,15 @@ namespace NMP.Commons.Resources {
         public static string lblFigure {
             get {
                 return ResourceManager.GetString("lblFigure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Financial value.
+        /// </summary>
+        public static string lblFinancialValue {
+            get {
+                return ResourceManager.GetString("lblFinancialValue", resourceCulture);
             }
         }
         
@@ -9343,6 +9444,33 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lost ammonia-N.
+        /// </summary>
+        public static string lblLostAmmoniaN {
+            get {
+                return ResourceManager.GetString("lblLostAmmoniaN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lost denitrified-N.
+        /// </summary>
+        public static string lblLostDenitrifiedN {
+            get {
+                return ResourceManager.GetString("lblLostDenitrifiedN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lost nitrate-N.
+        /// </summary>
+        public static string lblLostNitrateN {
+            get {
+                return ResourceManager.GetString("lblLostNitrateN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to low.
         /// </summary>
         public static string lblLow {
@@ -9901,6 +10029,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Material type.
+        /// </summary>
+        public static string lblMaterialType {
+            get {
+                return ResourceManager.GetString("lblMaterialType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max application rate (everything except WOSR, Brassicas &amp; Grass).
         /// </summary>
         public static string lblMaxApplicationRateEverythingExceptWosr {
@@ -10122,6 +10259,15 @@ namespace NMP.Commons.Resources {
         public static string lblMillingWheat {
             get {
                 return ResourceManager.GetString("lblMillingWheat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mineralised nitrogen (N).
+        /// </summary>
+        public static string lblMineralisedNitrogen {
+            get {
+                return ResourceManager.GetString("lblMineralisedNitrogen", resourceCulture);
             }
         }
         
@@ -10441,6 +10587,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nitrogen (N) mineralization and losses.
+        /// </summary>
+        public static string lblNitrogenMineralizationAndLosses {
+            get {
+                return ResourceManager.GetString("lblNitrogenMineralizationAndLosses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nitrogen (N) standard.
         /// </summary>
         public static string lblNitrogenNStandard {
@@ -10500,6 +10655,15 @@ namespace NMP.Commons.Resources {
         public static string lblNitrogenStandards {
             get {
                 return ResourceManager.GetString("lblNitrogenStandards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nitrogen use efficiency.
+        /// </summary>
+        public static string lblNitrogenUseEfficiency {
+            get {
+                return ResourceManager.GetString("lblNitrogenUseEfficiency", resourceCulture);
             }
         }
         
@@ -11337,6 +11501,15 @@ namespace NMP.Commons.Resources {
         public static string lblOptionalQues {
             get {
                 return ResourceManager.GetString("lblOptionalQues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        public static string lblOptionForManner {
+            get {
+                return ResourceManager.GetString("lblOptionForManner", resourceCulture);
             }
         }
         
@@ -15978,6 +16151,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total and crop available nitrogen (N).
+        /// </summary>
+        public static string lblTotalAndCropAvailableNitrogen {
+            get {
+                return ResourceManager.GetString("lblTotalAndCropAvailableNitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total annual target dry matter yield.
         /// </summary>
         public static string lblTotalAnnualTargetDryMatterYield {
@@ -17045,6 +17227,15 @@ namespace NMP.Commons.Resources {
         public static string lblValuePerTonne {
             get {
                 return ResourceManager.GetString("lblValuePerTonne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Values are per hectare.
+        /// </summary>
+        public static string lblValuesArePerHectare {
+            get {
+                return ResourceManager.GetString("lblValuesArePerHectare", resourceCulture);
             }
         }
         

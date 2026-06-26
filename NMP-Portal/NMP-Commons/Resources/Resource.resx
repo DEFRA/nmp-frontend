@@ -8036,4 +8036,69 @@ livestock manure.</value>
   <data name="lblEstimateOfNutrientSupplyFromOrganicMaterialResults" xml:space="preserve">
     <value>Estimate of nutrient supply from organic material results</value>
   </data>
+  <data name="lblOptionForManner" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="lblAddAnotherOrganicMaterialApplicationToThisEstimate" xml:space="preserve">
+    <value>Add another organic material application to this estimate</value>
+  </data>
+  <data name="lblFinancialValue" xml:space="preserve">
+    <value>Financial value</value>
+  </data>
+  <data name="lblFarmFieldAndCrop" xml:space="preserve">
+    <value>Farm, field and crop</value>
+  </data>
+  <data name="lblApplicationDetails" xml:space="preserve">
+    <value>Application details</value>
+  </data>
+  <data name="lblMaterialType" xml:space="preserve">
+    <value>Material type</value>
+  </data>
+  <data name="lblExportOrPrintThisEstimate" xml:space="preserve">
+    <value>Export or print this estimate</value>
+  </data>
+  <data name="lblTotalAndCropAvailableNitrogen" xml:space="preserve">
+    <value>Total and crop available nitrogen (N)</value>
+  </data>
+  <data name="lblValuesArePerHectare" xml:space="preserve">
+    <value>Values are per hectare</value>
+  </data>
+  <data name="lblCropAvailableNitrogenCurrentCrop" xml:space="preserve">
+    <value>Crop available nitrogen (N)
+current crop</value>
+  </data>
+  <data name="lblCropAvailableNitrogenFollowingCropYear2" xml:space="preserve">
+    <value>Crop available nitrogen (N)
+following crop year 2</value>
+  </data>
+  <data name="lblNitrogenUseEfficiency" xml:space="preserve">
+    <value>Nitrogen use efficiency</value>
+  </data>
+  <data name="lblNitrogenMineralizationAndLosses" xml:space="preserve">
+    <value>Nitrogen (N) mineralization and losses</value>
+  </data>
+  <data name="lblLostNitrateN" xml:space="preserve">
+    <value>Lost nitrate-N</value>
+  </data>
+  <data name="lblLostAmmoniaN" xml:space="preserve">
+    <value>Lost ammonia-N</value>
+  </data>
+  <data name="lblLostDenitrifiedN" xml:space="preserve">
+    <value>Lost denitrified-N</value>
+  </data>
+  <data name="lblMineralisedNitrogen" xml:space="preserve">
+    <value>Mineralised nitrogen (N)</value>
+  </data>
+  <data name="lblCropAvailablePhosphate" xml:space="preserve">
+    <value>Crop available phosphate (P2O5)</value>
+  </data>
+  <data name="lblCropAvailablePotash" xml:space="preserve">
+    <value>Crop available potash (K2O)</value>
+  </data>
+  <data name="lblCropAvailableSulphur" xml:space="preserve">
+    <value>Crop available sulphur (SO3)</value>
+  </data>
+  <data name="lblBackToAllNutrientSupplyEstimates" xml:space="preserve">
+    <value>Back to all nutrient supply estimates</value>
+  </data>
 </root>
