@@ -8101,4 +8101,7 @@ following crop year 2</value>
   <data name="lblBackToAllNutrientSupplyEstimates" xml:space="preserve">
     <value>Back to all nutrient supply estimates</value>
   </data>
+  <data name="lblPhosphatePotashSulphurAndMagnesium" xml:space="preserve">
+    <value>Phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO)</value>
+  </data>
 </root>

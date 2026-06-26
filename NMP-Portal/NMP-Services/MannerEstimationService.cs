@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System;
@@ -20,9 +21,9 @@ namespace NMP.Services;
 public class MannerEstimationService(ILogger<MannerEstimationService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IMannerEstimationService
 {
     private readonly ILogger<MannerEstimationService> _logger = logger;
-    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId)
+    public async Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
-        List<MannerEstimation> mannerEstimationsList = new List<MannerEstimation>();
+        List<MannerEstimationDetailsViewModel> mannerEstimationsList = new List<MannerEstimationDetailsViewModel>();
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
@@ -33,7 +34,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            var mannerEstimations = responseWrapper?.Data?.ToObject<List<MannerEstimation>>();
+            var mannerEstimations = responseWrapper?.Data?.ToObject<List<MannerEstimationDetailsViewModel>>();
             mannerEstimationsList.AddRange(mannerEstimations);
         }
         else
@@ -176,6 +177,30 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         }
 
         return (mannerEstimationApplication, error);
+    }
+    public async Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId)
+    {
+        MannerEstimationResultResponse? mannerEstimationResultResponse = null;
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(mannerEstimationId.ToString())));
+
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                mannerEstimationResultResponse = responseWrapper?.Data?.ToObject<MannerEstimationResultResponse>();
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerEstimationResultResponse, error);
     }
 }
 

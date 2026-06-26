@@ -48,7 +48,7 @@ else
                                 <td class="govuk-table__cell">@estimation.FarmName</td>
                                 <td class="govuk-table__cell">@estimation.FieldName</td>
                                 <td class="govuk-table__cell">@(estimation.ModifiedOn == null ? estimation.CreatedOn.ToString("dd MMMM yyyy") : estimation.ModifiedOn.ToString("dd MMMM yyyy"))</td>
-                                <td class="govuk-table__cell"><a asp-action="MannerEstimationResult" asp-controller="MannerEstimation"  aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, estimation.FarmName)))">@Resource.lblViewOrChange</a></td>
+                                <td class="govuk-table__cell"><a asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-r="@estimation.EncryptedId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, estimation.FarmName)))">@Resource.lblViewOrChange</a></td>
                             </tr>
                         }
                     }

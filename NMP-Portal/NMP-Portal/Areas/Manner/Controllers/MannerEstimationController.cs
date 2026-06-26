@@ -2394,13 +2394,26 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         [HttpGet]
-        public IActionResult MannerEstimationResult(string? q)
+        public async Task<IActionResult> MannerEstimationResult(string? q,string? r)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  MannerEstimationResult() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
+                int estimateId =Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
+                (MannerEstimationResultResponse? MannerEstimationResultResponse,Error? error) =  await _mannerEstimationLogic.FetchMannerApplicationResultById(estimateId);
+                if(!string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    TempData["Error"] = error.Message;
+                    return RedirectToAction("MannerHubPage");
+                }
+                ViewBag.MannerEstimationResult = MannerEstimationResultResponse;
+
+            }
+            if (!string.IsNullOrWhiteSpace(r))
+            {
                 ViewBag.Success = _mannerEstimationProtector.Unprotect(q);
             }
+
             return View();
         }
         private async Task LoadMannerEstimations()
@@ -2415,6 +2428,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             foreach (var estimation in mannerEstimations)
             {
+                estimation.EncryptedId = _mannerEstimationProtector.Protect(estimation.ID.ToString());
                 estimation.FarmName = string.Format(Resource.lblEstimationForFarm, estimation.Name, estimation.FarmName);
             }
 
@@ -2634,7 +2648,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             List<SelectListItem> farmsWithFields = await BindAllFarmList();
             if (model.IsCopyEstimate.HasValue && model.IsCopyEstimate.Value)
             {
-                return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+                return RedirectToAction("MannerEstimationResult", new { r = _mannerEstimationProtector.Protect(Resource.lblTrue) });
             }
             else if (farmsWithFields.Count > 0)
             {
@@ -3174,7 +3188,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+                return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue),r = _mannerEstimationProtector.Protect(Resource.lblTrue) });
 
 
             }

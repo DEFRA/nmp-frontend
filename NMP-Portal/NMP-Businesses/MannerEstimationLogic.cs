@@ -452,7 +452,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep22();
     }
-    public async Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId)
+    public async Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
         _logger.LogTrace("MannerLogic : FetchMannerEstimationsList() by organisation id called");
         return await _mannerEstimationService.FetchMannerEstimationsList(orgId);
@@ -793,7 +793,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationApplication.TotalP2O5 = mannerOutput.TotalP2O5;
             mannerEstimationApplication.CropAvailableP2O5 = mannerOutput.CropAvailableP2O5;
 
-            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3;
+            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3;         
             mannerEstimationApplication.TotalMgO = mannerOutput.TotalMgO;
 
             mannerEstimationApplication.TotalK2O = mannerOutput.TotalK2O;
@@ -934,6 +934,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         _logger.LogTrace("MannerLogic : FetchMannerApplicationById() called");
         return await _mannerEstimationService.FetchMannerApplicationById(mannerApplicationId);
+    }
+    public async Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchMannerApplicationResultById() called");
+        return await _mannerEstimationService.FetchMannerApplicationResultById(mannerEstimationId);
     }
 }
 

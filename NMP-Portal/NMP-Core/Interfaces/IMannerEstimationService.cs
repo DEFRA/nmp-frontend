@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace NMP.Core.Interfaces
 {
     public interface IMannerEstimationService
     {
-        Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId);
+        Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId);
         Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
         Task<(bool, Error?)> AddMannerEstimationServiceAsync(string MannerData);
 
@@ -18,6 +19,7 @@ namespace NMP.Core.Interfaces
 
         Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);
         Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
+        Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId);
 
     }
 }

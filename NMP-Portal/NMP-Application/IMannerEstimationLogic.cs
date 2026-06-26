@@ -76,7 +76,7 @@ namespace NMP.Application
 
         MannerEstimationStep22ViewModel GetMannerEstimationStep22();
         MannerEstimationStep22ViewModel SetMannerEstimationStep22(MannerEstimationStep22ViewModel mannerEstimationStep22);
-        Task<(List<MannerEstimation>, Error?)> FetchMannerEstimationsList(Guid orgId);
+        Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId);
         MannerEstimationStep29ViewModel GetMannerEstimationStep29();
         MannerEstimationStep29ViewModel SetMannerEstimationStep29(MannerEstimationStep29ViewModel mannerEstimationStep29);
 
@@ -91,5 +91,6 @@ namespace NMP.Application
         Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);
         Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);
         Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
+        Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId);
     }
 }
