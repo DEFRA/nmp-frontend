@@ -28,6 +28,23 @@ namespace NMP.Commons.Models
         public int? CropTypeID { get; set; }  
         public int? MannerCropTypeID { get; set; }
         public DateTime? SowingDate { get; set; }
+        public int NitrogenProductId { get; set; } = 0;
+        public int PhosphateProductId { get; set; } = 0;
+        public int PotashProductId { get; set; } = 0;
+
+
+        public string NitrogenProductName { get; set; } = string.Empty;
+        public string PhosphateProductName { get; set; } = string.Empty;
+        public string PotashProductName { get; set; } = string.Empty;
+
+        public int NitrogenProductPrice { get; set; } = 0;
+        public int PhosphateProductPrice { get; set; } = 0;
+        public int PotashProductPrice { get; set; } = 0;
+
+        public int NitrogenPrice { get; set; } = 0;
+        public int PhosphatePrice { get; set; } = 0;
+        public int PotashPrice { get; set; } = 0;
+
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }

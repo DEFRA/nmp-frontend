@@ -27,7 +27,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IDataProtectionProvider dataProtectionProvider,  IMannerEstimationLogicDependencies dependencies) : Controller
+    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IDataProtectionProvider dataProtectionProvider, IMannerEstimationLogicDependencies dependencies) : Controller
     {
         private readonly ILogger<MannerEstimationController> _logger = logger;
         private readonly IMannerEstimationLogic _mannerEstimationLogic = mannerEstimationLogic;
@@ -790,7 +790,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (string.IsNullOrEmpty(error?.Message))
             {
                 string closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, model.SowingDate, model.FarmRB209CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
-                ViewBag.ClosedPeriod = closedPeriod;
                 model.ClosedPeriod = closedPeriod;
             }
 
@@ -819,13 +818,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = _mannerEstimationLogic.GetMannerEstimationStep13();
                 model.ApplicationDate = formData.ApplicationDate;
                 var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
-              _mannerEstimationLogic.SetMannerEstimationStep13(model);
+                _mannerEstimationLogic.SetMannerEstimationStep13(model);
                 //non organic farm, high N, NVZ
                 if (!string.IsNullOrWhiteSpace(model.ClosedPeriod) && string.IsNullOrWhiteSpace(error?.Message))
                 {
                     int harvestYear = GetHarvestYearFromApplicationDate(model.ApplicationDate ?? DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
 
-                    await CheckApplicationDateWarnings(model, manureType, harvestYear);
+                    error = await CheckApplicationDateWarnings(model, manureType, harvestYear);
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        TempData["ApplicationDateError"] = error.Message;
+                    }
+
                     (bool flowControl, IActionResult? value) = BindPropertiesForManureApplyingDate(model);
                     if (!flowControl && value != null)
                     {
@@ -844,8 +848,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        private async Task CheckApplicationDateWarnings(MannerEstimationStep13ViewModel model, ManureType? manureType, int harvestYear)
+        private async Task<Error?> CheckApplicationDateWarnings(MannerEstimationStep13ViewModel model, ManureType? manureType, int harvestYear)
         {
+            Error? error = null;
             DateTime endDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
             if (!(model.IsFarmOrganic ?? false) && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
             {
@@ -863,7 +868,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             // England-specific warning for Winter Oilseed Rape or Grass
             await EndOctoberToEndClosedPeriodWarning(endDate, model, harvestYear);
 
-            await EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(model);
+            error = await EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(model);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                return error;
+            }
 
             if (model.FarmRB209CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
@@ -873,13 +882,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 //There have been 20 days or less since the last application livestock manure
                 if (IsLivestockCondition(model))
                 {
-                    await HandleLivestockManureRule(model);
+                    error = await HandleLivestockManureRule(model);
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        return error;
+                    }
                 }
             }
             _mannerEstimationLogic.SetMannerEstimationStep13(model);
+            return error;
         }
 
-        private async Task EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(MannerEstimationStep13ViewModel model)
+        private async Task<Error?> EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(MannerEstimationStep13ViewModel model)
         {
             Error? error = null;
 
@@ -887,34 +901,36 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (isWithinClosedPeriodAndFebruary == true)
             {
                 (List<MannerEstimationApplication> mannerApplications, error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(model.MannerEstimationId ?? 0);
-                var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
-
-                bool isSlurry = IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
-                bool isPoultryManure =
-                    model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
-
-                if (isSlurry || isPoultryManure)
+                if (mannerApplications.Count > 0)
                 {
-                    // warning excel sheet row no. 21
-                    model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+                    var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
 
-                    WarningResponse warning =
-                        await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                            model.FarmRB209CountryId,
-                            NMP.Commons.Enums.WarningKey
-                                .AllowWeeksBetweenSlurryPoultryApplications.ToString());
+                    bool isSlurry = IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
+                    bool isPoultryManure =
+                        model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
 
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
-                    model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
+                    if (isSlurry || isPoultryManure)
+                    {
+                        // warning excel sheet row no. 21
+                        model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+
+                        WarningResponse warning =
+                            await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                                model.CountryId,
+                                NMP.Commons.Enums.WarningKey
+                                    .AllowWeeksBetweenSlurryPoultryApplications.ToString());
+
+                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
+                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
+                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
+                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
+                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
+                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
+                    }
                 }
+
             }
-
-
-
+            return error;
 
         }
         private static bool IsSlurryType(int? manureTypeId)
@@ -927,7 +943,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                    manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion;
         }
 
-        private async Task HandleLivestockManureRule(MannerEstimationStep13ViewModel model)
+        private async Task<Error?> HandleLivestockManureRule(MannerEstimationStep13ViewModel model)
         {
             (List<MannerEstimationApplication> mannerApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(model.MannerEstimationId ?? 0);
             if (mannerApplications.Count > 0)
@@ -939,7 +955,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     await ApplyLivestockWarning(model);
                 }
             }
-
+            return error;
         }
         private async Task HandleScotlandHighN(MannerEstimationStep13ViewModel model, int harvestYear)
         {
@@ -963,7 +979,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             //scotland warning excel sheet row no. 26
             WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                model.FarmRB209CountryId, NMP.Commons.Enums.WarningKey.RanManureJulyToSep.ToString());
+                model.CountryId, NMP.Commons.Enums.WarningKey.RanManureJulyToSep.ToString());
             model.ApplicationJulyToSeptHeader = warning.Header;
             model.ApplicationJulyToSeptCodeID = warning.WarningCodeID;
             model.ApplicationJulyToSeptLevelID = warning.WarningLevelID;
@@ -990,7 +1006,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             var warning =
                 await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                    model.FarmRB209CountryId,
+                    model.CountryId,
                     NMP.Commons.Enums.WarningKey
                         .AllowWeeksBetweenSlurryPoultryApplications.ToString());
 
@@ -1079,7 +1095,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 //warning excel sheet row no. 10
                 WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                    model.FarmRB209CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriod.ToString());
+                    model.CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriod.ToString());
                 model.ClosedPeriodWarningHeader = warning.Header;
                 model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
                 model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
@@ -1102,7 +1118,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 //warning excel sheet row no. 12
                 model.IsClosedPeriodWarning = true;
                 WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                    model.FarmRB209CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriodOrganicFarm.ToString());
+                    model.CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureClosedPeriodOrganicFarm.ToString());
                 model.ClosedPeriodWarningHeader = warning.Header;
                 model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
                 model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
@@ -1116,15 +1132,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private async Task EndOctoberToEndClosedPeriodWarning(DateTime endDate, MannerEstimationStep13ViewModel model, int harvestYear)
         {
-            DateTime endOfOctober = new DateTime(harvestYear-1, 10, 31, 0, 0, 0, DateTimeKind.Utc);
+            DateTime endOfOctober = new DateTime(harvestYear - 1, 10, 31, 0, 0, 0, DateTimeKind.Utc);
             if ((model.CropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape ||
                  model.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass) &&
                 WarningWithinPeriod.IsApplicationDateWithinDateRange(model.ApplicationDate, endOfOctober, endDate) &&
-                (model.FarmRB209CountryId == (int)NMP.Commons.Enums.FarmCountry.England))
+                (model.CountryId == (int)NMP.Commons.Enums.FarmCountry.England))
             {
                 //warning excel sheet row no. 17
                 WarningResponse warning = await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                    model.FarmRB209CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureDateOnly.ToString());
+                    model.CountryId, NMP.Commons.Enums.WarningKey.HighNOrganicManureDateOnly.ToString());
                 model.ClosedPeriodWarningHeader = warning.Header;
                 model.ClosedPeriodWarningCodeID = warning.WarningCodeID;
                 model.ClosedPeriodWarningLevelID = warning.WarningLevelID;
@@ -3182,7 +3198,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 Guid organisationId = GetOrganisationId();
                 (bool success, Error? error) = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
-                if(!string.IsNullOrWhiteSpace(error?.Message)&&!success)
+                if (!string.IsNullOrWhiteSpace(error?.Message) && !success)
                 {
                     TempData["ConditionsAffectingNutrientsError"] = error.Message;
                     return View(model);
@@ -3220,6 +3236,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             );
 
         }
-        
+
     }
 }

@@ -292,6 +292,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep13.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
         mannerEstimationViewModel.MannerEstimationStep13.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
+        mannerEstimationViewModel.MannerEstimationStep13.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         mannerEstimationViewModel.MannerEstimationStep13.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep13.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
 
@@ -624,6 +625,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             (SoilTypeSoilTextureResponse soilTypeSoilTextureResponse, _) = await _organicManureLogic.FetchSoilTypeSoilTextureBySoilTypeIdServiceAsync(field.SoilTypeID.Value);
             mannerEstimationViewModel.MannerEstimationStep18.TopSoilId = soilTypeSoilTextureResponse.TopSoilID;
             mannerEstimationViewModel.MannerEstimationStep19.SubSoilId = soilTypeSoilTextureResponse.SubSoilID;
+            mannerEstimationViewModel.MannerEstimationStep2.CountryID = farm.CountryID??0;
+            mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = farm.RB209CountryID ?? 0;
         }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return error;
@@ -793,7 +796,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationApplication.TotalP2O5 = mannerOutput.TotalP2O5;
             mannerEstimationApplication.CropAvailableP2O5 = mannerOutput.CropAvailableP2O5;
 
-            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3;         
+            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3; 
+            mannerEstimationApplication.CropAvailableSO3 = mannerOutput.CropAvailableSO3 ?? 0;
+
             mannerEstimationApplication.TotalMgO = mannerOutput.TotalMgO;
 
             mannerEstimationApplication.TotalK2O = mannerOutput.TotalK2O;
