@@ -45,12 +45,15 @@ namespace NMP.Commons.Models
         public int TotalMgO { get; set; } = 0;
         public int TotalK2O { get; set; } = 0;
         public int CropAvailableK2O { get; set; } = 0;
+        public int CropAvailableSO3 { get; set; } = 0;
         public int NitrogenUseEfficiency { get; set; } = 0;
         public int MineralisedNitrogenLosses { get; set; } = 0;
         public int LostNitrateLosses { get; set; } = 0;
         public int LostAmmonia { get; set; } = 0;
         public int LostDenitrified { get; set; } = 0;
-
+        public int NitrogenValue { get; set; }
+        public int PhosphateValue { get; set; }
+        public int PotashValue { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }
