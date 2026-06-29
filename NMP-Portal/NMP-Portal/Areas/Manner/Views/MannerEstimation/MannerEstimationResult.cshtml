@@ -23,7 +23,9 @@
         </h1>
     </div>
 </div>
-<p class="govuk-body">@string.Format(Resource.lblLastUpdatedDate, ViewBag.LastUpdatedOn)</p>
+<p class="govuk-body">
+    @string.Format(Resource.lblLastUpdatedDate, ViewBag.LastUpdatedOn.ToString("dd MMM yyyy"))
+</p>
 <div class="govuk-grid-row margin-bottom-thirty">
     <div class="govuk-grid-column-two-thirds-from-desktop">
         <h2 class="govuk-heading-s">@Resource.lblOptionForManner</h2>

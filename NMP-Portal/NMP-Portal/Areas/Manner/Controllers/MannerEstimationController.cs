@@ -2433,7 +2433,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (!string.IsNullOrWhiteSpace(r))
             {
-                ViewBag.Success = _mannerEstimationProtector.Unprotect(q);
+                ViewBag.Success = _mannerEstimationProtector.Unprotect(r);
             }
 
             return View();
