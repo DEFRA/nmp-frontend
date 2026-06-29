@@ -6581,6 +6581,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The potential financial value of the nutrients applied is £{0} per hectare..
+        /// </summary>
+        public static string lblFinancialValuesTabContent1 {
+            get {
+                return ResourceManager.GetString("lblFinancialValuesTabContent1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Find weather data based on postcode.
         /// </summary>
         public static string lblFindWeatherDataBasedOnPostcode {
@@ -11168,6 +11177,15 @@ namespace NMP.Commons.Resources {
         public static string lblNutrientManagementPlansAndNitrateVulnerableZoneReports {
             get {
                 return ResourceManager.GetString("lblNutrientManagementPlansAndNitrateVulnerableZoneReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient prices.
+        /// </summary>
+        public static string lblNutrientPrices {
+            get {
+                return ResourceManager.GetString("lblNutrientPrices", resourceCulture);
             }
         }
         
@@ -17146,6 +17164,15 @@ namespace NMP.Commons.Resources {
         public static string lblValue {
             get {
                 return ResourceManager.GetString("lblValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value breakdown.
+        /// </summary>
+        public static string lblValueBreakdown {
+            get {
+                return ResourceManager.GetString("lblValueBreakdown", resourceCulture);
             }
         }
         

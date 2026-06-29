@@ -8104,4 +8104,13 @@ following crop year 2</value>
   <data name="lblPhosphatePotashSulphurAndMagnesium" xml:space="preserve">
     <value>Phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO)</value>
   </data>
+  <data name="lblFinancialValuesTabContent1" xml:space="preserve">
+    <value>The potential financial value of the nutrients applied is £{0} per hectare.</value>
+  </data>
+  <data name="lblValueBreakdown" xml:space="preserve">
+    <value>Value breakdown</value>
+  </data>
+  <data name="lblNutrientPrices" xml:space="preserve">
+    <value>Nutrient prices</value>
+  </data>
 </root>

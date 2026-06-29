@@ -57,8 +57,7 @@
                         @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                         {
                                 <tr>
-                                    <td class="govuk-table__cell">@item.ManureTypeName</td>
-                                    @* <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td> *@
+                                    <td class="govuk-table__cell">@item.ManureTypeName</td>                                    
                                         <td class="govuk-table__cell">
     @item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
 </td>
@@ -154,7 +153,76 @@
                 </div>
             </govuk-tabs-item>
             <govuk-tabs-item id="FinancialValue" label=@Resource.lblFinancialValue>
-                <h2 class="govuk-heading-m non-standard">@Resource.lblFinancialValue</h2>
+               
+                <h2 class="govuk-heading-m">Resource.lblFinancialValue</h2>
+                    <div class="govuk-inset-text">
+                    @string.Format(Resource.lblFinancialValuesTabContent1, ViewBag.FinancialValue)
+                    </div>
+                <h3 class="govuk-heading-s">@Resource.lblValueBreakdown</h3>
+                    <div class="margin-bottom-forty">
+                        <table class="govuk-table margin-bottom-forty data-table">
+                            <thead class="govuk-table__head">
+                                <tr class="govuk-table__row">
+
+                                    <th scope="row" class="govuk-table__header">Material type</th>
+                                    <th scope="row" class="govuk-table__header">Crop available <br>nitrogen (N)</th>
+                                    <th scope="row" class="govuk-table__header">Total phosphate (P2O5)</th>
+                                    <th scope="row" class="govuk-table__header">Total potash (K2O)</th>
+                                    <th scope="row" class="govuk-table__header">Total value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="govuk-table__row">
+
+                                    <td class="govuk-table__cell">Pig slurry</td>
+                                    <td class="govuk-table__cell">£10</td>
+                                    <td class="govuk-table__cell">£79</td>
+                                    <td class="govuk-table__cell">£36</td>
+                                    <td class="govuk-table__cell">£125</td>
+                                </tr>
+
+			
+                            </tbody>
+                        </table>
+                    </div>
+                <h3 class="govuk-heading-s">@Resource.lblNutrientPrices</h3>
+                    <table class="govuk-table data-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">Nutrient</th>
+                                <th scope="col" class="govuk-table__header">Product</th>
+                                <th scope="col" class="govuk-table__header">Product price</th>
+                                <th scope="col" class="govuk-table__header">Nutrient price</th>
+                                <th scope="col" class="govuk-table__header"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">Nitrogen (N)</td>
+                                <td class="govuk-table__cell">
+                                    Ammonium nitrate (34.5% N)
+                                </td>
+                                <td class="govuk-table__cell">£207 per tonne</td>
+                                <td class="govuk-table__cell">60p per kg</td>
+                                <td class="govuk-table__cell"><a href="nitrogen_value_one">Change</a></td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">Phosphate (P2O5)</td>
+                                <td class="govuk-table__cell">Triple superphosphate (46% P2O5)</td>
+                                <td class="govuk-table__cell">£230 per tonne</td>
+                                <td class="govuk-table__cell">50p per kg</td>
+                                <td class="govuk-table__cell"><a href="phosphate_value">Change</a></td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">Potash (K2O)</td>
+                                <td class="govuk-table__cell">Muriate of potash (60% K2O)</td>
+                                <td class="govuk-table__cell">£330 per tonne</td>
+                                <td class="govuk-table__cell">55p per kg</td>
+                                <td class="govuk-table__cell"><a href="potash_value">Change</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
             </govuk-tabs-item>
             <govuk-tabs-item id="FarmFieldAndCrop" label=@Resource.lblFarmFieldAndCrop>
                 <h2 class="govuk-heading-m non-standard">@Resource.lblFarmFieldAndCrop</h2>
