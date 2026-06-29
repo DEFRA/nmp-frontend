@@ -938,3 +938,6 @@ hr.seperator_five_report {
 .card-group__item .card {
     margin-bottom: 25px;
 }
+.width-66 {
+    width: 66%;
+}

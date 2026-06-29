@@ -12045,6 +12045,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO).
+        /// </summary>
+        public static string lblPhosphatePotashSulphurAndMagnesium {
+            get {
+                return ResourceManager.GetString("lblPhosphatePotashSulphurAndMagnesium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phosphate (P2O5) standard: {0}kg per animal, per year.
         /// </summary>
         public static string lblPhosphateStandard {
