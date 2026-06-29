@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Identity.Client;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Application;
 using NMP.Businesses;
 using NMP.Commons.Enums;
@@ -2427,6 +2428,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     TempData["Error"] = error.Message;
                     return RedirectToAction("MannerHubPage");
                 }
+                int cropAvailableNCurrentCrop = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.CropAvailableNCurrentCrop);
+                int cropAvailableNitrogenFollowingCropYearTwo = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.CropAvailableNitrogenFollowingCropYearTwo);
+                int totalP2O5 = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.TotalP2O5);
+                int totalSO3 = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.TotalSO3);
+                ViewBag.TotalValue = cropAvailableNCurrentCrop + cropAvailableNitrogenFollowingCropYearTwo + totalP2O5 + totalSO3;
+
                 ViewBag.LastUpdatedOn = MannerEstimationResultResponse.LastUpdatedOn;
                 ViewBag.MannerEstimations = MannerEstimationResultResponse;
 
@@ -2961,6 +2968,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> EffectiveRainfallManual(MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} EffectiveRainfallManual() post action called");
+           
+
+            AddErrorIfNull(model.TotalRainfall, _totalRainfallKey, Resource.MsgEnterRainfallAmountBeforeContinuing);
             if ((!ModelState.IsValid) && ModelState.ContainsKey(_totalRainfallKey))
             {
                 var RainfallError = ModelState[_totalRainfallKey]?.Errors.Count > 0 ?
@@ -2970,22 +2980,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     ModelState[_totalRainfallKey]?.Errors.Clear();
                     decimal decimalValue;
-                    if (decimal.TryParse(ModelState[_totalRainfallKey].RawValue.ToString(), out decimalValue))
+                   if (ModelState[_totalRainfallKey].RawValue.ToString().Contains("."))
                     {
                         ModelState[_totalRainfallKey]?.Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
                     }
                     else
                     {
-                        ModelState[_totalRainfallKey]?.Errors.Add(Resource.MsgForEffectiveRainfallManual);
+                        ModelState[_totalRainfallKey]?.Errors.Add(string.Format(Resource.MsgEnterValueInBetween, Resource.lblEffectiveRainfall, 0, 9999));
                     }
                 }
             }
-
-            AddErrorIfNull(model.TotalRainfall, _totalRainfallKey, Resource.MsgEnterRainfallAmountBeforeContinuing);
-
-            if (model.TotalRainfall != null && model.TotalRainfall < 0)
+            if (model.TotalRainfall != null)
             {
-                ModelState.AddModelError(_totalRainfallKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+                if (model.TotalRainfall < 0 || model.TotalRainfall > 9999)
+                {
+                    ModelState.AddModelError(_totalRainfallKey, string.Format(Resource.MsgEnterValueInBetween,Resource.lblEffectiveRainfall,0,9999));
+                }
             }
 
             if (!ModelState.IsValid)

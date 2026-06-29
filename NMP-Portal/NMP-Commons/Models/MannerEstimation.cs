@@ -19,10 +19,10 @@ namespace NMP.Commons.Models
         public int? CountryID { get; set; }
         public string? Postcode { get; set; }
         public int? AverageAnuualRainfall { get; set; }
+        public bool? RegisteredOrganicProducer { get; set; }
 
         public string? FieldName { get; set; }
         public bool? IsWithinNVZ { get; set; }
-        public int? NVZProgrammeID   { get; set; }
         public int? TopSoilID { get; set; }
         public int? SubSoilID { get; set; }
         public int? CropTypeID { get; set; }  

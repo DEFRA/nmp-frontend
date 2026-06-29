@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{Resource.lblWhatWouldYouLikeTocallThisEstimationReference} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.FarmName;
     string backAction = "MannerHubPage";
     @if (Model.IsCopyEstimate.HasValue)
