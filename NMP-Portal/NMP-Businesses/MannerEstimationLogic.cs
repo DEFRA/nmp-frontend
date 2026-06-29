@@ -818,7 +818,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         });
 
         (MannerEstimationApplication? mannerEstimationApplicationResult, error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
-        return (mannerEstimationApplication, error);
+        return (mannerEstimationApplicationResult, error);
     }
 
     private async Task<(string?, Error?)> BindManureOutput(MannerEstimation mannerEstimation, MannerEstimationApplication mannerEstimationApplication)

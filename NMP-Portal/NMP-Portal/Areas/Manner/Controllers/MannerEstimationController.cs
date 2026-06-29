@@ -2415,13 +2415,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MannerEstimationResult(string? q,string? r)
+        public async Task<IActionResult> MannerEstimationResult(string? q, string? r)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  MannerEstimationResult() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int estimateId =Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
-                (MannerEstimationResultResponse? MannerEstimationResultResponse,Error? error) =  await _mannerEstimationLogic.FetchMannerApplicationResultById(estimateId);
+                (MannerEstimationResultResponse? MannerEstimationResultResponse, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(estimateId);
                 if(!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["Error"] = error.Message;
@@ -3202,14 +3202,25 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 Guid organisationId = GetOrganisationId();
-                (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
-                if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimationApplicationResult!=null)
+                (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error)
+                   = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
+
+                if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["ConditionsAffectingNutrientsError"] = error.Message;
                     return View(model);
                 }
 
-                return RedirectToAction("MannerEstimationResult", new { q = _mannerEstimationProtector.Protect(mannerEstimationApplicationResult.MannerEstimationID.ToString()),r = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+                if (mannerEstimationApplicationResult != null && mannerEstimationApplicationResult.MannerEstimationID != null)
+                {
+                    return RedirectToAction("MannerEstimationResult", new
+                    {
+                        q = _mannerEstimationProtector.Protect(
+                          mannerEstimationApplicationResult.MannerEstimationID.ToString()),
+                        r = _mannerEstimationProtector.Protect(Resource.lblTrue)
+                    });
+                }
+                return View(model);
 
 
             }
