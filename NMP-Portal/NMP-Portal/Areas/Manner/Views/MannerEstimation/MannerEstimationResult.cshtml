@@ -1,5 +1,11 @@
 ﻿@using NMP.Commons.Resources
 @using System.Globalization
+@{
+    var mannerEstimation = ViewBag.MannerEstimations.MannerEstimation;
+    
+    var registeredOrganicProducer = mannerEstimation.RegisteredOrganicProducer ? Resource.lblYes : Resource.lblNo;
+    var isWithinNVZ = @mannerEstimation.IsWithinNVZ ? Resource.lblYes : Resource.lblNo;
+}
 @section BeforeContent {
     <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation">@Resource.lblBackToAllNutrientSupplyEstimates</govuk-back-link>
 }
@@ -54,14 +60,13 @@
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
-                        @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
-                        {
+                            @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                            {
                                 <tr>
                                     <td class="govuk-table__cell">@item.ManureTypeName</td>
-                                    @* <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td> *@
-                                        <td class="govuk-table__cell">
-    @item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
-</td>
+                                    <td class="govuk-table__cell">
+                                        @item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -81,14 +86,14 @@
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
-                            @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
-                            {
+                                @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                                {
                                     <tr>
 
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalN, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNCurrentCrop, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
-                                        <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.NitrogenUseEfficiency,Resource.lblPercentage)</td>
+                                        <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.NitrogenUseEfficiency, Resource.lblPercentage)</td>
                                     </tr>
                                 }
                             </tbody>
@@ -107,17 +112,17 @@
                                     <th scope="row" class="govuk-table__header">@Resource.lblLostDenitrifiedN</th>
                                 </tr>
                             </thead>
-                                <tbody class="govuk-table__body">
+                            <tbody class="govuk-table__body">
                                 @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
-                            {
+                                {
                                     <tr>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.MineralisedNitrogenLosses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostNitrateLosses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostAmmonia, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostDenitrified, Resource.lblkg)</td>
                                     </tr>
-                            }
-                                </tbody>
+                                }
+                            </tbody>
                         </table>
                     </div>
 
@@ -135,9 +140,9 @@
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotalMagnesium</th>
                             </tr>
                         </thead>
-                            <tbody class="govuk-table__body">
-                        @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
-                        {
+                        <tbody class="govuk-table__body">
+                            @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                            {
                                 <tr>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalP2O5, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableP2O5, Resource.lblkg)</td>
@@ -147,22 +152,194 @@
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableSO3, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalMgO, Resource.lblkg)</td>
                                 </tr>
-                        }
-                            </tbody>
+                            }
+                        </tbody>
                     </table>
 
                 </div>
             </govuk-tabs-item>
             <govuk-tabs-item id="FinancialValue" label=@Resource.lblFinancialValue>
-                <h2 class="govuk-heading-m non-standard">@Resource.lblFinancialValue</h2>
+
+                <h2 class="govuk-heading-m">@Resource.lblFinancialValue</h2>
+                <div class="govuk-inset-text">
+                    @string.Format(Resource.lblFinancialValuesTabContent1, ViewBag.TotalValue)
+                </div>
+                <h3 class="govuk-heading-s">@Resource.lblValueBreakdown</h3>
+                <div class="margin-bottom-forty">
+                    <table class="govuk-table margin-bottom-forty data-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
+                                <th scope="row" class="govuk-table__header">@Resource.lblDate</th>
+                                <th scope="row" class="govuk-table__header">@Resource.lblCropAvailable<br />@Resource.lblNitrogenLowercase</th>
+                                <th scope="row" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                                <th scope="row" class="govuk-table__header">@Resource.lblTotalPotash</th>
+                                <th scope="row" class="govuk-table__header">@Resource.lblTotalValue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int count = 0;
+                            }
+                            @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                            {
+                                count++;
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell">@count</td>
+                                    <td class="govuk-table__cell">@item.ManureTypeName</td>
+                                    <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.CropAvailableNCurrentCrop)</td>
+                                    @*  *@
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.TotalP2O5)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.TotalK2O)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.CropAvailableNCurrentCrop + item.TotalP2O5 + item.TotalK2O)</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <h3 class="govuk-heading-s">@Resource.lblNutrientPrices</h3>
+                <table class="govuk-table data-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblPercentageOfNutrient</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblPriceOfProduct</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblPriceOfNutrient</th>
+                            <th scope="col" class="govuk-table__header"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblNitrogen</td>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.NitrogenProductName
+                            </td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne,mannerEstimation.NitrogenProductPrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundPerKg, mannerEstimation.NitrogenPrice)</td>
+                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.PhosphateProductName
+                            </td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PhosphateProductPrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundPerKg, mannerEstimation.PhosphatePrice)</td>
+                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.PotashProductName
+                            </td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PotashProductPrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundPerKg, mannerEstimation.PhosphatePrice)</td>
+                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
             </govuk-tabs-item>
             <govuk-tabs-item id="FarmFieldAndCrop" label=@Resource.lblFarmFieldAndCrop>
                 <h2 class="govuk-heading-m non-standard">@Resource.lblFarmFieldAndCrop</h2>
+                <table class="govuk-table data-table manner-answers-table margin-bottom-forty">
+                    <tbody class="govuk-table__body">
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblFarmName</th>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.FarmName
+                            </td>
+                            <td class="govuk-table__cell">
+                                <a class="govuk-link" href="#">
+                                    @Resource.lblChange
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblCountry</th>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.Country
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblPostCode</th>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.Postcode
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblRegisteredOrganicProducerOnly</th>
+                            <td class="govuk-table__cell">
+                                @registeredOrganicProducer
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblAverageAnnualRainfallFor, mannerEstimation.Postcode)</th>
+                            <td class="govuk-table__cell">
+                                @string.Format("{0}{1}", mannerEstimation.AverageAnuualRainfall, Resource.lblmm)
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblFieldName</th>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.FieldName
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblIsInsideANitrateVulnerableZone</th>
+                            <td class="govuk-table__cell">
+                                @isWithinNVZ
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblTopsoil</th>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.TopSoil
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblSubSoil</th>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.SubSoil
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblCropType</th>
+                            <td class="govuk-table__cell">
+                                @mannerEstimation.CropTypeName
+                            </td>
+                            <td class="govuk-table__cell"><a class="govuk-link" href="#">@Resource.lblChange</a></td>
+                        </tr>
+
+    
+      
+                    </tbody>
+                </table>
             </govuk-tabs-item>
-            <govuk-tabs-item id="ApplicationDetails" label=@Resource.lblApplicationDetails>
-                <h2 class="govuk-heading-m non-standard">@Resource.lblApplicationDetails</h2>
-            </govuk-tabs-item>
-        </govuk-tabs>
+             
+            </govuk-tabs>
 
     </div>
 

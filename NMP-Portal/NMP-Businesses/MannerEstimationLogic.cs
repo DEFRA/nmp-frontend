@@ -716,7 +716,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             AverageAnuualRainfall = mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall,
             FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName,
             IsWithinNVZ = mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ,
-            NVZProgrammeID = 2,
+            RegisteredOrganicProducer = mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic,
             TopSoilID = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId,
             SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
             CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,

@@ -8104,4 +8104,52 @@ following crop year 2</value>
   <data name="lblPhosphatePotashSulphurAndMagnesium" xml:space="preserve">
     <value>Phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO)</value>
   </data>
+  <data name="lblFinancialValuesTabContent1" xml:space="preserve">
+    <value>The potential financial value of the nutrients applied is £{0} per hectare.</value>
+  </data>
+  <data name="lblValueBreakdown" xml:space="preserve">
+    <value>Value breakdown</value>
+  </data>
+  <data name="lblApplication" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="lblCropAvailable" xml:space="preserve">
+    <value>Crop available </value>
+  </data>
+  <data name="lblTotalValue" xml:space="preserve">
+    <value>Total value</value>
+  </data>
+  <data name="lblNutrientPrices" xml:space="preserve">
+    <value>Nutrient prices</value>
+  </data>
+  <data name="lblPoundWithValue" xml:space="preserve">
+    <value>£{0}</value>
+  </data>
+  <data name="lblPriceOfProduct" xml:space="preserve">
+    <value>Price of product</value>
+  </data>
+  <data name="lblPercentageOfNutrient" xml:space="preserve">
+    <value>Percentage of nutrient</value>
+  </data>
+  <data name="lblPriceOfNutrient" xml:space="preserve">
+    <value>Price of nutrient</value>
+  </data>
+  <data name="lblPoundValuePerTonne" xml:space="preserve">
+    <value>£{0} per tonne</value>
+  </data>
+  <data name="lblPoundPerKg" xml:space="preserve">
+    <value>{0}p per kg</value>
+  </data>
+  <data name="lblSubSoil" xml:space="preserve">
+    <value>Subsoil</value>
+  </data>
+  <data name="lblTopsoil" xml:space="preserve">
+    <value>Topsoil</value>
+  </data>
+  <data name="lblIsInsideANitrateVulnerableZone" xml:space="preserve">
+    <value>Is inside a Nitrate Vulnerable Zone (NVZ)</value>
+  </data>
+  <data name="lblRegisteredOrganicProducerOnly" xml:space="preserve">
+    <value>Registered organic producer</value>
+  </data>
 </root>

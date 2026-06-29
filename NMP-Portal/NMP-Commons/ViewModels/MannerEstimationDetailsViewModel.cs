@@ -9,9 +9,10 @@ namespace NMP.Commons.ViewModels
 {
     public class MannerEstimationDetailsViewModel:MannerEstimation
     {
-        public string TopSoilName { get; set; } = string.Empty;
-        public string SubSoilName { get; set; } = string.Empty;
+        public string TopSoil { get; set; } = string.Empty;
+        public string SubSoil { get; set; } = string.Empty;
         public string CropTypeName { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
 
         public string EncryptedId { get; set; } = string.Empty;
     }
