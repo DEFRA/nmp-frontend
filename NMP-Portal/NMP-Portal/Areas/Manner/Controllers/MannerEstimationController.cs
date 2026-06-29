@@ -2968,34 +2968,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> EffectiveRainfallManual(MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} EffectiveRainfallManual() post action called");
-           
+
 
             AddErrorIfNull(model.TotalRainfall, _totalRainfallKey, Resource.MsgEnterRainfallAmountBeforeContinuing);
-            if ((!ModelState.IsValid) && ModelState.ContainsKey(_totalRainfallKey))
+            ValidationEffectiveRainfall();
+            if (model.TotalRainfall != null && (model.TotalRainfall < 0 || model.TotalRainfall > 9999))
             {
-                var RainfallError = ModelState[_totalRainfallKey]?.Errors.Count > 0 ?
-                                ModelState[_totalRainfallKey]?.Errors[0].ErrorMessage.ToString() : null;
+                ModelState.AddModelError(_totalRainfallKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblEffectiveRainfall, 0, 9999));
 
-                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_totalRainfallKey].RawValue, _totalRainfallKey)))
-                {
-                    ModelState[_totalRainfallKey]?.Errors.Clear();
-                    decimal decimalValue;
-                   if (ModelState[_totalRainfallKey].RawValue.ToString().Contains("."))
-                    {
-                        ModelState[_totalRainfallKey]?.Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
-                    }
-                    else
-                    {
-                        ModelState[_totalRainfallKey]?.Errors.Add(string.Format(Resource.MsgEnterValueInBetween, Resource.lblEffectiveRainfall, 0, 9999));
-                    }
-                }
-            }
-            if (model.TotalRainfall != null)
-            {
-                if (model.TotalRainfall < 0 || model.TotalRainfall > 9999)
-                {
-                    ModelState.AddModelError(_totalRainfallKey, string.Format(Resource.MsgEnterValueInBetween,Resource.lblEffectiveRainfall,0,9999));
-                }
             }
 
             if (!ModelState.IsValid)
@@ -3006,6 +2986,28 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             _mannerEstimationLogic.SetMannerEstimationStep32(model);
             return RedirectToAction(_conditionsAffectingNutrients);
+        }
+
+        private void ValidationEffectiveRainfall()
+        {
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(_totalRainfallKey))
+            {
+                var RainfallError = ModelState[_totalRainfallKey]?.Errors.Count > 0 ?
+                                ModelState[_totalRainfallKey]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_totalRainfallKey].RawValue, _totalRainfallKey)))
+                {
+                    ModelState[_totalRainfallKey]?.Errors.Clear();
+                    if (ModelState[_totalRainfallKey].RawValue.ToString().Contains("."))
+                    {
+                        ModelState[_totalRainfallKey]?.Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
+                    }
+                    else
+                    {
+                        ModelState[_totalRainfallKey]?.Errors.Add(string.Format(Resource.MsgEnterValueInBetween, Resource.lblEffectiveRainfall, 0, 9999));
+                    }
+                }
+            }
         }
 
         [HttpGet]
