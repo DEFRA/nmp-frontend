@@ -163,9 +163,9 @@
 
                 <h2 class="govuk-heading-m">@Resource.lblFinancialValue</h2>
                 <div class="govuk-inset-text">
-                    @string.Format(Resource.lblFinancialValuesTabContent1, ViewBag.TotalValue)
+                    @string.Format(Resource.lblFinancialValuesTabContent1, ViewBag.TotalValue)<br />
+                    @Resource.lblThisIsBasedOnFertiliserNutrientPricesBelow
                 </div>
-                <p class="govuk-body">@Resource.lblThisIsBasedOnFertiliserNutrientPricesBelow</p>
                 <h3 class="govuk-heading-s">@Resource.lblValueBreakdown</h3>
                 <div class="margin-bottom-forty">
                     <table class="govuk-table margin-bottom-forty data-table">
@@ -220,7 +220,7 @@
                                 @mannerEstimation.NitrogenProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.NitrogenProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, mannerEstimation.NitrogenPrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue,string.Format("{0:N2}",mannerEstimation.NitrogenPrice))</td>
                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                         </tr>
                         <tr class="govuk-table__row">
@@ -229,7 +229,7 @@
                                 @mannerEstimation.PhosphateProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PhosphateProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, mannerEstimation.PhosphatePrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2}", mannerEstimation.PhosphatePrice))</td>
                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                         </tr>
                         <tr class="govuk-table__row">
@@ -238,7 +238,7 @@
                                 @mannerEstimation.PotashProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PotashProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, mannerEstimation.PhosphatePrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2}", mannerEstimation.PotashPrice))</td>
                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                         </tr>
 
