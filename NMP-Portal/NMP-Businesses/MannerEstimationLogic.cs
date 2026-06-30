@@ -625,7 +625,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             (SoilTypeSoilTextureResponse soilTypeSoilTextureResponse, _) = await _organicManureLogic.FetchSoilTypeSoilTextureBySoilTypeIdServiceAsync(field.SoilTypeID.Value);
             mannerEstimationViewModel.MannerEstimationStep18.TopSoilId = soilTypeSoilTextureResponse.TopSoilID;
             mannerEstimationViewModel.MannerEstimationStep19.SubSoilId = soilTypeSoilTextureResponse.SubSoilID;
-            mannerEstimationViewModel.MannerEstimationStep2.CountryID = farm.CountryID??0;
+            mannerEstimationViewModel.MannerEstimationStep2.CountryID = farm.CountryID ?? 0;
             mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = farm.RB209CountryID ?? 0;
         }
         SetMannerEstimationToSession(mannerEstimationViewModel);
@@ -795,7 +795,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationApplication.TotalP2O5 = mannerOutput.TotalP2O5;
             mannerEstimationApplication.CropAvailableP2O5 = mannerOutput.CropAvailableP2O5;
 
-            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3; 
+            mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3;
             mannerEstimationApplication.CropAvailableSO3 = mannerOutput.CropAvailableSO3 ?? 0;
 
             mannerEstimationApplication.TotalMgO = mannerOutput.TotalMgO;
@@ -923,7 +923,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
            ? cropTypeLinkingResponse.MannerCropTypeID
            : cropTypeLinkingResponse.LateSownMannerCropTypeID.Value;
     }
-    
+
     public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
     {
         _logger.LogTrace("MannerLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");
@@ -944,5 +944,26 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         _logger.LogTrace("MannerLogic : FetchMannerApplicationResultById() called");
         return await _mannerEstimationService.FetchMannerApplicationResultById(mannerEstimationId);
     }
+    public async Task<bool> FetchDefaultNutrientValue(
+    int manureTypeId,
+    MannerEstimationApplication mannerEstimationApplication)
+    {
+        (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(manureTypeId);
+
+        if (manureType == null)
+            return false;
+
+        return
+            mannerEstimationApplication.DryMatterPercent == manureType.DryMatter &&
+            mannerEstimationApplication.N == manureType.TotalN &&
+            mannerEstimationApplication.NH4N == manureType.NH4N &&
+            mannerEstimationApplication.UricAcid == manureType.Uric &&
+            mannerEstimationApplication.NO3N == manureType.NO3N &&
+            mannerEstimationApplication.P2O5 == manureType.P2O5 &&
+            mannerEstimationApplication.K2O == manureType.K2O &&
+            mannerEstimationApplication.SO3 == manureType.SO3 &&
+            mannerEstimationApplication.MgO == manureType.MgO;
+    }
+
 }
 

@@ -92,5 +92,8 @@ namespace NMP.Application
         Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);
         Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
         Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId);
+        Task<bool> FetchDefaultNutrientValue(
+    int manureTypeId,
+    MannerEstimationApplication mannerEstimationApplication);
     }
 }

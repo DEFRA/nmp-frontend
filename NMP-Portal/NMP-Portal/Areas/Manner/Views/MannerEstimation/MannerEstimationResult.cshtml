@@ -2,9 +2,10 @@
 @using System.Globalization
 @{
     var mannerEstimation = ViewBag.MannerEstimations.MannerEstimation;
-    
+
     var registeredOrganicProducer = mannerEstimation.RegisteredOrganicProducer ? Resource.lblYes : Resource.lblNo;
     var isWithinNVZ = @mannerEstimation.IsWithinNVZ ? Resource.lblYes : Resource.lblNo;
+    int applicationCount = ViewBag.MannerEstimations.MannerEstimationApplication.Count;
 }
 @section BeforeContent {
     <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation">@Resource.lblBackToAllNutrientSupplyEstimates</govuk-back-link>
@@ -189,11 +190,11 @@
                                     <td class="govuk-table__cell">@count</td>
                                     <td class="govuk-table__cell">@item.ManureTypeName</td>
                                     <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
-                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.CropAvailableNCurrentCrop)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.NitrogenValue)</td>
                                     @*  *@
-                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.TotalP2O5)</td>
-                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.TotalK2O)</td>
-                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.CropAvailableNCurrentCrop + item.TotalP2O5 + item.TotalK2O)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.PhosphateValue)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.PotashValue)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.NitrogenValue + item.PhosphateValue + item.PotashValue)</td>
                                 </tr>
                             }
 
@@ -217,7 +218,7 @@
                             <td class="govuk-table__cell">
                                 @mannerEstimation.NitrogenProductName
                             </td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne,mannerEstimation.NitrogenProductPrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.NitrogenProductPrice)</td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundPerKg, mannerEstimation.NitrogenPrice)</td>
                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                         </tr>
@@ -246,7 +247,7 @@
             </govuk-tabs-item>
             <govuk-tabs-item id="FarmFieldAndCrop" label=@Resource.lblFarmFieldAndCrop>
                 <h2 class="govuk-heading-m non-standard">@Resource.lblFarmFieldAndCrop</h2>
-                <table class="govuk-table data-table manner-answers-table margin-bottom-forty">
+                <table class="govuk-table data-table margin-bottom-forty">
                     <tbody class="govuk-table__body">
 
                         <tr class="govuk-table__row">
@@ -338,8 +339,335 @@
                     </tbody>
                 </table>
             </govuk-tabs-item>
-             
-            </govuk-tabs>
+            @{
+                int countApp = 0;
+            }
+            @if (applicationCount != 3)
+            {
+                @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                {
+                    countApp++;
+                    <govuk-tabs-item id="ApplicationDetail@(countApp)" label="@Resource.lblApplicationDetail">
+                        <h2 class="govuk-heading-m non-standard">@Resource.lblApplicationDetails</h2>
+                        <table class="govuk-table data-table margin-bottom-none">
+                            <tbody class="govuk-table__body">
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
+                                    <td class="govuk-table__cell">@item.ManureTypeName</td>
+                                    <td class="govuk-table__cell">
+                                        <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                                    </td>
+                                </tr>
+                                @*   <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblApplicationDate    </th>
+                         <td class="govuk-table__cell">@item.ApplicationDate.ToString("d MMM yyyy")</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change</a>
+                         </td>
+                     </tr>
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, item.ManureTypeName)</th>
+                         <td class="govuk-table__cell">Yes</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change></a>
+                         </td>
+                     </tr>
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@string.Format(Resource.lblNutrientValuesForManureTypeName, item.ManureTypeName)</th>
+                         <td class="govuk-table__cell">
+                             <ul class="manner_nutrient_values">
+                                 <li>
+                                     @string.Format("{0}{1}", Resource.lblDryMatterContent, ":")<span>@string.Format("{0:P}", item.DryMatterPercent)</span>
+                                 </li>
+                                 <li>
+                                     @string.Format("{0}{1}", Resource.lblTotalNitrogen, ":")<span>@string.Format("{0}{1}", item.N, Resource.lblkg)</span>
+                                 </li>
+                                 <li>
+                                     @string.Format("{0}{1}", Resource.lblAmmoniumHypenN, ":")<span>@string.Format("{0}{1}", item.NH4N, Resource.lblkg)</span>
+                                 </li>
+                                 <li>
+                                     @string.Format("{0}{1}", Resource.lblUricAcidN, ":")<span>@string.Format("{0}{1}", item.UricAcid, Resource.lblkg)</span>
+                                 </li>
+                                 <li>
+                                     @string.Format("{0}{1}", Resource.lblNitrate, ":")<span>@string.Format("{0}{1}", item.NO3N, Resource.lblkg)            </span>
+                                 </li>
+                                 <li>
+                                     @string.Format("{0}{1}", Resource.lblTotalPhosphate, ":")<span>@string.Format("{0}{1}", item.P2O5, Resource.lblkg)</span>
+                                 </li>
+                                 <li>
+                                     @string.Format("{0}{1}", Resource.lblTotalPotassium, ":")<span>@string.Format("{0}{1}", item.K2O, Resource.lblkg)</span>
+                                 </li>
+                                 <li>
+                                     @string.Format("{0}{1}", Resource.lblTotalSulphur, ":")<span>@string.Format("{0}{1}", item.SO3, Resource.lblkg)</span>
+                                 </li>
+                                 <li>@string.Format("{0}{1}", Resource.lblTotalMagnesiumOxide, ":")<span>@string.Format("{0}{1}", item.MgO, Resource.lblkg)</span></li>
+                             </ul>
+                         </td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                         </td>
+                     </tr>
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">How to enter the application rate</th>
+                         <td class="govuk-table__cell">Use a typical application rate</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                         </td>
+                     </tr>
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblApplicationRate</th>
+                         <td class="govuk-table__cell">
+
+                             @string.Format(Resource.lblYieldTonnesPerHectare, item.ApplicationRate)
+
+                         </td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                         </td>
+                     </tr>
+
+
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenNUptake</th>
+                         <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenUptake, item.AutumnCropNitrogenUptake)</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                         </td>
+                     </tr>
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblEndOfSoilDrainage</th>
+                         <td class="govuk-table__cell">@item.EndOfDrainageDate.ToString("d MMM yyyy")</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                         </td>
+                     </tr>
+
+
+                   <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblRainfallWithin6HoursOfApplication</th>
+                         <td class="govuk-table__cell">@item.RainfallWithinSixHoursName</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                         </td>
+                     </tr>
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblTotalRainfallSinceApplication</th>
+                         <td class="govuk-table__cell">@string.Format(Resource.lblRainfallMM, item.RainfallPostApplication)</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                         </td>
+                     </tr>*@
+
+
+                                @* <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblWindspeedAtApplication</th>
+                         <td class="govuk-table__cell">@item.WindspeedName</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                         </td>
+                     </tr>
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblTopsoilMoisture</th>
+                         <td class="govuk-table__cell">@item.MoistureName</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                         </td>
+                     </tr> *@
+
+
+                            </tbody>
+                        </table>
+                    </govuk-tabs-item>
+
+                }
+            }
+            else
+            {               
+                <govuk-tabs-item id="ApplicationDetails" label="@Resource.lblApplicationDetails">
+
+                    <h2 class="govuk-heading-m">
+                        @Resource.lblApplicationDetails
+                    </h2>
+
+                    <govuk-tabs>
+                        @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                        {
+                            countApp++;
+                            <govuk-tabs-item id="ApplicationDetails_ApplicationDetail@(countApp)" label=@Resource.lblApplicationDetail>
+                                <h3 class="govuk-heading-s">
+                                    "Application @(countApp)"
+                                </h3>
+
+                                <table class="govuk-table data-table manner-answers-table margin-bottom-none">
+                                    <tbody class="govuk-table__body">
+                                        <tr class="govuk-table__row">
+                                            <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
+                                            <td class="govuk-table__cell">@item.ManureTypeName</td>
+                                            <td class="govuk-table__cell">
+                                                <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                                            </td>
+                                        </tr>
+                                        <tr class="govuk-table__row">
+                                            <th scope="row" class="govuk-table__header">@Resource.lblApplicationDate    </th>
+                                            <td class="govuk-table__cell">@item.ApplicationDate.ToString("d MMM yyyy")</td>
+                                            <td class="govuk-table__cell">
+                                                <a class="govuk-link" href="#">Change</a>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr class="govuk-table__row">
+                                            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, item.ManureTypeName)</th>
+                                            <td class="govuk-table__cell">Yes</td>
+                                            <td class="govuk-table__cell">
+                                                <a class="govuk-link" href="#">Change></a>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr class="govuk-table__row">
+                                            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblNutrientValuesForManureTypeName, item.ManureTypeName)</th>
+                                            <td class="govuk-table__cell">
+                                                <ul class="manner_nutrient_values">
+                                                    <li>
+                                                        @string.Format("{0}{1}", Resource.lblDryMatterContent, ":")<span>@string.Format("{0:P}", item.DryMatterPercent)</span>
+                                                    </li>
+                                                    <li>
+                                                        @string.Format("{0}{1}", Resource.lblTotalNitrogen, ":")<span>@string.Format("{0}{1}", item.N, Resource.lblkg)</span>
+                                                    </li>
+                                                    <li>
+                                                        @string.Format("{0}{1}", Resource.lblAmmoniumHypenN, ":")<span>@string.Format("{0}{1}", item.NH4N, Resource.lblkg)</span>
+                                                    </li>
+                                                    <li>
+                                                        @string.Format("{0}{1}", Resource.lblUricAcidN, ":")<span>@string.Format("{0}{1}", item.UricAcid, Resource.lblkg)</span>
+                                                    </li>
+                                                    <li>
+                                                        @string.Format("{0}{1}", Resource.lblNitrate, ":")<span>@string.Format("{0}{1}", item.NO3N, Resource.lblkg)            </span>
+                                                    </li>
+                                                    <li>
+                                                        @string.Format("{0}{1}", Resource.lblTotalPhosphate, ":")<span>@string.Format("{0}{1}", item.P2O5, Resource.lblkg)</span>
+                                                    </li>
+                                                    <li>
+                                                        @string.Format("{0}{1}", Resource.lblTotalPotassium, ":")<span>@string.Format("{0}{1}", item.K2O, Resource.lblkg)</span>
+                                                    </li>
+                                                    <li>
+                                                        @string.Format("{0}{1}", Resource.lblTotalSulphur, ":")<span>@string.Format("{0}{1}", item.SO3, Resource.lblkg)</span>
+                                                    </li>
+                                                    <li>@string.Format("{0}{1}", Resource.lblTotalMagnesiumOxide, ":")<span>@string.Format("{0}{1}", item.MgO, Resource.lblkg)</span></li>
+                                                </ul>
+                                            </td>
+                                            <td class="govuk-table__cell">
+                                                <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr class="govuk-table__row">
+                                            <th scope="row" class="govuk-table__header">How to enter the application rate</th>
+                                            <td class="govuk-table__cell">Use a typical application rate</td>
+                                            <td class="govuk-table__cell">
+                                                <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr class="govuk-table__row">
+                                            <th scope="row" class="govuk-table__header">@Resource.lblApplicationRate</th>
+                                            <td class="govuk-table__cell">
+
+                                                @string.Format(Resource.lblYieldTonnesPerHectare, item.ApplicationRate)
+
+                                            </td>
+                                            <td class="govuk-table__cell">
+                                                <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                                            </td>
+                                        </tr>
+
+
+
+
+                                        <tr class="govuk-table__row">
+                                            <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenNUptake</th>
+                                            <td class="govuk-table__cell">@string.Format(Resource.lblAutumnCropNitrogenUptake, item.AutumnCropNitrogenUptake)</td>
+                                            <td class="govuk-table__cell">
+                                                <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr class="govuk-table__row">
+                                            <th scope="row" class="govuk-table__header">@Resource.lblEndOfSoilDrainage</th>
+                                            <td class="govuk-table__cell">@item.EndOfDrainageDate.ToString("d MMM yyyy")</td>
+                                            <td class="govuk-table__cell">
+                                                <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                                            </td>
+                                        </tr>
+
+
+                                        @*    <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblRainfallWithin6HoursOfApplication</th>
+                         <td class="govuk-table__cell">@item.RainfallWithinSixHoursName</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                         </td>
+                     </tr>
+
+
+                                         <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblTotalRainfallSinceApplication</th>
+                         <td class="govuk-table__cell">@string.Format(Resource.lblRainfallMM, item.RainfallPostApplication)</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                         </td>
+                     </tr>*@
+
+
+                                        @* <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblWindspeedAtApplication</th>
+                         <td class="govuk-table__cell">@item.WindspeedName</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> Question 1</span></a>
+                         </td>
+                     </tr>
+
+
+                     <tr class="govuk-table__row">
+                         <th scope="row" class="govuk-table__header">@Resource.lblTopsoilMoisture</th>
+                         <td class="govuk-table__cell">@item.MoistureName</td>
+                         <td class="govuk-table__cell">
+                             <a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"></span></a>
+                         </td>
+                     </tr> *@
+
+
+                                    </tbody>
+                                </table>
+                            </govuk-tabs-item>
+
+
+                        }
+
+                    </govuk-tabs>
+                </govuk-tabs-item>
+
+            }
+        </govuk-tabs>
 
     </div>
 

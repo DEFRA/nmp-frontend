@@ -2428,14 +2428,19 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     TempData["Error"] = error.Message;
                     return RedirectToAction("MannerHubPage");
                 }
-                int cropAvailableNCurrentCrop = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.CropAvailableNCurrentCrop);
-                int cropAvailableNitrogenFollowingCropYearTwo = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.CropAvailableNitrogenFollowingCropYearTwo);
-                int totalP2O5 = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.TotalP2O5);
-                int totalSO3 = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.TotalSO3);
-                ViewBag.TotalValue = cropAvailableNCurrentCrop + cropAvailableNitrogenFollowingCropYearTwo + totalP2O5 + totalSO3;
+                int nitrogenValue = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.NitrogenValue);                
+                int p2O5Value = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.PhosphateValue);
+                int potashValue = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.PotashValue);
+                ViewBag.TotalValue = nitrogenValue + p2O5Value + potashValue;
 
                 ViewBag.LastUpdatedOn = MannerEstimationResultResponse.LastUpdatedOn;
                 ViewBag.MannerEstimations = MannerEstimationResultResponse;
+                int count = 0;
+                foreach(var application in MannerEstimationResultResponse.MannerEstimationApplication)
+                {
+                    count++;
+                    TempData[$"Application{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
+                }
 
             }
             if (!string.IsNullOrWhiteSpace(r))
@@ -2445,6 +2450,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View();
         }
+
+        
         private async Task LoadMannerEstimations()
         {
             Guid organisationId = GetOrganisationId();
