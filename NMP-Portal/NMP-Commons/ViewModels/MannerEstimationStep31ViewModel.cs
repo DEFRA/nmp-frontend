@@ -13,6 +13,7 @@ namespace NMP.Commons.ViewModels
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheName))]
         [StringLength(250, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgNameMinMaxValidation))]
         public string Name { get; set; } = string.Empty;
+        public int? MannerEstimationId { get; set; }
         public bool? IsCopyEstimate { get; set; } 
     }
 }

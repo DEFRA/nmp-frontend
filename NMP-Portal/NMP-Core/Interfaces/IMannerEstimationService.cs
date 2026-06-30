@@ -20,6 +20,7 @@ namespace NMP.Core.Interfaces
         Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);
         Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
         Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId);
+        Task<(int, Error?)> CopyMannerEstimation(int id, string estimationName);
 
     }
 }

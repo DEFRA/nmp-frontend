@@ -202,5 +202,39 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimationResultResponse, error);
     }
+
+    public async Task<(int, Error?)> CopyMannerEstimation(int id, string estimationName)
+    {
+        int newEstimationId = 0;
+        Error? error = null;
+        string jsonData = JsonConvert.SerializeObject(new
+        {
+            ID = id,
+            Name = estimationName
+        });
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.PostAsync(ApiurlHelper.CopyMannerEstimationAsyncAPI,
+                new StringContent(jsonData, Encoding.UTF8, "application/json"));
+
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            var mannerEstimationId = responseWrapper?.Data?.mannerEstimationId;
+
+            if (mannerEstimationId > 0)
+            {
+                newEstimationId = mannerEstimationId;
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+        return (newEstimationId, error);
+
+        
+    }
 }
 
