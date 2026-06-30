@@ -672,6 +672,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep31.IsCopyEstimate = mannerEstimationViewModel.MannerEstimationStep21.IsCopyEstimate;
+        mannerEstimationViewModel.MannerEstimationStep31.MannerEstimationId = mannerEstimationViewModel.MannerEstimationStep22.MannerEstimationId;
         return mannerEstimationViewModel.MannerEstimationStep31;
     }
     public MannerEstimationStep31ViewModel SetMannerEstimationStep31(MannerEstimationStep31ViewModel mannerEstimationStep31)
@@ -943,6 +944,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         _logger.LogTrace("MannerLogic : FetchMannerApplicationResultById() called");
         return await _mannerEstimationService.FetchMannerApplicationResultById(mannerEstimationId);
+    }
+
+    public async Task<(int, Error?)> CopyMannerEstimation(int id, string estimationName)
+    {
+        _logger.LogTrace("MannerLogic : CopyMannerEstimation() called");
+        return await _mannerEstimationService.CopyMannerEstimation(id, estimationName);
     }
 }
 

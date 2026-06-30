@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -13080,6 +13080,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reference.
+        /// </summary>
+        public static string lblReference {
+            get {
+                return ResourceManager.GetString("lblReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reference must be unique from any previous estimations..
         /// </summary>
         public static string lblReferenceMustBeUniqueFromAnyPreviousEstimations {
@@ -23826,6 +23835,15 @@ namespace NMP.Commons.Resources {
         public static string MsgWeCounldNotAddOrganicManure {
             get {
                 return ResourceManager.GetString("MsgWeCounldNotAddOrganicManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We could not copy this estimation, try again later.
+        /// </summary>
+        public static string MsgWeCounldNotCopyMannerEstimation {
+            get {
+                return ResourceManager.GetString("MsgWeCounldNotCopyMannerEstimation", resourceCulture);
             }
         }
         

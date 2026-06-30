@@ -33,6 +33,7 @@ else
             <table class="govuk-table data-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblReference</th>
                         <th scope="col" class="govuk-table__header">@Resource.lblFarm</th>
                         <th scope="col" class="govuk-table__header">@Resource.lblField</th>
                         <th scope="col" class="govuk-table__header">@Resource.lblLastUpdate</th>
@@ -45,6 +46,7 @@ else
                         @foreach (var estimation in ViewBag.MannerEstimations)
                         {
                             <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@estimation.Name</td>
                                 <td class="govuk-table__cell">@estimation.FarmName</td>
                                 <td class="govuk-table__cell">@estimation.FieldName</td>
                                 <td class="govuk-table__cell">@(estimation.ModifiedOn == null ? estimation.CreatedOn.ToString("dd MMMM yyyy") : estimation.ModifiedOn.ToString("dd MMMM yyyy"))</td>

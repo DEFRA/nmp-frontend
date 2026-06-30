@@ -269,4 +269,5 @@ internal static class ApiurlHelper
     public const string FetchSoilTypeIdByTopSoilIdAndSubSoilIdAsyncAPI = "/soil-type-soil-texture/{0}/{1}";
     public const string FetchMannerApplicationsByEstimationIdAsyncAPI = "/manner-estimation-applications/{0}";
     public const string FetchMannerManureTypeByIdAsyncAPI = "/vendors/manner/manure-types/{0}";
+    public const string CopyMannerEstimationAsyncAPI = "/manner-estimations/copyestimates";
 }
