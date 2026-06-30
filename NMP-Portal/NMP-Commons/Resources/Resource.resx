@@ -8046,7 +8046,7 @@ livestock manure.</value>
     <value>Financial value</value>
   </data>
   <data name="lblFarmFieldAndCrop" xml:space="preserve">
-    <value>Farm, field and crop</value>
+    <value>Farm, field and crop details</value>
   </data>
   <data name="lblApplicationDetails" xml:space="preserve">
     <value>Application details</value>
@@ -8058,7 +8058,7 @@ livestock manure.</value>
     <value>Export or print this estimate</value>
   </data>
   <data name="lblTotalAndCropAvailableNitrogen" xml:space="preserve">
-    <value>Total and crop available nitrogen (N)</value>
+    <value>Total and crop available nitrogen (N).</value>
   </data>
   <data name="lblValuesArePerHectare" xml:space="preserve">
     <value>Values are per hectare</value>
@@ -8087,7 +8087,7 @@ following crop year 2</value>
     <value>Lost denitrified-N</value>
   </data>
   <data name="lblMineralisedNitrogen" xml:space="preserve">
-    <value>Mineralised nitrogen (N)</value>
+    <value>Mineralizated nitrogen (N)</value>
   </data>
   <data name="lblCropAvailablePhosphate" xml:space="preserve">
     <value>Crop available phosphate (P2O5)</value>
@@ -8151,5 +8151,23 @@ following crop year 2</value>
   </data>
   <data name="lblRegisteredOrganicProducerOnly" xml:space="preserve">
     <value>Registered organic producer</value>
+  </data>
+  <data name="lblDoYouWantToUseTheseStandardNutrientValuesForThisOrganicMaterial" xml:space="preserve">
+    <value>Do you want to use these standard nutrient values for this organic material?</value>
+  </data>
+  <data name="lblHowManyDaysWillThereBeBeforeTheManureIsIncorporated" xml:space="preserve">
+    <value>How many days will there be before the manure is incorporated?</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterApplicationRate" xml:space="preserve">
+    <value>How would you like to enter the application rate for this organic material?</value>
+  </data>
+  <data name="lblWhenAreYouApplyingThisOrganicMaterial" xml:space="preserve">
+    <value>When are you applying this organic material?</value>
+  </data>
+  <data name="lblWhatCropAreYouApplyingThisOrganicMaterial" xml:space="preserve">
+    <value>What {0} are you applying this organic material to?</value>
+  </data>
+  <data name="lblThisIsBasedOnFertiliserNutrientPricesBelow" xml:space="preserve">
+    <value>This is based on fertiliser nutrient prices below which can be updated.</value>
   </data>
 </root>

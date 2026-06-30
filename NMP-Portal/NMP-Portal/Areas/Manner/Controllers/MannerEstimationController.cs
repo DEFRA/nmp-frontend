@@ -2439,7 +2439,25 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 foreach(var application in MannerEstimationResultResponse.MannerEstimationApplication)
                 {
                     count++;
-                    TempData[$"Application{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
+                    bool isManureLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID.Value);
+                    string manureUnit = isManureLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
+                    TempData[$"ApplicationDefaultValues{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
+                    if (application.AreaSpread != null && application.ManureQuantity != null)
+                    {
+                        TempData[$"ApplicationRateOption{count}"] = Resource.lblCalculateBasedOnTheAreaAndQuantity;
+                    }
+                    else
+                    {
+                        (bool isDefaultRate,int defaultRate) = await _mannerEstimationLogic.FetchApplicationRateOptionValue(application.ManureTypeID.Value, application, MannerEstimationResultResponse.MannerEstimation);
+                        if(isDefaultRate)
+                        {
+                            TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblUseTypicalApplicationRate, defaultRate, manureUnit);
+                        }
+                        else
+                        {
+                            TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, application.ManureType);
+                        }
+                    }
                 }
 
             }

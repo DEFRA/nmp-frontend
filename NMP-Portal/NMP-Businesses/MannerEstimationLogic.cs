@@ -964,6 +964,29 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationApplication.SO3 == manureType.SO3 &&
             mannerEstimationApplication.MgO == manureType.MgO;
     }
+    public async Task<(bool,int)> FetchApplicationRateOptionValue(
+    int manureTypeId,
+    MannerEstimationApplication mannerEstimationApplication, MannerEstimation mannerEstimation)
+    {
+        (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(manureTypeId);
 
+        if (manureType == null)
+            return (false,0);
+
+        int? defaultRate = mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
+
+        return
+            (mannerEstimationApplication.ApplicationRate == defaultRate,defaultRate??0);
+    }
+    public async Task<bool> FetchIsManureLiquid(
+    int manureTypeId)
+    {
+        (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(manureTypeId);
+
+        if (manureType == null)
+            return false;
+
+        return manureType.IsLiquid??false;
+    }
 }
 

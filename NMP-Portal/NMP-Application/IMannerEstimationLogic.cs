@@ -95,5 +95,10 @@ namespace NMP.Application
         Task<bool> FetchDefaultNutrientValue(
     int manureTypeId,
     MannerEstimationApplication mannerEstimationApplication);
+        Task<(bool, int)> FetchApplicationRateOptionValue(
+    int manureTypeId,
+    MannerEstimationApplication mannerEstimationApplication, MannerEstimation mannerEstimation);
+         Task<bool> FetchIsManureLiquid(
+    int manureTypeId);
     }
 }

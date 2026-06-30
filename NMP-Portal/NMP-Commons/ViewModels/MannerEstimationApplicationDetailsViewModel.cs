@@ -9,9 +9,12 @@ namespace NMP.Commons.ViewModels
 {
     public class MannerEstimationApplicationDetailsViewModel:MannerEstimationApplication
     {
-        public string ManureTypeName { get; set; } = string.Empty;
-        public string WindspeedName { get; set; } = string.Empty;
-        public string RainfallWithinSixHoursName { get; set; } = string.Empty;
-        public string MoistureName { get; set; } = string.Empty;
+        public string ManureType { get; set; } = string.Empty;
+        public string Windspeed{ get; set; } = string.Empty;
+        public string RainType { get; set; } = string.Empty;
+        public string MoistureType { get; set; } = string.Empty;
+        public string ApplicationMethod { get; set; } = string.Empty;
+        public string IncorporationMethod { get; set; } = string.Empty;
+        public string IncorporationDelay { get; set; } = string.Empty;
     }
 }

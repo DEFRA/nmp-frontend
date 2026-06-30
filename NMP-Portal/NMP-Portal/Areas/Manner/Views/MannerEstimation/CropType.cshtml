@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading = Resource.lblCropTypeForPlan;
+    string heading =string.Format(Resource.lblWhatCropAreYouApplyingThisOrganicMaterial,Resource.lblCropType.ToLower());
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
