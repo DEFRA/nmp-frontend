@@ -8152,6 +8152,12 @@ following crop year 2</value>
   <data name="lblRegisteredOrganicProducerOnly" xml:space="preserve">
     <value>Registered organic producer</value>
   </data>
+  <data name="MsgWeCounldNotCopyMannerEstimation" xml:space="preserve">
+    <value>We could not copy this estimation, try again later</value>
+  </data>
+  <data name="lblReference" xml:space="preserve">
+    <value>Reference</value>
+  </data>
   <data name="lblDoYouWantToUseTheseStandardNutrientValuesForThisOrganicMaterial" xml:space="preserve">
     <value>Do you want to use these standard nutrient values for this organic material?</value>
   </data>

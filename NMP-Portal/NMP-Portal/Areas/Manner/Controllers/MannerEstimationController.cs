@@ -2698,14 +2698,33 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = _mannerEstimationLogic.GetMannerEstimationStep31();
 
             string action = _farmNameKey;
-            List<SelectListItem> farmsWithFields = await BindAllFarmList();
             if (model.IsCopyEstimate.HasValue && model.IsCopyEstimate.Value)
             {
-                return RedirectToAction("MannerEstimationResult", new { r = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+
+                (int newEstimationId, Error? error) = await _mannerEstimationLogic.CopyMannerEstimation(model.MannerEstimationId ?? 0, model.Name);
+                if (newEstimationId == 0 || error != null)
+                {
+                    TempData["CopyFromEstimates"] = Resource.MsgWeCounldNotCopyMannerEstimation;
+                    return View(model);
+                }
+
+                if (newEstimationId > 0)
+                {
+                    return RedirectToAction("MannerEstimationResult", new
+                    {
+                        q = _mannerEstimationProtector.Protect(
+                         newEstimationId.ToString()),
+                        r = _mannerEstimationProtector.Protect(Resource.lblTrue)
+                    });
+                }
             }
-            else if (farmsWithFields.Count > 0)
+            else 
             {
-                action = "CopyExistingFarmAndFieldDetails";
+                List<SelectListItem> farmsWithFields = await BindAllFarmList();
+                if (farmsWithFields.Count > 0)
+                {
+                    action = "CopyExistingFarmAndFieldDetails";
+                }
             }
             return RedirectToAction(action);
         }
