@@ -1705,7 +1705,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             }
 
             HandleDefoliationCounters(model);
-            await ProcessWarnings(model);
+
+            model.IsNitrogenExceedWarning = false;
+            model.IsNMaxLimitWarning = false;
+            model.IsWarningMsgNeedToShow = false;
+            model.IsClosedPeriodWarning = false;
+            await BindWarningForFertiliser(model, error);
 
             FinalizeModel(model);
 
@@ -1853,21 +1858,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         model.DefoliationEncryptedCounter =
             _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
     }
-    private async Task ProcessWarnings(FertiliserManureViewModel model)
-    {
-        if (model?.FertiliserManures == null || model.N <= 0)
-            return;
-
-        foreach (var fert in model.FertiliserManures)
-        {
-            if (fert.FieldID == null) continue;
-
-            var field = await _fieldLogic.FetchFieldByFieldId(fert.FieldID.Value);
-            if (field == null || !field.IsWithinNVZ.Value) continue;
-
-            await EvaluateWarnings(model, fert, field);
-        }
-    }
+    
     private void BuildFieldList(
     FertiliserManureViewModel model,
     FertiliserManureDataViewModel fertiliserManure,
@@ -2021,65 +2012,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         SetFertiliserManureToSession(model);
     }
-    private async Task EvaluateWarnings(
-    FertiliserManureViewModel model,
-    FertiliserManureDataViewModel fertiliser,
-    Field field)
-    {
-        var (managementPeriod, error) =
-            await _cropLogic.FetchManagementperiodById(fertiliser.ManagementPeriodID);
-
-        if (error != null || managementPeriod?.CropID == null)
-            return;
-
-        var (crop, cropError) =
-            await _cropLogic.FetchCropById(managementPeriod.CropID.Value);
-
-        if (cropError != null || crop?.CropTypeID == null)
-            return;
-
-        var (linking, linkError) =
-            await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-
-        if (linkError != null) return;
-
-        var (closedPeriod, _) =
-            await _fertiliserManureLogic.FetchFertiliserManureClosedPeriod(
-                model.FarmCountryId ?? 0,
-                crop.CropTypeID.Value,
-                field.NVZProgrammeID);
-
-        if (closedPeriod == null) return;
-
-        Regex regex = new Regex(_pattern, RegexOptions.NonBacktracking, TimeSpan.FromMicroseconds(100));
-        Match match = regex.Match(closedPeriod);
-
-        if (!match.Success) return;
-
-        GetStartAndEndDateForWarning(model.HarvestYear.Value, match, out DateTime start, out DateTime end);
-
-        if (linking != null && linking.NMaxLimitEngland != 0)
-        {
-            (model, _) = await IsClosedPeriodWarningMessageShow(model, crop.CropTypeID.Value);
-        }
-
-        if (model.N > 0)
-        {
-            (model, _) = await IsNitrogenExceedWarning(
-                model,
-                fertiliser.ManagementPeriodID,
-                crop.CropTypeID.Value,
-                start,
-                end,
-                fertiliser.FieldID.Value);
-        }
-
-        model.IsWarningMsgNeedToShow =
-            model.IsClosedPeriodWarning ||
-            model.IsNitrogenExceedWarning ||
-            model.IsNMaxLimitWarning;
-    }
-
+    
     private static void FinalizeModel(FertiliserManureViewModel model)
     {
         model.IsDoubleCropValueChange = false;
