@@ -2,9 +2,10 @@
 @using System.Globalization
 @{
     var mannerEstimation = ViewBag.MannerEstimations.MannerEstimation;
-    
+
     var registeredOrganicProducer = mannerEstimation.RegisteredOrganicProducer ? Resource.lblYes : Resource.lblNo;
     var isWithinNVZ = @mannerEstimation.IsWithinNVZ ? Resource.lblYes : Resource.lblNo;
+    int applicationCount = ViewBag.MannerEstimations.MannerEstimationApplication.Count;
 }
 @section BeforeContent {
     <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation">@Resource.lblBackToAllNutrientSupplyEstimates</govuk-back-link>
@@ -49,7 +50,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <govuk-tabs>
-            <govuk-tabs-item id="Nutrients" label=@Resource.lblNutrients>
+      <govuk-tabs-item id="Nutrients" label=@Resource.lblNutrients>
                 <h2 class="govuk-heading-m non-standard">@Resource.lblNutrients</h2>
                 <div class="margin-bottom-forty">
                     <table class="govuk-table data-table width-66">
@@ -63,9 +64,9 @@
                             @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                             {
                                 <tr>
-                                    <td class="govuk-table__cell">@item.ManureTypeName</td>
+                                    <td class="govuk-table__cell">@item.ManureType</td>
                                     <td class="govuk-table__cell">
-                                        @item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
+                                        @item.ApplicationDate.ToLocalTime().ToString("dd MMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
                                     </td>
                                 </tr>
                             }
@@ -162,7 +163,8 @@
 
                 <h2 class="govuk-heading-m">@Resource.lblFinancialValue</h2>
                 <div class="govuk-inset-text">
-                    @string.Format(Resource.lblFinancialValuesTabContent1, ViewBag.TotalValue)
+                    @string.Format(Resource.lblFinancialValuesTabContent1, ViewBag.TotalValue)<br />
+                    @Resource.lblThisIsBasedOnFertiliserNutrientPricesBelow
                 </div>
                 <h3 class="govuk-heading-s">@Resource.lblValueBreakdown</h3>
                 <div class="margin-bottom-forty">
@@ -187,13 +189,13 @@
                                 count++;
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@count</td>
-                                    <td class="govuk-table__cell">@item.ManureTypeName</td>
-                                    <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
-                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.CropAvailableNCurrentCrop)</td>
+                                    <td class="govuk-table__cell">@item.ManureType</td>
+                                    <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.NitrogenValue)</td>
                                     @*  *@
-                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.TotalP2O5)</td>
-                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.TotalK2O)</td>
-                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.CropAvailableNCurrentCrop + item.TotalP2O5 + item.TotalK2O)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.PhosphateValue)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.PotashValue)</td>
+                                    <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.NitrogenValue + item.PhosphateValue + item.PotashValue)</td>
                                 </tr>
                             }
 
@@ -217,8 +219,8 @@
                             <td class="govuk-table__cell">
                                 @mannerEstimation.NitrogenProductName
                             </td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne,mannerEstimation.NitrogenProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundPerKg, mannerEstimation.NitrogenPrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.NitrogenProductPrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue,string.Format("{0:N2}",mannerEstimation.NitrogenPrice))</td>
                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                         </tr>
                         <tr class="govuk-table__row">
@@ -227,7 +229,7 @@
                                 @mannerEstimation.PhosphateProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PhosphateProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundPerKg, mannerEstimation.PhosphatePrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2}", mannerEstimation.PhosphatePrice))</td>
                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                         </tr>
                         <tr class="govuk-table__row">
@@ -236,7 +238,7 @@
                                 @mannerEstimation.PotashProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PotashProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundPerKg, mannerEstimation.PhosphatePrice)</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2}", mannerEstimation.PotashPrice))</td>
                             <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                         </tr>
 
@@ -246,7 +248,7 @@
             </govuk-tabs-item>
             <govuk-tabs-item id="FarmFieldAndCrop" label=@Resource.lblFarmFieldAndCrop>
                 <h2 class="govuk-heading-m non-standard">@Resource.lblFarmFieldAndCrop</h2>
-                <table class="govuk-table data-table manner-answers-table margin-bottom-forty">
+                <table class="govuk-table data-table margin-bottom-forty">
                     <tbody class="govuk-table__body">
 
                         <tr class="govuk-table__row">
@@ -338,8 +340,45 @@
                     </tbody>
                 </table>
             </govuk-tabs-item>
-             
-            </govuk-tabs>
+            @{
+                int countApp = 0;
+            }
+            @if (applicationCount != 3)
+            {
+                @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                {
+                    countApp++;
+                    <govuk-tabs-item id="ApplicationDetail@(countApp)" label="@Resource.lblApplicationDetail">
+                        <h3 class="govuk-heading-m non-standard">@Resource.lblApplicationDetails</h3>
+                        @{ViewBag.Count = countApp;}
+                        <partial name="_MannerEstimationResultApplicationTabPartial" model="@item" />                       
+                    </govuk-tabs-item>
+
+                }
+            }
+            else
+            {
+                <govuk-tabs-item id="ApplicationDetails" label="@Resource.lblApplicationDetails">
+
+                    @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
+                    {
+                        countApp++;
+                        <h3 class="govuk-heading-m">@string.Format("{0} - {1}", Resource.lblApplication, countApp)</h3>
+                        ViewBag.Count = countApp;
+
+                        <partial name="_MannerEstimationResultApplicationTabPartial" model="@item" />
+                        <br />
+                        @if (countApp != applicationCount)
+                        {
+                            <hr class="margin-bottom-thirty">
+
+                        }
+                    }
+
+                </govuk-tabs-item>
+
+            }
+        </govuk-tabs>
 
     </div>
 

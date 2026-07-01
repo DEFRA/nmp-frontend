@@ -4898,6 +4898,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these standard nutrient values for this organic material?.
+        /// </summary>
+        public static string lblDoYouWantToUseTheseStandardNutrientValuesForThisOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToUseTheseStandardNutrientValuesForThisOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use these typical nutrient values?.
         /// </summary>
         public static string lblDoYouWantToUseTheseTypicalNutrientValues {
@@ -5915,7 +5924,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Farm, field and crop.
+        ///   Looks up a localized string similar to Farm, field and crop details.
         /// </summary>
         public static string lblFarmFieldAndCrop {
             get {
@@ -7580,6 +7589,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many days will there be before the manure is incorporated?.
+        /// </summary>
+        public static string lblHowManyDaysWillThereBeBeforeTheManureIsIncorporated {
+            get {
+                return ResourceManager.GetString("lblHowManyDaysWillThereBeBeforeTheManureIsIncorporated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How many fields at {0} are above 300 metres?.
         /// </summary>
         public static string lblHowManyFieldsAtFarmAreAbove300Meters {
@@ -7747,6 +7765,15 @@ namespace NMP.Commons.Resources {
         public static string lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation {
             get {
                 return ResourceManager.GetString("lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter the application rate for this organic material?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToEnterApplicationRate {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToEnterApplicationRate", resourceCulture);
             }
         }
         
@@ -10299,7 +10326,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mineralised nitrogen (N).
+        ///   Looks up a localized string similar to Mineralizated nitrogen (N).
         /// </summary>
         public static string lblMineralisedNitrogen {
             get {
@@ -16025,6 +16052,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is based on fertiliser nutrient prices below which can be updated..
+        /// </summary>
+        public static string lblThisIsBasedOnFertiliserNutrientPricesBelow {
+            get {
+                return ResourceManager.GetString("lblThisIsBasedOnFertiliserNutrientPricesBelow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is calculated from the dimensions you entered and the standard bulk density of the manure. You can change it if you need to..
         /// </summary>
         public static string lblThisIsCalculatedFromTheDimentionsYouEntered {
@@ -16295,7 +16331,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total and crop available nitrogen (N).
+        ///   Looks up a localized string similar to Total and crop available nitrogen (N)..
         /// </summary>
         public static string lblTotalAndCropAvailableNitrogen {
             get {
@@ -17717,6 +17753,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What {0} are you applying this organic material to?.
+        /// </summary>
+        public static string lblWhatCropAreYouApplyingThisOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblWhatCropAreYouApplyingThisOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What do you want to call this manure store?.
         /// </summary>
         public static string lblWhatDoYouWantToCallThisManureStore {
@@ -18946,6 +18991,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhenAreYouApplyingOrganicMaterialOnFieldName {
             get {
                 return ResourceManager.GetString("lblWhenAreYouApplyingOrganicMaterialOnFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When are you applying this organic material?.
+        /// </summary>
+        public static string lblWhenAreYouApplyingThisOrganicMaterial {
+            get {
+                return ResourceManager.GetString("lblWhenAreYouApplyingThisOrganicMaterial", resourceCulture);
             }
         }
         

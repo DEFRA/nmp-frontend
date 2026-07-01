@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading = Resource.lblCropGroupForPlan;
+    string heading = string.Format(Resource.lblWhatCropAreYouApplyingThisOrganicMaterial, Resource.lblCropGroup.ToLower());
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     string backAction = "SubSoil";
     if(Model.IsCheckAnswer)

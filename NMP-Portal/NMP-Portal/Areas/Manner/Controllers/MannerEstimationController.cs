@@ -2422,21 +2422,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int estimateId =Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
-                (MannerEstimationResultResponse? MannerEstimationResultResponse, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(estimateId);
+                (MannerEstimationResultResponse? mannerEstimationResultResponse, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(estimateId);
                 if(!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["Error"] = error.Message;
                     return RedirectToAction("MannerHubPage");
                 }
-                int cropAvailableNCurrentCrop = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.CropAvailableNCurrentCrop);
-                int cropAvailableNitrogenFollowingCropYearTwo = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.CropAvailableNitrogenFollowingCropYearTwo);
-                int totalP2O5 = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.TotalP2O5);
-                int totalSO3 = MannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.TotalSO3);
-                ViewBag.TotalValue = cropAvailableNCurrentCrop + cropAvailableNitrogenFollowingCropYearTwo + totalP2O5 + totalSO3;
-
-                ViewBag.LastUpdatedOn = MannerEstimationResultResponse.LastUpdatedOn;
-                ViewBag.MannerEstimations = MannerEstimationResultResponse;
-
+                await BindViewBegForMannerEstimationResult(mannerEstimationResultResponse);
             }
             if (!string.IsNullOrWhiteSpace(r))
             {
@@ -2444,6 +2436,43 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             return View();
+        }
+
+        
+        private async Task BindViewBegForMannerEstimationResult(MannerEstimationResultResponse? mannerEstimationResultResponse)
+        {
+            int nitrogenValue = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.NitrogenValue);
+            int p2O5Value = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.PhosphateValue);
+            int potashValue = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.PotashValue);
+            ViewBag.TotalValue = nitrogenValue + p2O5Value + potashValue;
+
+            ViewBag.LastUpdatedOn = mannerEstimationResultResponse.LastUpdatedOn;
+            ViewBag.MannerEstimations = mannerEstimationResultResponse;
+            int count = 0;
+            foreach (var application in mannerEstimationResultResponse.MannerEstimationApplication)
+            {
+                count++;
+                bool isManureLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID.Value);
+                string manureUnit = isManureLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
+                TempData[$"ApplicationDefaultValues{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
+                if (application.AreaSpread != null && application.ManureQuantity != null)
+                {
+                    TempData[$"ApplicationRateOption{count}"] = Resource.lblCalculateBasedOnTheAreaAndQuantity;
+                }
+                else
+                {
+                    (bool isDefaultRate, int defaultRate) = await _mannerEstimationLogic.FetchApplicationRateOptionValue(application.ManureTypeID.Value, application, mannerEstimationResultResponse.MannerEstimation);
+                    if (isDefaultRate)
+                    {
+                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblUseTypicalApplicationRate, defaultRate, manureUnit);
+                    }
+                    else
+                    {
+                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, application.ManureType);
+                    }
+                }
+            }
+
         }
         private async Task LoadMannerEstimations()
         {

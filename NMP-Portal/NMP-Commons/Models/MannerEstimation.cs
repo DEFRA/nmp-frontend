@@ -41,9 +41,9 @@ namespace NMP.Commons.Models
         public int PhosphateProductPrice { get; set; } = 0;
         public int PotashProductPrice { get; set; } = 0;
 
-        public int NitrogenPrice { get; set; } = 0;
-        public int PhosphatePrice { get; set; } = 0;
-        public int PotashPrice { get; set; } = 0;
+        public decimal NitrogenPrice { get; set; } = 0;
+        public decimal PhosphatePrice { get; set; } = 0;
+        public decimal PotashPrice { get; set; } = 0;
 
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
