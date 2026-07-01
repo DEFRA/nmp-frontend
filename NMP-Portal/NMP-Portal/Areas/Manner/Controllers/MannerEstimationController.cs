@@ -858,18 +858,25 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             Error? error = null;
             DateTime endDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
-            if (!(model.IsFarmOrganic ?? false) && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
+            (var startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+
+            if (model.CountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
-                (var startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+                if (!(model.IsFarmOrganic ?? false) && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
+                {
+                    await HandleNonOrganicHighNWarning(startDate, endDate, model);
+                }
+
+                if ((model.IsFarmOrganic ?? false) && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
+                {
+                    await HandleOrganicHighNWarning(startDate, endDate, model);
+                }
+            }
+            if (model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
+            {
                 await HandleNonOrganicHighNWarning(startDate, endDate, model);
             }
 
-            // Organic farm, high N, NVZ
-            if ((model.IsFarmOrganic ?? false) && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
-            {
-                (var startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
-                await HandleOrganicHighNWarning(startDate, endDate, model);
-            }
 
             // England-specific warning for Winter Oilseed Rape or Grass
             await EndOctoberToEndClosedPeriodWarning(endDate, model, harvestYear);
@@ -1111,7 +1118,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.IsClosedPeriodWarning = true;
             }
         }
-
+        
         private async Task HandleOrganicHighNWarning(DateTime startDate, DateTime endDate,
             MannerEstimationStep13ViewModel model)
         {
