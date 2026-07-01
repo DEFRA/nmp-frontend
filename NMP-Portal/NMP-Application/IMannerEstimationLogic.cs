@@ -101,5 +101,14 @@ namespace NMP.Application
     MannerEstimationApplication mannerEstimationApplication, MannerEstimation mannerEstimation);
          Task<bool> FetchIsManureLiquid(
     int manureTypeId);
+
+        MannerEstimationStep33ViewModel GetMannerEstimationStep33();
+        MannerEstimationStep33ViewModel SetMannerEstimationStep33(MannerEstimationStep33ViewModel mannerEstimationStep33);
+        MannerEstimationStep34ViewModel GetMannerEstimationStep34();
+        MannerEstimationStep34ViewModel SetMannerEstimationStep34(MannerEstimationStep34ViewModel mannerEstimationStep34);
+        MannerEstimationStep35ViewModel GetMannerEstimationStep35();
+        MannerEstimationStep35ViewModel SetMannerEstimationStep35(MannerEstimationStep35ViewModel mannerEstimationStep35    );
+
+        Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId);
     }
 }

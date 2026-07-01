@@ -221,7 +221,7 @@
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.NitrogenProductPrice)</td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue,string.Format("{0:N2}",mannerEstimation.NitrogenPrice))</td>
-                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                            <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>@Resource.lblChange</a></td>
                         </tr>
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>

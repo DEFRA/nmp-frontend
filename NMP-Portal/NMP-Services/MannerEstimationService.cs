@@ -236,5 +236,29 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         
     }
+    public async Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId)
+    {
+        List<NutrientProductResponse> nutrientProducts = new List<NutrientProductResponse>();
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientProductByNutrientIdAsyncAPI, nurteintId));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                var nutrientProductList = responseWrapper?.Data?.ToObject<List<NutrientProductResponse>>();
+                nutrientProducts.AddRange(nutrientProductList);
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (nutrientProducts, error);
+    }
 }
 

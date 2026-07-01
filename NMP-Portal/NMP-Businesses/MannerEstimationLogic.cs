@@ -455,7 +455,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     }
     public async Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerEstimationsList() by organisation id called");
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerEstimationsList() by organisation id called");
         return await _mannerEstimationService.FetchMannerEstimationsList(orgId);
     }
 
@@ -927,28 +927,28 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
     {
-        _logger.LogTrace("MannerLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");
+        _logger.LogTrace("MannerEstimationLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");
         return await _mannerEstimationService.FetchSoilTypeSoilTextureByTopSoilSubSoilId(topSoilId, subSoilId);
     }
     public async Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerApplicationsByMannerEstimationId() called");
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerApplicationsByMannerEstimationId() called");
         return await _mannerEstimationService.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId);
     }
     public async Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerApplicationById() called");
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerApplicationById() called");
         return await _mannerEstimationService.FetchMannerApplicationById(mannerApplicationId);
     }
     public async Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerApplicationResultById() called");
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerApplicationResultById() called");
         return await _mannerEstimationService.FetchMannerApplicationResultById(mannerEstimationId);
     }
 
     public async Task<(int, Error?)> CopyMannerEstimation(int id, string estimationName)
     {
-        _logger.LogTrace("MannerLogic : CopyMannerEstimation() called");
+        _logger.LogTrace("MannerEstimationLogic : CopyMannerEstimation() called");
         return await _mannerEstimationService.CopyMannerEstimation(id, estimationName);
     }
     public async Task<bool> FetchDefaultNutrientValue(
@@ -994,6 +994,54 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             return false;
 
         return manureType.IsLiquid??false;
+    }
+
+    public MannerEstimationStep33ViewModel GetMannerEstimationStep33()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        return mannerEstimationViewModel.MannerEstimationStep33;
+    }
+    public MannerEstimationStep33ViewModel SetMannerEstimationStep33(MannerEstimationStep33ViewModel mannerEstimationStep33)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep33 = mannerEstimationStep33;
+        mannerEstimationViewModel.MannerEstimationStep33.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep33();
+    }
+    public MannerEstimationStep34ViewModel GetMannerEstimationStep34()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep34.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep34.UpdateNutrientPriceQuestion = mannerEstimationViewModel.MannerEstimationStep33.UpdateNutrientPriceQuestion;
+        return mannerEstimationViewModel.MannerEstimationStep34;
+    }
+    public MannerEstimationStep34ViewModel SetMannerEstimationStep34(MannerEstimationStep34ViewModel mannerEstimationStep34)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();        
+        mannerEstimationViewModel.MannerEstimationStep34.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId??string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep34.UpdateNutrientPriceQuestion = mannerEstimationViewModel.MannerEstimationStep33.UpdateNutrientPriceQuestion;
+        mannerEstimationViewModel.MannerEstimationStep34 = mannerEstimationStep34;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep34();
+    }
+    public MannerEstimationStep35ViewModel GetMannerEstimationStep35()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();        
+        return mannerEstimationViewModel.MannerEstimationStep35;
+    }
+    public MannerEstimationStep35ViewModel SetMannerEstimationStep35(MannerEstimationStep35ViewModel mannerEstimationStep35)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep35 = mannerEstimationStep35;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep35();
+    }
+
+    public async Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId)
+    {
+        _logger.LogTrace("MannerEstimationLogic : FetchNutrientProductByNutrientId() called");
+        return await _mannerEstimationService.FetchNutrientProductByNutrientId(nurteintId);
     }
 }
 
