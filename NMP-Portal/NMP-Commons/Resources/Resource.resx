@@ -8075,7 +8075,7 @@ following crop year 2</value>
     <value>Nitrogen use efficiency</value>
   </data>
   <data name="lblNitrogenMineralizationAndLosses" xml:space="preserve">
-    <value>Nitrogen (N) mineralization and losses</value>
+    <value>Nitrogen (N) mineralisation and losses</value>
   </data>
   <data name="lblLostNitrateN" xml:space="preserve">
     <value>Lost nitrate-N</value>
@@ -8087,7 +8087,7 @@ following crop year 2</value>
     <value>Lost denitrified-N</value>
   </data>
   <data name="lblMineralisedNitrogen" xml:space="preserve">
-    <value>Mineralizated nitrogen (N)</value>
+    <value>Mineralisated nitrogen (N)</value>
   </data>
   <data name="lblCropAvailablePhosphate" xml:space="preserve">
     <value>Crop available phosphate (P2O5)</value>
