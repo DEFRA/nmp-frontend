@@ -872,10 +872,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     await HandleOrganicHighNWarning(startDate, endDate, model);
                 }
             }
-            if (model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
-            {
-                await HandleNonOrganicHighNWarning(startDate, endDate, model);
-            }
+            await CheckScotlandClosedPeriodWarning(model, manureType, endDate, startDate);
 
 
             // England-specific warning for Winter Oilseed Rape or Grass
@@ -904,6 +901,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             _mannerEstimationLogic.SetMannerEstimationStep13(model);
             return error;
+        }
+
+        private async Task CheckScotlandClosedPeriodWarning(MannerEstimationStep13ViewModel model, ManureType? manureType, DateTime endDate, DateTime startDate)
+        {
+            if (model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland && manureType.HighReadilyAvailableNitrogen.GetValueOrDefault() && (model.IsWithinNVZ ?? false))
+            {
+                await HandleNonOrganicHighNWarning(startDate, endDate, model);
+            }
         }
 
         private async Task<Error?> EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(MannerEstimationStep13ViewModel model)
