@@ -10335,7 +10335,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mineralizated nitrogen (N).
+        ///   Looks up a localized string similar to Mineralisated nitrogen (N).
         /// </summary>
         public static string lblMineralisedNitrogen {
             get {
@@ -10659,7 +10659,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nitrogen (N) mineralization and losses.
+        ///   Looks up a localized string similar to Nitrogen (N) mineralisation and losses.
         /// </summary>
         public static string lblNitrogenMineralizationAndLosses {
             get {
