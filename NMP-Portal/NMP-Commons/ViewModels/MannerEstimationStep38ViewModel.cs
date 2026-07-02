@@ -1,14 +1,18 @@
-﻿using System;
+﻿using NMP.Commons.Resources;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep33ViewModel
+    public class MannerEstimationStep38ViewModel
     {
-        public int? UpdateNitrogenPriceQuestion { get; set; }
+
+        public int? UpdatePotashPriceQuestion { get; set; }
         public int? MannerEstimateId { get; set; }
         public string? EncryptedMannerEstimateId { get; set; }
     }

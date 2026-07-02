@@ -104,11 +104,23 @@ namespace NMP.Application
 
         MannerEstimationStep33ViewModel GetMannerEstimationStep33();
         MannerEstimationStep33ViewModel SetMannerEstimationStep33(MannerEstimationStep33ViewModel mannerEstimationStep33);
-        MannerEstimationStep34ViewModel GetMannerEstimationStep34();
-        MannerEstimationStep34ViewModel SetMannerEstimationStep34(MannerEstimationStep34ViewModel mannerEstimationStep34);
+       Task<MannerEstimationStep34ViewModel> GetMannerEstimationStep34();
+        Task<MannerEstimationStep34ViewModel> SetMannerEstimationStep34(MannerEstimationStep34ViewModel mannerEstimationStep34);
         MannerEstimationStep35ViewModel GetMannerEstimationStep35();
         MannerEstimationStep35ViewModel SetMannerEstimationStep35(MannerEstimationStep35ViewModel mannerEstimationStep35    );
 
         Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId);
+        Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId);
+        public MannerEstimationViewModel? GetMannerEstimationFromSession();
+        Task<(MannerEstimation?, Error?)> UpdateMannerEstimation(int MannerEstimationId);
+        MannerEstimationStep36ViewModel GetMannerEstimationStep36();
+        MannerEstimationStep36ViewModel SetMannerEstimationStep36(MannerEstimationStep36ViewModel mannerEstimationStep36);
+        Task<MannerEstimationStep37ViewModel> GetMannerEstimationStep37();
+        Task<MannerEstimationStep37ViewModel> SetMannerEstimationStep37(MannerEstimationStep37ViewModel mannerEstimationStep37);
+
+        MannerEstimationStep38ViewModel GetMannerEstimationStep38();
+        MannerEstimationStep38ViewModel SetMannerEstimationStep38(MannerEstimationStep38ViewModel mannerEstimationStep38);
+        Task<MannerEstimationStep39ViewModel> GetMannerEstimationStep39();
+        Task<MannerEstimationStep39ViewModel> SetMannerEstimationStep39(MannerEstimationStep39ViewModel mannerEstimationStep39);
     }
 }

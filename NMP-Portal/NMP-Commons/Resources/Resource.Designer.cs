@@ -7814,11 +7814,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How would you like to update your nitrogen (N) prices?.
+        ///   Looks up a localized string similar to How would you like to update your {0} prices?.
         /// </summary>
-        public static string lblHowWouldYouLikeToUpdateYourNitrogenPrices {
+        public static string lblHowWouldYouLikeToUpdateYourNutrientPrice {
             get {
-                return ResourceManager.GetString("lblHowWouldYouLikeToUpdateYourNitrogenPrices", resourceCulture);
+                return ResourceManager.GetString("lblHowWouldYouLikeToUpdateYourNutrientPrice", resourceCulture);
             }
         }
         
@@ -11280,6 +11280,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient prices and financial value updated..
+        /// </summary>
+        public static string lblNutrientPricesAndFinancialValueUpdated {
+            get {
+                return ResourceManager.GetString("lblNutrientPricesAndFinancialValueUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} nutrient recommendations.
         /// </summary>
         public static string lblNutrientRecommendations {
@@ -12063,6 +12072,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to per kg.
+        /// </summary>
+        public static string lblPerKg {
+            get {
+                return ResourceManager.GetString("lblPerKg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to % per tonne.
         /// </summary>
         public static string lblPerTonne {
@@ -12266,6 +12284,15 @@ namespace NMP.Commons.Resources {
         public static string lblPhosphorusPPerLitreOfSoil {
             get {
                 return ResourceManager.GetString("lblPhosphorusPPerLitreOfSoil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phosphorus Price.
+        /// </summary>
+        public static string lblPhosphorusPrice {
+            get {
+                return ResourceManager.GetString("lblPhosphorusPrice", resourceCulture);
             }
         }
         
@@ -12581,6 +12608,24 @@ namespace NMP.Commons.Resources {
         public static string lblPotashK2OLowecase {
             get {
                 return ResourceManager.GetString("lblPotashK2OLowecase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potash Price.
+        /// </summary>
+        public static string lblPotashPrice {
+            get {
+                return ResourceManager.GetString("lblPotashPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potash product price.
+        /// </summary>
+        public static string lblPotashProductPrice {
+            get {
+                return ResourceManager.GetString("lblPotashProductPrice", resourceCulture);
             }
         }
         
@@ -17096,11 +17141,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update nitrogen (N) prices.
+        ///   Looks up a localized string similar to Update {0} prices.
         /// </summary>
-        public static string lblUpdateNitrogenPrices {
+        public static string lblUpdateNutrientPrices {
             get {
-                return ResourceManager.GetString("lblUpdateNitrogenPrices", resourceCulture);
+                return ResourceManager.GetString("lblUpdateNutrientPrices", resourceCulture);
             }
         }
         
@@ -18401,15 +18446,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the {0} nitrate price?.
-        /// </summary>
-        public static string lblWhatIstheNitratePrice {
-            get {
-                return ResourceManager.GetString("lblWhatIstheNitratePrice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to What is the nitrogen (N) standard for this {0} type in {1}.
         /// </summary>
         public static string lblWhatIsTheNitrogenNStandardForThis {
@@ -18437,15 +18473,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the nitrogen(N) price?.
-        /// </summary>
-        public static string lblWhatIsTheNitrogenPrice {
-            get {
-                return ResourceManager.GetString("lblWhatIsTheNitrogenPrice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to What is the nitrogen (N) standard for this livestock type in {0}.
         /// </summary>
         public static string lblWhatIsTheNitrogenStandardForThisLivestockTypeInSuffix {
@@ -18460,6 +18487,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatIsTheNumberOfShootsPerSquareMetre {
             get {
                 return ResourceManager.GetString("lblWhatIsTheNumberOfShootsPerSquareMetre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the {0} price?.
+        /// </summary>
+        public static string lblWhatIstheNutrientPrice {
+            get {
+                return ResourceManager.GetString("lblWhatIstheNutrientPrice", resourceCulture);
             }
         }
         
@@ -23110,6 +23146,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phosphorus price must not exceed two decimal places..
+        /// </summary>
+        public static string MsgPhosphoruPriceMustNotExceedtwoDecimal {
+            get {
+                return ResourceManager.GetString("MsgPhosphoruPriceMustNotExceedtwoDecimal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the phosphorus index before continuing.
         /// </summary>
         public static string MsgPhosphorusIndex {
@@ -23178,6 +23223,15 @@ namespace NMP.Commons.Resources {
         public static string MsgPostcodeMinMaxValidation {
             get {
                 return ResourceManager.GetString("MsgPostcodeMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Potash price must not exceed two decimal places..
+        /// </summary>
+        public static string MsgPotashPrceMustNotExceedTwoDecimal {
+            get {
+                return ResourceManager.GetString("MsgPotashPrceMustNotExceedTwoDecimal", resourceCulture);
             }
         }
         

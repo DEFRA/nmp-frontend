@@ -9,17 +9,14 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep34ViewModel
+    public class MannerEstimationStep37ViewModel
     {
-        public int? UpdateNitrogenPriceQuestion { get; set; }
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblNitrogenmustNotExceedTwoDecimalplaces))]
-        
-        public decimal? NitrogenPrice { get; set; }
-        public int? NitrogenProductPrice { get; set; }
+        public int? UpdatePhosphorusPriceQuestion { get; set; }
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgPhosphoruPriceMustNotExceedtwoDecimal))]        
+        public decimal? PhosphorusPrice { get; set; }
+        public int? PhosphorusProductPrice { get; set; }
         public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public int MannerEstimateId { get; set; } 
-        public decimal? DefaultNutrintPrice { get; set; }
-        public int? DefaultNitrogenProductPrice { get; set; }
         public bool IsComingFirstTime { get; set; } = false; 
         public int? NutrientProductId { get; set; }
         public string? NutrientProductName { get; set; } = string.Empty;

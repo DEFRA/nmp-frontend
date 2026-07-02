@@ -1,6 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @using System.Globalization
 @{
+    ViewData["Title"] = $"{Resource.lblEstimateOfNutrientSupplyFromOrganicMaterialResults} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     var mannerEstimation = ViewBag.MannerEstimations.MannerEstimation;
 
     var registeredOrganicProducer = mannerEstimation.RegisteredOrganicProducer ? Resource.lblYes : Resource.lblNo;
@@ -13,15 +14,31 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-
+        @if (TempData["MannerEstimationResult"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["MannerEstimationResult"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         @if (ViewBag.Success != null && ViewBag.Success == "true")
         {
-            <govuk-notification-banner type="NotificationBannerType.Success">
-                <h3 class="govuk-notification-banner__heading">
-                    @Resource.lblNutrientSupplyEstimateCreated
-                </h3>
-                <p class="">@Resource.lblSelectTheFarmFieldAndCropTabOrAnApplication</p>
-            </govuk-notification-banner>
+            @if (ViewBag.SuccessForTab != null)
+            {
+                <govuk-notification-banner type="NotificationBannerType.Success">
+                    <h3 class="govuk-notification-banner__heading">
+                        @ViewBag.SuccessForTab
+                    </h3>
+                </govuk-notification-banner>
+            }
+            else
+            {
+                <govuk-notification-banner type="NotificationBannerType.Success">
+                    <h3 class="govuk-notification-banner__heading">
+                        @Resource.lblNutrientSupplyEstimateCreated
+                    </h3>
+                    <p class="">@Resource.lblSelectTheFarmFieldAndCropTabOrAnApplication</p>
+                </govuk-notification-banner>
+            }
         }
 
   
@@ -50,7 +67,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <govuk-tabs>
-      <govuk-tabs-item id="Nutrients" label=@Resource.lblNutrients>
+            <govuk-tabs-item id="Nutrients" label=@Resource.lblNutrients>
                 <h2 class="govuk-heading-m non-standard">@Resource.lblNutrients</h2>
                 <div class="margin-bottom-forty">
                     <table class="govuk-table data-table width-66">
@@ -220,8 +237,8 @@
                                 @mannerEstimation.NitrogenProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.NitrogenProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue,string.Format("{0:N2}",mannerEstimation.NitrogenPrice))</td>
-                            <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>@Resource.lblChange</a></td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.NitrogenPrice,Resource.lblPerKg))</td>
+                            <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.EncryptedNitrogenId>@Resource.lblChange</a></td>
                         </tr>
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
@@ -229,8 +246,8 @@
                                 @mannerEstimation.PhosphateProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PhosphateProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2}", mannerEstimation.PhosphatePrice))</td>
-                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.PhosphatePrice, Resource.lblPerKg))</td>
+                            <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.EncryptedPhosphateId>@Resource.lblChange</a></td>
                         </tr>
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
@@ -238,8 +255,8 @@
                                 @mannerEstimation.PotashProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PotashProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2}", mannerEstimation.PotashPrice))</td>
-                            <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.PotashPrice,Resource.lblPerKg))</td>
+                            <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.EncryptedPotashId>@Resource.lblChange</a></td>
                         </tr>
 
                     </tbody>
@@ -350,8 +367,10 @@
                     countApp++;
                     <govuk-tabs-item id="ApplicationDetail@(countApp)" label="@Resource.lblApplicationDetail">
                         <h3 class="govuk-heading-m non-standard">@Resource.lblApplicationDetails</h3>
-                        @{ViewBag.Count = countApp;}
-                        <partial name="_MannerEstimationResultApplicationTabPartial" model="@item" />                       
+                        @{
+                            ViewBag.Count = countApp;
+                        }
+                        <partial name="_MannerEstimationResultApplicationTabPartial" model="@item" />
                     </govuk-tabs-item>
 
                 }
