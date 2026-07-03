@@ -5,7 +5,19 @@
 
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblUpdateNutrientPrices, Resource.lblNitrogenLowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
-
+    string productHeading=string.Empty;//string.Format(Resource.lblWhatIstheNutrientPrice, Model.NutrientProductName.ToLower());
+    string productUnit=string.Empty;
+    bool isProductPrice = Model.UpdateNitrogenPriceQuestion == (int)UpdateNutrientPriceQuestion.UpdateByProductPrice;
+    if(isProductPrice)
+    {
+        productHeading = string.Format(Resource.lblWhatIstheNutrientPrice, Model.NutrientProductName.ToLower());
+       productUnit=string.Format(Resource.lblInUnit, Resource.lblPerTonnes);
+    }
+    else
+    {
+        productHeading = string.Format(Resource.lblWhatIstheNutrientPrice, Resource.lblNitrogenLowercase);
+        productUnit = string.Format(Resource.lblInUnit, Resource.lblPerKg);
+    }
 }
 
 @section BeforeContent {
@@ -23,12 +35,12 @@
         <form asp-action="UpdateNitrogenPrice" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
             <h2 class="govuk-heading-m">@string.Format(Resource.lblUpdateNutrientPrices, Resource.lblNitrogenLowercase)</h2>
-            @* @if (Model.UpdateNitrogenPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+            @if (isProductPrice)
             {
                 <govuk-input name="NitrogenProductPrice" for=@Model.NitrogenProductPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>
-                        @string.Format(Resource.lblWhatIstheNutrientPrice, Model.NutrientProductName.ToLower())
-                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPerTonnes)</span>
+                        @productHeading
+                        <span class="govuk-visually-hidden">@productUnit</span>
                     </govuk-input-label>
                     <govuk-input-prefix>@Resource.lblPoundSign</govuk-input-prefix>
                     <govuk-input-suffix>@Resource.lblPerTonnes.ToLower()</govuk-input-suffix>
@@ -38,26 +50,15 @@
             {
                 <govuk-input name="NitrogenPrice" for=@Model.NitrogenPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>
-                        @string.Format(Resource.lblWhatIstheNutrientPrice, Resource.lblNitrogenLowercase)
-                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPerKg)</span>
+                        @productHeading
+                        <span class="govuk-visually-hidden"> @productUnit</span>
                     </govuk-input-label>
                     <govuk-input-prefix>@Resource.lblPoundSign</govuk-input-prefix>
 
                     <govuk-input-suffix>@Resource.lblPerKg.ToLower()</govuk-input-suffix>
                 </govuk-input>
-            } *@
+            }
 
-            @await Html.PartialAsync("_UpdateNutrientPrice",
-         new ViewDataDictionary(ViewData)
-         {
-                { "UpdateNutrientPriceQuestion", Model.UpdateNitrogenPriceQuestion },
-                { "NutrientProductPriceValue",Model.NitrogenProductPrice },
-                { "NutrientProductPrice", nameof(Model.NitrogenProductPrice) },
-                { "NutrientProductPriceHeading", string.Format(Resource.lblWhatIstheNutrientPrice,Model.NutrientProductName.ToLower())},
-                { "NutrientPriceHeading",string.Format(Resource.lblWhatIstheNutrientPrice, Resource.lblNitrogenLowercase) },
-                { "NutrientPrice", nameof(Model.NitrogenPrice) },
-                { "NutrientPriceValue", Model.NitrogenPrice },
-         })
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

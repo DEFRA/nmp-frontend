@@ -7,6 +7,7 @@
     var registeredOrganicProducer = mannerEstimation.RegisteredOrganicProducer ? Resource.lblYes : Resource.lblNo;
     var isWithinNVZ = @mannerEstimation.IsWithinNVZ ? Resource.lblYes : Resource.lblNo;
     int applicationCount = ViewBag.MannerEstimations.MannerEstimationApplication.Count;
+    int count = 0;
 }
 @section BeforeContent {
     <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation">@Resource.lblBackToAllNutrientSupplyEstimates</govuk-back-link>
@@ -72,15 +73,24 @@
                 <div class="margin-bottom-forty">
                     <table class="govuk-table data-table width-66">
                         <thead class="govuk-table__head">
-                            <tr>
+                            <tr>      @if(applicationCount>1){
+                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                }
                                 <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblApplicationDate</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
+                              @{
+                                 count = 0;
+                            }
                             @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                             {
+                                count++;
                                 <tr>
+                                     @if(applicationCount>1){
+                                    <td class="govuk-table__cell">@count</td>
+                                    }
                                     <td class="govuk-table__cell">@item.ManureType</td>
                                     <td class="govuk-table__cell">
                                         @item.ApplicationDate.ToLocalTime().ToString("dd MMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
@@ -96,7 +106,9 @@
                         <p class="govuk-body govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
                         <table class="govuk-table data-table">
                             <thead class="govuk-table__head">
-                                <tr>
+                                <tr>      @if(applicationCount>1){
+                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                }
                                     <th scope="row" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
                                     <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenCurrentCrop</th>
                                     <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenFollowingCropYear2</th>
@@ -104,10 +116,16 @@
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
+                                  @{
+count = 0;
+                            }
                                 @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                                 {
+                                count++;
                                     <tr>
-
+                                         @if(applicationCount>1){
+                                    <td class="govuk-table__cell">@count</td>
+                                    }
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalN, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNCurrentCrop, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
@@ -123,7 +141,9 @@
                         <p class="govuk-body  govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
                         <table class="govuk-table data-table">
                             <thead class="govuk-table__head">
-                                <tr>
+                                <tr>      @if(applicationCount>1){
+                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                }
                                     <th scope="row" class="govuk-table__header">@Resource.lblMineralisedNitrogen</th>
                                     <th scope="row" class="govuk-table__header">@Resource.lblLostNitrateN</th>
                                     <th scope="row" class="govuk-table__header">@Resource.lblLostAmmoniaN</th>
@@ -131,9 +151,16 @@
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
+                                  @{
+                                 count = 0;
+                            }
                                 @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                                 {
+                                count++;
                                     <tr>
+                                         @if(applicationCount>1){
+                                    <td class="govuk-table__cell">@count</td>
+                                    }
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.MineralisedNitrogenLosses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostNitrateLosses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostAmmonia, Resource.lblkg)</td>
@@ -148,7 +175,9 @@
                     <p class="govuk-body  govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
                     <table class="govuk-table data-table margin-bottom-none">
                         <thead class="govuk-table__head">
-                            <tr>
+                            <tr>      @if(applicationCount>1){
+                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                }
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblCropAvailablePhosphate</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotalPotash</th>
@@ -159,9 +188,16 @@
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
+                              @{
+                                 count = 0;
+                            }
                             @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                             {
+                                count++;
                                 <tr>
+                                     @if(applicationCount>1){
+                                    <td class="govuk-table__cell">@count</td>
+                                    }
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalP2O5, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableP2O5, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalK2O, Resource.lblkg)</td>
@@ -188,7 +224,9 @@
                     <table class="govuk-table margin-bottom-forty data-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
+                                @if(applicationCount>1){
                                 <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                }
                                 <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblDate</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblCropAvailable<br />@Resource.lblNitrogenLowercase</th>
@@ -205,7 +243,9 @@
                             {
                                 count++;
                                 <tr class="govuk-table__row">
+                                    @if(applicationCount>1){
                                     <td class="govuk-table__cell">@count</td>
+                                    }
                                     <td class="govuk-table__cell">@item.ManureType</td>
                                     <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
                                     <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, item.NitrogenValue)</td>

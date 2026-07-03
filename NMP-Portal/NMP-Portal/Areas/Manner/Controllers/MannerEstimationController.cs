@@ -3747,7 +3747,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (!model.UpdatePotashPriceQuestion.HasValue)
             {
-                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsPotashPriceBasedOnNutrientPrice;
+                ViewBag.IsPotashPriceBasedOnNutrientPrice = mannerEstimation.IsPotashPriceBasedOnNutrientPrice;
             }
             return View(model);
 

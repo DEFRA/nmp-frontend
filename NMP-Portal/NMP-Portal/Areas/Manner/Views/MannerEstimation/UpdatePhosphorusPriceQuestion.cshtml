@@ -5,7 +5,9 @@
 
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPhosphateP2O5Lowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
-
+    string heading = string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPhosphateP2O5Lowercase);
+    
+    bool isNutrientDefaultProduct = (bool?)ViewBag.isNutrientDefaultProduct ?? true;
 }
 
 @section BeforeContent {
@@ -16,15 +18,28 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="UpdatePhosphorusPriceQuestion" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            @{
-                var vd = new ViewDataDictionary(ViewData);
-                vd["PropertyName"] = nameof(Model.UpdatePhosphorusPriceQuestion);
-                vd["PropertyValue"] = Model.UpdatePhosphorusPriceQuestion;
-                vd["Legend"] = string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPhosphateP2O5Lowercase);
-                vd["IsNutrientDefaultProduct"] = ViewBag.isNutrientDefaultProduct;
-            }
+        
+           <govuk-radios for="@Model.UpdatePhosphorusPriceQuestion">
 
-            @await Html.PartialAsync("_UpdateNutrientPriceQuestion", vd)
+    <govuk-radios-fieldset>
+
+        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+            @heading
+        </govuk-radios-fieldset-legend>
+
+        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)"
+                           checked="@(!isNutrientDefaultProduct)">
+            @Resource.lblUpdateByProductPrice
+        </govuk-radios-item>
+
+        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
+                           checked="@(isNutrientDefaultProduct)">
+            @Resource.lblUpdateByNutrientPrice
+        </govuk-radios-item>
+
+    </govuk-radios-fieldset>
+
+</govuk-radios>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

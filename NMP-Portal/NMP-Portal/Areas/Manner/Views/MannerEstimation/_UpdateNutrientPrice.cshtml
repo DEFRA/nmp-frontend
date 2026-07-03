@@ -12,7 +12,7 @@
 }
 @if (updateNutrientPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
 {
-    <govuk-input name="@nutrientProductPrice" value=@nutrientProductPriceValue type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+    <govuk-input name=@nutrientProductPrice for="@nutrientProductPrice"  type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
         <govuk-input-label>
             @nutrientProductPriceHeading
             <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPerTonnes)</span>
@@ -23,7 +23,7 @@
 }
 else
 {
-    <govuk-input name=@nutrientPrice value="@nutrientPriceValue" type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+    <govuk-input name=@nutrientPrice for="@nutrientPrice" value=@nutrientPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
         <govuk-input-label>
             @nutrientPriceHeading
             <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPerKg)</span>
