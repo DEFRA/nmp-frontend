@@ -5,7 +5,7 @@
 
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPotashK2OLowecase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
-    
+
 }
 
 @section BeforeContent {
@@ -16,25 +16,17 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="UpdatePotashPriceQuestion" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios class="govuk-radios--inline" for="@Model.UpdatePotashPriceQuestion">
 
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPotashK2OLowecase)
-                    </govuk-radios-fieldset-legend>
 
-                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)"
-                                       checked="@(ViewBag.isNutrientDefaultProduct == false)">
-                        @Resource.lblUpdateByProductPrice
-                    </govuk-radios-item>
-                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
-                                       checked="@(ViewBag.isNutrientDefaultProduct == true)">
-                        @Resource.lblUpdateByNutrientPrice
-                    </govuk-radios-item>
+            @{
+                var viewDataDictionary = new ViewDataDictionary(ViewData);
+                viewDataDictionary["PropertyName"] = nameof(Model.UpdatePotashPriceQuestion);
+                viewDataDictionary["PropertyValue"] = Model.UpdatePotashPriceQuestion;
+                viewDataDictionary["Legend"] = string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPotashK2OLowecase);
+                viewDataDictionary["IsNutrientDefaultProduct"] = ViewBag.isNutrientDefaultProduct;
+            }
 
-                   
-                </govuk-radios-fieldset>
-            </govuk-radios>
+            @await Html.PartialAsync("_UpdateNutrientPriceQuestion", viewDataDictionary)
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

@@ -5,7 +5,7 @@
 
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
-    
+
 }
 
 @section BeforeContent {
@@ -16,30 +16,21 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="UpdateNitrogenPriceQuestion" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios class="govuk-radios--inline" for="@Model.UpdateNitrogenPriceQuestion">
+            @{
+                var viewData = new ViewDataDictionary(ViewData);
+                viewData["PropertyName"] = nameof(Model.UpdateNitrogenPriceQuestion);
+                viewData["PropertyValue"] = Model.UpdateNitrogenPriceQuestion;
+                viewData["Legend"] = string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase);
+                viewData["IsNutrientDefaultProduct"] = ViewBag.isNutrientDefaultProduct;
+            }
 
-                <govuk-radios-fieldset>
-                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase)
-                    </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)"
-                                       checked="@(ViewBag.isNutrientDefaultProduct == false)">
-                        @Resource.lblUpdateByProductPrice
-                    </govuk-radios-item>
-                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
-                                       checked="@(ViewBag.isNutrientDefaultProduct == true)">
-                        @Resource.lblUpdateByNutrientPrice
-                    </govuk-radios-item>
-                   
-                </govuk-radios-fieldset>
-            </govuk-radios>
+            @await Html.PartialAsync("_UpdateNutrientPriceQuestion", viewData)
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
             <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblCancel</a>
-
         </p>
     </div>
 </div>

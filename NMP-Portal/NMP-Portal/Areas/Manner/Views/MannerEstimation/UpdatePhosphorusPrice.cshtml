@@ -23,7 +23,7 @@
         <form asp-action="UpdatePhosphorusPrice" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
             <h2 class="govuk-heading-m">@string.Format(Resource.lblUpdateNutrientPrices, Resource.lblPhosphateP2O5Lowercase)</h2>
-            @if (Model.UpdatePhosphorusPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+            @* @if (Model.UpdatePhosphorusPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
             {
                 <govuk-input name="PhosphorusProductPrice" for=@Model.PhosphorusProductPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>
@@ -45,7 +45,23 @@
 
                     <govuk-input-suffix>@Resource.lblPerKg.ToLower()</govuk-input-suffix>
                 </govuk-input>
-            }
+            } *@
+            @await Html.PartialAsync("_UpdateNutrientPrice",
+            new ViewDataDictionary(ViewData)
+            {
+                { "UpdateNutrientPriceQuestion", Model.UpdatePhosphorusPriceQuestion },
+                { "NutrientProductPriceValue",Model.PhosphorusProductPrice },
+                { "NutrientProductPrice",nameof(Model.PhosphorusProductPrice) },
+                { "NutrientProductPriceHeading", string.Format(Resource.lblWhatIstheNutrientPrice,Model.NutrientProductName.ToLower())},
+                { "NutrientPriceHeading",string.Format(Resource.lblWhatIstheNutrientPrice, Resource.lblPhosphateP2O5Lowercase) },
+                { "NutrientPrice", nameof(Model.PhosphorusPrice) },
+                { "NutrientPriceValue",Model.PhosphorusPrice },
+            })
+            @* var updatePhosphorusPriceQuestion = ViewData["UpdatePhosphorusPriceQuestion"];
+            var nutrientProductPrice = ViewData["NutrientProductPrice"];
+            var nutrientProductPriceHeading = ViewData["NutrientProductPriceHeading"];
+            var nutrientPriceHeading = ViewData["NutrientPriceHeading"];
+            var nutrientPrice = ViewData["NutrientPrice"]; *@
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

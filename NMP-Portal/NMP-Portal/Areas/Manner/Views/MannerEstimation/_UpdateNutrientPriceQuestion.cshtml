@@ -1,0 +1,54 @@
+﻿@using NMP.Commons.Resources
+
+@* @{
+    var propertyName = ViewData["PropertyName"];
+    var legend = ViewData["Legend"]?.ToString();
+    bool isDefault = (bool?)ViewData["IsNutrientDefaultProduct"] ?? true;
+}
+
+<govuk-radios for="@propertyName" name="@propertyName">
+    <govuk-radios-fieldset>
+        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+            @legend
+        </govuk-radios-fieldset-legend>
+
+        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)"
+                           checked="@(!isDefault)">
+            @Resource.lblUpdateByProductPrice
+        </govuk-radios-item>
+
+        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
+                           checked="@(isDefault)">
+            @Resource.lblUpdateByNutrientPrice
+        </govuk-radios-item>
+    </govuk-radios-fieldset>
+</govuk-radios>
+ *@
+@{
+    var propertyName = ViewData["PropertyName"]?.ToString();
+    var propertyValue = ViewData["PropertyValue"]?.ToString();
+    var legend = ViewData["Legend"]?.ToString();
+    bool isDefault = (bool?)ViewData["IsNutrientDefaultProduct"] ?? true;
+}
+
+<govuk-radios name="@propertyName" value=@propertyValue>
+
+    <govuk-radios-fieldset>
+
+        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+            @legend
+        </govuk-radios-fieldset-legend>
+
+        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)"
+                           checked="@(!isDefault)">
+            @Resource.lblUpdateByProductPrice
+        </govuk-radios-item>
+
+        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
+                           checked="@(isDefault)">
+            @Resource.lblUpdateByNutrientPrice
+        </govuk-radios-item>
+
+    </govuk-radios-fieldset>
+
+</govuk-radios>
