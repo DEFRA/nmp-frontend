@@ -21,6 +21,11 @@ namespace NMP.Core.Interfaces
         Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
         Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId);
         Task<(int, Error?)> CopyMannerEstimation(int id, string estimationName);
+        Task<(decimal, Error)> FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(int mannerEstimationId, DateTime startDate, DateTime endDate, bool isGreenFoodCompost, int? mannerApplicationId);
+
+        Task<(decimal, Error)> FetchTotalNByMannerEstimationIdAppDate(int mannerEstimationId, DateTime startDate, DateTime endDate, int? mannerApplicationId);
+
+        Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId);
 
     }
 }

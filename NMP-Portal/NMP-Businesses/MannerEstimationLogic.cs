@@ -985,8 +985,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return
             (mannerEstimationApplication.ApplicationRate == defaultRate,defaultRate??0);
     }
-    public async Task<bool> FetchIsManureLiquid(
-    int manureTypeId)
+    public async Task<bool> FetchIsManureLiquid(int manureTypeId)
     {
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(manureTypeId);
 
@@ -994,6 +993,21 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             return false;
 
         return manureType.IsLiquid??false;
+    }
+    public async Task<(decimal, Error)> FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(int mannerEstimationId, DateTime startDate, DateTime endDate, bool isGreenFoodCompost, int? mannerApplicationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost() called");
+        return await _mannerEstimationService.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(mannerEstimationId, startDate, endDate, isGreenFoodCompost, mannerApplicationId);
+    }
+    public async Task<(decimal, Error)> FetchTotalNByMannerEstimationIdAppDate(int mannerEstimationId, DateTime startDate, DateTime endDate, int? mannerApplicationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchTotalNByMannerEstimationIdAppDate() called");
+        return await _mannerEstimationService.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId, startDate, endDate, mannerApplicationId);
+    }
+    public async Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId)
+    {
+        _logger.LogTrace("MannerLogic : CheckMannerGreenCompostExistanceByDateRange() called");
+        return await _mannerEstimationService.CheckMannerGreenCompostExistanceByDateRange(mannerEstimationId, dateFrom, dateTo, mannerApplicationId);
     }
 }
 
