@@ -60,6 +60,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _soilDrainageEndDateKey = "SoilDrainageEndDate";
         private const string _totalRainfallKey = "TotalRainfall";
         private const string _autumnCropNitrogenUptakeKey = "AutumnCropNitrogenUptake";
+        private const string _nutrientProductErrorKey = "NutrientProductError";
+        private const string _mannerEstimationResultKey = "MannerEstimationResult";
+        private const string _mannerEstimationResultErrorKey = "MannerEstimationResultError";
 
         public IActionResult Index()
         {
@@ -2741,7 +2744,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (newEstimationId > 0)
                 {
-                    return RedirectToAction("MannerEstimationResult", new
+                    return RedirectToAction(_mannerEstimationResultKey, new
                     {
                         q = _mannerEstimationProtector.Protect(
                          newEstimationId.ToString()),
@@ -3300,7 +3303,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (mannerEstimationApplicationResult != null && mannerEstimationApplicationResult.MannerEstimationID != null)
                 {
-                    return RedirectToAction("MannerEstimationResult", new
+                    return RedirectToAction(_mannerEstimationResultKey, new
                     {
                         q = _mannerEstimationProtector.Protect(
                           mannerEstimationApplicationResult.MannerEstimationID.ToString()),
@@ -3348,12 +3351,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
             {
-                TempData["NutrientProductError"] = error?.Message;
+                TempData[_nutrientProductErrorKey] = error.Message;
                 return RedirectToAction("NutrientProduct", new { q = model.EncryptedMannerEstimateId });
             }
             if (!model.UpdateNitrogenPriceQuestion.HasValue)
             {
-                ViewBag.isNutrientDefaultProduct = mannerEstimation.CalculateBasedOnNutrientPrice;
+                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsNitrogenPriceBasedOnNutrientPrice;
             }
             return View(model);
 
@@ -3390,8 +3393,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (List<NutrientProductResponse> nutrientProducts, Error? error) = await _mannerEstimationLogic.FetchNutrientProductByNutrientId(nutrientId);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["MannerEstimationResult"] = error.Message;
-                return RedirectToAction("MannerEstimationResult", new { q = q });
+                TempData[_mannerEstimationResultErrorKey] = error.Message;
+                return RedirectToAction(_mannerEstimationResultKey, new { q = q });
             }
 
             var productList = nutrientProducts.Select(x => new
@@ -3406,8 +3409,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (MannerEstimation? mannerEstimation, error) = await _mannerEstimationLogic.FetchMannerEstimateById(model.MannerEstimateId ?? 0);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
             {
-                TempData["MannerEstimationResult"] = error.Message;
-                return RedirectToAction("MannerEstimationResult", new { q = q });
+                TempData[_mannerEstimationResultErrorKey] = error.Message;
+                return RedirectToAction(_mannerEstimationResultKey, new { q = q });
             }
 
             int defaultNitrogenProductId = BindDefaultNutrientProductId(nutrientId, mannerEstimation);
@@ -3444,26 +3447,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
 
         }
-
-        private static int BindDefaultNutrientProductId(int nutrientId, MannerEstimation? mannerEstimation)
-        {
-            int defaultNitrogenProductId = 0;
-            if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Nitrogen)
-            {
-                defaultNitrogenProductId = mannerEstimation.NitrogenProductId;
-            }
-            else if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Phosphorus)
-            {
-                defaultNitrogenProductId = mannerEstimation.PhosphateProductId;
-            }
-            else if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Potassium)
-            {
-                defaultNitrogenProductId = mannerEstimation.PotashProductId;
-            }
-
-            return defaultNitrogenProductId;
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NutrientProduct(MannerEstimationStep35ViewModel model)
@@ -3476,7 +3459,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 (List<NutrientProductResponse> nutrientProducts, Error? error) = await _mannerEstimationLogic.FetchNutrientProductByNutrientId((int)NMP.Commons.Enums.MannerNutrients.Nitrogen);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
-                    TempData["NutrientProductError"] = error.Message;
+                    TempData[_nutrientProductErrorKey] = error.Message;
                     return View(model);
                 }
 
@@ -3490,7 +3473,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 (MannerEstimation? mannerEstimation, error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationStep35ViewModel.MannerEstimateId ?? 0);
                 if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
                 {
-                    TempData["NutrientProductError"] = error.Message;
+                    TempData[_nutrientProductErrorKey] = error.Message;
                     return View(model);
                 }
                 if (!model.NutrientProductId.HasValue)
@@ -3523,6 +3506,26 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return RedirectToAction("UpdateNitrogenPriceQuestion");
         }
+
+        private static int BindDefaultNutrientProductId(int nutrientId, MannerEstimation? mannerEstimation)
+        {
+            int defaultNitrogenProductId = 0;
+            if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Nitrogen)
+            {
+                defaultNitrogenProductId = mannerEstimation.NitrogenProductId;
+            }
+            else if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Phosphorus)
+            {
+                defaultNitrogenProductId = mannerEstimation.PhosphateProductId;
+            }
+            else if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Potassium)
+            {
+                defaultNitrogenProductId = mannerEstimation.PotashProductId;
+            }
+
+            return defaultNitrogenProductId;
+        }
+
 
         private async Task RecalculateNutrientPrices(MannerEstimationStep35ViewModel mannerEstimationStep35ViewModel, MannerEstimationViewModel mannerEstimationViewModel)
         {
@@ -3600,8 +3603,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ReplaceModelStateError(
    ModelState,
    nitrogenProductPriceKey,
-   string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999),
-   Resource.lblEnterAValidNumber);
+   string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999));
             }
             else
             {
@@ -3614,8 +3616,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ReplaceModelStateError(
    ModelState,
    nitrogenPriceKey,
-   string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenPrice.ToLower(), 0, 999999),
-   Resource.lblEnterAValidNumber);
+   string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenPrice.ToLower(), 0, 999999));
             }
         }
 
@@ -3628,12 +3629,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
             {
-                TempData["NutrientProductError"] = error?.Message;
+                TempData[_nutrientProductErrorKey] = error.Message;
                 return RedirectToAction("NutrientProduct", new { q = model.EncryptedMannerEstimateId });
             }
             if (!model.UpdatePhosphorusPriceQuestion.HasValue)
             {
-                ViewBag.isNutrientDefaultProduct = mannerEstimation.CalculateBasedOnNutrientPrice;
+                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsPhosphatePriceBasedOnNutrientPrice;
             }
             return View(model);
 
@@ -3714,8 +3715,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState,
                 phosphorusProductPriceKey,
                 string.Format(Resource.MsgEnterValueInBetween,
-                    Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999),
-                Resource.lblEnterAValidNumber);
+                    Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999));
 
             }
             else
@@ -3729,8 +3729,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ReplaceModelStateError(
     ModelState,
     phosphorusPriceKey,
-    string.Format(Resource.MsgEnterValueInBetween, Resource.lblPhosphorusPrice.ToLower(), 0, 999999),
-    Resource.lblEnterAValidNumber);
+    string.Format(Resource.MsgEnterValueInBetween, Resource.lblPhosphorusPrice.ToLower(), 0, 999999));
             }
         }
 
@@ -3743,12 +3742,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
             {
-                TempData["NutrientProductError"] = error?.Message;
+                TempData[_nutrientProductErrorKey] = error.Message;
                 return RedirectToAction("NutrientProduct", new { q = model.EncryptedMannerEstimateId });
             }
             if (!model.UpdatePotashPriceQuestion.HasValue)
             {
-                ViewBag.isNutrientDefaultProduct = mannerEstimation.CalculateBasedOnNutrientPrice;
+                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsPotashPriceBasedOnNutrientPrice;
             }
             return View(model);
 
@@ -3818,7 +3817,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private IActionResult RedirectSucessFinacialValues(int mannerEstimateId)
         {
-            return RedirectToAction("MannerEstimationResult", new
+            return RedirectToAction(_mannerEstimationResultKey, new
             {
                 q = _mannerEstimationProtector.Protect(mannerEstimateId.ToString()),
                 r = _mannerEstimationProtector.Protect(Resource.lblTrue),
@@ -3840,8 +3839,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState,
                 potashProductPriceKey,
                 string.Format(Resource.MsgEnterValueInBetween,
-                Resource.lblPotashProductPrice.ToLower(), 0, 99999999),
-                Resource.lblEnterAValidNumber);
+                Resource.lblPotashProductPrice.ToLower(), 0, 99999999));
 
             }
             else
@@ -3856,16 +3854,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ReplaceModelStateError(
                 ModelState,
                 potashPriceKey,
-                string.Format(Resource.MsgEnterValueInBetween, Resource.lblPotashPrice.ToLower(), 0, 999999),
-                Resource.lblEnterAValidNumber);
-                string potashPrice = model.PotashPrice.ToString();
+                string.Format(Resource.MsgEnterValueInBetween, Resource.lblPotashPrice.ToLower(), 0, 999999));
+                
             }
         }
         private void ReplaceModelStateError(
     ModelStateDictionary modelState,
     string key,
-    string numericErrorMessage,
-    string invalidValueMessage)
+    string numericErrorMessage)
         {
             if (!modelState.IsValid && modelState.ContainsKey(key))
             {
@@ -3875,19 +3871,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return;
 
 
-                if (error != null && error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, key)))
+                if (error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, key)))
                 {
                     modelState[key].Errors.Clear();
                     modelState.AddModelError(key, numericErrorMessage);
                 }
-                //if (error == Resource.MsgTheValueIsInvalid)
-                //{
-                //    modelState.AddModelError(key, invalidValueMessage);
-                //}
-                //else
-                //{
-                //    modelState.AddModelError(key, numericErrorMessage);
-                //}
+                
             }
         }
     }

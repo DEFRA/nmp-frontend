@@ -8195,7 +8195,7 @@ following crop year 2</value>
     <value>per tonne</value>
   </data>
   <data name="lblWhichNutrientProductWouldYouLikeToUse" xml:space="preserve">
-    <value>Which nutrient product would you like to use?</value>
+    <value>Which nutrient (N) product are you using?</value>
   </data>
   <data name="lblNitrogenPrice" xml:space="preserve">
     <value>Nitrogen price</value>

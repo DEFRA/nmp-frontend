@@ -19454,7 +19454,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which nutrient product would you like to use?.
+        ///   Looks up a localized string similar to Which nutrient (N) product are you using?.
         /// </summary>
         public static string lblWhichNutrientProductWouldYouLikeToUse {
             get {

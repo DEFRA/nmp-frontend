@@ -5,7 +5,7 @@
 
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
-    bool isSelected = ViewBag.isNutrientDefaultProduct ?? false;
+    
 }
 
 @section BeforeContent {
@@ -22,20 +22,14 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-item value=@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)>@Resource.lblUpdateByProductPrice</govuk-radios-item>
-                    @if (ViewBag.isNutrientDefaultProduct != null)
-                    {
-                        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
-                                           checked="@((bool)ViewBag.isNutrientDefaultProduct)">
-                            @Resource.lblUpdateByNutrientPrice
-                        </govuk-radios-item>
-                    }
-                    else
-                    {
-                        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)">
-                            @Resource.lblUpdateByNutrientPrice
-                        </govuk-radios-item>
-                    }
+                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)"
+                                       checked="@(ViewBag.isNutrientDefaultProduct == false)">
+                        @Resource.lblUpdateByProductPrice
+                    </govuk-radios-item>
+                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
+                                       checked="@(ViewBag.isNutrientDefaultProduct == true)">
+                        @Resource.lblUpdateByNutrientPrice
+                    </govuk-radios-item>
                    
                 </govuk-radios-fieldset>
             </govuk-radios>
