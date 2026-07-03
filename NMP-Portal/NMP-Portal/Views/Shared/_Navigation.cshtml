@@ -43,9 +43,7 @@
         </govuk-service-navigation-start>
         <govuk-service-navigation-nav>
             <govuk-service-navigation-nav-start></govuk-service-navigation-nav-start>
-           @*  <govuk-service-navigation-nav-item asp-action="FarmList" asp-controller="Farm" active="@(isAllFarm)" asp-area="">
-                @Resource.lblAllFarm
-            </govuk-service-navigation-nav-item> *@
+           
             @if (isFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
             {
                 <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" active="@(isFarmContext)">
@@ -54,11 +52,11 @@
             }
             @if (enrolmentCount > 1)
             {
-                <govuk-service-navigation-nav-item asp-controller="Account" asp-action="ChangeOrganisation">
+                <govuk-service-navigation-nav-item asp-controller="Account" asp-action="ChangeOrganisation" asp-area="">
                     @Resource.lblChangeCompany
                 </govuk-service-navigation-nav-item>
             }
-            <govuk-service-navigation-nav-item asp-controller="Account"  asp-action="Logout">
+            <govuk-service-navigation-nav-item asp-controller="Account"  asp-action="Logout" asp-area="">
                 @Resource.lblSignout
             </govuk-service-navigation-nav-item>
             <govuk-service-navigation-nav-end>               
