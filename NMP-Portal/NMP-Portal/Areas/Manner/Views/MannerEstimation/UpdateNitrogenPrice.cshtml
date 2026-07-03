@@ -8,7 +8,7 @@
     string productHeading=string.Empty;
     string productUnit=string.Empty;
     bool isProductPrice = Model.UpdateNitrogenPriceQuestion == (int)UpdateNutrientPriceQuestion.UpdateByProductPrice;
-    string prefix = isProductPrice ? Resource.lblPoundSign : Resource.lblPoundSign;
+    string prefix =  Resource.lblPoundSign;
     if(isProductPrice)
     {
         productHeading = string.Format(Resource.lblWhatIstheNutrientPrice, Model.NutrientProductName.ToLower());

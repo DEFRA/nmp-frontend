@@ -6,7 +6,8 @@
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     string heading =string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase);
-    
+    int productPrice = (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice;
+    int nutrientPrice = (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice;
 }
 
 @section BeforeContent {
@@ -26,11 +27,11 @@
             @heading
         </govuk-radios-fieldset-legend>
 
-        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)">
+                    <govuk-radios-item value="@(productPrice)">
             @Resource.lblUpdateByProductPrice
         </govuk-radios-item>
 
-        <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)">
+                    <govuk-radios-item value="@(nutrientPrice)">
             @Resource.lblUpdateByNutrientPrice
         </govuk-radios-item>
 
