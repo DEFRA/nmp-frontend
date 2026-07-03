@@ -23,7 +23,7 @@
         <form asp-action="UpdatePotashPrice" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
             <h2 class="govuk-heading-m">@string.Format(Resource.lblUpdateNutrientPrices, Resource.lblPotashK2OLowecase)</h2>
-            @* @if (Model.UpdatePotashPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+            @if (Model.UpdatePotashPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
             {
                 <govuk-input name="PotashProductPrice" for=@Model.PotashProductPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>
@@ -45,19 +45,9 @@
 
                     <govuk-input-suffix>@Resource.lblPerKg.ToLower()</govuk-input-suffix>
                 </govuk-input>
-            } *@
+            }
 
-            @await Html.PartialAsync("_UpdateNutrientPrice",
-          new ViewDataDictionary(ViewData)
-          {
-                { "UpdateNutrientPriceQuestion",Model.UpdatePotashPriceQuestion },
-                { "NutrientProductPriceValue",Model.PotashProductPrice },
-                { "NutrientProductPrice",nameof(Model.PotashProductPrice) },
-                { "NutrientProductPriceHeading", string.Format(Resource.lblWhatIstheNutrientPrice,Model.NutrientProductName.ToLower())},
-                { "NutrientPriceHeading",string.Format(Resource.lblWhatIstheNutrientPrice, Resource.lblPotashK2OLowecase) },
-                { "NutrientPrice", nameof(Model.PotashPrice) },
-                 { "NutrientPriceValue", Model.PotashPrice },
-          })
+          
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
