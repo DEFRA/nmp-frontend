@@ -7,7 +7,6 @@
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPhosphateP2O5Lowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     string heading = string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPhosphateP2O5Lowercase);
     
-    bool isNutrientDefaultProduct = (bool?)ViewBag.isNutrientDefaultProduct ?? true;
 }
 
 @section BeforeContent {
@@ -28,12 +27,12 @@
         </govuk-radios-fieldset-legend>
 
         <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)"
-                           checked="@(!isNutrientDefaultProduct)">
+                        >
             @Resource.lblUpdateByProductPrice
         </govuk-radios-item>
 
         <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
-                           checked="@(isNutrientDefaultProduct)">
+                        >
             @Resource.lblUpdateByNutrientPrice
         </govuk-radios-item>
 

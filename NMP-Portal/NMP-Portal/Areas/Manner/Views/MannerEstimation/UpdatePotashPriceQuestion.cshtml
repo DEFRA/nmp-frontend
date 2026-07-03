@@ -6,7 +6,6 @@
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPotashK2OLowecase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
 
-    bool isPotashPriceBasedOnNutrientPrice = (bool?)ViewBag.IsPotashPriceBasedOnNutrientPrice ?? true;
 }
 
 @section BeforeContent {
@@ -25,13 +24,11 @@
                         @string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPotashK2OLowecase)
                     </govuk-radios-fieldset-legend>
 
-                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)"
-                                       checked="@(!isPotashPriceBasedOnNutrientPrice)">
+                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)">
                         @Resource.lblUpdateByProductPrice
                     </govuk-radios-item>
 
-                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)"
-                                       checked="@(isPotashPriceBasedOnNutrientPrice)">
+                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)">
                         @Resource.lblUpdateByNutrientPrice
                     </govuk-radios-item>
 
