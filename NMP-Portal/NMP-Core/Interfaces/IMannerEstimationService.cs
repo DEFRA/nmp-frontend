@@ -21,6 +21,9 @@ namespace NMP.Core.Interfaces
         Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
         Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId);
         Task<(int, Error?)> CopyMannerEstimation(int id, string estimationName);
+        Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId);
+        Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId);
+        Task<(MannerEstimation?, Error?)> UpdateMannerEstimationServiceAsync(string MannerData);
 
     }
 }

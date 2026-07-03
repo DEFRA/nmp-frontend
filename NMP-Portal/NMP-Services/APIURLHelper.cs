@@ -270,4 +270,7 @@ internal static class ApiurlHelper
     public const string FetchMannerApplicationsByEstimationIdAsyncAPI = "/manner-estimation-applications/{0}";
     public const string FetchMannerManureTypeByIdAsyncAPI = "/vendors/manner/manure-types/{0}";
     public const string CopyMannerEstimationAsyncAPI = "/manner-estimations/copyestimates";
+    public const string FetchNutrientProductByNutrientIdAsyncAPI = "/vendors/manner/nutrient-products/by-nutrient-id/{0}";
+    public const string FetchMannerEstimateByIdAsyncAPI = "/manner-estimations/manner-estimations-by-id/{0}";
+    public const string UpdateMannerEstimateAsyncAPI = "manner-estimations";
 }

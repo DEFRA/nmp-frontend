@@ -13,6 +13,7 @@ using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -109,7 +110,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return GetMannerEstimationFromSession() ?? new MannerEstimationViewModel();
     }
 
-    private MannerEstimationViewModel? GetMannerEstimationFromSession()
+    public MannerEstimationViewModel? GetMannerEstimationFromSession()
     {
         var session = _httpContextAccessor.HttpContext?.Session;
         var mannerEstimation = session?.GetObjectFromJson<MannerEstimationViewModel>(_mannerEstimationSessionName);
@@ -455,7 +456,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     }
     public async Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerEstimationsList() by organisation id called");
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerEstimationsList() by organisation id called");
         return await _mannerEstimationService.FetchMannerEstimationsList(orgId);
     }
 
@@ -722,7 +723,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
             CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
             MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
-            SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate
+            SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate,
         };
 
         bool isDefaultnutrient = mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue ?? false;
@@ -927,28 +928,28 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
     {
-        _logger.LogTrace("MannerLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");
+        _logger.LogTrace("MannerEstimationLogic : FetchSoilTypeSoilTextureByTopSoilSubSoilId() called");
         return await _mannerEstimationService.FetchSoilTypeSoilTextureByTopSoilSubSoilId(topSoilId, subSoilId);
     }
     public async Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerApplicationsByMannerEstimationId() called");
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerApplicationsByMannerEstimationId() called");
         return await _mannerEstimationService.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId);
     }
     public async Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerApplicationById() called");
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerApplicationById() called");
         return await _mannerEstimationService.FetchMannerApplicationById(mannerApplicationId);
     }
     public async Task<(MannerEstimationResultResponse?, Error?)> FetchMannerApplicationResultById(int mannerEstimationId)
     {
-        _logger.LogTrace("MannerLogic : FetchMannerApplicationResultById() called");
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerApplicationResultById() called");
         return await _mannerEstimationService.FetchMannerApplicationResultById(mannerEstimationId);
     }
 
     public async Task<(int, Error?)> CopyMannerEstimation(int id, string estimationName)
     {
-        _logger.LogTrace("MannerLogic : CopyMannerEstimation() called");
+        _logger.LogTrace("MannerEstimationLogic : CopyMannerEstimation() called");
         return await _mannerEstimationService.CopyMannerEstimation(id, estimationName);
     }
     public async Task<bool> FetchDefaultNutrientValue(
@@ -971,19 +972,19 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationApplication.SO3 == manureType.SO3 &&
             mannerEstimationApplication.MgO == manureType.MgO;
     }
-    public async Task<(bool,int)> FetchApplicationRateOptionValue(
+    public async Task<(bool, int)> FetchApplicationRateOptionValue(
     int manureTypeId,
     MannerEstimationApplication mannerEstimationApplication, MannerEstimation mannerEstimation)
     {
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(manureTypeId);
 
         if (manureType == null)
-            return (false,0);
+            return (false, 0);
 
         int? defaultRate = mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
 
         return
-            (mannerEstimationApplication.ApplicationRate == defaultRate,defaultRate??0);
+            (mannerEstimationApplication.ApplicationRate == defaultRate, defaultRate ?? 0);
     }
     public async Task<bool> FetchIsManureLiquid(
     int manureTypeId)
@@ -993,7 +994,317 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (manureType == null)
             return false;
 
-        return manureType.IsLiquid??false;
+        return manureType.IsLiquid ?? false;
     }
+
+    public MannerEstimationStep33ViewModel GetMannerEstimationStep33()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep33.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        return mannerEstimationViewModel.MannerEstimationStep33;
+    }
+    public MannerEstimationStep33ViewModel SetMannerEstimationStep33(MannerEstimationStep33ViewModel mannerEstimationStep33)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep33 = mannerEstimationStep33;
+        mannerEstimationViewModel.MannerEstimationStep33.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep34.MannerEstimateId = mannerEstimationStep33.MannerEstimateId ?? 00;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep33();
+    }
+    public async Task<MannerEstimationStep34ViewModel> GetMannerEstimationStep34()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep34.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep34.UpdateNitrogenPriceQuestion = mannerEstimationViewModel.MannerEstimationStep33.UpdateNitrogenPriceQuestion;
+        mannerEstimationViewModel.MannerEstimationStep34.NutrientProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId;
+        mannerEstimationViewModel.MannerEstimationStep34.NutrientProductName = await FetchNutrientProductName((int)NMP.Commons.Enums.MannerNutrients.Nitrogen, mannerEstimationViewModel.MannerEstimationStep34.NutrientProductId ?? 0);
+        if (!mannerEstimationViewModel.MannerEstimationStep34.IsComingFirstTime)
+        {
+            mannerEstimationViewModel.MannerEstimationStep34.IsComingFirstTime = true;
+            await BindNutrientPrice(mannerEstimationViewModel, (int)NMP.Commons.Enums.MannerNutrients.Nitrogen);
+            SetMannerEstimationToSession(mannerEstimationViewModel);
+        }
+        return mannerEstimationViewModel.MannerEstimationStep34;
+    }
+    private async Task BindNutrientPrice(MannerEstimationViewModel mannerEstimationViewModel, int nutrientId)
+    {
+        (MannerEstimation? mannerEstimation, _) = await FetchMannerEstimateById(mannerEstimationViewModel.MannerEstimationStep35.MannerEstimateId.Value);
+        if (mannerEstimation != null)
+        {
+            if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Nitrogen)
+            {
+                mannerEstimationViewModel.MannerEstimationStep34.NitrogenPrice = mannerEstimation.NitrogenPrice;
+                mannerEstimationViewModel.MannerEstimationStep34.NitrogenProductPrice = mannerEstimation.NitrogenProductPrice;
+            }
+            else if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Phosphorus)
+            {
+                mannerEstimationViewModel.MannerEstimationStep37.PhosphorusPrice = mannerEstimation.PhosphatePrice;
+                mannerEstimationViewModel.MannerEstimationStep37.PhosphorusProductPrice = mannerEstimation.PhosphateProductPrice;
+            }
+            else if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Potassium)
+            {
+                mannerEstimationViewModel.MannerEstimationStep39.PotashPrice = mannerEstimation.PotashPrice;
+                mannerEstimationViewModel.MannerEstimationStep39.PotashProductPrice = mannerEstimation.PotashProductPrice;
+            }
+
+        }
+    }
+    public async Task<MannerEstimationStep34ViewModel> SetMannerEstimationStep34(MannerEstimationStep34ViewModel mannerEstimationStep34)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep34.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep34.UpdateNitrogenPriceQuestion = mannerEstimationStep34.UpdateNitrogenPriceQuestion ?? mannerEstimationViewModel.MannerEstimationStep33.UpdateNitrogenPriceQuestion;
+        mannerEstimationViewModel.MannerEstimationStep34.NutrientProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId;
+        mannerEstimationViewModel.MannerEstimationStep34.MannerEstimateId = mannerEstimationStep34.MannerEstimateId;
+        mannerEstimationStep34.IsComingFirstTime = mannerEstimationViewModel.MannerEstimationStep34.IsComingFirstTime;
+        if (!mannerEstimationViewModel.MannerEstimationStep34.IsComingFirstTime)
+        {
+            mannerEstimationStep34.IsComingFirstTime = true;
+        }
+        decimal nutrientPercentage = await FetchNutrientPrecentage((int)NMP.Commons.Enums.MannerNutrients.Nitrogen, mannerEstimationViewModel.MannerEstimationStep34.NutrientProductId.Value);
+        if (mannerEstimationViewModel.MannerEstimationStep34.UpdateNitrogenPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)
+        {
+            decimal cal1 = nutrientPercentage / 100m;
+            decimal cal2 = cal1 * 1000m;
+            mannerEstimationStep34.NitrogenProductPrice =
+            (int)Math.Round(cal2 * (mannerEstimationStep34.NitrogenPrice??0));
+        }
+        else
+        {
+            decimal cal1 = (nutrientPercentage / 100) * 1000;
+            decimal cal2 = (mannerEstimationStep34.NitrogenProductPrice ?? 0 / cal1);
+            decimal cal3 = (cal2 / cal1) * 100;
+            mannerEstimationStep34.NitrogenPrice = Math.Round(cal3 / 100, 2);
+        }
+
+        mannerEstimationViewModel.MannerEstimationStep34 = mannerEstimationStep34;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return await GetMannerEstimationStep34();
+    }
+    private async Task<decimal> FetchNutrientPrecentage(int nutrientId, int UpdateNitrogenPriceQuestionId)
+    {
+        decimal percentage = 0.0m;
+        (List<NutrientProductResponse> nutrientProducts, _) = await _mannerEstimationService.FetchNutrientProductByNutrientId(nutrientId);
+        if (nutrientProducts.Count > 0)
+        {
+             percentage = nutrientProducts
+    .FirstOrDefault(x => x.id == UpdateNitrogenPriceQuestionId)
+    ?.nutrientPercentage ?? 0m;
+        }
+        return percentage;
+    }
+
+    private async Task<string> FetchNutrientProductName(int nutrientId, int nutrientProductId)
+    {
+        string productName = string.Empty;
+        (List<NutrientProductResponse> nutrientProducts, _) = await _mannerEstimationService.FetchNutrientProductByNutrientId(nutrientId);
+        if (nutrientProducts.Count > 0)
+        {
+             productName = nutrientProducts
+    .FirstOrDefault(x => x.id == nutrientProductId)
+    ?.name ?? string.Empty;
+        }
+        return productName;
+    }
+    public MannerEstimationStep35ViewModel GetMannerEstimationStep35()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return mannerEstimationViewModel.MannerEstimationStep35;
+    }
+    public MannerEstimationStep35ViewModel SetMannerEstimationStep35(MannerEstimationStep35ViewModel mannerEstimationStep35)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId))
+        {
+            mannerEstimationStep35.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId;
+        }
+        if (mannerEstimationViewModel.MannerEstimationStep35.NutrientId != null)
+        {
+            mannerEstimationStep35.NutrientId = mannerEstimationViewModel.MannerEstimationStep35.NutrientId;
+        }
+        mannerEstimationViewModel.MannerEstimationStep35 = mannerEstimationStep35;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep35();
+    }
+
+    public async Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId)
+    {
+        _logger.LogTrace("MannerEstimationLogic : FetchNutrientProductByNutrientId() called");
+        return await _mannerEstimationService.FetchNutrientProductByNutrientId(nurteintId);
+    }
+    public async Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId)
+    {
+        _logger.LogTrace("MannerEstimationLogic : FetchMannerEstimateById() called");
+        return await _mannerEstimationService.FetchMannerEstimateById(mannerEstimateId);
+    }
+    public async Task<(MannerEstimation?, Error?)> UpdateMannerEstimation(int MannerEstimationId)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        (MannerEstimation? mannerEstimation, Error? error) = await FetchMannerEstimateById(MannerEstimationId);
+        if (!string.IsNullOrWhiteSpace(error?.Message) || mannerEstimation == null)
+        {
+            return (null, error);
+        }
+        if(mannerEstimationViewModel.MannerEstimationStep35.NutrientId==((int)NMP.Commons.Enums.MannerNutrients.Nitrogen))
+        {
+            mannerEstimation.NitrogenProductPrice = mannerEstimationViewModel.MannerEstimationStep34.NitrogenProductPrice ?? 0;
+            mannerEstimation.NitrogenPrice = mannerEstimationViewModel.MannerEstimationStep34.NitrogenPrice ?? 0;
+            mannerEstimation.NitrogenProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId ?? 0;
+            mannerEstimation.NitrogenProductName = await FetchNutrientProductName((int)NMP.Commons.Enums.MannerNutrients.Nitrogen, mannerEstimation.NitrogenProductId);
+            mannerEstimation.IsNitrogenPriceBasedOnNutrientPrice = mannerEstimationViewModel.MannerEstimationStep33.UpdateNitrogenPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice;
+        }
+        if(mannerEstimationViewModel.MannerEstimationStep35.NutrientId==((int)NMP.Commons.Enums.MannerNutrients.Phosphorus))
+        {
+            mannerEstimation.PhosphateProductPrice = mannerEstimationViewModel.MannerEstimationStep37.PhosphorusProductPrice ?? 0;
+            mannerEstimation.PhosphatePrice = mannerEstimationViewModel.MannerEstimationStep37.PhosphorusPrice ?? 0;
+            mannerEstimation.PhosphateProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId ?? 0;
+            mannerEstimation.PhosphateProductName = await FetchNutrientProductName((int)NMP.Commons.Enums.MannerNutrients.Phosphorus, mannerEstimation.PhosphateProductId);
+            mannerEstimation.IsPhosphatePriceBasedOnNutrientPrice = mannerEstimationViewModel.MannerEstimationStep36.UpdatePhosphorusPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice;
+        }
+        if(mannerEstimationViewModel.MannerEstimationStep35.NutrientId==((int)NMP.Commons.Enums.MannerNutrients.Potassium))
+        {
+            mannerEstimation.PotashProductPrice = mannerEstimationViewModel.MannerEstimationStep39.PotashProductPrice ?? 0;
+            mannerEstimation.PotashPrice = mannerEstimationViewModel.MannerEstimationStep39.PotashPrice ?? 0;
+            mannerEstimation.PotashProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId ?? 0;
+            mannerEstimation.PotashProductName = await FetchNutrientProductName((int)NMP.Commons.Enums.MannerNutrients.Potassium, mannerEstimation.PotashProductId);
+            mannerEstimation.IsPotashPriceBasedOnNutrientPrice = mannerEstimationViewModel.MannerEstimationStep38.UpdatePotashPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice;
+        }
+        string jsonData = JsonConvert.SerializeObject(new
+        {
+            MannerEstimation = mannerEstimation
+        });
+
+        (MannerEstimation? mannerEstimationResult, error) = await _mannerEstimationService.UpdateMannerEstimationServiceAsync(jsonData);
+        return (mannerEstimationResult, error);
+    }
+    public MannerEstimationStep36ViewModel GetMannerEstimationStep36()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep36.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        return mannerEstimationViewModel.MannerEstimationStep36;
+    }
+    public MannerEstimationStep36ViewModel SetMannerEstimationStep36(MannerEstimationStep36ViewModel mannerEstimationStep36)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep36 = mannerEstimationStep36;
+        mannerEstimationViewModel.MannerEstimationStep36.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep37.MannerEstimateId = mannerEstimationStep36.MannerEstimateId ?? 00;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep36();
+    }
+    public async Task<MannerEstimationStep37ViewModel> GetMannerEstimationStep37()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep37.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep37.UpdatePhosphorusPriceQuestion = mannerEstimationViewModel.MannerEstimationStep36.UpdatePhosphorusPriceQuestion;
+        mannerEstimationViewModel.MannerEstimationStep37.NutrientProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId;
+        mannerEstimationViewModel.MannerEstimationStep37.NutrientProductName = await FetchNutrientProductName((int)NMP.Commons.Enums.MannerNutrients.Phosphorus, mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId ?? 0);
+        if (!mannerEstimationViewModel.MannerEstimationStep34.IsComingFirstTime)
+        {
+            mannerEstimationViewModel.MannerEstimationStep34.IsComingFirstTime = true;
+            await BindNutrientPrice(mannerEstimationViewModel, (int)NMP.Commons.Enums.MannerNutrients.Phosphorus);
+            SetMannerEstimationToSession(mannerEstimationViewModel);
+        }
+        return mannerEstimationViewModel.MannerEstimationStep37;
+    }
+    public async Task<MannerEstimationStep37ViewModel> SetMannerEstimationStep37(MannerEstimationStep37ViewModel mannerEstimationStep37)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep37.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep37.UpdatePhosphorusPriceQuestion = mannerEstimationStep37.UpdatePhosphorusPriceQuestion ?? mannerEstimationViewModel.MannerEstimationStep36.UpdatePhosphorusPriceQuestion;
+        mannerEstimationViewModel.MannerEstimationStep37.NutrientProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId;
+        mannerEstimationViewModel.MannerEstimationStep37.MannerEstimateId = mannerEstimationStep37.MannerEstimateId;
+        mannerEstimationStep37.IsComingFirstTime = mannerEstimationViewModel.MannerEstimationStep34.IsComingFirstTime;
+        if (!mannerEstimationViewModel.MannerEstimationStep37.IsComingFirstTime)
+        {
+            mannerEstimationStep37.IsComingFirstTime = true;
+        }
+        decimal nutrientPercentage = await FetchNutrientPrecentage((int)NMP.Commons.Enums.MannerNutrients.Phosphorus, mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId.Value);
+        if (mannerEstimationViewModel.MannerEstimationStep37.UpdatePhosphorusPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)
+        {
+            decimal cal1 = nutrientPercentage / 100m;
+            decimal cal2 = cal1 * 1000m;
+            mannerEstimationStep37.PhosphorusProductPrice =
+            (int)Math.Round(cal2 * (mannerEstimationStep37.PhosphorusPrice ?? 0 / 100));
+        }
+        else
+        {
+            decimal cal1 = (nutrientPercentage / 100) * 1000;
+            decimal cal2 = (mannerEstimationStep37.PhosphorusProductPrice ?? 0 / cal1);
+            decimal cal3 = (cal2 / cal1) * 100;
+            mannerEstimationStep37.PhosphorusPrice = Math.Round(cal3 / 100, 2);
+        }
+
+        mannerEstimationViewModel.MannerEstimationStep37 = mannerEstimationStep37;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return await GetMannerEstimationStep37();
+    }
+    public MannerEstimationStep38ViewModel GetMannerEstimationStep38()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep38.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        return mannerEstimationViewModel.MannerEstimationStep38;
+    }
+    public MannerEstimationStep38ViewModel SetMannerEstimationStep38(MannerEstimationStep38ViewModel mannerEstimationStep38)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep38 = mannerEstimationStep38;
+        mannerEstimationViewModel.MannerEstimationStep38.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep38.MannerEstimateId = mannerEstimationStep38.MannerEstimateId ?? 00;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep38();
+    }
+    public async Task<MannerEstimationStep39ViewModel> GetMannerEstimationStep39()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep39.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep39.UpdatePotashPriceQuestion = mannerEstimationViewModel.MannerEstimationStep38.UpdatePotashPriceQuestion;
+        mannerEstimationViewModel.MannerEstimationStep39.NutrientProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId;
+        mannerEstimationViewModel.MannerEstimationStep39.NutrientProductName = await FetchNutrientProductName((int)NMP.Commons.Enums.MannerNutrients.Potassium, mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId ?? 0);
+        if (!mannerEstimationViewModel.MannerEstimationStep39.IsComingFirstTime)
+        {
+            mannerEstimationViewModel.MannerEstimationStep39.IsComingFirstTime = true;
+            await BindNutrientPrice(mannerEstimationViewModel, (int)NMP.Commons.Enums.MannerNutrients.Potassium);
+            SetMannerEstimationToSession(mannerEstimationViewModel);
+        }
+        return mannerEstimationViewModel.MannerEstimationStep39;
+    }
+    public async Task<MannerEstimationStep39ViewModel> SetMannerEstimationStep39(MannerEstimationStep39ViewModel mannerEstimationStep39)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep39.EncryptedMannerEstimateId = mannerEstimationViewModel.MannerEstimationStep35.EncryptedMannerEstimateId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep39.UpdatePotashPriceQuestion = mannerEstimationStep39.UpdatePotashPriceQuestion ?? mannerEstimationViewModel.MannerEstimationStep38.UpdatePotashPriceQuestion;
+        mannerEstimationViewModel.MannerEstimationStep39.NutrientProductId = mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId;
+        mannerEstimationViewModel.MannerEstimationStep39.MannerEstimateId = mannerEstimationStep39.MannerEstimateId;
+        mannerEstimationStep39.IsComingFirstTime = mannerEstimationViewModel.MannerEstimationStep39.IsComingFirstTime;
+        if (!mannerEstimationViewModel.MannerEstimationStep39.IsComingFirstTime)
+        {
+            mannerEstimationStep39.IsComingFirstTime = true;
+        }
+        decimal nutrientPercentage = await FetchNutrientPrecentage((int)NMP.Commons.Enums.MannerNutrients.Potassium, mannerEstimationViewModel.MannerEstimationStep35.NutrientProductId.Value);
+        if (mannerEstimationViewModel.MannerEstimationStep39.UpdatePotashPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)
+        {
+            decimal cal1 = nutrientPercentage / 100m;
+            decimal cal2 = cal1 * 1000m;
+            mannerEstimationStep39.PotashProductPrice =
+            (int)Math.Round(cal2 * (mannerEstimationStep39.PotashPrice ?? 0 / 100));
+        }
+        else
+        {
+            decimal cal1 = (nutrientPercentage / 100) * 1000;
+            decimal cal2 = (mannerEstimationStep39.PotashProductPrice ?? 0 / cal1);
+            decimal cal3 = (cal2 / cal1) * 100;
+            mannerEstimationStep39.PotashPrice = Math.Round(cal3 / 100, 2);
+        }
+
+        mannerEstimationViewModel.MannerEstimationStep39 = mannerEstimationStep39;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+       
+        return await GetMannerEstimationStep39();
+    }
+
+
 }
 

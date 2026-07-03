@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Identity.Client;
 using Microsoft.VisualBasic.FileIO;
@@ -59,6 +60,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _soilDrainageEndDateKey = "SoilDrainageEndDate";
         private const string _totalRainfallKey = "TotalRainfall";
         private const string _autumnCropNitrogenUptakeKey = "AutumnCropNitrogenUptake";
+        private const string _nutrientProductErrorKey = "NutrientProductError";
+        private const string _mannerEstimationResultKey = "MannerEstimationResult";
+        private const string _mannerEstimationResultErrorKey = "MannerEstimationResultError";
 
         public IActionResult Index()
         {
@@ -1123,7 +1127,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.IsClosedPeriodWarning = true;
             }
         }
-        
+
         private async Task HandleOrganicHighNWarning(DateTime startDate, DateTime endDate,
             MannerEstimationStep13ViewModel model)
         {
@@ -2428,14 +2432,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MannerEstimationResult(string? q, string? r)
+        public async Task<IActionResult> MannerEstimationResult(string? q, string? r, string? s)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  MannerEstimationResult() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
-                int estimateId =Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
+                ViewBag.EncryptedEstimateId = q;
+                int estimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
                 (MannerEstimationResultResponse? mannerEstimationResultResponse, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(estimateId);
-                if(!string.IsNullOrWhiteSpace(error?.Message))
+                if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData["Error"] = error.Message;
                     return RedirectToAction("MannerHubPage");
@@ -2446,13 +2451,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 ViewBag.Success = _mannerEstimationProtector.Unprotect(r);
             }
+            if (!string.IsNullOrWhiteSpace(s))
+            {
+                ViewBag.SuccessForTab = _mannerEstimationProtector.Unprotect(s);
+            }
 
             return View();
         }
 
-        
+
         private async Task BindViewBegForMannerEstimationResult(MannerEstimationResultResponse? mannerEstimationResultResponse)
         {
+            RemoveMannerEstimationSession();
             int nitrogenValue = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.NitrogenValue);
             int p2O5Value = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.PhosphateValue);
             int potashValue = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.PotashValue);
@@ -2484,6 +2494,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     }
                 }
             }
+            ViewBag.EncryptedNitrogenId =
+    _mannerEstimationProtector.Protect(((int)NMP.Commons.Enums.MannerNutrients.Nitrogen).ToString());
+
+            ViewBag.EncryptedPhosphateId =
+                _mannerEstimationProtector.Protect(((int)NMP.Commons.Enums.MannerNutrients.Phosphorus).ToString());
+
+            ViewBag.EncryptedPotashId =
+                _mannerEstimationProtector.Protect(((int)NMP.Commons.Enums.MannerNutrients.Potassium).ToString());
 
         }
         private async Task LoadMannerEstimations()
@@ -2726,7 +2744,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (newEstimationId > 0)
                 {
-                    return RedirectToAction("MannerEstimationResult", new
+                    return RedirectToAction(_mannerEstimationResultKey, new
                     {
                         q = _mannerEstimationProtector.Protect(
                          newEstimationId.ToString()),
@@ -2734,7 +2752,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     });
                 }
             }
-            else 
+            else
             {
                 List<SelectListItem> farmsWithFields = await BindAllFarmList();
                 if (farmsWithFields.Count > 0)
@@ -3285,7 +3303,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (mannerEstimationApplicationResult != null && mannerEstimationApplicationResult.MannerEstimationID != null)
                 {
-                    return RedirectToAction("MannerEstimationResult", new
+                    return RedirectToAction(_mannerEstimationResultKey, new
                     {
                         q = _mannerEstimationProtector.Protect(
                           mannerEstimationApplicationResult.MannerEstimationID.ToString()),
@@ -3324,6 +3342,542 @@ namespace NMP.Portal.Areas.Manner.Controllers
             );
 
         }
+        [HttpGet]
+        public async Task<IActionResult> UpdateNitrogenPriceQuestion()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdateNitrogenPriceQuestion() action called");
+            MannerEstimationStep33ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep33();
+            int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
+            (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
+            if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
+            {
+                TempData[_nutrientProductErrorKey] = error.Message;
+                return RedirectToAction("NutrientProduct", new { q = model.EncryptedMannerEstimateId });
+            }
+            if (!model.UpdateNitrogenPriceQuestion.HasValue)
+            {
+                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsNitrogenPriceBasedOnNutrientPrice;
+            }
+            return View(model);
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateNitrogenPriceQuestion(MannerEstimationStep33ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdateNitrogenPriceQuestion() post action called");
+            AddErrorIfNull(model.UpdateNitrogenPriceQuestion, "UpdateNitrogenPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+
+            MannerEstimationStep33ViewModel mannerEstimationStep33ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep33();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep33ViewModelmodel.EncryptedMannerEstimateId));
+            _mannerEstimationLogic.SetMannerEstimationStep33(model);
+            return RedirectToAction("UpdateNitrogenPrice");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> NutrientProduct(string q, string r)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} NutrientProduct() action called");
+            MannerEstimationStep35ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep35();
+            int nutrientId = 1;
+            if (!string.IsNullOrWhiteSpace(r))
+            {
+                nutrientId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(r));
+            }
+            (List<NutrientProductResponse> nutrientProducts, Error? error) = await _mannerEstimationLogic.FetchNutrientProductByNutrientId(nutrientId);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData[_mannerEstimationResultErrorKey] = error.Message;
+                return RedirectToAction(_mannerEstimationResultKey, new { q = q });
+            }
+
+            var productList = nutrientProducts.Select(x => new
+            {
+                Value = x.id.ToString(),
+                Text = x.name,
+                Hint = string.Format("{0:0.##} {1}", x.nutrientPercentage, Resource.lblNitrogenLowercase)
+            }).ToList();
+
+            model.EncryptedMannerEstimateId = q;
+            model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
+            (MannerEstimation? mannerEstimation, error) = await _mannerEstimationLogic.FetchMannerEstimateById(model.MannerEstimateId ?? 0);
+            if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
+            {
+                TempData[_mannerEstimationResultErrorKey] = error.Message;
+                return RedirectToAction(_mannerEstimationResultKey, new { q = q });
+            }
+
+            int defaultNitrogenProductId = BindDefaultNutrientProductId(nutrientId, mannerEstimation);
+
+            if (!model.NutrientProductId.HasValue)
+            {
+                model.NutrientProductId = nutrientProducts
+                    .Where(x => x.id == defaultNitrogenProductId)
+                    .Select(x => (int?)x.id)
+                    .FirstOrDefault();
+            }
+
+            ViewBag.NutrientProductList = productList;
+
+
+            model.NutrientId = nutrientId;
+
+            _mannerEstimationLogic.SetMannerEstimationStep35(model);
+
+            if (productList.Count == 1)
+            {
+                if (model.NutrientId == (int)NMP.Commons.Enums.MannerNutrients.Phosphorus)
+                {
+                    return RedirectToAction("UpdatePhosphorusPriceQuestion");
+                }
+                else
+                {
+                    return RedirectToAction("UpdatePotashPriceQuestion");
+                }
+            }
+
+
+
+            return View(model);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NutrientProduct(MannerEstimationStep35ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  NutrientProduct() post action called");
+            AddErrorIfNull(model.NutrientProductId, "NutrientProductId", Resource.MsgSelectAnOptionBeforeContinuing);
+            MannerEstimationStep35ViewModel? mannerEstimationStep35ViewModel = _mannerEstimationLogic.GetMannerEstimationStep35();
+            if (!ModelState.IsValid)
+            {
+                (List<NutrientProductResponse> nutrientProducts, Error? error) = await _mannerEstimationLogic.FetchNutrientProductByNutrientId((int)NMP.Commons.Enums.MannerNutrients.Nitrogen);
+                if (!string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    TempData[_nutrientProductErrorKey] = error.Message;
+                    return View(model);
+                }
+
+                var productList = nutrientProducts.Select(x => new
+                {
+                    Value = x.id.ToString(),
+                    Text = x.name,
+                    Hint = string.Format("{0:0.##} {1}", x.nutrientPercentage, Resource.lblNitrogenLowercase)
+                }).ToList();
+
+                (MannerEstimation? mannerEstimation, error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationStep35ViewModel.MannerEstimateId ?? 0);
+                if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
+                {
+                    TempData[_nutrientProductErrorKey] = error.Message;
+                    return View(model);
+                }
+                if (!model.NutrientProductId.HasValue)
+                {
+                    model.NutrientProductId = nutrientProducts
+                        .Where(x => x.id == mannerEstimation.NitrogenProductId)
+                        .Select(x => (int?)x.id)
+                        .FirstOrDefault();
+                }
+                if (!model.NutrientProductId.HasValue)
+                {
+                    model.NutrientProductId = nutrientProducts
+                        .Where(x => x.isNutrientDefaultProduct)
+                        .Select(x => (int?)x.id)
+                        .FirstOrDefault();
+                }
+                ViewBag.NutrientProductList = productList;
+
+                model = _mannerEstimationLogic.GetMannerEstimationStep35();
+                return View(model);
+            }
+            model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep35ViewModel.EncryptedMannerEstimateId));
+
+            _mannerEstimationLogic.SetMannerEstimationStep35(model);
+            MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+
+            if (mannerEstimationViewModel != null)
+            {
+                await RecalculateNutrientPrices(mannerEstimationStep35ViewModel, mannerEstimationViewModel);
+            }
+            return RedirectToAction("UpdateNitrogenPriceQuestion");
+        }
+
+        private static int BindDefaultNutrientProductId(int nutrientId, MannerEstimation? mannerEstimation)
+        {
+            int defaultNitrogenProductId = 0;
+            if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Nitrogen)
+            {
+                defaultNitrogenProductId = mannerEstimation.NitrogenProductId;
+            }
+            else if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Phosphorus)
+            {
+                defaultNitrogenProductId = mannerEstimation.PhosphateProductId;
+            }
+            else if (nutrientId == (int)NMP.Commons.Enums.MannerNutrients.Potassium)
+            {
+                defaultNitrogenProductId = mannerEstimation.PotashProductId;
+            }
+
+            return defaultNitrogenProductId;
+        }
+
+
+        private async Task RecalculateNutrientPrices(MannerEstimationStep35ViewModel mannerEstimationStep35ViewModel, MannerEstimationViewModel mannerEstimationViewModel)
+        {
+            if (mannerEstimationStep35ViewModel.NutrientId == (int)NMP.Commons.Enums.MannerNutrients.Nitrogen && mannerEstimationViewModel.MannerEstimationStep34 != null && mannerEstimationViewModel.MannerEstimationStep34.NitrogenProductPrice != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep34.UpdateNitrogenPriceQuestion = (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice;
+                await _mannerEstimationLogic.SetMannerEstimationStep34(mannerEstimationViewModel.MannerEstimationStep34);
+            }
+            else if (mannerEstimationStep35ViewModel.NutrientId == (int)NMP.Commons.Enums.MannerNutrients.Phosphorus && mannerEstimationViewModel.MannerEstimationStep37 != null && mannerEstimationViewModel.MannerEstimationStep37.PhosphorusProductPrice != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep37.UpdatePhosphorusPriceQuestion = (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice;
+                await _mannerEstimationLogic.SetMannerEstimationStep37(mannerEstimationViewModel.MannerEstimationStep37);
+            }
+            else if (mannerEstimationStep35ViewModel.NutrientId == (int)NMP.Commons.Enums.MannerNutrients.Potassium && mannerEstimationViewModel.MannerEstimationStep39 != null && mannerEstimationViewModel.MannerEstimationStep39.PotashProductPrice != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep39.UpdatePotashPriceQuestion = (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice;
+                await _mannerEstimationLogic.SetMannerEstimationStep39(mannerEstimationViewModel.MannerEstimationStep39);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateNitrogenPrice()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdateNutrientPrice() action called");
+            MannerEstimationStep34ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep34();
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateNitrogenPrice(MannerEstimationStep34ViewModel model)
+        {
+            string nitrogenProductPriceKey = "NitrogenProductPrice";
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdateNutrientPrice() post action called");
+
+            MannerEstimationStep34ViewModel mannerEstimationStep34ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep34();
+            ValidateNitrogenPrice(model, nitrogenProductPriceKey, mannerEstimationStep34ViewModel);
+
+            if (!ModelState.IsValid)
+            {
+                if (mannerEstimationStep34ViewModel.UpdateNitrogenPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+                {
+                    mannerEstimationStep34ViewModel.NitrogenProductPrice = model.NitrogenProductPrice;
+                }
+                else
+                {
+                    mannerEstimationStep34ViewModel.NitrogenPrice = model.NitrogenPrice;
+                }
+                return View(mannerEstimationStep34ViewModel);
+            }
+
+            model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep34ViewModel.EncryptedMannerEstimateId));
+            await _mannerEstimationLogic.SetMannerEstimationStep34(model);
+            (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.UpdateMannerEstimation(model.MannerEstimateId);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData["NitrogenPriceError"] = error.Message;
+                return View(model);
+            }
+
+            return RedirectSucessFinacialValues(mannerEstimation.ID.Value);
+        }
+
+        private void ValidateNitrogenPrice(MannerEstimationStep34ViewModel model, string nitrogenProductPriceKey, MannerEstimationStep34ViewModel mannerEstimationStep34ViewModel)
+        {
+            if (mannerEstimationStep34ViewModel.UpdateNitrogenPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+            {
+                AddErrorIfNull(model.NitrogenProductPrice, nitrogenProductPriceKey, Resource.lblEnterAValidNumber);
+                if (model.NitrogenProductPrice.HasValue && (model.NitrogenProductPrice < 0 || model.NitrogenProductPrice > 99999999))
+                {
+                    ModelState.AddModelError(nitrogenProductPriceKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999));
+                }
+                ReplaceModelStateError(
+   ModelState,
+   nitrogenProductPriceKey,
+   string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999));
+            }
+            else
+            {
+                string nitrogenPriceKey = "NitrogenPrice";
+                AddErrorIfNull(model.NitrogenPrice, nitrogenPriceKey, Resource.lblEnterAValidNumber);
+                if (model.NitrogenPrice.HasValue && (model.NitrogenPrice < 0 || model.NitrogenPrice > 999999))
+                {
+                    ModelState.AddModelError(nitrogenPriceKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenPrice.ToLower(), 0, 999999));
+                }
+                ReplaceModelStateError(
+   ModelState,
+   nitrogenPriceKey,
+   string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenPrice.ToLower(), 0, 999999));
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdatePhosphorusPriceQuestion()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPriceQuestion() action called");
+            MannerEstimationStep36ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep36();
+            int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
+            (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
+            if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
+            {
+                TempData[_nutrientProductErrorKey] = error.Message;
+                return RedirectToAction("NutrientProduct", new { q = model.EncryptedMannerEstimateId });
+            }
+            if (!model.UpdatePhosphorusPriceQuestion.HasValue)
+            {
+                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsPhosphatePriceBasedOnNutrientPrice;
+            }
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePhosphorusPriceQuestion(MannerEstimationStep36ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePhosphorusPriceQuestion() post action called");
+            AddErrorIfNull(model.UpdatePhosphorusPriceQuestion, "UpdatePhosphorusPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+
+            MannerEstimationStep36ViewModel mannerEstimationStep36ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep36();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep36ViewModelmodel.EncryptedMannerEstimateId));
+            _mannerEstimationLogic.SetMannerEstimationStep36(model);
+            return RedirectToAction("UpdatePhosphorusPrice");
+        }
+        [HttpGet]
+        public async Task<IActionResult> UpdatePhosphorusPrice()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPrice() action called");
+            MannerEstimationStep37ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep37();
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePhosphorusPrice(MannerEstimationStep37ViewModel model)
+        {
+            string phosphorusProductPriceKey = "PhosphorusProductPrice";
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePhosphorusPrice() post action called");
+
+            MannerEstimationStep37ViewModel mannerEstimationStep37ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep37();
+            ValidatePhosphorusPrice(model, phosphorusProductPriceKey, mannerEstimationStep37ViewModel);
+
+            if (!ModelState.IsValid)
+            {
+                if (mannerEstimationStep37ViewModel.UpdatePhosphorusPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+                {
+                    mannerEstimationStep37ViewModel.PhosphorusProductPrice = model.PhosphorusProductPrice;
+                }
+                else
+                {
+                    mannerEstimationStep37ViewModel.PhosphorusPrice = model.PhosphorusPrice;
+                }
+                return View(mannerEstimationStep37ViewModel);
+            }
+
+            model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep37ViewModel.EncryptedMannerEstimateId));
+            await _mannerEstimationLogic.SetMannerEstimationStep37(model);
+            (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.UpdateMannerEstimation(model.MannerEstimateId);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData["PhosphorusPriceError"] = error.Message;
+                return View(model);
+            }
+
+            return RedirectSucessFinacialValues(mannerEstimation.ID.Value);
+        }
+
+        private void ValidatePhosphorusPrice(MannerEstimationStep37ViewModel model, string phosphorusProductPriceKey, MannerEstimationStep37ViewModel mannerEstimationStep37ViewModel)
+        {
+            if (mannerEstimationStep37ViewModel.UpdatePhosphorusPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+            {
+                AddErrorIfNull(model.PhosphorusProductPrice, "PhosphorusProductPrice", Resource.lblEnterAValidNumber);
+                if (model.PhosphorusProductPrice.HasValue && (model.PhosphorusProductPrice < 0 || model.PhosphorusProductPrice > 99999999))
+                {
+                    ModelState.AddModelError("NitrogenProductPrice", string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999));
+                }
+                ReplaceModelStateError(
+                ModelState,
+                phosphorusProductPriceKey,
+                string.Format(Resource.MsgEnterValueInBetween,
+                    Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999));
+
+            }
+            else
+            {
+                string phosphorusPriceKey = "PhosphorusPrice";
+                AddErrorIfNull(model.PhosphorusPrice, phosphorusPriceKey, Resource.lblEnterAValidNumber);
+                if (model.PhosphorusPrice.HasValue && (model.PhosphorusPrice < 0 || model.PhosphorusPrice > 999999))
+                {
+                    ModelState.AddModelError(phosphorusPriceKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenPrice.ToLower(), 0, 999999));
+                }
+                ReplaceModelStateError(
+    ModelState,
+    phosphorusPriceKey,
+    string.Format(Resource.MsgEnterValueInBetween, Resource.lblPhosphorusPrice.ToLower(), 0, 999999));
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdatePotashPriceQuestion()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPriceQuestion() action called");
+            MannerEstimationStep38ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep38();
+            int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
+            (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
+            if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
+            {
+                TempData[_nutrientProductErrorKey] = error.Message;
+                return RedirectToAction("NutrientProduct", new { q = model.EncryptedMannerEstimateId });
+            }
+            if (!model.UpdatePotashPriceQuestion.HasValue)
+            {
+                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsPotashPriceBasedOnNutrientPrice;
+            }
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePotashPriceQuestion(MannerEstimationStep38ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePotashPriceQuestion() post action called");
+            AddErrorIfNull(model.UpdatePotashPriceQuestion, "UpdatePotashPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+
+            MannerEstimationStep38ViewModel mannerEstimationStep38ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep38();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep38ViewModelmodel.EncryptedMannerEstimateId));
+            _mannerEstimationLogic.SetMannerEstimationStep38(model);
+            return RedirectToAction("UpdatePotashPrice");
+        }
+        [HttpGet]
+        public async Task<IActionResult> UpdatePotashPrice()
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPrice() action called");
+            MannerEstimationStep39ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep39();
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePotashPrice(MannerEstimationStep39ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePotashPrice() post action called");
+
+            MannerEstimationStep39ViewModel mannerEstimationStep39ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep39();
+            ValidatePotashPrice(model, mannerEstimationStep39ViewModel);
+
+            if (!ModelState.IsValid)
+            {
+                if (mannerEstimationStep39ViewModel.UpdatePotashPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+                {
+                    mannerEstimationStep39ViewModel.PotashProductPrice = model.PotashProductPrice;
+                }
+                else
+                {
+                    mannerEstimationStep39ViewModel.PotashPrice = model.PotashPrice;
+                }
+                return View(mannerEstimationStep39ViewModel);
+            }
+
+            model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep39ViewModel.EncryptedMannerEstimateId));
+            await _mannerEstimationLogic.SetMannerEstimationStep39(model);
+            (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.UpdateMannerEstimation(model.MannerEstimateId);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData["PotashPriceError"] = error.Message;
+                return View(model);
+            }
+
+            return RedirectSucessFinacialValues(mannerEstimation.ID.Value);
+
+        }
+
+        private IActionResult RedirectSucessFinacialValues(int mannerEstimateId)
+        {
+            return RedirectToAction(_mannerEstimationResultKey, new
+            {
+                q = _mannerEstimationProtector.Protect(mannerEstimateId.ToString()),
+                r = _mannerEstimationProtector.Protect(Resource.lblTrue),
+                s = _mannerEstimationProtector.Protect(Resource.lblNutrientPricesAndFinancialValueUpdated)
+            });
+        }
+
+        private void ValidatePotashPrice(MannerEstimationStep39ViewModel model, MannerEstimationStep39ViewModel mannerEstimationStep39ViewModel)
+        {
+            string potashProductPriceKey = "PotashProductPrice";
+            if (mannerEstimationStep39ViewModel.UpdatePotashPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+            {
+                AddErrorIfNull(model.PotashProductPrice, potashProductPriceKey, Resource.lblEnterAValidNumber);
+                if (model.PotashProductPrice.HasValue && (model.PotashProductPrice < 0 || model.PotashProductPrice > 99999999))
+                {
+                    ModelState.AddModelError(potashProductPriceKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenProductPrice.ToLower(), 0, 99999999));
+                }
+                ReplaceModelStateError(
+                ModelState,
+                potashProductPriceKey,
+                string.Format(Resource.MsgEnterValueInBetween,
+                Resource.lblPotashProductPrice.ToLower(), 0, 99999999));
+
+            }
+            else
+            {
+                string potashPriceKey = "PotashPrice";
+                AddErrorIfNull(model.PotashPrice, potashPriceKey, Resource.lblEnterAValidNumber);
+                if (model.PotashPrice.HasValue && (model.PotashPrice < 0 || model.PotashPrice > 999999))
+                {
+                    ModelState.AddModelError(potashPriceKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblNitrogenPrice.ToLower(), 0, 999999));
+                }
+
+                ReplaceModelStateError(
+                ModelState,
+                potashPriceKey,
+                string.Format(Resource.MsgEnterValueInBetween, Resource.lblPotashPrice.ToLower(), 0, 999999));
+                
+            }
+        }
+        private void ReplaceModelStateError(
+    ModelStateDictionary modelState,
+    string key,
+    string numericErrorMessage)
+        {
+            if (!modelState.IsValid && modelState.ContainsKey(key))
+            {
+                var error = modelState[key]?.Errors.FirstOrDefault()?.ErrorMessage;
+
+                if (string.IsNullOrEmpty(error))
+                    return;
+
+
+                if (error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, key)))
+                {
+                    modelState[key].Errors.Clear();
+                    modelState.AddModelError(key, numericErrorMessage);
+                }
+                
+            }
+        }
     }
 }

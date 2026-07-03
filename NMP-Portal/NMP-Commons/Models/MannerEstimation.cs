@@ -45,6 +45,10 @@ namespace NMP.Commons.Models
         public decimal PhosphatePrice { get; set; } = 0;
         public decimal PotashPrice { get; set; } = 0;
 
+        public bool IsNitrogenPriceBasedOnNutrientPrice { get; set; } = true;
+        public bool IsPotashPriceBasedOnNutrientPrice { get; set; } = true;
+        public bool IsPhosphatePriceBasedOnNutrientPrice { get; set; } = true;
+
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }

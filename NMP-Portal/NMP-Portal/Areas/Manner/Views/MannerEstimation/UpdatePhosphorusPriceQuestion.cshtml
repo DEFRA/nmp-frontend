@@ -1,0 +1,37 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep36ViewModel
+
+@{
+    ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPhosphateP2O5Lowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="UpdatePhosphorusPriceQuestion" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            @{
+                var vd = new ViewDataDictionary(ViewData);
+                vd["PropertyName"] = nameof(Model.UpdatePhosphorusPriceQuestion);
+                vd["PropertyValue"] = Model.UpdatePhosphorusPriceQuestion;
+                vd["Legend"] = string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPhosphateP2O5Lowercase);
+                vd["IsNutrientDefaultProduct"] = ViewBag.isNutrientDefaultProduct;
+            }
+
+            @await Html.PartialAsync("_UpdateNutrientPriceQuestion", vd)
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblCancel</a>
+
+        </p>
+    </div>
+</div>
