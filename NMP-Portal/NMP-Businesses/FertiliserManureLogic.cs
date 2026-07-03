@@ -115,7 +115,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
 
         if (periods.Length == 2)
         {
-            startPeriod = periods[0];
+            startPeriod = Convert.ToDateTime(periods[0]).ToString("dd MMMM");
             endPeriod = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland) ? endDate.ToString("dd MMMM") : Resource.lbl31October;
             warningPeriod = $"{startPeriod} to {endPeriod}";
         }
