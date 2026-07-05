@@ -43,6 +43,13 @@ namespace NMP.Commons.ViewModels
             MannerEstimationStep30 = new MannerEstimationStep30ViewModel();
             MannerEstimationStep31 = new MannerEstimationStep31ViewModel();
             MannerEstimationStep32 = new MannerEstimationStep32ViewModel();
+            MannerEstimationStep33 = new MannerEstimationStep33ViewModel();
+            MannerEstimationStep34 = new MannerEstimationStep34ViewModel();
+            MannerEstimationStep35 = new MannerEstimationStep35ViewModel();
+            MannerEstimationStep36 = new MannerEstimationStep36ViewModel();
+            MannerEstimationStep37 = new MannerEstimationStep37ViewModel();
+            MannerEstimationStep38 = new MannerEstimationStep38ViewModel();
+            MannerEstimationStep39 = new MannerEstimationStep39ViewModel();
         }
         public bool IsCheckAnswer { get; set; } = false;
         public bool? IsCopyEstimate { get; set; }
@@ -88,6 +95,15 @@ namespace NMP.Commons.ViewModels
         public MannerEstimationStep30ViewModel MannerEstimationStep30 { get; set; }
         public MannerEstimationStep31ViewModel MannerEstimationStep31 { get; set; }
         public MannerEstimationStep32ViewModel MannerEstimationStep32 { get; set; }
+
+        public MannerEstimationStep33ViewModel MannerEstimationStep33 { get; set; }
+        public MannerEstimationStep34ViewModel MannerEstimationStep34 { get; set; }
+        public MannerEstimationStep35ViewModel MannerEstimationStep35 { get; set; }
+        public MannerEstimationStep36ViewModel MannerEstimationStep36 { get; set; }
+
+        public MannerEstimationStep37ViewModel MannerEstimationStep37 { get; set; }
+        public MannerEstimationStep38ViewModel MannerEstimationStep38 { get; set; }
+        public MannerEstimationStep39ViewModel MannerEstimationStep39 { get; set; }
     }
 }
 

@@ -2262,7 +2262,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         bool isScotland = model.FarmCountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
 
-        bool isCropAllowed = isScotland ? WarningWithinPeriod.BrassicaCrops().Contains(cropTypeId) : filterCrops.Contains(cropTypeId);
+        bool isCropAllowed = isScotland ? (WarningWithinPeriod.BrassicaCrops().Contains(cropTypeId) || cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape) : filterCrops.Contains(cropTypeId);
 
         if (!isCropAllowed && isWithinClosedPeriod)
         {

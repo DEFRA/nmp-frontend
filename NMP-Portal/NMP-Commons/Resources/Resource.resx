@@ -8176,4 +8176,58 @@ following crop year 2</value>
   <data name="lblThisIsBasedOnFertiliserNutrientPricesBelow" xml:space="preserve">
     <value>This is based on fertiliser nutrient prices below which can be updated.</value>
   </data>
+  <data name="lblUpdateByProductPrice" xml:space="preserve">
+    <value>Update by product price</value>
+  </data>
+  <data name="lblUpdateByNutrientPrice" xml:space="preserve">
+    <value>Update by nutrient price</value>
+  </data>
+  <data name="lblUpdateNutrientPrices" xml:space="preserve">
+    <value>Update {0} prices</value>
+  </data>
+  <data name="lblWhatIstheNutrientPrice" xml:space="preserve">
+    <value>What is the {0} price?</value>
+  </data>
+  <data name="lblPoundSign" xml:space="preserve">
+    <value>£</value>
+  </data>
+  <data name="lblPerTonnes" xml:space="preserve">
+    <value>per tonne</value>
+  </data>
+  <data name="lblWhichNutrientProductWouldYouLikeToUse" xml:space="preserve">
+    <value>Which nutrient (N) product are you using?</value>
+  </data>
+  <data name="lblNitrogenPrice" xml:space="preserve">
+    <value>Nitrogen price</value>
+  </data>
+  <data name="lblNitrogenmustNotExceedTwoDecimalplaces" xml:space="preserve">
+    <value>Nitrogen price must not exceed two decimal places.</value>
+  </data>
+  <data name="lblNitrogenProductPrice" xml:space="preserve">
+    <value>Nitrogen product price</value>
+  </data>
+  <data name="lblPerKg" xml:space="preserve">
+    <value>per kg</value>
+  </data>
+  <data name="lblHowWouldYouLikeToUpdateYourNutrientPrice" xml:space="preserve">
+    <value>How would you like to update your {0} prices?</value>
+  </data>
+  <data name="lblNutrientPricesAndFinancialValueUpdated" xml:space="preserve">
+    <value>Nutrient prices and financial value updated.</value>
+  </data>
+  <data name="lblPhosphorusPrice" xml:space="preserve">
+    <value>Phosphorus Price</value>
+  </data>
+  <data name="lblPotashPrice" xml:space="preserve">
+    <value>Potash Price</value>
+  </data>
+  <data name="lblPotashProductPrice" xml:space="preserve">
+    <value>Potash product price</value>
+  </data>
+  <data name="MsgPotashPrceMustNotExceedTwoDecimal" xml:space="preserve">
+    <value>Potash price must not exceed two decimal places.</value>
+  </data>
+  <data name="MsgPhosphoruPriceMustNotExceedtwoDecimal" xml:space="preserve">
+    <value>Phosphorus price must not exceed two decimal places.</value>
+  </data>
 </root>

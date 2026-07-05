@@ -270,8 +270,11 @@ internal static class ApiurlHelper
     public const string FetchMannerApplicationsByEstimationIdAsyncAPI = "/manner-estimation-applications/{0}";
     public const string FetchMannerManureTypeByIdAsyncAPI = "/vendors/manner/manure-types/{0}";
     public const string CopyMannerEstimationAsyncAPI = "/manner-estimations/copyestimates";
+    public const string FetchNutrientProductByNutrientIdAsyncAPI = "/vendors/manner/nutrient-products/by-nutrient-id/{0}";
+    public const string FetchMannerEstimateByIdAsyncAPI = "/manner-estimations/manner-estimations-by-id/{0}";
+    public const string UpdateMannerEstimateAsyncAPI = "manner-estimations";
 
-    public const string FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompostAsyncAPI = "organic-manures/total-nitrogen-if-green-food-compost/{0}?fromDate={1}&toDate={2}&isGreenFoodCompost={3}";
-    public const string FetchTotalNByMannerEstimationIdAppDateAsyncAPI = "organic-manures/total-nitrogen/{0}?fromDate={1}&toDate={2}";
-    public const string CheckMannerGreenCompostExistanceByDateRangeAsyncAPI = "organic-manure/check-green-compost/{0}?startDate={1}&endDate={2}";
+    public const string FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompostAsyncAPI = "/manner-estimation-applications/total-n-if-green-food-compost/{0}?startDate={1}&endDate={2}&isGreenFoodCompost={3}";
+    public const string FetchTotalNByMannerEstimationIdAppDateAsyncAPI = "/manner-estimation-applications/total-n/{0}?startDate={1}&endDate={2}";
+    public const string CheckMannerGreenCompostExistanceByDateRangeAsyncAPI = "/manner-estimation-applications/check-green-compost/{0}?dateFrom={1}&dateTo={2}";
 }

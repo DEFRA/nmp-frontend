@@ -236,6 +236,94 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         
     }
+    public async Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId)
+    {
+        List<NutrientProductResponse> nutrientProducts = new List<NutrientProductResponse>();
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientProductByNutrientIdAsyncAPI, nurteintId));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                var nutrientProductList = responseWrapper?.Data?.ToObject<List<NutrientProductResponse>>();
+                nutrientProducts.AddRange(nutrientProductList);
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (nutrientProducts, error);
+    }
+    public async Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId)
+    {
+        MannerEstimation? mannerEstimation = null;
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateByIdAsyncAPI, mannerEstimateId));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                 mannerEstimation = responseWrapper?.Data?.records.ToObject<MannerEstimation>();
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerEstimation, error);
+    }
+    public async Task<(MannerEstimation?, Error?)> UpdateMannerEstimationServiceAsync(string MannerData)
+    {
+        MannerEstimation? mannerEstimation = null;
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            var response = await httpClient.PutAsync(
+                ApiurlHelper.UpdateMannerEstimateAsyncAPI,
+                new StringContent(MannerData, Encoding.UTF8, "application/json"));
+
+            string result = await response.Content.ReadAsStringAsync();
+
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper?.Data is not null)
+                {
+                    mannerEstimation = responseWrapper.Data?.MannerEstimation.ToObject<MannerEstimation>();
+                }
+            }
+            else
+            {
+                error = new Error();
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, error);
+        }
+
+        return (mannerEstimation, error);
+
+    }
     public async Task<(decimal, Error)> FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(int mannerEstimationId, DateTime startDate, DateTime endDate, bool isGreenFoodCompost, int? mannerApplicationId)
     {
         decimal totalN = 0;
