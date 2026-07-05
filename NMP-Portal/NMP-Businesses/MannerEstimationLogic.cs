@@ -211,6 +211,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep8ViewModel SetMannerEstimationStep8(MannerEstimationStep8ViewModel mannerEstimationStep8)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationStep8.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
         mannerEstimationViewModel.MannerEstimationStep8 = mannerEstimationStep8;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep8();

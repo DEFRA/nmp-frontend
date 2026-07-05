@@ -17,16 +17,24 @@
         <form asp-action="UpdatePotashPriceQuestion" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
 
+            <govuk-radios for="@Model.UpdatePotashPriceQuestion">
+                <govuk-radios-fieldset>
 
-            @{
-                var viewDataDictionary = new ViewDataDictionary(ViewData);
-                viewDataDictionary["PropertyName"] = nameof(Model.UpdatePotashPriceQuestion);
-                viewDataDictionary["PropertyValue"] = Model.UpdatePotashPriceQuestion;
-                viewDataDictionary["Legend"] = string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPotashK2OLowecase);
-                viewDataDictionary["IsNutrientDefaultProduct"] = ViewBag.isNutrientDefaultProduct;
-            }
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblPotashK2OLowecase)
+                    </govuk-radios-fieldset-legend>
 
-            @await Html.PartialAsync("_UpdateNutrientPriceQuestion", viewDataDictionary)
+                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)">
+                        @Resource.lblUpdateByProductPrice
+                    </govuk-radios-item>
+
+                    <govuk-radios-item value="@((int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice)">
+                        @Resource.lblUpdateByNutrientPrice
+                    </govuk-radios-item>
+
+                </govuk-radios-fieldset>
+
+            </govuk-radios>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>

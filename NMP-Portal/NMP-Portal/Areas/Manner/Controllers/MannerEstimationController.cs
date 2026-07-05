@@ -3616,7 +3616,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (!model.UpdateNitrogenPriceQuestion.HasValue)
             {
-                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsNitrogenPriceBasedOnNutrientPrice;
+                model.UpdateNitrogenPriceQuestion = mannerEstimation.IsNitrogenPriceBasedOnNutrientPrice ? (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice : (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice;
+                _mannerEstimationLogic.SetMannerEstimationStep33(model);
             }
             return View(model);
 
@@ -3894,7 +3895,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (!model.UpdatePhosphorusPriceQuestion.HasValue)
             {
-                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsPhosphatePriceBasedOnNutrientPrice;
+                model.UpdatePhosphorusPriceQuestion = mannerEstimation.IsPhosphatePriceBasedOnNutrientPrice ? (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice : (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice;
+
+                _mannerEstimationLogic.SetMannerEstimationStep36(model);
             }
             return View(model);
 
@@ -4007,7 +4010,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (!model.UpdatePotashPriceQuestion.HasValue)
             {
-                ViewBag.isNutrientDefaultProduct = mannerEstimation.IsPotashPriceBasedOnNutrientPrice;
+                model.UpdatePotashPriceQuestion = mannerEstimation.IsPotashPriceBasedOnNutrientPrice ? (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice : (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice;
+                _mannerEstimationLogic.SetMannerEstimationStep38(model);
             }
             return View(model);
 
@@ -4115,7 +4119,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState,
                 potashPriceKey,
                 string.Format(Resource.MsgEnterValueInBetween, Resource.lblPotashPrice.ToLower(), 0, 999999));
-                
+
             }
         }
         private void ReplaceModelStateError(
@@ -4136,7 +4140,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     modelState[key].Errors.Clear();
                     modelState.AddModelError(key, numericErrorMessage);
                 }
-                
+
             }
         }
     }
