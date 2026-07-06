@@ -21,6 +21,7 @@ using NMP.Portal.Controllers;
 using NMP.Portal.Helpers;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -827,6 +828,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(formData);
                 }
                 model = _mannerEstimationLogic.GetMannerEstimationStep13();
+                if (model.ApplicationDate != formData.ApplicationDate)
+                {
+                    model.IsWarningMsgNeedToShow = false;
+                }
                 model.ApplicationDate = formData.ApplicationDate;
                 var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
                 _mannerEstimationLogic.SetMannerEstimationStep13(model);
@@ -2019,7 +2024,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ApplicationRateMethod() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-
+            ResetWarnings(model, true);
             return View(model);
         }
 
@@ -2047,11 +2052,48 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction("AreaQuantity");
                 }
+                Error? error = null;
+
                 if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
                 {
+                    model = await _mannerEstimationLogic.GetMannerEstimationStep26();
+                    if (!IsOtherManureType(model.ManureTypeId))
+                    {
+                        (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+
+                        if (error == null)
+                        {
+                            model.ApplicationRate = manureType?.ApplicationRateArable;
+                        }
+                        else
+                        {
+                            ViewBag.Error = error?.Message;
+                        }
+                    }
+
+                    ResetWarnings(model, false);
+
+                    (model, error) = await NFieldLimitWarningMessage(model);
+
+                    bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
+                    if (hasAnyWarning)
+                    {
+                        if (!model.IsWarningMsgNeedToShow)
+                        {
+                            model.IsWarningMsgNeedToShow = true;
+                            await _mannerEstimationLogic.SetMannerEstimationStep26(model);
+                            return View(model);
+                        }
+                    }
+                    else
+                    {
+                        ResetWarnings(model, true);
+                    }
+                    model.IsWarningMsgNeedToShow = false;
                     return RedirectToAction(_incorporationMethodAction);
 
                 }
+                await _mannerEstimationLogic.SetMannerEstimationStep26(model);
 
                 return RedirectToAction(_incorporationMethodAction);
             }
@@ -2061,6 +2103,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
+        }
+        private static bool IsOtherManureType(int? manureId)
+        {
+            return manureId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
+                || manureId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
         }
         [HttpGet]
         public async Task<IActionResult> ManualApplicationRate()
@@ -2104,8 +2151,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(formData);
                 }
                 model = await _mannerEstimationLogic.GetMannerEstimationStep27();
+                if (model.ApplicationRate != formData.ApplicationRate)
+                {
+                    model.IsWarningMsgNeedToShow = false;
+                }
+
                 model.ApplicationRate = formData.ApplicationRate;
                 ResetWarnings(model, false);
+
+                (model, Error? error) = await NFieldLimitWarningMessage(model);
+
                 bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                 if (hasAnyWarning)
                 {
@@ -2121,7 +2176,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ResetWarnings(model, true);
                 }
                 model.IsWarningMsgNeedToShow = false;
-                await IsNFieldLimitWarningMessage(model);
                 return RedirectToAction(_incorporationMethodAction);
             }
             catch (Exception ex)
@@ -2132,244 +2186,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        private async Task<(MannerEstimationStep27ViewModel, Error?)> IsNFieldLimitWarningMessage(MannerEstimationStep27ViewModel model)
-        {
 
-            Error? error = null;
-            decimal defaultNitrogen = 0;
-            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-            if(string.IsNullOrWhiteSpace(error?.Message))
-            {
-                defaultNitrogen= manureType?.TotalN ?? 0;
-            }
-
-            List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
-
-            if (model.ApplicationRate.HasValue && model.ApplicationDate.HasValue)
-            {
-                decimal previousAppliedTotalN = 0;
-                decimal totalN = 0;
-
-                //The planned application would result in more than 250 kg/ha of total N from all applications of any Manure type apart from ‘Green compost’ or ‘Green/food compost’, applied or planned to the field in the last 365 days up to and including the application date of the manure
-                //warning excel sheet row 2
-                if (model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.GreenCompost && model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.GreenFoodCompost)
-                {
-                    //passing orgId
-                    if (model.UpdatedMannerAppId != null)
-                    {
-                        (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId??0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, model.UpdatedMannerAppId);
-                    }
-                    else
-                    {
-                        (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId??0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, null);
-                    }
-                    if (error == null)
-                    {
-                        decimal currentApplicationNitrogen = 0;
-                        currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
-                        totalN = previousAppliedTotalN + currentApplicationNitrogen;
-                        if (totalN > 250)
-                        {
-                            model.IsOrgManureNfieldLimitWarning = true;
-                            var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimit.ToString();
-
-                            WarningResponse? warning = warningList
-                                .FirstOrDefault(x => x.CountryID == model.CountryId &&
-                                                     string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-
-                            if (warning != null)
-                            {
-                                model.NFieldLimitWarningHeader = warning.Header;
-                                model.NFieldLimitWarningCodeID = warning.WarningCodeID;
-                                model.NFieldLimitWarningLevelID = warning.WarningLevelID;
-
-                                model.NFieldLimitWarningPara1 = warning.Para1;
-                                model.NFieldLimitWarningPara2 = warning.Para2;
-                                model.NFieldLimitWarningPara3 = warning.Para3;
-                            }
-                        }
-                    }
-                }
-
-                //warning excel sheet row no. 4
-                bool isScotland = model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
-
-                bool isCompost = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.GreenCompost || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.GreenFoodCompost;
-
-                if (isScotland || isCompost)
-                {
-                    var cropTypeIdsForTrigger = new HashSet<int> {
-                        (int)NMP.Commons.Enums.CropTypes.CiderApples,
-                        (int)NMP.Commons.Enums.CropTypes.CulinaryApples,
-                        (int)NMP.Commons.Enums.CropTypes.DessertApples,
-                        (int)NMP.Commons.Enums.CropTypes.Cherries,
-                        (int)NMP.Commons.Enums.CropTypes.Pears,
-                        (int)NMP.Commons.Enums.CropTypes.Plums
-                    };
-                    bool showPAS100Warning = true;
-                   
-
-                    //The planned application would result in more than 500 of total N from all applications of Green compost & Green/food compost applied or planned to the field in the last 730 days up to and including the application date of the manure.
-
-                    
-                    (MannerEstimationResultResponse? mannerEstimationResultResponse, error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(model.MannerEstimationId ?? 0);
-
-                    if (!cropTypeIdsForTrigger.Contains(mannerEstimationResultResponse.MannerEstimation.CropTypeID??0) || isScotland)
-                    {
-                        //passing orgId
-                        if (model.UpdatedMannerAppId != null)
-                        {
-                            if (!isScotland)
-                            {
-                                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId??0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
-                            }
-                            else
-                            {
-                                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, model.UpdatedMannerAppId);
-                            }
-
-                        }
-                        else
-                        {
-                            if (!isScotland)
-                            {
-                                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, true, null);
-                            }
-                            else
-                            {
-                                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, null);
-                            }
-
-                        }
-
-                        if (error == null)
-                        {
-
-                            decimal currentApplicationNitrogen = 0;
-                            currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
-                            totalN = previousAppliedTotalN + currentApplicationNitrogen;
-
-                            (bool isGreenCompostExistIn2Year, error) = await _mannerEstimationLogic.CheckMannerGreenCompostExistanceByDateRange(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729).ToString(_dateStringLiteral), model.ApplicationDate.Value.ToString(_dateStringLiteral), model.UpdatedMannerAppId);
-
-                            if ((!isScotland || isGreenCompostExistIn2Year || isCompost) && totalN > 500)
-                            {
-                                model.IsOrgManureNfieldLimitWarning = true;
-                                showPAS100Warning = false;
-                                var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString();
-
-                                WarningResponse? warning = warningList
-                                    .FirstOrDefault(x => x.CountryID == model.CountryId &&
-                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-                                if (warning != null)
-                                {
-                                    model.NFieldLimitWarningHeader = warning.Header;
-                                    model.NFieldLimitWarningCodeID = warning.WarningCodeID;
-                                    model.NFieldLimitWarningLevelID = warning.WarningLevelID;
-
-                                    model.NFieldLimitWarningPara1 = warning.Para1;
-                                    model.NFieldLimitWarningPara2 = warning.Para2;
-                                    model.NFieldLimitWarningPara3 = warning.Para3;
-                                }
-                            }
-
-                        }
-                    }
-                    //warning excel sheet row no. 6
-                    if (cropTypeIdsForTrigger.Contains(mannerEstimationResultResponse.MannerEstimation.CropTypeID ?? 0))
-                    {
-                        //passing orgId
-                        if (model.UpdatedMannerAppId != null)
-                        {
-                            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-1459), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
-                        }
-                        else
-                        {
-                            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-1459), model.ApplicationDate.Value, true, null);
-                        }
-
-                        if (error == null)
-                        {
-                            decimal currentApplicationNitrogen = 0;
-                            currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
-                            totalN = previousAppliedTotalN + currentApplicationNitrogen;
-                            if (totalN > 1000)
-                            {
-                                model.IsOrgManureNfieldLimitWarning = true;
-
-                                var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostMulch.ToString();
-
-                                WarningResponse? warning = warningList
-                                    .FirstOrDefault(x => x.CountryID == model.CountryId &&
-                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-                                if (warning != null)
-                                {
-                                    model.NFieldLimitWarningHeader = warning.Header;
-                                    model.NFieldLimitWarningCodeID = warning.WarningCodeID;
-                                    model.NFieldLimitWarningLevelID = warning.WarningLevelID;
-
-                                    model.NFieldLimitWarningPara1 = warning.Para1;
-                                    model.NFieldLimitWarningPara2 = warning.Para2;
-                                    model.NFieldLimitWarningPara3 = warning.Para3;
-                                }
-                            }
-
-                        }
-                    }
-                    if (model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland && isCompost)
-                    {
-                        if (model.UpdatedMannerAppId != null)
-                        {
-                            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
-                        }
-                        else
-                        {
-                            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, true, null);
-                        }
-
-                        if (error == null)
-                        {
-
-                            decimal currentApplicationNitrogen = 0;
-                            currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
-                            totalN = previousAppliedTotalN + currentApplicationNitrogen;
-                            if (totalN > 250 && showPAS100Warning)
-                            {
-                                model.IsOrgManureNfieldLimitWarning = true;
-
-                                var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostPAS.ToString();
-
-                                WarningResponse? warning = warningList
-                                    .FirstOrDefault(x => x.CountryID == model.CountryId &&
-                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
-                                if (warning != null)
-                                {
-                                    model.NFieldLimitWarningHeader = warning.Header;
-                                    model.NFieldLimitWarningCodeID = warning.WarningCodeID;
-                                    model.NFieldLimitWarningLevelID = warning.WarningLevelID;
-
-                                    model.NFieldLimitWarningPara1 = warning.Para1;
-                                    model.NFieldLimitWarningPara2 = warning.Para2;
-                                    model.NFieldLimitWarningPara3 = warning.Para3;
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-            }
-            return (model, error);
-
-        }
-
-        private static void ResetWarnings(MannerEstimationStep27ViewModel model, bool isWarningMsgNeedToShowReset)
+        private static void ResetWarnings(MannerEstimationNWarningViewModel model, bool isWarningMsgNeedToShowReset)
         {
             if (isWarningMsgNeedToShowReset)
             {
                 model.IsWarningMsgNeedToShow = false;
             }
+
             model.IsOrgManureNfieldLimitWarning = false;
-            
         }
         [HttpGet]
         public async Task<IActionResult> AreaQuantity()
@@ -2382,27 +2207,59 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AreaQuantity() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-
+            ResetWarnings(model, true);
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AreaQuantity(MannerEstimationStep28ViewModel model)
+        public async Task<IActionResult> AreaQuantity(MannerEstimationStep28ViewModel formData)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} : AreaQuantity() post action called");
+            MannerEstimationStep28ViewModel model= new MannerEstimationStep28ViewModel();
             try
             {
-                AddErrorIfNull(model.AreaSpread, "AreaSpread", string.Format(Resource.MsgEnterAValidArea, Resource.lblArea));
-                AddErrorIfNull(model.ManureQuantity, "ManureQuantity", string.Format(Resource.MsgEnterAValidQuantity, Resource.lblQuantity));
-                ValidateAreaQuantity(model);
+                AddErrorIfNull(formData.AreaSpread, "AreaSpread", string.Format(Resource.MsgEnterAValidArea, Resource.lblArea));
+                AddErrorIfNull(formData.ManureQuantity, "ManureQuantity", string.Format(Resource.MsgEnterAValidQuantity, Resource.lblQuantity));
+                ValidateAreaQuantity(formData);
 
-                await _mannerEstimationLogic.SetMannerEstimationStep28(model);
                 if (!ModelState.IsValid)
                 {
-                    model = await _mannerEstimationLogic.GetMannerEstimationStep28();
-                    return View("AreaQuantity", model);
+                    formData = await _mannerEstimationLogic.GetMannerEstimationStep28();
+                    return View("AreaQuantity", formData);
                 }
-                model.ApplicationRate = Math.Round((model.ManureQuantity.Value / model.AreaSpread.Value), 2);
+                formData.ApplicationRate = Math.Round((formData.ManureQuantity.Value / formData.AreaSpread.Value), 2);
+                
+
+                model = await _mannerEstimationLogic.GetMannerEstimationStep28();
+                model.AreaSpread = formData.AreaSpread;
+                model.ManureQuantity = formData.ManureQuantity;
+                if (model.ManureQuantity != formData.ManureQuantity || model.AreaSpread != formData.AreaSpread)
+                {
+                    model.IsWarningMsgNeedToShow = false;
+                }
+
+                model.ApplicationRate = formData.ApplicationRate;
+                ResetWarnings(model, false);
+
+                (model, Error? error) = await NFieldLimitWarningMessage(model);
+
+                bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
+                if (hasAnyWarning)
+                {
+                    if (!model.IsWarningMsgNeedToShow)
+                    {
+                        model.IsWarningMsgNeedToShow = true;
+                        await _mannerEstimationLogic.SetMannerEstimationStep28(model);
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    ResetWarnings(model, true);
+                }
+                model.IsWarningMsgNeedToShow = false;
+                await _mannerEstimationLogic.SetMannerEstimationStep28(model);
+
                 return RedirectToAction(_incorporationMethodAction);
 
             }
@@ -4142,6 +3999,241 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
             }
+        }
+
+        private async Task<(TModel, Error?)> NFieldLimitWarningMessage<TModel>(TModel model)
+    where TModel : MannerEstimationNWarningViewModel
+        {
+            Error? error = null;
+            decimal defaultNitrogen = 0;
+            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+            if (string.IsNullOrWhiteSpace(error?.Message))
+            {
+                defaultNitrogen = manureType?.TotalN ?? 0;
+            }
+
+            List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
+
+            if (model.ApplicationRate.HasValue && model.ApplicationDate.HasValue)
+            {
+                decimal previousAppliedTotalN = 0;
+                decimal totalN = 0;
+
+                //The planned application would result in more than 250 kg/ha of total N from all applications of any Manure type apart from ‘Green compost’ or ‘Green/food compost’, applied or planned to the field in the last 365 days up to and including the application date of the manure
+                //warning excel sheet row 2
+                if (model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.GreenCompost && model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.GreenFoodCompost)
+                {
+                    //passing orgId
+                    if (model.UpdatedMannerAppId != null)
+                    {
+                        (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, model.UpdatedMannerAppId);
+                    }
+                    else
+                    {
+                        (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, null);
+                    }
+                    if (error == null)
+                    {
+                        decimal currentApplicationNitrogen = 0;
+                        currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
+                        totalN = previousAppliedTotalN + currentApplicationNitrogen;
+                        if (totalN > 250)
+                        {
+                            model.IsOrgManureNfieldLimitWarning = true;
+                            var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimit.ToString();
+
+                            WarningResponse? warning = warningList
+                                .FirstOrDefault(x => x.CountryID == model.CountryId &&
+                                                     string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+
+                            if (warning != null)
+                            {
+                                model.NFieldLimitWarningHeader = warning.Header;
+                                model.NFieldLimitWarningCodeID = warning.WarningCodeID;
+                                model.NFieldLimitWarningLevelID = warning.WarningLevelID;
+
+                                model.NFieldLimitWarningPara1 = warning.Para1;
+                                model.NFieldLimitWarningPara2 = warning.Para2;
+                                model.NFieldLimitWarningPara3 = warning.Para3;
+                            }
+                        }
+                    }
+                }
+
+                //warning excel sheet row no. 4
+                bool isScotland = model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
+
+                bool isCompost = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.GreenCompost || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.GreenFoodCompost;
+
+                if (isScotland || isCompost)
+                {
+                    var cropTypeIdsForTrigger = new HashSet<int> {
+                        (int)NMP.Commons.Enums.CropTypes.CiderApples,
+                        (int)NMP.Commons.Enums.CropTypes.CulinaryApples,
+                        (int)NMP.Commons.Enums.CropTypes.DessertApples,
+                        (int)NMP.Commons.Enums.CropTypes.Cherries,
+                        (int)NMP.Commons.Enums.CropTypes.Pears,
+                        (int)NMP.Commons.Enums.CropTypes.Plums
+                    };
+
+                    //The planned application would result in more than 500 of total N from all applications of Green compost & Green/food compost applied or planned to the field in the last 730 days up to and including the application date of the manure.
+
+                    int? cropTypeId = null;
+                    if (model.UpdatedMannerAppId != null)
+                    {
+                        (MannerEstimationResultResponse? mannerEstimationResultResponse, error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(model.MannerEstimationId ?? 0);
+                        cropTypeId = mannerEstimationResultResponse?.MannerEstimation?.CropTypeID;
+                    }
+                    else
+                    {
+                        cropTypeId = model.CropTypeId;
+                    }
+
+
+                    if (!cropTypeIdsForTrigger.Contains(cropTypeId ?? 0) || isScotland)
+                    {
+                        //passing orgId
+                        if (model.UpdatedMannerAppId != null)
+                        {
+                            if (!isScotland)
+                            {
+                                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
+                            }
+                            else
+                            {
+                                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, model.UpdatedMannerAppId);
+                            }
+
+                        }
+                        else
+                        {
+                            if (!isScotland)
+                            {
+                                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, true, null);
+                            }
+                            else
+                            {
+                                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, null);
+                            }
+
+                        }
+
+                        if (error == null)
+                        {
+
+                            decimal currentApplicationNitrogen = 0;
+                            currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
+                            totalN = previousAppliedTotalN + currentApplicationNitrogen;
+
+                            (bool isGreenCompostExistIn2Year, error) = await _mannerEstimationLogic.CheckMannerGreenCompostExistanceByDateRange(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729).ToString(_dateStringLiteral), model.ApplicationDate.Value.ToString(_dateStringLiteral), model.UpdatedMannerAppId);
+
+                            if ((!isScotland || isGreenCompostExistIn2Year || isCompost) && totalN > 500)
+                            {
+                                model.IsOrgManureNfieldLimitWarning = true;
+                                var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString();
+
+                                WarningResponse? warning = warningList
+                                    .FirstOrDefault(x => x.CountryID == model.CountryId &&
+                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+                                if (warning != null)
+                                {
+                                    model.NFieldLimitWarningHeader = warning.Header;
+                                    model.NFieldLimitWarningCodeID = warning.WarningCodeID;
+                                    model.NFieldLimitWarningLevelID = warning.WarningLevelID;
+
+                                    model.NFieldLimitWarningPara1 = warning.Para1;
+                                    model.NFieldLimitWarningPara2 = warning.Para2;
+                                    model.NFieldLimitWarningPara3 = warning.Para3;
+                                }
+                            }
+
+                        }
+                    }
+                    //warning excel sheet row no. 6
+                    if (cropTypeIdsForTrigger.Contains(cropTypeId ?? 0))
+                    {
+                        //passing orgId
+                        if (model.UpdatedMannerAppId != null)
+                        {
+                            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-1459), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
+                        }
+                        else
+                        {
+                            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-1459), model.ApplicationDate.Value, true, null);
+                        }
+
+                        if (error == null)
+                        {
+                            decimal currentApplicationNitrogen = 0;
+                            currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
+                            totalN = previousAppliedTotalN + currentApplicationNitrogen;
+                            if (totalN > 1000)
+                            {
+                                model.IsOrgManureNfieldLimitWarning = true;
+
+                                var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostMulch.ToString();
+
+                                WarningResponse? warning = warningList
+                                    .FirstOrDefault(x => x.CountryID == model.CountryId &&
+                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+                                if (warning != null)
+                                {
+                                    model.NFieldLimitWarningHeader = warning.Header;
+                                    model.NFieldLimitWarningCodeID = warning.WarningCodeID;
+                                    model.NFieldLimitWarningLevelID = warning.WarningLevelID;
+
+                                    model.NFieldLimitWarningPara1 = warning.Para1;
+                                    model.NFieldLimitWarningPara2 = warning.Para2;
+                                    model.NFieldLimitWarningPara3 = warning.Para3;
+                                }
+                            }
+
+                        }
+                    }
+                    if (model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland && isCompost)
+                    {
+                        if (model.UpdatedMannerAppId != null)
+                        {
+                            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
+                        }
+                        else
+                        {
+                            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(model.MannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, true, null);
+                        }
+
+                        if (error == null)
+                        {
+
+                            decimal currentApplicationNitrogen = 0;
+                            currentApplicationNitrogen = (defaultNitrogen * model.ApplicationRate.Value);
+                            totalN = previousAppliedTotalN + currentApplicationNitrogen;
+                            if (totalN > 250)
+                            {
+                                model.IsOrgManureNfieldLimitWarning = true;
+
+                                var warningKey = NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostPAS.ToString();
+
+                                WarningResponse? warning = warningList
+                                    .FirstOrDefault(x => x.CountryID == model.CountryId &&
+                                                         string.Equals(x.WarningKey?.Trim(), warningKey, StringComparison.OrdinalIgnoreCase));
+                                if (warning != null)
+                                {
+                                    model.NFieldLimitWarningHeader = warning.Header;
+                                    model.NFieldLimitWarningCodeID = warning.WarningCodeID;
+                                    model.NFieldLimitWarningLevelID = warning.WarningLevelID;
+
+                                    model.NFieldLimitWarningPara1 = warning.Para1;
+                                    model.NFieldLimitWarningPara2 = warning.Para2;
+                                    model.NFieldLimitWarningPara3 = warning.Para3;
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+            return (model, error);
         }
     }
 }

@@ -556,6 +556,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
         }
+        mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
+        mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep26.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep26.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
+        mannerEstimationViewModel.MannerEstimationStep26.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         return mannerEstimationViewModel.MannerEstimationStep26;
     }
     public async Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26)
@@ -567,6 +573,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
         }
+
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return await GetMannerEstimationStep26();
     }
@@ -612,6 +619,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep28.IsManureTypeLiquid = manureType.IsLiquid;
         }
+        mannerEstimationViewModel.MannerEstimationStep28.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
+        mannerEstimationViewModel.MannerEstimationStep28.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep28.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep28.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep28.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
+        mannerEstimationViewModel.MannerEstimationStep28.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         return mannerEstimationViewModel.MannerEstimationStep28;
     }
     public async Task<MannerEstimationStep28ViewModel> SetMannerEstimationStep28(MannerEstimationStep28ViewModel mannerEstimationStep28)
