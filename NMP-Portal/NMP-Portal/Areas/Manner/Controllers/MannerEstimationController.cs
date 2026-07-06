@@ -4193,7 +4193,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return error;
         }
 
-        private void ApplyWarning<TModel>(TModel model, List<WarningResponse> warningList, string warningKey)
+        private static void ApplyWarning<TModel>(TModel model, List<WarningResponse> warningList, string warningKey)
             where TModel : MannerEstimationNWarningViewModel
         {
             model.IsOrgManureNfieldLimitWarning = true;
