@@ -115,12 +115,12 @@ namespace NMP.Portal.Security
                 return "unknown";
             }
         }
-
+#pragma warning disable S1172
         private static async Task OnRemoteSignOut(RemoteSignOutContext context)
         {
             await Task.CompletedTask.ConfigureAwait(false);
         }
-
+#pragma warning restore S1172
         private static async Task OnAuthenticationFailed(AuthenticationFailedContext context)
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
@@ -135,22 +135,24 @@ namespace NMP.Portal.Security
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-
+#pragma warning disable S1172
         private static async Task OnSignedOutCallbackRedirect(RemoteSignOutContext context)
         { 
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-
+#pragma warning restore S1172
         /// <summary>        
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
+        /// 
+#pragma warning disable S1172
         private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
         {
             await Task.CompletedTask.ConfigureAwait(false);
         }
-
+#pragma warning restore S1172
 
         private static async Task OnAccessDenied(AccessDeniedContext context)
         {
@@ -162,20 +164,20 @@ namespace NMP.Portal.Security
         {
             if (!string.IsNullOrWhiteSpace(configuration?["CustomerIdentityReturnURI"]?.ToString()))
             {
-                context.ProtocolMessage.RedirectUri = configuration?["CustomerIdentityReturnURI"]?.ToString();                
+                context.ProtocolMessage.RedirectUri = configuration["CustomerIdentityReturnURI"]?.ToString();                
             }
             context.ProtocolMessage.Parameters["serviceId"] = configuration?["CustomerIdentityServiceId"]?.ToString() ?? string.Empty;
             context.ProtocolMessage.Parameters["forceReselection"] = "true";
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-
+#pragma warning disable S1172
         private static async Task OnAuthorizationCodeReceived(AuthorizationCodeReceivedContext context)
         {
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-
+#pragma warning restore S1172
         private static async Task OnTokenValidated(TokenValidatedContext context)
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();

@@ -27,13 +27,13 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.SulphurDeficient">
+            <govuk-radios class="govuk-radios--inline" for="@Model.SulphurDeficient">
 
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblDoYouExpectSulphurDeficiency, Model.FieldName)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@Resource.lblAHDBNutrientManagementGuide</govuk-radios-hint>
+                    <govuk-radios-hint>@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblFASSRUCTechnicalNotesGuide : Resource.lblAHDBNutrientManagementGuide)</govuk-radios-hint>
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
@@ -41,15 +41,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
-            {
-                <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field"  asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a></p>
-
-            }
-            else
-            {
-                <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
-            }
+            @await Html.PartialAsync("~/Views/SoilAnalysis/_CancelAction.cshtml", Model)
 
         </div>
 

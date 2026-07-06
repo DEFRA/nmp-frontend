@@ -1,10 +1,10 @@
 ﻿(function () {
-    if (!window.sessionConfig) return;
+    if (!globalThis.sessionConfig) { return; }
 
-    const SESSION_LENGTH = window.sessionConfig.timeoutMinutes * 60 * 1000;
-    const WARNING_TIME = window.sessionConfig.warningMinutes * 60 * 1000; // Show warning 3 minutes before expiry
-    const REFRESH_URL = window.sessionConfig.keepAliveUrl;
-    const SIGNOUT_URL = window.sessionConfig.logoutUrl;
+    const SESSION_LENGTH = globalThis.sessionConfig.timeoutMinutes * 60 * 1000;
+    const WARNING_TIME = globalThis.sessionConfig.warningMinutes * 60 * 1000; // Show warning 3 minutes before expiry
+    const REFRESH_URL = globalThis.sessionConfig.keepAliveUrl;
+    const SIGNOUT_URL = globalThis.sessionConfig.logoutUrl;
     const STORAGE_KEY = 'govuk-last-activity';
     const CHANNEL_NAME = 'govuk-session';
     const DIALOG = document.getElementById('session-timeout-dialog');
@@ -33,14 +33,17 @@
                 case 'expire':
                     expireSession();
                     break;
+                default:
+                    // unknown message type
+                    break;
             }
         };
     } catch (err) {
-        console.warn('BroadcastChannel not supported, using localStorage fallback');
+        console.warn('BroadcastChannel not supported, using localStorage fallback',err);
     }
 
     // Fallback (storage event for Safari/IE)
-    window.addEventListener('storage', function (e) {
+    globalThis.addEventListener('storage', function (e) {
         if (e.key === STORAGE_KEY) {
             resetTimers();
         }
@@ -53,7 +56,7 @@
     function resetTimers() {
         clearTimeout(warningTimer);
         clearTimeout(expiryTimer);
-        const last = parseInt(localStorage.getItem(STORAGE_KEY) || Date.now());
+        const last = Number.parseInt(localStorage.getItem(STORAGE_KEY) || Date.now());
         const since = Date.now() - last;
         const warnDelay = Math.max(0, SESSION_LENGTH - WARNING_TIME - since);
         const expireDelay = Math.max(0, SESSION_LENGTH - since);
@@ -87,16 +90,16 @@
     }
 
     function startCountdown(seconds) {
-        let remaining = seconds;        
+        let remaining = seconds;
         countdownInterval = setInterval(() => {
-            remaining--;            
+            remaining--;
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
                 expireSession();
             }
         }, 1000);
     }
-    
+
     function keepAlive() {
         fetch(REFRESH_URL).then(response => {
             if (response.ok) {
@@ -128,18 +131,20 @@
     // ---- Focus trap (modal only) ----
     function trapFocus(e) {
         if (e.key === "Tab") {
-            var focusedIndex = FOCUSABLE_ELEMENTS.indexOf(document.activeElement);
+            const focusedIndex = FOCUSABLE_ELEMENTS.indexOf(document.activeElement);
             if (e.shiftKey) {
                 if (focusedIndex === 0) {
                     e.preventDefault();
-                    FOCUSABLE_ELEMENTS[FOCUSABLE_ELEMENTS.length - 1].focus();
+                    FOCUSABLE_ELEMENTS.at(-1)?.focus();
                 }
-            } else {
-                if (focusedIndex === FOCUSABLE_ELEMENTS.length - 1) {
-                    e.preventDefault();
-                    FOCUSABLE_ELEMENTS[0].focus();
-                }
+            } else if (focusedIndex === FOCUSABLE_ELEMENTS.length - 1) {
+                e.preventDefault();
+                FOCUSABLE_ELEMENTS[0].focus();
             }
+            else {
+                // added this for sonar issue: Add the missing "else" clause.
+            }
+
         }
     }
 
@@ -148,7 +153,7 @@
             channel.postMessage({ type: 'expire' });
         }
         hideDialog();
-        window.location.href = SIGNOUT_URL;
+        globalThis.location.href = SIGNOUT_URL;
     }
 
     function userActivityHandler() {
@@ -161,7 +166,7 @@
     // Hook up events   
     function bindActivityListeners() {
         ['click', 'keypress', 'mousemove', 'scroll'].forEach(eventType => {
-            window.addEventListener(eventType, () => {
+            globalThis.addEventListener(eventType, () => {
                 userActivityHandler();
             });
         });

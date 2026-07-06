@@ -1,4 +1,6 @@
-﻿namespace NMP.Commons.ServiceResponses;
+﻿using NMP.Commons.Models;
+
+namespace NMP.Commons.ServiceResponses;
 public class NMaxReportResponse
 {
     public string CropTypeName { get; set; } = string.Empty;
@@ -7,4 +9,5 @@ public class NMaxReportResponse
     public string GroupName { get; set; } = string.Empty;
     public List<NMaxLimitReportResponse> NMaxLimitReportResponse { get; set; }
     public List<NitrogenApplicationsForNMaxReportResponse> NitrogenApplicationsForNMaxReportResponse { get; set; }
+    public List<FieldDetails>? FieldDetail { get; set; }
 }

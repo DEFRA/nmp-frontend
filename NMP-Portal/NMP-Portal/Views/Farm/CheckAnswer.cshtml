@@ -57,19 +57,17 @@
                 <govuk-error-summary>
                     @foreach (var state in ViewData.ModelState)
                     {
-                        foreach (var error in state.Value.Errors)
+                        foreach (var error in state.Value.Errors.Where(error =>
+                        error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblFirstLineAddress))
+                        || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblSecondLineAddress))
+                        || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblTownOrCity))
+                        || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblCounty))))
                         {
-                            if (error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblFirstLineAddress))
-                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblSecondLineAddress))
-                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblTownOrCity))
-                            || error.ErrorMessage.Equals(string.Format(Resource.MsgYourAddressFieldsHasExceededTheMaximumCharacterLimit, Resource.lblCounty)))
-                            {
-                                errorAction = action;
-                                <govuk-error-summary-item href="@errorAction">
-                                    @error.ErrorMessage
-                                </govuk-error-summary-item>
-                            }
+                            errorAction = action;
 
+                            <govuk-error-summary-item href="@errorAction">
+                                @error.ErrorMessage
+                            </govuk-error-summary-item>
                         }
                     }
                 </govuk-error-summary>
@@ -221,7 +219,7 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
-                @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
