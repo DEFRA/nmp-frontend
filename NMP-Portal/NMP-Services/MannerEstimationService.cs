@@ -21,6 +21,7 @@ namespace NMP.Services;
 public class MannerEstimationService(ILogger<MannerEstimationService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IMannerEstimationService
 {
     private readonly ILogger<MannerEstimationService> _logger = logger;
+    private const string _dateFormat = "yyyy-MM-dd";
     public async Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
         List<MannerEstimationDetailsViewModel> mannerEstimationsList = new List<MannerEstimationDetailsViewModel>();
@@ -323,6 +324,80 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimation, error);
 
+    }
+    public async Task<(decimal, Error)> FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(int mannerEstimationId, DateTime startDate, DateTime endDate, bool isGreenFoodCompost, int? mannerApplicationId)
+    {
+        decimal totalN = 0;
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+       
+        string url = ApiurlHelper.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompostAsyncAPI;
+        if (mannerApplicationId.HasValue)
+        {
+            url += $"&mannerApplicationID={mannerApplicationId.Value}";
+        }
+        url = string.Format(url, mannerEstimationId, startDate.ToString(_dateFormat), endDate.ToString(_dateFormat), isGreenFoodCompost);
+        var response = await httpClient.GetAsync(url);
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            totalN = responseWrapper?.Data?.TotalN?.ToObject<decimal>() ?? 0;
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+        return (totalN, error);
+    }
+    public async Task<(decimal, Error)> FetchTotalNByMannerEstimationIdAppDate(int mannerEstimationId, DateTime startDate, DateTime endDate, int? mannerApplicationId)
+    {
+        decimal totalN = 0;
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        string url = ApiurlHelper.FetchTotalNByMannerEstimationIdAppDateAsyncAPI;
+        if (mannerApplicationId.HasValue)
+        {
+            url += $"&mannerApplicationID={mannerApplicationId.Value}";
+        }
+        url = string.Format(url, mannerEstimationId, startDate.ToString(_dateFormat), endDate.ToString(_dateFormat));
+        var response = await httpClient.GetAsync(url);
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            totalN = responseWrapper?.Data?.TotalN?.ToObject<decimal>() ?? 0;
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+        return (totalN, error);
+    }
+    public async Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId)
+    {
+        bool isExist = false;
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        
+        string url = ApiurlHelper.CheckMannerGreenCompostExistanceByDateRangeAsyncAPI;
+        if (mannerApplicationId.HasValue)
+        {
+            url += $"&mannerApplicationID={mannerApplicationId.Value}";
+        }
+        url = string.Format(url, mannerEstimationId, dateFrom, dateTo);
+        var response = await httpClient.GetAsync(url);
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            isExist = responseWrapper?.Data?.IsExist?.ToObject<bool>() ?? false;
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+        return (isExist, error);
     }
 }
 

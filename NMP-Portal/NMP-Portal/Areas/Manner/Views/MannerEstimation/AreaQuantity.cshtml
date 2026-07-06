@@ -24,8 +24,8 @@
                     <govuk-error-summary-item>@TempData["AreaAndQuantityError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-                     
-                        
+            @await Html.PartialAsync("_MannerAppRateWarningPartial", Model)
+
             <h1 class="govuk-heading-l">@Resource.lblEnterTheAreaAndQuantity</h1>
             <govuk-input for="@Model.AreaSpread" type="number" inputmode="decimal"
                          pattern="^\d{1,10}(\.\d{1,2})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
