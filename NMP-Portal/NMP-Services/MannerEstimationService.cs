@@ -21,6 +21,7 @@ namespace NMP.Services;
 public class MannerEstimationService(ILogger<MannerEstimationService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IMannerEstimationService
 {
     private readonly ILogger<MannerEstimationService> _logger = logger;
+    private const string _dateFormat = "yyyy-MM-dd";
     public async Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
         List<MannerEstimationDetailsViewModel> mannerEstimationsList = new List<MannerEstimationDetailsViewModel>();
@@ -335,7 +336,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         {
             url += $"&mannerApplicationID={mannerApplicationId.Value}";
         }
-        url = string.Format(url, mannerEstimationId, startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"), isGreenFoodCompost);
+        url = string.Format(url, mannerEstimationId, startDate.ToString(_dateFormat), endDate.ToString(_dateFormat), isGreenFoodCompost);
         var response = await httpClient.GetAsync(url);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -359,7 +360,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         {
             url += $"&mannerApplicationID={mannerApplicationId.Value}";
         }
-        url = string.Format(url, mannerEstimationId, startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
+        url = string.Format(url, mannerEstimationId, startDate.ToString(_dateFormat), endDate.ToString(_dateFormat));
         var response = await httpClient.GetAsync(url);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

@@ -595,10 +595,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep27.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
         mannerEstimationViewModel.MannerEstimationStep27.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep27.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
-        //mannerEstimationViewModel.MannerEstimationStep27.MannerEstimationId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
-        //mannerEstimationViewModel.MannerEstimationStep27.MannerEstimationApplicationsId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
-        //mannerEstimationViewModel.MannerEstimationStep27.UpdatedMannerAppId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
-
         return mannerEstimationViewModel.MannerEstimationStep27;
     }
     public async Task<MannerEstimationStep27ViewModel> SetMannerEstimationStep27(MannerEstimationStep27ViewModel mannerEstimationStep27)
