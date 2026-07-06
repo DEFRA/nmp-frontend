@@ -1,0 +1,55 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.MannerEstimationStep28ViewModel
+@{
+    ViewData["Title"] = $"{Resource.lblEnterTheAreaAndQuantity} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    
+    var suffixUnit = "";
+    if (Model.IsManureTypeLiquid != null)
+    {
+        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+    }
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.AreaQuantity;
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+
+<form asp-action="AreaQuantity" asp-controller="MannerEstimation" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (TempData["AreaAndQuantityError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item>@TempData["AreaAndQuantityError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+            @await Html.PartialAsync("_MannerAppRateWarningPartial", Model)
+
+            <h1 class="govuk-heading-l">@Resource.lblEnterTheAreaAndQuantity</h1>
+            <govuk-input for="@Model.AreaSpread" type="number" inputmode="decimal"
+                         pattern="^\d{1,10}(\.\d{1,2})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblhectar)</span>
+                </govuk-input-label>
+                <govuk-input-suffix>@Resource.lblhectar</govuk-input-suffix>
+            </govuk-input>
+            <govuk-input for=@Model.ManureQuantity type="number" inputmode="numeric"
+                         pattern="^\d{1,10}$" step="1"
+                         maxlength="10" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblQuantityApplied
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
+                </govuk-input-label>
+                <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+            </govuk-input>            
+            <govuk-button type="submit" class="margin-bottom-forty" asp-action="AreaQuantity">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            </p>
+
+        </div>
+
+    </div>
+</form>

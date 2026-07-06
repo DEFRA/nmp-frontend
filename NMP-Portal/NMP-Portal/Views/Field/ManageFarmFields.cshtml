@@ -30,7 +30,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
 
-            @if (ViewBag.Success != null && ViewBag.Success == true)
+            @if (ViewBag.Success != null && ViewBag.Success)
             {
                 <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">
@@ -50,7 +50,7 @@
                     </div>
                 </govuk-notification-banner>
             }
-            @if (ViewBag.IsDeleted != null && ViewBag.IsDeleted == true)
+            @if (ViewBag.IsDeleted != null && ViewBag.IsDeleted)
             {
                 <govuk-notification-banner type="NotificationBannerType.Success">
                     <div class="">

@@ -1,0 +1,60 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep39ViewModel
+
+@{
+    ViewData["Title"] = $"{string.Format(Resource.lblUpdateNutrientPrices, Resource.lblPotashK2OLowecase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="UpdatePotashPriceQuestion" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (TempData["PotashPriceError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["PotashPriceError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+        <form asp-action="UpdatePotashPrice" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <h2 class="govuk-heading-m">@string.Format(Resource.lblUpdateNutrientPrices, Resource.lblPotashK2OLowecase)</h2>
+            @if (Model.UpdatePotashPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
+            {
+                <govuk-input name="PotashProductPrice" for=@Model.PotashProductPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label>
+                        @string.Format(Resource.lblWhatIstheNutrientPrice, Model.NutrientProductName.ToLower())
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPerTonnes)</span>
+                    </govuk-input-label>
+                    <govuk-input-prefix>@Resource.lblPoundSign</govuk-input-prefix>
+                    <govuk-input-suffix>@Resource.lblPerTonnes.ToLower()</govuk-input-suffix>
+                </govuk-input>
+            }
+            else
+            {
+                <govuk-input name="PotashPrice" for=@Model.PotashPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label>
+                        @string.Format(Resource.lblWhatIstheNutrientPrice, Resource.lblPotashK2OLowecase)
+                        <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPerKg)</span>
+                    </govuk-input-label>
+                    <govuk-input-prefix>@Resource.lblPoundSign</govuk-input-prefix>
+
+                    <govuk-input-suffix>@Resource.lblPerKg.ToLower()</govuk-input-suffix>
+                </govuk-input>
+            }
+
+          
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblCancel</a>
+
+        </p>
+    </div>
+</div>

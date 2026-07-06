@@ -17,12 +17,13 @@
     }
     else
     {
-        if (Model.IsStoreCapacityExist == true)
+        if (Model.IsStoreCapacityExist)
         {
             backController = "StorageCapacity";
             backAction = "ManageStorageCapacity";
         }
     }
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.StorageCapacityWizardStep.CopyExistingManureStorage;
 }
 
 @section BeforeContent {

@@ -8,7 +8,14 @@
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsPostcode, Model.Name)} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)FarmWizardSteps.Postcode;
     bool isScotland = Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland;
-    var actionName = Model.IsCheckAnswer ? "CheckAnswer" : (isScotland ? "BusinessInformation" : "FarmingRules");
+    string actionName;
+
+    if (Model.IsCheckAnswer)
+        actionName = "CheckAnswer";
+    else if (isScotland)
+        actionName = "BusinessInformation";
+    else
+        actionName = "FarmingRules";
 }
 
 @section BeforeContent {

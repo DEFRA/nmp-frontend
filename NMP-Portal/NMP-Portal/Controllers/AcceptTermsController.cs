@@ -28,7 +28,7 @@ public class AcceptTermsController(ILogger<AcceptTermsController> logger, IAccep
         model.IsTermsOfUseAccepted = await _acceptTermsLogic.IsUserTermsOfUseAccepted();         
         if (model.IsTermsOfUseAccepted)
         {            
-            return RedirectToAction("FarmList", "Farm");                   
+            return RedirectToAction("Index", "Dashboard");                   
         }
 
         return View("Accept", model);
@@ -48,7 +48,7 @@ public class AcceptTermsController(ILogger<AcceptTermsController> logger, IAccep
             await _acceptTermsLogic.UpdateTermsOfUseAsync(model);
             if (model.IsTermsOfUseAccepted)
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction("Index", "Dashboard");
             }
             
             return View("Accept", model);

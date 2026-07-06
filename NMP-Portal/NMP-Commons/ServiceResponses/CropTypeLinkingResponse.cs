@@ -23,9 +23,8 @@ public class CropTypeLinkingResponse
     [JsonProperty("nMaxLimitWales")]
     public int? NMaxLimitWales { get; set; }
 
-    [JsonProperty("nMaxLimitScotland")]
-    public int? NMaxLimitScotland { get; set; }
-
     [JsonProperty("sNSCategoryID")]
     public int? SNSCategoryID { get; set; }
+    [JsonProperty("LateSownMannerCropTypeID")]
+    public int? LateSownMannerCropTypeID { get; set; }
 }

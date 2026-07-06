@@ -1,0 +1,13 @@
+﻿@using NMP.Commons.Resources
+@model bool
+
+<p class="govuk-body cancel-link">
+    @if (!Model)
+    {
+        <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+    }
+    else
+    {
+        <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+    }
+</p>

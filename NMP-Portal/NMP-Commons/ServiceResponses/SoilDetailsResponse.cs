@@ -7,4 +7,5 @@ public class SoilDetailsResponse
     public bool? SulphurDeficient { get; set; }
     public int? StartingP { get; set; }
     public int? StartingK { get; set; }
+    public string? PscIndexName { get; set; }
 }

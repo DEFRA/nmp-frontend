@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -26,33 +28,28 @@ public class PKBalanceService(ILogger<PKBalanceService> logger, IHttpContextAcce
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null&&responseWrapper.Data.PkBalances!=null)
+                if (responseWrapper?.Data?.PkBalances is JToken pkBalancesToken)
                 {
-                    pKBalance = new PKBalance();
-                    pKBalance = responseWrapper.Data.ToObject<PKBalance>();
+                    pKBalance = pkBalancesToken.ToObject<PKBalance>()
+                        ?? new PKBalance();
                 }
             }
             else
             {
                 if (responseWrapper != null && responseWrapper.Error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    _logger.LogError($"{error.Code} : {error.Message} : {error.Stack} : {error.Path}");
+                    _logger.ExtractError(responseWrapper, error);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre.Message);
-            throw new Exception(error.Message, hre);
+            _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error.Message = ex.Message;
-            _logger.LogError(ex.Message);
-            throw new Exception(error.Message, ex);
+            _logger.HandleException(ex, error);
         }
         return pKBalance;
-    }        
+    }
 }

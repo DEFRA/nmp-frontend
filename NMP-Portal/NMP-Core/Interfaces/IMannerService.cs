@@ -23,4 +23,6 @@ public interface IMannerService
     Task<(string?, Error?)> FetchApplicationMethodById(int Id);
     Task<(string?, Error?)> FetchIncorporationMethodById(int Id);
     Task<(string?, Error?)> FetchIncorporationDelayById(int Id);
+    Task<(List<CommonResponse>?, Error?)> FetchTopsoilList();
+    Task<(List<CommonResponse>?, Error?)> FetchSubsoilList();
 }

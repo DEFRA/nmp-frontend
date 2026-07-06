@@ -18,24 +18,12 @@ namespace NMP.Portal.Security
 
         public async Task<OAuthTokenResponse> AcquireTokenByRefreshTokenAsync(string refreshToken, string issuer)
         {
-            try
-            {
                 OAuthTokenResponse oauthTokenResponse = await GetAccessTokenByRefreshTokenAsync(refreshToken, issuer);
                 return oauthTokenResponse;
-            }
-            catch (MsalUiRequiredException)
-            {
-                // This exception means you need to prompt the user for re-authentication
-                throw;
-            }
-            catch (MsalServiceException ex)
-            {
-                // Handle exception (e.g., logging, rethrowing, etc.)
-                throw;
-            }
+          
         }
 
-        public bool IsTokenValid(ClaimsPrincipal user, out DateTime expiration)
+        public static bool IsTokenValid(ClaimsPrincipal user, out DateTime expiration)
         {
             var expClaim = user.FindFirst("access_token_expiry");
             if (expClaim != null && long.TryParse(expClaim.Value, out long exp))

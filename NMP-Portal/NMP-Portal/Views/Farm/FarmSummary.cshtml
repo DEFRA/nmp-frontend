@@ -4,7 +4,9 @@
 @{
     ViewData["Title"] = Model != null ? Model.Name : Resource.lblFarmSummary;
 }
-
+@section BeforeContent {
+    <govuk-back-link asp-action="FarmList" asp-controller="Farm">@Resource.lblBackToAllFarms</govuk-back-link>
+}
 @if (TempData["Error"] != null)
 {
     <govuk-error-summary>

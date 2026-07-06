@@ -8,6 +8,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Text;
 using System.Web;
 namespace NMP.Services;
 
@@ -15,8 +16,7 @@ namespace NMP.Services;
 public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IMannerService
 {
     private readonly ILogger<MannerService> _logger = logger;
-    private const string _errorLogTemplate = "{Code} : {Message} : {Stack} : {Path}";
-    Dictionary<int, int> cropTypeToCategoryId = new Dictionary<int, int>
+    private readonly Dictionary<int, int> cropTypeToCategoryId = new Dictionary<int, int>
     {
         { 0, 2 },
         { 1, 2 },
@@ -526,4 +526,57 @@ responseWrapper?.Data is not null)
         }
         return (incorporationDelay, error);
     }
+    public async Task<(List<CommonResponse>?, Error?)> FetchTopsoilList()
+    {
+        Error? error = null;
+        List<CommonResponse>? topSoilList = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = ApiurlHelper.FetchAllMannerTopSoilListAsyncAPI;
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper?.Data != null)
+            {
+                topSoilList = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+
+            }
+
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (topSoilList, error);
+    }
+    public async Task<(List<CommonResponse>?, Error?)> FetchSubsoilList()
+    {
+        Error? error = null;
+        List<CommonResponse>? subSoilList = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = ApiurlHelper.FetchAllMannerSubSoilListAsyncAPI;
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper?.Data != null)
+            {
+                subSoilList = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+
+            }
+
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (subSoilList, error);
+    }
+
 }

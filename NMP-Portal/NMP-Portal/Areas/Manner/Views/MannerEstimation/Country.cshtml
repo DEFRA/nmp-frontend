@@ -16,7 +16,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="Country" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios asp-for="@Model.CountryID">
+            <govuk-radios for="@Model.CountryID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)
@@ -36,14 +36,8 @@
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
+            <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+
         </p>
     </div>
 </div>

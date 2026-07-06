@@ -5,19 +5,28 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading =Resource.lblWhatTypeOfCropWouldYouLikeToUse;
+    string heading = string.Format(Resource.lblWhatCropAreYouApplyingThisOrganicMaterial, Resource.lblCropGroup.ToLower());
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+    string backAction = "SubSoil";
+    if(Model.IsCheckAnswer)
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (Model.IsFarmCopied)
+    {
+        backAction = "FieldToCopy";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "SoilType")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="CropGroup" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios asp-for="@Model.CropGroupId">
+            <govuk-radios for="@Model.CropGroupId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @heading

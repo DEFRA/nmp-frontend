@@ -1,0 +1,47 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.MannerEstimationStep27ViewModel
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{Resource.lblWhatIsTheApplicationRate} {Resource.lblHyphen} {title}";
+    var suffixUnit = "";
+    if (Model.IsManureTypeLiquid != null)
+    {
+        suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
+    }
+
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+
+<form asp-action="ManualApplicationRate" asp-controller="MannerEstimation" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (TempData["ManualApplicationRateError"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item>@TempData["ManualApplicationRateError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+            @await Html.PartialAsync("_MannerAppRateWarningPartial", Model)
+
+            <govuk-input for="@Model.ApplicationRate" type="number" inputmode="decimal"
+                         pattern="^\d{1,10}(\.\d{1,2})?$" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @Resource.lblWhatIsTheApplicationRate
+                    <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
+                </govuk-input-label>
+                <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
+            </govuk-input>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            </p>
+
+        </div>
+
+    </div>
+</form>

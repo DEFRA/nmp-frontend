@@ -6,7 +6,7 @@ public class CropInfoTwoResponse
     public int CropInfo2Id { get; set; }
 
     [JsonProperty("cropInfo2")]
-    public string CropInfo2 { get; set; }
+    public string CropInfo2 { get; set; } = string.Empty;
 
     [JsonProperty("countryId")]
     public int CountryId { get; set; }

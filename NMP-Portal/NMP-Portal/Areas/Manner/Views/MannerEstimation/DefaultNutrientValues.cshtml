@@ -1,0 +1,125 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@using System.Globalization
+
+@model MannerEstimationStep24ViewModel
+@{
+    var heading = string.Format(Resource.lblNutrientValuesFor, Model.ManureTypeName);
+    string title = Resource.lblMannerEstimate;
+
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
+    if (Model.IsManureTypeLiquid == null)
+    {
+        Model.IsManureTypeLiquid = false;
+    }
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.DefaultNutrient;
+
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@(Model.ApplicationMethodCount == 1 ? "ApplicationDate" : "ApplicationMethod") asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form class="form" asp-action="DefaultNutrientValues" asp-controller="MannerEstimation" method="post" autocomplete="off">
+            @Html.AntiForgeryToken()
+
+            <h1 class="govuk-heading-l">
+                @heading
+            </h1>
+            <p class="govuk-body">@Resource.lblDefaultNutrientValueContentFirst</p>
+
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblNutrient</th>
+                        <th scope="col" class="govuk-table__header alignRight">
+                            @(Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid.Value ? Resource.lblValuePerCubicMetre : Resource.lblValuePerTonne)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblDryMatter</td>
+                        <td class="govuk-table__cell alignRight">
+                            @(string.Format(Resource.lblValueTotal, string.Format(Resource.lblValuePercent, Model.ManureType.DryMatter)))
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalNitrogen</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.TotalN != null ? string.Format(Resource.lblValueKg, Model.ManureType.TotalN) : string.Empty)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblAmmoniumHypenN​</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.NH4N != null ? string.Format(Resource.lblValueKg, Model.ManureType.NH4N) : string.Empty)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblUricAcidN​</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.Uric != null ? string.Format(Resource.lblValueKg, Model.ManureType.Uric) : string.Empty)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblNitrateHypenN​</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.NO3N != null ? string.Format(Resource.lblValueKg, Model.ManureType.NO3N) : string.Empty)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalPhosphateOnly</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.P2O5 != null ? string.Format(Resource.lblValueKg, Model.ManureType.P2O5) : string.Empty)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalPotashWithNutrient</td>
+                        <td class="govuk-table__cell alignRight">@(Model.ManureType.K2O != null ? string.Format(Resource.lblValueKg, Model.ManureType.K2O) : string.Empty)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalSulphur</td>
+                        <td class="govuk-table__cell alignRight">@((Model.ManureType.SO3 != null && Model.ManureType.SO3 != 0) ? string.Format(Resource.lblValueKg, Model.ManureType.SO3) : string.Empty)</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Resource.lblTotalMagnesium</td>
+                        <td class="govuk-table__cell alignRight">@((Model.ManureType.MgO != null && Model.ManureType.SO3 != 0) ? string.Format(Resource.lblValueKg, Model.ManureType.MgO) : string.Empty)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <govuk-radios for="@Model.DefaultNutrientValue">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="false">
+
+                        @Resource.lblDoYouWantToUseTheseTypicalNutrientValues
+
+                    </govuk-radios-fieldset-legend>
+
+                   
+                    <govuk-radios-item value="@yes">@Resource.lblYesUseTheseValues</govuk-radios-item>
+                    <govuk-radios-item value="@no">
+                        @Resource.lblNoChangeTheseValues
+                    </govuk-radios-item>
+
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+
+            
+        </form>
+        <p class="govuk-body cancel-link">
+            <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+        </p>
+    </div>
+</div>
+
