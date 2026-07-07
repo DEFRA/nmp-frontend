@@ -1418,7 +1418,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep9.CropTypeId = mannerEstimate.CropTypeID;
             mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = mannerEstimate.MannerCropTypeID;
             mannerEstimationViewModel.MannerEstimationStep20.SowingDate = mannerEstimate.SowingDate;
-            mannerEstimationViewModel.MannerEstimationStep8.CropGroupId = cropTypes?.FirstOrDefault(x=>x.CropTypeId== mannerEstimate?.CropTypeID).CropGroupId;
+            var cropType = cropTypes?
+    .FirstOrDefault(x => x.CropTypeId == mannerEstimate?.CropTypeID);
+
+            mannerEstimationViewModel.MannerEstimationStep8.CropGroupId =
+                cropType?.CropGroupId ?? 0;
+
         }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return error;
