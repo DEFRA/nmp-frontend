@@ -256,10 +256,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-              model=  await _mannerEstimationLogic.SetMannerEstimationStep3(model);
+                model = await _mannerEstimationLogic.SetMannerEstimationStep3(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)&&!model.IsPostCodeChange) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("AverageAnnualRainfall");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsPostCodeChange) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("AverageAnnualRainfall");
             }
             catch (HttpRequestException hre)
             {
@@ -349,7 +349,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerEstimationLogic.GetMannerEstimationStep4();
                 return View(model);
             }
-             await _mannerEstimationLogic.SetMannerEstimationStep4(model);
+            await _mannerEstimationLogic.SetMannerEstimationStep4(model);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("IsFarmOrganic");
         }
@@ -415,7 +415,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
-             _mannerEstimationLogic.SetMannerEstimationStep5(model);
+            _mannerEstimationLogic.SetMannerEstimationStep5(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("NVZField");
@@ -453,7 +453,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
-             _mannerEstimationLogic.SetMannerEstimationStep6(model);
+            _mannerEstimationLogic.SetMannerEstimationStep6(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("TopSoil");
@@ -534,7 +534,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = _mannerEstimationLogic.SetMannerEstimationStep8(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)&&!model.IsCropGroupChange) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("CropType");
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsCropGroupChange) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("CropType");
         }
 
         [HttpGet]
@@ -575,7 +575,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model.CropTypeName = await _fieldLogic.FetchCropTypeById(model.CropTypeId ?? 0);
             model = await _mannerEstimationLogic.SetMannerEstimationStep9(model);
 
-            if (model.CropTypeId != null && Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), model.CropTypeId)&&model.IsCropTypeChange)
+            if (model.CropTypeId != null && Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), model.CropTypeId) && model.IsCropTypeChange)
             {
                 return RedirectToAction("SowingDate");
             }
@@ -907,7 +907,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
 
-                    bool isSlurry = IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
+                    bool isSlurry = CommonHelpers.IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
                     bool isPoultryManure =
                         model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
 
@@ -935,15 +935,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return error;
 
         }
-        private static bool IsSlurryType(int? manureTypeId)
-        {
-            return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
-                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry ||
-                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox ||
-                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall ||
-                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator ||
-                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion;
-        }
+
 
         private async Task<Error?> HandleLivestockManureRule(MannerEstimationStep13ViewModel model)
         {
@@ -2578,6 +2570,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ViewBag.SubSoilAction = _mannerEstimationProtector.Protect(Resource.lblSubSoil);
             ViewBag.CropGroupAction = _mannerEstimationProtector.Protect(Resource.lblCropGroupActionName);
             ViewBag.CropTypeAction = _mannerEstimationProtector.Protect(Resource.lblCropTypeActionName);
+            ViewBag.SowingDateAction = _mannerEstimationProtector.Protect(Resource.lblSowingDateForActionName);
             return View();
         }
 
@@ -3713,7 +3706,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             string successMsg = _mannerEstimationProtector.Protect(Resource.lblNutrientPricesAndFinancialValueUpdated);
 
-            return RedirectSucessFinacialValues(mannerEstimation.ID.Value, successMsg);
+            return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
         }
 
         private void ValidateNitrogenPrice(MannerEstimationStep34ViewModel model, string nitrogenProductPriceKey, MannerEstimationStep34ViewModel mannerEstimationStep34ViewModel)
@@ -3827,7 +3820,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             string successMsg = _mannerEstimationProtector.Protect(Resource.lblNutrientPricesAndFinancialValueUpdated);
 
-            return RedirectSucessFinacialValues(mannerEstimation.ID.Value, successMsg);
+            return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
         }
 
         private void ValidatePhosphorusPrice(MannerEstimationStep37ViewModel model, string phosphorusProductPriceKey, MannerEstimationStep37ViewModel mannerEstimationStep37ViewModel)
@@ -3942,18 +3935,19 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             string successMsg = _mannerEstimationProtector.Protect(Resource.lblNutrientPricesAndFinancialValueUpdated);
 
-            return RedirectSucessFinacialValues(mannerEstimation.ID.Value, successMsg);
+            return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
 
         }
 
-        private IActionResult RedirectSucessFinacialValues(int mannerEstimateId, string succesMsg)
+        private IActionResult RedirectToResultWithSuccessValues(int mannerEstimateId, string succesMsg, string tabId)
         {
-            return RedirectToAction(_mannerEstimationResultKey, new
+            return RedirectToAction(actionName: _mannerEstimationResultKey,
+                       controllerName: "MannerEstimation", routeValues: new
             {
                 q = _mannerEstimationProtector.Protect(mannerEstimateId.ToString()),
                 r = _mannerEstimationProtector.Protect(Resource.lblTrue),
                 s = succesMsg
-            });
+            }, fragment:  tabId);
         }
 
         private void ValidatePotashPrice(MannerEstimationStep39ViewModel model, MannerEstimationStep39ViewModel mannerEstimationStep39ViewModel)
@@ -4246,7 +4240,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     Resource.lblTopsoil,
                     Resource.lblSubSoil,
                     Resource.lblCropGroupActionName,
-                    Resource.lblCropTypeActionName
+                    Resource.lblCropTypeActionName,
+                    Resource.lblSowingDateForActionName
                 };
 
                 if (allowedActions.Contains(actionMethod))
@@ -4278,7 +4273,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 });
             }
             string succesMsg = _mannerEstimationProtector.Protect(Resource.lblFarmFieldCropDataUpdated);
-            return RedirectSucessFinacialValues(mannerEstimation.ID.Value, succesMsg);
+            return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, succesMsg, "FarmFieldAndCrop");
         }
 
 

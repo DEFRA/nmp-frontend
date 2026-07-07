@@ -5960,7 +5960,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Farm, field and crop details updated.
+        ///   Looks up a localized string similar to Farm, field and crop details updated..
         /// </summary>
         public static string lblFarmFieldCropDataUpdated {
             get {
@@ -15084,6 +15084,15 @@ namespace NMP.Commons.Resources {
         public static string lblSowingDate {
             get {
                 return ResourceManager.GetString("lblSowingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SowingDate.
+        /// </summary>
+        public static string lblSowingDateForActionName {
+            get {
+                return ResourceManager.GetString("lblSowingDateForActionName", resourceCulture);
             }
         }
         

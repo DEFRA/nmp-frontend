@@ -47,7 +47,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep1ViewModel GetMannerEstimationStep1()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep1.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId??string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep1.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep1.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
         return mannerEstimationViewModel.MannerEstimationStep1;
     }
@@ -137,7 +137,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<MannerEstimationStep4ViewModel> GetMannerEstimationStep4()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep5.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+        mannerEstimationViewModel.MannerEstimationStep4.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep4.Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
         if (mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall == 0)
         {
@@ -221,7 +221,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationStep8.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
-        if(mannerEstimationViewModel.MannerEstimationStep8.CropGroupId!=mannerEstimationStep8.CropGroupId)
+        if (mannerEstimationViewModel.MannerEstimationStep8.CropGroupId != mannerEstimationStep8.CropGroupId)
         {
             mannerEstimationViewModel.MannerEstimationStep9.CropTypeId = null;
             mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = null;
@@ -867,8 +867,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
             CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
             MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
-            SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate,
+            SowingDate = Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), mannerEstimationViewModel.MannerEstimationStep9.CropTypeId) ? mannerEstimationViewModel.MannerEstimationStep20.SowingDate : null,
         };
+
 
         if (mannerEstimationId != null)
         {
@@ -877,12 +878,27 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             {
                 mannerEstimate.ID = mannerEstimationId;
                 mannerEstimate.OrganisationID = mannerEstimateData.OrganisationID;
+
+                mannerEstimate.NitrogenPrice = mannerEstimateData.NitrogenPrice;
+                mannerEstimate.NitrogenProductId = mannerEstimateData.NitrogenProductId;
+                mannerEstimate.NitrogenProductName = mannerEstimateData.NitrogenProductName;
+                mannerEstimate.NitrogenProductPrice = mannerEstimateData.NitrogenProductPrice;
+
+                mannerEstimate.PotashProductId = mannerEstimateData.PotashProductId;
+                mannerEstimate.PotashProductPrice = mannerEstimateData.PotashProductPrice;
+                mannerEstimate.PotashProductName = mannerEstimateData.PotashProductName;
+                mannerEstimate.PotashPrice = mannerEstimateData.PotashPrice;
+
+                mannerEstimate.PhosphateProductPrice = mannerEstimateData.PhosphateProductPrice;
+                mannerEstimate.PhosphateProductId = mannerEstimateData.PhosphateProductId;
+                mannerEstimate.PhosphatePrice = mannerEstimateData.PhosphatePrice;
+                mannerEstimate.PhosphateProductName = mannerEstimateData.PhosphateProductName;
             }
         }
         else
         {
             mannerEstimate.OrganisationID = organisationId.Value;
-        }
+        }   
         return (mannerEstimationViewModel, mannerEstimate);
     }
 
@@ -1382,8 +1398,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return await _mannerEstimationService.CheckMannerGreenCompostExistanceByDateRange(mannerEstimationId, dateFrom, dateTo, mannerApplicationId);
     }
 
-    public async Task<Error> BindMannerEstimationDataForUpdate(int mannerEstimateId)
+    public async Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId)
     {
+        List<CropTypeResponse> cropTypes=await _fieldService.FetchAllCropTypesServiceAsync();
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         (MannerEstimation? mannerEstimate, Error? error) = await FetchMannerEstimateById(mannerEstimateId);
         if (mannerEstimate != null && string.IsNullOrWhiteSpace(error?.Message))
@@ -1401,6 +1418,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep9.CropTypeId = mannerEstimate.CropTypeID;
             mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = mannerEstimate.MannerCropTypeID;
             mannerEstimationViewModel.MannerEstimationStep20.SowingDate = mannerEstimate.SowingDate;
+            mannerEstimationViewModel.MannerEstimationStep8.CropGroupId = cropTypes?.FirstOrDefault(x=>x.CropTypeId== mannerEstimate?.CropTypeID).CropGroupId;
         }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return error;

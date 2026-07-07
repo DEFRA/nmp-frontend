@@ -8229,9 +8229,12 @@ following crop year 2</value>
     <value>CropType</value>
   </data>
   <data name="lblFarmFieldCropDataUpdated" xml:space="preserve">
-    <value>Farm, field and crop details updated</value>
+    <value>Farm, field and crop details updated.</value>
   </data>
   <data name="lblIsFarmOrganic" xml:space="preserve">
     <value>IsFarmOrganic</value>
+  </data>
+  <data name="lblSowingDateForActionName" xml:space="preserve">
+    <value>SowingDate</value>
   </data>
 </root>
