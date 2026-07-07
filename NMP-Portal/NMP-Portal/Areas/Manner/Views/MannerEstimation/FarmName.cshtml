@@ -8,9 +8,11 @@
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.FarmName;
     string backAction = "MannerHubPage";
-    if (Model.IsCheckAnswer)
+    var parameter=ViewBag.IsBack;
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId))
     {
-        backAction = "CheckAnswer";
+        backAction = "MannerEstimationResult";
+        parameter=Model.EncryptedMannerEstimateId;
     }
     else if (Model.IsFarmCopied)
     {
@@ -19,7 +21,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@parameter">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -29,14 +31,14 @@
             <govuk-input for="@Model.FarmName">
                 <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>                
             </govuk-input>
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
         <p class="govuk-body cancel-link">
-            @if (Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+            @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId))
+    {
+                <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblCancel</a>
             }
             else
             {
