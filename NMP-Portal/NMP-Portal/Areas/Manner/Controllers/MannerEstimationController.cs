@@ -349,7 +349,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerEstimationLogic.GetMannerEstimationStep4();
                 return View(model);
             }
-            model = await _mannerEstimationLogic.SetMannerEstimationStep4(model);
+             await _mannerEstimationLogic.SetMannerEstimationStep4(model);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("IsFarmOrganic");
         }
@@ -415,7 +415,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
-            model = _mannerEstimationLogic.SetMannerEstimationStep5(model);
+             _mannerEstimationLogic.SetMannerEstimationStep5(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("NVZField");
@@ -453,7 +453,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
-            model = _mannerEstimationLogic.SetMannerEstimationStep6(model);
+             _mannerEstimationLogic.SetMannerEstimationStep6(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("TopSoil");
@@ -1442,7 +1442,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                model = _mannerEstimationLogic.SetMannerEstimationStep17(model);
+                _mannerEstimationLogic.SetMannerEstimationStep17(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("FieldName");
@@ -1512,7 +1512,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                model = _mannerEstimationLogic.SetMannerEstimationStep18(model);
+                _mannerEstimationLogic.SetMannerEstimationStep18(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("SubSoil");
@@ -1580,7 +1580,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                model = _mannerEstimationLogic.SetMannerEstimationStep19(model);
+                _mannerEstimationLogic.SetMannerEstimationStep19(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("CropGroup");
