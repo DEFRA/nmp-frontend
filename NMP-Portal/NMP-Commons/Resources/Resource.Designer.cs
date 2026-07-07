@@ -2610,6 +2610,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AverageAnnualRainfall.
+        /// </summary>
+        public static string lblAverageAnnualRainfallActionName {
+            get {
+                return ResourceManager.GetString("lblAverageAnnualRainfallActionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average annual rainfall for {0}.
         /// </summary>
         public static string lblAverageAnnualRainfallFor {
@@ -3935,6 +3944,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CropGroup.
+        /// </summary>
+        public static string lblCropGroupActionName {
+            get {
+                return ResourceManager.GetString("lblCropGroupActionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which crop group would you like to plan for?.
         /// </summary>
         public static string lblCropGroupForPlan {
@@ -4147,6 +4165,15 @@ namespace NMP.Commons.Resources {
         public static string lblCropType {
             get {
                 return ResourceManager.GetString("lblCropType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CropType.
+        /// </summary>
+        public static string lblCropTypeActionName {
+            get {
+                return ResourceManager.GetString("lblCropTypeActionName", resourceCulture);
             }
         }
         
@@ -5933,6 +5960,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Farm, field and crop details updated.
+        /// </summary>
+        public static string lblFarmFieldCropDataUpdated {
+            get {
+                return ResourceManager.GetString("lblFarmFieldCropDataUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} fields.
         /// </summary>
         public static string lblFarmFields {
@@ -6163,6 +6199,15 @@ namespace NMP.Commons.Resources {
         public static string lblFarmName {
             get {
                 return ResourceManager.GetString("lblFarmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FarmName.
+        /// </summary>
+        public static string lblFarmNameActionName {
+            get {
+                return ResourceManager.GetString("lblFarmNameActionName", resourceCulture);
             }
         }
         
@@ -6496,6 +6541,15 @@ namespace NMP.Commons.Resources {
         public static string lblFieldName {
             get {
                 return ResourceManager.GetString("lblFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FieldName.
+        /// </summary>
+        public static string lblFieldNameActionName {
+            get {
+                return ResourceManager.GetString("lblFieldNameActionName", resourceCulture);
             }
         }
         
@@ -8242,6 +8296,15 @@ namespace NMP.Commons.Resources {
         public static string lblIsAnyLivestock {
             get {
                 return ResourceManager.GetString("lblIsAnyLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IsFarmOrganic.
+        /// </summary>
+        public static string lblIsFarmOrganic {
+            get {
+                return ResourceManager.GetString("lblIsFarmOrganic", resourceCulture);
             }
         }
         
@@ -11456,6 +11519,15 @@ namespace NMP.Commons.Resources {
         public static string lblNVZField {
             get {
                 return ResourceManager.GetString("lblNVZField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NVZField.
+        /// </summary>
+        public static string lblNVZFieldActionName {
+            get {
+                return ResourceManager.GetString("lblNVZFieldActionName", resourceCulture);
             }
         }
         

@@ -62,6 +62,7 @@ namespace NMP.Commons.ViewModels
 
         public int? MannerEstimationId { get; set; }
         public int? MannerEstimationApplicationsId { get; set; }
+        public string? EncryptedMannerEstimationId { get; set; }
 
         public MannerEstimationStep1ViewModel MannerEstimationStep1 { get; set; }
         public MannerEstimationStep2ViewModel MannerEstimationStep2 { get; set; }

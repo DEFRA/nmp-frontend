@@ -9,7 +9,7 @@
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "CropGroup")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)&&!Model.IsCropGroupChange) ? "MannerEstimationResult" : "CropGroup")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -36,15 +36,7 @@
                 @Resource.lblContinue
             </govuk-button> 
         </form>
-        <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-        </p>
+
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
     </div>
 </div>

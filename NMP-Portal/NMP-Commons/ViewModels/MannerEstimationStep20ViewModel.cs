@@ -11,6 +11,7 @@ namespace NMP.Commons.ViewModels
         public string? FieldName { get; set; }
         public string? CropTypeName { get; set; }
         public DateTime? SowingDate { get; set; }
-        public bool IsCheckAnswer { get; set;  }
+        public bool IsCropTypeChange { get; set; }
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
     }
 }

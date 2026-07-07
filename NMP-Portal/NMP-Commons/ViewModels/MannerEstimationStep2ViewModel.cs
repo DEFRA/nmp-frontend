@@ -12,8 +12,9 @@ namespace NMP.Commons.ViewModels
     {
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgSelectACountryBeforContinuing))]
         public int CountryID { get; set; }
-        public bool IsCheckAnswer { get; set; } = false;
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public string FarmName { get; set; } = string.Empty;
         public int? FarmRB209CountryId { get; set; }
+        public bool IsCountryIdChange { get; set; } = false;
     }
 }

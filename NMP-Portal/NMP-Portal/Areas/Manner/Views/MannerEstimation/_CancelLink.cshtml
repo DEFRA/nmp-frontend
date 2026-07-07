@@ -1,13 +1,14 @@
 ﻿@using NMP.Commons.Resources
-@model bool
+@model string
 
 <p class="govuk-body cancel-link">
-    @if (!Model)
+    @if (!string.IsNullOrWhiteSpace(Model))
     {
-        <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+        <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model">@Resource.lblCancel</a>
     }
     else
     {
+
         <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
     }
 </p>

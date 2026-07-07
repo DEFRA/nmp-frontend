@@ -8210,4 +8210,28 @@ following crop year 2</value>
   <data name="MsgPhosphoruPriceMustNotExceedtwoDecimal" xml:space="preserve">
     <value>Phosphorus price must not exceed two decimal places.</value>
   </data>
+  <data name="lblFarmNameActionName" xml:space="preserve">
+    <value>FarmName</value>
+  </data>
+  <data name="lblAverageAnnualRainfallActionName" xml:space="preserve">
+    <value>AverageAnnualRainfall</value>
+  </data>
+  <data name="lblFieldNameActionName" xml:space="preserve">
+    <value>FieldName</value>
+  </data>
+  <data name="lblNVZFieldActionName" xml:space="preserve">
+    <value>NVZField</value>
+  </data>
+  <data name="lblCropGroupActionName" xml:space="preserve">
+    <value>CropGroup</value>
+  </data>
+  <data name="lblCropTypeActionName" xml:space="preserve">
+    <value>CropType</value>
+  </data>
+  <data name="lblFarmFieldCropDataUpdated" xml:space="preserve">
+    <value>Farm, field and crop details updated</value>
+  </data>
+  <data name="lblIsFarmOrganic" xml:space="preserve">
+    <value>IsFarmOrganic</value>
+  </data>
 </root>

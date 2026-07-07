@@ -8,9 +8,9 @@
     string heading = string.Format(Resource.lblWhatCropAreYouApplyingThisOrganicMaterial, Resource.lblCropGroup.ToLower());
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     string backAction = "SubSoil";
-    if(Model.IsCheckAnswer)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId))
     {
-        backAction = "CheckAnswer";
+        backAction = "MannerEstimationResult";
     }
     else if (Model.IsFarmCopied)
     {
@@ -19,7 +19,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -48,15 +48,7 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-        </p>
+
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
     </div>
 </div>
