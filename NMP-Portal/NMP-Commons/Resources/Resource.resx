@@ -6855,73 +6855,53 @@ livestock manure.</value>
     <value>Last updated {0}</value>
   </data>
   <data name="lblReleaseScheduleContentOne" xml:space="preserve">
-    <value>Public Beta release, January 2026</value>
-  </data>
-  <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
-    <value>The first functionality in the nutrient management planning tool is ready for use by the public in England and Wales. This has had approximately eight months of user testing.</value>
-  </data>
-  <data name="lblReleaseScheduleContentThree" xml:space="preserve">
-    <value>The first public release helps users to;</value>
+    <value>Existing functionality for England and Wales regions  </value>
   </data>
   <data name="lblReleaseScheduleContentFour" xml:space="preserve">
-    <value>create a nutrient management plan for arable crops and grassland</value>
+    <value>Create a nutrient management plan for arable crops and grassland</value>
   </data>
   <data name="lblReleaseScheduleContentFive" xml:space="preserve">
-    <value>get nutrient recommendations from RB209</value>
+    <value>Get nutrient recommendations from AHDB digital RB209</value>
   </data>
   <data name="lblReleaseScheduleContentSix" xml:space="preserve">
-    <value>plan organic and inorganic material applications, which include MANNER-NPK calculations</value>
+    <value>Plan organic and inorganic material applications, which include MANNER-NPK calculations</value>
   </data>
   <data name="lblReleaseScheduleContentSeven" xml:space="preserve">
-    <value>see warning messages where applications may breach Nitrate Vulnerable Zone (NVZ) rules</value>
+    <value>See warning messages where applications may breach Nitrate Vulnerable   
+Zone (NVZ) rules</value>
   </data>
   <data name="lblReleaseScheduleContentEight" xml:space="preserve">
-    <value>update plans and record what happens at a field level</value>
-  </data>
-  <data name="lblReleaseScheduleContentNine" xml:space="preserve">
-    <value>This version also helps to create NVZ reports for:</value>
+    <value>Create the following reports:</value>
   </data>
   <data name="lblReleaseScheduleContentTen" xml:space="preserve">
-    <value>Livestock manure nitrogen (N) farm limit</value>
+    <value>Aug/Sept 2026 &amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Standalone MANNER-NPK calculator</value>
   </data>
   <data name="lblReleaseScheduleContentEleven" xml:space="preserve">
-    <value>Next releases, early 2026</value>
+    <value>Next releases</value>
   </data>
   <data name="lblReleaseScheduleContentTwelve" xml:space="preserve">
-    <value>Launch in Scotland</value>
+    <value>Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Scotland Arable</value>
   </data>
   <data name="lblReleaseScheduleContentThirteen" xml:space="preserve">
-    <value>The Scottish version of the nutrient management planning tool is currently in development. This will be released to all users in early 2026, after user testing.</value>
-  </data>
-  <data name="lblReleaseScheduleContentFourteen" xml:space="preserve">
-    <value>This version will give recommendations based on the Scottish FAS SRUC Technical Notes. It will help users to create NVZ reports based on Scottish rules.</value>
-  </data>
-  <data name="lblReleaseScheduleContentFifteen" xml:space="preserve">
-    <value>Next available functionality</value>
-  </data>
-  <data name="lblReleaseScheduleContentSixteen" xml:space="preserve">
-    <value>Upcoming releases available in England, Scotland and Wales will include the ability to:</value>
+    <value>Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Scotland Grassland</value>
   </data>
   <data name="lblReleaseScheduleContentSeventeen" xml:space="preserve">
-    <value>create an NVZ report for existing manure storage capacity</value>
+    <value>N-max report</value>
   </data>
   <data name="lblReleaseScheduleContentEighteen" xml:space="preserve">
-    <value>calculate NVZ organic manure storage requirements and manure inventory</value>
+    <value>Livestock manure nitrogen (N) farm limit report</value>
   </data>
   <data name="lblReleaseScheduleContentNineteen" xml:space="preserve">
-    <value>use MANNER NPK to create quick estimates of nitrogen (N) value and losses</value>
+    <value>Manure storage capacity report</value>
   </data>
   <data name="lblReleaseScheduleContentTwenty" xml:space="preserve">
-    <value>import data from existing PLANET files</value>
-  </data>
-  <data name="lblReleaseScheduleContentTwentyOne" xml:space="preserve">
-    <value>The current functionality will continue to be updated based on feedback from our users.</value>
+    <value>User feedback survey</value>
   </data>
   <data name="lblReleaseScheduleContentTwentyTwo" xml:space="preserve">
     <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
-    <value>7th January 2026</value>
+    <value>13th July 2026</value>
   </data>
   <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
     <value>Add or update fields and soil analysis</value>

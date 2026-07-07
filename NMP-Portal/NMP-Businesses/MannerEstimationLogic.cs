@@ -556,6 +556,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
         }
+        mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
+        mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep26.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep26.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
+        mannerEstimationViewModel.MannerEstimationStep26.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         return mannerEstimationViewModel.MannerEstimationStep26;
     }
     public async Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26)
@@ -567,6 +573,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
         }
+
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return await GetMannerEstimationStep26();
     }
@@ -581,6 +588,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep27.IsManureTypeLiquid = manureType.IsLiquid;
         }
+
+        mannerEstimationViewModel.MannerEstimationStep27.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId??0;
+        mannerEstimationViewModel.MannerEstimationStep27.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep27.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep27.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep27.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
+        mannerEstimationViewModel.MannerEstimationStep27.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         return mannerEstimationViewModel.MannerEstimationStep27;
     }
     public async Task<MannerEstimationStep27ViewModel> SetMannerEstimationStep27(MannerEstimationStep27ViewModel mannerEstimationStep27)
@@ -601,6 +615,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep28.IsManureTypeLiquid = manureType.IsLiquid;
         }
+        mannerEstimationViewModel.MannerEstimationStep28.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
+        mannerEstimationViewModel.MannerEstimationStep28.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep28.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
+        mannerEstimationViewModel.MannerEstimationStep28.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep28.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
+        mannerEstimationViewModel.MannerEstimationStep28.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         return mannerEstimationViewModel.MannerEstimationStep28;
     }
     public async Task<MannerEstimationStep28ViewModel> SetMannerEstimationStep28(MannerEstimationStep28ViewModel mannerEstimationStep28)
@@ -987,8 +1007,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return
             (mannerEstimationApplication.ApplicationRate == defaultRate, defaultRate ?? 0);
     }
-    public async Task<bool> FetchIsManureLiquid(
-    int manureTypeId)
+    public async Task<bool> FetchIsManureLiquid(int manureTypeId)
     {
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(manureTypeId);
 
@@ -1305,7 +1324,20 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
        
         return await GetMannerEstimationStep39();
     }
-
-
+    public async Task<(decimal, Error)> FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(int mannerEstimationId, DateTime startDate, DateTime endDate, bool isGreenFoodCompost, int? mannerApplicationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost() called");
+        return await _mannerEstimationService.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(mannerEstimationId, startDate, endDate, isGreenFoodCompost, mannerApplicationId);
+    }
+    public async Task<(decimal, Error)> FetchTotalNByMannerEstimationIdAppDate(int mannerEstimationId, DateTime startDate, DateTime endDate, int? mannerApplicationId)
+    {
+        _logger.LogTrace("MannerLogic : FetchTotalNByMannerEstimationIdAppDate() called");
+        return await _mannerEstimationService.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId, startDate, endDate, mannerApplicationId);
+    }
+    public async Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId)
+    {
+        _logger.LogTrace("MannerLogic : CheckMannerGreenCompostExistanceByDateRange() called");
+        return await _mannerEstimationService.CheckMannerGreenCompostExistanceByDateRange(mannerEstimationId, dateFrom, dateTo, mannerApplicationId);
+    }
 }
 

@@ -1,0 +1,28 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+
+@model NMP.Commons.ViewModels.MannerEstimationNWarningViewModel
+
+@{
+    var warningModel = new WarningMessageViewModel
+    {
+        IsWales = Model.CountryId ==
+                   (int)NMP.Commons.Enums.FarmCountry.Wales
+    };
+
+    if (Model.IsOrgManureNfieldLimitWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.NFieldLimitWarningPara1,
+            Para2 = Model.NFieldLimitWarningPara2,
+            Para3 = Model.NFieldLimitWarningPara3
+        });
+    }
+
+    
+}
+
+@await Html.PartialAsync(
+"~/Views/OrganicManure/_WarningMessagePartial.cshtml",
+    warningModel)

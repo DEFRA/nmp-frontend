@@ -24,6 +24,7 @@
                     <govuk-error-summary-item>@TempData["ApplicationRateMethodError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
+            @await Html.PartialAsync("_MannerAppRateWarningPartial", Model)
             <govuk-radios for="@Model.ApplicationRateMethod">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">

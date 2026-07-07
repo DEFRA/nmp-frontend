@@ -24,6 +24,7 @@
                     <govuk-error-summary-item>@TempData["ManualApplicationRateError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
+            @await Html.PartialAsync("_MannerAppRateWarningPartial", Model)
 
             <govuk-input for="@Model.ApplicationRate" type="number" inputmode="decimal"
                          pattern="^\d{1,10}(\.\d{1,2})?$" input-class="govuk-input--width-5" spellcheck="false">

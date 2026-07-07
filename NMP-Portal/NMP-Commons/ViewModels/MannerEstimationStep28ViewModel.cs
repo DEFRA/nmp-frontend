@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationStep28ViewModel
+    public class MannerEstimationStep28ViewModel : MannerEstimationNWarningViewModel
     {
         public bool? IsManureTypeLiquid { get; set; }
-        public int? ManureTypeId { get; set; }
         public string? ManureTypeName { get; set; }
         public decimal? AreaSpread { get; set; }
         public decimal? ManureQuantity { get; set; }
-        public decimal? ApplicationRate { get; set; }
+        public int FarmRB209CountryId { get; set; }
+        public int? CropGroupId { get; set; }
+        public int? ManureGroupId { get; set; }
+        public int? MannerEstimationApplicationsId { get; set; }
+
     }
 }
