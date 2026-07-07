@@ -2166,6 +2166,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ResetWarnings(model, true);
                 }
                 model.IsWarningMsgNeedToShow = false;
+                await _mannerEstimationLogic.SetMannerEstimationStep27(model);
                 return RedirectToAction(_incorporationMethodAction);
             }
             catch (Exception ex)
