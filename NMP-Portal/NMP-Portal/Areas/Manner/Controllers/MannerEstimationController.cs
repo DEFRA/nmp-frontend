@@ -65,6 +65,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _nutrientProductErrorKey = "NutrientProductError";
         private const string _mannerEstimationResultKey = "MannerEstimationResult";
         private const string _mannerEstimationResultErrorKey = "MannerEstimationResultError";
+        private const string _nitrogenKey = "N";
+        private const string _ammoniaKey = "NH4N";
+        private const string _uricAcidKey = "UricAcid";
+        private const string _nO3NKey = "NO3N";
+        private const string _p2O5Key = "P2O5";
+        private const string _k2OKey = "K2O";
+        private const string _sO3Key = "SO3";
+        private const string _mgOKey = "MgO";
 
         public IActionResult Index()
         {
@@ -1974,14 +1982,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private void ValidateManualNutrientValues()
         {
             ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
-            ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
-            ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
-            ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
-            ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
-            ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
-            ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
-            ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
-            ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
+            ReplaceNumericError(_nitrogenKey, Resource.lblN, Resource.lblTotalNitrogen);
+            ReplaceNumericError(_ammoniaKey, Resource.lblNH4N, Resource.lblAmmonium);
+            ReplaceNumericError(_uricAcidKey, Resource.lblUricAcidForError, Resource.lblUricAcid);
+            ReplaceNumericError(_nO3NKey, Resource.lblNO3N, Resource.lblNitrogen);
+            ReplaceNumericError(_p2O5Key, Resource.lblP2O5, Resource.lblTotalPhosphate);
+            ReplaceNumericError(_k2OKey, Resource.lblK2O, Resource.lblTotalPotassium);
+            ReplaceNumericError(_sO3Key, Resource.lblSO3, Resource.lblTotalSulphur);
+            ReplaceNumericError(_mgOKey, Resource.lblMgO, Resource.lblMagnesiumMgO);
         }
 
         [HttpGet]
