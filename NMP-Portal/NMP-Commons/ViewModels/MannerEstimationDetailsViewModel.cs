@@ -15,5 +15,6 @@ namespace NMP.Commons.ViewModels
         public string Country { get; set; } = string.Empty;
 
         public string EncryptedId { get; set; } = string.Empty;
+
     }
 }

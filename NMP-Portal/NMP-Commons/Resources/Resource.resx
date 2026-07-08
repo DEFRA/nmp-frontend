@@ -8210,82 +8210,73 @@ following crop year 2</value>
   <data name="MsgPhosphoruPriceMustNotExceedtwoDecimal" xml:space="preserve">
     <value>Phosphorus price must not exceed two decimal places.</value>
   </data>
-  <data name="lblFarmNameActionName" xml:space="preserve">
-    <value>FarmName</value>
+  <data name="lblEstimateOfNutrientSupplyFromOrganicMaterial" xml:space="preserve">
+    <value>Estimate of nutrient supply from organic materials</value>
   </data>
-  <data name="lblAverageAnnualRainfallActionName" xml:space="preserve">
-    <value>AverageAnnualRainfall</value>
+  <data name="lblReportCreatedOn" xml:space="preserve">
+    <value>Report created on {0}</value>
   </data>
-  <data name="lblFieldNameActionName" xml:space="preserve">
-    <value>FieldName</value>
+  <data name="lblFieldAndCropDetails" xml:space="preserve">
+    <value>Field and crop details</value>
   </data>
-  <data name="lblNVZFieldActionName" xml:space="preserve">
-    <value>NVZField</value>
+  <data name="lblInANVZ" xml:space="preserve">
+    <value>In a NVZ</value>
   </data>
-  <data name="lblCropGroupActionName" xml:space="preserve">
-    <value>CropGroup</value>
+  <data name="lblConditionsAtTheTimeOfApplication" xml:space="preserve">
+    <value>Conditions at the time of application</value>
   </data>
-  <data name="lblCropTypeActionName" xml:space="preserve">
-    <value>CropType</value>
+  <data name="lblRainfallPostApplication" xml:space="preserve">
+    <value>Rainfall post application</value>
   </data>
-  <data name="lblFarmFieldCropDataUpdated" xml:space="preserve">
-    <value>Farm, field and crop details updated.</value>
+  <data name="lblWindSpeedAtApplications" xml:space="preserve">
+    <value>Wind speed at application</value>
   </data>
-  <data name="lblIsFarmOrganic" xml:space="preserve">
-    <value>IsFarmOrganic</value>
+  <data name="lblRainWithin6HoursOfApplication" xml:space="preserve">
+    <value>Rain within 6 hours of application</value>
   </data>
-  <data name="lblSowingDateForActionName" xml:space="preserve">
-    <value>SowingDate</value>
+  <data name="lblManureAnalysis" xml:space="preserve">
+    <value>Manure analysis</value>
   </data>
-  <data name="lblApplicationDateActionName" xml:space="preserve">
-    <value>ApplicationDate</value>
+  <data name="lblValuesArePerCubicMetre" xml:space="preserve">
+    <value>Values are per cubic metre</value>
   </data>
-  <data name="lblApplicationMethodActionName" xml:space="preserve">
-    <value>ApplicationMethod</value>
+  <data name="lblTotalNitrogenNitrogen" xml:space="preserve">
+    <value>Total nitrogen (N)</value>
   </data>
-  <data name="lblApplicationRateMethodActionName" xml:space="preserve">
-    <value>ApplicationRateMethod</value>
+  <data name="lblAmmoniumN" xml:space="preserve">
+    <value>Ammonium N</value>
   </data>
-  <data name="lblAreaQuantityActionName" xml:space="preserve">
-    <value>AreaQuantity</value>
+  <data name="lblNitrateN" xml:space="preserve">
+    <value>Nitrate N</value>
   </data>
-  <data name="lblAutumnCropNitrogenUptakeActionName" xml:space="preserve">
-    <value>AutumnCropNitrogenUptake</value>
+  <data name="lblTotalSulphurSO3" xml:space="preserve">
+    <value>Total sulphur (SO3)</value>
   </data>
-  <data name="lblDefaultNutrientValuesActionName" xml:space="preserve">
-    <value>DefaultNutrientValues</value>
+  <data name="lblTotalMagnesiumMgO" xml:space="preserve">
+    <value>Total magnesium (MgO)</value>
   </data>
-  <data name="lblIncorporationDelayActionName" xml:space="preserve">
-    <value>IncorporationDelay</value>
+  <data name="lblMannerNPKResults" xml:space="preserve">
+    <value>MANNER-NPK results</value>
   </data>
-  <data name="lblIncorporationMethodActionName" xml:space="preserve">
-    <value>IncorporationMethod</value>
+  <data name="lblCurrentCrop" xml:space="preserve">
+    <value>current crop</value>
   </data>
-  <data name="lblManualApplicationRateActionName" xml:space="preserve">
-    <value>ManualApplicationRate</value>
+  <data name="lblFollowingCropYear2" xml:space="preserve">
+    <value>following crop year 2</value>
   </data>
-  <data name="lblManualNutrientValuesActionName" xml:space="preserve">
-    <value>ManualNutrientValues</value>
+  <data name="lblNitrogenNMineralizationAndLosses" xml:space="preserve">
+    <value>Nitrogen (N) mineralization and losses</value>
   </data>
-  <data name="lblManureGroupActionName" xml:space="preserve">
-    <value>ManureGroup</value>
+  <data name="lblMineralisedNitrogenN" xml:space="preserve">
+    <value>Mineralised nitrogen (N)</value>
   </data>
-  <data name="lblManureTypeActionName" xml:space="preserve">
-    <value>ManureType</value>
+  <data name="lblOrganicMaterialValue" xml:space="preserve">
+    <value>Organic material value</value>
   </data>
-  <data name="lblRainfallWithinSixHourActionName" xml:space="preserve">
-    <value>RainfallWithinSixHour</value>
+  <data name="lblCropAvailableNitrogenNitrogen" xml:space="preserve">
+    <value>Crop available nitrogen (N)</value>
   </data>
-  <data name="lblSoilDrainageEndDateActionName" xml:space="preserve">
-    <value>SoilDrainageEndDate</value>
-  </data>
-  <data name="lblEffectiveRainfallActionName" xml:space="preserve">
-    <value>EffectiveRainfall</value>
-  </data>
-  <data name="lblEffectiveRainfallManualActionName" xml:space="preserve">
-    <value>EffectiveRainfallManual</value>
-  </data>
-  <data name="lblTopsoilMoistureActionName" xml:space="preserve">
-    <value>TopsoilMoisture</value>
+  <data name="lblBackToResults" xml:space="preserve">
+    <value>Back to results</value>
   </data>
 </root>

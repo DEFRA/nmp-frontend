@@ -1,0 +1,17 @@
+﻿@using NMP.Commons.Resources
+@model dynamic
+<div class="govuk-grid-row margin-bottom-forty">
+    <div class="govuk-grid-column-full">
+        
+        <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContent1)
+        </p>
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
+        </p>
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
+        </p>
+    </div>
+</div>

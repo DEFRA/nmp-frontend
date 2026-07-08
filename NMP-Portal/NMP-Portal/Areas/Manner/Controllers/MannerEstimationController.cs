@@ -4450,6 +4450,177 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return RedirectToResultWithSuccessValues(mannerEstimationApplication.MannerEstimationID.Value, succesMsg, "FarmFieldAndCrop");
         }
 
+        public async Task<IActionResult> Report(string? q)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog} Report() action called");
+            MannerEstimationReportViewModel model = new MannerEstimationReportViewModel();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int estimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
+                (MannerEstimationResultResponse? mannerEstimationResultResponse, Error? error) =
+                    await _mannerEstimationLogic.FetchMannerApplicationResultById(estimateId);
+
+                if (!string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    TempData["Error"] = error.Message;
+                    return RedirectToAction("MannerEstimationResult", new { q = q });
+                }
+
+                var estimation = mannerEstimationResultResponse?.MannerEstimation;
+                var applications = mannerEstimationResultResponse?.MannerEstimationApplication;
+
+                if (estimation != null)
+                {
+                    int nitrogenValue = applications?.Sum(x => x.NitrogenValue) ?? 0;
+                    int p2O5Value = applications?.Sum(x => x.PhosphateValue) ?? 0;
+                    int potashValue = applications?.Sum(x => x.PotashValue) ?? 0;
+                    ViewBag.TotalValue = nitrogenValue + p2O5Value + potashValue;
+                    ViewBag.FarmName = estimation.FarmName;
+                    ViewBag.PostCode = estimation.Postcode;
+                    Country? country = await _mannerLogic.FetchCountryById(estimation.CountryID ?? 0);
+                    if (country != null)
+                    {
+                        ViewBag.CountryName = country.Name;
+                    }
+                    model.EncryptedMannerEstimateId = q;
+                    model.FarmRB209CountryID = estimation.CountryID;
+
+                    // Field and crop details
+                    model.MannerFieldAndCropDetails = estimation;
+                }
+
+                if (applications != null && applications.Any())
+                {
+                    foreach (var application in applications)
+                    {
+                        // Application details
+                        model.MannerEstimationApplicationDetails.Add(new MannerEstimationApplicationDetailsViewModel
+                        {
+                            ID = application.ID,
+                            MannerEstimationID = application.MannerEstimationID,
+                            ManureTypeID = application.ManureTypeID,
+                            ApplicationDate = application.ApplicationDate,
+                            N = application.N,
+                            P2O5 = application.P2O5,
+                            K2O = application.K2O,
+                            MgO = application.MgO,
+                            SO3 = application.SO3,
+                            DryMatterPercent = application.DryMatterPercent,
+                            NH4N = application.NH4N,
+                            NO3N = application.NO3N,
+                            UricAcid = application.UricAcid,
+                            ApplicationRate = application.ApplicationRate,
+                            AreaSpread = application.AreaSpread,
+                            ManureQuantity = application.ManureQuantity,
+                            ApplicationMethodID = application.ApplicationMethodID,
+                            IncorporationMethodID = application.IncorporationMethodID,
+                            IncorporationDelayID = application.IncorporationDelayID,
+                            WindspeedID = application.WindspeedID,
+                            RainfallWithinSixHoursID = application.RainfallWithinSixHoursID,
+                            MoistureID = application.MoistureID,
+                            AutumnCropNitrogenUptake = application.AutumnCropNitrogenUptake,
+                            EndOfDrainageDate = application.EndOfDrainageDate,
+                            RainfallPostApplication = application.RainfallPostApplication,
+                            TotalN = application.TotalN,
+                            CropAvailableNCurrentCrop = application.CropAvailableNCurrentCrop,
+                            CropAvailableNitrogenFollowingCropYearTwo = application.CropAvailableNitrogenFollowingCropYearTwo,
+                            TotalP2O5 = application.TotalP2O5,
+                            CropAvailableP2O5 = application.CropAvailableP2O5,
+                            TotalSO3 = application.TotalSO3,
+                            TotalMgO = application.TotalMgO,
+                            TotalK2O = application.TotalK2O,
+                            CropAvailableK2O = application.CropAvailableK2O,
+                            CropAvailableSO3 = application.CropAvailableSO3,
+                            NitrogenUseEfficiency = application.NitrogenUseEfficiency,
+                            MineralisedNitrogenLosses = application.MineralisedNitrogenLosses,
+                            LostNitrateLosses = application.LostNitrateLosses,
+                            LostAmmonia = application.LostAmmonia,
+                            LostDenitrified = application.LostDenitrified,
+                            NitrogenValue = application.NitrogenValue,
+                            PhosphateValue = application.PhosphateValue,
+                            PotashValue = application.PotashValue,
+                            CreatedOn = application.CreatedOn,
+                            CreatedByID = application.CreatedByID,
+                            ModifiedOn = application.ModifiedOn,
+                            ModifiedByID = application.ModifiedByID,
+
+                            // Display/lookup text fields
+                            ManureType = application.ManureType,
+                            Windspeed = application.Windspeed,
+                            RainType = application.RainType,
+                            MoistureType = application.MoistureType,
+                            ApplicationMethod = application.ApplicationMethod,
+                            IncorporationMethod = application.IncorporationMethod,
+                            IncorporationDelay = application.IncorporationDelay
+                        });
+
+                        // Manure analysis (one per application)
+                        model.ManureAnalyses.Add(new MannerManureAnalysisViewModel
+                        {
+                            DryMatterContent = application.DryMatterPercent,
+                            TotalNitrogen = application.N,
+                            AmmoniumNitrogen = application.NH4N,
+                            UricAcidNitrogen = application.UricAcid,
+                            NitrateNitrogen = application.NO3N,
+                            TotalPhosphate = application.P2O5,
+                            TotalPotash = application.K2O,
+                            TotalSulphur = application.SO3,
+                            TotalMagnesium = application.MgO
+                        });
+
+                        // NPK results (one per application)
+                        model.MannerNpkResults.Add(new MannerNpkResultViewModel
+                        {
+                            TotalNitrogen = application.TotalN,
+                            CropAvailableNitrogenCurrentCrop = application.CropAvailableNCurrentCrop,
+                            CropAvailableNitrogenFollowingCropYear2 = application.CropAvailableNitrogenFollowingCropYearTwo,
+                            NitrogenUseEfficiency = application.NitrogenUseEfficiency,
+                            MineralisedNitrogen = application.MineralisedNitrogenLosses,
+                            LostNitrateNitrogen = application.LostNitrateLosses,
+                            LostAmmoniaNitrogen = application.LostAmmonia,
+                            LostDenitrifiedNitrogen = application.LostDenitrified,
+                            TotalPhosphate = application.TotalP2O5,
+                            CropAvailablePhosphate = application.CropAvailableP2O5,
+                            TotalPotash = application.TotalK2O,
+                            CropAvailablePotash = application.CropAvailableK2O,
+                            TotalSulphur = application.TotalSO3,
+                            CropAvailableSulphur = application.CropAvailableSO3,
+                            TotalMagnesium = application.TotalMgO,
+                            NitrogenValue = application.NitrogenValue,
+                            PhosphateValue = application.PhosphateValue,
+                            PotashValue = application.PotashValue,
+                            TotalValue = application.NitrogenValue + application.PhosphateValue + application.PotashValue
+                        });
+
+                        // Conditions/Step32 (one per application)
+                        model.MannerEstimationConditions.Add(new MannerEstimationStep32ViewModel
+                        {
+                            ApplicationMethodId = application.ApplicationMethodID,
+                            SoilDrainageEndDate = application.EndOfDrainageDate,
+                            RainfallWithinSixHoursId = application.RainfallWithinSixHoursID,
+                            RainfallWithinSixHours = application.RainType,
+                            WindspeedId = application.WindspeedID,
+                            Windspeed = application.Windspeed,
+                            MoistureTypeId = application.MoistureID,
+                            MoistureType = application.MoistureType,
+                            IncorporationMethodId = application.IncorporationMethodID,
+                            AutumnCropNitrogenUptake = application.AutumnCropNitrogenUptake,
+                            ApplicationDate = application.ApplicationDate,
+                            // Fields not on MannerEstimationApplication — pulled from estimation if needed
+                            PostCode = estimation?.Postcode,
+                            CropTypeId = estimation?.CropTypeID,
+                            FieldName = estimation?.FieldName,
+                            CropTypeName = estimation?.CropTypeName,
+                            TotalRainfall = estimation?.AverageAnuualRainfall
+                        });
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
 
     }
 }
