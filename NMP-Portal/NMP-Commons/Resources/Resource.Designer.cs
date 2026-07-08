@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -2619,15 +2619,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AverageAnnualRainfall.
-        /// </summary>
-        public static string lblAverageAnnualRainfallActionName {
-            get {
-                return ResourceManager.GetString("lblAverageAnnualRainfallActionName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Average annual rainfall for {0}.
         /// </summary>
         public static string lblAverageAnnualRainfallFor {
@@ -3980,15 +3971,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CropGroup.
-        /// </summary>
-        public static string lblCropGroupActionName {
-            get {
-                return ResourceManager.GetString("lblCropGroupActionName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Which crop group would you like to plan for?.
         /// </summary>
         public static string lblCropGroupForPlan {
@@ -4201,15 +4183,6 @@ namespace NMP.Commons.Resources {
         public static string lblCropType {
             get {
                 return ResourceManager.GetString("lblCropType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CropType.
-        /// </summary>
-        public static string lblCropTypeActionName {
-            get {
-                return ResourceManager.GetString("lblCropTypeActionName", resourceCulture);
             }
         }
         
@@ -6257,15 +6230,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FarmName.
-        /// </summary>
-        public static string lblFarmNameActionName {
-            get {
-                return ResourceManager.GetString("lblFarmNameActionName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to farm name, address and postcode.
         /// </summary>
         public static string lblFarmNameAddressAndPostcode {
@@ -6604,15 +6568,6 @@ namespace NMP.Commons.Resources {
         public static string lblFieldName {
             get {
                 return ResourceManager.GetString("lblFieldName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FieldName.
-        /// </summary>
-        public static string lblFieldNameActionName {
-            get {
-                return ResourceManager.GetString("lblFieldNameActionName", resourceCulture);
             }
         }
         
@@ -8377,15 +8332,6 @@ namespace NMP.Commons.Resources {
         public static string lblIsAnyLivestock {
             get {
                 return ResourceManager.GetString("lblIsAnyLivestock", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to IsFarmOrganic.
-        /// </summary>
-        public static string lblIsFarmOrganic {
-            get {
-                return ResourceManager.GetString("lblIsFarmOrganic", resourceCulture);
             }
         }
         
@@ -11645,15 +11591,6 @@ namespace NMP.Commons.Resources {
         public static string lblNVZField {
             get {
                 return ResourceManager.GetString("lblNVZField", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NVZField.
-        /// </summary>
-        public static string lblNVZFieldActionName {
-            get {
-                return ResourceManager.GetString("lblNVZFieldActionName", resourceCulture);
             }
         }
         
@@ -15246,15 +15183,6 @@ namespace NMP.Commons.Resources {
         public static string lblSowingDate {
             get {
                 return ResourceManager.GetString("lblSowingDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SowingDate.
-        /// </summary>
-        public static string lblSowingDateForActionName {
-            get {
-                return ResourceManager.GetString("lblSowingDateForActionName", resourceCulture);
             }
         }
         
