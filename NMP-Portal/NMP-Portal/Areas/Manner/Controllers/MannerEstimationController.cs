@@ -805,7 +805,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model.ManureTypeName = manureType.Name;
                 }
             }
-            model = _mannerEstimationLogic.SetMannerEstimationStep12(model);
+             _mannerEstimationLogic.SetMannerEstimationStep12(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationDate");
@@ -1892,12 +1892,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in DefaultNutrientValues() action");
+                _logger.LogError(hre, "MannerEstimation  Controller :   HttpRequestException in DefaultNutrientValues() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in DefaultNutrientValues() post action");
+                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in DefaultNutrientValues() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
@@ -2032,12 +2032,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in ManualNutrientValues() action");
+                _logger.LogError(hre, "MannerEstimation  Controller :   HttpRequestException in ManualNutrientValues() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in ManualNutrientValues() post action");
+                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in ManualNutrientValues() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
@@ -2112,13 +2112,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model = await _mannerEstimationLogic.GetMannerEstimationStep26();
                     return View(_applicationRateMethodAction, model);
                 }
-                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
+                (bool flowControl, IActionResult value) = RedirectForApplicationRateMethod(model);
+                if (!flowControl)
                 {
-                    return RedirectToAction("ManualApplicationRate");
-                }
-                if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-                {
-                    return RedirectToAction("AreaQuantity");
+                    return value;
                 }
                 Error? error = null;
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
@@ -2162,6 +2159,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
+        }
+
+        private (bool flowControl, IActionResult value) RedirectForApplicationRateMethod(MannerEstimationStep26ViewModel model)
+        {
+            if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
+            {
+                return (flowControl: false, value: RedirectToAction("ManualApplicationRate"));
+            }
+            if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+            {
+                return (flowControl: false, value: RedirectToAction("AreaQuantity"));
+            }
+
+            return (flowControl: true, value: null);
         }
 
         private async Task<Error?> GetDefaultNitrogenRate(MannerEstimationStep26ViewModel model, Error? error)
@@ -2215,18 +2226,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 AddErrorIfNull(formData.ApplicationRate, _applicationRateKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblApplicationRate));
-                if (formData.ApplicationRate != null)
-                {
-                    if (formData.ApplicationRate < 0)
-                        ModelState.AddModelError(_applicationRateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-
-                    if (formData.ApplicationRate > 250)
-                        ModelState.AddModelError(_applicationRateKey, Resource.MsgForApplicationRate);
-                    if (formData.ApplicationRate != Math.Round(formData.ApplicationRate.Value, 2))
-                    {
-                        ModelState.AddModelError(_applicationRateKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblApplicationRate));
-                    }
-                }
+                ValidateManualApplicationRate(formData);
                 if (!ModelState.IsValid)
                 {
                     formData = await _mannerEstimationLogic.GetMannerEstimationStep27();
@@ -2275,6 +2275,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
+        private void ValidateManualApplicationRate(MannerEstimationStep27ViewModel formData)
+        {
+            if (formData.ApplicationRate != null)
+            {
+                if (formData.ApplicationRate < 0)
+                    ModelState.AddModelError(_applicationRateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+
+                if (formData.ApplicationRate > 250)
+                    ModelState.AddModelError(_applicationRateKey, Resource.MsgForApplicationRate);
+                if (formData.ApplicationRate != Math.Round(formData.ApplicationRate.Value, 2))
+                {
+                    ModelState.AddModelError(_applicationRateKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblApplicationRate));
+                }
+            }
+        }
 
         private static void ResetWarnings(MannerEstimationNWarningViewModel model, bool isWarningMsgNeedToShowReset)
         {
@@ -2923,12 +2938,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in IncorporationDelay() action");
+                _logger.LogError(hre, "MannerEstimation  Controller :   HttpRequestException in IncorporationDelay() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in IncorporationDelay() post action");
+                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in IncorporationDelay() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
@@ -4350,7 +4365,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 Error? error = await _mannerEstimationLogic.BindMannerEstimationDataForUpdate(mannerEstimateId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
-                    TempData["MannerEstimationResult"] = error.Message;
+                    TempData[_mannerEstimationResultErrorKey] = error.Message;
                     return RedirectToAction(_mannerEstimationResultKey, new
                     {
                         q = q
@@ -4363,30 +4378,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     mannerEstimationViewModel.EncryptedMannerEstimationId = q;
                     _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
                 }
-                //var actionMethod = _mannerEstimationProtector.Unprotect(r);
-
-                //var allowedActions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                //{
-                //    Resource.lblFarmNameActionName,
-                //    Resource.lblCountry,
-                //    Resource.lblPostCode,
-                //    Resource.lblAverageAnnualRainfallActionName,
-                //    Resource.lblIsFarmOrganic,
-                //    Resource.lblFieldNameActionName,
-                //    Resource.lblNVZFieldActionName,
-                //    Resource.lblTopsoil,
-                //    Resource.lblSubSoil,
-                //    Resource.lblCropGroupActionName,
-                //    Resource.lblCropTypeActionName,
-                //    Resource.lblSowingDateForActionName
-                //};
-
-                //if (allowedActions.Contains(actionMethod))
-                //{
-                //    return RedirectToAction(actionMethod);
-                //}
-
-                //return RedirectToAction(_mannerEstimationResultKey, new { q });
+              
 
             }
             return null;
@@ -4399,7 +4391,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.UpdateFarmFieldAndCropData(mannerEstimationViewModel.MannerEstimationId.Value);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["MannerEstimationResult"] = error.Message;
+                TempData[_mannerEstimationResultErrorKey] = error.Message;
                 return RedirectToAction(_mannerEstimationResultKey, new
                 {
                     q = mannerEstimationViewModel.EncryptedMannerEstimationId
@@ -4419,7 +4411,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 Error? error = await _mannerEstimationLogic.BindApplicationDetailForUpdate(mannerEstimateApplicationId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
-                    TempData["MannerEstimationResult"] = error.Message;
+                    TempData[_mannerEstimationResultErrorKey] = error.Message;
                     return RedirectToAction(_mannerEstimationResultKey, new
                     {
                         q = q
@@ -4443,7 +4435,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (MannerEstimationApplication? mannerEstimationApplication, Error? error) = await _mannerEstimationLogic.UpdateMannerEstimationApplicationData();
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData["MannerEstimationResult"] = error.Message;
+                TempData[_mannerEstimationResultErrorKey] = error.Message;
                 return RedirectToAction(_mannerEstimationResultKey, new
                 {
                     q = mannerEstimationViewModel.EncryptedMannerEstimationId

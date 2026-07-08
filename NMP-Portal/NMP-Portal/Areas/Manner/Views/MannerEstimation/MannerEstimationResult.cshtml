@@ -16,10 +16,10 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-        @if (TempData["MannerEstimationResult"] != null)
+        @if (TempData["MannerEstimationResultError"] != null)
         {
             <govuk-error-summary>
-                <govuk-error-summary-item href="#">@TempData["MannerEstimationResult"]</govuk-error-summary-item>
+                <govuk-error-summary-item href="#">@TempData["MannerEstimationResultError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
         @if (ViewBag.Success != null && ViewBag.Success == "true")

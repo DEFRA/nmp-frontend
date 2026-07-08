@@ -802,8 +802,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     private async Task<(MannerEstimationApplication?, Error?)> BindMannerEstinationApplicationData(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimation mannerEstimate, bool isUpdate)
     {
-        MannerEstimationApplication mannerEstimationApplication = new MannerEstimationApplication();
-        Error? error = null;
         bool isDefaultnutrient = mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue ?? false;
         decimal? nitrogen = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.TotalN : mannerEstimationViewModel.MannerEstimationStep25.N;
         decimal? p2O5 = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.P2O5 : mannerEstimationViewModel.MannerEstimationStep25.P2O5;
@@ -825,7 +823,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate = mannerEstimationViewModel.MannerEstimationStep28.ApplicationRate;
         }
-        mannerEstimationApplication = new MannerEstimationApplication
+        MannerEstimationApplication mannerEstimationApplication = new MannerEstimationApplication
         {
             ManureTypeID = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId,
             ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate.Value,
@@ -858,7 +856,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             RainfallPostApplication = mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall,
 
         };
-        (string? mannerRequestbody, error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
+        (string? mannerRequestbody,Error? error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
         if (!string.IsNullOrEmpty(error?.Message))
         {
             return (mannerEstimationApplication, error);
@@ -1500,7 +1498,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     }
     public async Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId)
     {
-
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         (MannerEstimationApplication? mannerEstimateApplication, Error? error) = await FetchMannerEstimateApplicationById(mannerEstimateApplicationId);
         if (mannerEstimateApplication != null && string.IsNullOrWhiteSpace(error?.Message))
@@ -1543,6 +1540,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep32.SoilDrainageEndDate = mannerEstimateApplication.EndOfDrainageDate;
             mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall = mannerEstimateApplication.RainfallPostApplication;
             mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue = await FetchDefaultNutrientValue(mannerEstimateApplication.ManureTypeID.Value, mannerEstimateApplication);
+        }
+        else
+        {
+            return error;
         }
         (ManureType? manureType, error) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimateApplication.ManureTypeID.Value);
         if (error == null && manureType != null)

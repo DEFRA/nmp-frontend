@@ -4,37 +4,38 @@
 
     ViewData["Title"] = $"{Resource.lblConditionsAffectingTheLossOfNutrients} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     var backAction = Model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
+    var backActionIfApplicationMethodInjection = "ManualApplicationRate";
+    @if (Model.ApplicationRateMethod.HasValue && (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate))
+    {
+        backActionIfApplicationMethodInjection = "ManualApplicationRate";
+    }
+    else if (Model.ApplicationRateMethod.HasValue && (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity))
+    {
+        backActionIfApplicationMethodInjection = "AreaQuantity";
+    }
+    else
+    {
+        backActionIfApplicationMethodInjection = "ApplicationRateMethod";
+    }
+
 }
 @section BeforeContent {
     @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationDateChange)
     {
         <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
     }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationDateChange)
+    {
+        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    }
+    else if ((Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
+    {
+        <govuk-back-link asp-action=@backActionIfApplicationMethodInjection asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
     else
-        @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationDateChange)
-        {
-            <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
-        }
-        else
-            @if ((Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
-            {
-                @if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
-                {
-                    <govuk-back-link asp-action="ManualApplicationRate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-                }
-                else if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-                {
-                    <govuk-back-link asp-action="AreaQuantity" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-                }
-                else
-                {
-                    <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-                }
-            }
-            else
-            {
-                <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-            }
+    {
+        <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
 
     
 }

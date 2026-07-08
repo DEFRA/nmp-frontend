@@ -22,6 +22,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 {
     private readonly ILogger<MannerEstimationService> _logger = logger;
     private const string _dateFormat = "yyyy-MM-dd";
+    private const string _contentType = "application/json";
     public async Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId)
     {
         List<MannerEstimationDetailsViewModel> mannerEstimationsList = new List<MannerEstimationDetailsViewModel>();
@@ -65,7 +66,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
             var response = await httpClient.PostAsync(
                 ApiurlHelper.AddMannerEstimationAsyncAPI,
-                new StringContent(MannerData, Encoding.UTF8, "application/json"));
+                new StringContent(MannerData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();
 
@@ -216,7 +217,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.PostAsync(ApiurlHelper.CopyMannerEstimationAsyncAPI,
-                new StringContent(jsonData, Encoding.UTF8, "application/json"));
+                new StringContent(jsonData, Encoding.UTF8, _contentType));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -294,7 +295,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
             var response = await httpClient.PutAsync(
                 ApiurlHelper.UpdateMannerEstimateAsyncAPI,
-                new StringContent(MannerData, Encoding.UTF8, "application/json"));
+                new StringContent(MannerData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();
 
@@ -432,7 +433,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
             var response = await httpClient.PutAsync(
               string.Format(ApiurlHelper.UpdateMannerEstimateApplicationAsyncAPI,14),
-                new StringContent(MannerApplicationData, Encoding.UTF8, "application/json"));
+                new StringContent(MannerApplicationData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();
 
