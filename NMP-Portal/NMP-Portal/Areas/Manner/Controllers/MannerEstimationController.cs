@@ -1575,18 +1575,35 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("SubSoil");
             }
-            catch (HttpRequestException hre)
+            catch (Exception ex)
             {
-                _logger.LogError(hre, "MannerEstimation  Controller :   HttpRequestException in TopSoil() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);
+                return HandleException(ex, "TopSoil");
+            }
+
+        }
+
+        private IActionResult HandleException(Exception ex, string actionName)
+        {
+            if (ex is HttpRequestException hre)
+            {
+                _logger.LogError(
+                    hre,
+                    "MannerEstimation Controller : HttpRequestException in {Action} action : {Message} {StackTrace}",
+                    actionName,
+                    hre.Message,
+                    hre.StackTrace);
 
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in TopSoil() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
-            }
 
+            _logger.LogError(
+                ex,
+                "MannerEstimation Controller : Exception in {Action} post action : {Message} {StackTrace}",
+                actionName,
+                ex.Message,
+                ex.StackTrace);
+
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
         }
         private async Task BindAllSubsoilList()
         {
@@ -1648,15 +1665,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("CropGroup");
             }
-            catch (HttpRequestException hre)
-            {
-                _logger.LogError(hre, "MannerEstimation  Controller :   HttpRequestException in SubSoil() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);
-                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
-            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in SubSoil() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+                return HandleException(ex, "TopSoil");
             }
 
         }
@@ -2030,15 +2041,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction);
             }
-            catch (HttpRequestException hre)
-            {
-                _logger.LogError(hre, "MannerEstimation  Controller :   HttpRequestException in ManualNutrientValues() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);
-                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
-            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in ManualNutrientValues() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+                return HandleException(ex, "ManualNutrientValues");
             }
 
         }
