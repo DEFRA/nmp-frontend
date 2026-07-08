@@ -1316,12 +1316,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FarmToCopy() action");
+                _logger.LogError(hre, "MannerEstimation  Controller :  HttpRequestException in FarmToCopy() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FarmToCopy() post action");
+                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in FarmToCopy() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
@@ -1445,7 +1445,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _mannerEstimationLogic.SetMannerEstimationStep17(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("FieldName");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("FieldName");
             }
             catch (HttpRequestException hre)
             {
@@ -1515,16 +1515,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _mannerEstimationLogic.SetMannerEstimationStep18(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("SubSoil");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFarmFieldOrCropDataActionName) : RedirectToAction("SubSoil");
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in TopSoil() action");
+                _logger.LogError(hre, "MannerEstimation  Controller :   HttpRequestException in TopSoil() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);                
+                
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in TopSoil() post action");
+                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in TopSoil() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
@@ -1587,12 +1588,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in SubSoil() action");
+                _logger.LogError(hre, "MannerEstimation  Controller :   HttpRequestException in SubSoil() action : {Message} {StackTrace}", hre.Message, hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in SubSoil() post action");
+                _logger.LogError(ex, "MannerEstimation  Controller :   Exception in SubSoil() post action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
