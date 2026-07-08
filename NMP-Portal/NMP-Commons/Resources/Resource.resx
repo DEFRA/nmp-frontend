@@ -8210,4 +8210,73 @@ following crop year 2</value>
   <data name="MsgPhosphoruPriceMustNotExceedtwoDecimal" xml:space="preserve">
     <value>Phosphorus price must not exceed two decimal places.</value>
   </data>
+  <data name="lblEstimateOfNutrientSupplyFromOrganicMaterial" xml:space="preserve">
+    <value>Estimate of nutrient supply from organic materials</value>
+  </data>
+  <data name="lblReportCreatedOn" xml:space="preserve">
+    <value>Report created on {0}</value>
+  </data>
+  <data name="lblFieldAndCropDetails" xml:space="preserve">
+    <value>Field and crop details</value>
+  </data>
+  <data name="lblInANVZ" xml:space="preserve">
+    <value>In a NVZ</value>
+  </data>
+  <data name="lblConditionsAtTheTimeOfApplication" xml:space="preserve">
+    <value>Conditions at the time of application</value>
+  </data>
+  <data name="lblRainfallPostApplication" xml:space="preserve">
+    <value>Rainfall post application</value>
+  </data>
+  <data name="lblWindSpeedAtApplications" xml:space="preserve">
+    <value>Wind speed at application</value>
+  </data>
+  <data name="lblRainWithin6HoursOfApplication" xml:space="preserve">
+    <value>Rain within 6 hours of application</value>
+  </data>
+  <data name="lblManureAnalysis" xml:space="preserve">
+    <value>Manure analysis</value>
+  </data>
+  <data name="lblValuesArePerCubicMetre" xml:space="preserve">
+    <value>Values are per cubic metre</value>
+  </data>
+  <data name="lblTotalNitrogenNitrogen" xml:space="preserve">
+    <value>Total nitrogen (N)</value>
+  </data>
+  <data name="lblAmmoniumN" xml:space="preserve">
+    <value>Ammonium N</value>
+  </data>
+  <data name="lblNitrateN" xml:space="preserve">
+    <value>Nitrate N</value>
+  </data>
+  <data name="lblTotalSulphurSO3" xml:space="preserve">
+    <value>Total sulphur (SO3)</value>
+  </data>
+  <data name="lblTotalMagnesiumMgO" xml:space="preserve">
+    <value>Total magnesium (MgO)</value>
+  </data>
+  <data name="lblMannerNPKResults" xml:space="preserve">
+    <value>MANNER-NPK results</value>
+  </data>
+  <data name="lblCurrentCrop" xml:space="preserve">
+    <value>current crop</value>
+  </data>
+  <data name="lblFollowingCropYear2" xml:space="preserve">
+    <value>following crop year 2</value>
+  </data>
+  <data name="lblNitrogenNMineralizationAndLosses" xml:space="preserve">
+    <value>Nitrogen (N) mineralization and losses</value>
+  </data>
+  <data name="lblMineralisedNitrogenN" xml:space="preserve">
+    <value>Mineralised nitrogen (N)</value>
+  </data>
+  <data name="lblOrganicMaterialValue" xml:space="preserve">
+    <value>Organic material value</value>
+  </data>
+  <data name="lblCropAvailableNitrogenNitrogen" xml:space="preserve">
+    <value>Crop available nitrogen (N)</value>
+  </data>
+  <data name="lblBackToResults" xml:space="preserve">
+    <value>Back to results</value>
+  </data>
 </root>
