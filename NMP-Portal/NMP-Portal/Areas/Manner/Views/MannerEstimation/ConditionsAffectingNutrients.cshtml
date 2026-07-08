@@ -6,27 +6,37 @@
     var backAction = Model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
 }
 @section BeforeContent {
-        @if ((Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationDateChange)
+    {
+        <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
+    else
+        @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationDateChange)
         {
-            @if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
+            <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+        }
+        else
+            @if ((Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
             {
-                <govuk-back-link asp-action="ManualApplicationRate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-            }
-            else if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-            {
-                <govuk-back-link asp-action="AreaQuantity" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+                @if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
+                {
+                    <govuk-back-link asp-action="ManualApplicationRate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+                }
+                else if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+                {
+                    <govuk-back-link asp-action="AreaQuantity" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+                }
+                else
+                {
+                    <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+                }
             }
             else
             {
-                <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+                <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
             }
-        }
-        else
-        {
-            <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-        }
-    
 
+    
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -76,20 +86,20 @@
 
             <h2 class="govuk-heading-m">@Resource.HeadingClimateConditions</h2>
             <govuk-summary-list>
-                @if (Model.AutumnCropNitrogenUptake!=null&&Model.AutumnCropNitrogenUptake >0)
+                @if (Model.AutumnCropNitrogenUptake != null && Model.AutumnCropNitrogenUptake > 0)
                 {
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key>
-                                @Resource.lblAutumnCropNitrogenUptake
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptake.Value.ToString("#,0.#")))
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="AutumnCropNitrogenUptake" asp-controller="MannerEstimation" >@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblAutumnCropNitrogenUptake</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
-                    
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblAutumnCropNitrogenUptake
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptake.Value.ToString("#,0.#")))
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="AutumnCropNitrogenUptake" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblAutumnCropNitrogenUptake</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
                 }
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
@@ -139,13 +149,9 @@
                 @Resource.lblContinue
             </govuk-button>
 
-
-
-
-            <p class="govuk-body cancel-link">
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            </p>
+            
         </form>
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
     </div>
 
 </div>

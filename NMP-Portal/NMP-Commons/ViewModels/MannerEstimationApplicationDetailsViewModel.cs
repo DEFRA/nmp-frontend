@@ -16,5 +16,6 @@ namespace NMP.Commons.ViewModels
         public string ApplicationMethod { get; set; } = string.Empty;
         public string IncorporationMethod { get; set; } = string.Empty;
         public string IncorporationDelay { get; set; } = string.Empty;
+        public string EncryptedApplicationId { get; set; } = string.Empty;
     }
 }

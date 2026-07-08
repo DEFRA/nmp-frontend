@@ -4,9 +4,15 @@
     string title = Resource.lblMannerEstimate;
     string heading = string.Format(Resource.lblHowAreYouApplyingTheManureType, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+    var backAction = "ApplicationDate";
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange)
+    {
+        backAction = "MannerEstimationResult";
+    }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+
 }
 
 

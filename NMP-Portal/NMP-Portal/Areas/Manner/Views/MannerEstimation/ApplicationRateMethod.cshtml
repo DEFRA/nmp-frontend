@@ -9,9 +9,15 @@
     var calculateBasedOnAreaAndQuantity = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
     var useDefaultApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
     bool isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
+    var backAction = "DefaultNutrientValues";
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange)
+    {
+        backAction = "MannerEstimationResult";
+    }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="DefaultNutrientValues" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+
 }
 
 <form asp-action="ApplicationRateMethod" asp-controller="MannerEstimation" method="post" autocomplete="off">

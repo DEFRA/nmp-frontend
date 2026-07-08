@@ -315,7 +315,7 @@ count = 0;
                                 @mannerEstimation.FarmName
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.FarmNameAction>
+                                <a class="govuk-link" asp-action="FarmName" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblFarmName)</span>
                                 </a>
@@ -328,7 +328,7 @@ count = 0;
                                 @mannerEstimation.Country
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.CountryAction>
+                                <a class="govuk-link" asp-action="Country" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblCountry)</span>
                                 </a>
@@ -341,7 +341,7 @@ count = 0;
                                 @mannerEstimation.Postcode
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.PostcodeAction>
+                                <a class="govuk-link" asp-action="PostCode" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span>
                                 </a>
@@ -354,7 +354,7 @@ count = 0;
                                 @registeredOrganicProducer
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.IsFarmOrganicAction>
+                                <a class="govuk-link" asp-action="IsFarmOrganic" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblRegisteredOrganicProducerOnly)</span>
                                 </a>
@@ -367,7 +367,7 @@ count = 0;
                                 @string.Format("{0}{1}", mannerEstimation.AverageAnuualRainfall, Resource.lblmm)
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.AverageAnnualRainfallAction>
+                                <a class="govuk-link" asp-action="AverageAnnualRainfall" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(string.Format(Resource.lblAverageAnnualRainfallFor, mannerEstimation.Postcode))</span>
                                 </a>
@@ -380,7 +380,7 @@ count = 0;
                                 @mannerEstimation.FieldName
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.FieldNameAction>
+                                <a class="govuk-link" asp-action="FieldName" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblFieldName)</span>
                                 </a>
@@ -393,7 +393,7 @@ count = 0;
                                 @isWithinNVZ
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.NVZFieldAction>
+                                <a class="govuk-link" asp-action="NVZField" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblIsInsideANitrateVulnerableZone)</span>
                                 </a>
@@ -406,7 +406,7 @@ count = 0;
                                 @mannerEstimation.TopSoil
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.TopsoilAction>
+                                <a class="govuk-link" asp-action="Topsoil" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblTopsoil)</span>
                                 </a>
@@ -419,7 +419,7 @@ count = 0;
                                 @mannerEstimation.SubSoil
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.SubsoilAction>
+                                <a class="govuk-link" asp-action="Subsoil" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblSubSoil)</span>
                                 </a>
@@ -432,7 +432,7 @@ count = 0;
                                 @mannerEstimation.CropTypeName
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.CropTypeAction>
+                                <a class="govuk-link" asp-action="CropType" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">@(Resource.lblCropType)</span>
                                 </a>
@@ -447,7 +447,7 @@ count = 0;
                                     @mannerEstimation.SowingDate.ToString("dd MMMM yyyy")
                                         </td>
                                         <td class="govuk-table__cell">
-                                    <a class="govuk-link" asp-action="BindFarmFieldOrCropDataUpdate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.SowingDateAction>
+                                    <a class="govuk-link" asp-action="SowingDate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                                 @Resource.lblChange
                                                 <span class="govuk-visually-hidden">@(Resource.lblCropType)</span>
                                             </a>

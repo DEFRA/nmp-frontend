@@ -8237,4 +8237,55 @@ following crop year 2</value>
   <data name="lblSowingDateForActionName" xml:space="preserve">
     <value>SowingDate</value>
   </data>
+  <data name="lblApplicationDateActionName" xml:space="preserve">
+    <value>ApplicationDate</value>
+  </data>
+  <data name="lblApplicationMethodActionName" xml:space="preserve">
+    <value>ApplicationMethod</value>
+  </data>
+  <data name="lblApplicationRateMethodActionName" xml:space="preserve">
+    <value>ApplicationRateMethod</value>
+  </data>
+  <data name="lblAreaQuantityActionName" xml:space="preserve">
+    <value>AreaQuantity</value>
+  </data>
+  <data name="lblAutumnCropNitrogenUptakeActionName" xml:space="preserve">
+    <value>AutumnCropNitrogenUptake</value>
+  </data>
+  <data name="lblDefaultNutrientValuesActionName" xml:space="preserve">
+    <value>DefaultNutrientValues</value>
+  </data>
+  <data name="lblIncorporationDelayActionName" xml:space="preserve">
+    <value>IncorporationDelay</value>
+  </data>
+  <data name="lblIncorporationMethodActionName" xml:space="preserve">
+    <value>IncorporationMethod</value>
+  </data>
+  <data name="lblManualApplicationRateActionName" xml:space="preserve">
+    <value>ManualApplicationRate</value>
+  </data>
+  <data name="lblManualNutrientValuesActionName" xml:space="preserve">
+    <value>ManualNutrientValues</value>
+  </data>
+  <data name="lblManureGroupActionName" xml:space="preserve">
+    <value>ManureGroup</value>
+  </data>
+  <data name="lblManureTypeActionName" xml:space="preserve">
+    <value>ManureType</value>
+  </data>
+  <data name="lblRainfallWithinSixHourActionName" xml:space="preserve">
+    <value>RainfallWithinSixHour</value>
+  </data>
+  <data name="lblSoilDrainageEndDateActionName" xml:space="preserve">
+    <value>SoilDrainageEndDate</value>
+  </data>
+  <data name="lblEffectiveRainfallActionName" xml:space="preserve">
+    <value>EffectiveRainfall</value>
+  </data>
+  <data name="lblEffectiveRainfallManualActionName" xml:space="preserve">
+    <value>EffectiveRainfallManual</value>
+  </data>
+  <data name="lblTopsoilMoistureActionName" xml:space="preserve">
+    <value>TopsoilMoisture</value>
+  </data>
 </root>

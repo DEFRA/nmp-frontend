@@ -21,5 +21,8 @@ namespace NMP.Commons.ViewModels
         public decimal? UricAcid { get; set; }
         public decimal? NH4N { get; set; }
         public decimal? NO3N { get; set; }
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public bool IsManureTypeChange { get; set; } = false;
+        public bool IsDefaultValueChange { get; set; } = false;
     }
 }

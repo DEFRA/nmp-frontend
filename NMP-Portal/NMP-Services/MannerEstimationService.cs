@@ -399,5 +399,69 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         }
         return (isExist, error);
     }
+    public async Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationByIdAsync(int mannerEstimateApplicationId)
+    {
+        MannerEstimationApplication? mannerEstimationApplication = null;
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateApplicationByIdAsyncAPI, mannerEstimateApplicationId));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                mannerEstimationApplication = responseWrapper?.Data?.records.ToObject<MannerEstimationApplication>();
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerEstimationApplication, error);
+    }
+    public async Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationServiceAsync(string MannerApplicationData)
+    {
+        MannerEstimationApplication? mannerEstimationApplication = null;
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            var response = await httpClient.PutAsync(
+              string.Format(ApiurlHelper.UpdateMannerEstimateApplicationAsyncAPI,14),
+                new StringContent(MannerApplicationData, Encoding.UTF8, "application/json"));
+
+            string result = await response.Content.ReadAsStringAsync();
+
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper?.Data is not null)
+                {
+                    mannerEstimationApplication = responseWrapper.Data?.MannerEstimationApplication.ToObject<MannerEstimationApplication>();
+                }
+            }
+            else
+            {
+                error = new Error();
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, error);
+        }
+
+        return (mannerEstimationApplication, error);
+
+    }
 }
 
