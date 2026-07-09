@@ -25,8 +25,8 @@
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>@Resource.CopyExistingFarmAndFieldDetailsContent2</govuk-radios-hint>
 
-                    <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
-                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+                    <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
 
                 </govuk-radios-fieldset>
             </govuk-radios>
@@ -36,6 +36,8 @@
             </govuk-button>
         </form>
 
-        <partial name="_CancelLink" model="@Model.IsCheckAnswer" />
+        <p class="govuk-body cancel-link">
+        <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+        </p>
     </div>
 </div>
