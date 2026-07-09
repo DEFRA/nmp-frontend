@@ -1543,16 +1543,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    private async Task FetchYearsList(ReportViewModel model, List<int> yearList, int maxYear)
-    {
-        List<PlanSummaryResponse> PlanYearList = await _cropLogic.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
-        if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
-        {
-            List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
-            yearList.AddRange(maxYearList);
-        }
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Year(ReportViewModel model)
@@ -1617,6 +1607,16 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             _logger.LogTrace(ex, "Report Controller : Exception in Year() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorOnYear] = ex.Message;
             return View(model);
+        }
+    }
+
+    private async Task FetchYearsList(ReportViewModel model, List<int> yearList, int maxYear)
+    {
+        List<PlanSummaryResponse> PlanYearList = await _cropLogic.FetchPlanSummaryByFarmId(model.FarmId.Value, 0);//0=plan
+        if (PlanYearList.Count > 0 && PlanYearList.Any(x => x.Year > maxYear))
+        {
+            List<int> maxYearList = PlanYearList.Where(x => x.Year > maxYear).Select(x => x.Year).ToList();
+            yearList.AddRange(maxYearList);
         }
     }
 

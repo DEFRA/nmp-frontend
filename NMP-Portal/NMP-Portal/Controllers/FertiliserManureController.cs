@@ -3153,67 +3153,31 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     public async Task<IActionResult> Defoliation(FertiliserManureViewModel model)
     {
         _logger.LogTrace("Fertiliser Manure Controller : Defoliation() post action called");
-        Error? error = null;
         try
         {
-            if (model.DefoliationList[model.DefoliationCurrentCounter].Defoliation == null)
-            {
-                ModelState.AddModelError("DefoliationList[" + model.DefoliationCurrentCounter + "].Defoliation", Resource.MsgSelectAnOptionBeforeContinuing);
-            }
-
+            ValidateDefoliationSelection(model);
             if (!ModelState.IsValid)
             {
                 await BindViewBegForDefoliationList(model);
                 return View(model);
             }
 
-
-            if (!model.NeedToShowSameDefoliationForAll || (model.IsSameDefoliationForAll.HasValue && !model.IsSameDefoliationForAll.Value))
+            IActionResult? bindingResult = await HandleDefoliationBinding(model);
+            if (bindingResult != null)
             {
-                (bool flowControl, IActionResult value, error) = await BindDefoliations(model, error);
-                if (!flowControl)
-                {
-                    return value;
-                }
+                return bindingResult;
             }
-            else if (model.IsSameDefoliationForAll.HasValue && (model.IsSameDefoliationForAll.Value))
-            {
-                error = await BindManagementPeriodAndDefoliation(model, error);
 
-                SetFertiliserManureToSession(model);
-                if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
-                {
-                    return RedirectToAction(_checkAnswerActionName);
-                }
-                return RedirectToAction(_inOrgnaicManureDurationActionName);
-            }
             model.GrassCropCount = model.DefoliationList.Count;
             SetFertiliserManureToSession(model);
+
             if (model.DefoliationCurrentCounter == model.DefoliationList.Count)
             {
-                if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
-                {
-                    return RedirectToAction(_checkAnswerActionName);
-                }
-                return RedirectToAction(_inOrgnaicManureDurationActionName);
+                return RedirectToNextStep(model);
             }
-            else
-            {
-                (List<SelectListItem> defoliationList, error) = await GetDefoliationList(model);
-                if (error == null && defoliationList.Count > 0)
-                {
-                    ViewBag.DefoliationList = defoliationList.Select(f => new SelectListItem
-                    {
-                        Value = f.Value,
-                        Text = f.Text.ToString()
-                    }).ToList();
-                }
-                else
-                {
-                    TempData["DefoliationError"] = error?.Message;
-                }
-                return View(model);
-            }
+
+            await PopulateDefoliationViewBag(model);
+            return View(model);
         }
         catch (Exception ex)
         {
@@ -3221,8 +3185,72 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             TempData["DefoliationError"] = ex.Message;
             return View(model);
         }
+    }
 
-       
+    private void ValidateDefoliationSelection(FertiliserManureViewModel model)
+    {
+        if (model.DefoliationList[model.DefoliationCurrentCounter].Defoliation == null)
+        {
+            ModelState.AddModelError(
+                "DefoliationList[" + model.DefoliationCurrentCounter + "].Defoliation",
+                Resource.MsgSelectAnOptionBeforeContinuing);
+        }
+    }
+
+    private static bool IsSameDefoliationForAllSelectedYes(FertiliserManureViewModel model)
+    {
+        return model.IsSameDefoliationForAll.HasValue && model.IsSameDefoliationForAll.Value;
+    }
+
+    private static bool ShouldBindIndividualDefoliations(FertiliserManureViewModel model)
+    {
+        return !model.NeedToShowSameDefoliationForAll
+            || (model.IsSameDefoliationForAll.HasValue && !model.IsSameDefoliationForAll.Value);
+    }
+
+    private async Task<IActionResult?> HandleDefoliationBinding(FertiliserManureViewModel model)
+    {
+        Error? error = null;
+
+        if (ShouldBindIndividualDefoliations(model))
+        {
+            (bool flowControl, IActionResult value, error) = await BindDefoliations(model, error);
+            return flowControl ? null : value;
+        }
+
+        if (IsSameDefoliationForAllSelectedYes(model))
+        {
+            error = await BindManagementPeriodAndDefoliation(model, error);
+            SetFertiliserManureToSession(model);
+            return RedirectToNextStep(model);
+        }
+
+        return null;
+    }
+
+    private IActionResult RedirectToNextStep(FertiliserManureViewModel model)
+    {
+        if (model.IsCheckAnswer && !model.IsAnyChangeInField)
+        {
+            return RedirectToAction(_checkAnswerActionName);
+        }
+        return RedirectToAction(_inOrgnaicManureDurationActionName);
+    }
+
+    private async Task PopulateDefoliationViewBag(FertiliserManureViewModel model)
+    {
+        (List<SelectListItem> defoliationList, Error? error) = await GetDefoliationList(model);
+
+        if (error == null && defoliationList.Count > 0)
+        {
+            ViewBag.DefoliationList = defoliationList
+                .Select(f => new SelectListItem { Value = f.Value, Text = f.Text.ToString() })
+                .ToList();
+        }
+        else
+        {
+            TempData["DefoliationError"] = error?.Message;
+        }
     }
 
     async Task<(bool flowControl, IActionResult value, Error? error)> BindDefoliations(FertiliserManureViewModel model, Error? error)
