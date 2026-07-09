@@ -12,29 +12,35 @@
             <h1 class="govuk-heading-xl">@Resource.lblServiceReleaseSchedule</h1>
             <p class="govuk-body">@string.Format(Resource.lblLastUpdatedDate, Resource.lblReleaseScheduleDate)</p>
             <h2 class="govuk-heading-m">@Resource.lblReleaseScheduleContentOne</h2>
+            <p class="govuk-body ">
+                @Html.Raw(Resource.lblReleaseScheduleContentTwo)
+            </p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>@Resource.lblReleaseScheduleContentFour</li>
                 <li>@Resource.lblReleaseScheduleContentFive</li>
                 <li>@Resource.lblReleaseScheduleContentSix</li>
                 <li>@Resource.lblReleaseScheduleContentSeven</li>
-                <li>@Resource.lblReleaseScheduleContentEight
+                <li>
+                    @Resource.lblReleaseScheduleContentEight
                     <ul class="govuk-list govuk-list--bullet">
                         <li>@Resource.lblReleaseScheduleContentSeventeen</li>
                         <li>@Resource.lblReleaseScheduleContentEighteen</li>
-                        <li>@Resource.lblReleaseScheduleContentNineteen</li>                        
-                    </ul>                
+                        <li>@Resource.lblReleaseScheduleContentNineteen</li>
+                    </ul>
                 </li>
                 <li>@Resource.lblReleaseScheduleContentTwenty</li>
             </ul>
+
             <h2 class="govuk-heading-m">@Resource.lblReleaseScheduleContentEleven</h2>
-            <ul class="govuk-list govuk-list--bullet">                
+            <ul class="govuk-list govuk-list--bullet">
                 <li>@Html.Raw(Resource.lblReleaseScheduleContentTen)</li>
                 <li>@Html.Raw(Resource.lblReleaseScheduleContentTwelve)</li>
                 <li>@Html.Raw(Resource.lblReleaseScheduleContentThirteen)</li>
             </ul>
             <p class="govuk-body">
                 @Html.Raw(Resource.lblReleaseScheduleContentTwentyTwo)
-            </p>         
+            </p>
+
         </div>
     </div>
 </div>
