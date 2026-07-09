@@ -21,9 +21,8 @@
                 <br>
                 <govuk-button type="submit">@Resource.lblContinue</govuk-button>
             </fieldset>
-            <p class="govuk-body cancel-link">
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            </p>
+
+            <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
         </form>
     </div>
 </div>

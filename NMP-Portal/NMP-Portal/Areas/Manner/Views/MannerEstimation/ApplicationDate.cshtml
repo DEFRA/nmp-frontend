@@ -7,10 +7,11 @@
     string title = Resource.lblMannerEstimate;
     string pageHeader = string.Format(Resource.lblWhenAreYouApplyingOrganicMaterialOnFieldName, Model.FieldName);
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange) ? "MannerEstimationResult" : "ManureType";
 }
 
 @section BeforeContent {    
-    <govuk-back-link asp-action="@((!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "ManureType")" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -55,8 +56,7 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-        </p>
+
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
     </div>
 </div>

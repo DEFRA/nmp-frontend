@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "AverageAnnualRainfall")" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="AverageAnnualRainfall" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">

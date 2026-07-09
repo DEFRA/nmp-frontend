@@ -2322,6 +2322,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application detail updated..
+        /// </summary>
+        public static string lblApplicationDetailUpdated {
+            get {
+                return ResourceManager.GetString("lblApplicationDetailUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application method.
         /// </summary>
         public static string lblApplicationMethod {
@@ -9800,6 +9809,15 @@ namespace NMP.Commons.Resources {
         public static string lblManageStoreCapacity {
             get {
                 return ResourceManager.GetString("lblManageStoreCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application detail {0} updated..
+        /// </summary>
+        public static string lblMannerApplicationDetailCountUpdated {
+            get {
+                return ResourceManager.GetString("lblMannerApplicationDetailCountUpdated", resourceCulture);
             }
         }
         

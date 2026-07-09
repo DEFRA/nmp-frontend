@@ -4,9 +4,11 @@
 
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblTotalRainfallSinceApplication} {Resource.lblHyphen} {title}";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "ConditionsAffectingNutrients";
 }
+
 @section BeforeContent {
-    <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="EffectiveRainfall" asp-controller="MannerEstimation" method="post" autocomplete="off">
@@ -29,9 +31,8 @@
                 @Resource.lblContinue
             </govuk-button>
 
-            <p class="govuk-body cancel-link">
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            </p>
+       
+            <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
 
         </div>
 

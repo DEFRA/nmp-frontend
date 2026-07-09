@@ -7,9 +7,10 @@
     string title = Resource.lblMannerEstimate;
     string heading =Resource.lblWhatTypeOfLivestockManureAreYouUsingInThisApplication;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+    var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) ? "MannerEstimationResult" : "ManureGroup";
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@(!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) ? "MannerEstimationResult" : "ManureGroup")" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
