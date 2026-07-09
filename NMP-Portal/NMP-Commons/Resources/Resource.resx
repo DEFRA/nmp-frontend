@@ -6858,7 +6858,7 @@ livestock manure.</value>
     <value>Last updated {0}</value>
   </data>
   <data name="lblReleaseScheduleContentOne" xml:space="preserve">
-    <value>Existing functionality for England and Wales regions  </value>
+    <value>Existing functionality</value>
   </data>
   <data name="lblReleaseScheduleContentFour" xml:space="preserve">
     <value>Create a nutrient management plan for arable crops and grassland</value>
@@ -6871,22 +6871,22 @@ livestock manure.</value>
   </data>
   <data name="lblReleaseScheduleContentSeven" xml:space="preserve">
     <value>See warning messages where applications may breach Nitrate Vulnerable   
-Zone (NVZ) rules</value>
+Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
   </data>
   <data name="lblReleaseScheduleContentEight" xml:space="preserve">
     <value>Create the following reports:</value>
   </data>
   <data name="lblReleaseScheduleContentTen" xml:space="preserve">
-    <value>Aug/Sept 2026 &amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Standalone MANNER-NPK calculator</value>
+    <value>Sept 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Standalone MANNER-NPK calculator</value>
   </data>
   <data name="lblReleaseScheduleContentEleven" xml:space="preserve">
     <value>Next releases</value>
   </data>
   <data name="lblReleaseScheduleContentTwelve" xml:space="preserve">
-    <value>Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Scotland Arable</value>
+    <value>Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable</value>
   </data>
   <data name="lblReleaseScheduleContentThirteen" xml:space="preserve">
-    <value>Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Scotland Grassland</value>
+    <value>Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Grassland</value>
   </data>
   <data name="lblReleaseScheduleContentSeventeen" xml:space="preserve">
     <value>N-max report</value>
@@ -7534,6 +7534,10 @@ Zone (NVZ) rules</value>
   </data>
   <data name="ContentGettingHelp3" xml:space="preserve">
     <value>telephone 0845 646 2469</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
+    <value>Currently available for England and Wales only. Features for Scotland will be   
+released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; below.  </value>
   </data>
   <data name="lblWhichSoilAnalysisMethodWasUsed" xml:space="preserve">
     <value>Which soil analysis method was used?</value>

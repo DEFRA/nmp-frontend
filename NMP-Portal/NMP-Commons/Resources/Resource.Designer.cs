@@ -12502,7 +12502,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Existing functionality for England and Wales regions  .
+        ///   Looks up a localized string similar to Existing functionality.
         /// </summary>
         public static string lblReleaseScheduleContentOne {
             get {
@@ -12512,7 +12512,7 @@ namespace NMP.Commons.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to See warning messages where applications may breach Nitrate Vulnerable   
-        ///Zone (NVZ) rules.
+        ///Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages.
         /// </summary>
         public static string lblReleaseScheduleContentSeven {
             get {
@@ -12539,7 +12539,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aug/Sept 2026 &amp;nbsp; &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Standalone MANNER-NPK calculator.
+        ///   Looks up a localized string similar to Sept 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Standalone MANNER-NPK calculator.
         /// </summary>
         public static string lblReleaseScheduleContentTen {
             get {
@@ -12548,7 +12548,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Scotland Grassland.
+        ///   Looks up a localized string similar to Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Grassland.
         /// </summary>
         public static string lblReleaseScheduleContentThirteen {
             get {
@@ -12557,7 +12557,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Scotland Arable.
+        ///   Looks up a localized string similar to Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable.
         /// </summary>
         public static string lblReleaseScheduleContentTwelve {
             get {
@@ -12580,6 +12580,16 @@ namespace NMP.Commons.Resources {
         public static string lblReleaseScheduleContentTwentyTwo {
             get {
                 return ResourceManager.GetString("lblReleaseScheduleContentTwentyTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently available for England and Wales only. Features for Scotland will be   
+        ///released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; below.  .
+        /// </summary>
+        public static string lblReleaseScheduleContentTwo {
+            get {
+                return ResourceManager.GetString("lblReleaseScheduleContentTwo", resourceCulture);
             }
         }
         
