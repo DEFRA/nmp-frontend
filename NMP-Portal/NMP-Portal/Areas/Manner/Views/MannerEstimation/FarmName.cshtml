@@ -38,7 +38,7 @@
         <p class="govuk-body cancel-link">
             @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId))
     {
-                <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@(!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)?Model.EncryptedMannerEstimateId:null)">@Resource.lblCancel</a>
             }
             else
             {

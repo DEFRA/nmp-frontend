@@ -6,10 +6,11 @@
     ViewData["Title"] = $"{Resource.lblRegisteredOrganicProducer} {Resource.lblHyphen} {title}";
     var organicProducer = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var noOrganicProducer = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "AverageAnnualRainfall";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "AverageAnnualRainfall")" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="IsFarmOrganic" asp-controller="MannerEstimation" method="post" autocomplete="off">
     @Html.AntiForgeryToken()

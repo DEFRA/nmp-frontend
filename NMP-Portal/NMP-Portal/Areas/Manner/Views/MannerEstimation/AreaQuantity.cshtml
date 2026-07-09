@@ -10,13 +10,13 @@
     }
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.AreaQuantity;
     var backAction = "ApplicationRateMethod";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationRateMethodChange)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationRateMethodChange && !Model.IsManureTypeChange)
     {
         backAction = "MannerEstimationResult";
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 
 }
 

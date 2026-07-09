@@ -6,13 +6,13 @@
     ViewData["Title"] = $"{string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     
     var backAction = "IncorporationMethod";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsIncorporationMethodChange)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange)
     {
         backAction = "MannerEstimationResult";
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 
 }
 

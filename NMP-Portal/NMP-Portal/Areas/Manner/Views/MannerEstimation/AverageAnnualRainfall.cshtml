@@ -14,7 +14,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backLinkAction" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backLinkAction" asp-controller="MannerEstimation" asp-route-q="@(backLinkAction == "MannerEstimationResult"?Model.EncryptedMannerEstimateId:null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">

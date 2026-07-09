@@ -17,5 +17,6 @@ namespace NMP.Commons.ViewModels
         public string IncorporationMethod { get; set; } = string.Empty;
         public string IncorporationDelay { get; set; } = string.Empty;
         public string EncryptedApplicationId { get; set; } = string.Empty;
+        public bool IsManureTypeLiquid { get; set; } = false;
     }
 }

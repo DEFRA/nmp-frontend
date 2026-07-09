@@ -7,10 +7,11 @@
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsPostcode, Model.FarmName)} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.Postcode;
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && (!Model.IsCountryIdChange)) ? "MannerEstimationResult" : "Country";
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && (!Model.IsCountryIdChange)) ? "MannerEstimationResult" : "Country")" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">

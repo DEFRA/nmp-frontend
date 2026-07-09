@@ -7,9 +7,10 @@
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.Country;
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "FarmName";
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@((!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "FarmName")" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId:null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
