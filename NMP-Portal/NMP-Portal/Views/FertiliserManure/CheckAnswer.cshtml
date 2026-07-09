@@ -19,7 +19,7 @@
             </span>");
     }
 
-    public static IHtmlContent RenderNullableDecimalRow(string label, decimal? value, string suffix = "")
+    public static IHtmlContent RenderNullableDecimalRow(string label, decimal? value, string suffix = "{0}")
     {
         if (!value.HasValue || value.Value <= 0) return HtmlString.Empty;
 
