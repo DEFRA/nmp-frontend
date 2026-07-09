@@ -9,8 +9,8 @@
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
 }
 
-@section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "ManureType")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+@section BeforeContent {    
+    <govuk-back-link asp-action="@((!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "ManureType")" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">

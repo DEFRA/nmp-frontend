@@ -2,11 +2,17 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep30ViewModel
 @{
     bool isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
-    
+
     ViewData["Title"] = $"{string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    
+    var backAction = "IncorporationMethod";
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsIncorporationMethodChange)
+    {
+        backAction = "MannerEstimationResult";
+    }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="IncorporationMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
 
 }
 
@@ -26,7 +32,7 @@
                         @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblSelectOneOption                        
+                        @Resource.lblSelectOneOption
                     </govuk-radios-hint>
                     @if (ViewBag.IncorporationDelaysList != null && ViewBag.IncorporationDelaysList.Count > 0)
                     {
@@ -43,9 +49,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            </p>
+            <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
         </form>
     </div>
 

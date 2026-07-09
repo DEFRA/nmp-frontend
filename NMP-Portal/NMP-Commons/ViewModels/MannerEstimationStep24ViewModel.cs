@@ -14,5 +14,8 @@ namespace NMP.Commons.ViewModels
         public bool? DefaultNutrientValue { get; set; }
         public bool? IsManureTypeLiquid { get; set; }
         public int? ApplicationMethodCount { get; set; }
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public bool IsManureTypeChange { get; set; } = false;
+        public bool IsDefaultValueChange { get; set; } = false;
     }
 }

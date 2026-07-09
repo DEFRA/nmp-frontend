@@ -18,6 +18,8 @@ namespace NMP.Commons.ViewModels
         public int? CropGroupId { get; set; }
         public int? ManureGroupId { get; set; }
         public int? MannerEstimationApplicationsId { get; set; }
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public bool IsManureTypeChange { get; set; } = false;
 
     }
 }

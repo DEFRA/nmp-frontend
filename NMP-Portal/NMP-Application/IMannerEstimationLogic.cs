@@ -122,5 +122,11 @@ namespace NMP.Application
         Task<(decimal, Error)> FetchTotalNByMannerEstimationIdAppDate(int mannerEstimationId, DateTime startDate, DateTime endDate, int? mannerApplicationId);
 
         Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId);
+        Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId);
+        Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId);
+        void SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
+        Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationById(int mannerEstimateApplicationId);
+        Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId);
+        Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData();
     }
 }

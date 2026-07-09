@@ -13,6 +13,9 @@ namespace NMP.Commons.ViewModels
         public string ManureTypeName { get; set; } = string.Empty;
         public int? ManureTypeId { get; set; }
         public string? OtherMaterialName { get; set; }
+        public bool IsIncorporationMethodChange { get; set; } = false;
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public bool IsManureTypeChange { get; set; } = false;
 
     }
 }

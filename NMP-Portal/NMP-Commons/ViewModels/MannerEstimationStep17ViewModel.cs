@@ -9,6 +9,6 @@ namespace NMP.Commons.ViewModels
     public class MannerEstimationStep17ViewModel
     {
         public bool? IsFarmOrganic { get; set; }
-        public bool IsCheckAnswer { get; set; } = false;
+        public string? EncryptedMannerEstimateId { get; set; } = string.Empty;
     }
 }

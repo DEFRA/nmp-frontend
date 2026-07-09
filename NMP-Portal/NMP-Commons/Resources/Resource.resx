@@ -8279,4 +8279,7 @@ following crop year 2</value>
   <data name="lblBackToResults" xml:space="preserve">
     <value>Back to results</value>
   </data>
+  <data name="lblFarmFieldCropDataUpdated" xml:space="preserve">
+    <value>Farm, field and crop details updated.</value>
+  </data>
 </root>

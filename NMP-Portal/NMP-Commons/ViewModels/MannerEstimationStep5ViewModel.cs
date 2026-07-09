@@ -13,6 +13,6 @@ namespace NMP.Commons.ViewModels
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFieldName))]
         [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFieldNameMaxLengthValidation))]
         public string FieldName { get; set; } = string.Empty;
-        public bool IsCheckAnswer { get; set; } = false;
+        public string? EncryptedMannerEstimateId { get; set; } = string.Empty;
     }
 }

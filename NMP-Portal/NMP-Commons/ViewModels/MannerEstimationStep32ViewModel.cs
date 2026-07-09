@@ -26,5 +26,8 @@ namespace NMP.Commons.ViewModels
         public int? CropTypeId { get; set; }
         public string? FieldName { get; set; }
         public string? CropTypeName { get; set; }
+        public bool IsApplicationDateChange { get; set; } = false;
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public bool IsManureTypeChange { get; set; } = false;
     }
 }

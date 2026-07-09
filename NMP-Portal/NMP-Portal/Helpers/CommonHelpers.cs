@@ -200,6 +200,14 @@ namespace NMP.Portal.Helpers
         Resource.MsgDateMustIncludeADayAndMonth
     };
         }
-
+        public static bool IsSlurryType(int? manureTypeId)
+        {
+            return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator ||
+                   manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion;
+        }
     }
 }

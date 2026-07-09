@@ -12,7 +12,6 @@ namespace NMP.Commons.ViewModels
         public DateTime? ApplicationDate { get; set; }
         public string FieldName { get; set; } = string.Empty;
         public string ManureTypeName { get; set; } = string.Empty;
-        public bool IsCheckAnswer { get; set; } = false;
         public int CountryId { get; set; }
         public int FarmRB209CountryId { get; set; }
         public int? CropTypeId { get; set; }
@@ -57,6 +56,9 @@ namespace NMP.Commons.ViewModels
 
         public int? MannerEstimationId { get; set; }
         public int? MannerEstimationApplicationsId { get; set; }
+        public bool IsApplicationDateChange { get; set; } = false;
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public bool IsManureTypeChange { get; set; } = false;
 
     }
 }

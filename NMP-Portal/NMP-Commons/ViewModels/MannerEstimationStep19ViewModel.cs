@@ -9,7 +9,7 @@ namespace NMP.Commons.ViewModels
     public class MannerEstimationStep19ViewModel
     {
         public int? SubSoilId { get; set; }
-        public bool IsCheckAnswer { get; set; } = false;
         public string? FieldName { get; set; }
+        public string? EncryptedMannerEstimateId { get; set; } = string.Empty;
     }
 }

@@ -3,20 +3,33 @@
 @{
     var isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+
 }
 @section BeforeContent {
-  @if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
-  {
-      <govuk-back-link asp-action="ManualApplicationRate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-  }
-  else if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-  {
-      <govuk-back-link asp-action="AreaQuantity" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-  }
-  else
-  {
-      <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
-  }
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationMethodChange)
+    {
+        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationMethodChange)
+    {
+        <govuk-back-link asp-action="ApplicationMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
+    else if (Model.ApplicationRateMethod.HasValue)
+    {
+        if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
+        {
+            <govuk-back-link asp-action="ManualApplicationRate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        }
+        else if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+        {
+            <govuk-back-link asp-action="AreaQuantity" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        }
+        else
+        {
+            <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        }
+    }
+
 }
 
 <div class="govuk-grid-row">
@@ -58,10 +71,9 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            </p>
         </form>
+
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
     </div>
 
 </div>
