@@ -873,7 +873,6 @@ hr.seperator_five_report {
 }
 .text-wrap-anywhere {
     overflow-wrap: anywhere;
-    word-break: break-word;
 }
 .govuk-radios__label #lastUpdated {
     display: inline;
