@@ -93,7 +93,7 @@
                                 }
                                 <td class="govuk-table__cell">@application.ManureType</td>
                                 <td class="govuk-table__cell">@application.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0} {1}", application.ApplicationRate, Resource.lblMetresCubed)</td>
+                                <td class="govuk-table__cell">@(application.ApplicationRate != 0 ? string.Format("{0:N0} {1}", application.ApplicationRate, Resource.lblMetresCubed) : "0")</td>
                                 <td class="govuk-table__cell">@application.ApplicationMethod</td>
                                 <td class="govuk-table__cell">@application.IncorporationMethod</td>
                                 <td class="govuk-table__cell">@application.IncorporationDelay</td>
@@ -132,13 +132,13 @@
                         {
                             conditionCount++;
                             <tr class="govuk-table__row">
-                                @if(isMultiApplication)
+                                @if (isMultiApplication)
                                 {
                                     <td class="govuk-table__cell">@conditionCount</td>
                                 }
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", condition.AutumnCropNitrogenUptake, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">@(condition.AutumnCropNitrogenUptake != 0 ? string.Format("{0:N0}{1}", condition.AutumnCropNitrogenUptake, Resource.lblkg) : "0")</td>
                                 <td class="govuk-table__cell">@condition.SoilDrainageEndDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", condition.TotalRainfall, Resource.lblmm)</td>
+                                <td class="govuk-table__cell">@(condition.TotalRainfall != 0 ? string.Format("{0:N0}{1}", condition.TotalRainfall, Resource.lblmm) : "0")</td>
                                 <td class="govuk-table__cell">@condition.Windspeed</td>
                                 <td class="govuk-table__cell">@condition.RainfallWithinSixHours</td>
                                 <td class="govuk-table__cell">@condition.MoistureType</td>
@@ -154,7 +154,10 @@
             <table class="govuk-table data-table margin-bottom-none">
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
-
+                        @if (isMultiApplication)
+                        {
+                            <th scope="col" class="govuk-table__header">@Resource.lblApplication</th>
+                        }
                         <th scope="col" class="govuk-table__header">@Resource.lblDryMatterContent</th>
                         <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenNitrogen</th>
                         <th scope="col" class="govuk-table__header">@Resource.lblAmmoniumN</th>
@@ -167,18 +170,26 @@
                     </tr>
                 </tbody>
                 <tbody class="govuk-table__body">
+                    @{
+                        int manureAnalysisCount = 0;
+                    }
                     @foreach (var manureAnalysis in Model.ManureAnalyses)
                     {
+                        manureAnalysisCount++;
                         <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", manureAnalysis.DryMatterContent, Resource.lblPercentage)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", manureAnalysis.TotalNitrogen, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", manureAnalysis.AmmoniumNitrogen, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@manureAnalysis.UricAcidNitrogen</td>
-                            <td class="govuk-table__cell">@manureAnalysis.NitrateNitrogen</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", manureAnalysis.TotalPhosphate, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", manureAnalysis.TotalPotash, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", manureAnalysis.TotalSulphur, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@manureAnalysis.TotalMagnesium</td>
+                            @if(isMultiApplication)
+                            {
+                                <td class="govuk-table__cell">@manureAnalysisCount</td>
+                            }
+                            <td class="govuk-table__cell">@(manureAnalysis.DryMatterContent != 0 ? string.Format("{0:N0}{1}", manureAnalysis.DryMatterContent, Resource.lblPercentage) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.AmmoniumNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.AmmoniumNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.UricAcidNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.UricAcidNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.NitrateNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.NitrateNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalPhosphate != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalPhosphate, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalPotash != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalPotash, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalSulphur != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalSulphur, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalMagnesium != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalMagnesium, Resource.lblkg) : "0")</td>
                         </tr>
                     }
 
@@ -192,7 +203,7 @@
             <h2 class="govuk-heading-m">@Resource.lblMannerNPKResults</h2>
 
             <div class="margin-bottom-forty">
-                <h2 class="govuk-heading-s table-title">@Resource.lblTotalAndCropAvailableNitrogen</h2>
+                <h2 class="govuk-heading-s table-title">@Resource.lblTotalAndCropAvailableN</h2>
                 <p class="govuk-body govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
                 <table class="govuk-table data-table">
                     <thead class="govuk-table__head">
@@ -202,8 +213,8 @@
                                 <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
                             }
                             <th scope="row" class="govuk-table__header">@Resource.lblTotalNitrogenN</th>
-                            <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenCurrentCrop <br>@Resource.lblCurrentCrop</th>
-                            <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenCurrentCrop <br>@Resource.lblFollowingCropYear2</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenN <br>@Resource.lblCurrentCrop</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenN <br>@Resource.lblFollowingCropYear2</th>
                             <th scope="row" class="govuk-table__header">@Resource.lblNitrogenUseEfficiency</th>
                         </tr>
                     </thead>
@@ -219,20 +230,20 @@
                                 {
                                     <td class="govuk-table__cell">@cropAvailableNCount</td>
                                 }
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", cropAvailableN.TotalNitrogen, Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenCurrentCrop, Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenFollowingCropYear2, Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", cropAvailableN.NitrogenUseEfficiency, Resource.lblPercentage)</td>
+                                <td class="govuk-table__cell">@(cropAvailableN.TotalNitrogen != 0 ? string.Format("{0:N0}{1}", cropAvailableN.TotalNitrogen, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(cropAvailableN.CropAvailableNitrogenCurrentCrop != 0 ? string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenCurrentCrop, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(cropAvailableN.CropAvailableNitrogenFollowingCropYear2 != 0 ? string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenFollowingCropYear2, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(cropAvailableN.NitrogenUseEfficiency != 0 ? string.Format("{0:N0}{1}", cropAvailableN.NitrogenUseEfficiency, Resource.lblPercentage) : "0")</td>
                             </tr>
                         }
                         @if (isMultiApplication)
                         {
                             <tr class="total_row">
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalNitrogen), Resource.lblkg) </td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop), Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2), Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency), Resource.lblPercentage)</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalNitrogen), Resource.lblkg) : "0") </td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency), Resource.lblPercentage) : "0")</td>
                             </tr>
                         }
 
@@ -269,20 +280,20 @@
                                 {
                                     <td class="govuk-table__cell">@mineralizationCount</td>
                                 }
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", mineralization.MineralisedNitrogen, Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", mineralization.LostNitrateNitrogen, Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", mineralization.LostAmmoniaNitrogen, Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", mineralization.LostDenitrifiedNitrogen, Resource.lblkg)</td>
+                                <td class="govuk-table__cell">@(mineralization.MineralisedNitrogen != 0 ? string.Format("{0:N0}{1}", mineralization.MineralisedNitrogen, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(mineralization.LostNitrateNitrogen != 0 ? string.Format("{0:N0}{1}", mineralization.LostNitrateNitrogen, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(mineralization.LostAmmoniaNitrogen != 0 ? string.Format("{0:N0}{1}", mineralization.LostAmmoniaNitrogen, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(mineralization.LostDenitrifiedNitrogen != 0 ? string.Format("{0:N0}{1}", mineralization.LostDenitrifiedNitrogen, Resource.lblkg) : "0")</td>
                             </tr>
                         }
                         @if (isMultiApplication)
                         {
                             <tr class="total_row">
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.MineralisedNitrogen), Resource.lblkg) </td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostNitrateNitrogen), Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostAmmoniaNitrogen), Resource.lblkg)</td>
-                                <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostDenitrifiedNitrogen), Resource.lblkg)</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.MineralisedNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.MineralisedNitrogen), Resource.lblkg) : "0") </td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.LostNitrateNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostNitrateNitrogen), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.LostAmmoniaNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostAmmoniaNitrogen), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.LostDenitrifiedNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostDenitrifiedNitrogen), Resource.lblkg) : "0")</td>
                             </tr>
                         }
                     </tbody>
@@ -319,26 +330,26 @@
                             {
                                 <td class="govuk-table__cell">@phosphatePotashSulphurCount</td>
                             }
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", availableNutrient.TotalPhosphate, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", availableNutrient.CropAvailablePhosphate, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", availableNutrient.TotalPotash, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", availableNutrient.CropAvailablePotash, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", availableNutrient.TotalSulphur, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", availableNutrient.CropAvailableSulphur, Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", availableNutrient.TotalMagnesium, Resource.lblkg)</td>
+                            <td class="govuk-table__cell">@(availableNutrient.TotalPhosphate != 0 ? string.Format("{0:N0}{1}", availableNutrient.TotalPhosphate, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.CropAvailablePhosphate != 0 ? string.Format("{0:N0}{1}", availableNutrient.CropAvailablePhosphate, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.TotalPotash != 0 ? string.Format("{0:N0}{1}", availableNutrient.TotalPotash, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.CropAvailablePotash != 0 ? string.Format("{0:N0}{1}", availableNutrient.CropAvailablePotash, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.TotalSulphur != 0 ? string.Format("{0:N0}{1}", availableNutrient.TotalSulphur, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.CropAvailableSulphur != 0 ? string.Format("{0:N0}{1}", availableNutrient.CropAvailableSulphur, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.TotalMagnesium != 0 ? string.Format("{0:N0}{1}", availableNutrient.TotalMagnesium, Resource.lblkg) : "0")</td>
                         </tr>
                     }
                     @if (isMultiApplication)
                     {
                         <tr class="total_row">
                             <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalPhosphate), Resource.lblkg) </td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailablePhosphate), Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalPotash), Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailablePotash), Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalSulphur), Resource.lblkg) </td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableSulphur), Resource.lblkg)</td>
-                            <td class="govuk-table__cell">@string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalMagnesium), Resource.lblkg)</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalPhosphate) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalPhosphate), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailablePhosphate) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailablePhosphate), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalPotash) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalPotash), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailablePotash) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailablePotash), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalSulphur) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalSulphur), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableSulphur) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableSulphur), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalMagnesium) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalMagnesium), Resource.lblkg) : "0")</td>
                         </tr>
                     }
 
@@ -381,20 +392,20 @@
                             {
                                 <td class="govuk-table__cell">@valueBreakdownCount</td>
                             }
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, valueBreakdown.NitrogenValue)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, valueBreakdown.PhosphateValue)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, valueBreakdown.PotashValue)</td>
-                            <td class="govuk-table__cell strong">@string.Format(Resource.lblPoundWithValue, valueBreakdown.TotalValue)</td>
+                            <td class="govuk-table__cell">@(valueBreakdown.NitrogenValue != 0 ? string.Format(Resource.lblPoundWithValue, valueBreakdown.NitrogenValue) : "0")</td>
+                            <td class="govuk-table__cell">@(valueBreakdown.PhosphateValue != 0 ? string.Format(Resource.lblPoundWithValue, valueBreakdown.PhosphateValue) : "0")</td>
+                            <td class="govuk-table__cell">@(valueBreakdown.PotashValue != 0 ? string.Format(Resource.lblPoundWithValue, valueBreakdown.PotashValue) : "0")</td>
+                            <td class="govuk-table__cell strong">@(valueBreakdown.TotalValue != 0 ? string.Format(Resource.lblPoundWithValue, valueBreakdown.TotalValue) : "0")</td>
                         </tr>
                     }
                     @if (isMultiApplication)
                     {
                         <tr class="total_row">
                             <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.NitrogenValue))</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.PhosphateValue))</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.PotashValue))</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.TotalValue))</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.NitrogenValue) != 0 ? string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.NitrogenValue)) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.PhosphateValue) != 0 ? string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.PhosphateValue)) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.PotashValue) != 0 ? string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.PotashValue)) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalValue) != 0 ? string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.TotalValue)) : "0")</td>
                         </tr>
                     }
 

@@ -8282,4 +8282,10 @@ following crop year 2</value>
   <data name="lblFarmFieldCropDataUpdated" xml:space="preserve">
     <value>Farm, field and crop details updated.</value>
   </data>
+  <data name="lblCropAvailableNitrogenN" xml:space="preserve">
+    <value>Crop available nitrogen (N)</value>
+  </data>
+  <data name="lblTotalAndCropAvailableN" xml:space="preserve">
+    <value>Total and crop available nitrogen (N)</value>
+  </data>
 </root>
