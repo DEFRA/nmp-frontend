@@ -432,7 +432,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             HttpClient httpClient = await GetNMPAPIClient();
 
             var response = await httpClient.PutAsync(
-              string.Format(ApiurlHelper.UpdateMannerEstimateApplicationAsyncAPI),
+              ApiurlHelper.UpdateMannerEstimateApplicationAsyncAPI,
                 new StringContent(MannerApplicationData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();

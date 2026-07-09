@@ -829,15 +829,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         decimal? nH4N = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.NH4N : mannerEstimationViewModel.MannerEstimationStep25.NH4N;
         decimal? nO3N = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.NO3N : mannerEstimationViewModel.MannerEstimationStep25.NO3N;
 
-        if (mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
-        {
-            mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate = mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable;
-        }
-
-        if (mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
-        {
-            mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate = mannerEstimationViewModel.MannerEstimationStep28.ApplicationRate;
-        }
+        BindApplicationRateForUpdate(mannerEstimationViewModel);
         MannerEstimationApplication mannerEstimationApplication = new MannerEstimationApplication
         {
             ManureTypeID = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId,
@@ -917,6 +909,19 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
 
         return (mannerEstimationApplication, error);
+    }
+
+    private static void BindApplicationRateForUpdate(MannerEstimationViewModel mannerEstimationViewModel)
+    {
+        if (mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
+        {
+            mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate = mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable;
+        }
+
+        if (mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+        {
+            mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate = mannerEstimationViewModel.MannerEstimationStep28.ApplicationRate;
+        }
     }
 
     private async Task<(MannerEstimationViewModel, MannerEstimation)> BindMannerEstimationDataForAdd(Guid? organisationId, int? mannerEstimationId)
