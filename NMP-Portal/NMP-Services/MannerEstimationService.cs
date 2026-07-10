@@ -335,9 +335,9 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         string url = ApiurlHelper.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompostAsyncAPI;
         if (mannerApplicationId.HasValue)
         {
-            url += $"&mannerApplicationID={mannerApplicationId.Value}";
+            url += $"&mannerApplicationId={mannerApplicationId.Value}";
         }
-        url = string.Format(url, mannerEstimationId, startDate.ToString(_dateFormat), endDate.ToString(_dateFormat), isGreenFoodCompost);
+        url = string.Format(url, mannerEstimationId, startDate.ToString(_dateFormat), endDate.ToString(_dateFormat), isGreenFoodCompost.ToString().ToLowerInvariant());
         var response = await httpClient.GetAsync(url);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -359,7 +359,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         string url = ApiurlHelper.FetchTotalNByMannerEstimationIdAppDateAsyncAPI;
         if (mannerApplicationId.HasValue)
         {
-            url += $"&mannerApplicationID={mannerApplicationId.Value}";
+            url += $"&mannerApplicationId={mannerApplicationId.Value}";
         }
         url = string.Format(url, mannerEstimationId, startDate.ToString(_dateFormat), endDate.ToString(_dateFormat));
         var response = await httpClient.GetAsync(url);
@@ -384,7 +384,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         string url = ApiurlHelper.CheckMannerGreenCompostExistanceByDateRangeAsyncAPI;
         if (mannerApplicationId.HasValue)
         {
-            url += $"&mannerApplicationID={mannerApplicationId.Value}";
+            url += $"&mannerApplicationId={mannerApplicationId.Value}";
         }
         url = string.Format(url, mannerEstimationId, dateFrom, dateTo);
         var response = await httpClient.GetAsync(url);

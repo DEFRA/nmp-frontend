@@ -179,7 +179,7 @@
                     {
                         manureAnalysisCount++;
                         <tr class="govuk-table__row">
-                            @if(isMultiApplication)
+                            @if (isMultiApplication)
                             {
                                 <td class="govuk-table__cell">@manureAnalysisCount</td>
                             }
@@ -198,6 +198,31 @@
                 </tbody>
             </table>
 
+        </div>
+    </div>
+    <div class="govuk-grid-row margin-bottom-forty">
+        <div class="govuk-grid-column-full">
+            @{
+                var isAnyWarning = Model.ApplicationWarnings.Any();
+            }
+            @if (isAnyWarning)
+            {
+                <h2 class="govuk-heading-m">
+                    @string.Format((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNvzWarningFor : Resource.lblWaterResourcesRegulationsWarningsFor, Model.MannerFieldAndCropDetails.FieldName)
+                </h2>
+
+                <p class="govuk-body">@((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblThePlannedApplicationsmayNotComplyWith : Resource.lblThePlannedApplicationsMayNotComplyWithTheseWater)</p>
+
+                <ul class="govuk-list govuk-list--bullet">
+                    @foreach (var applicationWarning in Model.ApplicationWarnings)
+                    {
+                        foreach (var warning in applicationWarning.Warnings)
+                        {
+                            <li>@warning.Header</li>
+                        }
+                    }
+                </ul>
+            }
         </div>
     </div>
     <div class="govuk-grid-row margin-bottom-forty">

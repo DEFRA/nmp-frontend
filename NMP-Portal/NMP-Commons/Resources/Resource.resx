@@ -7860,7 +7860,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB).</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContent1" xml:space="preserve">
-    <value>Plan and manage nutrient applications ('this tool) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd.('Defra and partners').</value>
+    <value>Plan and manage nutrient applications ('this tool') was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd.('Defra and partners').</value>
   </data>
   <data name="lblTheToolGivesFertiliserRecommendationsForAllMajorNutrients" xml:space="preserve">
     <value>The tool gives fertiliser recommendations for all major nutrients and lime, and for most agricultural and horticultural crops.</value>
