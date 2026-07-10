@@ -1656,7 +1656,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<int?> GetCropGroupByCropTypeId(int? cropTypeId)
     {
         List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypesServiceAsync();
-        int? cropGroupId = cropTypes?.FirstOrDefault(x => x.CropTypeId == cropTypeId).CropGroupId;
+        int? cropGroupId = cropTypes?.FirstOrDefault(x => x.CropTypeId == cropTypeId)?.CropGroupId;
         return cropGroupId;
     }
 }

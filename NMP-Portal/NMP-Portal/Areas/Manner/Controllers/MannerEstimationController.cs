@@ -26,6 +26,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NMP.Portal.Areas.Manner.Controllers
 {
@@ -4492,8 +4493,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 var estimation = mannerEstimationResultResponse?.MannerEstimation;
                 var applications = mannerEstimationResultResponse?.MannerEstimationApplication;
-                int? cropGroupId = null;
-                string? closedPeriod = string.Empty;
                 if (estimation != null)
                 {
                     int nitrogenValue = applications?.Sum(x => x.NitrogenValue) ?? 0;
@@ -4509,18 +4508,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         ViewBag.CountryName = country.Name;
                     }
 
-                    //warnings logic
-                    
-                    cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.CropTypeID);
-                    bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.CropTypeID ?? 0);
-                    int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
-
-                    (var soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(estimation.TopSoilID ?? 0, estimation.SubSoilID ?? 0);
-                    if (string.IsNullOrEmpty(error?.Message))
-                    {
-                        closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, estimation.SowingDate, estimation.CountryID??0, cropGroupId, estimation.CropTypeID ?? 0, isPerennial);
-                    }
-
                     model.EncryptedMannerEstimateId = q;
                     model.FarmRB209CountryID = estimation.CountryID;
 
@@ -4533,62 +4520,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     foreach (var application in applications)
                     {
                         //warnings
-
-                        int harvestYear = GetHarvestYearFromApplicationDate(application.ApplicationDate);
-                        (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID ?? 0);
-
-                        // --- date-based warnings ---
-                        MannerEstimationStep13ViewModel dateWarningViewModel = new MannerEstimationStep13ViewModel
-                        {
-                            ApplicationDate = application.ApplicationDate,
-                            FieldName = estimation?.FieldName ?? string.Empty,
-                            ManureTypeName = application.ManureType ?? string.Empty,
-                            CountryId = estimation?.CountryID ?? 0,
-                            FarmRB209CountryId = estimation?.CountryID ?? 0,
-                            CropTypeId = estimation?.CropTypeID,
-                            CropGroupId = cropGroupId,
-                            TopSoilId = estimation?.TopSoilID,
-                            SubSoilId = estimation?.SubSoilID,
-                            SowingDate = estimation?.SowingDate,
-                            IsWithinNVZ = estimation?.IsWithinNVZ,
-                            IsFarmOrganic = estimation?.RegisteredOrganicProducer,
-                            ManureTypeId = application.ManureTypeID,
-                            ClosedPeriod = closedPeriod,
-                            MannerEstimationId = estimation?.ID,
-                            MannerEstimationApplicationsId = application.ID,
-                            IsWarningMsgNeedToShow = false,
-                            IsClosedPeriodWarning = false,
-                            IsApplicationJulyToSeptWarning = false,
-                            IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false
-                        };
-
-                        error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
-
-                        // --- N-field-limit warnings ---
-                        MannerEstimationNWarningViewModel nWarningViewModel = new MannerEstimationNWarningViewModel
-                        {
-                            ManureTypeId = application.ManureTypeID,
-                            ApplicationRate = application.ApplicationRate,
-                            ApplicationDate = application.ApplicationDate,
-                            CountryId = estimation?.CountryID??0,
-                            MannerEstimationId = estimation?.ID,
-                            CropTypeId = estimation?.CropTypeID,
-                            UpdatedMannerAppId = application.ID,
-                            IsOrgManureNfieldLimitWarning = false
-                        };
-
-                        (nWarningViewModel, error) = await NFieldLimitWarningMessage(nWarningViewModel);
-
-                        // --- combine and store against this application ---
-                        var combinedWarnings = new List<WarningItemViewModel>();
-                        combinedWarnings.AddRange(BuildApplicationDateWarnings(dateWarningViewModel));
-                        combinedWarnings.AddRange(BuildNFieldLimitWarnings(nWarningViewModel));
-
-                        model.ApplicationWarnings.Add(new MannerEstimationApplicationWarningViewModel
-                        {
-                            ApplicationId = application.ID,
-                            Warnings = combinedWarnings
-                        });
+                        await BindWarnings(estimation, application, model);
 
                         // Application details
                         model.MannerEstimationApplicationDetails.Add(new MannerEstimationApplicationDetailsViewModel
@@ -4716,7 +4648,76 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
+        private async Task BindWarnings(MannerEstimationDetailsViewModel estimation, MannerEstimationApplicationDetailsViewModel application, MannerEstimationReportViewModel model)
+        {
+            Error? error = null;
 
+            string? closedPeriod = string.Empty;
+            int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.CropTypeID);
+            bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.CropTypeID ?? 0);
+            int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
+
+            (var soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(estimation.TopSoilID ?? 0, estimation.SubSoilID ?? 0);
+            if (string.IsNullOrEmpty(error?.Message))
+            {
+                closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, estimation.SowingDate, estimation.CountryID ?? 0, cropGroupId, estimation.CropTypeID ?? 0, isPerennial);
+            }
+            int harvestYear = GetHarvestYearFromApplicationDate(application.ApplicationDate);
+            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID ?? 0);
+
+            // --- date-based warnings ---
+            MannerEstimationStep13ViewModel dateWarningViewModel = new MannerEstimationStep13ViewModel
+            {
+                ApplicationDate = application.ApplicationDate,
+                FieldName = estimation?.FieldName ?? string.Empty,
+                ManureTypeName = application.ManureType ?? string.Empty,
+                CountryId = estimation?.CountryID ?? 0,
+                FarmRB209CountryId = estimation?.CountryID ?? 0,
+                CropTypeId = estimation?.CropTypeID,
+                CropGroupId = cropGroupId,
+                TopSoilId = estimation?.TopSoilID,
+                SubSoilId = estimation?.SubSoilID,
+                SowingDate = estimation?.SowingDate,
+                IsWithinNVZ = estimation?.IsWithinNVZ,
+                IsFarmOrganic = estimation?.RegisteredOrganicProducer,
+                ManureTypeId = application.ManureTypeID,
+                ClosedPeriod = closedPeriod,
+                MannerEstimationId = estimation?.ID,
+                MannerEstimationApplicationsId = application.ID,
+                IsWarningMsgNeedToShow = false,
+                IsClosedPeriodWarning = false,
+                IsApplicationJulyToSeptWarning = false,
+                IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false
+            };
+
+            error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
+
+            // --- N-field-limit warnings ---
+            MannerEstimationNWarningViewModel nWarningViewModel = new MannerEstimationNWarningViewModel
+            {
+                ManureTypeId = application.ManureTypeID,
+                ApplicationRate = application.ApplicationRate,
+                ApplicationDate = application.ApplicationDate,
+                CountryId = estimation?.CountryID ?? 0,
+                MannerEstimationId = estimation?.ID,
+                CropTypeId = estimation?.CropTypeID,
+                UpdatedMannerAppId = application.ID,
+                IsOrgManureNfieldLimitWarning = false
+            };
+
+            (nWarningViewModel, error) = await NFieldLimitWarningMessage(nWarningViewModel);
+
+            // --- combine and store against this application ---
+            var combinedWarnings = new List<WarningItemViewModel>();
+            combinedWarnings.AddRange(BuildApplicationDateWarnings(dateWarningViewModel));
+            combinedWarnings.AddRange(BuildNFieldLimitWarnings(nWarningViewModel));
+
+            model.ApplicationWarnings.Add(new MannerEstimationApplicationWarningViewModel
+            {
+                ApplicationId = application.ID,
+                Warnings = combinedWarnings
+            });
+        }
         private List<WarningItemViewModel> BuildApplicationDateWarnings(MannerEstimationStep13ViewModel model)
         {
             var warnings = new List<WarningItemViewModel>();
