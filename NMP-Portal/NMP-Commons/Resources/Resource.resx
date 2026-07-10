@@ -8292,6 +8292,9 @@ following crop year 2</value>
     <value>Currently available for England and Wales only. Features for Scotland will be   
 released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; below.  </value>
   </data>
+  <data name="lblSiteUnderMaintenance" xml:space="preserve">
+    <value>NMPT service under maintenance</value>
+  </data>
   <data name="lblMannerApplicationDetailCountUpdated" xml:space="preserve">
     <value>Application detail {0} updated.</value>
   </data>

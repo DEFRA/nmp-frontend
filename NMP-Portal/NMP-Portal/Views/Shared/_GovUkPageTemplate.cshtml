@@ -96,6 +96,6 @@
     @await RenderSectionAsync("Footer", required: false)
     @Html.GovUkFrontendScriptImports(cspNonce)    
     <script type="text/javascript" asp-add-nonce="true" asp-append-version="true" src="~/assets/javascripts/application.js"></script>
-    @await RenderSectionAsync("BodyEnd")
+    @await RenderSectionAsync("BodyEnd", required: false)
 </body>
 </html>

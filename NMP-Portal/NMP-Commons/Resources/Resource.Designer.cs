@@ -14495,6 +14495,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NMPT service under maintenance.
+        /// </summary>
+        public static string lblSiteUnderMaintenance {
+            get {
+                return ResourceManager.GetString("lblSiteUnderMaintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Six.
         /// </summary>
         public static string lblSix {
