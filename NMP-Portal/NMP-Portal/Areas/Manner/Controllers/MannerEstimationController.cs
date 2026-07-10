@@ -4260,12 +4260,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 error = await CheckNFieldLimit1000CompostMulch(model, warningList, currentApplicationNitrogen);
             }
 
-            // Scotland + compost: >250 total N in last 365 days (PAS)
-            if (isScotland && isCompost)
-            {
-                error = await CheckNFieldLimit250Pas(model, warningList, currentApplicationNitrogen);
-            }
-
             return error;
         }
 
@@ -4339,20 +4333,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return error;
         }
 
-        private async Task<Error?> CheckNFieldLimit250Pas<TModel>(
-            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen)
-            where TModel : MannerEstimationNWarningViewModel
-        {
-            var (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
-                model.MannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-364), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
-
-            if (error == null && (previousAppliedTotalN + currentApplicationNitrogen) > 250)
-            {
-                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostPAS.ToString());
-            }
-
-            return error;
-        }
 
         private static void ApplyWarning<TModel>(TModel model, List<WarningResponse> warningList, string warningKey)
             where TModel : MannerEstimationNWarningViewModel
