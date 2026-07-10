@@ -245,7 +245,7 @@ app.Use(async (context, next) =>
     {
         context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
         return;
-    }       
+    }
 
     // 3️ Continue normal pipeline
     await next();
@@ -274,8 +274,22 @@ app.UseCsp(csp =>
     csp.AllowWorkers.FromSelf().From("blob:");
 });
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.Use(async (context, next) =>
+{
+    var maintenanceMode = builder.Configuration.GetValue<bool>("MaintenanceMode");
+
+    if (maintenanceMode && !context.Request.Path.StartsWithSegments("/maintenance"))
+    {
+        context.Response.Redirect("/maintenance");
+        return;
+    }
+
+    await next();
+});
 app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
