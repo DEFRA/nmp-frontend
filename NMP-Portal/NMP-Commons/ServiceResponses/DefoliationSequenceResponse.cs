@@ -6,8 +6,8 @@ public class DefoliationSequenceResponse
     public int DefoliationSequenceId { get; set; }
 
     [JsonProperty("defoliationSequence")]
-    public string DefoliationSequence { get; set; }
+    public string DefoliationSequence { get; set; } = string.Empty;
 
     [JsonProperty("defoliationSequenceDescription")]
-    public string DefoliationSequenceDescription { get; set; }
+    public string DefoliationSequenceDescription { get; set; } = string.Empty;
 }

@@ -33,7 +33,7 @@
         <form asp-action="AddField" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
-            <govuk-input asp-for="@Model.Name">
+            <govuk-input for="@Model.Name">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
                     @Resource.AddFieldNameQuestion
                 </govuk-input-label>

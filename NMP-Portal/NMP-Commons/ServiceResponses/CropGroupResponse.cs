@@ -6,7 +6,7 @@ public class CropGroupResponse
     public int CropGroupId { get; set; }
 
     [JsonProperty("cropGroupName")]
-    public string CropGroupName { get; set; }
+    public string CropGroupName { get; set; } = string.Empty;
 
     [JsonProperty("countryId")]
     public int CountryId { get; set; }

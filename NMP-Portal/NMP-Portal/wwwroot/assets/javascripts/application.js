@@ -6,14 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const printButton = document.getElementById("cropReportPrintButton");
     if (printButton) {
         printButton.addEventListener("click", function () {
-            window.print();
+            globalThis.print();
         });
     }
 
     const backButton = document.getElementById("BackToPreviousPage");
     if (backButton) {
         backButton.addEventListener("click", function () {
-            window.history.back();
+            globalThis.history.back();
         });
     }
 
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    const selectAllCheckbox = document.getElementById("select-all");
+    const selectAllCheckbox = document.querySelector('input[name="select-all"]');
 
     if (selectAllCheckbox) {
 
@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
         checkboxes.forEach(function (checkbox) {
             checkbox.addEventListener("change", function () {
                 // Update "Select All" checkbox based on individual checkboxes' state
-                selectAllCheckbox.checked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+                selectAllCheckbox.checked = Array.from(checkboxes)
+                    .every(item => item.checked);
             });
         });
         // Select or deselect all checkboxes when "Select All" changes
@@ -60,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("input", function (e) {
         if (e.target.matches(".govuk-date-input__input")) {
-            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+            e.target.value = e.target.value.replaceAll(/\D/g, "");
         }
     });
 

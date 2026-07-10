@@ -6,7 +6,6 @@
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
 }
 
 @if (User.Identity?.IsAuthenticated == true)
@@ -38,8 +37,6 @@
         isHelpFeedback ||
         isReleaseschedule
         );
-    string allFarmsActiveClass = isAllFarm ? "govuk-service-navigation__item--active" : "";
-    string currentFarmActiveClass = (!isAllFarm) ? "govuk-service-navigation__item--active" : "";
     <govuk-header home-page-url="https://www.gov.uk" />
     <govuk-service-navigation class="noprint" service-name="@Resource.lblPlanAndRecordNutrientApplications" service-url="/">
         <govuk-service-navigation-start>          
