@@ -37,10 +37,10 @@
     </govuk-footer>
 }
 @section BodyEnd {
-    @await RenderSectionAsync("BodyEnd", required: false)
-    @await Html.PartialAsync("_LoadingOverlay")
+    @await RenderSectionAsync("BodyEnd", required: false)    
     @if (User.Identity?.IsAuthenticated == true)
     {
+        @await Html.PartialAsync("_LoadingOverlay")
         @await Html.PartialAsync("_SessionTimeout")
     }
 }
