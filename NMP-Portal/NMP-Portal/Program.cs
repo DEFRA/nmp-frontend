@@ -274,6 +274,10 @@ app.UseCsp(csp =>
     csp.AllowWorkers.FromSelf().From("blob:");
 });
 
+
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.Use(async (context, next) =>
 {
     var maintenanceMode = builder.Configuration.GetValue<bool>("MaintenanceMode");
@@ -286,9 +290,6 @@ app.Use(async (context, next) =>
 
     await next();
 });
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
