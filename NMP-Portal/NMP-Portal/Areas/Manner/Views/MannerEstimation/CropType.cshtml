@@ -5,18 +5,19 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading =string.Format(Resource.lblWhichWouldYouLikeToUse,Model.CropGroupName.ToLower());
+    string heading =string.Format(Resource.lblWhatCropAreYouApplyingThisOrganicMaterial,Resource.lblCropType.ToLower());
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsCropGroupChange) ? "MannerEstimationResult" : "CropGroup";
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "CropGroup")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="CropType" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-radios asp-for="@Model.CropTypeId">
+            <govuk-radios for="@Model.CropTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @heading
@@ -36,15 +37,7 @@
                 @Resource.lblContinue
             </govuk-button> 
         </form>
-        <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-        </p>
+
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
     </div>
 </div>

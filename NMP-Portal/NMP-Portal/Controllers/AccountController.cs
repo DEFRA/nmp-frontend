@@ -38,7 +38,7 @@ namespace NMP.Portal.Controllers
         public IActionResult ChangeOrganisation()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("SignIn", "Account", new { Area = "MicrosoftIdentity", redirectUri = "/Farm/FarmList" });
+            return RedirectToAction("SignIn", "Account", new { Area = "MicrosoftIdentity", redirectUri = "/Dashboard/Index" });
         }
 
         private IConfigurationManager<OpenIdConnectConfiguration>? GetConfigurationManager()

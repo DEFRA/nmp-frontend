@@ -1,11 +1,67 @@
 ﻿@using NMP.Commons.Resources;
+@using NMP.Commons.ViewModels;
+
 @{
     ViewData["Title"] = Resource.lblMannerHubPage;
 }
+@section BeforeContent {
+    <govuk-back-link asp-action="Index" asp-controller="Dashboard" asp-area="">@Resource.lblPlanAndRecordNutrientApplications</govuk-back-link>
+}
 
- <govuk-notification-banner>
-                    <govuk-notification-banner-title>
-                        @Resource.lblImportant
-                    </govuk-notification-banner-title>
-                    <p class="govuk-body">Page is in Under construction.</p>
-</govuk-notification-banner>
+@if (TempData["Error"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+else
+{
+    <div class="govuk-grid-row">
+        <div id="all-plans-table" class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">@Resource.lblNutrientSupplyEstimates</h1>
+
+            <form asp-action="CopyEstimate" method="get" asp-controller="MannerEstimation" autocomplete="off">
+                <govuk-button type="submit">
+                    @Resource.lblCreateANutrientSupplyEstimate
+                </govuk-button>
+            </form>
+
+            <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a href="#">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
+
+            <h2 class="govuk-heading-m">@Resource.lblNutrientSupplyEstimates</h2>
+
+            <table class="govuk-table data-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblReference</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblFarm</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblField</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblLastUpdate</th>
+                        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblUpdateOrMakeACopy</span></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @if (ViewBag.MannerEstimations != null)
+                    {
+                        @foreach (var estimation in ViewBag.MannerEstimations)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@estimation.Name</td>
+                                <td class="govuk-table__cell">@estimation.FarmName</td>
+                                <td class="govuk-table__cell">@estimation.FieldName</td>
+                                <td class="govuk-table__cell">@(estimation.ModifiedOn == null ? estimation.CreatedOn.ToString("dd MMMM yyyy") : estimation.ModifiedOn.ToString("dd MMMM yyyy"))</td>
+                                <td class="govuk-table__cell"><a asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@estimation.EncryptedId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, estimation.FarmName)))">@Resource.lblViewOrChange</a></td>
+                            </tr>
+                        }
+                    }
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+}

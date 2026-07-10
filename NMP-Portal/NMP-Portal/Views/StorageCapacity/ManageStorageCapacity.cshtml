@@ -2,25 +2,9 @@
 @model NMP.Commons.ViewModels.StorageCapacityViewModel
 @{
     ViewData["Title"] = $"{Resource.lblManureStores} {Resource.lblHyphen} {Resource.lblStorageCapacityForTitle}";
-    var dataLists = new List<(string Name, IEnumerable<object> Data)>
-{
-    ("SlurryStorage",
-        ViewData["SlurryStorageList"] as IEnumerable<object>
-            ?? Enumerable.Empty<object>()),
+ 
 
-    ("SolidManureStorage",
-        ViewData["SolidManureStorageList"] as IEnumerable<object>
-            ?? Enumerable.Empty<object>())
-};
-
-
-
-    var nonEmptyLists = dataLists
-    .Where(x => x.Data != null && x.Data.Any())
-    .ToList();
-
-    var backAction = ((string.IsNullOrWhiteSpace(Model.IsComingFromPlan)) ? "Year" :
-       "NVZComplianceReports");
+    var backAction ="NVZComplianceReports";
     int totalCapacity = 0;
     decimal totalWeight = 0;
 

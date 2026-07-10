@@ -22,6 +22,8 @@ public class CropDetailResponse
     public string? OtherCropName { get; set; }
     [JsonProperty("CropInfo1")]
     public int? CropInfo1 { get; set; }
+    [JsonProperty("CropOrder")]
+    public int? CropOrder { get; set; }
     [JsonProperty("Yield")]
     public decimal? Yield { get; set; }
     [JsonProperty("LastModifiedOn")]

@@ -54,7 +54,7 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
 
             IConfigurationManager<OpenIdConnectConfiguration>? configurationManager = GetConfigurationManager();
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-            var metadata = await configurationManager?.GetConfigurationAsync(CancellationToken.None);
+            var metadata = await configurationManager.GetConfigurationAsync(CancellationToken.None);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             var url = metadata.TokenEndpoint;
             var response = await client.PostAsync(url, formData);

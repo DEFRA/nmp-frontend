@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 namespace NMP.Application;
 public interface ICropLogic
 {
@@ -18,21 +19,21 @@ public interface ICropLogic
     Task<List<Crop>> FetchCropsByFieldId(int fieldId);
 
     Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId, bool isScotland);
-    Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId);
+    Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId, int rb209CountryId);
     Task<(HarvestYearResponseHeader?, Error?)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId);
-    Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId);
+    Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId,int countryId);
     Task<(ManagementPeriod?, Error?)> FetchManagementperiodById(int id);
     Task<(Crop?, Error?)> FetchCropById(int id);
     Task<(string, Error?)> RemoveCropPlan(List<int> cropIds);
     Task<(bool, Error?)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year, int farmId);
     Task<(List<Crop>, Error)> UpdateCrop(string cropData);
     Task<List<GrassSeasonResponse>> FetchGrassSeasons();
-    Task<(List<GrassGrowthClassResponse>, Error)> FetchGrassGrowthClass(List<int> fieldIds);
+    Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds);
 
-    Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward);
+    Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward, int countryId);
     Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId);
     Task<(List<SwardManagementResponse>, Error)> FetchSwardManagements();
-    Task<(List<SwardTypeResponse>, Error)> FetchSwardTypes();
+    Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesByCountry(int countryId);
     Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId);
 
     Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId, bool isShortSummary);
@@ -48,4 +49,14 @@ public interface ICropLogic
     Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYear(int fieldId, int year);
     Task<SnsAnalysis> FetchSnsAnalysisByCropIdAsync(int cropId);
     Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
+    Task<(Recommendation?, Error?)> FetchRecommendationByManagementPeriodId(int managementPeriodID);
+    Task<(List<PreviousCroppingData>?, Error?)> FetchDataByFieldId(int fieldId, int year);
+    Task<(RecommendationViewModel, string)> BindDataForRecommendation(string q, string? s, RecommendationViewModel model, Error? error, List<RecommendationHeader> recommendations, string firstCropName);
+    RecommendationViewModel BindRecommendationCommentForRecommendation(RecommendationViewModel model, RecommendationData recData);
+    RecommendationViewModel BindOrganicManureDataForRecommendation(RecommendationViewModel model, OrganicManureDataViewModel item, ManureType manureType);
+    RecommendationViewModel BindFertiliserDataForRecommendation(RecommendationViewModel model, RecommendationData recData);
+    RecommendationViewModel BindManagementPeriodForRecommendation(RecommendationViewModel model, RecommendationData recData, string defoliationSequenceName);
+    string BindDefoliationSequenceNameForRecommendation(string[]? defolicationParts, int defIndex);
+    Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop);
+    PlanViewModel FilterOrganicAndInorganicListForHarvestYearOverview(PlanViewModel model, string? s, string? u, string? t);
 }

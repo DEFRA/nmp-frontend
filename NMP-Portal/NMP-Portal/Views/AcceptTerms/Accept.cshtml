@@ -3,9 +3,7 @@
 @{
     ViewData["Title"] = Resource.lblTermsOfUse;
 }
-@section BeforeContent {
-    <govuk-back-link asp-action="Index" asp-controller="Home">@Resource.lblBack</govuk-back-link>
-}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         @if (ViewBag.Error != null)
@@ -18,7 +16,7 @@
         <form class="form margin-top-forty" asp-action="Accept" asp-controller="AcceptTerms" method="post">
             <partial name="_TermsOfUsePartial.cshtml" />
             <govuk-checkboxes name="IsTermsOfUseAccepted" asp-for="@Model.IsTermsOfUseAccepted">
-                <govuk-checkboxes-item checked="@Model.IsTermsOfUseAccepted" value="true">@Resource.lbl_I_accept_to_the_terms_of_use</govuk-checkboxes-item>
+                <govuk-checkboxes-item checked="@Model.IsTermsOfUseAccepted" value="true">@Resource.lbl_I_agree_to_the_terms_of_use</govuk-checkboxes-item>
             </govuk-checkboxes>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button">
                 @Resource.lblContinue

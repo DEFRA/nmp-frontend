@@ -8,4 +8,9 @@ public class FieldDetails
     public decimal? Yield { get; set; }
     public string? Variety { get; set; } = string.Empty;
     public string? Management { get; set; } = string.Empty;
+    public decimal? CroppedArea { get; set; }
+    public string? PreviousCrop { get; set; }
+    public string? SoilType { get; set; }
+    public int? NitrogenResidueGroup { get; set; }
+    public int? CropOrder { get; set; }
 }

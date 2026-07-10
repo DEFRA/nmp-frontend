@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NMP.Commons.Models;
-using NMP.Commons.Resources;
+using NMP.Commons.Helpers;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Interfaces;
 using NMP.Core.Attributes;
@@ -26,35 +26,22 @@ public class AuthService(ILogger<AuthService> logger, IHttpContextAccessor httpC
             var response = await httpClient.PostAsync(ApiurlHelper.AddOrUpdateUserAsyncAPI,new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper.Data.GetType().Name.ToLower() != "string")
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
             {
                 userId = responseWrapper?.Data["UserID"];
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper?.Error?.ToObject<Error>();
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error?.Code, error?.Message, error?.Stack, error?.Path);
-                }
+                error = _logger.ExtractError(responseWrapper, error);
             }
-
         }
         catch (HttpRequestException hre)
         {
-            error = new Error
-            {
-                Message = Resource.MsgServiceNotAvailable
-            };
-            _logger.LogError(hre, hre.Message);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            error = new Error
-            {
-                Message = ex.Message
-            };
-            _logger.LogError(ex,ex.Message);
+            error = _logger.HandleException(ex, error);
         }
 
         return (userId,error);

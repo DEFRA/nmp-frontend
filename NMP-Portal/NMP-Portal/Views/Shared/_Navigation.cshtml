@@ -6,7 +6,6 @@
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
 }
 
 @if (User.Identity?.IsAuthenticated == true)
@@ -38,17 +37,13 @@
         isHelpFeedback ||
         isReleaseschedule
         );
-    string allFarmsActiveClass = isAllFarm ? "govuk-service-navigation__item--active" : "";
-    string currentFarmActiveClass = (!isAllFarm) ? "govuk-service-navigation__item--active" : "";
     <govuk-header home-page-url="https://www.gov.uk" />
-    <govuk-service-navigation class="noprint" service-name="@Resource.lblPlanAndRecordNutrientApplications" service-url="/">
+    <govuk-service-navigation class="noprint" service-name="@Resource.lblPlanAndRecordNutrientApplications" service-url="/Dashboard/Index">
         <govuk-service-navigation-start>          
         </govuk-service-navigation-start>
         <govuk-service-navigation-nav>
             <govuk-service-navigation-nav-start></govuk-service-navigation-nav-start>
-            <govuk-service-navigation-nav-item asp-action="FarmList" asp-controller="Farm" active="@(isAllFarm)" asp-area="">
-                @Resource.lblAllFarm
-            </govuk-service-navigation-nav-item>
+           
             @if (isFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
             {
                 <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" active="@(isFarmContext)">
@@ -57,11 +52,11 @@
             }
             @if (enrolmentCount > 1)
             {
-                <govuk-service-navigation-nav-item asp-controller="Account" asp-action="ChangeOrganisation">
+                <govuk-service-navigation-nav-item asp-controller="Account" asp-action="ChangeOrganisation" asp-area="">
                     @Resource.lblChangeCompany
                 </govuk-service-navigation-nav-item>
             }
-            <govuk-service-navigation-nav-item asp-controller="Account"  asp-action="Logout">
+            <govuk-service-navigation-nav-item asp-controller="Account"  asp-action="Logout" asp-area="">
                 @Resource.lblSignout
             </govuk-service-navigation-nav-item>
             <govuk-service-navigation-nav-end>               

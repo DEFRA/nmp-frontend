@@ -24,14 +24,47 @@ namespace NMP.Commons.ViewModels
             MannerEstimationStep11 = new MannerEstimationStep11ViewModel();
             MannerEstimationStep12 = new MannerEstimationStep12ViewModel();
             MannerEstimationStep13 = new MannerEstimationStep13ViewModel();
+            MannerEstimationStep14 = new MannerEstimationStep14ViewModel();
+            MannerEstimationStep15 = new MannerEstimationStep15ViewModel();
+            MannerEstimationStep16 = new MannerEstimationStep16ViewModel();
+            MannerEstimationStep17 = new MannerEstimationStep17ViewModel();
+            MannerEstimationStep18 = new MannerEstimationStep18ViewModel();
+            MannerEstimationStep19 = new MannerEstimationStep19ViewModel();
+            MannerEstimationStep20 = new MannerEstimationStep20ViewModel();
+            MannerEstimationStep23 = new MannerEstimationStep23ViewModel();
+            MannerEstimationStep24 = new MannerEstimationStep24ViewModel();
+            MannerEstimationStep25 = new MannerEstimationStep25ViewModel();
+            MannerEstimationStep26 = new MannerEstimationStep26ViewModel();
+            MannerEstimationStep27 = new MannerEstimationStep27ViewModel();
+            MannerEstimationStep28 = new MannerEstimationStep28ViewModel();
+            MannerEstimationStep21 = new MannerEstimationStep21ViewModel();
+            MannerEstimationStep22 = new MannerEstimationStep22ViewModel();
+            MannerEstimationStep29 = new MannerEstimationStep29ViewModel();
+            MannerEstimationStep30 = new MannerEstimationStep30ViewModel();
+            MannerEstimationStep31 = new MannerEstimationStep31ViewModel();
+            MannerEstimationStep32 = new MannerEstimationStep32ViewModel();
+            MannerEstimationStep33 = new MannerEstimationStep33ViewModel();
+            MannerEstimationStep34 = new MannerEstimationStep34ViewModel();
+            MannerEstimationStep35 = new MannerEstimationStep35ViewModel();
+            MannerEstimationStep36 = new MannerEstimationStep36ViewModel();
+            MannerEstimationStep37 = new MannerEstimationStep37ViewModel();
+            MannerEstimationStep38 = new MannerEstimationStep38ViewModel();
+            MannerEstimationStep39 = new MannerEstimationStep39ViewModel();
         }
         public bool IsCheckAnswer { get; set; } = false;
+        public bool? IsCopyEstimate { get; set; }
         public string? Country { get; set; }
         public int? CropGroupID { get; set; }
         public string? CropGroup { get; set; }
         public bool? EnglishRues { get; set; }
         public string? CropType { get; set; }
         public string? SoilType { get; set; }
+
+        public int? MannerEstimationId { get; set; }
+        public int? MannerEstimationApplicationId { get; set; }
+        public string? EncryptedMannerEstimationId { get; set; }
+        public string? EncryptedMannerEstimationApplicationId { get; set; }
+
         public MannerEstimationStep1ViewModel MannerEstimationStep1 { get; set; }
         public MannerEstimationStep2ViewModel MannerEstimationStep2 { get; set; }
         public MannerEstimationStep3ViewModel MannerEstimationStep3 { get; set; }
@@ -45,5 +78,34 @@ namespace NMP.Commons.ViewModels
         public MannerEstimationStep11ViewModel MannerEstimationStep11 { get; set; }
         public MannerEstimationStep12ViewModel MannerEstimationStep12 { get; set; }
         public MannerEstimationStep13ViewModel MannerEstimationStep13 { get; set; }
+        public MannerEstimationStep14ViewModel MannerEstimationStep14 { get; set; }
+        public MannerEstimationStep15ViewModel MannerEstimationStep15 { get; set; }
+        public MannerEstimationStep16ViewModel MannerEstimationStep16 { get; set; }
+        public MannerEstimationStep17ViewModel MannerEstimationStep17 { get; set; }
+        public MannerEstimationStep18ViewModel MannerEstimationStep18 { get; set; }
+        public MannerEstimationStep19ViewModel MannerEstimationStep19 { get; set; }
+        public MannerEstimationStep20ViewModel MannerEstimationStep20 { get; set; }
+        public MannerEstimationStep23ViewModel MannerEstimationStep23 { get; set; }
+        public MannerEstimationStep24ViewModel MannerEstimationStep24 { get; set; }
+        public MannerEstimationStep25ViewModel MannerEstimationStep25 { get; set; }
+        public MannerEstimationStep26ViewModel MannerEstimationStep26 { get; set; }
+        public MannerEstimationStep27ViewModel MannerEstimationStep27 { get; set; }
+        public MannerEstimationStep28ViewModel MannerEstimationStep28 { get; set; }
+        public MannerEstimationStep21ViewModel MannerEstimationStep21 { get; set; }
+        public MannerEstimationStep22ViewModel MannerEstimationStep22 { get; set; }
+        public MannerEstimationStep29ViewModel MannerEstimationStep29 { get; set; }
+        public MannerEstimationStep30ViewModel MannerEstimationStep30 { get; set; }
+        public MannerEstimationStep31ViewModel MannerEstimationStep31 { get; set; }
+        public MannerEstimationStep32ViewModel MannerEstimationStep32 { get; set; }
+
+        public MannerEstimationStep33ViewModel MannerEstimationStep33 { get; set; }
+        public MannerEstimationStep34ViewModel MannerEstimationStep34 { get; set; }
+        public MannerEstimationStep35ViewModel MannerEstimationStep35 { get; set; }
+        public MannerEstimationStep36ViewModel MannerEstimationStep36 { get; set; }
+
+        public MannerEstimationStep37ViewModel MannerEstimationStep37 { get; set; }
+        public MannerEstimationStep38ViewModel MannerEstimationStep38 { get; set; }
+        public MannerEstimationStep39ViewModel MannerEstimationStep39 { get; set; }
     }
 }
+

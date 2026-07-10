@@ -1,0 +1,32 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.MannerEstimationStep32ViewModel
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeFor, ViewBag.CropTypeName, ViewBag.FieldName)} {Resource.lblHyphen} {title}";
+    
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.AutumnCropNitrogenUptake;
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+
+<form asp-action="AutumnCropNitrogenUptake" asp-controller="MannerEstimation" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+         
+            <govuk-input for="@Model.AutumnCropNitrogenUptake" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeForSuffix, ViewBag.CropTypeName, ViewBag.FieldName)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>@Resource.lblQuestionMark
+                </govuk-input-label>
+                <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
+            </govuk-input>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+
+            <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
+        </div>
+
+    </div>
+</form>

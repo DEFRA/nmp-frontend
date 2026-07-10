@@ -2,18 +2,26 @@
 @using NMP.Commons.ViewModels;
 @using NMP.Commons.Resources;
 @model NMP.Commons.ViewModels.SoilAnalysisViewModel
-
 @{
-    ViewData["Title"] = ((Model != null && !string.IsNullOrEmpty(Model.EncryptedSoilAnalysisId))) ? $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}" : $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
-    var cancelViewModel = new CancelViewModel
-            {
-                IsCancel = Model.IsCancel,
+    if (Model != null && !string.IsNullOrEmpty(Model.EncryptedSoilAnalysisId))
+    {
+        ViewData["Title"] = $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblUpdateSoilAnalysis}";
+    }
+    else
+    {
+        ViewData["Title"] = $"{Resource.lblAreYouSureYouWantToCancel} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
+    }
+        
+    var cancelViewModel = new CancelViewModel()
+    {
+                IsCancel = Model?.IsCancel,
                 LableContent = string.Format(Resource.lblTheInformationEnteredAboutThisWillBeLost, Resource.lblSoilAnalysis.ToLower())
-    }; 
+    };
+    
     ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.Cancel;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model?.EncryptedSoilAnalysisId" asp-route-j="@Model?.EncryptedFieldId" asp-route-k="@Model?.EncryptedFarmId" asp-route-l="@Model?.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
 
 }
 
@@ -25,4 +33,4 @@
         @Resource.lblContinue
     </govuk-button>
 </form>
-<p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
+<p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model?.EncryptedSoilAnalysisId" asp-route-j="@Model?.EncryptedFieldId" asp-route-k="@Model?.EncryptedFarmId" asp-route-l="@Model?.IsSoilDataChanged">@Resource.lblCancel</a></p>

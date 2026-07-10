@@ -1,0 +1,49 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep33ViewModel
+
+@{
+    ViewData["Title"] = $"{string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    string heading =string.Format(Resource.lblHowWouldYouLikeToUpdateYourNutrientPrice, Resource.lblNitrogenLowercase);
+    int productPrice = (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice;
+    int nutrientPrice = (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByNutrientPrice;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="UpdateNitrogenPriceQuestion" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+           
+            <govuk-radios for="@Model.UpdateNitrogenPriceQuestion">
+
+    <govuk-radios-fieldset>
+
+        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+            @heading
+        </govuk-radios-fieldset-legend>
+
+                    <govuk-radios-item value="@(productPrice)">
+            @Resource.lblUpdateByProductPrice
+        </govuk-radios-item>
+
+                    <govuk-radios-item value="@(nutrientPrice)">
+            @Resource.lblUpdateByNutrientPrice
+        </govuk-radios-item>
+
+    </govuk-radios-fieldset>
+
+</govuk-radios>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblCancel</a>
+        </p>
+    </div>
+</div>

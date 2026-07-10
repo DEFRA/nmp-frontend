@@ -5,5 +5,6 @@ public class CropAndFieldReportResponse
     [JsonProperty("Farm")]
     public FarmReportResponse? Farm { get; set; }
     public string? ExcessWinterRainfall { get; set; }
-    
+    public string? WinterRainfall { get; set; }
+
 }

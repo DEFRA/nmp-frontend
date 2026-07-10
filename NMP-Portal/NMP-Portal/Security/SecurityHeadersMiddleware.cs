@@ -13,7 +13,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         context.Response.Headers.Remove("X-Powered-By");
         context.Response.Headers.Remove("Server");
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
-        // TODO Change the value depending of your needs
+        // Change the value depending of your needs
         context.Response.Headers.Append("Referrer-Policy", new StringValues("strict-origin"));
 
         // Strict Transport Security (HSTS) - Enforces HTTPS
@@ -29,11 +29,10 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", new StringValues("none"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
-        //context.Response.Headers.Append("X-Xss-Protection", new StringValues("1; mode=block"));
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
         // You can use https://report-uri.com/ to get notified when a misissued certificate is detected
-        //context.Response.Headers.Add("Expect-CT", new StringValues("max-age=0, enforce, report-uri=\"https://example.report-uri.com/r/d/ct/enforce\""));
+        
 
         context.Response.Headers.Append("Permissions-Policy", new StringValues(
             "accelerometer=(self), " +
@@ -57,14 +56,14 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
-        // TODO change the value of each rule and check the documentation to see if new rules are available
+        // Change the value of each rule and check the documentation to see if new rules are available
         //context.Response.Headers.Add("Content-Security-Policy", new StringValues(
         //    "base-uri 'self';" +
         //    "block-all-mixed-content;" +
         //    "child-src 'self';" +
         //    "connect-src 'self' wss: ws:;" +
         //    "default-src 'self';" +
-        //    "font-src 'self' https: " + //fonts.googleapis.com;
+        
         //    "form-action 'self';" +
         //    "frame-ancestors 'self';" +
         //    "frame-src 'self';" +
@@ -81,7 +80,7 @@ public sealed class SecurityHeadersMiddleware(RequestDelegate requestDelegate)
         //     "style-src-elem 'self' 'unsafe-inline'  " + //fonts.googleapis.com www.gstatic.com; stackpath.bootstrapcdn.com;" +
         //    "upgrade-insecure-requests;" +
         //    "worker-src 'self';"
-        //    ));
+      
                 
 
         return _requestDelegate(context);

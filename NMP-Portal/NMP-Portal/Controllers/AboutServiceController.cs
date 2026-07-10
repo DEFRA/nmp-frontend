@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NMP.Application;
 using NMP.Commons.ViewModels;
 
 namespace NMP.Portal.Controllers
 {
+    [Authorize]
     public class AboutServiceController(ILogger<AboutServiceController> logger ,IAboutServiceLogic aboutServiceLogic) : Controller
     {
         private readonly ILogger<AboutServiceController> _logger = logger;
@@ -15,7 +17,7 @@ namespace NMP.Portal.Controllers
             model.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService();
             if (model.DoNotShowAboutThisService)
             {
-                return RedirectToAction("Accept", "AcceptTerms");
+                return RedirectToAction("FarmList", "Farm");
             }
 
             return View(model);
@@ -32,7 +34,7 @@ namespace NMP.Portal.Controllers
                 await _aboutServiceLogic.UpdateShowAboutServiceAsync(model.DoNotShowAboutThisService);                                                  
             }
 
-            return RedirectToAction("Accept", "AcceptTerms");
+            return RedirectToAction("FarmList", "Farm");
         }
     }
 }
