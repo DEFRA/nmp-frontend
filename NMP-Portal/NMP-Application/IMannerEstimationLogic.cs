@@ -128,5 +128,6 @@ namespace NMP.Application
         Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationById(int mannerEstimateApplicationId);
         Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId);
         Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData();
+        Task<int?> GetCropGroupByCropTypeId(int? cropTypeId);
     }
 }
