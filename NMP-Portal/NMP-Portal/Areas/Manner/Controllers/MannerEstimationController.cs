@@ -890,9 +890,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         return value;
                     }
                 }
-
-
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange&&model.IsApplicationDateChange)
+                {
+                    return RedirectToAction(_conditionsAffectingNutrients);
+                }
+                
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationMethod");
             }
             catch (Exception ex)
@@ -4759,7 +4762,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private IActionResult RedirectToResult(MannerEstimationApplication mannerEstimationApplication, MannerEstimationResultResponse? mannerEstimationResultResponse, bool isUpdate)
         {
-            string succesMsg = isUpdate ? Resource.lblApplicationDetailUpdated : Resource.lblApplicationDetailAdded;
+            string succesMsg = isUpdate ? Resource.lblApplicationDetailUpdated : Resource.lblOrganicMaterialApplicationAdded;
 
             string tabName = "ApplicationDetails";
             if (mannerEstimationResultResponse?.MannerEstimationApplication != null)
