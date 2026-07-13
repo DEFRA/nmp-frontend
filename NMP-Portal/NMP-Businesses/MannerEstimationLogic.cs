@@ -277,14 +277,23 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep11ViewModel GetMannerEstimationStep11()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep11.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        mannerEstimationViewModel.MannerEstimationStep11.EncryptedMannerEstimationId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep11.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId ?? 0;
         return mannerEstimationViewModel.MannerEstimationStep11;
     }
 
-    public MannerEstimationStep11ViewModel SetMannerEstimationStep11(MannerEstimationStep11ViewModel mannerEstimationStep11)
+    public async Task<MannerEstimationStep11ViewModel> SetMannerEstimationStep11(MannerEstimationStep11ViewModel mannerEstimationStep11)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (mannerEstimationStep11.IsComingForAddNewApplication)
+        {
+            mannerEstimationViewModel.EncryptedMannerEstimationId = mannerEstimationStep11.EncryptedMannerEstimationId;
+            mannerEstimationViewModel.IsComingForAddNewApplication = true;
+            SetMannerEstimationToSession(mannerEstimationViewModel);
+            mannerEstimationViewModel = GetMannerEstimation();
+        }
+        mannerEstimationViewModel.MannerEstimationStep11.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
+        mannerEstimationViewModel.MannerEstimationStep11.EncryptedMannerEstimationId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep11 = mannerEstimationStep11;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep11();
@@ -293,7 +302,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep12ViewModel GetMannerEstimationStep12()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep12.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+        mannerEstimationViewModel.MannerEstimationStep12.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId??string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep12.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep12.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep12.ManureGroupName = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupName;
         mannerEstimationViewModel.MannerEstimationStep12.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId ?? 0;
@@ -315,7 +325,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep13ViewModel GetMannerEstimationStep13()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep13.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep13.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep13.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         mannerEstimationViewModel.MannerEstimationStep13.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
@@ -510,7 +522,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep23.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         mannerEstimationViewModel.MannerEstimationStep23.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
         mannerEstimationViewModel.MannerEstimationStep23.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
-        mannerEstimationViewModel.MannerEstimationStep23.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep23.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep23.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep23.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         return mannerEstimationViewModel.MannerEstimationStep23;
     }
@@ -535,7 +549,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         (mannerEstimationViewModel.MannerEstimationStep24.ManureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
         mannerEstimationViewModel.MannerEstimationStep24.ApplicationMethodCount = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodCount;
-        mannerEstimationViewModel.MannerEstimationStep24.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep24.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep24.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep24.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         return mannerEstimationViewModel.MannerEstimationStep24;
     }
@@ -561,7 +577,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep25.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
-        mannerEstimationViewModel.MannerEstimationStep25.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep25.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep25.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
         if (manureType != null)
@@ -592,7 +610,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep26.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
         mannerEstimationViewModel.MannerEstimationStep26.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
-        mannerEstimationViewModel.MannerEstimationStep26.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep26.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep26.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
         if (manureType != null)
@@ -625,7 +645,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<MannerEstimationStep27ViewModel> GetMannerEstimationStep27()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep27.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep27.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep27.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep27.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
         mannerEstimationViewModel.MannerEstimationStep27.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
         mannerEstimationViewModel.MannerEstimationStep27.IsManureTypeLiquid = mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid;
@@ -657,7 +679,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<MannerEstimationStep28ViewModel> GetMannerEstimationStep28()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep28.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep28.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep28.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep28.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         mannerEstimationViewModel.MannerEstimationStep28.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
         mannerEstimationViewModel.MannerEstimationStep28.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
@@ -714,7 +738,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep29.ApplicationMethodId = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId;
         mannerEstimationViewModel.MannerEstimationStep29.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
         mannerEstimationViewModel.MannerEstimationStep29.ApplicationRateMethod = mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod;
-        mannerEstimationViewModel.MannerEstimationStep29.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep29.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep29.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         return mannerEstimationViewModel.MannerEstimationStep29;
     }
     public MannerEstimationStep29ViewModel SetMannerEstimationStep29(MannerEstimationStep29ViewModel mannerEstimationStep29)
@@ -735,7 +761,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep30.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
         mannerEstimationViewModel.MannerEstimationStep30.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
         mannerEstimationViewModel.MannerEstimationStep30.IncorporationMethodId = mannerEstimationViewModel.MannerEstimationStep29.IncorporationMethodId;
-        mannerEstimationViewModel.MannerEstimationStep30.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep30.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep30.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep30.IsIncorporationMethodChange = mannerEstimationViewModel.MannerEstimationStep29.IsIncorporationMethodChange;
 
         mannerEstimationViewModel.MannerEstimationStep30.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
@@ -780,7 +808,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep32.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
         mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = mannerEstimationViewModel.MannerEstimationStep9.CropTypeName;
         mannerEstimationViewModel.MannerEstimationStep32.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
-        mannerEstimationViewModel.MannerEstimationStep32.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+
+        mannerEstimationViewModel.MannerEstimationStep32.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep32.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep32.IsApplicationDateChange = mannerEstimationViewModel.MannerEstimationStep13.IsApplicationDateChange;
 
         mannerEstimationViewModel.MannerEstimationStep32.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
@@ -906,6 +936,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
                 mannerEstimationApplication.PhosphateValue = mannerEstimateApplicationData.PhosphateValue;
                 mannerEstimationApplication.PotashValue = mannerEstimateApplicationData.PotashValue;
             }
+        }
+
+        if(mannerEstimationViewModel.IsComingForAddNewApplication)
+        {
+            mannerEstimationApplication.MannerEstimationID = mannerEstimationViewModel.MannerEstimationId;
         }
 
         return (mannerEstimationApplication, error);
@@ -1576,7 +1611,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
         (ManureType? manureType, error) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimateApplication.ManureTypeID.Value);
         if (error == null && manureType != null)
-        {            
+        {
             mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName = manureType.Name;
             mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId = manureType.ManureGroupId;
             if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
@@ -1591,12 +1626,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             {
                 mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
             }
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
 
         }
         await BindConditionAffectingNutrientValues(mannerEstimationViewModel);
         SetMannerEstimationToSession(mannerEstimationViewModel);
         await BindMannerEstimationDataForUpdate(mannerEstimateApplication.MannerEstimationID.Value);
-        
+
         return error;
 
     }
@@ -1650,6 +1686,27 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     private async Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimateApplication(string jsonData)
     {
         (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.UpdateMannerEstimationApplicationServiceAsync(jsonData);
+        return (mannerEstimationApplicationResult, error);
+    }
+    public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplication()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        (MannerEstimation? mannerEstimate, Error? error) = await FetchMannerEstimateById(mannerEstimationViewModel.MannerEstimationId.Value);
+        if (mannerEstimate == null && !string.IsNullOrWhiteSpace(error?.Message))
+        {
+            return (null, error);
+        }
+
+        (MannerEstimationApplication? mannerEstimationApplication, error) = await BindMannerEstinationApplicationData(mannerEstimationViewModel, mannerEstimate, false);
+        if (!string.IsNullOrWhiteSpace(error?.Message) || mannerEstimationApplication == null)
+        {
+            return (null, error);
+        }
+
+
+        string jsonData = JsonConvert.SerializeObject(mannerEstimationApplication);
+
+        (MannerEstimationApplication? mannerEstimationApplicationResult, error) = await _mannerEstimationService.AddMannerEstimationApplicationServiceAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
 }

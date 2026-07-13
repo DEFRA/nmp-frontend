@@ -5,7 +5,7 @@
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblWhatIsTheEndOfDrainageDate} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.SoilDrainageEndDate;
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "ConditionsAffectingNutrients"; 
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)&&!Model.IsComingForAddNewApplication) ? "MannerEstimationResult" : "ConditionsAffectingNutrients";
 }
 
 @section BeforeContent {

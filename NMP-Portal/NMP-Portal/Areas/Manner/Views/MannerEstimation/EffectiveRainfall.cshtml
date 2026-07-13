@@ -4,7 +4,7 @@
 
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblTotalRainfallSinceApplication} {Resource.lblHyphen} {title}";
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "ConditionsAffectingNutrients";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)&&!Model.IsComingForAddNewApplication) ? "MannerEstimationResult" : "ConditionsAffectingNutrients";
 }
 
 @section BeforeContent {

@@ -7,7 +7,7 @@
     string title = Resource.lblMannerEstimate;
     string pageHeader = string.Format(Resource.lblWhenAreYouApplyingOrganicMaterialOnFieldName, Model.FieldName);
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange) ? "MannerEstimationResult" : "ManureType";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication) ? "MannerEstimationResult" : "ManureType";
 }
 
 @section BeforeContent {    

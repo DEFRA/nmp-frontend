@@ -7,12 +7,13 @@
     string title = Resource.lblMannerEstimate;
     string heading = Resource.lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    string backAction = (Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), Model.CropTypeId) ? "SowingDate" : "CropType");
-    var cancelAction = Model.IsCheckAnswer ? "CheckAnswer" : "MannerEstimationCancel";
+    string backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimationId) ? "MannerEstimationResult" : ((Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), Model.CropTypeId) ? "SowingDate" : "CropType"));
+
+    
 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : backAction)" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimationId : null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -39,9 +40,6 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            <a class="govuk-link" asp-action="@cancelAction" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-
-        </p>
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimationApplicationId" />
     </div>
 </div>
