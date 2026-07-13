@@ -251,4 +251,9 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, ISns
         _logger.LogTrace("CropLogic : FetchIsPerennialByCropTypeId() called");
         return await _cropService.FetchIsPerennialByCropTypeId(cropTypeId);
     }
+    public async Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesByCountry(int countryId)
+    {
+        _logger.LogTrace("Fetching sward types by CountryId:{CountryId}", countryId);
+        return await _cropService.FetchSwardTypesServiceByCountryAsync(countryId);
+    }
 }
