@@ -484,7 +484,11 @@
                     countApp++;
                     @if (applicationCount == 2)
                     {
-                        applcationTabName = string.Format("{0}{1}", "ApplicationDetail", countApp);
+                        applcationTabName = string.Format(Resource.lblApplicationCountDetail, countApp);
+                    }
+                    @if (applicationCount == 1)
+                    {
+                        applcationTabName =Resource.lblApplicationDetails;
                     }
                     <govuk-tabs-item id="ApplicationDetail@(countApp)" label="@applcationTabName">
                         <h3 class="govuk-heading-m non-standard">@Resource.lblApplicationDetails</h3>

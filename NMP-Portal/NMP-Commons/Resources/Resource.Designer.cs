@@ -2277,6 +2277,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application {0} details.
+        /// </summary>
+        public static string lblApplicationCountDetail {
+            get {
+                return ResourceManager.GetString("lblApplicationCountDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application date.
         /// </summary>
         public static string lblApplicationDate {

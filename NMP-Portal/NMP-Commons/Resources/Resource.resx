@@ -8304,4 +8304,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   <data name="lblApplicationDetailAdded" xml:space="preserve">
     <value>Application detail added.</value>
   </data>
+  <data name="lblApplicationCountDetail" xml:space="preserve">
+    <value>Application {0} details</value>
+  </data>
 </root>
