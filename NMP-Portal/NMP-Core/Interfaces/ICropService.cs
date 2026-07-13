@@ -48,4 +48,5 @@ public interface ICropService
     Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYear(int fieldId,int year);
 
     Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId);
+    Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesServiceByCountryAsync(int countryId);
 }

@@ -6075,8 +6075,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 _logger.LogTrace("Crop Controller : SwardType() action called - CropData session is null");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
+            (FarmResponse? farm,_)=await _farmLogic.FetchFarmByIdAsync(farmID);
+            int countryId = farm?.RB209CountryID ?? 3;
+            (List<SwardTypeResponse> swardTypeResponses, Error error) =
+                await _cropLogic.FetchSwardTypesByCountry(countryId);
 
-            (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropLogic.FetchSwardTypes();
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["SowingDateError"] = error.Message;
