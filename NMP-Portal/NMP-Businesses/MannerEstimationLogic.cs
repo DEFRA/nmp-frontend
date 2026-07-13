@@ -1688,6 +1688,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.UpdateMannerEstimationApplicationServiceAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
+
+    public async Task<int?> GetCropGroupByCropTypeId(int? cropTypeId)
+    {
+        List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypesServiceAsync();
+        int? cropGroupId = cropTypes?.FirstOrDefault(x => x.CropTypeId == cropTypeId)?.CropGroupId;
+        return cropGroupId;
+    }
     public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplication()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();

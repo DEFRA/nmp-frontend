@@ -855,7 +855,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plan and manage nutrient applications (&apos;this tool) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd.(&apos;Defra and partners&apos;)..
+        ///   Looks up a localized string similar to Plan and manage nutrient applications (&apos;this tool&apos;) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), RSK ADAS Ltd and RSK Business Solutions Ltd.(&apos;Defra and partners&apos;)..
         /// </summary>
         public static string lblAboutRecommendationGuidenceAdviceContent1 {
             get {
@@ -14500,6 +14500,15 @@ namespace NMP.Commons.Resources {
         public static string lblSingleBusinessIdentifier {
             get {
                 return ResourceManager.GetString("lblSingleBusinessIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT service under maintenance.
+        /// </summary>
+        public static string lblSiteUnderMaintenance {
+            get {
+                return ResourceManager.GetString("lblSiteUnderMaintenance", resourceCulture);
             }
         }
         
