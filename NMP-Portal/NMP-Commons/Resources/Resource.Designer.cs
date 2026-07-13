@@ -2322,15 +2322,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application detail added..
-        /// </summary>
-        public static string lblApplicationDetailAdded {
-            get {
-                return ResourceManager.GetString("lblApplicationDetailAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Application details.
         /// </summary>
         public static string lblApplicationDetails {
@@ -11951,6 +11942,15 @@ namespace NMP.Commons.Resources {
         public static string lblOrganicMaterial {
             get {
                 return ResourceManager.GetString("lblOrganicMaterial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organic material application added.
+        /// </summary>
+        public static string lblOrganicMaterialApplicationAdded {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterialApplicationAdded", resourceCulture);
             }
         }
         
