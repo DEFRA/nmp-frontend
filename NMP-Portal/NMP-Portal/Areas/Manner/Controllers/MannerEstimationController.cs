@@ -891,11 +891,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     }
                 }
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange&&model.IsApplicationDateChange)
+                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && model.IsApplicationDateChange)
                 {
                     return RedirectToAction(_conditionsAffectingNutrients);
                 }
-                
+
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationMethod");
             }
             catch (Exception ex)
@@ -3466,7 +3466,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-     
+
 
         private async Task BindPostCodeAndCropTypeDataForAddNewApplication(MannerEstimationStep32ViewModel model)
         {
@@ -4846,6 +4846,88 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return warnings;
         }
+        public async Task<IActionResult?> RemoveMannerEstimateApplication(string? q)
+        {
+            MannerEstimationStep41ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep41();
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                int mannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
+                model.EncryptedMannerEstimateId = q;
+                _mannerEstimationLogic.SetMannerEstimationStep41(model);
+                (MannerEstimationResultResponse? mannerEstimationResult, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(mannerEstimateId);
+                if (!string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    TempData[_mannerEstimationResultErrorKey] = error.Message;
+                    return RedirectToAction(_mannerEstimationResultKey, new
+                    {
+                        q = q
 
+                    });
+                }
+                ViewBag.ApplicationList = BindApplicationList(mannerEstimationResult);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveMannerEstimateApplication(MannerEstimationStep41ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePotashPrice() post action called");
+            MannerEstimationStep41ViewModel mannerEstimationStep41ViewModel = _mannerEstimationLogic.GetMannerEstimationStep41();
+            Error? error = null;
+            if (model.MannerEstimateApplicationId == null)
+            {
+                ModelState.AddModelError("MannerEstimateApplicationId", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+            if (!ModelState.IsValid)
+            {
+                int mannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep41ViewModel.EncryptedMannerEstimateId));
+                (MannerEstimationResultResponse? mannerEstimationResult,error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(mannerEstimateId);
+                if (!string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    TempData[_mannerEstimationResultErrorKey] = error.Message;
+                    return RedirectToAction(_mannerEstimationResultKey, new
+                    {
+                        q = mannerEstimationStep41ViewModel.EncryptedMannerEstimateId
+
+                    });
+                }
+                ViewBag.ApplicationList = BindApplicationList(mannerEstimationResult);
+                return View(mannerEstimationStep41ViewModel);
+            }
+
+            int mannerApplicationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep41ViewModel.EncryptedMannerEstimateId));
+            (string? success,  error) = await _mannerEstimationLogic.DeleteMannerEstimateApplicationById(model.MannerEstimateApplicationId.Value);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData["RemoveMannerEstimateApplicationError"] = error.Message;
+                return View(model);
+            }
+
+            string successMsg = Resource.lblOrganicMaterialApplicationRemoved;
+
+            return RedirectToResultWithSuccessValues(mannerApplicationId, successMsg, "Nutrients");
+
+        }
+
+        private List<SelectListItem> BindApplicationList(MannerEstimationResultResponse mannerEstimationResult)
+        {
+            MannerEstimation? mannerEstimation = mannerEstimationResult.MannerEstimation;
+            List<MannerEstimationApplicationDetailsViewModel>? mannerEstimationApplication = mannerEstimationResult.MannerEstimationApplication.ToList();
+            List<SelectListItem> selectListItem = mannerEstimationApplication
+     .Select((x, index) => new SelectListItem
+     {
+         Value = x.ID.ToString(),
+         Text = $"Application {index + 1}",
+         Group = new SelectListGroup
+         {
+             Name = $"{x.ManureType}, {(x.ModifiedOn ?? x.CreatedOn):dd MMM yyyy}"
+         }
+     })
+     .ToList();
+            return selectListItem;
+
+        }
     }
 }

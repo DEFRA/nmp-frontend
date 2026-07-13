@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -13712,6 +13712,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove an organic material application from this estimate.
+        /// </summary>
+        public static string lblRemoveAnOrganicMaterialApplicationFromThisEstimate {
+            get {
+                return ResourceManager.GetString("lblRemoveAnOrganicMaterialApplicationFromThisEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to remove a nutrient supply estimate.
         /// </summary>
         public static string lblRemoveANutrientSupplyEstimate {
@@ -19434,6 +19443,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhenWasThisMeasured {
             get {
                 return ResourceManager.GetString("lblWhenWasThisMeasured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Which application do you want to remove?.
+        /// </summary>
+        public static string lblWhichApplicationDoYouWantToRemove {
+            get {
+                return ResourceManager.GetString("lblWhichApplicationDoYouWantToRemove", resourceCulture);
             }
         }
         

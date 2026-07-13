@@ -130,5 +130,8 @@ namespace NMP.Application
         Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData();
         Task<int?> GetCropGroupByCropTypeId(int? cropTypeId);
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplication();
+        MannerEstimationStep41ViewModel GetMannerEstimationStep41();
+        MannerEstimationStep41ViewModel SetMannerEstimationStep41(MannerEstimationStep41ViewModel mannerEstimationStep41);
+        Task<(string, Error?)> DeleteMannerEstimateApplicationById(int mannerEstimationId);
     }
 }
