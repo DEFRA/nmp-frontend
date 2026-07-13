@@ -5040,7 +5040,6 @@ managementPeriod.CropID.HasValue
 
             }
         }
-
         [HttpGet]
         public async Task<IActionResult> RainfallWithinSixHour()
         {
