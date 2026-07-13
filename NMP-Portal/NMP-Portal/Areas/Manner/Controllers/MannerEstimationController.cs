@@ -75,6 +75,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _sO3Key = "SO3";
         private const string _mgOKey = "MgO";
         private const string _updateApplicationDataActionName = "UpdateApplicationData";
+        private const string _mannerHubPageAction = "MannerHubPage";
 
         public IActionResult Index()
         {
@@ -117,11 +118,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
             {
-                return RedirectToAction("MannerHubPage");
+                return RedirectToAction(_mannerHubPageAction);
             }
             else
             {
-                return RedirectToAction("MannerHubPage", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+                return RedirectToAction(_mannerHubPageAction, new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
             }
         }
 
@@ -2713,7 +2714,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData[_mannerEstimationResultErrorKey] = error.Message;
-                    return RedirectToAction("MannerHubPage");
+                    return RedirectToAction(_mannerHubPageAction);
                 }
                 await BindViewBegForMannerEstimationResult(mannerEstimationResultResponse);
             }
@@ -4497,7 +4498,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["Error"] = error.Message;
-                return RedirectToAction("MannerHubPage");
+                return RedirectToAction(_mannerHubPageAction);
             }
 
             return RedirectToResult(mannerEstimationApplication, mannerEstimationResultResponse, true);
@@ -4891,8 +4892,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 model = _mannerEstimationLogic.SetMannerEstimationStep40(model);
 
-                MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-
                 if (model.MannerEstimationIdList.Contains(Resource.lblSelectAll))
                 {
                     Guid organisationId = GetOrganisationId();
@@ -4919,7 +4918,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("MannerHubPage", new
+                    return RedirectToAction(_mannerHubPageAction, new
                     {
                         r = _mannerEstimationProtector.Protect(Resource.lblTrue)
                     });
