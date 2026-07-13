@@ -80,12 +80,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> MannerHubPage(string? q)
+        public async Task<IActionResult> MannerHubPage(string? q, string? r)
         {
             RemoveMannerEstimationSession();
             if (!string.IsNullOrWhiteSpace(q))
             {
                 return RedirectToAction("Index", "Dashboard", new { area = "" });
+            }
+            if (!string.IsNullOrWhiteSpace(r))
+            {
+                ViewBag.Success = _mannerEstimationProtector.Unprotect(r);
             }
             Guid organisationId = GetOrganisationId();
             var (mannerEstimations, error) = await _mannerEstimationLogic.FetchMannerEstimationsList(organisationId);
@@ -104,13 +108,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return RedirectToAction("Name");
         }
 
-        public IActionResult MannerEstimationCancel()
+        public async Task<IActionResult> MannerEstimationCancel()
         {
             _logger.LogTrace("MannerEstimation Controller : MannerEstimationCancel() action called");
-            return RedirectToAction("MannerHubPage", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+
+            Guid organisationId = GetOrganisationId();
+            var (mannerEstimations, error) = await _mannerEstimationLogic.FetchMannerEstimationsList(organisationId);
+
+            if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
+            {
+                return RedirectToAction("MannerHubPage");
+            }
+            else
+            {
+                return RedirectToAction("MannerHubPage", new { q = _mannerEstimationProtector.Protect(Resource.lblTrue) });
+            }
         }
-
-
 
         private void RemoveMannerEstimationSession()
         {
@@ -4781,6 +4794,122 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             return warnings;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveEstimations()
+        {
+            Guid organisationId = GetOrganisationId();
+            await FetchMannerEstimationSelectList(organisationId);
+            return View();
+
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> RemoveEstimations(MannerEstimationStep40ViewModel model)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  RemoveEstimations() post action called");
+            try
+            {
+                if (model.MannerEstimationIdList == null)
+                {
+                    ModelState.AddModelError("MannerEstimationIdList", Resource.MsgSelectAtLeastOneNutrientSupplyEstimateToRemove);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    model = _mannerEstimationLogic.GetMannerEstimationStep40();
+                    Guid organisationId = GetOrganisationId();
+                    await FetchMannerEstimationSelectList(organisationId);
+                    return View(model);
+                }
+
+                model = _mannerEstimationLogic.SetMannerEstimationStep40(model);
+
+                MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+
+                if (model.MannerEstimationIdList.Contains(Resource.lblSelectAll))
+                {
+                    Guid organisationId = GetOrganisationId();
+                    await FetchMannerEstimationSelectList(organisationId);
+                    SelectAllLogic(model, ViewBag.MannerEstimationIdList);
+                }
+                List<int> mannerEstimationIds = new List<int>();
+
+                foreach (string estimationId in model.MannerEstimationIdList)
+                {
+                    mannerEstimationIds.Add(Convert.ToInt32(estimationId));
+                }
+                var result = new
+                {
+                    mannerEstimationIds
+                };
+
+                string jsonString = JsonConvert.SerializeObject(result);
+                Error? error = await _mannerEstimationLogic.RemoveMannerEstimations(jsonString);
+                if (!string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    TempData["MannerEstimationRemoveError"] = error.Message;
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("MannerHubPage", new
+                    {
+                        r = _mannerEstimationProtector.Protect(Resource.lblTrue)
+                    });
+                }
+            }
+            catch (HttpRequestException hre)
+            {
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in RemoveEstimations() action");
+                return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in RemoveEstimations() post action");
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        private async Task FetchMannerEstimationSelectList(Guid organisationId)
+        {
+            var (mannerEstimations, error) = await _mannerEstimationLogic.FetchMannerEstimationsList(organisationId);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData["Error"] = error.Message;
+            }
+            if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
+            {
+                foreach (var estimation in mannerEstimations)
+                {
+                    estimation.EncryptedId = _mannerEstimationProtector.Protect(estimation.ID.ToString());
+                }
+                var selectList = ToSelectList(mannerEstimations, f => f.ID.ToString(), f => string.Format(Resource.lblRemoveEstimationNames, f.Name, f.FarmName, f.ModifiedOn != null ? f.ModifiedOn.Value.ToString("d MMMM yyyy") : f.CreatedOn.Value.ToString("d MMMM yyyy")))
+                                .OrderBy(x => x.Text)
+                                .ToList();
+                ViewBag.MannerEstimationIdList = selectList;
+            }
+        }
+        private static void SelectAllLogic(MannerEstimationStep40ViewModel model, List<SelectListItem> fieldSelectList)
+        {
+            if (model.MannerEstimationIdList.Contains(Resource.lblSelectAll))
+                model.MannerEstimationIdList = fieldSelectList
+                    .Where(x => x.Value != Resource.lblSelectAll)
+                    .Select(x => x.Value)
+                    .ToList();
+
+
+        }
+        private static List<SelectListItem> ToSelectList<T>(IEnumerable<T> source, Func<T, string> value, Func<T, string> text)
+        {
+            return source
+                .Select(x => new SelectListItem
+                {
+                    Value = value(x),
+                    Text = text(x)
+                })
+                .ToList();
         }
     }
 }

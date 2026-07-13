@@ -1659,5 +1659,23 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         int? cropGroupId = cropTypes?.FirstOrDefault(x => x.CropTypeId == cropTypeId)?.CropGroupId;
         return cropGroupId;
     }
+
+    public MannerEstimationStep40ViewModel GetMannerEstimationStep40()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        return mannerEstimationViewModel.MannerEstimationStep40;
+    }
+    public MannerEstimationStep40ViewModel SetMannerEstimationStep40(MannerEstimationStep40ViewModel mannerEstimationStep40)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep40 = mannerEstimationStep40;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep40();
+    }
+    public async Task<Error?> RemoveMannerEstimations(string mannerEstimationIds)
+    {
+        Error? error = await _mannerEstimationService.RemoveMannerEstimationsServiceAsync(mannerEstimationIds);
+        return error;
+    }
 }
 
