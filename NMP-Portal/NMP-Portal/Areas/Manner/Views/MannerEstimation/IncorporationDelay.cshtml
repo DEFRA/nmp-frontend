@@ -6,7 +6,7 @@
     ViewData["Title"] = $"{string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     
     var backAction = "IncorporationMethod";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange&&!Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";
     }

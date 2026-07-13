@@ -9,6 +9,7 @@
     int applicationCount = ViewBag.MannerEstimations.MannerEstimationApplication.Count;
     int count = 0;
     int countApp = 0;
+    var applcationTabName = Resource.lblApplicationDetail;
 }
 @section BeforeContent {
     <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation">@Resource.lblBackToAllNutrientSupplyEstimates</govuk-back-link>
@@ -56,10 +57,12 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
         <h2 class="govuk-heading-s">@Resource.lblOptionForManner</h2>
         <ul class="govuk-list govuk-list--spaced">
-            <li>
-                <a href="#">@Resource.lblAddAnotherOrganicMaterialApplicationToThisEstimate</a>
-            </li>
-
+            @if (applicationCount != 3)
+            {
+                <li>
+                    <a asp-action="ManureGroup" asp-controller="MannerEstimation" asp-route-r="@ViewBag.EncryptedEstimateId" asp-route-s="@ViewBag.EncryptedIsAddOtherApplication">@Resource.lblAddAnotherOrganicMaterialApplicationToThisEstimate</a>
+                </li>
+            }
             <li>
                 <a asp-action="Report" asp-route-q="@ViewBag.EncryptedEstimateId">@Resource.lblExportOrPrintThisEstimate</a>
             </li>
@@ -74,23 +77,26 @@
                 <div class="margin-bottom-forty">
                     <table class="govuk-table data-table width-66">
                         <thead class="govuk-table__head">
-                            <tr>      @if(applicationCount>1){
-                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                            <tr>
+                                @if (applicationCount > 1)
+                                {
+                                    <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
                                 }
                                 <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblApplicationDate</th>
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
-                              @{
-                                 count = 0;
+                            @{
+                                count = 0;
                             }
                             @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                             {
                                 count++;
                                 <tr>
-                                     @if(applicationCount>1){
-                                    <td class="govuk-table__cell">@count</td>
+                                    @if (applicationCount > 1)
+                                    {
+                                        <td class="govuk-table__cell">@count</td>
                                     }
                                     <td class="govuk-table__cell">@item.ManureType</td>
                                     <td class="govuk-table__cell">
@@ -107,9 +113,11 @@
                         <p class="govuk-body govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
                         <table class="govuk-table data-table">
                             <thead class="govuk-table__head">
-                                <tr>      @if(applicationCount>1){
-                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
-                                }
+                                <tr>
+                                    @if (applicationCount > 1)
+                                    {
+                                        <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                    }
                                     <th scope="row" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
                                     <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenCurrentCrop</th>
                                     <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenFollowingCropYear2</th>
@@ -117,16 +125,17 @@
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
-                                  @{
-count = 0;
-                            }
+                                @{
+                                    count = 0;
+                                }
                                 @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                                 {
-                                count++;
+                                    count++;
                                     <tr>
-                                         @if(applicationCount>1){
-                                    <td class="govuk-table__cell">@count</td>
-                                    }
+                                        @if (applicationCount > 1)
+                                        {
+                                            <td class="govuk-table__cell">@count</td>
+                                        }
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalN, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNCurrentCrop, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
@@ -142,9 +151,11 @@ count = 0;
                         <p class="govuk-body  govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
                         <table class="govuk-table data-table">
                             <thead class="govuk-table__head">
-                                <tr>      @if(applicationCount>1){
-                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
-                                }
+                                <tr>
+                                    @if (applicationCount > 1)
+                                    {
+                                        <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                    }
                                     <th scope="row" class="govuk-table__header">@Resource.lblMineralisedNitrogen</th>
                                     <th scope="row" class="govuk-table__header">@Resource.lblLostNitrateN</th>
                                     <th scope="row" class="govuk-table__header">@Resource.lblLostAmmoniaN</th>
@@ -152,16 +163,17 @@ count = 0;
                                 </tr>
                             </thead>
                             <tbody class="govuk-table__body">
-                                  @{
-                                 count = 0;
-                            }
+                                @{
+                                    count = 0;
+                                }
                                 @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                                 {
-                                count++;
+                                    count++;
                                     <tr>
-                                         @if(applicationCount>1){
-                                    <td class="govuk-table__cell">@count</td>
-                                    }
+                                        @if (applicationCount > 1)
+                                        {
+                                            <td class="govuk-table__cell">@count</td>
+                                        }
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.MineralisedNitrogenLosses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostNitrateLosses, Resource.lblkg)</td>
                                         <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostAmmonia, Resource.lblkg)</td>
@@ -176,8 +188,10 @@ count = 0;
                     <p class="govuk-body  govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
                     <table class="govuk-table data-table margin-bottom-none">
                         <thead class="govuk-table__head">
-                            <tr>      @if(applicationCount>1){
-                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                            <tr>
+                                @if (applicationCount > 1)
+                                {
+                                    <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
                                 }
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblCropAvailablePhosphate</th>
@@ -189,15 +203,16 @@ count = 0;
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
-                              @{
-                                 count = 0;
+                            @{
+                                count = 0;
                             }
                             @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                             {
                                 count++;
                                 <tr>
-                                     @if(applicationCount>1){
-                                    <td class="govuk-table__cell">@count</td>
+                                    @if (applicationCount > 1)
+                                    {
+                                        <td class="govuk-table__cell">@count</td>
                                     }
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalP2O5, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableP2O5, Resource.lblkg)</td>
@@ -225,8 +240,9 @@ count = 0;
                     <table class="govuk-table margin-bottom-forty data-table">
                         <thead class="govuk-table__head">
                             <tr class="govuk-table__row">
-                                @if(applicationCount>1){
-                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                                @if (applicationCount > 1)
+                                {
+                                    <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
                                 }
                                 <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblDate</th>
@@ -244,8 +260,9 @@ count = 0;
                             {
                                 count++;
                                 <tr class="govuk-table__row">
-                                    @if(applicationCount>1){
-                                    <td class="govuk-table__cell">@count</td>
+                                    @if (applicationCount > 1)
+                                    {
+                                        <td class="govuk-table__cell">@count</td>
                                     }
                                     <td class="govuk-table__cell">@item.ManureType</td>
                                     <td class="govuk-table__cell">@item.ApplicationDate.ToLocalTime().ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
@@ -278,7 +295,7 @@ count = 0;
                                 @mannerEstimation.NitrogenProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.NitrogenProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.NitrogenPrice,Resource.lblPerKg))</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.NitrogenPrice, Resource.lblPerKg))</td>
                             <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.EncryptedNitrogenId>@Resource.lblChange</a></td>
                         </tr>
                         <tr class="govuk-table__row">
@@ -296,7 +313,7 @@ count = 0;
                                 @mannerEstimation.PotashProductName
                             </td>
                             <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PotashProductPrice)</td>
-                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.PotashPrice,Resource.lblPerKg))</td>
+                            <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.PotashPrice, Resource.lblPerKg))</td>
                             <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.EncryptedPotashId>@Resource.lblChange</a></td>
                         </tr>
 
@@ -439,40 +456,47 @@ count = 0;
                             </td>
                         </tr>
 
-                                @if (mannerEstimation.SowingDate != null)
-                                {
-                                    <tr class="govuk-table__row">
-                                        <th scope="row" class="govuk-table__header">@Resource.lblSowingDate</th>
-                                        <td class="govuk-table__cell">
+                        @if (mannerEstimation.SowingDate != null)
+                        {
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">@Resource.lblSowingDate</th>
+                                <td class="govuk-table__cell">
                                     @mannerEstimation.SowingDate.ToString("dd MMMM yyyy")
-                                        </td>
-                                        <td class="govuk-table__cell">
+                                </td>
+                                <td class="govuk-table__cell">
                                     <a class="govuk-link" asp-action="SowingDate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                                @Resource.lblChange
-                                                <span class="govuk-visually-hidden">@(Resource.lblCropType)</span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
+                                        @Resource.lblChange
+                                        <span class="govuk-visually-hidden">@(Resource.lblCropType)</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
 
       
                     </tbody>
                 </table>
             </govuk-tabs-item>
-         
+
             @if (applicationCount != 3)
             {
                 @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                 {
                     countApp++;
-                    <govuk-tabs-item id="ApplicationDetail@(countApp)" label="@Resource.lblApplicationDetail">
+                    @if (applicationCount == 2)
+                    {
+                        applcationTabName = string.Format(Resource.lblApplicationCountDetail, countApp);
+                    }
+                    @if (applicationCount == 1)
+                    {
+                        applcationTabName =Resource.lblApplicationDetails;
+                    }
+                    <govuk-tabs-item id="ApplicationDetail@(countApp)" label="@applcationTabName">
                         <h3 class="govuk-heading-m non-standard">@Resource.lblApplicationDetails</h3>
                         @{
                             ViewBag.Count = countApp;
                         }
                         <partial name="_MannerEstimationResultApplicationTabPartial" model="@item" />
                     </govuk-tabs-item>
-
                 }
             }
             else

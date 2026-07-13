@@ -9,7 +9,7 @@
         suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
     }
      var backAction = "ApplicationRateMethod";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationRateMethodChange && !Model.IsManureTypeChange)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationRateMethodChange && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";
     }

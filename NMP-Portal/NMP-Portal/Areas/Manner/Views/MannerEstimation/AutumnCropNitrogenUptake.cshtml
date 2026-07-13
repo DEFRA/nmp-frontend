@@ -4,10 +4,10 @@
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeFor, ViewBag.CropTypeName, ViewBag.FieldName)} {Resource.lblHyphen} {title}";
     
-    ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.AutumnCropNitrogenUptake;
+ 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <partial name="_BackLinkForConditionPages" model="Model" />
 }
 
 <form asp-action="AutumnCropNitrogenUptake" asp-controller="MannerEstimation" method="post" autocomplete="off">

@@ -36,7 +36,7 @@ namespace NMP.Application
         MannerEstimationStep10ViewModel GetMannerEstimationStep10();
         MannerEstimationStep10ViewModel SetMannerEstimationStep10(MannerEstimationStep10ViewModel mannerEstimationStep10);
         MannerEstimationStep11ViewModel GetMannerEstimationStep11();
-        MannerEstimationStep11ViewModel SetMannerEstimationStep11(MannerEstimationStep11ViewModel mannerEstimationStep11);
+        Task<MannerEstimationStep11ViewModel> SetMannerEstimationStep11(MannerEstimationStep11ViewModel mannerEstimationStep11);
         MannerEstimationStep12ViewModel GetMannerEstimationStep12();
         MannerEstimationStep12ViewModel SetMannerEstimationStep12(MannerEstimationStep12ViewModel mannerEstimationStep12);
         MannerEstimationStep13ViewModel GetMannerEstimationStep13();
@@ -129,5 +129,6 @@ namespace NMP.Application
         Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId);
         Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData();
         Task<int?> GetCropGroupByCropTypeId(int? cropTypeId);
+        Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplication();
     }
 }

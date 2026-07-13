@@ -31,6 +31,7 @@ namespace NMP.Core.Interfaces
         Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId);
         Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationByIdAsync(int mannerEstimateApplicationId);
         Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationServiceAsync(string MannerApplicationData);
+        Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplicationServiceAsync(string applicationData);
 
     }
 }
