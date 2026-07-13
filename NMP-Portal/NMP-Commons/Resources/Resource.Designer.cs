@@ -12071,7 +12071,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plan organic and inorganic material applications, which include MANNER-NPK calculations.
+        ///   Looks up a localized string similar to Plan organic material and inorganic fertiliser applications.
         /// </summary>
         public static string lblReleaseScheduleContentSix {
             get {
