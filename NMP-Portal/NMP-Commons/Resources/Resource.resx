@@ -6864,7 +6864,7 @@ livestock manure.</value>
     <value>Get nutrient recommendations from AHDB digital RB209</value>
   </data>
   <data name="lblReleaseScheduleContentSix" xml:space="preserve">
-    <value>Plan organic and inorganic material applications, which include MANNER-NPK calculations</value>
+    <value>Plan organic material and inorganic fertiliser applications</value>
   </data>
   <data name="lblReleaseScheduleContentSeven" xml:space="preserve">
     <value>See warning messages where applications may breach Nitrate Vulnerable   
@@ -8300,6 +8300,12 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   </data>
   <data name="lblApplicationDetailUpdated" xml:space="preserve">
     <value>Application detail updated.</value>
+  </data>
+  <data name="lblApplicationCountDetail" xml:space="preserve">
+    <value>Application {0} details</value>
+  </data>
+  <data name="lblOrganicMaterialApplicationAdded" xml:space="preserve">
+    <value>Organic material application added</value>
   </data>
   <data name="lblWhichEstimatesWouldYouLikeToRemove" xml:space="preserve">
     <value>Which estimates would you like to remove?</value>

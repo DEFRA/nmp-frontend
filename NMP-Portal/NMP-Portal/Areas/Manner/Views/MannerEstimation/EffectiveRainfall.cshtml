@@ -4,11 +4,11 @@
 
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblTotalRainfallSinceApplication} {Resource.lblHyphen} {title}";
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "ConditionsAffectingNutrients";
+   
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
+    <partial name="_BackLinkForConditionPages" model="Model" />
 }
 
 <form asp-action="EffectiveRainfall" asp-controller="MannerEstimation" method="post" autocomplete="off">

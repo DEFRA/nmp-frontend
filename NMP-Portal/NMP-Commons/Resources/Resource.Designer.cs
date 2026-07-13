@@ -2277,6 +2277,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application {0} details.
+        /// </summary>
+        public static string lblApplicationCountDetail {
+            get {
+                return ResourceManager.GetString("lblApplicationCountDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application date.
         /// </summary>
         public static string lblApplicationDate {
@@ -11946,6 +11955,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organic material application added.
+        /// </summary>
+        public static string lblOrganicMaterialApplicationAdded {
+            get {
+                return ResourceManager.GetString("lblOrganicMaterialApplicationAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organic material application removed..
         /// </summary>
         public static string lblOrganicMaterialApplicationRemoved {
@@ -13585,7 +13603,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plan organic and inorganic material applications, which include MANNER-NPK calculations.
+        ///   Looks up a localized string similar to Plan organic material and inorganic fertiliser applications.
         /// </summary>
         public static string lblReleaseScheduleContentSix {
             get {

@@ -6,11 +6,11 @@
 
 }
 @section BeforeContent {
-    @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationMethodChange && !Model.IsManureTypeChange)
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationMethodChange && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)
     {
-        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@(!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)?Model.EncryptedMannerEstimateId:null)">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
     }
-    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationMethodChange)
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationMethodChange&&!Model.IsComingForAddNewApplication)
     {
         <govuk-back-link asp-action="ApplicationMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
     }

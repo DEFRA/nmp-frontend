@@ -1,0 +1,16 @@
+﻿@using NMP.Commons.Resources;
+@using NMP.Commons.ViewModels;
+@model MannerEstimationStep32ViewModel
+
+@{
+    var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)
+        && !Model.IsComingForAddNewApplication
+        ? "MannerEstimationResult"
+        : "ConditionsAffectingNutrients";
+}
+
+<govuk-back-link asp-action="@backAction"
+                 asp-controller="MannerEstimation"
+                 asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">
+    @Resource.lblBack
+</govuk-back-link>

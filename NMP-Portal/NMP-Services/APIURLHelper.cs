@@ -279,5 +279,6 @@ internal static class ApiurlHelper
     public const string CheckMannerGreenCompostExistanceByDateRangeAsyncAPI = "/manner-estimation-applications/check-green-compost/{0}?dateFrom={1}&dateTo={2}";
     public const string FetchMannerEstimateApplicationByIdAsyncAPI = "/manner-estimation-applications/manner-estimations-applications-by-id/{0}";
     public const string UpdateMannerEstimateApplicationAsyncAPI = "manner-estimation-applications";
+    public const string AddMannerEstimationApplicationAsyncAPI = "manner-estimation-applications";
     public const string DeleteMannerEstimateAsyncAPI = "/manner-estimations/";
 }

@@ -22,6 +22,7 @@
      && Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection
      && Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection;
     }
+    int applicationMonth = Model?.ApplicationDate != null ? Model.ApplicationDate.Month : 0;
 }
 
 <table class="govuk-table data-table manner-answers-table margin-bottom-none">
@@ -261,22 +262,24 @@
             </tr>
         }
 
-        <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenNUptake</th>
-            <td class="govuk-table__cell">
-                @string.Format(Resource.lblAutumnCropNitrogenPerHectare, Model.AutumnCropNitrogenUptake)
-            </td>
-            <td class="govuk-table__cell">
-                <a class="govuk-link"
-                   asp-action="AutumnCropNitrogenUptake"
-                   asp-controller="MannerEstimation"
-                   asp-route-q="@Model.EncryptedApplicationId">
-                    @Resource.lblChange
-                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblAutumnCropNitrogenNUptake, Resource.lblChange))</span>
-                </a>
-            </td>
-        </tr>
-
+        @if (applicationMonth >= 8 && applicationMonth <= 10)
+        {
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenNUptake</th>
+                <td class="govuk-table__cell">
+                    @string.Format(Resource.lblAutumnCropNitrogenPerHectare, Model.AutumnCropNitrogenUptake)
+                </td>
+                <td class="govuk-table__cell">
+                    <a class="govuk-link"
+                       asp-action="AutumnCropNitrogenUptake"
+                       asp-controller="MannerEstimation"
+                       asp-route-q="@Model.EncryptedApplicationId">
+                        @Resource.lblChange
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblAutumnCropNitrogenNUptake, Resource.lblChange))</span>
+                    </a>
+                </td>
+            </tr>
+        }
         <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">@Resource.lblEndOfSoilDrainage</th>
             <td class="govuk-table__cell">

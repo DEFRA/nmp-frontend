@@ -15,5 +15,6 @@ namespace NMP.Commons.ViewModels
         public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public int FarmRB209CountryId { get; set; }
         public bool IsManureTypeChange { get; set; }=false;
+        public bool IsComingForAddNewApplication { get; set; } = false;
     }
 }

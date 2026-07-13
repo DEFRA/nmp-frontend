@@ -18,7 +18,7 @@
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.DefaultNutrient;
 
     var backAction = Model.ApplicationMethodCount == 1 ? "ApplicationDate" : "ApplicationMethod";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";
     }
