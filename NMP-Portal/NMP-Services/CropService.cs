@@ -1371,5 +1371,38 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         return isPerennial;
     }
+    public async Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesServiceByCountryAsync(int countryId)
+    {
+        List<SwardTypeResponse> swardTypeResponses = new List<SwardTypeResponse>();
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSwardTypesByCountryIdAsyncAPI, countryId));
 
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    var swardTypeResponseList = responseWrapper?.Data?.ToObject<List<SwardTypeResponse>>();
+                    swardTypeResponses.AddRange(swardTypeResponseList);
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.LogError(hre, hre.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+        }
+        return (swardTypeResponses, error);
+    }
 }
