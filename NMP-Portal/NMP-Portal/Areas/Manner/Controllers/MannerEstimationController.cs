@@ -3463,6 +3463,24 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
+     
+
+        private async Task BindPostCodeAndCropTypeDataForAddNewApplication(MannerEstimationStep32ViewModel model)
+        {
+            MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+
+            if (mannerEstimationViewModel?.IsComingForAddNewApplication == true)
+            {
+                int mannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationViewModel.EncryptedMannerEstimationId));
+                (MannerEstimation? mannerEstimate, _) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimateId);
+                if (mannerEstimate != null)
+                {
+                    model.PostCode = mannerEstimate.Postcode;
+                    model.CropTypeId = mannerEstimate.CropTypeID;
+                    _mannerEstimationLogic.SetMannerEstimationStep32(model);
+                }
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> ConditionsAffectingNutrients()
         {
@@ -3579,24 +3597,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-
-        private async Task BindPostCodeAndCropTypeDataForAddNewApplication(MannerEstimationStep32ViewModel model)
-        {
-            MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-
-            if (mannerEstimationViewModel?.IsComingForAddNewApplication == true)
-            {
-                int mannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationViewModel.EncryptedMannerEstimationId));
-                (MannerEstimation? mannerEstimate, _) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimateId);
-                if (mannerEstimate != null)
-                {
-                    model.PostCode = mannerEstimate.Postcode;
-                    model.CropTypeId = mannerEstimate.CropTypeID;
-                    _mannerEstimationLogic.SetMannerEstimationStep32(model);
-                }
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConditionsAffectingNutrients(MannerEstimationStep32ViewModel model)
@@ -3609,7 +3609,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                if (mannerEstimationViewModel != null && (mannerEstimationViewModel.IsComingForAddNewApplication == false && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId) && !model.IsManureTypeChange))
+                if (mannerEstimationViewModel != null && (!mannerEstimationViewModel.IsComingForAddNewApplication && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId) && !model.IsManureTypeChange))
                 {
                     return RedirectToAction(_updateApplicationDataActionName);
                 }
