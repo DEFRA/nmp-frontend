@@ -893,7 +893,37 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             RainfallPostApplication = mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall,
 
         };
-        (string? mannerRequestbody, Error? error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
+                
+        (mannerEstimationApplication,Error? error) = await BindMannerOutputData(mannerEstimate, mannerEstimationApplication);
+        if (error != null)
+        {
+            return (mannerEstimationApplication, error);
+        }
+
+        if (isUpdate)
+        {
+            (MannerEstimationApplication? mannerEstimateApplicationData, _) = await FetchMannerEstimateApplicationById(mannerEstimationViewModel.MannerEstimationApplicationId.Value);
+            if (mannerEstimateApplicationData != null)
+            {
+                mannerEstimationApplication.ID = mannerEstimateApplicationData.ID;
+                mannerEstimationApplication.MannerEstimationID = mannerEstimateApplicationData.MannerEstimationID;
+                mannerEstimationApplication.NitrogenValue = mannerEstimateApplicationData.NitrogenValue;
+                mannerEstimationApplication.PhosphateValue = mannerEstimateApplicationData.PhosphateValue;
+                mannerEstimationApplication.PotashValue = mannerEstimateApplicationData.PotashValue;
+            }
+        }
+
+        if (mannerEstimationViewModel.IsComingForAddNewApplication)
+        {
+            mannerEstimationApplication.MannerEstimationID = mannerEstimationViewModel.MannerEstimationId;
+        }
+
+        return (mannerEstimationApplication, error);
+    }
+
+    private async Task<(MannerEstimationApplication, Error?)> BindMannerOutputData(MannerEstimation mannerEstimate, MannerEstimationApplication mannerEstimationApplication)
+    {
+        (string? mannerRequestbody,Error? error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
         if (!string.IsNullOrEmpty(error?.Message))
         {
             return (mannerEstimationApplication, error);
@@ -923,24 +953,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationApplication.LostNitrateLosses = mannerOutput.NitrateNLoss;
             mannerEstimationApplication.LostAmmonia = mannerOutput.AmmoniaNLoss;
             mannerEstimationApplication.LostDenitrified = mannerOutput.DenitrifiedNLoss;
-        }
-
-        if (isUpdate)
-        {
-            (MannerEstimationApplication? mannerEstimateApplicationData, _) = await FetchMannerEstimateApplicationById(mannerEstimationViewModel.MannerEstimationApplicationId.Value);
-            if (mannerEstimateApplicationData != null)
-            {
-                mannerEstimationApplication.ID = mannerEstimateApplicationData.ID;
-                mannerEstimationApplication.MannerEstimationID = mannerEstimateApplicationData.MannerEstimationID;
-                mannerEstimationApplication.NitrogenValue = mannerEstimateApplicationData.NitrogenValue;
-                mannerEstimationApplication.PhosphateValue = mannerEstimateApplicationData.PhosphateValue;
-                mannerEstimationApplication.PotashValue = mannerEstimateApplicationData.PotashValue;
-            }
-        }
-
-        if(mannerEstimationViewModel.IsComingForAddNewApplication)
-        {
-            mannerEstimationApplication.MannerEstimationID = mannerEstimationViewModel.MannerEstimationId;
         }
 
         return (mannerEstimationApplication, error);

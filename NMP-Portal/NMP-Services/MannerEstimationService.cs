@@ -439,18 +439,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper?.Data is not null)
-                {
-                    mannerEstimationApplication = responseWrapper.Data?.MannerEstimationApplication.ToObject<MannerEstimationApplication>();
-                }
-            }
-            else
-            {
-                error = new Error();
-                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
-            }
+            GetResponseForMannerApplication(ref mannerEstimationApplication, ref error, response, responseWrapper);
         }
         catch (HttpRequestException hre)
         {
@@ -463,6 +452,22 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimationApplication, error);
 
+    }
+
+    private void GetResponseForMannerApplication(ref MannerEstimationApplication? mannerEstimationApplication, ref Error? error, HttpResponseMessage response, ResponseWrapper? responseWrapper)
+    {
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper?.Data is not null)
+            {
+                mannerEstimationApplication = responseWrapper.Data?.MannerEstimationApplication.ToObject<MannerEstimationApplication>();
+            }
+        }
+        else
+        {
+            error = new Error();
+            error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+        }
     }
 
     public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplicationServiceAsync(string applicationData)
@@ -481,30 +486,30 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper?.Data is not null)
-                {
-                    mannerEstimationApplication = responseWrapper.Data?.MannerEstimationApplication.ToObject<MannerEstimationApplication>();
-                }
-            }
-            else
-            {
-                error = new Error();
-                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
-            }
+            GetResponseForMannerApplication(ref mannerEstimationApplication, ref error, response, responseWrapper);
         }
         catch (HttpRequestException hre)
         {
-            _logger.HandleHttpRequestException(hre, error);
+            HandleException(hre, error);
         }
         catch (Exception ex)
         {
-            _logger.HandleException(ex, error);
+            HandleException(ex, error);
         }
 
         return (mannerEstimationApplication, error);
 
+    }
+    public void HandleException(Exception ex, Error error)
+    {
+        if (ex is HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        else
+        {
+            _logger.HandleException(ex, error);
+        }
     }
 }
 

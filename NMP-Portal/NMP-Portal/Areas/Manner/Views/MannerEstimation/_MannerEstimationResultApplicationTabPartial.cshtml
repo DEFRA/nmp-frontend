@@ -22,7 +22,7 @@
      && Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection
      && Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection;
     }
-    int applicationMonth = Model.ApplicationDate != null ? Model.ApplicationDate.Month : 0;
+    int applicationMonth = Model?.ApplicationDate != null ? Model.ApplicationDate.Month : 0;
 }
 
 <table class="govuk-table data-table manner-answers-table margin-bottom-none">
@@ -262,7 +262,7 @@
             </tr>
         }
 
-        @if (Model.AutumnCropNitrogenUptake>0)
+        @if (applicationMonth >= 8 && applicationMonth <= 10)
         {
             <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenNUptake</th>

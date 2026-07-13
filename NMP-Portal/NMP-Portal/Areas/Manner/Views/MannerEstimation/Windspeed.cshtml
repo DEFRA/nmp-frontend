@@ -5,7 +5,11 @@
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblWindAtTheTimeOfApplication} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.Windspeed;
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)&&!Model.IsComingForAddNewApplication) ? "MannerEstimationResult" : "ConditionsAffectingNutrients";
+    var backAction = "ConditionsAffectingNutrients";
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsComingForAddNewApplication)
+    {
+        backAction = "MannerEstimationResult";
+    }
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>

@@ -7,7 +7,16 @@
     string title = Resource.lblMannerEstimate;
     string heading = Resource.lblWhatTypeOfOrganicMaterialAreYouUsingInThisApplication;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    string backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimationId) ? "MannerEstimationResult" : ((Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), Model.CropTypeId) ? "SowingDate" : "CropType"));
+    bool isEarlyCrop = Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), Model.CropTypeId);
+    string backAction = "CropType";
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimationId))
+    {
+        backAction = " MannerEstimationResult";
+    }
+    else if (isEarlyCrop)
+    {
+        backAction = "SowingDate";
+    }
 
     
 
