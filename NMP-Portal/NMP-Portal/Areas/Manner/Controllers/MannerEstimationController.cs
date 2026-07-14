@@ -4898,7 +4898,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             int mannerApplicationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep41ViewModel.EncryptedMannerEstimateId));
-            (string? success,  error) = await _mannerEstimationLogic.DeleteMannerEstimateApplicationById(model.MannerEstimateApplicationId.Value);
+            (_,  error) = await _mannerEstimationLogic.DeleteMannerEstimateApplicationById(model.MannerEstimateApplicationId.Value);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["RemoveMannerEstimateApplicationError"] = error.Message;
@@ -4913,7 +4913,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private List<SelectListItem> BindApplicationList(MannerEstimationResultResponse mannerEstimationResult)
         {
-            MannerEstimation? mannerEstimation = mannerEstimationResult.MannerEstimation;
             List<MannerEstimationApplicationDetailsViewModel>? mannerEstimationApplication = mannerEstimationResult.MannerEstimationApplication.ToList();
             List<SelectListItem> selectListItem = mannerEstimationApplication
      .Select((x, index) => new SelectListItem
