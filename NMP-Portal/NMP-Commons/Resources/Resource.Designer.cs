@@ -11514,6 +11514,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimates removed.
+        /// </summary>
+        public static string lblNutrientSupplyEstimatesRemoved {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimatesRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient totals from organic material applications.
         /// </summary>
         public static string lblNutrientTotalsFromOrganicMaterialApplications {
@@ -13807,6 +13816,15 @@ namespace NMP.Commons.Resources {
         public static string lblRemoveCropTypeFromFieldNameInYear {
             get {
                 return ResourceManager.GetString("lblRemoveCropTypeFromFieldNameInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} -{1} - Updated {2}.
+        /// </summary>
+        public static string lblRemoveEstimationNames {
+            get {
+                return ResourceManager.GetString("lblRemoveEstimationNames", resourceCulture);
             }
         }
         
@@ -19510,6 +19528,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which estimates would you like to remove?.
+        /// </summary>
+        public static string lblWhichEstimatesWouldYouLikeToRemove {
+            get {
+                return ResourceManager.GetString("lblWhichEstimatesWouldYouLikeToRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which estimate would you like to copy?.
         /// </summary>
         public static string lblWhichEstimateWouldYouLikeToCopy {
@@ -20361,6 +20388,15 @@ namespace NMP.Commons.Resources {
         public static string lblYouHaveNoInorganicFertiliserApplicationForFieldInYear {
             get {
                 return ResourceManager.GetString("lblYouHaveNoInorganicFertiliserApplicationForFieldInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no nutrient supply estimates..
+        /// </summary>
+        public static string lblYouHaveNoNutrientSupplyEstimates {
+            get {
+                return ResourceManager.GetString("lblYouHaveNoNutrientSupplyEstimates", resourceCulture);
             }
         }
         
@@ -23720,6 +23756,15 @@ namespace NMP.Commons.Resources {
         public static string MsgSelectAtLeastOneField {
             get {
                 return ResourceManager.GetString("MsgSelectAtLeastOneField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select at least one nutrient supply estimate to remove..
+        /// </summary>
+        public static string MsgSelectAtLeastOneNutrientSupplyEstimateToRemove {
+            get {
+                return ResourceManager.GetString("MsgSelectAtLeastOneNutrientSupplyEstimateToRemove", resourceCulture);
             }
         }
         
