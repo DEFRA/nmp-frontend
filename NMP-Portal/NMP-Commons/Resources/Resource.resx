@@ -8322,4 +8322,10 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   <data name="MsgSelectAtLeastOneNutrientSupplyEstimateToRemove" xml:space="preserve">
     <value>Select at least one nutrient supply estimate to remove.</value>
   </data>
+  <data name="lblWhichApplicationDoYouWantToRemove" xml:space="preserve">
+    <value>Which application do you want to remove?</value>
+  </data>
+  <data name="lblRemoveAnOrganicMaterialApplicationFromThisEstimate" xml:space="preserve">
+    <value>Remove an organic material application from this estimate</value>
+  </data>
 </root>
