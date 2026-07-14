@@ -4962,6 +4962,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     .Where(x => x.Value != Resource.lblSelectAll)
                     .Select(x => x.Value)
                     .ToList();
+        }
 
         public async Task<IActionResult?> RemoveMannerEstimateApplication(string? q)
         {
@@ -4986,7 +4987,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        }
+        
         private static List<SelectListItem> ToSelectList<T>(IEnumerable<T> source, Func<T, string> value, Func<T, string> text)
         {
             return source
@@ -4997,8 +4998,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 })
                 .ToList();
         }
-    }
-}
+   
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveMannerEstimateApplication(MannerEstimationStep41ViewModel model)
