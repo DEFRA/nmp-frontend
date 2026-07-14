@@ -4964,6 +4964,19 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     .ToList();
         }
 
+      
+
+        
+        private static List<SelectListItem> ToSelectList<T>(IEnumerable<T> source, Func<T, string> value, Func<T, string> text)
+        {
+            return source
+                .Select(x => new SelectListItem
+                {
+                    Value = value(x),
+                    Text = text(x)
+                })
+                .ToList();
+        }
         public async Task<IActionResult?> RemoveMannerEstimateApplication(string? q)
         {
             MannerEstimationStep41ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep41();
@@ -4986,19 +4999,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return View(model);
         }
-
-        
-        private static List<SelectListItem> ToSelectList<T>(IEnumerable<T> source, Func<T, string> value, Func<T, string> text)
-        {
-            return source
-                .Select(x => new SelectListItem
-                {
-                    Value = value(x),
-                    Text = text(x)
-                })
-                .ToList();
-        }
-   
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveMannerEstimateApplication(MannerEstimationStep41ViewModel model)
