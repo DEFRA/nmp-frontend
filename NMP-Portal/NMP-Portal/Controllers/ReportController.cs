@@ -2250,6 +2250,26 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
+    private void BindImportExportForManureType(string? q, ReportViewModel model)
+    {
+        if (!string.IsNullOrWhiteSpace(q))
+        {
+            string import = _reportDataProtector.Unprotect(q);
+            if (!string.IsNullOrWhiteSpace(import))
+            {
+                if (import == Resource.lblImport)
+                {
+                    model.IsImport = true;
+                    model.ImportExport = (int)NMP.Commons.Enums.ImportExport.Import;
+                }
+                else
+                {
+                    model.IsImport = false;
+                    model.ImportExport = (int)NMP.Commons.Enums.ImportExport.Export;
+                }
+            }
+        }
+    }
     [HttpGet]
     public async Task<IActionResult> ManureType(string? q)
     {
@@ -2282,23 +2302,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                string import = _reportDataProtector.Unprotect(q);
-                if (!string.IsNullOrWhiteSpace(import))
-                {
-                    if (import == Resource.lblImport)
-                    {
-                        model.IsImport = true;
-                        model.ImportExport = (int)NMP.Commons.Enums.ImportExport.Import;
-                    }
-                    else
-                    {
-                        model.IsImport = false;
-                        model.ImportExport = (int)NMP.Commons.Enums.ImportExport.Export;
-                    }
-                }
-            }
+            BindImportExportForManureType(q, model);
 
             SetReportDataToSession(model);
         }
@@ -2323,6 +2327,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         return View(model);
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -2372,37 +2377,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             ReportViewModel? reportViewModel = GetReportDataFromSession();
 
-            if (reportViewModel != null && reportViewModel.ManureTypeId != model.ManureTypeId)
+            error = await BindDefaultValueOfManureType(model, error, manureType, reportViewModel);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                model.IsDefaultValueChange = true;
-                model.IsManureTypeChange = true;
-                if (manureType != null && reportViewModel.ManureTypeId != null)
-                {
-                    model.ManureType = manureType;
-                    model.DryMatterPercent = manureType.DryMatter;
-                    model.NH4N = manureType.NH4N;
-                    model.NO3N = manureType.NO3N;
-                    model.SO3 = manureType.SO3;
-                    model.K2O = manureType.K2O;
-                    model.MgO = manureType.MgO;
-                    model.UricAcid = manureType.Uric;
-                    model.N = manureType.TotalN;
-                    model.P2O5 = manureType.P2O5;
-                }
+                TempData["ErrorOnManureType"] = error.Message;
+                return View(model);
             }
-
-            (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
-            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureTypeList.Count > 0)
-            {
-                FarmManureTypeResponse? previousFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == reportViewModel?.ManureTypeId);
-                FarmManureTypeResponse? currentFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-                if (previousFarmManure != null && currentFarmManure == null)
-                {
-                    model.DefaultNutrientValue = Resource.lblYes;
-                }
-
-            }
-
             SetReportDataToSession(model);
             if (model.ManureTypeId == (int)ManureTypes.OtherSolidMaterials || model.ManureTypeId == (int)ManureTypes.OtherLiquidMaterials)
             {
@@ -2414,16 +2394,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 SetReportDataToSession(model);
             }
 
-            if (model.IsDefaultValueChange && model.IsCheckAnswer)
-            {
-                return RedirectToAction("LivestockDefaultNutrientValue");
-            }
-            else if (!model.IsDefaultValueChange && model.IsCheckAnswer)
-            {
-                return RedirectToAction(_livestockImportExportCheckAnswerAction);
-            }
-
-            return RedirectToAction(_tempDataLivestockImportExportDate);
+            return RedirectForManureType(model);
         }
         catch (Exception ex)
         {
@@ -2432,6 +2403,57 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return View(model);
         }
     }
+
+    private IActionResult RedirectForManureType(ReportViewModel model)
+    {
+        if (model.IsDefaultValueChange && model.IsCheckAnswer)
+        {
+            return RedirectToAction("LivestockDefaultNutrientValue");
+        }
+        else if (!model.IsDefaultValueChange && model.IsCheckAnswer)
+        {
+            return RedirectToAction(_livestockImportExportCheckAnswerAction);
+        }
+
+        return RedirectToAction(_tempDataLivestockImportExportDate);
+    }
+
+    private async Task<Error> BindDefaultValueOfManureType(ReportViewModel model, Error error, ManureType? manureType, ReportViewModel? reportViewModel)
+    {
+        if (reportViewModel != null && reportViewModel.ManureTypeId != model.ManureTypeId)
+        {
+            model.IsDefaultValueChange = true;
+            model.IsManureTypeChange = true;
+            if (manureType != null && reportViewModel.ManureTypeId != null)
+            {
+                model.ManureType = manureType;
+                model.DryMatterPercent = manureType.DryMatter;
+                model.NH4N = manureType.NH4N;
+                model.NO3N = manureType.NO3N;
+                model.SO3 = manureType.SO3;
+                model.K2O = manureType.K2O;
+                model.MgO = manureType.MgO;
+                model.UricAcid = manureType.Uric;
+                model.N = manureType.TotalN;
+                model.P2O5 = manureType.P2O5;
+            }
+        }
+
+        (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId ?? 0);
+        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureTypeList.Count > 0)
+        {
+            FarmManureTypeResponse? previousFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == reportViewModel?.ManureTypeId);
+            FarmManureTypeResponse? currentFarmManure = farmManureTypeList.FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
+            if (previousFarmManure != null && currentFarmManure == null)
+            {
+                model.DefaultNutrientValue = Resource.lblYes;
+            }
+
+        }
+
+        return error;
+    }
+
     [HttpGet]
     public IActionResult LivestockImportExportDate()
     {
@@ -2583,51 +2605,15 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 model.FarmName = farm.Name;
                 model.FarmId = decryptedFarmId;
                 model.EncryptedFarmId = q;
-                List<HarvestYear> harvestYearList = new List<HarvestYear>();
 
                 model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
                 (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmId(decryptedFarmId);
                 if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingFarmDetailList != null && nutrientsLoadingFarmDetailList.Count > 0)
                 {
-                    (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
-                    if (string.IsNullOrWhiteSpace(error?.Message))
+                    (bool flowControl, (IActionResult?, ReportViewModel) value) = await BindHarvestYearListForUpdateLivestockImportExport(q, model,  decryptedFarmId, nutrientsLoadingFarmDetailList);
+                    if (!flowControl && value.Item1 != null)
                     {
-                        var uniqueYears = nutrientsLoadingFarmDetailList
-                            .Where(x => x.CalendarYear.HasValue)
-                            .Select(x => x.CalendarYear.Value)
-                            .Distinct();
-
-                        foreach (var year in uniqueYears)
-                        {
-                            DateTime? lastModifyDate = null;
-                            if (nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
-                            {
-                                var matchedManures = nutrientsLoadingManuresList
-                                    .Where(m => m.ManureDate.HasValue && m.ManureDate.Value.Year == year)
-                                    .ToList();
-
-                                lastModifyDate = matchedManures
-                                   .Select(m => m.ModifiedOn ?? m.CreatedOn)
-                                   .OrderByDescending(d => d)
-                                   .FirstOrDefault();
-                            }
-                            harvestYearList.Add(new HarvestYear
-                            {
-                                Year = year,
-                                EncryptedYear = _farmDataProtector.Protect(year.ToString()),
-                                LastModifiedOn = lastModifyDate
-                            });
-                        }
-                        if (harvestYearList.Count > 0)
-                        {
-                            harvestYearList = harvestYearList.OrderBy(x => x.Year).ToList();
-                            model.HarvestYear = harvestYearList;
-                        }
-                    }
-                    else
-                    {
-                        TempData[_error] = error.Message;
-                        return RedirectToAction(_farmSummaryAction, "Farm", new { q = q });
+                        return value.Item1;
                     }
 
                 }
@@ -2648,6 +2634,54 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
         return RedirectToAction(_farmSummaryAction, "Farm", new { q = q });
+    }
+
+    private async Task<(bool flowControl, (IActionResult?,ReportViewModel) value)> BindHarvestYearListForUpdateLivestockImportExport(string q, ReportViewModel model, int decryptedFarmId, List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList)
+    {
+        List<HarvestYear> harvestYearList = new List<HarvestYear>();
+        Error? error = null;
+        (List<NutrientsLoadingManures> nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId);
+        if (string.IsNullOrWhiteSpace(error?.Message))
+        {
+            var uniqueYears = nutrientsLoadingFarmDetailList
+                .Where(x => x.CalendarYear.HasValue)
+                .Select(x => x.CalendarYear.Value)
+                .Distinct();
+
+            foreach (var year in uniqueYears)
+            {
+                DateTime? lastModifyDate = null;
+                if (nutrientsLoadingManuresList != null && nutrientsLoadingManuresList.Count > 0)
+                {
+                    var matchedManures = nutrientsLoadingManuresList
+                        .Where(m => m.ManureDate.HasValue && m.ManureDate.Value.Year == year)
+                        .ToList();
+
+                    lastModifyDate = matchedManures
+                       .Select(m => m.ModifiedOn ?? m.CreatedOn)
+                       .OrderByDescending(d => d)
+                       .FirstOrDefault();
+                }
+                harvestYearList.Add(new HarvestYear
+                {
+                    Year = year,
+                    EncryptedYear = _farmDataProtector.Protect(year.ToString()),
+                    LastModifiedOn = lastModifyDate
+                });
+            }
+            if (harvestYearList.Count > 0)
+            {
+                harvestYearList = harvestYearList.OrderBy(x => x.Year).ToList();
+                model.HarvestYear = harvestYearList;
+            }
+        }
+        else
+        {
+            TempData[_error] = error.Message;
+            return (flowControl: false, value: (RedirectToAction(_farmSummaryAction, "Farm", new { q = q }), model));
+        }
+
+        return (flowControl: true, value: (null, model));
     }
 
     private async Task<List<FarmManureTypeResponse>> GetFarmManureList(int? farmId)
@@ -2771,21 +2805,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     var farmManure = farmManureList
                         .FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
 
-                    if (model.IsDefaultValueChange)
-                    {
-                        model.IsDefaultValueChange = false;
-
-                        if (farmManure != null)
-                        {
-                            ApplyFarmManure(model, farmManure);
-                            ViewBag.FarmManureApiOption = Resource.lblTrue;
-                        }
-                    }
-                    else if (farmManure != null)
-                    {
-                        ApplyFarmManure(model, farmManure, true);
-                        HandleViewBagOptions(model, farmManure);
-                    }
+                    BindDataForLivestockDefaultNutrientValue(model, farmManure);
                 }
             }
 
@@ -2800,6 +2820,25 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
         return View(model);
+    }
+
+    private void BindDataForLivestockDefaultNutrientValue(ReportViewModel model, FarmManureTypeResponse? farmManure)
+    {
+        if (model.IsDefaultValueChange)
+        {
+            model.IsDefaultValueChange = false;
+
+            if (farmManure != null)
+            {
+                ApplyFarmManure(model, farmManure);
+                ViewBag.FarmManureApiOption = Resource.lblTrue;
+            }
+        }
+        else if (farmManure != null)
+        {
+            ApplyFarmManure(model, farmManure, true);
+            HandleViewBagOptions(model, farmManure);
+        }
     }
 
     [HttpPost]
@@ -5434,35 +5473,46 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         else
         {
-            if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+            (bool flowControl, IActionResult value) = BackRedirectForLivestockCheckAnswer(model, cattle, sheep, goatsDeerOrHorses);
+            if (!flowControl)
             {
-                if (model.LivestockNumberQuestion == (int)NMP.Commons.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
-                {
-                    return RedirectToAction(_averageNumber);
-                }
-                else if (model.LivestockNumberQuestion == (int)NMP.Commons.Enums.LivestockNumberQuestion.ANumberForEachMonth)
-                {
-                    return RedirectToAction("LivestockNumbersMonthly");
-                }
-            }
-            else
-            {
-                if (model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
-                {
-                    return RedirectToAction(_occupancy);
-                }
-                else if (model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
-                {
-                    return RedirectToAction(_nitrogenStandard);
-                }
-                else if (model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.UseDefault)
-                {
-                    return RedirectToAction(_occupancyAndStandard);
-                }
+                return value;
             }
         }
 
         return RedirectToAction(_averageNumber);
+    }
+
+    private (bool flowControl, IActionResult value) BackRedirectForLivestockCheckAnswer(ReportViewModel model, int cattle, int sheep, int goatsDeerOrHorses)
+    {
+        if (model.LivestockGroupId == cattle || model.LivestockGroupId == sheep || model.LivestockGroupId == goatsDeerOrHorses)
+        {
+            if (model.LivestockNumberQuestion == (int)NMP.Commons.Enums.LivestockNumberQuestion.AverageNumberForTheYear)
+            {
+                return (flowControl: false, value: RedirectToAction(_averageNumber));
+            }
+            else if (model.LivestockNumberQuestion == (int)NMP.Commons.Enums.LivestockNumberQuestion.ANumberForEachMonth)
+            {
+                return (flowControl: false, value: RedirectToAction("LivestockNumbersMonthly"));
+            }
+        }
+        else
+        {
+            if (model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeOccupancy)
+            {
+                return (flowControl: false, value: RedirectToAction(_occupancy));
+            }
+            else if (model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeNitrogen)
+            {
+                return (flowControl: false, value: RedirectToAction(_nitrogenStandard));
+            }
+            else if (model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.UseDefault)
+            {
+                return (flowControl: false, value: RedirectToAction(_occupancyAndStandard));
+            }
+        }
+
+        return (flowControl: true, value: null);
     }
 
     [HttpGet]
