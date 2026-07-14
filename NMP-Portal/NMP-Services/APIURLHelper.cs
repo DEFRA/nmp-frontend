@@ -95,7 +95,7 @@ internal static class ApiurlHelper
     public const string FetchSoilAnalysisByIdAsyncAPI = "soil-analyses/{0}";
     public const string UpdateSoilAnalysisAsyncAPI = "soil-analyses/{0}";
     public const string UpdateFieldAsyncAPI = "fields/{0}";
-    public const string DeleteFieldByIdAPI = "fields/{0}";
+    public const string DeleteFieldByIdAPI = "fields/{0}";    
     public const string AddPKBalanceAsyncAPI = "pk-Balance";
     public const string UpdatePKBalanceAsyncAPI = "pk-Balance/{0}&Field={1}";
     public const string FetchPKBalanceByYearAndFieldIdAsyncAPI = "pk-balance/{0}?fieldId={1}";
@@ -281,4 +281,5 @@ internal static class ApiurlHelper
     public const string UpdateMannerEstimateApplicationAsyncAPI = "manner-estimation-applications";
     public const string AddMannerEstimationApplicationAsyncAPI = "manner-estimation-applications";
     public const string DeleteMannerEstimateAsyncAPI = "/manner-estimations/";
+    public const string DeleteMannerEstimateApplicationByIdAPI = "manner-estimation-applications/{0}";
 }

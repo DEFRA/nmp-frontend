@@ -136,5 +136,8 @@ namespace NMP.Application
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplication();
 
         Task<Error?> RemoveMannerEstimations(string mannerEstimationIds);
+        MannerEstimationStep41ViewModel GetMannerEstimationStep41();
+        MannerEstimationStep41ViewModel SetMannerEstimationStep41(MannerEstimationStep41ViewModel mannerEstimationStep41);
+        Task<(string, Error?)> DeleteMannerEstimateApplicationById(int mannerEstimationId);
     }
 }

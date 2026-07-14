@@ -2,8 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
+using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
@@ -500,7 +502,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         return (mannerEstimationApplication, error);
 
     }
-    public void HandleException(Exception ex, Error error)
+    public void HandleException(Exception ex, Error? error)
     {
         if (ex is HttpRequestException hre)
         {
@@ -510,6 +512,36 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         {
             _logger.HandleException(ex, error);
         }
+    }
+    public async Task<(string, Error?)> DeleteMannerEstimateApplicationByIdServiceAsync(int mannerEstimationId)
+    {
+        Error? error = null;
+        string message = string.Empty;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.DeleteAsync(string.Format(ApiurlHelper.DeleteMannerEstimateApplicationByIdAPI, mannerEstimationId));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
+            {
+                message = data["message"]?.Value<string>() ?? string.Empty;
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            HandleException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            HandleException(ex, error);
+        }
+
+        return (message, error);
     }
 
     public async Task<Error?> RemoveMannerEstimationsServiceAsync(string mannerEstimationIds)

@@ -1,0 +1,53 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep41ViewModel
+
+@{
+    var heading = Resource.lblWhichApplicationDoYouWantToRemove;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (TempData["RemoveMannerEstimateApplicationError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["RemoveMannerEstimateApplicationError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+        <form asp-action="RemoveMannerEstimateApplication" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-radios class="govuk-radios--inline" for="@Model.MannerEstimateApplicationId">
+
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @heading
+                    </govuk-radios-fieldset-legend>
+                    @if (ViewBag.ApplicationList != null && ViewBag.ApplicationList.Count > 0)
+                    {
+                        @foreach (var item in ViewBag.ApplicationList)
+                        {
+                            <govuk-radios-item value="@item.Value">
+                                @item.Text
+
+                                <govuk-radios-item-hint>
+                                    @item.Group.Name
+                                </govuk-radios-item-hint>
+                            </govuk-radios-item>
+                        }
+                    }
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
+    </div>
+</div>
