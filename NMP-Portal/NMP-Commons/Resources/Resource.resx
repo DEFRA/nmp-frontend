@@ -8127,7 +8127,7 @@ following crop year 2</value>
     <value>Topsoil</value>
   </data>
   <data name="lblIsInsideANitrateVulnerableZone" xml:space="preserve">
-    <value>Is inside a Nitrate Vulnerable Zone (NVZ)</value>
+    <value>In a Nitrate Vulnerable Zone (NVZ)</value>
   </data>
   <data name="lblRegisteredOrganicProducerOnly" xml:space="preserve">
     <value>Registered organic producer</value>
