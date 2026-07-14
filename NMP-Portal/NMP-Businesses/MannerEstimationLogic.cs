@@ -302,7 +302,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep12ViewModel GetMannerEstimationStep12()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep12.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId??string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep12.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep12.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep12.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep12.ManureGroupName = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupName;
@@ -893,8 +893,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             RainfallPostApplication = mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall,
 
         };
-                
-        (mannerEstimationApplication,Error? error) = await BindMannerOutputData(mannerEstimate, mannerEstimationApplication);
+
+        (mannerEstimationApplication, Error? error) = await BindMannerOutputData(mannerEstimate, mannerEstimationApplication);
         if (error != null)
         {
             return (mannerEstimationApplication, error);
@@ -923,7 +923,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     private async Task<(MannerEstimationApplication, Error?)> BindMannerOutputData(MannerEstimation mannerEstimate, MannerEstimationApplication mannerEstimationApplication)
     {
-        (string? mannerRequestbody,Error? error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
+        (string? mannerRequestbody, Error? error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
         if (!string.IsNullOrEmpty(error?.Message))
         {
             return (mannerEstimationApplication, error);
@@ -1727,6 +1727,43 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         (MannerEstimationApplication? mannerEstimationApplicationResult, error) = await _mannerEstimationService.AddMannerEstimationApplicationServiceAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
+    }
+
+    public MannerEstimationStep40ViewModel GetMannerEstimationStep40()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        return mannerEstimationViewModel.MannerEstimationStep40;
+    }
+    public MannerEstimationStep40ViewModel SetMannerEstimationStep40(MannerEstimationStep40ViewModel mannerEstimationStep40)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep40 = mannerEstimationStep40;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep40();
+    }
+    public async Task<Error?> RemoveMannerEstimations(string mannerEstimationIds)
+    {
+        Error? error = await _mannerEstimationService.RemoveMannerEstimationsServiceAsync(mannerEstimationIds);
+        return error;
+    }
+
+    public MannerEstimationStep41ViewModel SetMannerEstimationStep41(MannerEstimationStep41ViewModel mannerEstimationStep41)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep41.EncryptedMannerEstimateId = mannerEstimationStep41.EncryptedMannerEstimateId;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return mannerEstimationViewModel.MannerEstimationStep41;
+    }
+    public MannerEstimationStep41ViewModel GetMannerEstimationStep41()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        return mannerEstimationViewModel.MannerEstimationStep41;
+    }
+    public async Task<(string, Error?)> DeleteMannerEstimateApplicationById(int mannerEstimationId)
+    {
+        _logger.LogTrace("MannerLogic : DeleteMannerEstimateApplicationById() called");
+        return await _mannerEstimationService.DeleteMannerEstimateApplicationByIdServiceAsync(mannerEstimationId);
+
     }
 }
 

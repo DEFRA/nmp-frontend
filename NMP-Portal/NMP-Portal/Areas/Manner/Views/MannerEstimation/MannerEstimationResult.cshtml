@@ -67,6 +67,12 @@
                     <a asp-action="ManureGroup" asp-controller="MannerEstimation" asp-route-r="@ViewBag.EncryptedEstimateId" asp-route-s="@ViewBag.EncryptedIsAddOtherApplication">@Resource.lblAddAnotherOrganicMaterialApplicationToThisEstimate</a>
                 </li>
             }
+            @if (applicationCount >1)
+            {
+            <li>
+                <a asp-action="RemoveMannerEstimateApplication" asp-controller="MannerEstimation" asp-route-q="@ViewBag.EncryptedEstimateId">@Resource.lblRemoveAnOrganicMaterialApplicationFromThisEstimate</a>
+            </li>
+            }
             <li>
                 <a asp-action="Report" asp-route-q="@ViewBag.EncryptedEstimateId">@Resource.lblExportOrPrintThisEstimate</a>
             </li>
@@ -462,14 +468,14 @@
                     @if (mannerEstimation.SowingDate != null)
                     {
                         <tr class="govuk-table__row">
-                            <th scope="row" class="govuk-table__header">@Resource.lblSowingDate</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblPlantingDate</th>
                             <td class="govuk-table__cell">
                                 @mannerEstimation.SowingDate.ToString("dd MMMM yyyy")
                             </td>
                             <td class="govuk-table__cell">
                                 <a class="govuk-link" asp-action="SowingDate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                     @Resource.lblChange
-                                    <span class="govuk-visually-hidden">@(Resource.lblCropType)</span>
+                                    <span class="govuk-visually-hidden">@(Resource.lblPlantingDate)</span>
                                 </a>
                             </td>
                         </tr>
@@ -518,11 +524,11 @@
                     {
                         <hr class="margin-bottom-thirty">
                     }
-                    <p class="govuk-body mt-5 margin-top-forty">
+                   
+                }
+                 <p class="govuk-body mt-5 margin-top-forty">
                         <a class="govuk-link" href="@(string.Format("{0}{1}", "#", "ApplicationDetails"))">@Resource.lblBackToTheTop</a>
                     </p>
-                }
-
             </govuk-tabs-item>
         }
     </govuk-tabs>

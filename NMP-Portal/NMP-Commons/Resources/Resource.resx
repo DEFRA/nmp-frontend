@@ -8127,7 +8127,7 @@ following crop year 2</value>
     <value>Topsoil</value>
   </data>
   <data name="lblIsInsideANitrateVulnerableZone" xml:space="preserve">
-    <value>Is inside a Nitrate Vulnerable Zone (NVZ)</value>
+    <value>In a Nitrate Vulnerable Zone (NVZ)</value>
   </data>
   <data name="lblRegisteredOrganicProducerOnly" xml:space="preserve">
     <value>Registered organic producer</value>
@@ -8306,5 +8306,26 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   </data>
   <data name="lblOrganicMaterialApplicationAdded" xml:space="preserve">
     <value>Organic material application added</value>
+  </data>
+  <data name="lblWhichEstimatesWouldYouLikeToRemove" xml:space="preserve">
+    <value>Which estimates would you like to remove?</value>
+  </data>
+  <data name="lblRemoveEstimationNames" xml:space="preserve">
+    <value>{0} -{1} - Updated {2}</value>
+  </data>
+  <data name="lblNutrientSupplyEstimatesRemoved" xml:space="preserve">
+    <value>Nutrient supply estimates removed</value>
+  </data>
+  <data name="lblYouHaveNoNutrientSupplyEstimates" xml:space="preserve">
+    <value>You have no nutrient supply estimates.</value>
+  </data>
+  <data name="MsgSelectAtLeastOneNutrientSupplyEstimateToRemove" xml:space="preserve">
+    <value>Select at least one nutrient supply estimate to remove.</value>
+  </data>
+  <data name="lblWhichApplicationDoYouWantToRemove" xml:space="preserve">
+    <value>Which application do you want to remove?</value>
+  </data>
+  <data name="lblRemoveAnOrganicMaterialApplicationFromThisEstimate" xml:space="preserve">
+    <value>Remove an organic material application from this estimate</value>
   </data>
 </root>

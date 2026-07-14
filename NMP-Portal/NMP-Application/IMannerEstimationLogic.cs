@@ -117,6 +117,10 @@ namespace NMP.Application
         MannerEstimationStep38ViewModel SetMannerEstimationStep38(MannerEstimationStep38ViewModel mannerEstimationStep38);
         Task<MannerEstimationStep39ViewModel> GetMannerEstimationStep39();
         Task<MannerEstimationStep39ViewModel> SetMannerEstimationStep39(MannerEstimationStep39ViewModel mannerEstimationStep39);
+
+        MannerEstimationStep40ViewModel GetMannerEstimationStep40();
+        MannerEstimationStep40ViewModel SetMannerEstimationStep40(MannerEstimationStep40ViewModel mannerEstimationStep40);
+
         Task<(decimal, Error)> FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(int mannerEstimationId, DateTime startDate, DateTime endDate, bool isGreenFoodCompost, int? mannerApplicationId);
 
         Task<(decimal, Error)> FetchTotalNByMannerEstimationIdAppDate(int mannerEstimationId, DateTime startDate, DateTime endDate, int? mannerApplicationId);
@@ -130,5 +134,10 @@ namespace NMP.Application
         Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData();
         Task<int?> GetCropGroupByCropTypeId(int? cropTypeId);
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplication();
+
+        Task<Error?> RemoveMannerEstimations(string mannerEstimationIds);
+        MannerEstimationStep41ViewModel GetMannerEstimationStep41();
+        MannerEstimationStep41ViewModel SetMannerEstimationStep41(MannerEstimationStep41ViewModel mannerEstimationStep41);
+        Task<(string, Error?)> DeleteMannerEstimateApplicationById(int mannerEstimationId);
     }
 }
