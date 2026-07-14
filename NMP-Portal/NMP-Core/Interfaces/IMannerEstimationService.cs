@@ -32,6 +32,7 @@ namespace NMP.Core.Interfaces
         Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationByIdAsync(int mannerEstimateApplicationId);
         Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationServiceAsync(string MannerApplicationData);
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplicationServiceAsync(string applicationData);
+        Task<Error?> RemoveMannerEstimationsServiceAsync(string mannerEstimationIds);
 
     }
 }
