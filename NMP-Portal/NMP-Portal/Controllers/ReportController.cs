@@ -3444,25 +3444,22 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                             x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName);
                             if (farmManureType != null)
                             {
-                                if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) &&
-                                   farmManureType.ManureTypeName.Equals(nutrientsLoadingManure.ManureType))
-                                {
-                                    if (farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
+                                bool isDefaultNutrientValue = farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
                                     farmManureType.DryMatter == model.DryMatterPercent && farmManureType.Uric == model.UricAcid &&
                                     farmManureType.NH4N == model.NH4N && farmManureType.NO3N == model.NO3N &&
                                     farmManureType.SO3 == model.SO3 && farmManureType.K2O == model.K2O &&
-                                    farmManureType.MgO == model.MgO)
+                                    farmManureType.MgO == model.MgO;
+                                if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) &&
+                                   farmManureType.ManureTypeName.Equals(nutrientsLoadingManure.ManureType))
+                                {
+                                    if (isDefaultNutrientValue)
                                     {
                                         model.DefaultNutrientValue = Resource.lblYes;
                                     }
                                 }
                                 else
                                 {
-                                    if (farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
-                                    farmManureType.DryMatter == model.DryMatterPercent && farmManureType.Uric == model.UricAcid &&
-                                    farmManureType.NH4N == model.NH4N && farmManureType.NO3N == model.NO3N &&
-                                    farmManureType.SO3 == model.SO3 && farmManureType.K2O == model.K2O &&
-                                    farmManureType.MgO == model.MgO)
+                                    if (isDefaultNutrientValue)
                                     {
 
                                         model.DefaultNutrientValue = Resource.lblYesUseTheseValues;
@@ -4134,14 +4131,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 ModelState.AddModelError(_livestockNumberQuestion, Resource.MsgSelectAnOptionBeforeContinuing);
             }
-            if (model.LivestockGroupId == (int)Enums.LivestockGroup.GoatsDeerOrHorses)
-            {
-                ViewBag.LivestockCategory = Resource.lblLivestock;
-            }
-            else
-            {
-                ViewBag.LivestockCategory = model.LivestockGroupName?.ToLower();
-            }
+            BindViewBegForLivestockCategoryForLivestockNumberQuestion(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -4174,6 +4164,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return View(model);
         }
     }
+
+    private void BindViewBegForLivestockCategoryForLivestockNumberQuestion(ReportViewModel model)
+    {
+        if (model.LivestockGroupId == (int)Enums.LivestockGroup.GoatsDeerOrHorses)
+        {
+            ViewBag.LivestockCategory = Resource.lblLivestock;
+        }
+        else
+        {
+            ViewBag.LivestockCategory = model.LivestockGroupName?.ToLower();
+        }
+    }
+
     private void BindLivestockCategory(ReportViewModel model)
     {
         if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
@@ -4347,20 +4350,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
             model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
             SetReportDataToSession(model);
-            if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
-            {
-                ViewBag.LivestockCategory = model.LivestockGroupName;
-            }
-            else
-            {
-
-                string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
-                if (!string.IsNullOrWhiteSpace(groupName) && (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse)))
-                {
-                    groupName = groupName + "s";
-                }
-                ViewBag.LivestockCategory = groupName;
-            }
+            BindLivestockCategory(model);
         }
         catch (Exception ex)
         {
@@ -4384,20 +4374,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (!ModelState.IsValid)
             {
-                if (model.LivestockGroupId != (int)Enums.LivestockGroup.GoatsDeerOrHorses)
-                {
-                    ViewBag.LivestockCategory = model.LivestockGroupName;
-                }
-                else
-                {
-                    string groupName = model.LivestockTypeName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim(',').ToLower();
-                    if (!string.IsNullOrWhiteSpace(groupName) && (groupName.Equals(Resource.lblGoat) || groupName.Equals(Resource.lblHorse)))
-                    {
-                        groupName = groupName + "s";
-                    }
-                    ViewBag.LivestockCategory = groupName;
-                }
-
+                BindLivestockCategory(model);
                 return View(model);
             }
             model.NumbersInJanuary = null;
@@ -5631,68 +5608,70 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             if (model.IsLivestockCheckAnswer)
             {
-                model.LivestockGroupId = null;
-                model.IsAnyLivestockNumber = null;
-                model.LivestockTypeId = null;
-                model.LivestockNumberQuestion = null;
-                model.AverageNumber = null;
-                model.NumbersInJanuary = null;
-                model.NumbersInFebruary = null;
-                model.NumbersInMarch = null;
-                model.NumbersInApril = null;
-                model.NumbersInMay = null;
-                model.NumbersInJune = null;
-                model.NumbersInJuly = null;
-                model.NumbersInAugust = null;
-                model.NumbersInSeptember = null;
-                model.NumbersInOctober = null;
-                model.NumbersInNovember = null;
-                model.NumbersInDecember = null;
-                model.AverageNumberOfPlaces = null;
-                model.AverageOccupancy = null;
-                model.NitrogenStandard = null;
-                model.OccupancyAndNitrogenOptions = null;
-                model.IsLivestockCheckAnswer = false;
+                ResetLivestockProperties(model);
                 SetReportDataToSession(model);
                 return RedirectForCancelLivestockCheckAnswer(model);
             }
             else
             {
-                model.ImportExport = null;
-                model.LivestockImportExportDate = null;
-                model.ManureTypeId = null;
-                model.ManureTypeName = null;
-                model.DefaultFarmManureValueDate = null;
-                model.DefaultNutrientValue = null;
-                model.LivestockQuantity = null;
-                model.ReceiverName = null;
-                model.Postcode = null;
-                model.Address1 = null;
-                model.Address3 = null;
-                model.Address2 = null;
-                model.Address4 = null;
-                model.Comment = null;
-                model.IsImport = null;
-                model.IsCheckAnswer = false;
-                model.IsManureTypeChange = false;
-                model.IsAnyLivestockImportExport = null;
-                model.ManureGroupId = null;
-                model.ManureGroupIdForFilter = null;
-                model.ManureGroupName = null;
-                model.ManureType = new ManureType();
-                model.N = null;
-                model.NH4N = null;
-                model.DryMatterPercent = null;
-                model.NO3N = null;
-                model.SO3 = null;
-                model.K2O = null;
-                model.MgO = null;
-                model.P2O5 = null;
-                model.UricAcid = null;
+                ResetImportExportProperties(model);
+                ResetNutrients(model);
                 SetReportDataToSession(model);
                 return RedirectForImportExportCheckAnswer(model);
             }
         }
+    }
+
+    private static void ResetImportExportProperties(ReportViewModel model)
+    {
+        model.ImportExport = null;
+        model.LivestockImportExportDate = null;
+        model.ManureTypeId = null;
+        model.ManureTypeName = null;
+        model.DefaultFarmManureValueDate = null;
+        model.DefaultNutrientValue = null;
+        model.LivestockQuantity = null;
+        model.ReceiverName = null;
+        model.Postcode = null;
+        model.Address1 = null;
+        model.Address3 = null;
+        model.Address2 = null;
+        model.Address4 = null;
+        model.Comment = null;
+        model.IsImport = null;
+        model.IsCheckAnswer = false;
+        model.IsManureTypeChange = false;
+        model.IsAnyLivestockImportExport = null;
+        model.ManureGroupId = null;
+        model.ManureGroupIdForFilter = null;
+        model.ManureGroupName = null;
+        model.ManureType = new ManureType();
+    }
+
+    private static void ResetLivestockProperties(ReportViewModel model)
+    {
+        model.LivestockGroupId = null;
+        model.IsAnyLivestockNumber = null;
+        model.LivestockTypeId = null;
+        model.LivestockNumberQuestion = null;
+        model.AverageNumber = null;
+        model.NumbersInJanuary = null;
+        model.NumbersInFebruary = null;
+        model.NumbersInMarch = null;
+        model.NumbersInApril = null;
+        model.NumbersInMay = null;
+        model.NumbersInJune = null;
+        model.NumbersInJuly = null;
+        model.NumbersInAugust = null;
+        model.NumbersInSeptember = null;
+        model.NumbersInOctober = null;
+        model.NumbersInNovember = null;
+        model.NumbersInDecember = null;
+        model.AverageNumberOfPlaces = null;
+        model.AverageOccupancy = null;
+        model.NitrogenStandard = null;
+        model.OccupancyAndNitrogenOptions = null;
+        model.IsLivestockCheckAnswer = false;
     }
 
     private IActionResult RedirectForImportExportCheckAnswer(ReportViewModel model)
@@ -6677,64 +6656,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         if (isLivestock)
         {
             model.EncryptedNLLivestockID = null;
-            model.LivestockGroupId = null;
-            model.IsAnyLivestockNumber = null;
-            model.LivestockTypeId = null;
-            model.LivestockNumberQuestion = null;
-            model.AverageNumber = null;
-            model.NumbersInJanuary = null;
-            model.NumbersInFebruary = null;
-            model.NumbersInMarch = null;
-            model.NumbersInApril = null;
-            model.NumbersInMay = null;
-            model.NumbersInJune = null;
-            model.NumbersInJuly = null;
-            model.NumbersInAugust = null;
-            model.NumbersInSeptember = null;
-            model.NumbersInOctober = null;
-            model.NumbersInNovember = null;
-            model.NumbersInDecember = null;
-            model.AverageNumberOfPlaces = null;
-            model.AverageOccupancy = null;
-            model.NitrogenStandard = null;
-            model.OccupancyAndNitrogenOptions = null;
-            model.IsLivestockCheckAnswer = false;
+            ResetLivestockProperties(model);
             model.LivestockGroupName = null;
             model.LivestockTypeName = null;
         }
         else
         {
-            model.ImportExport = null;
-            model.LivestockImportExportDate = null;
-            model.ManureTypeId = null;
-            model.ManureTypeName = null;
-            model.DefaultFarmManureValueDate = null;
-            model.DefaultNutrientValue = null;
-            model.LivestockQuantity = null;
-            model.ReceiverName = null;
-            model.Postcode = null;
-            model.Address1 = null;
-            model.Address3 = null;
-            model.Address2 = null;
-            model.Address4 = null;
-            model.Comment = null;
-            model.IsImport = null;
-            model.IsCheckAnswer = false;
-            model.IsManureTypeChange = false;
-            model.ManureGroupId = null;
-            model.ManureGroupIdForFilter = null;
-            model.ManureGroupName = null;
-            model.IsAnyLivestockImportExport = null;
-            model.ManureType = new ManureType();
-            model.N = null;
-            model.NH4N = null;
-            model.DryMatterPercent = null;
-            model.NO3N = null;
-            model.SO3 = null;
-            model.K2O = null;
-            model.MgO = null;
-            model.P2O5 = null;
-            model.UricAcid = null;
+            ResetImportExportProperties(model);
+            ResetNutrients(model);
         }
 
         return model;
