@@ -524,18 +524,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.WarningHeaders = warningHeaderResponses;
 
         (CropAndFieldReportResponse? cropAndFieldReportResponse, error) = await _fieldLogic.FetchCropAndFieldReportById(fieldIds, model.Year.Value);
-        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+        if (!string.IsNullOrWhiteSpace(error?.Message))
         {
             TempData[_errorOnSelectField] = error.Message;
             return RedirectToAction(_exportFieldsOrCropTypeAction);
         }
-        else
-        {
-            model.CropAndFieldReport = cropAndFieldReportResponse;
-        }
 
-        (List<NutrientResponseWrapper> nutrients, error) = await _fieldLogic.FetchNutrientsAsync();
-        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && nutrients.Count > 0)
+        model.CropAndFieldReport = cropAndFieldReportResponse;
+
+
+        (List<NutrientResponseWrapper> nutrients, _) = await _fieldLogic.FetchNutrientsAsync();
+        if (nutrients.Count > 0)
         {
             model.Nutrients = new List<NutrientResponseWrapper>();
             model.Nutrients = nutrients;
@@ -545,49 +544,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         if (model.CropAndFieldReport != null && model.CropAndFieldReport.Farm != null && model.FarmId != null)
         {
             model.FarmRB209CountryID = model.CropAndFieldReport.Farm.RB209CountryID;
-            (ExcessRainfalls excessRainfalls, error) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
-            if (string.IsNullOrWhiteSpace(error?.Message) && excessRainfalls != null)
-            {
-                if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
-                {
-                    (List<CommonResponse> excessWinterRainfallOption, error) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
-                    if (string.IsNullOrWhiteSpace(error?.Message) && excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
-                    {
-                        string? excessRainfallName = excessWinterRainfallOption.FirstOrDefault(x => x.Value == excessRainfalls.WinterRainfall)?.Name;
-                        if (!string.IsNullOrWhiteSpace(excessRainfallName))
-                        {
-                            string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
-                            model.CropAndFieldReport.ExcessWinterRainfall = $"{parts[0]} ({parts[1]})";
-                        }
-
-                    }
-                }
-                else if (model.CropAndFieldReport != null)
-                {
-                    if (excessRainfalls.WinterRainfall == 500)
-                    {
-                        model.CropAndFieldReport.WinterRainfall = Resource.lbl450OrMore;
-                    }
-                    else
-                    {
-                        model.CropAndFieldReport.WinterRainfall = Resource.lblLessThan450;
-                    }
-                }
-            }
-            if (string.IsNullOrWhiteSpace(model.CropAndFieldReport?.Farm.CPH))
-            {
-                model.CropAndFieldReport.Farm.CPH = Resource.lblNotEntered;
-            }
-            if (string.IsNullOrWhiteSpace(model.CropAndFieldReport?.Farm.BusinessName))
-            {
-                model.CropAndFieldReport.Farm.BusinessName = Resource.lblNotEntered;
-            }
+            await BindExcessRainfallDataForCropFieldReport(model);
+            BindCPHAndBussinessNameForCropAndFieldReport(model);
             model.CropAndFieldReport.Farm.FullAddress = string.Format("{0}, {1} {2}, {3}, {4}", model.CropAndFieldReport.Farm.Address1, model.CropAndFieldReport.Farm.Address2 != null ? model.CropAndFieldReport.Farm.Address2 + "," : string.Empty, model.CropAndFieldReport.Farm.Address3, model.CropAndFieldReport.Farm.Address4, model.CropAndFieldReport.Farm.Postcode);
             int totalCount = 0;
-            if ((!string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.FullAddress)) && model.CropAndFieldReport.Farm.CountryID != null)
-            {
-                model.CropAndFieldReport.Farm.FullAddress += ", " + Enum.GetName(typeof(NMP.Commons.Enums.FarmCountry), model.CropAndFieldReport.Farm.CountryID);
-            }
+            BindFullAddressforCropFieldReport(model);
             if (model.CropAndFieldReport.Farm.Fields != null && model.CropAndFieldReport.Farm.Fields.Count > 0)
             {
                 model.CropAndFieldReport.Farm.Fields = model.CropAndFieldReport.Farm.Fields.OrderBy(a => a.Name).ToList();
@@ -606,150 +567,16 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                         foreach (var cropData in fieldData.Crops)
                         {
-                            if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                            (bool flowControl, IActionResult value,totalCount,totalGrassArea,totalArableArea) = await BindGrassDataForCropFieldReport( totalCount,  totalGrassArea,  totalArableArea, fieldData, fieldIdsForGrowthClass, cropData);
+                            if (!flowControl)
                             {
-                                (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
-                                if (grassGrowthClasses != null && grassGrowthClasses.Count > 0)
-                                {
-
-                                    if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
-                                    {
-                                        cropData.GrowthClass = grassGrowthClasses.FirstOrDefault()?.GrassGrowthClassName;
-                                    }
-                                }
-                                else
-                                {
-                                    TempData[_errorOnSelectField] = error?.Message;
-                                    return RedirectToAction(_exportFieldsOrCropTypeAction);
-                                }
-
-                                totalCount++;
-                                if (cropData.CropOrder == 1)
-                                {
-                                    if (cropData.Establishment != null)
-                                    {
-                                        if (cropData.Establishment != (int)NMP.Commons.Enums.Season.Autumn &&
-                                        cropData.Establishment != (int)NMP.Commons.Enums.Season.Spring)
-                                        {
-                                            cropData.EstablishmentName = Resource.lblExistingSwards;
-                                        }
-                                        else if (cropData.Establishment == (int)NMP.Commons.Enums.Season.Spring)
-                                        {
-                                            cropData.EstablishmentName = Resource.lblSpringSown;
-                                        }
-                                    }
-
-                                    if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                    {
-                                        totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
-                                    }
-                                    else
-                                    {
-                                        totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
-                                    }
-                                }
-                                string defolicationName = string.Empty;
-                                if (cropData.SwardTypeID != null && cropData.PotentialCut != null && cropData.DefoliationSequenceID != null && string.IsNullOrWhiteSpace(defolicationName) && cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                {
-
-                                    (DefoliationSequenceResponse defResponse, Error grassError) = await _cropLogic.FetchDefoliationSequencesById(cropData.DefoliationSequenceID.Value);
-                                    if (grassError == null && defResponse != null)
-                                    {
-                                        defolicationName = defResponse.DefoliationSequenceDescription;
-                                        if (!string.IsNullOrWhiteSpace(defolicationName))
-                                        {
-                                            List<string> defoliationList = defolicationName
-                                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                            .Select(s => s.Trim())
-                                            .ToList();
-
-                                            cropData.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
-                                        }
-                                    }
-
-                                }
-                                int defIndex = 0;
-                                var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
-                                foreach (var manData in cropData.ManagementPeriods)
-                                {
-                                    string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim() : string.Empty;
-                                    string defoliationSequenceName = (!string.IsNullOrWhiteSpace(part)) ? char.ToUpper(part[0]).ToString() + part.Substring(1) : string.Empty;
-                                    if (defolicationParts != null)
-                                    {
-                                        manData.DefoliationSequenceName = defoliationSequenceName;
-                                    }
-                                    defIndex++;
-                                }
+                                return value;
                             }
-                            if (cropData.ManagementPeriods != null)
-                            {
-                                foreach (var manData in cropData.ManagementPeriods)
-                                {
-                                    if (manData.Recommendation != null)
-                                    {
-                                        manData.Recommendation.LimeIndex = manData.Recommendation.PH;
-                                        manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
-                                        if (manData.Recommendation.KIndex != null)
-                                        {
-                                            if (manData.Recommendation.KIndex == Resource.lblMinusTwo)
-                                            {
-                                                manData.Recommendation.KIndex = Resource.lblTwoMinus;
-                                            }
-                                            else if (manData.Recommendation.KIndex == Resource.lblPlusTwo)
-                                            {
-                                                manData.Recommendation.KIndex = Resource.lblTwoPlus;
-                                            }
-                                        }
-                                    }
-                                    foreach (var organic in manData.OrganicManures)
-                                    {
-                                        (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(organic.ManureTypeID);
-                                        if (error == null)
-                                        {
-                                            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                                            {
-                                                organic.RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
-                                            }
-                                            else
-                                            {
-                                                organic.RateUnit = manureType.IsLiquid.Value ? string.Format(_stringFormat, Resource.lblCubicMeters, Resource.lblPerHectare) : string.Format(_stringFormat, Resource.lbltonnes, Resource.lblPerHectare);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            TempData[_errorOnSelectField] = error.Message;
-                                            return RedirectToAction(_exportFieldsOrCropTypeAction);
-                                        }
-                                    }
-                                }
-                            }
+                            BindManagementDataForCropFieldReport(model, cropData);
                         }
                     }
 
-                    if (fieldData.SoilAnalysis != null && !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
-                    {
-                        string? potassiumIndex = fieldData.SoilAnalysis.PotassiumIndex;
-                        string? updatedPotassiumIndex = null;
-
-                        if (!string.IsNullOrWhiteSpace(potassiumIndex))
-                        {
-                            if (potassiumIndex == Resource.lblMinusTwo)
-                            {
-                                updatedPotassiumIndex = Resource.lblTwoMinus;
-                            }
-                            else if (potassiumIndex == Resource.lblPlusTwo)
-                            {
-                                updatedPotassiumIndex = Resource.lblTwoPlus;
-                            }
-                            else
-                            {
-                                updatedPotassiumIndex = potassiumIndex;
-                            }
-                        }
-
-                        fieldData.SoilAnalysis.PotassiumIndex = updatedPotassiumIndex;
-
-                    }
+                    BindSoilAnalysisDataForCropFieldReport(fieldData);
                 }
                 model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
                 model.CropAndFieldReport.Farm.ArableArea = totalArableArea;
@@ -762,6 +589,260 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
+    private async Task<(bool flowControl, IActionResult? value,int,int,int)> BindGrassDataForCropFieldReport(int totalCount, int totalGrassArea,  int totalArableArea, FieldAndCropReportResponse fieldData, List<int> fieldIdsForGrowthClass, CropReportResponse cropData)
+    {
+        if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+        {
+            (bool flowControl, IActionResult? value) = await BindGrowthClassForCropAndFieldReport(fieldIdsForGrowthClass, cropData);
+            if (!flowControl && value != null)
+            {
+                return (flowControl: false, value: value, totalCount, totalGrassArea, totalArableArea);
+            }
+
+            totalCount++;
+            if (cropData.CropOrder == 1)
+            {
+                BindEstablishmentNameForCropFieldReport(cropData);
+
+                BindTotalAreaForCropAndFieldReport(ref totalGrassArea, ref totalArableArea, fieldData, cropData);
+            }
+            string defolicationName = string.Empty;
+            defolicationName = await BindDefoliationSequenceNameForCropFieldReport(cropData, defolicationName);
+            int defIndex = 0;
+            var defolicationParts = (!string.IsNullOrWhiteSpace(defolicationName)) ? defolicationName.Split(',') : null;
+            defIndex = BindDefoliationSequenceNameForCropFieldReport(cropData, defIndex, defolicationParts);
+        }
+
+        return (flowControl: true, value: null, totalCount,totalGrassArea,totalArableArea);
+    }
+
+    private async Task BindManagementDataForCropFieldReport(ReportViewModel model, CropReportResponse cropData)
+    {
+        if (cropData.ManagementPeriods != null)
+        {
+            foreach (var manData in cropData.ManagementPeriods)
+            {
+                BindKIndexForCropFieldReport(manData);
+                foreach (var organic in manData.OrganicManures)
+                {
+                  await  BindRateUnitForCropFieldReport(model, organic);
+                }
+            }
+        }
+    }
+
+    private static void BindFullAddressforCropFieldReport(ReportViewModel model)
+    {
+        if ((!string.IsNullOrWhiteSpace(model.CropAndFieldReport.Farm.FullAddress)) && model.CropAndFieldReport.Farm.CountryID != null)
+        {
+            model.CropAndFieldReport.Farm.FullAddress += ", " + Enum.GetName(typeof(NMP.Commons.Enums.FarmCountry), model.CropAndFieldReport.Farm.CountryID);
+        }
+    }
+
+    private async Task BindExcessRainfallDataForCropFieldReport(ReportViewModel model)
+    {
+        (ExcessRainfalls excessRainfalls, _) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmId.Value, model.Year.Value);
+        if (excessRainfalls != null)
+        {
+            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                await BindExcessWinterRainfallForCropAndFieldReport(model, excessRainfalls);
+            }
+            else
+            {
+                BindWinterRainfallForCropAndFieldReport(model, excessRainfalls);
+            }
+        }
+    }
+
+    private static void BindSoilAnalysisDataForCropFieldReport(FieldAndCropReportResponse fieldData)
+    {
+        if (fieldData.SoilAnalysis != null && !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
+        {
+            string? potassiumIndex = fieldData.SoilAnalysis.PotassiumIndex;
+            string? updatedPotassiumIndex = null;
+
+            if (!string.IsNullOrWhiteSpace(potassiumIndex))
+            {
+                if (potassiumIndex == Resource.lblMinusTwo)
+                {
+                    updatedPotassiumIndex = Resource.lblTwoMinus;
+                }
+                else if (potassiumIndex == Resource.lblPlusTwo)
+                {
+                    updatedPotassiumIndex = Resource.lblTwoPlus;
+                }
+                else
+                {
+                    updatedPotassiumIndex = potassiumIndex;
+                }
+            }
+
+            fieldData.SoilAnalysis.PotassiumIndex = updatedPotassiumIndex;
+
+        }
+    }
+
+    private async Task BindRateUnitForCropFieldReport(ReportViewModel model, OrganicManureDataViewModel organic)
+    {
+        (ManureType? manureType, _) = await _mannerLogic.FetchManureTypeByManureTypeId(organic.ManureTypeID);
+        
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            organic.RateUnit = manureType.IsLiquid.Value ? Resource.lblCubicMeters : Resource.lbltonnes;
+        }
+        else
+        {
+            organic.RateUnit = manureType.IsLiquid.Value ? string.Format(_stringFormat, Resource.lblCubicMeters, Resource.lblPerHectare) : string.Format(_stringFormat, Resource.lbltonnes, Resource.lblPerHectare);
+        }
+    }
+
+    private static void BindKIndexForCropFieldReport(RecommendationReportResponse manData)
+    {
+        if (manData.Recommendation != null)
+        {
+            manData.Recommendation.LimeIndex = manData.Recommendation.PH;
+            manData.Recommendation.CropLime = (manData.Recommendation.PreviousAppliedLime != null && manData.Recommendation.PreviousAppliedLime > 0) ? manData.Recommendation.PreviousAppliedLime : manData.Recommendation.CropLime;
+            if (manData.Recommendation.KIndex != null)
+            {
+                if (manData.Recommendation.KIndex == Resource.lblMinusTwo)
+                {
+                    manData.Recommendation.KIndex = Resource.lblTwoMinus;
+                }
+                else if (manData.Recommendation.KIndex == Resource.lblPlusTwo)
+                {
+                    manData.Recommendation.KIndex = Resource.lblTwoPlus;
+                }
+            }
+        }
+    }
+
+    private static int BindDefoliationSequenceNameForCropFieldReport(CropReportResponse cropData, int defIndex, string[]? defolicationParts)
+    {
+        foreach (var manData in cropData.ManagementPeriods)
+        {
+            string part = (defolicationParts != null && defIndex < defolicationParts.Length) ? defolicationParts[defIndex].Trim() : string.Empty;
+            string defoliationSequenceName = (!string.IsNullOrWhiteSpace(part)) ? char.ToUpper(part[0]).ToString() + part.Substring(1) : string.Empty;
+            if (defolicationParts != null)
+            {
+                manData.DefoliationSequenceName = defoliationSequenceName;
+            }
+            defIndex++;
+        }
+
+        return defIndex;
+    }
+
+    private async Task<string> BindDefoliationSequenceNameForCropFieldReport(CropReportResponse cropData, string defolicationName)
+    {
+        if (cropData.SwardTypeID != null && cropData.PotentialCut != null && cropData.DefoliationSequenceID != null && string.IsNullOrWhiteSpace(defolicationName) && cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+        {
+
+            (DefoliationSequenceResponse defResponse, Error grassError) = await _cropLogic.FetchDefoliationSequencesById(cropData.DefoliationSequenceID.Value);
+            if (grassError == null && defResponse != null)
+            {
+                defolicationName = defResponse.DefoliationSequenceDescription;
+                if (!string.IsNullOrWhiteSpace(defolicationName))
+                {
+                    List<string> defoliationList = defolicationName
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .ToList();
+
+                    cropData.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
+                }
+            }
+
+        }
+
+        return defolicationName;
+    }
+
+    private static void BindTotalAreaForCropAndFieldReport(ref int totalGrassArea, ref int totalArableArea, FieldAndCropReportResponse fieldData, CropReportResponse cropData)
+    {
+        if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+        {
+            totalGrassArea += (int)Math.Round(fieldData.TotalArea.Value);
+        }
+        else
+        {
+            totalArableArea += (int)Math.Round(fieldData.TotalArea.Value);
+        }
+    }
+
+    private static void BindEstablishmentNameForCropFieldReport(CropReportResponse cropData)
+    {
+        if (cropData.Establishment != null)
+        {
+            if (cropData.Establishment != (int)NMP.Commons.Enums.Season.Autumn &&
+            cropData.Establishment != (int)NMP.Commons.Enums.Season.Spring)
+            {
+                cropData.EstablishmentName = Resource.lblExistingSwards;
+            }
+            else if (cropData.Establishment == (int)NMP.Commons.Enums.Season.Spring)
+            {
+                cropData.EstablishmentName = Resource.lblSpringSown;
+            }
+        }
+    }
+
+    private async Task<(bool flowControl, IActionResult? value)> BindGrowthClassForCropAndFieldReport(List<int> fieldIdsForGrowthClass, CropReportResponse cropData)
+    {
+        Error? error = null;
+       (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
+        if (!string.IsNullOrWhiteSpace(error?.Message))
+        {
+            TempData[_errorOnSelectField] = error?.Message;
+            return (flowControl: false, value: RedirectToAction(_exportFieldsOrCropTypeAction));
+
+        }
+        if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+        {
+            cropData.GrowthClass = grassGrowthClasses.FirstOrDefault()?.GrassGrowthClassName;
+        }
+
+        return (flowControl: true, value: null);
+    }
+
+    private static void BindCPHAndBussinessNameForCropAndFieldReport(ReportViewModel model)
+    {
+        if (string.IsNullOrWhiteSpace(model.CropAndFieldReport?.Farm.CPH))
+        {
+            model.CropAndFieldReport.Farm.CPH = Resource.lblNotEntered;
+        }
+        if (string.IsNullOrWhiteSpace(model.CropAndFieldReport?.Farm.BusinessName))
+        {
+            model.CropAndFieldReport.Farm.BusinessName = Resource.lblNotEntered;
+        }
+    }
+
+    private static void BindWinterRainfallForCropAndFieldReport(ReportViewModel model, ExcessRainfalls excessRainfalls)
+    {
+        if (excessRainfalls.WinterRainfall == 500)
+        {
+            model.CropAndFieldReport.WinterRainfall = Resource.lbl450OrMore;
+        }
+        else
+        {
+            model.CropAndFieldReport.WinterRainfall = Resource.lblLessThan450;
+        }
+    }
+
+    private async Task BindExcessWinterRainfallForCropAndFieldReport(ReportViewModel model, ExcessRainfalls excessRainfalls)
+    {
+        (List<CommonResponse> excessWinterRainfallOption, _) = await _farmLogic.FetchExcessWinterRainfallOptionAsync();
+        if (excessWinterRainfallOption != null && excessWinterRainfallOption.Count > 0)
+        {
+            string? excessRainfallName = excessWinterRainfallOption.FirstOrDefault(x => x.Value == excessRainfalls.WinterRainfall)?.Name;
+            if (!string.IsNullOrWhiteSpace(excessRainfallName))
+            {
+                string[] parts = excessRainfallName.Split(new string[] { " - " }, StringSplitOptions.None);
+                model.CropAndFieldReport.ExcessWinterRainfall = $"{parts[0]} ({parts[1]})";
+            }
+
+        }
+
+    }
 
     public async Task<IActionResult> ReportType(string i, string? j)
     {
@@ -859,102 +940,70 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             Error? error = null;
             (model.Farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
 
-            if (model.Farm != null && string.IsNullOrWhiteSpace(error?.Message))
-            {
-                model.FarmRB209CountryID = model.Farm.RB209CountryID;
-                (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
-                if (harvestYearPlanResponse.Count > 0)
-                {
-                    // Get your dictionary of groups
-                    var cropGroups = (model.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? GetNmaxReportCropGroupsForScotland() : GetNmaxReportCropGroups();
-                    if (model.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
-                    {
-                        RemoveVegetableGroups(cropGroups);
-                        var lettuceGroups = GetNmaxReportLettuceGroups();
-                        foreach (var group in lettuceGroups)
-                        {
-                            cropGroups[group.Key] = group.Value;
-                        }
-                    }
-                    // Build reverse lookup: cropId -> groupIds[]
-                    var idToGroup = cropGroups
-                        .SelectMany(g => g.Value, (g, id) => new { id, groupIds = g.Value })
-                        .ToDictionary(x => x.id, x => x.groupIds);
-
-                    var cropGroupIds = model.CropTypeList?
-                    .Select(cropType => int.Parse(cropType)).ToList();
-
-                    List<CropTypeResponse> cropTypes = await _fieldLogic.FetchAllCropTypes();
-                    if (cropGroupIds != null)
-                    {
-                        foreach (int cropGroup in cropGroupIds)
-                        {
-                            bool isAutumn = cropGroup == -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape;
-
-                            List<int> selectedCropGroupList = idToGroup
-                           .Where(x => x.Key == cropGroup).SelectMany(x => x.Value).ToList();
-
-                            if (selectedCropGroupList.Count == 0)
-                            {
-                                selectedCropGroupList.Add(cropGroup);
-                            }
-                            string cropTypeName = string.Empty;
-                            int? nMaxLimit = 0;
-                            List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse = new List<NitrogenApplicationsForNMaxReportResponse>();
-                            List<NMaxLimitReportResponse> nMaxLimitReportResponse = new List<NMaxLimitReportResponse>();
-                            List<FieldDetails>? fieldDetail = null;
-                            string groupName = cropGroups
-                            .FirstOrDefault(group => group.Value.Contains(cropGroup)).Key;
-                            if (string.IsNullOrWhiteSpace(groupName))
-                            {
-                                groupName = cropTypes.Where(x => x.CropTypeId == cropGroup).Select(x => x.CropType).FirstOrDefault();
-                            }
-
-                            List<ScotlandNMaxValue>? scotlandNMaxValue = null;
-                            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                            {
-                                (scotlandNMaxValue, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
-                            }
-
-                            (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nMaxLimit, error) = await GetNMaxReportData(harvestYearPlanResponse, model,
-                                           nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, selectedCropGroupList, scotlandNMaxValue, isAutumn);
-                            cropTypeName = cropTypes.Where(x => x.CropTypeId == cropGroup).Select(x => x.CropType).FirstOrDefault();
-
-                            if (error != null && !string.IsNullOrWhiteSpace(error?.Message))
-                            {
-                                TempData[_errorOnSelectField] = error.Message;
-                                return RedirectToAction(_exportFieldsOrCropTypeAction);
-                            }
-
-                            if (nMaxLimitReportResponse != null && nMaxLimitReportResponse.Count > 0)
-                            {
-                                bool isComply = false;
-                                if (nMaxLimitReportResponse != null && nitrogenApplicationsForNMaxReportResponse != null)
-                                {
-                                    isComply = nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) >=
-                                        nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal);
-                                }
-                                var fullReport = new NMaxReportResponse
-                                {
-                                    CropTypeName = cropTypeName ?? string.Empty,
-                                    NmaxLimit = nMaxLimit ?? 0,
-                                    GroupName = groupName ?? string.Empty,
-                                    IsComply = isComply,
-                                    NMaxLimitReportResponse = nMaxLimitReportResponse,
-                                    NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null,
-                                    FieldDetail = fieldDetail
-
-                                };
-                                model.NMaxLimitReport.Add(fullReport);
-                            }
-                        }
-                    }
-                }
-            }
-            else
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData[_errorOnSelectField] = error?.Message;
                 return RedirectToAction(_exportFieldsOrCropTypeAction);
+            }
+            model.FarmRB209CountryID = model.Farm.RB209CountryID;
+            (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
+            if (harvestYearPlanResponse.Count > 0)
+            {
+                // Get your dictionary of groups
+                Dictionary<string, int[]> cropGroups = BindCropGroupsForNmaxReport(model);
+                // Build reverse lookup: cropId -> groupIds[]
+                var idToGroup = cropGroups
+                    .SelectMany(g => g.Value, (g, id) => new { id, groupIds = g.Value })
+                    .ToDictionary(x => x.id, x => x.groupIds);
+
+                var cropGroupIds = model.CropTypeList?
+                .Select(cropType => int.Parse(cropType)).ToList();
+
+                List<CropTypeResponse> cropTypes = await _fieldLogic.FetchAllCropTypes();
+                if (cropGroupIds != null)
+                {
+                    foreach (int cropGroup in cropGroupIds)
+                    {
+                        bool isAutumn = cropGroup == -(int)NMP.Commons.Enums.CropTypes.WinterOilseedRape;
+
+                        List<int> selectedCropGroupList = BindselectedCropGroupListForNmaxReport(idToGroup, cropGroup);
+                        string cropTypeName = string.Empty;
+                        int? nMaxLimit = 0;
+                        List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse = new List<NitrogenApplicationsForNMaxReportResponse>();
+                        List<NMaxLimitReportResponse> nMaxLimitReportResponse = new List<NMaxLimitReportResponse>();
+                        List<FieldDetails>? fieldDetail = null;
+                        string groupName = cropGroups
+                        .FirstOrDefault(group => group.Value.Contains(cropGroup)).Key;
+                        (groupName, List<ScotlandNMaxValue> scotlandNMaxValue) = await BindGroupNameAndScotalndNmaxValueForNmaxReport(model, cropTypes, cropGroup, groupName);
+
+                        (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nMaxLimit, error) = await GetNMaxReportData(harvestYearPlanResponse, model,
+                                       nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, selectedCropGroupList, scotlandNMaxValue, isAutumn);
+                        cropTypeName = cropTypes.Where(x => x.CropTypeId == cropGroup).Select(x => x.CropType).FirstOrDefault();
+
+                        if (!string.IsNullOrWhiteSpace(error?.Message))
+                        {
+                            TempData[_errorOnSelectField] = error.Message;
+                            return RedirectToAction(_exportFieldsOrCropTypeAction);
+                        }
+
+                        if (nMaxLimitReportResponse != null && nMaxLimitReportResponse.Count > 0)
+                        {
+                            bool isComply = BindIsComplyForNmaxReport(nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse);
+                            var fullReport = new NMaxReportResponse
+                            {
+                                CropTypeName = cropTypeName ?? string.Empty,
+                                NmaxLimit = nMaxLimit ?? 0,
+                                GroupName = groupName ?? string.Empty,
+                                IsComply = isComply,
+                                NMaxLimitReportResponse = nMaxLimitReportResponse,
+                                NitrogenApplicationsForNMaxReportResponse = (nitrogenApplicationsForNMaxReportResponse != null && nitrogenApplicationsForNMaxReportResponse.Count > 0) ? nitrogenApplicationsForNMaxReportResponse : null,
+                                FieldDetail = fieldDetail
+
+                            };
+                            model.NMaxLimitReport.Add(fullReport);
+                        }
+                    }
+                }
             }
         }
         catch (Exception ex)
@@ -964,6 +1013,63 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction(_exportFieldsOrCropTypeAction);
         }
         return View(model);
+    }
+
+    private static bool BindIsComplyForNmaxReport(List<NitrogenApplicationsForNMaxReportResponse> nitrogenApplicationsForNMaxReportResponse, List<NMaxLimitReportResponse> nMaxLimitReportResponse)
+    {
+        bool isComply = false;
+        if (nMaxLimitReportResponse != null && nitrogenApplicationsForNMaxReportResponse != null)
+        {
+            isComply = nMaxLimitReportResponse.Sum(x => x.MaximumLimitForNApplied) >=
+                nitrogenApplicationsForNMaxReportResponse.Sum(x => x.NTotal);
+        }
+
+        return isComply;
+    }
+
+    private static Dictionary<string, int[]> BindCropGroupsForNmaxReport(ReportViewModel model)
+    {
+        var cropGroups = (model.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? GetNmaxReportCropGroupsForScotland() : GetNmaxReportCropGroups();
+        if (model.Farm.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+        {
+            RemoveVegetableGroups(cropGroups);
+            var lettuceGroups = GetNmaxReportLettuceGroups();
+            foreach (var group in lettuceGroups)
+            {
+                cropGroups[group.Key] = group.Value;
+            }
+        }
+
+        return cropGroups;
+    }
+
+    private static List<int> BindselectedCropGroupListForNmaxReport(Dictionary<int, int[]> idToGroup, int cropGroup)
+    {
+        List<int> selectedCropGroupList = idToGroup
+       .Where(x => x.Key == cropGroup).SelectMany(x => x.Value).ToList();
+
+        if (selectedCropGroupList.Count == 0)
+        {
+            selectedCropGroupList.Add(cropGroup);
+        }
+
+        return selectedCropGroupList;
+    }
+
+    private async Task<(string groupName, List<ScotlandNMaxValue> scotlandNMaxValue)> BindGroupNameAndScotalndNmaxValueForNmaxReport(ReportViewModel model, List<CropTypeResponse> cropTypes, int cropGroup, string groupName)
+    {
+        if (string.IsNullOrWhiteSpace(groupName))
+        {
+            groupName = cropTypes.Where(x => x.CropTypeId == cropGroup).Select(x => x.CropType).FirstOrDefault();
+        }
+
+        List<ScotlandNMaxValue>? scotlandNMaxValue = null;
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            (scotlandNMaxValue, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
+        }
+
+        return (groupName, scotlandNMaxValue);
     }
 
     private async Task<(List<NitrogenApplicationsForNMaxReportResponse>, List<NMaxLimitReportResponse>, List<FieldDetails> fieldDetail, int nMaxLimit, Error?)> GetNMaxReportData(List<HarvestYearPlanResponse> harvestYearPlanResponse, ReportViewModel model,
@@ -2355,36 +2461,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             Error? error = null;
             if (!ModelState.IsValid)
             {
-                (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
-                if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
-                {
-                    int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
-                    : model.ManureGroupIdForFilter.Value;
-                    (List<ManureType> ManureTypes, error) = await _mannerLogic.FetchManureTypeList(manureGroup, farm.CountryID.Value);
-                    if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && ManureTypes != null && ManureTypes.Count > 0)
-                    {
-                        var SelectListItem = ManureTypes.Select(f => new SelectListItem
-                        {
-                            Value = f.Id.ToString(),
-                            Text = f.Name
-                        }).ToList();
-                        ViewBag.ManureTypeList = SelectListItem.ToList();
-                    }
-                }
+                error = await BindDataIfModelInValidForManureType(model, error);
                 return View(model);
             }
 
-            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null)
-            {
-                model.IsManureTypeLiquid = manureType.IsLiquid.Value;
-                model.ManureTypeName = manureType.Name;
-            }
-
-            if (model.ManureGroupIdForFilter.HasValue)
-            {
-                model.ManureGroupId = model.ManureGroupIdForFilter;
-            }
+            (error, ManureType? manureType) = await BindManureDataForManureType(model, error);
 
             ReportViewModel? reportViewModel = GetReportDataFromSession();
 
@@ -2413,6 +2494,45 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnManureType"] = ex.Message;
             return View(model);
         }
+    }
+
+    private async Task<Error?> BindDataIfModelInValidForManureType(ReportViewModel model, Error? error)
+    {
+        (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
+        if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
+        {
+            int manureGroup = model.ManureGroupIdForFilter == null ? (int)NMP.Commons.Enums.ManureGroup.LivestockManure
+            : model.ManureGroupIdForFilter.Value;
+            (List<ManureType> manureTypes, error) = await _mannerLogic.FetchManureTypeList(manureGroup, farm.CountryID.Value);
+            if (manureTypes != null && manureTypes.Count > 0)
+            {
+                var SelectListItem = manureTypes.Select(f => new SelectListItem
+                {
+                    Value = f.Id.ToString(),
+                    Text = f.Name
+                }).ToList();
+                ViewBag.ManureTypeList = SelectListItem.ToList();
+            }
+        }
+
+        return error;
+    }
+
+    private async Task<(Error? error, ManureType? manureType)> BindManureDataForManureType(ReportViewModel model, Error? error)
+    {
+        (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null)
+        {
+            model.IsManureTypeLiquid = manureType.IsLiquid.Value;
+            model.ManureTypeName = manureType.Name;
+        }
+
+        if (model.ManureGroupIdForFilter.HasValue)
+        {
+            model.ManureGroupId = model.ManureGroupIdForFilter;
+        }
+
+        return (error, manureType);
     }
 
     private IActionResult RedirectForManureType(ReportViewModel model)
@@ -2611,35 +2731,29 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
-            if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                model.FarmName = farm.Name;
-                model.FarmId = decryptedFarmId;
-                model.EncryptedFarmId = q;
+                TempData[_error] = error?.Message;
+                return RedirectToAction(_farmSummaryAction, "Farm", new { q = q });
 
-                model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
-                (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmId(decryptedFarmId);
-                if (string.IsNullOrWhiteSpace(error?.Message) && nutrientsLoadingFarmDetailList != null && nutrientsLoadingFarmDetailList.Count > 0)
-                {
-                    (bool flowControl, (IActionResult?, ReportViewModel) value) = await BindHarvestYearListForUpdateLivestockImportExport(q, model, decryptedFarmId, nutrientsLoadingFarmDetailList);
-                    if (!flowControl && value.Item1 != null)
-                    {
-                        return value.Item1;
-                    }
-
-                }
-                else
-                {
-                    TempData[_error] = error?.Message;
-                    return RedirectToAction(_farmSummaryAction, "Farm", new { q = q });
-                }
-                SetReportDataToSession(model);
             }
-            else
+            model.FarmName = farm.Name;
+            model.FarmId = decryptedFarmId;
+            model.EncryptedFarmId = q;
+
+            model.IsComingFromImportExportOverviewPage = _reportDataProtector.Protect(Resource.lblTrue);
+            (List<NutrientsLoadingFarmDetail> nutrientsLoadingFarmDetailList, error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmId(decryptedFarmId);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData[_error] = error?.Message;
                 return RedirectToAction(_farmSummaryAction, "Farm", new { q = q });
             }
+            (bool flowControl, (IActionResult?, ReportViewModel) value) = await BindHarvestYearListForUpdateLivestockImportExport(q, model, decryptedFarmId, nutrientsLoadingFarmDetailList);
+            if (!flowControl && value.Item1 != null)
+            {
+                return value.Item1;
+            }
+            SetReportDataToSession(model);
 
             return View(model);
         }
@@ -2876,23 +2990,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (isOther)
             {
-                bool isOtherGroup = model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
-                                 || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
-
-                if (isOtherGroup)
+                (bool flowControl, IActionResult value) = BindDefaultNutrientValuesIfOther(model, farmManureList);
+                if (!flowControl)
                 {
-                    var farmManure = farmManureList
-                        .FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
-
-                    if (farmManure == null)
-                        return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-
-                    ApplyFarmManure(model, farmManure);
-                    model.IsDefaultNutrient = true;
-                }
-                else
-                {
-                    model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
+                    return value;
                 }
             }
             else if (farmManureList.Any())
@@ -2934,6 +3035,18 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         GetReportDataFromSession();
 
+        await BindIsThisDefaultValueOfRB209ForDefaultNutrientValues(model, farmManureList);
+
+        SetReportDataToSession(model);
+
+        if (model.IsCheckAnswer)
+            return RedirectToAction(_livestockImportExportCheckAnswerAction);
+
+        return RedirectToAction("LivestockReceiver");
+    }
+
+    private async Task BindIsThisDefaultValueOfRB209ForDefaultNutrientValues(ReportViewModel model, List<FarmManureTypeResponse> farmManureList)
+    {
         if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues ||
             model.DefaultNutrientValue == Resource.lblYes)
         {
@@ -2954,13 +3067,30 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.IsThisDefaultValueOfRB209 = true;
             ViewBag.RB209ApiOption = Resource.lblTrue;
         }
+    }
 
-        SetReportDataToSession(model);
+    private static (bool flowControl, IActionResult value) BindDefaultNutrientValuesIfOther(ReportViewModel model, List<FarmManureTypeResponse> farmManureList)
+    {
+        bool isOtherGroup = model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
+                         || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
 
-        if (model.IsCheckAnswer)
-            return RedirectToAction(_livestockImportExportCheckAnswerAction);
+        if (isOtherGroup)
+        {
+            var farmManure = farmManureList
+                .FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
 
-        return RedirectToAction("LivestockReceiver");
+            if (farmManure == null)
+                return (flowControl: false, value: Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+
+            ApplyFarmManure(model, farmManure);
+            model.IsDefaultNutrient = true;
+        }
+        else
+        {
+            model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
+        }
+
+        return (flowControl: true, value: null);
     }
 
     [HttpGet]
@@ -2983,208 +3113,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         _logger.LogTrace($"Organic Manure Controller : LivestockManualNutrientValue() post action called");
         try
         {
-            if ((!ModelState.IsValid) && ModelState.ContainsKey(_dryMatterPercent))
-            {
-                var dryMatterPercentError = ModelState[_dryMatterPercent]?.Errors.Count > 0 ?
-                                ModelState[_dryMatterPercent]?.Errors[0].ErrorMessage.ToString() : null;
+            ValidatePropertiesForManualNutrientValue();
+            ValidateManualNutrientValuesIfNull(model);
 
-                if (dryMatterPercentError != null && dryMatterPercentError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_dryMatterPercent]?.RawValue, Resource.lblDryMatterPercent)))
-                {
-                    ModelState[_dryMatterPercent]?.Errors.Clear();
-                    ModelState[_dryMatterPercent]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblDryMatter));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
-            {
-                var totalNitrogenError = ModelState["N"]?.Errors.Count > 0 ?
-                                ModelState["N"]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (totalNitrogenError != null && totalNitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["N"]?.RawValue, Resource.lblN)))
-                {
-                    ModelState["N"]?.Errors.Clear();
-                    ModelState["N"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalNitrogen));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("NH4N"))
-            {
-                var ammoniumError = ModelState["NH4N"]?.Errors.Count > 0 ?
-                                ModelState["NH4N"]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (ammoniumError != null && ammoniumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NH4N"]?.RawValue, Resource.lblNH4N)))
-                {
-                    ModelState["NH4N"]?.Errors.Clear();
-                    ModelState["NH4N"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmmonium));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey(_uricAcid))
-            {
-                var uricAcidError = ModelState[_uricAcid]?.Errors.Count > 0 ?
-                                ModelState[_uricAcid]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (uricAcidError != null && uricAcidError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_uricAcid]?.RawValue, Resource.lblUricAcidForError)))
-                {
-                    ModelState[_uricAcid]?.Errors.Clear();
-                    ModelState[_uricAcid]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblUricAcid));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("NO3N"))
-            {
-                var nitrogenError = ModelState["NO3N"]?.Errors.Count > 0 ?
-                                ModelState["NO3N"]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (nitrogenError != null && nitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NO3N"]?.RawValue, Resource.lblNO3N)))
-                {
-                    ModelState["NO3N"]?.Errors.Clear();
-                    ModelState["NO3N"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblNitrogen));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("P2O5"))
-            {
-                var totalPhosphateError = ModelState["P2O5"]?.Errors.Count > 0 ?
-                                ModelState["P2O5"]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (totalPhosphateError != null && totalPhosphateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["P2O5"]?.RawValue, Resource.lblP2O5)))
-                {
-                    ModelState["P2O5"]?.Errors.Clear();
-                    ModelState["P2O5"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPhosphate));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("K2O"))
-            {
-                var totalPotassiumError = ModelState["K2O"]?.Errors.Count > 0 ?
-                                ModelState["K2O"]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (totalPotassiumError != null && totalPotassiumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["K2O"]?.RawValue, Resource.lblK2O)))
-                {
-                    ModelState["K2O"]?.Errors.Clear();
-                    ModelState["K2O"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPotassium));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("SO3"))
-            {
-                var sulphurSO3Error = ModelState["SO3"]?.Errors.Count > 0 ?
-                                ModelState["SO3"]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (sulphurSO3Error != null && sulphurSO3Error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SO3"]?.RawValue, Resource.lblSO3)))
-                {
-                    ModelState["SO3"]?.Errors.Clear();
-                    ModelState["SO3"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalSulphur));
-                }
-            }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey("MgO"))
-            {
-                var totalMagnesiumOxideError = ModelState["MgO"]?.Errors.Count > 0 ?
-                                ModelState["MgO"]?.Errors[0].ErrorMessage.ToString() : null;
-
-                if (totalMagnesiumOxideError != null && totalMagnesiumOxideError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
-                {
-                    ModelState["MgO"]?.Errors.Clear();
-                    ModelState["MgO"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
-                }
-            }
-            if (model.DryMatterPercent == null)
-            {
-                ModelState.AddModelError(_dryMatterPercent, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
-            }
-            if (model.N == null)
-            {
-                ModelState.AddModelError("N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
-            }
-            if (model.NH4N == null)
-            {
-                ModelState.AddModelError("NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
-            }
-            if (model.UricAcid == null)
-            {
-                ModelState.AddModelError(_uricAcid, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
-            }
-            if (model.NO3N == null)
-            {
-                ModelState.AddModelError("NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
-            }
-            if (model.P2O5 == null)
-            {
-                ModelState.AddModelError("P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
-            }
-            if (model.K2O == null)
-            {
-                ModelState.AddModelError("K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
-            }
-            if (model.SO3 == null)
-            {
-                ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
-            }
-            if (model.MgO == null)
-            {
-                ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
-            }
-
-            if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
-            {
-                decimal totalValue = model.NH4N.Value + model.UricAcid.Value + model.NO3N.Value;
-                if (model.N < totalValue)
-                {
-                    ModelState.AddModelError("N", Resource.lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate);
-                }
-            }
-
-            if (model.DryMatterPercent != null)
-            {
-                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
-                    model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry)
-                {
-                    if (model.DryMatterPercent < 0 || model.DryMatterPercent > 25)
-                    {
-                        ModelState.AddModelError(_dryMatterPercent, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter.ToLower(), 25));
-                    }
-                }
-                else
-                {
-                    if (model.DryMatterPercent < 0 || model.DryMatterPercent > 99)
-                    {
-                        ModelState.AddModelError(_dryMatterPercent, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter, 99));
-                    }
-                }
-            }
-
-            if (model.N != null && (model.N < 0 || model.N > 297))
-            {
-                ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
-            }
-
-            if (model.NH4N != null && (model.NH4N < 0 || model.NH4N > 99))
-            {
-                ModelState.AddModelError("NH4N", string.Format(Resource.MsgMinMaxValidation, Resource.lblAmmonium, 99));
-            }
-
-            if (model.UricAcid != null && (model.UricAcid < 0 || model.UricAcid > 99))
-            {
-                ModelState.AddModelError(_uricAcid, string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
-            }
-
-            if (model.NO3N != null && (model.NO3N < 0 || model.NO3N > 99))
-            {
-                ModelState.AddModelError("NO3N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrate, 99));
-            }
-
-            if (model.P2O5 != null && (model.P2O5 < 0 || model.P2O5 > 99))
-            {
-                ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 99));
-            }
-
-            if (model.K2O != null && (model.K2O < 0 || model.K2O > 99))
-            {
-                ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 99));
-            }
-            if (model.MgO != null && (model.MgO < 0 || model.MgO > 99))
-            {
-                ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblMagnesiumMgO, 99));
-            }
-
-            if (model.SO3 != null && (model.SO3 < 0 || model.SO3 > 99))
-            {
-                ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 99));
-            }
+            ValidateManualNutrientMinMaxValues(model);
 
             decimal totalNutrient =
                 (model.DryMatterPercent ?? 0) +
@@ -3221,6 +3153,229 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             _logger.LogTrace(ex, "Report Controller : Exception in LivestockManualNutrientValue() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnLivestockManualNutrientValue"] = ex.Message;
             return View(model);
+        }
+    }
+
+    private void ValidateManualNutrientMinMaxValues(ReportViewModel model)
+    {
+        if (model.DryMatterPercent != null)
+        {
+            ValidateDryMatter(model);
+        }
+
+        if (model.N != null && (model.N < 0 || model.N > 297))
+        {
+            ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
+        }
+
+        if (model.NH4N != null && (model.NH4N < 0 || model.NH4N > 99))
+        {
+            ModelState.AddModelError("NH4N", string.Format(Resource.MsgMinMaxValidation, Resource.lblAmmonium, 99));
+        }
+
+        if (model.UricAcid != null && (model.UricAcid < 0 || model.UricAcid > 99))
+        {
+            ModelState.AddModelError(_uricAcid, string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
+        }
+
+        if (model.NO3N != null && (model.NO3N < 0 || model.NO3N > 99))
+        {
+            ModelState.AddModelError("NO3N", string.Format(Resource.MsgMinMaxValidation, Resource.lblNitrate, 99));
+        }
+
+        ValidateP2O5K2OMgOSO3(model);
+    }
+
+    private void ValidateDryMatter(ReportViewModel model)
+    {
+        if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
+            model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry)
+        {
+            if (model.DryMatterPercent < 0 || model.DryMatterPercent > 25)
+            {
+                ModelState.AddModelError(_dryMatterPercent, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter.ToLower(), 25));
+            }
+        }
+        else
+        {
+            if (model.DryMatterPercent < 0 || model.DryMatterPercent > 99)
+            {
+                ModelState.AddModelError(_dryMatterPercent, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter, 99));
+            }
+        }
+    }
+
+    private void ValidateP2O5K2OMgOSO3(ReportViewModel model)
+    {
+        if (model.P2O5 != null && (model.P2O5 < 0 || model.P2O5 > 99))
+        {
+            ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 99));
+        }
+
+        if (model.K2O != null && (model.K2O < 0 || model.K2O > 99))
+        {
+            ModelState.AddModelError("K2O", string.Format(Resource.MsgMinMaxValidation, Resource.lblPotashK2O, 99));
+        }
+        if (model.MgO != null && (model.MgO < 0 || model.MgO > 99))
+        {
+            ModelState.AddModelError("MgO", string.Format(Resource.MsgMinMaxValidation, Resource.lblMagnesiumMgO, 99));
+        }
+
+        if (model.SO3 != null && (model.SO3 < 0 || model.SO3 > 99))
+        {
+            ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 99));
+        }
+    }
+
+    private void ValidateManualNutrientValuesIfNull(ReportViewModel model)
+    {
+        if (model.DryMatterPercent == null)
+        {
+            ModelState.AddModelError(_dryMatterPercent, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
+        }
+        if (model.N == null)
+        {
+            ModelState.AddModelError("N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
+        }
+        if (model.NH4N == null)
+        {
+            ModelState.AddModelError("NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
+        }
+        if (model.UricAcid == null)
+        {
+            ModelState.AddModelError(_uricAcid, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
+        }
+        if (model.NO3N == null)
+        {
+            ModelState.AddModelError("NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
+        }
+        if (model.P2O5 == null)
+        {
+            ModelState.AddModelError("P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
+        }
+        if (model.K2O == null)
+        {
+            ModelState.AddModelError("K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
+        }
+        if (model.SO3 == null)
+        {
+            ModelState.AddModelError("SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
+        }
+        if (model.MgO == null)
+        {
+            ModelState.AddModelError("MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
+        }
+
+        if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
+        {
+            decimal totalValue = model.NH4N.Value + model.UricAcid.Value + model.NO3N.Value;
+            if (model.N < totalValue)
+            {
+                ModelState.AddModelError("N", Resource.lblTotalNitrogenMustBeGreaterOrEqualToAmmoniumUricacidNitrate);
+            }
+        }
+    }
+
+    private void ValidatePropertiesForManualNutrientValue()
+    {
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(_dryMatterPercent))
+        {
+            var dryMatterPercentError = ModelState[_dryMatterPercent]?.Errors.Count > 0 ?
+                            ModelState[_dryMatterPercent]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (dryMatterPercentError != null && dryMatterPercentError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_dryMatterPercent]?.RawValue, Resource.lblDryMatterPercent)))
+            {
+                ModelState[_dryMatterPercent]?.Errors.Clear();
+                ModelState[_dryMatterPercent]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblDryMatter));
+            }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey("N"))
+        {
+            var totalNitrogenError = ModelState["N"]?.Errors.Count > 0 ?
+                            ModelState["N"]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (totalNitrogenError != null && totalNitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["N"]?.RawValue, Resource.lblN)))
+            {
+                ModelState["N"]?.Errors.Clear();
+                ModelState["N"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalNitrogen));
+            }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey("NH4N"))
+        {
+            var ammoniumError = ModelState["NH4N"]?.Errors.Count > 0 ?
+                            ModelState["NH4N"]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (ammoniumError != null && ammoniumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NH4N"]?.RawValue, Resource.lblNH4N)))
+            {
+                ModelState["NH4N"]?.Errors.Clear();
+                ModelState["NH4N"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmmonium));
+            }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(_uricAcid))
+        {
+            var uricAcidError = ModelState[_uricAcid]?.Errors.Count > 0 ?
+                            ModelState[_uricAcid]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (uricAcidError != null && uricAcidError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_uricAcid]?.RawValue, Resource.lblUricAcidForError)))
+            {
+                ModelState[_uricAcid]?.Errors.Clear();
+                ModelState[_uricAcid]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblUricAcid));
+            }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey("NO3N"))
+        {
+            var nitrogenError = ModelState["NO3N"]?.Errors.Count > 0 ?
+                            ModelState["NO3N"]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (nitrogenError != null && nitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NO3N"]?.RawValue, Resource.lblNO3N)))
+            {
+                ModelState["NO3N"]?.Errors.Clear();
+                ModelState["NO3N"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblNitrogen));
+            }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey("P2O5"))
+        {
+            var totalPhosphateError = ModelState["P2O5"]?.Errors.Count > 0 ?
+                            ModelState["P2O5"]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (totalPhosphateError != null && totalPhosphateError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["P2O5"]?.RawValue, Resource.lblP2O5)))
+            {
+                ModelState["P2O5"]?.Errors.Clear();
+                ModelState["P2O5"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPhosphate));
+            }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey("K2O"))
+        {
+            var totalPotassiumError = ModelState["K2O"]?.Errors.Count > 0 ?
+                            ModelState["K2O"]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (totalPotassiumError != null && totalPotassiumError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["K2O"]?.RawValue, Resource.lblK2O)))
+            {
+                ModelState["K2O"]?.Errors.Clear();
+                ModelState["K2O"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPotassium));
+            }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey("SO3"))
+        {
+            var sulphurSO3Error = ModelState["SO3"]?.Errors.Count > 0 ?
+                            ModelState["SO3"]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (sulphurSO3Error != null && sulphurSO3Error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["SO3"]?.RawValue, Resource.lblSO3)))
+            {
+                ModelState["SO3"]?.Errors.Clear();
+                ModelState["SO3"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalSulphur));
+            }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey("MgO"))
+        {
+            var totalMagnesiumOxideError = ModelState["MgO"]?.Errors.Count > 0 ?
+                            ModelState["MgO"]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (totalMagnesiumOxideError != null && totalMagnesiumOxideError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["MgO"].RawValue, Resource.lblMgO)))
+            {
+                ModelState["MgO"]?.Errors.Clear();
+                ModelState["MgO"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblMagnesiumMgO));
+            }
         }
     }
 
@@ -3386,7 +3541,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.IsManureTypeChange = false;
             model.IsDefaultValueChange = false;
             model.IsCancel = null;
-            Error error = null;
+            Error? error = null;
 
             if (!string.IsNullOrWhiteSpace(i))
             {
@@ -3407,13 +3562,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         model.Address4 = nutrientsLoadingManure.Address4;
                         model.Postcode = nutrientsLoadingManure.PostCode;
                         model.Comment = nutrientsLoadingManure.Comments;
-                        (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
-                        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && manureType != null)
-                        {
-                            model.IsManureTypeLiquid = manureType.IsLiquid;
-                            model.ManureGroupId = manureType.ManureGroupId;
-                            model.ManureGroupIdForFilter = manureType.ManureGroupId;
-                        }
+                        ManureType manureType = await BindManureTypeDataForImportExport(model);
                         model.ManureTypeName = nutrientsLoadingManure.ManureType;
                         model.EncryptedId = i;
                         model.N = nutrientsLoadingManure.NContent;
@@ -3437,52 +3586,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         model.ManureType.K2O = nutrientsLoadingManure.K2O;
                         model.ManureType.DryMatter = nutrientsLoadingManure.DryMatterPercent;
                         model.ManureType.Uric = nutrientsLoadingManure.UricAcid;
-                        (List<FarmManureTypeResponse> farmManureTypeResponse, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId.Value);
-                        if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureTypeResponse != null && farmManureTypeResponse.Count > 0)
-                        {
-                            FarmManureTypeResponse? farmManureType = farmManureTypeResponse.FirstOrDefault(x =>
-                            x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName);
-                            if (farmManureType != null)
-                            {
-                                bool isDefaultNutrientValue = farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
-                                    farmManureType.DryMatter == model.DryMatterPercent && farmManureType.Uric == model.UricAcid &&
-                                    farmManureType.NH4N == model.NH4N && farmManureType.NO3N == model.NO3N &&
-                                    farmManureType.SO3 == model.SO3 && farmManureType.K2O == model.K2O &&
-                                    farmManureType.MgO == model.MgO;
-                                if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) &&
-                                   farmManureType.ManureTypeName.Equals(nutrientsLoadingManure.ManureType))
-                                {
-                                    if (isDefaultNutrientValue)
-                                    {
-                                        model.DefaultNutrientValue = Resource.lblYes;
-                                    }
-                                }
-                                else
-                                {
-                                    if (isDefaultNutrientValue)
-                                    {
-
-                                        model.DefaultNutrientValue = Resource.lblYesUseTheseValues;
-                                    }
-                                }
-                                if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) &&
-                                   farmManureType.ManureTypeName.Equals(nutrientsLoadingManure.ManureType))
-                                {
-                                    model.OtherMaterialName = farmManureType.ManureTypeName;
-                                    model.ManureGroupId = nutrientsLoadingManure.ManureTypeID;
-                                    model.ManureGroupIdForFilter = nutrientsLoadingManure.ManureTypeID;
-                                }
-                                model.DefaultFarmManureValueDate = farmManureType.ModifiedOn == null ? farmManureType.CreatedOn : farmManureType.ModifiedOn;
-                            }
-                            else
-                            {
-                                model.DefaultNutrientValue = Resource.lblYes;
-                            }
-                        }
-                        else if (farmManureTypeResponse?.Count == 0)
-                        {
-                            model.DefaultNutrientValue = Resource.lblYes;
-                        }
+                        await BindDefaultNutrientForImportExportCheckAnswer(model, nutrientsLoadingManure);
                         if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
                         {
                             if (manureType == null)
@@ -3510,23 +3614,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             SetReportDataToSession(model);
 
-            if (!string.IsNullOrWhiteSpace(i))
-            {
-                HttpContext?.Session.SetObjectAsJson(_previousSessionName, model);
-
-            }
-            var previousModel = HttpContext?.Session.GetObjectFromJson<ReportViewModel>(_previousSessionName);
-
-            bool isDataChanged = false;
-
-            if (previousModel != null)
-            {
-                string oldJson = JsonConvert.SerializeObject(previousModel);
-                string newJson = JsonConvert.SerializeObject(model);
-
-                isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
-            }
-            ViewBag.IsDataChange = isDataChanged;
+            BindViewBegIsDataChangeForImportExport(i, model);
         }
         catch (Exception ex)
         {
@@ -3551,48 +3639,104 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
+    private void BindViewBegIsDataChangeForImportExport(string? i, ReportViewModel model)
+    {
+        if (!string.IsNullOrWhiteSpace(i))
+        {
+            HttpContext?.Session.SetObjectAsJson(_previousSessionName, model);
+
+        }
+        var previousModel = HttpContext?.Session.GetObjectFromJson<ReportViewModel>(_previousSessionName);
+
+        bool isDataChanged = false;
+
+        if (previousModel != null)
+        {
+            string oldJson = JsonConvert.SerializeObject(previousModel);
+            string newJson = JsonConvert.SerializeObject(model);
+
+            isDataChanged = !string.Equals(oldJson, newJson, StringComparison.Ordinal);
+        }
+        ViewBag.IsDataChange = isDataChanged;
+    }
+
+    private async Task BindDefaultNutrientForImportExportCheckAnswer(ReportViewModel model, NutrientsLoadingManures nutrientsLoadingManure)
+    {
+        (List<FarmManureTypeResponse> farmManureTypeResponse, _) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId.Value);
+        if (farmManureTypeResponse != null && farmManureTypeResponse.Count > 0)
+        {
+            FarmManureTypeResponse? farmManureType = farmManureTypeResponse.FirstOrDefault(x =>
+            x.ManureTypeID == model.ManureTypeId && x.ManureTypeName == model.ManureTypeName);
+            if (farmManureType != null)
+            {
+                bool isDefaultNutrientValue = farmManureType.TotalN == model.N && farmManureType.P2O5 == model.P2O5 &&
+                    farmManureType.DryMatter == model.DryMatterPercent && farmManureType.Uric == model.UricAcid &&
+                    farmManureType.NH4N == model.NH4N && farmManureType.NO3N == model.NO3N &&
+                    farmManureType.SO3 == model.SO3 && farmManureType.K2O == model.K2O &&
+                    farmManureType.MgO == model.MgO;
+                if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) &&
+                farmManureType.ManureTypeName.Equals(nutrientsLoadingManure.ManureType))
+                {
+                    if (isDefaultNutrientValue)
+                    {
+                        model.DefaultNutrientValue = Resource.lblYes;
+                    }
+                }
+                else
+                {
+                    if (isDefaultNutrientValue)
+                    {
+
+                        model.DefaultNutrientValue = Resource.lblYesUseTheseValues;
+                    }
+                }
+                if (model.ManureTypeId != null && (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) &&
+                   farmManureType.ManureTypeName.Equals(nutrientsLoadingManure.ManureType))
+                {
+                    model.OtherMaterialName = farmManureType.ManureTypeName;
+                    model.ManureGroupId = nutrientsLoadingManure.ManureTypeID;
+                    model.ManureGroupIdForFilter = nutrientsLoadingManure.ManureTypeID;
+                }
+                model.DefaultFarmManureValueDate = farmManureType.ModifiedOn == null ? farmManureType.CreatedOn : farmManureType.ModifiedOn;
+            }
+            else
+            {
+                model.DefaultNutrientValue = Resource.lblYes;
+            }
+        }
+        else if (farmManureTypeResponse?.Count == 0)
+        {
+            model.DefaultNutrientValue = Resource.lblYes;
+        }
+
+    }
+
+    private async Task<ManureType> BindManureTypeDataForImportExport(ReportViewModel model)
+    {
+        (ManureType manureType, _) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+        if (manureType != null)
+        {
+            model.IsManureTypeLiquid = manureType.IsLiquid;
+            model.ManureGroupId = manureType.ManureGroupId;
+            model.ManureGroupIdForFilter = manureType.ManureGroupId;
+        }
+
+        return manureType;
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> LivestockImportExportCheckAnswer(ReportViewModel model)
     {
         _logger.LogTrace($"Report Controller : LivestockImportExportCheckAnswer() post action called");
         Error? error = null;
-        if (model.IsDefaultNutrient == null && model.ManureTypeId != null)
-        {
-            (List<FarmManureTypeResponse> farmManureTypeList, error) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId.Value);
-            if ((error == null || string.IsNullOrWhiteSpace(error.Message)) && farmManureTypeList.Count > 0)
-            {
-                farmManureTypeList = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId).ToList();
-                if (farmManureTypeList.Count > 0)
-                {
-                    ModelState.AddModelError("IsDefaultNutrient", string.Format(_stringFormat, string.Format(Resource.lblNutrientValuesForManureTypeNameYouAddedOnDate, model.ManureTypeName, model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))), Resource.lblNotSet));
-                }
-                else
-                {
-                    ModelState.AddModelError("IsDefaultNutrient", string.Format(_stringFormat, string.Format(Resource.lblNutrientValuesForManureTypeName, model.ManureTypeName), Resource.lblNotSet));
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("IsDefaultNutrient", string.Format(_stringFormat, string.Format(Resource.lblNutrientValuesForManureTypeName, model.ManureTypeName), Resource.lblNotSet));
-            }
-        }
+        await ValidatePropertiesForLivestockImportExportCheckAnswer(model);
 
         if (!ModelState.IsValid)
         {
             return View(model);
         }
-        if (model.ImportExport == null && model.IsImport != null)
-        {
-            if (model.IsImport.Value)
-            {
-                model.ImportExport = (int)NMP.Commons.Enums.ImportExport.Import;
-            }
-            else
-            {
-                model.ImportExport = (int)NMP.Commons.Enums.ImportExport.Export;
-            }
-        }
+        BindImportExportForCheckAnswer(model);
         decimal totalN = model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis ? model.N.Value : model.ManureType.TotalN.Value;
         decimal totalP = model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis ? model.P2O5.Value : model.ManureType.P2O5.Value;
         NutrientsLoadingManures nutrientsLoadingManure = new NutrientsLoadingManures();
@@ -3634,14 +3778,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         };
         string jsonString = JsonConvert.SerializeObject(jsonData);
         NutrientsLoadingManures nutrientsLoadingManureData = null;
-        if (!string.IsNullOrWhiteSpace(model.EncryptedId))
-        {
-            (nutrientsLoadingManureData, error) = await _reportLogic.UpdateNutrientsLoadingManuresAsync(jsonString);
-        }
-        else
-        {
-            (nutrientsLoadingManureData, error) = await _reportLogic.AddNutrientsLoadingManuresAsync(jsonString);
-        }
+        (error, nutrientsLoadingManureData) = await AddorUpdateLivestockImportExport(model, error, jsonString, nutrientsLoadingManureData);
 
         if (nutrientsLoadingManureData != null && string.IsNullOrWhiteSpace(error?.Message))
         {
@@ -3663,6 +3800,58 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return RedirectToAction(_livestockImportExportCheckAnswerAction);
     }
 
+    private async Task<(Error error, NutrientsLoadingManures nutrientsLoadingManureData)> AddorUpdateLivestockImportExport(ReportViewModel model, Error error, string jsonString, NutrientsLoadingManures nutrientsLoadingManureData)
+    {
+        if (!string.IsNullOrWhiteSpace(model.EncryptedId))
+        {
+            (nutrientsLoadingManureData, error) = await _reportLogic.UpdateNutrientsLoadingManuresAsync(jsonString);
+        }
+        else
+        {
+            (nutrientsLoadingManureData, error) = await _reportLogic.AddNutrientsLoadingManuresAsync(jsonString);
+        }
+
+        return (error, nutrientsLoadingManureData);
+    }
+
+    private static void BindImportExportForCheckAnswer(ReportViewModel model)
+    {
+        if (model.ImportExport == null && model.IsImport != null)
+        {
+            if (model.IsImport.Value)
+            {
+                model.ImportExport = (int)NMP.Commons.Enums.ImportExport.Import;
+            }
+            else
+            {
+                model.ImportExport = (int)NMP.Commons.Enums.ImportExport.Export;
+            }
+        }
+    }
+
+    private async Task ValidatePropertiesForLivestockImportExportCheckAnswer(ReportViewModel model)
+    {
+        if (model.IsDefaultNutrient == null && model.ManureTypeId != null)
+        {
+            (List<FarmManureTypeResponse> farmManureTypeList, _) = await _organicManureLogic.FetchFarmManureTypeByFarmId(model.FarmId.Value);
+            if (farmManureTypeList.Count > 0)
+            {
+                farmManureTypeList = farmManureTypeList.Where(x => x.ManureTypeID == model.ManureTypeId).ToList();
+                if (farmManureTypeList.Count > 0)
+                {
+                    ModelState.AddModelError("IsDefaultNutrient", string.Format(_stringFormat, string.Format(Resource.lblNutrientValuesForManureTypeNameYouAddedOnDate, model.ManureTypeName, model.DefaultFarmManureValueDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))), Resource.lblNotSet));
+                }
+                else
+                {
+                    ModelState.AddModelError("IsDefaultNutrient", string.Format(_stringFormat, string.Format(Resource.lblNutrientValuesForManureTypeName, model.ManureTypeName), Resource.lblNotSet));
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("IsDefaultNutrient", string.Format(_stringFormat, string.Format(Resource.lblNutrientValuesForManureTypeName, model.ManureTypeName), Resource.lblNotSet));
+            }
+        }
+    }
 
     [HttpGet]
     public async Task<IActionResult> ManageImportExport(string q, string y, string r, string s)
@@ -3713,29 +3902,25 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (nutrientsLoadingManuresList?.Count > 0)
             {
                 nutrientsLoadingManuresList = nutrientsLoadingManuresList.Where(x => x.ManureDate.Value.Year == model.Year.Value).ToList();
-                if (nutrientsLoadingManuresList.Count > 0)
-                {
-                    HarvestYear harvestYear = new HarvestYear();
-                    foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
-                    {
-                        harvestYear.LastModifiedOn = nutrientsLoadingManure.ModifiedOn != null ? nutrientsLoadingManure.ModifiedOn.Value : nutrientsLoadingManure.CreatedOn.Value;
-                        harvestYear.Year = nutrientsLoadingManure.ManureDate.Value.Year;
-                        harvestYearList.Add(harvestYear);
-                    }
-
-                    harvestYearList = harvestYearList.OrderBy(x => x.Year).ToList();
-                    model.HarvestYear = harvestYearList;
-                    nutrientsLoadingManuresList.ForEach(x => x.EncryptedID = _reportDataProtector.Protect(x.ID.Value.ToString()));
-                    ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
-                    await BindViewBegForManageImportExport(model, error, nutrientsLoadingManuresList);
-                }
-
                 if (nutrientsLoadingManuresList.Count == 0)
                 {
                     model.IsManageImportExport = false;
                     SetReportDataToSession(model);
                     return RedirectToAction(_isAnyLivestockImportExportAction, model);
                 }
+                HarvestYear harvestYear = new HarvestYear();
+                foreach (var nutrientsLoadingManure in nutrientsLoadingManuresList)
+                {
+                    harvestYear.LastModifiedOn = nutrientsLoadingManure.ModifiedOn ?? nutrientsLoadingManure.CreatedOn.Value;
+                    harvestYear.Year = nutrientsLoadingManure.ManureDate.Value.Year;
+                    harvestYearList.Add(harvestYear);
+                }
+
+                harvestYearList = harvestYearList.OrderBy(x => x.Year).ToList();
+                model.HarvestYear = harvestYearList;
+                nutrientsLoadingManuresList.ForEach(x => x.EncryptedID = _reportDataProtector.Protect(x.ID.Value.ToString()));
+                ViewBag.ImportList = nutrientsLoadingManuresList.Where(x => x.ManureLookupType?.ToUpper() == Resource.lblImport.ToUpper()).ToList();
+                await BindViewBegForManageImportExport(model, error, nutrientsLoadingManuresList);
             }
             else
             {
@@ -3744,11 +3929,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return RedirectToAction(_isAnyLivestockImportExportAction, model);
             }
             SetReportDataToSession(model);
-        }
-        if (!string.IsNullOrWhiteSpace(y))
-        {
-            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
-            model.EncryptedHarvestYear = y;
         }
 
         model.IsManageImportExport = true;
@@ -4194,7 +4374,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ViewBag.LivestockCategory = groupName;
         }
     }
-   
+
     private async Task BindNitrogenAndPhosphate(ReportViewModel model)
     {
         (List<LivestockTypeResponse> livestockTypes, _) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
@@ -6013,18 +6193,18 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         TempData["DeleteLivestockImportExportError"] = error.Message;
                         return View(model);
                     }
-                    
-                        string successMsg = _reportDataProtector.Protect(string.Format(Resource.lblYouHaveRemovedImportExport,
-                            model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
-                        Resource.lblExport.ToLower()));
-                        (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
-                        if (!string.IsNullOrWhiteSpace(error?.Message))
-                        {
-                            TempData["DeleteLivestockImportExportError"] = error.Message;
-                            return View(model);
-                        }
-                        return RedirectDeleteLivestockImportExportWithSuccessMsg(model, error, successMsg, nutrientsLoadingManureList);
-                    
+
+                    string successMsg = _reportDataProtector.Protect(string.Format(Resource.lblYouHaveRemovedImportExport,
+                        model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
+                    Resource.lblExport.ToLower()));
+                    (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        TempData["DeleteLivestockImportExportError"] = error.Message;
+                        return View(model);
+                    }
+                    return RedirectDeleteLivestockImportExportWithSuccessMsg(model, error, successMsg, nutrientsLoadingManureList);
+
 
                 }
             }
@@ -6451,7 +6631,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return totalLivestockManureCapacity;
     }
-       
+
 
     private void BindTotalImportExportTotalN(int total)
     {
