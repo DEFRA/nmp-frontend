@@ -6,13 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using NMP.Core;
 using NMP.Core.Attributes;
-using System.Security.Claims;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
