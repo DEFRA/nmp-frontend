@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
-using NMP.Portal.Helpers;
+using NMP.Application;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
-using NMP.Application;
-using NMP.Commons.Helpers;
+using NMP.Portal.Helpers;
+using System.Linq;
 using System.Net;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace NMP.Portal.Controllers
 {
@@ -761,7 +762,7 @@ namespace NMP.Portal.Controllers
 
         // ===================== Shared "look up existing ID for a harvest year" helper =====================
 
-        private int? GetExistingIdForYear(List<PreviousCroppingData> previousCropList, Error? error, int? year)
+        private static int? GetExistingIdForYear(List<PreviousCroppingData> previousCropList, Error? error, int? year)
         {
             if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
             {
@@ -814,7 +815,7 @@ namespace NMP.Portal.Controllers
         {
             int? id = GetExistingIdForYear(previousCropList, error, year);
 
-            if (!previousGrassYears.Any(x => x == year))
+            if (!previousGrassYears.Contains(year??0))
             {
                 previousCropping.Add(new PreviousCropping
                 {
@@ -904,7 +905,7 @@ namespace NMP.Portal.Controllers
             List<PreviousCropping> previousCropping, PreviousCroppingViewModel model, List<PreviousCroppingData> previousCropList,
             Error? error, int? year, List<int> previousGrassYears)
         {
-            if (!previousGrassYears.Any(x => x == year))
+            if (!previousGrassYears.Contains(year??0))
             {
                 int? id = GetExistingIdForYear(previousCropList, error, year);
                 previousCropping.Add(new PreviousCropping
