@@ -4206,9 +4206,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         try
         {
-            (List<LivestockTypeResponse> livestockTypes, _) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-            model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-            model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+            await BindNitrogenAndPhosphate(model);
             SetReportDataToSession(model);
 
             BindLivestockCategory(model);
@@ -4224,7 +4222,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-
+    private async Task BindNitrogenAndPhosphate(ReportViewModel model)
+    {
+        (List<LivestockTypeResponse> livestockTypes, _) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+        model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+        model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -4346,9 +4349,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return RedirectToAction(_farmListAction, "Farm");
             }
-            (List<LivestockTypeResponse> livestockTypes, _) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-            model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-            model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+            await BindNitrogenAndPhosphate(model);
             SetReportDataToSession(model);
             BindLivestockCategory(model);
         }
@@ -4356,7 +4357,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             _logger.LogTrace(ex, "Report Controller : Exception in AverageNumber() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
 
-            TempData["ErrorOnLivestockNumberQuestion"] = ex.Message;
+            TempData["ErrorOnAverageNumber"] = ex.Message;
             return RedirectToAction(_livestockNumberQuestion);
 
         }
@@ -6319,8 +6320,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.ComplianceOrNot = totalLivestockManureCapacity >= totalNLoading ? Resource.lblCompliance : Resource.lblNonCompliance;
 
 
-        List<int> grazingLivestockList = new List<int>();
-        List<int> nonGrazingLivestockList = new List<int>();
         (List<LivestockTypeResponse> livestockList, error) = await _reportLogic.FetchLivestockTypes();
         if (!string.IsNullOrWhiteSpace(error?.Message))
         {
@@ -6333,8 +6332,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             livestockList.Where(c => c.ID == (int)NMP.Commons.Enums.Livestock.VealCalf).ToList().ForEach(c => c.IsGrazing = true);
 
         }
-        grazingLivestockList = livestockList.Where(mt => mt.IsGrazing.HasValue && mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
-        nonGrazingLivestockList = livestockList.Where(mt => mt.IsGrazing.HasValue && !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
+        List<int> grazingLivestockList = livestockList.Where(mt => mt.IsGrazing.HasValue && mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
+        List<int> nonGrazingLivestockList = livestockList.Where(mt => mt.IsGrazing.HasValue && !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
         if (nutrientsLoadingLiveStockList.Count > 0)
         {
             BindGrazedAndNonGrazedListLivestockReport(nutrientsLoadingLiveStockList, grazingLivestockList, nonGrazingLivestockList, livestockList);
@@ -6343,7 +6342,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
 
         // for derogation
-        CalculateAreaRequiredForGrazingAnNonGrazingLivestockReport(nutrientsLoadingFarmDetail, nutrientsLoadingLiveStockList, totalImportedGrazingLivestock, totalImportedNonGrazingLivestock, totalExportedGrazingLivestock, totalExportedNonGrazingLivestock, grazingLivestockList, nonGrazingLivestockList);
+        CalculateAreaRequiredForGrazingAnNonGrazingLivestockReport(nutrientsLoadingFarmDetail, nutrientsLoadingLiveStockList, totalImportedGrazingLivestock, totalImportedNonGrazingLivestock, totalExportedGrazingLivestock, totalExportedNonGrazingLivestock, livestockList);
         _logger.LogTrace("Report Controller : CropAndFieldManagement() post action called");
         return View(model);
     }
@@ -6376,8 +6375,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
-    private void CalculateAreaRequiredForGrazingAnNonGrazingLivestockReport(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail, List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, decimal totalImportedGrazingLivestock, decimal totalImportedNonGrazingLivestock, decimal totalExportedGrazingLivestock, decimal totalExportedNonGrazingLivestock, List<int> grazingLivestockList, List<int> nonGrazingLivestockList)
+    private void CalculateAreaRequiredForGrazingAnNonGrazingLivestockReport(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail, List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, decimal totalImportedGrazingLivestock, decimal totalImportedNonGrazingLivestock, decimal totalExportedGrazingLivestock, decimal totalExportedNonGrazingLivestock, List<LivestockTypeResponse> livestockList)
     {
+        List<int> grazingLivestockList = livestockList.Where(mt => mt.IsGrazing.HasValue && mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
+        List<int> nonGrazingLivestockList = livestockList.Where(mt => mt.IsGrazing.HasValue && !mt.IsGrazing.Value).Select(mt => mt.ID).ToList();
         if (nutrientsLoadingFarmDetail != null && nutrientsLoadingFarmDetail.Derogation.HasValue && nutrientsLoadingFarmDetail.Derogation.Value && (grazingLivestockList.Count > 0 || nonGrazingLivestockList.Count > 0))
         {
             decimal areaReqForGrazingLivestock = nutrientsLoadingLiveStockList
@@ -6450,25 +6451,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return totalLivestockManureCapacity;
     }
-
-    private void CalculateAreRequiredForLivestockReport(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetail, decimal areaReqForNonGrazingLivestock)
-    {
-        if (nutrientsLoadingFarmDetail.LandNotNVZ != null && nutrientsLoadingFarmDetail.LandNotNVZ > 0)
-        {
-            decimal capacityOfLandOutside = (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250;
-            if (capacityOfLandOutside > areaReqForNonGrazingLivestock)
-            {
-                ViewBag.AreaReqForNonGrazingLivestock = Math.Round(areaReqForNonGrazingLivestock / 250, 2);
-            }
-            else
-            {
-                ViewBag.AreaReqForNonGrazingLivestock = Math.Round(nutrientsLoadingFarmDetail.LandNotNVZ.Value + (areaReqForNonGrazingLivestock - capacityOfLandOutside) / 170, 2);
-            }
-
-            ViewBag.TotalAreaReqForLivestock = (ViewBag.AreaReqForNonGrazingLivestock != null &&
-            ViewBag.AreaReqForGrazingLivestock != null) ? Math.Round(ViewBag.AreaReqForGrazingLivestock + ViewBag.AreaReqForNonGrazingLivestock, 2) : 0;
-        }
-    }
+       
 
     private void BindTotalImportExportTotalN(int total)
     {
