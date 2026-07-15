@@ -4194,6 +4194,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ViewBag.LivestockCategory = groupName;
         }
     }
+   
+    private async Task BindNitrogenAndPhosphate(ReportViewModel model)
+    {
+        (List<LivestockTypeResponse> livestockTypes, _) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+        model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+        model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+    }
     [HttpGet]
     public async Task<IActionResult> LivestockNumbersMonthly()
     {
@@ -4220,13 +4227,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         }
         return View(model);
-    }
-
-    private async Task BindNitrogenAndPhosphate(ReportViewModel model)
-    {
-        (List<LivestockTypeResponse> livestockTypes, _) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-        model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-        model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
     }
 
     [HttpPost]
@@ -6403,7 +6403,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
-    public void CalculateAreaRequiredForLivestockReport(NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetail, decimal areaReqForNonGrazingLivestock)
+    private void CalculateAreaRequiredForLivestockReport(NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetail, decimal areaReqForNonGrazingLivestock)
     {
         if (nutrientsLoadingFarmDetail.LandNotNVZ != null && nutrientsLoadingFarmDetail.LandNotNVZ > 0)
         {
