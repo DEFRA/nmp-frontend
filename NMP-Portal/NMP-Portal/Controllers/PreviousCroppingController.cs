@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
-using NMP.Portal.Helpers;
+using NMP.Application;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
-using NMP.Application;
-using NMP.Commons.Helpers;
+using NMP.Portal.Helpers;
+using System.Linq;
 using System.Net;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace NMP.Portal.Controllers
 {
@@ -667,281 +668,295 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> CheckAnswer(PreviousCroppingViewModel model)
         {
             _logger.LogTrace($"Previous Croppping Controller : CheckAnswer() post action called");
-            if (!model.HasGrassInLastThreeYear.HasValue)
-            {
-                ModelState.AddModelError(_hasGrassInLastThreeYearText, $"{string.Format(Resource.lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear, model.FieldName)} {Resource.lblNotSet}");
-            }
-            else
-            {
-                if (model.HasGrassInLastThreeYear.Value)
-                {
-                    if (model.PreviousGrassYears == null)
-                    {
-                        ModelState.AddModelError("GrassLastThreeHarvestYear", $"{string.Format(Resource.lblInWhichYearsWasUsedForGrass, model.FieldName)} {Resource.lblNotSet}");
-                    }
 
-                    if (model.PreviousGrassYears != null && model.PreviousGrassYears.Count == 3 && model.LayDuration == null)
-                    {
-                        ModelState.AddModelError("LayDuration", $"{string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, model.PreviousGrassYears?[0])} {Resource.lblNotSet}");
-                    }
-
-                    if (model.GrassManagementOptionID == null)
-                    {
-                        ModelState.AddModelError("GrassManagementOptionID", $"{Resource.lblHowWasTheGrassTypicallyManagedEachYear} {Resource.lblNotSet}");
-                    }
-
-                    if (model.HasGreaterThan30PercentClover == null)
-                    {
-                        ModelState.AddModelError("HasGreaterThan30PercentClover", $"{string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, model.FieldName)} {Resource.lblNotSet}");
-                    }
-                    if (model.HasGreaterThan30PercentClover == false && model.SoilNitrogenSupplyItemID == null)
-                    {
-                        ModelState.AddModelError("SoilNitrogenSupplyItemID", $"{string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, model.FieldName)} {Resource.lblNotSet}");
-                    }
-
-                    if (model.CropTypeID == null && (model.HasGrassInLastThreeYear.HasValue && (!model.HasGrassInLastThreeYear.Value)
-                        || (model.IsPreviousYearGrass.HasValue && !model.IsPreviousYearGrass.Value)))
-                    {
-                        ModelState.AddModelError("CropTypeID", $"{string.Format(Resource.lblWhatWasTheCropType, model.HarvestYear)} {Resource.lblNotSet}");
-                    }
-                }
-                else
-                {
-
-                    if (model.CropTypeID == null)
-                    {
-                        ModelState.AddModelError("CropTypeID", $"{string.Format(Resource.lblWhatWasTheCropType, model.HarvestYear)} {Resource.lblNotSet}");
-                    }
-                }
-            }
+            ValidatePreviousCroppingModel(model);
 
             if (!ModelState.IsValid)
             {
-                List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
-                ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.GrassManagementOptionID)?.Name;
-                if (model.CropGroupID != null)
-                {
-                    ViewBag.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupID.Value);
-                }
-
-                List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
-                ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.SoilNitrogenSupplyItemID)?.Name;
+                await PopulatePreviousCroppingViewBagsAsync(model);
                 return View(model);
             }
 
+            (List<PreviousCroppingData> previousCropList, Error? error) = await _previousCroppingLogic.FetchDataByFieldId(model.FieldID, null);
 
-            List<PreviousCropping> previousCropping = new List<PreviousCropping>();
-            Error? error = null;
-            int? id = null;
-            (List<PreviousCroppingData> previousCropList, error) = await _previousCroppingLogic.FetchDataByFieldId(model.FieldID, null);
-            if (model.IsPreviousYearGrass == true && model.PreviousGrassYears != null)
+            List<PreviousCropping> previousCropping = (model.IsPreviousYearGrass == true && model.PreviousGrassYears != null)
+                ? BuildIsPreviousYearGrassTrueList(model, previousCropList, error)
+                : BuildIsPreviousYearGrassFalseList(model, previousCropList, error);
+
+            return await SaveAndBuildResultAsync(model, previousCropping);
+        }
+
+        // ===================== Validation =====================
+
+        private void ValidatePreviousCroppingModel(PreviousCroppingViewModel model)
+        {
+            if (!model.HasGrassInLastThreeYear.HasValue)
             {
-                model.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Grass;
-                model.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
-                foreach (var year in model.PreviousGrassYears)
-                {
-                    id = null;
-                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
-                    {
-                        id = previousCropList.Where(x => x.HarvestYear == year).Select(x => x.ID).FirstOrDefault();
-                    }
-                    var newPreviousCropping = new PreviousCropping
-                    {
-                        ID = id,
-                        FieldID = model.FieldID,
-                        CropGroupID = model.CropGroupID,
-                        CropTypeID = model.CropTypeID,
-                        HasGrassInLastThreeYear = model.HasGrassInLastThreeYear ?? false,
-                        HarvestYear = year,
-                        LayDuration = model.LayDuration,
-                        GrassManagementOptionID = model.GrassManagementOptionID,
-                        HasGreaterThan30PercentClover = model.HasGreaterThan30PercentClover,
-                        SoilNitrogenSupplyItemID = model.SoilNitrogenSupplyItemID
-                    };
-                    previousCropping.Add(newPreviousCropping);
-                }
-                if (model.PreviousGrassYears.Count < 3)
-                {
-                    id = null;
-                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
-                    {
-                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 1).Select(x => x.ID).FirstOrDefault();
-                    }
-                    if (!model.PreviousGrassYears.Any(x => x == model.HarvestYear - 1))
-                    {
-                        var newPreviousCropping = new PreviousCropping
-                        {
-                            ID = id,
-                            CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
-                            CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
-                            HarvestYear = model.HarvestYear - 1,
-                            HasGrassInLastThreeYear = true,
-                            FieldID = model.FieldID,
-                        };
-                        previousCropping.Add(newPreviousCropping);
-                    }
+                ModelState.AddModelError(_hasGrassInLastThreeYearText,
+                    $"{string.Format(Resource.lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear, model.FieldName)} {Resource.lblNotSet}");
+                return;
+            }
 
-                    id = null;
-                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
-                    {
-                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault();
-                    }
-                    if (!model.PreviousGrassYears.Any(x => x == model.HarvestYear - 2))
-                    {
-                        var newPreviousCropping = new PreviousCropping
-                        {
-                            ID = id,
-                            CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
-                            CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
-                            HarvestYear = model.HarvestYear - 2,
-                            HasGrassInLastThreeYear = true,
-                            FieldID = model.FieldID,
-                        };
-                        previousCropping.Add(newPreviousCropping);
-                    }
-                }
+            if (model.HasGrassInLastThreeYear.Value)
+            {
+                ValidateGrassInLastThreeYearFields(model);
             }
             else
             {
-                id = null;
-                if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
+                if (model.CropTypeID == null)
                 {
-                    id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear.Value).Select(x => x.ID).FirstOrDefault();
+                    ModelState.AddModelError("CropTypeID", $"{string.Format(Resource.lblWhatWasTheCropType, model.HarvestYear)} {Resource.lblNotSet}");
                 }
-                var newPreviousCropping = new PreviousCropping
+            }
+        }
+
+        private void ValidateGrassInLastThreeYearFields(PreviousCroppingViewModel model)
+        {
+            if (model.PreviousGrassYears == null)
+            {
+                ModelState.AddModelError("GrassLastThreeHarvestYear", $"{string.Format(Resource.lblInWhichYearsWasUsedForGrass, model.FieldName)} {Resource.lblNotSet}");
+            }
+
+            if (model.PreviousGrassYears != null && model.PreviousGrassYears.Count == 3 && model.LayDuration == null)
+            {
+                ModelState.AddModelError("LayDuration", $"{string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, model.PreviousGrassYears?[0])} {Resource.lblNotSet}");
+            }
+
+            if (model.GrassManagementOptionID == null)
+            {
+                ModelState.AddModelError("GrassManagementOptionID", $"{Resource.lblHowWasTheGrassTypicallyManagedEachYear} {Resource.lblNotSet}");
+            }
+
+            if (model.HasGreaterThan30PercentClover == null)
+            {
+                ModelState.AddModelError("HasGreaterThan30PercentClover", $"{string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, model.FieldName)} {Resource.lblNotSet}");
+            }
+
+            if (model.HasGreaterThan30PercentClover == false && model.SoilNitrogenSupplyItemID == null)
+            {
+                ModelState.AddModelError("SoilNitrogenSupplyItemID", $"{string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, model.FieldName)} {Resource.lblNotSet}");
+            }
+
+            if (model.CropTypeID == null && (model.HasGrassInLastThreeYear.HasValue && (!model.HasGrassInLastThreeYear.Value)
+                || (model.IsPreviousYearGrass.HasValue && !model.IsPreviousYearGrass.Value)))
+            {
+                ModelState.AddModelError("CropTypeID", $"{string.Format(Resource.lblWhatWasTheCropType, model.HarvestYear)} {Resource.lblNotSet}");
+            }
+        }
+
+        // ===================== Shared ViewBag population (used by both invalid-model and merge-failure paths) =====================
+
+        private async Task PopulatePreviousCroppingViewBagsAsync(PreviousCroppingViewModel model)
+        {
+            List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
+            ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.GrassManagementOptionID)?.Name;
+
+            if (model.CropGroupID != null)
+            {
+                ViewBag.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupID.Value);
+            }
+
+            List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
+            ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.SoilNitrogenSupplyItemID)?.Name;
+        }
+
+        // ===================== Shared "look up existing ID for a harvest year" helper =====================
+
+        private static int? GetExistingIdForYear(List<PreviousCroppingData> previousCropList, Error? error, int? year)
+        {
+            if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
+            {
+                return previousCropList.Where(x => x.HarvestYear == year).Select(x => x.ID).FirstOrDefault();
+            }
+
+            return null;
+        }
+
+        // ===================== Branch: IsPreviousYearGrass == true =====================
+
+        private List<PreviousCropping> BuildIsPreviousYearGrassTrueList(PreviousCroppingViewModel model, List<PreviousCroppingData> previousCropList, Error? error)
+        {
+            var previousCropping = new List<PreviousCropping>();
+
+            model.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Grass;
+            model.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
+
+            foreach (var year in model.PreviousGrassYears)
+            {
+                int? id = GetExistingIdForYear(previousCropList, error, year);
+                previousCropping.Add(new PreviousCropping
                 {
                     ID = id,
                     FieldID = model.FieldID,
                     CropGroupID = model.CropGroupID,
                     CropTypeID = model.CropTypeID,
                     HasGrassInLastThreeYear = model.HasGrassInLastThreeYear ?? false,
-                    HarvestYear = model.HarvestYear,
-                    LayDuration = null,
-                    GrassManagementOptionID = null,
-                    HasGreaterThan30PercentClover = null,
-                    SoilNitrogenSupplyItemID = null
-                };
-                previousCropping.Add(newPreviousCropping);
-
-                if (model.PreviousGrassYears != null)
-                {
-                    model.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Grass;
-                    model.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
-                    foreach (var year in model.PreviousGrassYears)
-                    {
-                        id = null;
-                        if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
-                        {
-                            var firstPreviousCrop = previousCropList.FirstOrDefault(x => x.HarvestYear == year);
-                            id = firstPreviousCrop?.ID;
-                        }
-
-                        var newPreviousGrass = new PreviousCropping
-                        {
-                            ID = id,
-                            FieldID = model.FieldID,
-                            CropGroupID = model.CropGroupID,
-                            CropTypeID = model.CropTypeID,
-                            HasGrassInLastThreeYear = model.HasGrassInLastThreeYear ?? false,
-                            HarvestYear = year,
-                            LayDuration = model.LayDuration,
-                            GrassManagementOptionID = model.GrassManagementOptionID,
-                            HasGreaterThan30PercentClover = model.HasGreaterThan30PercentClover,
-                            SoilNitrogenSupplyItemID = model.SoilNitrogenSupplyItemID
-                        };
-
-                        previousCropping.Add(newPreviousGrass);
-                    }
-
-                    if (model.PreviousGrassYears.Count < 3)
-                    {
-                        if (!model.PreviousGrassYears.Any(x => x == model.HarvestYear - 1))
-                        {
-                            id = null;
-                            if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
-                            {
-                                id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 1).Select(x => x.ID).FirstOrDefault();
-                            }
-                            newPreviousCropping = new PreviousCropping
-                            {
-                                ID = id,
-                                CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
-                                FieldID = model.FieldID,
-                                CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
-                                HarvestYear = model.HarvestYear - 1,
-                                HasGrassInLastThreeYear = true
-                            };
-
-                            previousCropping.Add(newPreviousCropping);
-                        }
-
-                        if (!model.PreviousGrassYears.Any(x => x == model.HarvestYear - 2))
-                        {
-                            id = null;
-                            if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
-                            {
-                                id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault();
-                            }
-
-                            newPreviousCropping = new PreviousCropping
-                            {
-                                ID = id,
-                                CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
-                                FieldID = model.FieldID,
-                                CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
-                                HarvestYear = model.HarvestYear - 2,
-                                HasGrassInLastThreeYear = true
-                            };
-                            previousCropping.Add(newPreviousCropping);
-                        }
-                    }
-                }
-                else
-                {
-                    id = null;
-                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
-                    {
-                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 1).Select(x => x.ID).FirstOrDefault();
-                    }
-
-                    newPreviousCropping = new PreviousCropping
-                    {
-                        ID = id,
-                        CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
-                        CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
-                        FieldID = model.FieldID,
-                        HarvestYear = model.HarvestYear - 1,
-                        HasGrassInLastThreeYear = false,
-                    };
-
-                    previousCropping.Add(newPreviousCropping);
-
-                    id = null;
-                    if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
-                    {
-                        id = previousCropList.Where(x => x.HarvestYear == model.HarvestYear - 2).Select(x => x.ID).FirstOrDefault();
-                    }
-                    newPreviousCropping = new PreviousCropping
-                    {
-                        ID = id,
-                        CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
-                        CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
-                        FieldID = model.FieldID,
-                        HarvestYear = model.HarvestYear - 2,
-                        HasGrassInLastThreeYear = false,
-                    };
-                    previousCropping.Add(newPreviousCropping);
-                }
-
+                    HarvestYear = year,
+                    LayDuration = model.LayDuration,
+                    GrassManagementOptionID = model.GrassManagementOptionID,
+                    HasGreaterThan30PercentClover = model.HasGreaterThan30PercentClover,
+                    SoilNitrogenSupplyItemID = model.SoilNitrogenSupplyItemID
+                });
             }
 
+            if (model.PreviousGrassYears.Count < 3)
+            {
+                AddOtherYearIfMissing(previousCropping, model, previousCropList, error, model.HarvestYear - 1, model.PreviousGrassYears, hasGrassInLastThreeYearOverride: true);
+                AddOtherYearIfMissing(previousCropping, model, previousCropList, error, model.HarvestYear - 2, model.PreviousGrassYears, hasGrassInLastThreeYearOverride: true);
+            }
+
+            return previousCropping;
+        }
+
+        // Shared by both branches: adds an "Other" crop entry for a given year if it isn't already in the grass-years list.
+        private void AddOtherYearIfMissing(
+            List<PreviousCropping> previousCropping, PreviousCroppingViewModel model, List<PreviousCroppingData> previousCropList,
+            Error? error, int? year, List<int> previousGrassYears, bool hasGrassInLastThreeYearOverride)
+        {
+            int? id = GetExistingIdForYear(previousCropList, error, year);
+
+            if (!previousGrassYears.Contains(year??0))
+            {
+                previousCropping.Add(new PreviousCropping
+                {
+                    ID = id,
+                    CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
+                    CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
+                    HarvestYear = year,
+                    HasGrassInLastThreeYear = hasGrassInLastThreeYearOverride,
+                    FieldID = model.FieldID,
+                });
+            }
+        }
+
+        // ===================== Branch: IsPreviousYearGrass != true =====================
+
+        private List<PreviousCropping> BuildIsPreviousYearGrassFalseList(PreviousCroppingViewModel model, List<PreviousCroppingData> previousCropList, Error? error)
+        {
+            var previousCropping = new List<PreviousCropping>();
+
+            int? id = GetExistingIdForYear(previousCropList, error, model.HarvestYear.Value);
+            previousCropping.Add(new PreviousCropping
+            {
+                ID = id,
+                FieldID = model.FieldID,
+                CropGroupID = model.CropGroupID,
+                CropTypeID = model.CropTypeID,
+                HasGrassInLastThreeYear = model.HasGrassInLastThreeYear ?? false,
+                HarvestYear = model.HarvestYear,
+                LayDuration = null,
+                GrassManagementOptionID = null,
+                HasGreaterThan30PercentClover = null,
+                SoilNitrogenSupplyItemID = null
+            });
+
+            if (model.PreviousGrassYears != null)
+            {
+                BuildNonGrassWithPreviousGrassYears(previousCropping, model, previousCropList, error);
+            }
+            else
+            {
+                BuildNonGrassWithoutPreviousGrassYears(previousCropping, model, previousCropList, error);
+            }
+
+            return previousCropping;
+        }
+
+        private void BuildNonGrassWithPreviousGrassYears(
+            List<PreviousCropping> previousCropping, PreviousCroppingViewModel model, List<PreviousCroppingData> previousCropList, Error? error)
+        {
+            model.CropGroupID = (int)NMP.Commons.Enums.CropGroup.Grass;
+            model.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
+
+            foreach (var year in model.PreviousGrassYears)
+            {
+                int? id = null;
+                if (string.IsNullOrWhiteSpace(error?.Message) && previousCropList.Count > 0)
+                {
+                    var firstPreviousCrop = previousCropList.FirstOrDefault(x => x.HarvestYear == year);
+                    id = firstPreviousCrop?.ID;
+                }
+
+                previousCropping.Add(new PreviousCropping
+                {
+                    ID = id,
+                    FieldID = model.FieldID,
+                    CropGroupID = model.CropGroupID,
+                    CropTypeID = model.CropTypeID,
+                    HasGrassInLastThreeYear = model.HasGrassInLastThreeYear ?? false,
+                    HarvestYear = year,
+                    LayDuration = model.LayDuration,
+                    GrassManagementOptionID = model.GrassManagementOptionID,
+                    HasGreaterThan30PercentClover = model.HasGreaterThan30PercentClover,
+                    SoilNitrogenSupplyItemID = model.SoilNitrogenSupplyItemID
+                });
+            }
+
+            if (model.PreviousGrassYears.Count < 3)
+            {
+                AddOtherYearIfMissingSimple(previousCropping, model, previousCropList, error, model.HarvestYear - 1, model.PreviousGrassYears);
+                AddOtherYearIfMissingSimple(previousCropping, model, previousCropList, error, model.HarvestYear - 2, model.PreviousGrassYears);
+            }
+        }
+
+        // Same as AddOtherYearIfMissing but always uses HasGrassInLastThreeYear = true and checks the "not already present" condition
+        // before computing the id (matching the original's slightly different statement order in this branch).
+        private void AddOtherYearIfMissingSimple(
+            List<PreviousCropping> previousCropping, PreviousCroppingViewModel model, List<PreviousCroppingData> previousCropList,
+            Error? error, int? year, List<int> previousGrassYears)
+        {
+            if (!previousGrassYears.Contains(year??0))
+            {
+                int? id = GetExistingIdForYear(previousCropList, error, year);
+                previousCropping.Add(new PreviousCropping
+                {
+                    ID = id,
+                    CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
+                    FieldID = model.FieldID,
+                    CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
+                    HarvestYear = year,
+                    HasGrassInLastThreeYear = true
+                });
+            }
+        }
+
+        private void BuildNonGrassWithoutPreviousGrassYears(
+            List<PreviousCropping> previousCropping, PreviousCroppingViewModel model, List<PreviousCroppingData> previousCropList, Error? error)
+        {
+            int? id1 = GetExistingIdForYear(previousCropList, error, model.HarvestYear - 1);
+            previousCropping.Add(new PreviousCropping
+            {
+                ID = id1,
+                CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
+                CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
+                FieldID = model.FieldID,
+                HarvestYear = model.HarvestYear - 1,
+                HasGrassInLastThreeYear = false,
+            });
+
+            int? id2 = GetExistingIdForYear(previousCropList, error, model.HarvestYear - 2);
+            previousCropping.Add(new PreviousCropping
+            {
+                ID = id2,
+                CropGroupID = (int)NMP.Commons.Enums.CropGroup.Other,
+                CropTypeID = (int)NMP.Commons.Enums.CropTypes.Other,
+                FieldID = model.FieldID,
+                HarvestYear = model.HarvestYear - 2,
+                HasGrassInLastThreeYear = false,
+            });
+        }
+
+        // ===================== Save + final result =====================
+
+        private async Task<IActionResult> SaveAndBuildResultAsync(PreviousCroppingViewModel model, List<PreviousCropping> previousCropping)
+        {
             var previousDataWrapper = new
             {
                 PreviousCroppings = previousCropping
             };
 
             string jsonData = JsonConvert.SerializeObject(previousDataWrapper);
-            (bool success, error) = await _previousCroppingLogic.MergePreviousCropping(jsonData);
+            (bool success, Error? error) = await _previousCroppingLogic.MergePreviousCropping(jsonData);
 
             if (string.IsNullOrWhiteSpace(error?.Message) && success)
             {
@@ -954,20 +969,9 @@ namespace NMP.Portal.Controllers
                     t = _cropDataProtector.Protect(Resource.MsgRecommendationsUpdated)
                 });
             }
-            else
-            {
-                TempData["Error"] = error?.Message;
-                List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
-                ViewBag.GrassManagementOptions = grassManagements?.FirstOrDefault(x => x.Id == model.GrassManagementOptionID)?.Name;
 
-                if (model.CropGroupID != null)
-                {
-                    ViewBag.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupID.Value);
-                }
-
-                List<CommonResponse> soilNitrogenSupplyItems = await _fieldLogic.GetSoilNitrogenSupplyItems();
-                ViewBag.SoilNitrogenSupplyItems = soilNitrogenSupplyItems?.FirstOrDefault(x => x.Id == model.SoilNitrogenSupplyItemID)?.Name;
-            }
+            TempData["Error"] = error?.Message;
+            await PopulatePreviousCroppingViewBagsAsync(model);
 
             return View(model);
         }
