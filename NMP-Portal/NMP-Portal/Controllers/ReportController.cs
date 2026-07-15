@@ -717,7 +717,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
-    private static int BindDefoliationSequenceNameForCropFieldReport(CropReportResponse cropData, int defIndex, string[]? defolicationParts)
+    private static void BindDefoliationSequenceNameForCropFieldReport(CropReportResponse cropData, int defIndex, string[]? defolicationParts)
     {
         foreach (var manData in cropData.ManagementPeriods)
         {
@@ -729,8 +729,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             defIndex++;
         }
-
-        return defIndex;
     }
 
     private async Task<string> BindDefoliationSequenceForCropFieldReport(CropReportResponse cropData, string defolicationName)
@@ -3340,6 +3338,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 ModelState["K2O"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblTotalPotassium));
             }
         }
+        ValidateSO3();
+    }
+
+    private void ValidateSO3()
+    {
         if ((!ModelState.IsValid) && ModelState.ContainsKey("SO3"))
         {
             var sulphurSO3Error = ModelState["SO3"]?.Errors.Count > 0 ?
@@ -3377,6 +3380,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 ModelState["NH4N"]?.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.lblAmmonium));
             }
         }
+        ValidateUricAcid();
+    }
+
+    private void ValidateUricAcid()
+    {
         if ((!ModelState.IsValid) && ModelState.ContainsKey(_uricAcid))
         {
             var uricAcidError = ModelState[_uricAcid]?.Errors.Count > 0 ?
