@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Extensions.Options;
-using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.TokenCacheProviders.Distributed;
-using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using NMP.Commons.Models;
@@ -65,8 +61,7 @@ namespace NMP.Portal.Security
                 options.Events.OnRemoteSignOut += OnRemoteSignOut;
                 options.Events.OnRemoteFailure += OnRemoteFailure;               
             });            
-            services.AddDistributedTokenCaches();
-            services.AddSingleton<TokenAcquisitionService>();
+            services.AddDistributedTokenCaches();            
             return services;
         }
 
@@ -115,12 +110,12 @@ namespace NMP.Portal.Security
                 return "unknown";
             }
         }
-#pragma warning disable S1172
+
         private static async Task OnRemoteSignOut(RemoteSignOutContext context)
         {
             await Task.CompletedTask.ConfigureAwait(false);
         }
-#pragma warning restore S1172
+
         private static async Task OnAuthenticationFailed(AuthenticationFailedContext context)
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
@@ -135,24 +130,17 @@ namespace NMP.Portal.Security
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-#pragma warning disable S1172
+
         private static async Task OnSignedOutCallbackRedirect(RemoteSignOutContext context)
         { 
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-#pragma warning restore S1172
-        /// <summary>        
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        /// 
-#pragma warning disable S1172
+
         private static async Task OnRedirectToIdentityProviderForSignOut(RedirectContext context)
         {
             await Task.CompletedTask.ConfigureAwait(false);
         }
-#pragma warning restore S1172
 
         private static async Task OnAccessDenied(AccessDeniedContext context)
         {
@@ -171,13 +159,13 @@ namespace NMP.Portal.Security
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-#pragma warning disable S1172
+
         private static async Task OnAuthorizationCodeReceived(AuthorizationCodeReceivedContext context)
         {
             // Don't remove this line
             await Task.CompletedTask.ConfigureAwait(false);
         }
-#pragma warning restore S1172
+
         private static async Task OnTokenValidated(TokenValidatedContext context)
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();

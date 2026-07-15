@@ -3508,7 +3508,7 @@ cubic metres per hectare  not set</value>
     <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
   </data>
   <data name="lblReadScheduleLink" xml:space="preserve">
-    <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule&lt;/a&gt; (opens in a new window)</value>
+    <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule&lt;/a&gt;</value>
   </data>
   <data name="lblReleaseSchedule" xml:space="preserve">
     <value>Release schedule</value>
