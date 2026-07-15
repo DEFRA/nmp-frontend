@@ -4229,7 +4229,6 @@ managementPeriod.CropID.HasValue
             OrganicManureViewModel model, OrganicManureDataViewModel organicManure, ManagementPeriod? managementPeriod, Error? error, int fieldIdForUpdate)
         {
             int? defoliation = null;
-            string defoliationName = string.Empty;
 
             if (HasError(error))
             {
@@ -4498,7 +4497,7 @@ managementPeriod.CropID.HasValue
             return model;
         }
 
-        private void ApplyFarmManureTypeMatch(OrganicManureViewModel model, OrganicManureDataViewModel organicManure, FarmManureTypeResponse farmManureType)
+        private static void ApplyFarmManureTypeMatch(OrganicManureViewModel model, OrganicManureDataViewModel organicManure, FarmManureTypeResponse farmManureType)
         {
             bool isOtherManureSameName = IsOtherManureSameName(model, organicManure, farmManureType);
 
