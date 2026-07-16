@@ -14,5 +14,8 @@ namespace NMP.Commons.ViewModels
         public string EncryptedMannerEstimationApplicationId { get; set; } = string.Empty;
         public string EncryptedMannerEstimationId { get; set; } = string.Empty;
         public int CropTypeId { get; set; }
+        public int? CountryId { get; set; }
+        public bool? IsFarmOrganic { get; set; }
+        public bool? IsWithinNVZ { get; set; }
     }
 }

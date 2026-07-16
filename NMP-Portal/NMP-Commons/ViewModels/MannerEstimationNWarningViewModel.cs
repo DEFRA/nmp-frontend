@@ -15,6 +15,8 @@ namespace NMP.Commons.ViewModels
         public int? UpdatedMannerAppId { get; set; }
         public int CountryId { get; set; }
         public int? CropTypeId { get; set; }
+        public bool? IsFarmOrganic { get; set; }
+        public bool? IsWithinNVZ { get; set; }
         public bool IsWarningMsgNeedToShow { get; set; } = false;
 
         public bool IsOrgManureNfieldLimitWarning { get; set; }
