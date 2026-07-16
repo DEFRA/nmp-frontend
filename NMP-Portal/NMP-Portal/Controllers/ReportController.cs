@@ -6300,9 +6300,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                         return View(model);
                     }
 
-                    string successMsg;
-                    List<NutrientsLoadingManures> nutrientsLoadingManureList;
-                    (bool flowControl, IActionResult value) = await BindSuccessMsgForDeleteImportExport(model, ref error, out successMsg, out nutrientsLoadingManureList);
+                    (bool flowControl, IActionResult value, List<NutrientsLoadingManures> nutrientsLoadingManureList, string successMsg) = await BindSuccessMsgForDeleteImportExport(model);
                     if (!flowControl)
                     {
                         return value;
@@ -6323,19 +6321,19 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    private async Task<(bool flowControl, IActionResult value)> BindSuccessMsgForDeleteImportExport(ReportViewModel model, ref Error? error, out string successMsg, out List<NutrientsLoadingManures> nutrientsLoadingManureList)
+    private async Task<(bool flowControl, IActionResult value, List<NutrientsLoadingManures>,string)> BindSuccessMsgForDeleteImportExport(ReportViewModel model )
     {
-        successMsg = _reportDataProtector.Protect(string.Format(Resource.lblYouHaveRemovedImportExport,
+        string successMsg = _reportDataProtector.Protect(string.Format(Resource.lblYouHaveRemovedImportExport,
             model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() :
         Resource.lblExport.ToLower()));
-        (nutrientsLoadingManureList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
+        (List<NutrientsLoadingManures> nutrientsLoadingManureList, Error? error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
         if (!string.IsNullOrWhiteSpace(error?.Message))
         {
             TempData["DeleteLivestockImportExportError"] = error.Message;
-            return (flowControl: false, value: View(model));
+            return (flowControl: false, value: View(model), nutrientsLoadingManureList, successMsg);
         }
 
-        return (flowControl: true, value: null);
+        return (flowControl: true, value: null, nutrientsLoadingManureList,successMsg);
     }
 
     private IActionResult RedirectDeleteLivestockImportExportWithSuccessMsg(ReportViewModel model, Error error, string successMsg, List<NutrientsLoadingManures> nutrientsLoadingManureList)
