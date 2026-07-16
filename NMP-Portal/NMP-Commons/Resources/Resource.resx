@@ -8038,7 +8038,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Export or print this estimate</value>
   </data>
   <data name="lblTotalAndCropAvailableNitrogen" xml:space="preserve">
-    <value>Total and crop available nitrogen (N).</value>
+    <value>Total and crop available nitrogen (N)</value>
   </data>
   <data name="lblValuesArePerHectare" xml:space="preserve">
     <value>Values are per hectare</value>
@@ -8296,10 +8296,10 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>NMPT service under maintenance</value>
   </data>
   <data name="lblMannerApplicationDetailCountUpdated" xml:space="preserve">
-    <value>Application detail {0} updated.</value>
+    <value>Application {0} details updated.</value>
   </data>
   <data name="lblApplicationDetailUpdated" xml:space="preserve">
-    <value>Application detail updated.</value>
+    <value>Application details updated.</value>
   </data>
   <data name="lblApplicationCountDetail" xml:space="preserve">
     <value>Application {0} details</value>

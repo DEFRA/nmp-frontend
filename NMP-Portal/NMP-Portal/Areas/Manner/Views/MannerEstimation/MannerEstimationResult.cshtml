@@ -109,7 +109,7 @@
                                 }
                                 <td class="govuk-table__cell">@item.ManureType</td>
                                 <td class="govuk-table__cell">
-                                    @item.ApplicationDate.ToLocalTime().ToString("dd MMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
+                                    @item.ApplicationDate.ToLocalTime().ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))
                                 </td>
                             </tr>
                         }
@@ -537,6 +537,19 @@
                             <a class="govuk-link" asp-action="Subsoil" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblSubSoil)</span>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">@Resource.lblCropGroup</th>
+                        <td class="govuk-table__cell">
+                            @ViewBag.CropGroup
+                        </td>
+                        <td class="govuk-table__cell">
+                            <a class="govuk-link" asp-action="CropGroup" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
+                                @Resource.lblChange
+                                <span class="govuk-visually-hidden">@(Resource.lblCropGroup)</span>
                             </a>
                         </td>
                     </tr>

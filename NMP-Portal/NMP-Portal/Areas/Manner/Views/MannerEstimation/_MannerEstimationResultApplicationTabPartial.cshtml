@@ -27,6 +27,20 @@
 
 <table class="govuk-table data-table manner-answers-table margin-bottom-none">
     <tbody class="govuk-table__body">
+         <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblManureGroup</th>
+            <td class="govuk-table__cell">@Model.ManureGroup</td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="ManureGroup"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblManureGroup, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
         <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
             <td class="govuk-table__cell">@Model.ManureType</td>
