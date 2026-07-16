@@ -292,6 +292,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             SetMannerEstimationToSession(mannerEstimationViewModel);
             mannerEstimationViewModel = GetMannerEstimation();
         }
+
+        if (mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId != mannerEstimationStep11.ManureGroupId)
+        {
+            mannerEstimationStep11.IsManureGroupIdChange = true;
+        }
         mannerEstimationViewModel.MannerEstimationStep11.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep11.EncryptedMannerEstimationId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep11 = mannerEstimationStep11;
@@ -307,16 +312,19 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep12.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep12.ManureGroupName = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupName;
         mannerEstimationViewModel.MannerEstimationStep12.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId ?? 0;
+        mannerEstimationViewModel.MannerEstimationStep12.IsManureGroupIdChange = mannerEstimationViewModel.MannerEstimationStep11.IsManureGroupIdChange;
         return mannerEstimationViewModel.MannerEstimationStep12;
     }
 
     public MannerEstimationStep12ViewModel SetMannerEstimationStep12(MannerEstimationStep12ViewModel mannerEstimationStep12)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationStep12.IsManureGroupIdChange = mannerEstimationViewModel.MannerEstimationStep11.IsManureGroupIdChange;
         if (mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId != mannerEstimationStep12.ManureTypeId)
         {
             mannerEstimationStep12.IsManureTypeChange = true;
         }
+        mannerEstimationStep12.IsManureGroupIdChange = mannerEstimationViewModel.MannerEstimationStep11.IsManureGroupIdChange;
         mannerEstimationViewModel.MannerEstimationStep12 = mannerEstimationStep12;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep12();

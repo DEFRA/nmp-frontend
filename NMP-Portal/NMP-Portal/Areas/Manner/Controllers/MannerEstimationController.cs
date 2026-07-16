@@ -739,8 +739,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model.ManureGroupName = manureGroup.Name;
                 }
             }
-            await _mannerEstimationLogic.SetMannerEstimationStep11(model);
 
+         model=   await _mannerEstimationLogic.SetMannerEstimationStep11(model);
+            if(!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId) && !model.IsComingForAddNewApplication && !model.IsManureGroupIdChange)
+            {
+                return RedirectToAction(_updateApplicationDataActionName);
+            }
             return RedirectToAction("ManureType");
         }
         private async Task<(List<SelectListItem>, Error?)> FetchManureGroup()
@@ -2742,10 +2746,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ViewBag.LastUpdatedOn = mannerEstimationResultResponse.LastUpdatedOn;
             mannerEstimationResultResponse.MannerEstimationApplication.ForEach(x => x.EncryptedApplicationId = _mannerEstimationProtector.Protect(x.ID.ToString()));
             ViewBag.MannerEstimations = mannerEstimationResultResponse;
+            List<CropTypeResponse> cropTypeList =await  _fieldLogic.FetchAllCropTypes();
+            int cropGroupId = cropTypeList.FirstOrDefault(x=>x.CropTypeId == mannerEstimationResultResponse.MannerEstimation.CropTypeID.Value)?.CropGroupId ?? 0;
+            ViewBag.CropGroup = await _fieldLogic.FetchCropGroupById(cropGroupId);
             int count = 0;
             foreach (var application in mannerEstimationResultResponse.MannerEstimationApplication)
             {
                 count++;
+                (ManureType? manure, _) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID.Value);
+                int manureGroupId = manure?.ManureGroupId ?? 0;
+                application.ManureGroup = (await _mannerLogic.FetchManureGroupById(manureGroupId)).Item1.Name;
                 bool isManureLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID.Value);
                 application.IsManureTypeLiquid = isManureLiquid;
                 string manureUnit = isManureLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
@@ -4870,7 +4880,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View();
 
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> RemoveEstimations(MannerEstimationStep40ViewModel model)
         {
@@ -4964,9 +4974,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     .ToList();
         }
 
-      
 
-        
+
+
         private static List<SelectListItem> ToSelectList<T>(IEnumerable<T> source, Func<T, string> value, Func<T, string> text)
         {
             return source
@@ -5013,7 +5023,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!ModelState.IsValid)
             {
                 int mannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep41ViewModel.EncryptedMannerEstimateId));
-                (MannerEstimationResultResponse? mannerEstimationResult,error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(mannerEstimateId);
+                (MannerEstimationResultResponse? mannerEstimationResult, error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(mannerEstimateId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData[_mannerEstimationResultErrorKey] = error.Message;
@@ -5028,7 +5038,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             int mannerApplicationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep41ViewModel.EncryptedMannerEstimateId));
-            (_,  error) = await _mannerEstimationLogic.DeleteMannerEstimateApplicationById(model.MannerEstimateApplicationId.Value);
+            (_, error) = await _mannerEstimationLogic.DeleteMannerEstimateApplicationById(model.MannerEstimateApplicationId.Value);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["RemoveMannerEstimateApplicationError"] = error.Message;

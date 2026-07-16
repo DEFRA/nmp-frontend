@@ -27,8 +27,22 @@
 
 <table class="govuk-table data-table manner-answers-table margin-bottom-none">
     <tbody class="govuk-table__body">
+         <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblManureGroup</th>
+            <td class="govuk-table__cell">@Model.ManureGroup</td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="ManureGroup"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblManureGroup, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@Resource.lblWhatTypeOfOrganicMaterialWouldYouLikeUse</th>
+            <th scope="row" class="govuk-table__header">@Resource.lblMaterialType</th>
             <td class="govuk-table__cell">@Model.ManureType</td>
             <td class="govuk-table__cell">
                 <a class="govuk-link"
@@ -42,7 +56,7 @@
         </tr>
 
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@Resource.lblWhenAreYouApplyingThisOrganicMaterial</th>
+            <th scope="row" class="govuk-table__header">@Resource.lblApplicationDate</th>
             <td class="govuk-table__cell">@Model.ApplicationDate.ToString("dd MMM yyyy")</td>
             <td class="govuk-table__cell">
                 <a class="govuk-link"
@@ -75,7 +89,7 @@
         </tr>
 
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@Resource.lblDoYouWantToUseTheseStandardNutrientValuesForThisOrganicMaterial</th>
+            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureType)</th>
             <td class="govuk-table__cell">
                 @defaultNutrientValue
 
@@ -86,7 +100,7 @@
                    asp-controller="MannerEstimation"
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
-                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblDoYouWantToUseTheseStandardNutrientValuesForThisOrganicMaterial, Resource.lblChange))</span>
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureType), Resource.lblChange))</span>
                 </a>
             </td>
         </tr>
@@ -148,7 +162,7 @@
         </tr>
 
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@Resource.lblHowWouldYouLikeToEnterApplicationRate</th>
+            <th scope="row" class="govuk-table__header">@Resource.lblHowToEnterTheApplicationRate</th>
             <td class="govuk-table__cell">
                 @applicationRateMethod
             </td>
@@ -158,7 +172,7 @@
                    asp-controller="MannerEstimation"
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
-                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblHowWouldYouLikeToEnterApplicationRate, Resource.lblChange))</span>
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblHowToEnterTheApplicationRate, Resource.lblChange))</span>
                 </a>
             </td>
         </tr>
@@ -223,7 +237,7 @@
         </tr>
 
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureType)</th>
+            <th scope="row" class="govuk-table__header">@Resource.lblIncorporationMethod</th>
             <td class="govuk-table__cell">
                 @Model.IncorporationMethod
             </td>
@@ -235,7 +249,7 @@
                        asp-controller="MannerEstimation"
                        asp-route-q="@Model.EncryptedApplicationId">
                         @Resource.lblChange
-                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureType), Resource.lblChange))</span>
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblIncorporationMethod, Resource.lblChange))</span>
                     </a>
                 }
             </td>
@@ -243,7 +257,7 @@
         @if (Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
         {
             <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">@Resource.lblHowManyDaysWillThereBeBeforeTheManureIsIncorporated</th>
+                <th scope="row" class="govuk-table__header">@Resource.lblIncorporationDelay</th>
                 <td class="govuk-table__cell">
                     @Model.IncorporationDelay
                 </td>
@@ -255,7 +269,7 @@
                            asp-controller="MannerEstimation"
                            asp-route-q="@Model.EncryptedApplicationId">
                             @Resource.lblChange
-                            <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblHowManyDaysWillThereBeBeforeTheManureIsIncorporated, Resource.lblChange))</span>
+                            <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblIncorporationDelay, Resource.lblChange))</span>
                         </a>
                     }
                 </td>

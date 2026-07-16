@@ -14,5 +14,6 @@ namespace NMP.Commons.ViewModels
         public string EncryptedMannerEstimationApplicationId { get; set; } = string.Empty;
         public string EncryptedMannerEstimationId { get; set; } = string.Empty;
         public int CropTypeId { get; set; }
+        public bool IsManureGroupIdChange { get; set; } = false;
     }
 }
