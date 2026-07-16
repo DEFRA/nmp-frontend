@@ -2172,7 +2172,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 (bool flowControl, IActionResult value) = RedirectForApplicationRateMethod(formData);
                 if (!flowControl)
                 {
-                    formData = await _mannerEstimationLogic.SetMannerEstimationStep26(formData);
+                    await _mannerEstimationLogic.SetMannerEstimationStep26(formData);
                     return value;
                 }
                 Error? error = null;
