@@ -3508,7 +3508,7 @@ cubic metres per hectare  not set</value>
     <value>NVZ compliance, warning messages and N-max calculations suitable for Scottish regulations</value>
   </data>
   <data name="lblReadScheduleLink" xml:space="preserve">
-    <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule&lt;/a&gt; (opens in a new window)</value>
+    <value>&lt;a  href ="/ReleaseSchedule"&gt;Read the release schedule&lt;/a&gt;</value>
   </data>
   <data name="lblReleaseSchedule" xml:space="preserve">
     <value>Release schedule</value>
@@ -8038,7 +8038,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Export or print this estimate</value>
   </data>
   <data name="lblTotalAndCropAvailableNitrogen" xml:space="preserve">
-    <value>Total and crop available nitrogen (N).</value>
+    <value>Total and crop available nitrogen (N)</value>
   </data>
   <data name="lblValuesArePerHectare" xml:space="preserve">
     <value>Values are per hectare</value>
@@ -8296,10 +8296,10 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>NMPT service under maintenance</value>
   </data>
   <data name="lblMannerApplicationDetailCountUpdated" xml:space="preserve">
-    <value>Application detail {0} updated.</value>
+    <value>Application {0} details updated.</value>
   </data>
   <data name="lblApplicationDetailUpdated" xml:space="preserve">
-    <value>Application detail updated.</value>
+    <value>Application details updated.</value>
   </data>
   <data name="lblApplicationCountDetail" xml:space="preserve">
     <value>Application {0} details</value>
@@ -8327,5 +8327,8 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   </data>
   <data name="lblRemoveAnOrganicMaterialApplicationFromThisEstimate" xml:space="preserve">
     <value>Remove an organic material application from this estimate</value>
+  </data>
+  <data name="lblHowToEnterTheApplicationRate" xml:space="preserve">
+    <value>How to enter the application rate</value>
   </data>
 </root>

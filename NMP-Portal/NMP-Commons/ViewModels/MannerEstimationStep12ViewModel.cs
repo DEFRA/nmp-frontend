@@ -16,5 +16,6 @@ namespace NMP.Commons.ViewModels
         public int FarmRB209CountryId { get; set; }
         public bool IsManureTypeChange { get; set; }=false;
         public bool IsComingForAddNewApplication { get; set; } = false;
+        public bool IsManureGroupIdChange { get; set; } = false;
     }
 }

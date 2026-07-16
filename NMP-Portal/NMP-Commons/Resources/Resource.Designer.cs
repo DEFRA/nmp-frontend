@@ -2331,7 +2331,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application detail updated..
+        ///   Looks up a localized string similar to Application details updated..
         /// </summary>
         public static string lblApplicationDetailUpdated {
             get {
@@ -7796,6 +7796,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How to enter the application rate.
+        /// </summary>
+        public static string lblHowToEnterTheApplicationRate {
+            get {
+                return ResourceManager.GetString("lblHowToEnterTheApplicationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How to save this report as a PDF.
         /// </summary>
         public static string lblHowtosaveyourplanasaPDF {
@@ -9822,7 +9831,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application detail {0} updated..
+        ///   Looks up a localized string similar to Application {0} details updated..
         /// </summary>
         public static string lblMannerApplicationDetailCountUpdated {
             get {
@@ -13350,7 +13359,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a  href =&quot;/ReleaseSchedule&quot;&gt;Read the release schedule&lt;/a&gt; (opens in a new window).
+        ///   Looks up a localized string similar to &lt;a  href =&quot;/ReleaseSchedule&quot;&gt;Read the release schedule&lt;/a&gt;.
         /// </summary>
         public static string lblReadScheduleLink {
             get {
@@ -16639,7 +16648,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total and crop available nitrogen (N)..
+        ///   Looks up a localized string similar to Total and crop available nitrogen (N).
         /// </summary>
         public static string lblTotalAndCropAvailableNitrogen {
             get {
