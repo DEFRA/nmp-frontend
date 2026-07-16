@@ -2181,7 +2181,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                     ResetWarnings(model, false);
 
-                    (model, error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)));
+                    (model, error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)), Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)));
 
                     bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                     if (hasAnyWarning)
@@ -2297,7 +2297,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.ApplicationRate = formData.ApplicationRate;
                 ResetWarnings(model, false);
 
-                (model, Error? error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)));
+                (model, Error? error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)), Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)));
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     ViewBag.Error = error.Message;
@@ -2406,7 +2406,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.ApplicationRate = formData.ApplicationRate;
                 ResetWarnings(model, false);
 
-                (model, Error? error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)));
+                (model, Error? error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)), Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)));
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     ViewBag.Error = error.Message;
@@ -4247,7 +4247,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        private async Task<(TModel, Error?)> NFieldLimitWarningMessage<TModel>(TModel model, int? mannerEstimationId) //mannerEstimationId will be null for new application and will have value for updated application and add another application
+        private async Task<(TModel, Error?)> NFieldLimitWarningMessage<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) //mannerEstimationId will be null for new application and will have value for updated application and add another application
     where TModel : MannerEstimationNWarningViewModel
         {
             Error? error = null;
@@ -4271,7 +4271,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.GreenCompost &&
                 model.ManureTypeId != (int)NMP.Commons.Enums.ManureTypes.GreenFoodCompost)
             {
-                error = await CheckNFieldLimit250(model, warningList, currentApplicationNitrogen, mannerEstimationId);
+                error = await CheckNFieldLimit250(model, warningList, currentApplicationNitrogen, mannerEstimationId, mannerAppId);
             }
 
             bool isScotland = model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland;
@@ -4280,7 +4280,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (isScotland || isCompost)
             {
-                error = await CheckCompostAndScotlandLimits(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId);
+                error = await CheckCompostAndScotlandLimits(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId, mannerAppId);
             }
 
             return (model, error);
@@ -4291,7 +4291,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             List<WarningResponse> warningList,
             decimal currentApplicationNitrogen,
             bool isScotland,
-            bool isCompost, int? mannerEstimationId)
+            bool isCompost, int? mannerEstimationId, int? mannerAppId)
             where TModel : MannerEstimationNWarningViewModel
         {
             Error? error;
@@ -4307,7 +4307,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             };
 
             int? cropTypeId;
-            if (model.UpdatedMannerAppId != null)
+            if (mannerAppId != null)
             {
                 MannerEstimationResultResponse? result;
                 (result, error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(mannerEstimationId??0);
@@ -4324,25 +4324,25 @@ namespace NMP.Portal.Areas.Manner.Controllers
             // Warning excel sheet row 4: >500 total N in last 730 days (compost/Scotland, non-trigger crops or Scotland)
             if (!isTriggerCrop || isScotland)
             {
-                error = await CheckNFieldLimit500Compost(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId);
+                error = await CheckNFieldLimit500Compost(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId, mannerAppId);
             }
 
             // Warning excel sheet row 6: >1000 total N in last 1460 days (trigger crops)
             if (isTriggerCrop)
             {
-                error = await CheckNFieldLimit1000CompostMulch(model, warningList, currentApplicationNitrogen, mannerEstimationId);
+                error = await CheckNFieldLimit1000CompostMulch(model, warningList, currentApplicationNitrogen, mannerEstimationId, mannerAppId);
             }
 
             return error;
         }
 
         private async Task<Error?> CheckNFieldLimit250<TModel>(
-            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, int? mannerEstimationId)
+            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, int? mannerEstimationId, int? mannerAppId)
             where TModel : MannerEstimationNWarningViewModel
         {
 
             var (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
-                mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-364), model.ApplicationDate.Value, false, model.UpdatedMannerAppId);
+                mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-364), model.ApplicationDate.Value, false, mannerAppId);
 
             if (error == null && (previousAppliedTotalN + currentApplicationNitrogen) > 250)
             {
@@ -4353,7 +4353,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         private async Task<Error?> CheckNFieldLimit500Compost<TModel>(
-            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, bool isScotland, bool isCompost, int? mannerEstimationId)
+            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, bool isScotland, bool isCompost, int? mannerEstimationId, int? mannerAppId)
             where TModel : MannerEstimationNWarningViewModel
         {
             decimal previousAppliedTotalN;
@@ -4362,12 +4362,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!isScotland)
             {
                 (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
-                    mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-729), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
+                    mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-729), model.ApplicationDate.Value, true, mannerAppId);
             }
             else
             {
                 (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
-                    mannerEstimationId??0, model.ApplicationDate!.Value.AddDays(-729), model.ApplicationDate.Value, model.UpdatedMannerAppId);
+                    mannerEstimationId??0, model.ApplicationDate!.Value.AddDays(-729), model.ApplicationDate.Value, mannerAppId);
             }
 
             if (error != null)
@@ -4382,7 +4382,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 mannerEstimationId??0,
                 model.ApplicationDate!.Value.AddDays(-729).ToString(_dateStringLiteral),
                 model.ApplicationDate.Value.ToString(_dateStringLiteral),
-                model.UpdatedMannerAppId);
+                mannerAppId);
 
             if ((!isScotland || isGreenCompostExistIn2Year || isCompost) && totalN > 500)
             {
@@ -4393,11 +4393,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         private async Task<Error?> CheckNFieldLimit1000CompostMulch<TModel>(
-            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, int? mannerEstimationId)
+            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, int? mannerEstimationId, int? mannerAppId)
             where TModel : MannerEstimationNWarningViewModel
         {
             var (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
-                mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-1459), model.ApplicationDate.Value, true, model.UpdatedMannerAppId);
+                mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-1459), model.ApplicationDate.Value, true, mannerAppId);
 
             if (error == null && (previousAppliedTotalN + currentApplicationNitrogen) > 1000)
             {
@@ -4752,7 +4752,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 IsOrgManureNfieldLimitWarning = false
             };
 
-            (nWarningViewModel, error) = await NFieldLimitWarningMessage(nWarningViewModel, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)));
+            (nWarningViewModel, error) = await NFieldLimitWarningMessage(nWarningViewModel, estimation.ID, application.ID);
 
             // --- combine and store against this application ---
             var combinedWarnings = new List<WarningItemViewModel>();
