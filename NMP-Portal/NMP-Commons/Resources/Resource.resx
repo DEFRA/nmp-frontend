@@ -8328,4 +8328,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   <data name="lblRemoveAnOrganicMaterialApplicationFromThisEstimate" xml:space="preserve">
     <value>Remove an organic material application from this estimate</value>
   </data>
+  <data name="lblHowToEnterTheApplicationRate" xml:space="preserve">
+    <value>How to enter the application rate</value>
+  </data>
 </root>

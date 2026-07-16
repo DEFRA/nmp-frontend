@@ -17,6 +17,7 @@
     {
         backActionIfApplicationMethodInjection = "ApplicationRateMethod";
     }
+    int applicationMonth = Model?.ApplicationDate != null ? Model.ApplicationDate.Value.Month : 0;
 
 }
 @section BeforeContent {
@@ -59,7 +60,7 @@
                 </govuk-details-summary>
 
                 <govuk-details-text class="explanations">
-                    @if (Model.AutumnCropNitrogenUptake != null && Model.AutumnCropNitrogenUptake > 0)
+                    @if (applicationMonth >= 8 && applicationMonth <= 10)
                     {
                         <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenNUptake</h3>
                         <p class="govuk-body">@Resource.lblAmountOfNFromTheApplicationTaken.</p>
@@ -87,7 +88,7 @@
 
             <h2 class="govuk-heading-m">@Resource.HeadingClimateConditions</h2>
             <govuk-summary-list>
-                @if (Model.AutumnCropNitrogenUptake != null && Model.AutumnCropNitrogenUptake > 0)
+                @if (applicationMonth >= 8 && applicationMonth <= 10)
                 {
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
