@@ -6423,7 +6423,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         ViewBag.LivestockManureTotalNCapacityForNVZ = nutrientsLoadingFarmDetail.LandInNVZ * 170;
         ViewBag.LivestockManureTotalNCapacityForNotInNVZ = nutrientsLoadingFarmDetail.LandNotNVZ * 250;
-        ViewBag.LivestockManureTotalNCapacity = (int)Math.Round((((nutrientsLoadingFarmDetail.LandInNVZ ?? 0) * 170) + ((nutrientsLoadingFarmDetail?.LandNotNVZ ?? 0) * 250)), 0);
+        ViewBag.LivestockManureTotalNCapacity = (int)Math.Round((((nutrientsLoadingFarmDetail.LandInNVZ ?? 0) * 170) + ((nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250)), 0);
 
 
         (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.Farm.ID);
@@ -6452,7 +6452,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         BindTotalImportExportTotalN(total);
 
         ViewBag.TotalNLoading = totalNLoading;
-        ViewBag.AverageLivestockManureTotalNLoading = (int)Math.Round(totalNLoading / (nutrientsLoadingFarmDetail?.LandInNVZ ?? 0 + (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0)), 0);
+        ViewBag.AverageLivestockManureTotalNLoading = (int)Math.Round(totalNLoading / (nutrientsLoadingFarmDetail.LandInNVZ ?? 0 + (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0)), 0);
         ViewBag.ComplianceOrNot = totalLivestockManureCapacity >= totalNLoading ? Resource.lblCompliance : Resource.lblNonCompliance;
 
 
@@ -6626,7 +6626,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         })
         .ToList();
 
-        if (allImportData != null && allImportData.Count > 0)
+        if (allImportData.Count > 0)
         {
             ViewBag.ImportOfLivestockManureList = allImportData;
         }
@@ -6674,7 +6674,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             : Resource.lbltonnes
         })
         .ToList();
-        if (allExportData != null && allExportData.Count > 0)
+        if (allExportData.Count > 0)
         {
             ViewBag.ExportOfLivestockManureList = allExportData;
         }
