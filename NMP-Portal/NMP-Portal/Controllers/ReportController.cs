@@ -3686,6 +3686,39 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
+    private static bool AreStandardNutrientValues(ManureType manureType, ReportViewModel model)
+    {
+        return manureType.TotalN == model.N &&
+               manureType.P2O5 == model.P2O5 &&
+               manureType.DryMatter == model.DryMatterPercent &&
+               manureType.Uric == model.UricAcid &&
+               manureType.NH4N == model.NH4N &&
+               manureType.NO3N == model.NO3N &&
+               manureType.SO3 == model.SO3 &&
+               manureType.K2O == model.K2O &&
+               manureType.MgO == model.MgO;
+    }
+
+    private IActionResult? SetDefaultNutrientValue(
+    ReportViewModel model,
+    ManureType? manureType)
+    {
+        if (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
+            return null;
+
+        if (manureType == null)
+        {
+            _logger.LogTrace("Report Controller : LivestockImportExportCheckAnswer() action : ManureType is null");
+            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+        }
+
+        model.DefaultNutrientValue = AreStandardNutrientValues(manureType, model)
+            ? Resource.lblYesUseTheseStandardNutrientValues
+            : Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
+
+        return null;
+    }
+
     [HttpGet]
     public async Task<IActionResult> LivestockImportExportCheckAnswer(string? i)
     {
@@ -3747,27 +3780,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     model.ManureType.DryMatter = nutrientsLoadingManure.DryMatterPercent;
                     model.ManureType.Uric = nutrientsLoadingManure.UricAcid;
                     await BindDefaultNutrientForImportExportCheckAnswer(model, nutrientsLoadingManure);
-                    if (string.IsNullOrWhiteSpace(model.DefaultNutrientValue))
+                    var result = SetDefaultNutrientValue(model, manureType);
+                    if (result != null)
                     {
-                        if (manureType == null)
-                        {
-                            _logger.LogTrace("Report Controller : LivestockImportExportCheckAnswer() action : ManureType is null");
-                            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-                        }
-
-                        if (manureType.TotalN == model.N && manureType.P2O5 == model.P2O5 &&
-                            manureType.DryMatter == model.DryMatterPercent && manureType.Uric == model.UricAcid &&
-                            manureType.NH4N == model.NH4N && manureType.NO3N == model.NO3N &&
-                            manureType.SO3 == model.SO3 && manureType.K2O == model.K2O &&
-                            manureType.MgO == model.MgO)
-                        {
-                            model.DefaultNutrientValue = Resource.lblYesUseTheseStandardNutrientValues;
-                        }
-                        else
-                        {
-                            model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
-                        }
+                        return result;
                     }
+                   
                 }
 
             }
