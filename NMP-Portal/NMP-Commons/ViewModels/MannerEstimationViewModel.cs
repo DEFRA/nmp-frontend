@@ -55,18 +55,15 @@ namespace NMP.Commons.ViewModels
         }
         public bool IsCheckAnswer { get; set; } = false;
         public bool? IsCopyEstimate { get; set; }
-        public string? Country { get; set; }
-        public int? CropGroupID { get; set; }
-        public string? CropGroup { get; set; }
-        public bool? EnglishRues { get; set; }
-        public string? CropType { get; set; }
-        public string? SoilType { get; set; }
-
+        public int? CountryId { get; set; }
         public int? MannerEstimationId { get; set; }
         public int? MannerEstimationApplicationId { get; set; }
         public string? EncryptedMannerEstimationId { get; set; }
         public string? EncryptedMannerEstimationApplicationId { get; set; }
         public bool IsComingForAddNewApplication { get; set; } = false;
+        public bool? IsFarmOrganic { get; set; }
+        public bool? IsWithinNVZ { get; set; }
+        public int? CropTypeId { get; set; }
 
         public MannerEstimationStep1ViewModel MannerEstimationStep1 { get; set; }
         public MannerEstimationStep2ViewModel MannerEstimationStep2 { get; set; }

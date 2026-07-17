@@ -13,8 +13,14 @@ namespace NMP.Commons.ViewModels
         public DateTime? ApplicationDate { get; set; }
         public int? MannerEstimationId { get; set; }
         public int? UpdatedMannerAppId { get; set; }
+
+        public string EncryptedMannerApplicationsId { get; set; } = string.Empty;
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+
         public int CountryId { get; set; }
         public int? CropTypeId { get; set; }
+        public bool? IsFarmOrganic { get; set; }
+        public bool? IsWithinNVZ { get; set; }
         public bool IsWarningMsgNeedToShow { get; set; } = false;
 
         public bool IsOrgManureNfieldLimitWarning { get; set; }
