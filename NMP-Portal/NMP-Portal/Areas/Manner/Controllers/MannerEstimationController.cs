@@ -2185,9 +2185,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                     ResetWarnings(model, false);
 
-                    int? updatingEstimateId = !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)) : null;
-
-                    int? updatingApplicationId = !string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)) : null;
+                    var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
 
                     (model, error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
 
@@ -2305,9 +2303,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.ApplicationRate = formData.ApplicationRate;
                 ResetWarnings(model, false);
 
-                int? updatingEstimateId = !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)) : null;
-
-                int? updatingApplicationId = !string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)) : null;
+                var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
 
                 (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
@@ -2418,10 +2414,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.ApplicationRate = formData.ApplicationRate;
                 ResetWarnings(model, false);
 
-
-                int? updatingEstimateId = !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)) : null;
-
-                int? updatingApplicationId = !string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)) : null;
+                var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
 
                 (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
@@ -4269,6 +4262,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             }
         }
+        private async Task<(int?, int?)> GetUpdatingEstimationAndApplicationId(string? encryptedEstimateId, string? encryptedApplicationId)
+        {
+            int? updatingEstimateId = !string.IsNullOrWhiteSpace(encryptedEstimateId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(encryptedEstimateId)) : null;
+
+            int? updatingApplicationId = !string.IsNullOrWhiteSpace(encryptedApplicationId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(encryptedApplicationId)) : null;
+
+            return (updatingEstimateId, updatingApplicationId);
+        }
 
         private async Task<(TModel, Error?)> NFieldLimitWarningMessage<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) //mannerEstimationId will be null for new application and will have value for updated application and add another application
     where TModel : MannerEstimationNWarningViewModel
@@ -4374,6 +4375,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return error;
         }
+
 
         private async Task<Error?> CheckNFieldLimit500Compost<TModel>(
             TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, bool isScotland, bool isCompost, int? mannerEstimationId, int? mannerAppId)
