@@ -861,23 +861,19 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         (MannerEstimationViewModel mannerEstimationViewModel, MannerEstimation mannerEstimate) = await BindMannerEstimationDataForAdd(organisationId, null);
 
-        (MannerEstimationApplication? mannerEstimationApplication, Error? error) = await BindMannerEstinationApplicationData(mannerEstimationViewModel, mannerEstimate, false);
-        if (!string.IsNullOrWhiteSpace(error?.Message) || mannerEstimationApplication == null)
-        {
-            return (null, error);
-        }
-
+        MannerEstimationApplication? mannerEstimationApplication= await BindMannerEstinationApplicationData(mannerEstimationViewModel, mannerEstimate, false);
+        
         string jsonData = JsonConvert.SerializeObject(new
         {
             MannerEstimation = mannerEstimate,
             MannerEstimationApplication = mannerEstimationApplication
         });
 
-        (MannerEstimationApplication? mannerEstimationApplicationResult, error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
+        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
 
-    private async Task<(MannerEstimationApplication?, Error?)> BindMannerEstinationApplicationData(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimation mannerEstimate, bool isUpdate)
+    private async Task<MannerEstimationApplication?> BindMannerEstinationApplicationData(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimation mannerEstimate, bool isUpdate)
     {
         bool isDefaultnutrient = mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue ?? false;
         decimal? nitrogen = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.TotalN : mannerEstimationViewModel.MannerEstimationStep25.N;
@@ -926,11 +922,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         };
 
-        (mannerEstimationApplication, Error? error) = await BindMannerOutputData(mannerEstimate, mannerEstimationApplication);
-        if (error != null)
-        {
-            return (mannerEstimationApplication, error);
-        }
+        //(mannerEstimationApplication, Error? error) = await BindMannerOutputData(mannerEstimate, mannerEstimationApplication);
+        //if (error != null)
+        //{
+        //    return (mannerEstimationApplication, error);
+        //}
 
         if (isUpdate)
         {
@@ -950,7 +946,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationApplication.MannerEstimationID = mannerEstimationViewModel.MannerEstimationId;
         }
 
-        return (mannerEstimationApplication, error);
+        return mannerEstimationApplication;
     }
 
     private async Task<(MannerEstimationApplication, Error?)> BindMannerOutputData(MannerEstimation mannerEstimate, MannerEstimationApplication mannerEstimationApplication)
@@ -1720,7 +1716,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             return (null, error);
         }
-        (MannerEstimationApplication? mannerEstimationApplication, _) = await BindMannerEstinationApplicationData(mannerEstimationViewModel, mannerEstimate, true);
+
+       MannerEstimationApplication? mannerEstimationApplication = await BindMannerEstinationApplicationData(mannerEstimationViewModel, mannerEstimate, true);
 
         string jsonData = JsonConvert.SerializeObject(mannerEstimationApplication);
         (MannerEstimationApplication? mannerEstimationApplicationResult, error) = await UpdateMannerEstimateApplication(jsonData);
@@ -1748,7 +1745,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             return (null, error);
         }
 
-        (MannerEstimationApplication? mannerEstimationApplication, error) = await BindMannerEstinationApplicationData(mannerEstimationViewModel, mannerEstimate, false);
+        MannerEstimationApplication? mannerEstimationApplication = await BindMannerEstinationApplicationData(mannerEstimationViewModel, mannerEstimate, false);
         if (!string.IsNullOrWhiteSpace(error?.Message) || mannerEstimationApplication == null)
         {
             return (null, error);
