@@ -11973,7 +11973,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organic material application removed..
+        ///   Looks up a localized string similar to Organic material application removed.
         /// </summary>
         public static string lblOrganicMaterialApplicationRemoved {
             get {
@@ -21009,6 +21009,15 @@ namespace NMP.Commons.Resources {
         public static string MsgApplicationDateEnteredIsInsideClosedPeriodWales {
             get {
                 return ResourceManager.GetString("MsgApplicationDateEnteredIsInsideClosedPeriodWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an Application Date between 01-Aug-{0} and 31-July-{1}..
+        /// </summary>
+        public static string MsgApplicationDateHarvestYearValidation {
+            get {
+                return ResourceManager.GetString("MsgApplicationDateHarvestYearValidation", resourceCulture);
             }
         }
         

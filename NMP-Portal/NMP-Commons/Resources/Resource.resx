@@ -3694,7 +3694,7 @@ cubic metres per hectare  not set</value>
     <value>Which fields would you like to remove this application for?</value>
   </data>
   <data name="lblOrganicMaterialApplicationRemoved" xml:space="preserve">
-    <value>Organic material application removed.</value>
+    <value>Organic material application removed</value>
   </data>
   <data name="lblSelectFieldToSeeItsUpdatedNutrientRecommendations" xml:space="preserve">
     <value>Select a field to see its updated nutrient recommendations.</value>
@@ -8330,5 +8330,8 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   </data>
   <data name="lblHowToEnterTheApplicationRate" xml:space="preserve">
     <value>How to enter the application rate</value>
+  </data>
+  <data name="MsgApplicationDateHarvestYearValidation" xml:space="preserve">
+    <value>Enter an Application Date between 01-Aug-{0} and 31-July-{1}.</value>
   </data>
 </root>
