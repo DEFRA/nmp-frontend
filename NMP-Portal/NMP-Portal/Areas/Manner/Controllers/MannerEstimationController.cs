@@ -2185,7 +2185,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                     ResetWarnings(model, false);
 
-                    (model, error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)), Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)));
+                    int? updatingEstimateId = !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)) : null;
+
+                    int? updatingApplicationId = !string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)) : null;
+
+                    (model, error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
 
                     bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                     if (hasAnyWarning)
@@ -2301,7 +2305,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.ApplicationRate = formData.ApplicationRate;
                 ResetWarnings(model, false);
 
-                (model, Error? error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)), Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)));
+                int? updatingEstimateId = !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)) : null;
+
+                int? updatingApplicationId = !string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)) : null;
+
+                (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     ViewBag.Error = error.Message;
@@ -2410,7 +2418,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.ApplicationRate = formData.ApplicationRate;
                 ResetWarnings(model, false);
 
-                (model, Error? error) = await NFieldLimitWarningMessage(model, Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)), Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)));
+
+                int? updatingEstimateId = !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId)) : null;
+
+                int? updatingApplicationId = !string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId) ? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId)) : null;
+
+                (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     ViewBag.Error = error.Message;
