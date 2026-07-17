@@ -15,5 +15,8 @@ namespace NMP.Commons.ViewModels
         public string EncryptedMannerEstimationId { get; set; } = string.Empty;
         public int CropTypeId { get; set; }
         public bool IsManureGroupIdChange { get; set; } = false;
+        public int? CountryId { get; set; }
+        public bool? IsFarmOrganic { get; set; }
+        public bool? IsWithinNVZ { get; set; }
     }
 }

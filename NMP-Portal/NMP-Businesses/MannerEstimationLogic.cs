@@ -289,6 +289,14 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.EncryptedMannerEstimationId = mannerEstimationStep11.EncryptedMannerEstimationId;
             mannerEstimationViewModel.IsComingForAddNewApplication = true;
+            if (mannerEstimationStep11.IsComingForAddNewApplication)
+            {
+                mannerEstimationViewModel.CountryId = mannerEstimationStep11.CountryId;
+                mannerEstimationViewModel.IsFarmOrganic = mannerEstimationStep11.IsFarmOrganic;
+                mannerEstimationViewModel.IsWithinNVZ = mannerEstimationStep11.IsWithinNVZ;
+                mannerEstimationViewModel.CropTypeId = mannerEstimationStep11.CropTypeId;
+            }
+            
             SetMannerEstimationToSession(mannerEstimationViewModel);
             mannerEstimationViewModel = GetMannerEstimation();
         }
@@ -335,19 +343,20 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
 
         mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerApplicationId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep13.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep13.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
-        mannerEstimationViewModel.MannerEstimationStep13.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep13.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication? mannerEstimationViewModel.CountryId??0: mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         mannerEstimationViewModel.MannerEstimationStep13.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep13.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
 
-        mannerEstimationViewModel.MannerEstimationStep13.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep13.CropTypeId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CropTypeId: mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
         mannerEstimationViewModel.MannerEstimationStep13.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
         mannerEstimationViewModel.MannerEstimationStep13.TopSoilId = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId;
         mannerEstimationViewModel.MannerEstimationStep13.SubSoilId = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId;
         mannerEstimationViewModel.MannerEstimationStep13.SowingDate = mannerEstimationViewModel.MannerEstimationStep20.SowingDate;
-        mannerEstimationViewModel.MannerEstimationStep13.IsFarmOrganic = mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic;
-        mannerEstimationViewModel.MannerEstimationStep13.IsWithinNVZ = mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ;
+        mannerEstimationViewModel.MannerEstimationStep13.IsFarmOrganic = mannerEstimationViewModel.IsComingForAddNewApplication? mannerEstimationViewModel.IsFarmOrganic: mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic;
+        mannerEstimationViewModel.MannerEstimationStep13.IsWithinNVZ = mannerEstimationViewModel.IsComingForAddNewApplication? mannerEstimationViewModel.IsWithinNVZ: mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ;
         mannerEstimationViewModel.MannerEstimationStep13.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
         mannerEstimationViewModel.MannerEstimationStep13.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
 
@@ -620,6 +629,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep26.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
 
         mannerEstimationViewModel.MannerEstimationStep26.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep26.EncryptedMannerApplicationsId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep26.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
@@ -629,9 +639,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
         }
         mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
-        mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CountryId ?? 0 : mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         mannerEstimationViewModel.MannerEstimationStep26.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
-        mannerEstimationViewModel.MannerEstimationStep26.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep26.CropTypeId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CropTypeId : mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+
+        mannerEstimationViewModel.MannerEstimationStep26.IsFarmOrganic = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.IsFarmOrganic : mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic;
+        mannerEstimationViewModel.MannerEstimationStep26.IsWithinNVZ = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.IsWithinNVZ : mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ;
+
         mannerEstimationViewModel.MannerEstimationStep26.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep26.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         return mannerEstimationViewModel.MannerEstimationStep26;
@@ -655,6 +669,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
 
         mannerEstimationViewModel.MannerEstimationStep27.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep27.EncryptedMannerApplicationsId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep27.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep27.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
         mannerEstimationViewModel.MannerEstimationStep27.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
@@ -668,9 +683,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
 
         mannerEstimationViewModel.MannerEstimationStep27.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
-        mannerEstimationViewModel.MannerEstimationStep27.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep27.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication? mannerEstimationViewModel.CountryId??0: mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         mannerEstimationViewModel.MannerEstimationStep27.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
-        mannerEstimationViewModel.MannerEstimationStep27.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+
+        mannerEstimationViewModel.MannerEstimationStep27.CropTypeId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CropTypeId : mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep27.IsFarmOrganic = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.IsFarmOrganic : mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic;
+        mannerEstimationViewModel.MannerEstimationStep27.IsWithinNVZ = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.IsWithinNVZ : mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ;
+
         mannerEstimationViewModel.MannerEstimationStep27.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep27.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         return mannerEstimationViewModel.MannerEstimationStep27;
@@ -689,6 +708,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
 
         mannerEstimationViewModel.MannerEstimationStep28.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep28.EncryptedMannerApplicationsId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep28.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep28.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         mannerEstimationViewModel.MannerEstimationStep28.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
@@ -699,9 +719,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep28.IsManureTypeLiquid = manureType.IsLiquid;
         }
         mannerEstimationViewModel.MannerEstimationStep28.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
-        mannerEstimationViewModel.MannerEstimationStep28.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        mannerEstimationViewModel.MannerEstimationStep28.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CountryId ?? 0 : mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         mannerEstimationViewModel.MannerEstimationStep28.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
-        mannerEstimationViewModel.MannerEstimationStep28.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+
+        mannerEstimationViewModel.MannerEstimationStep28.CropTypeId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CropTypeId : mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep28.IsFarmOrganic = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.IsFarmOrganic : mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic;
+        mannerEstimationViewModel.MannerEstimationStep28.IsWithinNVZ = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.IsWithinNVZ : mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ;
+
         mannerEstimationViewModel.MannerEstimationStep28.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep28.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         return mannerEstimationViewModel.MannerEstimationStep28;
