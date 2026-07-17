@@ -853,15 +853,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (date.Month >= 8) // August to December
             {
                 return (
-                    new DateTime(date.Year, 8, 1),
-                    new DateTime(date.Year + 1, 7, 31)
+                    new DateTime(date.Year, 8, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(date.Year + 1, 7, 31, 0, 0, 0, DateTimeKind.Utc)
                 );
             }
             else // January to July
             {
                 return (
-                    new DateTime(date.Year - 1, 8, 1),
-                    new DateTime(date.Year, 7, 31)
+                    new DateTime(date.Year - 1, 8, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(date.Year, 7, 31, 0, 0, 0, DateTimeKind.Utc)
                 );
             }
         }
