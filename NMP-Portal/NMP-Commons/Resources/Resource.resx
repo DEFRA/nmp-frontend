@@ -7532,6 +7532,13 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
   <data name="ContentGettingHelp3" xml:space="preserve">
     <value>telephone 0845 646 2469</value>
   </data>
+  <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
+    <value>Currently available for England and Wales only. Features for Scotland will be   
+released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; below.  </value>
+  </data>
+  <data name="lblSiteUnderMaintenance" xml:space="preserve">
+    <value>NMPT service under maintenance</value>
+  </data>
   <data name="lblWhichSoilAnalysisMethodWasUsed" xml:space="preserve">
     <value>Which soil analysis method was used?</value>
   </data>
