@@ -1,0 +1,28 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.MannerEstimationStep32ViewModel
+@{
+    string title = Resource.lblMannerEstimate;
+    ViewData["Title"] = $"{Resource.lblEnterRainfallAmount} {Resource.lblHyphen} {title}";
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="EffectiveRainfall" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="EffectiveRainfallManual" asp-controller="MannerEstimation" method="post" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-input for=@Model.TotalRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
+                <govuk-input-label is-page-heading="true" class="govuk-label--l">
+                    @Resource.lblWhatWasTheTotalRainfallSinceApplicationSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblmm)</span>@Resource.lblQuestionMark
+                </govuk-input-label>
+                <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
+            </govuk-input>
+            <fieldset class="govuk-fieldset">
+                <br>
+                <govuk-button type="submit">@Resource.lblContinue</govuk-button>
+            </fieldset>
+
+            <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
+        </form>
+    </div>
+</div>

@@ -25,4 +25,6 @@ public class CropTypeLinkingResponse
 
     [JsonProperty("sNSCategoryID")]
     public int? SNSCategoryID { get; set; }
+    [JsonProperty("LateSownMannerCropTypeID")]
+    public int? LateSownMannerCropTypeID { get; set; }
 }

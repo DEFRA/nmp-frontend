@@ -9,7 +9,9 @@ namespace NMP.Commons.ViewModels
     public class MannerEstimationStep8ViewModel
     {
         public int? CropGroupId { get; set; }
-        public bool IsCheckAnswer { get; set; } = false;
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public string CropGroupName { get; set; } = string.Empty;
+        public bool IsFarmCopied { get; set; } = false;
+        public bool IsCropGroupChange { get; set; } = false;
     }
 }

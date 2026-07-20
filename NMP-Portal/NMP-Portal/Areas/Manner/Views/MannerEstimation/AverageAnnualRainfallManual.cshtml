@@ -9,14 +9,14 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "AverageAnnualRainfall")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="AverageAnnualRainfall" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="AverageAnnualRainfallManual" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-input asp-for=@Model.AverageAnnualRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
+            <govuk-input for=@Model.AverageAnnualRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
                     @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblmm)</span>
@@ -24,20 +24,10 @@
                 <govuk-input-hint>@Resource.lblRainfallValueHint</govuk-input-hint>
                 <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
             </govuk-input>
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            @if (Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
-
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-        </p>
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
     </div>
 </div>

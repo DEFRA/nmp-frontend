@@ -1,0 +1,160 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.MannerEstimationStep32ViewModel
+@{
+
+    ViewData["Title"] = $"{Resource.lblConditionsAffectingTheLossOfNutrients} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    var backAction = Model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
+    var backActionIfApplicationMethodInjection = "ManualApplicationRate";
+    @if (Model.ApplicationRateMethod.HasValue && (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate))
+    {
+        backActionIfApplicationMethodInjection = "ManualApplicationRate";
+    }
+    else if (Model.ApplicationRateMethod.HasValue && (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity))
+    {
+        backActionIfApplicationMethodInjection = "AreaQuantity";
+    }
+    else
+    {
+        backActionIfApplicationMethodInjection = "ApplicationRateMethod";
+    }
+    int applicationMonth = Model?.ApplicationDate != null ? Model.ApplicationDate.Value.Month : 0;
+
+}
+@section BeforeContent {
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationDateChange&&!Model.IsComingForAddNewApplication)
+    {
+        <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationDateChange&&!Model.IsComingForAddNewApplication)
+    {
+        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    }
+    else if ((Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
+    {
+        <govuk-back-link asp-action=@backActionIfApplicationMethodInjection asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
+
+    
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+        @if (TempData["ConditionsAffectingNutrientsError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ConditionsAffectingNutrientsError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+        <form asp-action="ConditionsAffectingNutrients" asp-controller="MannerEstimation" method="post" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <h1 class="govuk-heading-l">@Resource.lblConditionsAffectingTheLossOfNutrients</h1>
+            <p class="govuk-body">
+                @Resource.lblTheseValuesAreUsedToCalculateHowEffective
+            </p>
+            <govuk-details>
+                <govuk-details-summary>
+                    @Resource.lblAboutTheseValues
+                </govuk-details-summary>
+
+                <govuk-details-text class="explanations">
+                    @if (applicationMonth >= 8 && applicationMonth <= 10)
+                    {
+                        <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenNUptake</h3>
+                        <p class="govuk-body">@Resource.lblAmountOfNFromTheApplicationTaken.</p>
+                    }
+                    <h3 class="govuk-heading-s">@Resource.lblEndOfSoilDrainage</h3>
+                    <p class="govuk-body">@Resource.lblDateWhenSoilDrainageEnds.</p>
+
+
+                    <h3 class="govuk-heading-s">@Resource.lblRainfallWithin6HoursOfApplication</h3>
+                    <p class="govuk-body">@Resource.lblAmountOfRainThatFallsInThe6Hours.</p>
+
+
+                    <h3 class="govuk-heading-s">@Resource.lblEffectiveRainfallAfterApplication</h3>
+                    <p class="govuk-body">@Resource.lblAverageRainfallBetweenManAppAndEndOfSoilDrainage.</p>
+
+
+                    <h3 class="govuk-heading-s">@Resource.lblWindspeedDuringApplication</h3>
+                    <p class="govuk-body">@Resource.lblWindspeedWhenTheMaterialIsApplied.</p>
+
+                    <h3 class="govuk-heading-s">@Resource.lblTopsoilMoisture</h3>
+                    <p class="govuk-body"> @Resource.lblHowMoistTheTopsoilIs.</p>
+                </govuk-details-text>
+            </govuk-details>
+
+
+            <h2 class="govuk-heading-m">@Resource.HeadingClimateConditions</h2>
+            <govuk-summary-list>
+                @if (applicationMonth >= 8 && applicationMonth <= 10)
+                {
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @Resource.lblAutumnCropNitrogenUptake
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value>
+                            @string.Format(Resource.lblAutumnCropNitrogenPerHectare, (Model.AutumnCropNitrogenUptake == 0.0m ? 0 : Model.AutumnCropNitrogenUptake.Value.ToString("#,0.#")))
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="AutumnCropNitrogenUptake" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblAutumnCropNitrogenUptake</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
+
+                }
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @Resource.lblEndOfSoilDrainage
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>
+                        @Model.SoilDrainageEndDate.Value.Date.ToString("dd MMMM yyyy")
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="SoilDrainageEndDate" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblEndOfSoilDrainage</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>@Resource.lblRainfallWithin6HoursOfApplication</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@Model.RainfallWithinSixHours</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="RainfallWithinSixHour" asp-controller="MannerEstimation">
+                            @Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblRainfallWithin6HoursOfApplication</span>
+                        </govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>@Resource.lblEffectiveRainfallAfterApplication</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@string.Format(Resource.lblRainfallMM, string.Format("{0:N0}", Model.TotalRainfall))</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="EffectiveRainfall" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblEffectiveRainfallAfterApplication</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>@Resource.lblWindspeedDuringApplication</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@Model.Windspeed</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="Windspeed" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWindspeedDuringApplication</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>@Resource.lblTopsoilMoisture</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value>@Model.MoistureType</govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="TopsoilMoisture" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblTopsoilMoisture</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
+            </govuk-summary-list>
+
+
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+
+            
+        </form>
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
+    </div>
+
+</div>
+

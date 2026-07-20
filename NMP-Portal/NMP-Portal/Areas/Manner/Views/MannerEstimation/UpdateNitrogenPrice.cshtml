@@ -1,0 +1,72 @@
+﻿@using NMP.Commons.Enums
+@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+@model MannerEstimationStep34ViewModel
+
+@{
+    ViewData["Title"] = $"{string.Format(Resource.lblUpdateNutrientPrices, Resource.lblNitrogenLowercase)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    string productHeading=string.Empty;
+    string productUnit=string.Empty;
+    bool isProductPrice = Model.UpdateNitrogenPriceQuestion == (int)UpdateNutrientPriceQuestion.UpdateByProductPrice;
+    string prefix =  Resource.lblPoundSign;
+    if(isProductPrice)
+    {
+        productHeading = string.Format(Resource.lblWhatIstheNutrientPrice, Model.NutrientProductName.ToLower());
+       productUnit=string.Format(Resource.lblInUnit, Resource.lblPerTonnes);
+    }
+    else
+    {
+        productHeading = string.Format(Resource.lblWhatIstheNutrientPrice, Resource.lblNitrogenLowercase);
+        productUnit = string.Format(Resource.lblInUnit, Resource.lblPerKg);
+    }
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="UpdateNitrogenPriceQuestion" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (TempData["NitrogenPriceError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["NitrogenPriceError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+        <form asp-action="UpdateNitrogenPrice" method="post" asp-controller="MannerEstimation" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <h2 class="govuk-heading-m">@string.Format(Resource.lblUpdateNutrientPrices, Resource.lblNitrogenLowercase)</h2>
+            @if (isProductPrice)
+            {
+                <govuk-input name="NitrogenProductPrice" for=@Model.NitrogenProductPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label>
+                        @productHeading
+                        <span class="govuk-visually-hidden">@productUnit</span>
+                    </govuk-input-label>
+                    <govuk-input-prefix>@prefix</govuk-input-prefix>
+                    <govuk-input-suffix>@Resource.lblPerTonnes.ToLower()</govuk-input-suffix>
+                </govuk-input>
+            }
+            else
+            {
+                <govuk-input name="NitrogenPrice" for=@Model.NitrogenPrice type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                    <govuk-input-label>
+                        @productHeading
+                        <span class="govuk-visually-hidden"> @productUnit</span>
+                    </govuk-input-label>
+                    <govuk-input-prefix>@prefix</govuk-input-prefix>
+
+                    <govuk-input-suffix>@Resource.lblPerKg.ToLower()</govuk-input-suffix>
+                </govuk-input>
+            }
+
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+        <p class="govuk-body cancel-link">
+            <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblCancel</a>
+
+        </p>
+    </div>
+</div>

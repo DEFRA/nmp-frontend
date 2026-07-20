@@ -1,0 +1,79 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.MannerEstimationStep29ViewModel
+@{
+    var isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+
+}
+@section BeforeContent {
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationMethodChange && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)
+    {
+        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationMethodChange&&!Model.IsComingForAddNewApplication)
+    {
+        <govuk-back-link asp-action="ApplicationMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
+    else if (Model.ApplicationRateMethod.HasValue)
+    {
+        if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
+        {
+            <govuk-back-link asp-action="ManualApplicationRate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        }
+        else if (Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+        {
+            <govuk-back-link asp-action="AreaQuantity" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        }
+        else
+        {
+            <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        }
+    }
+
+}
+
+<div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+        @if (TempData["IncorporationMethodError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["IncorporationMethodError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
+        <form asp-action="IncorporationMethod" asp-controller="MannerEstimation" method="post" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <govuk-radios for="@Model.IncorporationMethodId">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        @Resource.lblSelectOneOption
+                    </govuk-radios-hint>
+                    @if (ViewBag.IncorporationMethod != null && ViewBag.IncorporationMethod.Count > 0)
+                    {
+                        @foreach (var item in ViewBag.IncorporationMethod)
+                        {
+                            @if (item.ID != (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
+                            {
+                                <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
+                            }
+                            @if (item.ID == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
+                            {
+                                <govuk-radios-divider>@Resource.lblOr</govuk-radios-divider>
+                                <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
+                            }
+                        }
+                    }
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+        </form>
+
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
+    </div>
+
+</div>

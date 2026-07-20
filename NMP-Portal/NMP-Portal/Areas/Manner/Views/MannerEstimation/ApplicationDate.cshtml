@@ -4,25 +4,43 @@
 @model MannerEstimationStep13ViewModel
 
 @{
-    string title = Resource.lblMannerEstimate; 
-    string pageHeader = string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName);
+    string title = Resource.lblMannerEstimate;
+    string pageHeader = string.Format(Resource.lblWhenAreYouApplyingOrganicMaterialOnFieldName, Model.FieldName);
     ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication) ? "MannerEstimationResult" : "ManureType";
 }
 
-@section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "ManureType")" asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+@section BeforeContent {    
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        @if (TempData["ApplicationDateError"] != null)
+        {
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ApplicationDateError"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        }
         <form asp-action="ApplicationDate" method="post" asp-controller="MannerEstimation" autocomplete="off">
             @Html.AntiForgeryToken()
-            <govuk-date-input asp-for="ApplicationDate">
+
+            @await Html.PartialAsync("_MannerApplicationDateWarning", Model)
+            <govuk-date-input for="ApplicationDate">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @pageHeader
                     </govuk-date-input-fieldset-legend>
                     <govuk-date-input-hint>
+
+                        @if (Model.ClosedPeriod != null)
+                        {
+                            <p class="govuk-body">@Resource.lblYourClosedPeriodForSpreadingOrganicMaterials</p>
+                            <p class="govuk-body">
+                                <strong>@Model.ClosedPeriod</strong><br />
+                                @Resource.lblBasedOnYourCropSoilTypeFarmDetails
+                            </p>
+                        }
                         <p class="govuk-body">
                             @Resource.MsgManureApplyingDateDontHaveExactDate
                         </p>
@@ -34,20 +52,11 @@
                     <govuk-date-input-year maxlength="4" pattern="[0-9]*"></govuk-date-input-year>
                 </govuk-date-input-fieldset>
             </govuk-date-input>
-        @*     <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
-            </govuk-button> *@
+            </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            @if (Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-            else
-            {
 
-                <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-            }
-        </p>
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
     </div>
 </div>

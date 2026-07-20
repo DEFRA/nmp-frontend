@@ -1,0 +1,446 @@
+﻿@using NMP.Commons.Resources
+@using System.Globalization
+@model NMP.Commons.ViewModels.MannerEstimationReportViewModel
+@{
+
+    string title = Resource.lblEstimateOfNutrientSupplyFromOrganicMaterial;
+    ViewData["Title"] = $"{ViewBag.FarmName} {Resource.lblHyphen} {title}";
+    bool isMultiApplication = Model.MannerEstimationApplicationDetails.Count > 1;
+}
+@section BeforeContent {
+    <div class="noprint">
+        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBackToResults</govuk-back-link>
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#passport-issued-day">@ViewBag.Error</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+@if (Model != null)
+{
+    @await Html.PartialAsync("~/Views/Report/_ReportPrintHeader.cshtml")
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full nmax_header">
+            <span class="farm_name_span govuk-caption-l">@ViewBag.FarmName</span>
+            <h1 class="govuk-heading-l margin-bottom-twenty">@Resource.lblEstimateOfNutrientSupplyFromOrganicMaterial</h1>
+
+            <ul class="govuk-list govuk-list--spaced margin-bottom-none">
+                <li>@($"{ViewBag.PostCode}, {ViewBag.CountryName}")</li>
+                <li>@string.Format(Resource.lblReportCreatedOn, DateTime.Now.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")))</li>
+            </ul>
+            <hr class="separator_thirty">
+        </div>
+    </div>
+
+    <div class="govuk-grid-row margin-bottom-forty">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-m">@Resource.lblFieldAndCropDetails</h2>
+            <table class="govuk-table data-table margin-bottom-none">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header">@Resource.lblFieldName</th>
+                        <th class="govuk-table__header">@Resource.lblTopsoil</th>
+                        <th class="govuk-table__header">@Resource.lblSubSoil</th>
+                        <th class="govuk-table__header">@Resource.lblCrop</th>
+                        <th class="govuk-table__header">@Resource.lblInANVZ</th>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.FieldName</td>
+                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.TopSoil</td>
+                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.SubSoil</td>
+                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.CropTypeName</td>
+                        <td class="govuk-table__cell">@(Model.MannerFieldAndCropDetails.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="govuk-grid-row margin-bottom-forty">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-m">@Resource.lblOrganicMaterialApplications</h2>
+            <div class="margin-bottom-forty">
+                <h3 class="govuk-heading-s">@Resource.lblApplicationDetails</h3>
+                <table class="govuk-table data-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            @if (isMultiApplication)
+                            {
+                                <th scope="col" class="govuk-table__header">@Resource.lblApplication</th>
+                            }
+                            <th scope="col" class="govuk-table__header">@Resource.lblMaterialType</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblDate</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblApplicationRatePerHectare</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblApplicationMethod</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblIncorporationMethod</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblIncorporationDelay</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @{
+                            int applicationCount = 0;
+                        }
+                        @foreach (var application in Model.MannerEstimationApplicationDetails)
+                        {
+                            applicationCount++;
+                            <tr class="govuk-table__row">
+                                @if (isMultiApplication)
+                                {
+                                    <td class="govuk-table__cell">@applicationCount</td>
+                                }
+                                <td class="govuk-table__cell">@application.ManureType</td>
+                                <td class="govuk-table__cell">@application.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                <td class="govuk-table__cell">@(application.ApplicationRate != 0 ? string.Format("{0:N0} {1}", application.ApplicationRate, Resource.lblMetresCubed) : "0")</td>
+                                <td class="govuk-table__cell">@application.ApplicationMethod</td>
+                                <td class="govuk-table__cell">@application.IncorporationMethod</td>
+                                <td class="govuk-table__cell">@application.IncorporationDelay</td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="margin-bottom-thirty">
+                <h3 class="govuk-heading-s">@Resource.lblConditionsAtTheTimeOfApplication</h3>
+                <table class="govuk-table data-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                        </tr>
+                        <tr class="govuk-table__row">
+                            @if (isMultiApplication)
+                            {
+                                <th scope="col" class="govuk-table__header">@Resource.lblApplication</th>
+                            }
+                            <th scope="col" class="govuk-table__header">@Resource.lblAutumnCropNitrogenNUptake</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblEndOfSoilDrainage</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblRainfallPostApplication</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblWindSpeedAtApplications</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblRainWithin6HoursOfApplication</th>
+                            <th scope="col" class="govuk-table__header">@Resource.lblTopsoilMoisture</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @{
+                            int conditionCount = 0;
+                        }
+                        @foreach (var condition in Model.MannerEstimationConditions)
+                        {
+                            conditionCount++;
+                            <tr class="govuk-table__row">
+                                @if (isMultiApplication)
+                                {
+                                    <td class="govuk-table__cell">@conditionCount</td>
+                                }
+                                <td class="govuk-table__cell">@(condition.AutumnCropNitrogenUptake != 0 ? string.Format("{0:N0}{1}", condition.AutumnCropNitrogenUptake, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@condition.SoilDrainageEndDate.Value.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                <td class="govuk-table__cell">@(condition.TotalRainfall != 0 ? string.Format("{0:N0}{1}", condition.TotalRainfall, Resource.lblmm) : "0")</td>
+                                <td class="govuk-table__cell">@condition.Windspeed</td>
+                                <td class="govuk-table__cell">@condition.RainfallWithinSixHours</td>
+                                <td class="govuk-table__cell">@condition.MoistureType</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="govuk-heading-s table-title">@Resource.lblManureAnalysis</h3>
+            <p class="govuk-body govuk-!-font-size-16">@Resource.lblValuesArePerCubicMetre</p>
+            <table class="govuk-table data-table margin-bottom-none">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        @if (isMultiApplication)
+                        {
+                            <th scope="col" class="govuk-table__header">@Resource.lblApplication</th>
+                        }
+                        <th scope="col" class="govuk-table__header">@Resource.lblDryMatterContent</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblTotalNitrogenNitrogen</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblAmmoniumN</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblUricAcidN</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblNitrateN</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblTotalPotashK2O</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblTotalSulphurSO3</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblTotalMagnesiumMgO</th>
+                    </tr>
+                </tbody>
+                <tbody class="govuk-table__body">
+                    @{
+                        int manureAnalysisCount = 0;
+                    }
+                    @foreach (var manureAnalysis in Model.ManureAnalyses)
+                    {
+                        manureAnalysisCount++;
+                        <tr class="govuk-table__row">
+                            @if (isMultiApplication)
+                            {
+                                <td class="govuk-table__cell">@manureAnalysisCount</td>
+                            }
+                            <td class="govuk-table__cell">@(manureAnalysis.DryMatterContent != 0 ? string.Format("{0:N0}{1}", manureAnalysis.DryMatterContent, Resource.lblPercentage) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.AmmoniumNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.AmmoniumNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.UricAcidNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.UricAcidNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.NitrateNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.NitrateNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalPhosphate != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalPhosphate, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalPotash != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalPotash, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalSulphur != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalSulphur, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalMagnesium != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalMagnesium, Resource.lblkg) : "0")</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div class="govuk-grid-row margin-bottom-forty">
+        <div class="govuk-grid-column-full">
+            @{
+                var isAnyWarning = Model.ApplicationWarnings.Any();
+            }
+            @if (isAnyWarning)
+            {
+                <h2 class="govuk-heading-m">
+                    @string.Format((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNvzWarningFor : Resource.lblWaterResourcesRegulationsWarningsFor, Model.MannerFieldAndCropDetails.FieldName)
+                </h2>
+
+                <p class="govuk-body">@((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblThePlannedApplicationsmayNotComplyWith : Resource.lblThePlannedApplicationsMayNotComplyWithTheseWater)</p>
+
+                <ul class="govuk-list govuk-list--bullet">
+                    @foreach (var applicationWarning in Model.ApplicationWarnings)
+                    {
+                        foreach (var warning in applicationWarning.Warnings)
+                        {
+                            <li>@warning.Header</li>
+                        }
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+    <div class="govuk-grid-row margin-bottom-forty">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-m">@Resource.lblMannerNPKResults</h2>
+
+            <div class="margin-bottom-forty">
+                <h2 class="govuk-heading-s table-title">@Resource.lblTotalAndCropAvailableN</h2>
+                <p class="govuk-body govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
+                <table class="govuk-table data-table">
+                    <thead class="govuk-table__head">
+                        <tr>
+                            @if (isMultiApplication)
+                            {
+                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                            }
+                            <th scope="row" class="govuk-table__header">@Resource.lblTotalNitrogenN</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenN <br>@Resource.lblCurrentCrop</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenN <br>@Resource.lblFollowingCropYear2</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblNitrogenUseEfficiency</th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @{
+                            int cropAvailableNCount = 0;
+                        }
+                        @foreach (var cropAvailableN in Model.MannerNpkResults)
+                        {
+                            cropAvailableNCount++;
+                            <tr>
+                                @if (isMultiApplication)
+                                {
+                                    <td class="govuk-table__cell">@cropAvailableNCount</td>
+                                }
+                                <td class="govuk-table__cell">@(cropAvailableN.TotalNitrogen != 0 ? string.Format("{0:N0}{1}", cropAvailableN.TotalNitrogen, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(cropAvailableN.CropAvailableNitrogenCurrentCrop != 0 ? string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenCurrentCrop, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(cropAvailableN.CropAvailableNitrogenFollowingCropYear2 != 0 ? string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenFollowingCropYear2, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(cropAvailableN.NitrogenUseEfficiency != 0 ? string.Format("{0:N0}{1}", cropAvailableN.NitrogenUseEfficiency, Resource.lblPercentage) : "0")</td>
+                            </tr>
+                        }
+                        @if (isMultiApplication)
+                        {
+                            <tr class="total_row">
+                                <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalNitrogen), Resource.lblkg) : "0") </td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency), Resource.lblPercentage) : "0")</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="margin-bottom-forty">
+                <h2 class="govuk-heading-s table-title">@Resource.lblNitrogenNMineralizationAndLosses</h2>
+                <p class="govuk-body  govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
+                <table class="govuk-table data-table">
+                    <thead class="govuk-table__head">
+                        <tr>
+                            @if (isMultiApplication)
+                            {
+                                <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                            }
+                            <th scope="row" class="govuk-table__header">@Resource.lblMineralisedNitrogenN</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblLostNitrateN</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblLostAmmoniaN</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblLostDenitrifiedN </th>
+                        </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @{
+                            int mineralizationCount = 0;
+                        }
+                        @foreach (var mineralization in Model.MannerNpkResults)
+                        {
+                            mineralizationCount++;
+                            <tr>
+                                @if (isMultiApplication)
+                                {
+                                    <td class="govuk-table__cell">@mineralizationCount</td>
+                                }
+                                <td class="govuk-table__cell">@(mineralization.MineralisedNitrogen != 0 ? string.Format("{0:N0}{1}", mineralization.MineralisedNitrogen, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(mineralization.LostNitrateNitrogen != 0 ? string.Format("{0:N0}{1}", mineralization.LostNitrateNitrogen, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(mineralization.LostAmmoniaNitrogen != 0 ? string.Format("{0:N0}{1}", mineralization.LostAmmoniaNitrogen, Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(mineralization.LostDenitrifiedNitrogen != 0 ? string.Format("{0:N0}{1}", mineralization.LostDenitrifiedNitrogen, Resource.lblkg) : "0")</td>
+                            </tr>
+                        }
+                        @if (isMultiApplication)
+                        {
+                            <tr class="total_row">
+                                <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.MineralisedNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.MineralisedNitrogen), Resource.lblkg) : "0") </td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.LostNitrateNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostNitrateNitrogen), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.LostAmmoniaNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostAmmoniaNitrogen), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.LostDenitrifiedNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.LostDenitrifiedNitrogen), Resource.lblkg) : "0")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="govuk-heading-s table-title">@Resource.lblPhosphatePotashSulphurAndMagnesium</h2>
+            <p class="govuk-body  govuk-!-font-size-16">@Resource.lblValuesArePerHectare</p>
+            <table class="govuk-table data-table margin-bottom-none">
+                <thead class="govuk-table__head">
+                    <tr>
+                        @if (isMultiApplication)
+                        {
+                            <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                        }
+                        <th scope="row" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblCropAvailablePhosphate</th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblTotalPotashK2O</th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblCropAvailablePotash</th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblTotalSulphurSO3</th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableSulphur</th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblTotalMagnesiumMgO</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @{
+                        int phosphatePotashSulphurCount = 0;
+                    }
+                    @foreach (var availableNutrient in Model.MannerNpkResults)
+                    {
+                        phosphatePotashSulphurCount++;
+                        <tr>
+                            @if (isMultiApplication)
+                            {
+                                <td class="govuk-table__cell">@phosphatePotashSulphurCount</td>
+                            }
+                            <td class="govuk-table__cell">@(availableNutrient.TotalPhosphate != 0 ? string.Format("{0:N0}{1}", availableNutrient.TotalPhosphate, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.CropAvailablePhosphate != 0 ? string.Format("{0:N0}{1}", availableNutrient.CropAvailablePhosphate, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.TotalPotash != 0 ? string.Format("{0:N0}{1}", availableNutrient.TotalPotash, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.CropAvailablePotash != 0 ? string.Format("{0:N0}{1}", availableNutrient.CropAvailablePotash, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.TotalSulphur != 0 ? string.Format("{0:N0}{1}", availableNutrient.TotalSulphur, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.CropAvailableSulphur != 0 ? string.Format("{0:N0}{1}", availableNutrient.CropAvailableSulphur, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(availableNutrient.TotalMagnesium != 0 ? string.Format("{0:N0}{1}", availableNutrient.TotalMagnesium, Resource.lblkg) : "0")</td>
+                        </tr>
+                    }
+                    @if (isMultiApplication)
+                    {
+                        <tr class="total_row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalPhosphate) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalPhosphate), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailablePhosphate) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailablePhosphate), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalPotash) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalPotash), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailablePotash) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailablePotash), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalSulphur) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalSulphur), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableSulphur) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableSulphur), Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalMagnesium) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalMagnesium), Resource.lblkg) : "0")</td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div class="govuk-grid-row margin-bottom-fifty">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-m">@Resource.lblOrganicMaterialValue</h2>
+            <div class="govuk-inset-text">
+                @string.Format(Resource.lblFinancialValuesTabContent1, ViewBag.TotalValue)
+            </div>
+
+            <h3 class="govuk-heading-s margin-bottom-fifteen">@Resource.lblValueBreakdown</h3>
+            <table class="govuk-table data-table margin-bottom-none">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        @if (isMultiApplication)
+                        {
+                            <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
+                        }
+                        <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenNitrogen </th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblTotalPhosphate</th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblTotalPotashK2O</th>
+                        <th scope="row" class="govuk-table__header">@Resource.lblTotalValue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int valueBreakdownCount = 0;
+                    }
+                    @foreach (var valueBreakdown in Model.MannerNpkResults)
+                    {
+                        valueBreakdownCount++;
+                        <tr class="govuk-table__row">
+                            @if (isMultiApplication)
+                            {
+                                <td class="govuk-table__cell">@valueBreakdownCount</td>
+                            }
+                            <td class="govuk-table__cell">@(valueBreakdown.NitrogenValue != 0 ? string.Format(Resource.lblPoundWithValue, valueBreakdown.NitrogenValue) : "0")</td>
+                            <td class="govuk-table__cell">@(valueBreakdown.PhosphateValue != 0 ? string.Format(Resource.lblPoundWithValue, valueBreakdown.PhosphateValue) : "0")</td>
+                            <td class="govuk-table__cell">@(valueBreakdown.PotashValue != 0 ? string.Format(Resource.lblPoundWithValue, valueBreakdown.PotashValue) : "0")</td>
+                            <td class="govuk-table__cell strong">@(valueBreakdown.TotalValue != 0 ? string.Format(Resource.lblPoundWithValue, valueBreakdown.TotalValue) : "0")</td>
+                        </tr>
+                    }
+                    @if (isMultiApplication)
+                    {
+                        <tr class="total_row">
+                            <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.NitrogenValue) != 0 ? string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.NitrogenValue)) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.PhosphateValue) != 0 ? string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.PhosphateValue)) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.PotashValue) != 0 ? string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.PotashValue)) : "0")</td>
+                            <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalValue) != 0 ? string.Format(Resource.lblPoundWithValue, Model.MannerNpkResults.Sum(x => x.TotalValue)) : "0")</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    @await Html.PartialAsync("~/Views/Report/_ReportDisclaimer.cshtml", Model)
+}

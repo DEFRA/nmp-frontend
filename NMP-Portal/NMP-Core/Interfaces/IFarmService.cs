@@ -19,4 +19,5 @@ public interface IFarmService:IService
     Task<(CommonResponse, Error)> FetchExcessWinterRainfallOptionByIdAsync(int id);
     Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId);
     Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId);
+    Task<(List<FarmListSummary>, Error?)> FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(Guid orgId);
 }
