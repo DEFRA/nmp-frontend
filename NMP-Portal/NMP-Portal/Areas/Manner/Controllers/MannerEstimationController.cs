@@ -752,8 +752,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
-         model=   await _mannerEstimationLogic.SetMannerEstimationStep11(model);
-            if(!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId) && !model.IsComingForAddNewApplication && !model.IsManureGroupIdChange)
+            model = await _mannerEstimationLogic.SetMannerEstimationStep11(model);
+            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId) && !model.IsComingForAddNewApplication && !model.IsManureGroupIdChange)
             {
                 return RedirectToAction(_updateApplicationDataActionName);
             }
@@ -848,6 +848,43 @@ namespace NMP.Portal.Areas.Manner.Controllers
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationDate");
         }
+        public static (DateTime StartDate, DateTime EndDate) GetHarvestYear(DateTime date)
+        {
+            if (date.Month >= 8) // August to December
+            {
+                return (
+                    new DateTime(date.Year, 8, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(date.Year + 1, 7, 31, 0, 0, 0, DateTimeKind.Utc)
+                );
+            }
+            else // January to July
+            {
+                return (
+                    new DateTime(date.Year - 1, 8, 1, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(date.Year, 7, 31, 0, 0, 0, DateTimeKind.Utc)
+                );
+            }
+        }
+
+        public static (bool, int?, int?) ValidateApplicationDate(DateTime applicationDate, DateTime? sowingDate, DateTime? otherApplication)
+        {
+            // If sowing date or other application date is available, application date must be in the same harvest year
+            if (sowingDate.HasValue)
+            {
+                var harvestYear = GetHarvestYear(sowingDate.Value);
+                return (applicationDate >= harvestYear.StartDate &&
+                       applicationDate <= harvestYear.EndDate, harvestYear.StartDate.Year, harvestYear.EndDate.Year);
+            }
+            if (otherApplication.HasValue)
+            {
+                var harvestYear = GetHarvestYear(otherApplication.Value);
+
+                return (applicationDate >= harvestYear.StartDate &&
+                       applicationDate <= harvestYear.EndDate, harvestYear.StartDate.Year, harvestYear.EndDate.Year);
+            }
+
+            return (true, null, null);
+        }
         [HttpGet]
         public async Task<IActionResult> ApplicationDate(string? q)
         {
@@ -889,11 +926,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 AddErrorIfNull(formData.ApplicationDate, _applicationDateKey, Resource.MsgEnterADateBeforeContinuing);
+                await ValidateApplicationDate(formData);
 
                 if (!ModelState.IsValid)
                 {
-                    formData = _mannerEstimationLogic.GetMannerEstimationStep13();
-                    return View(formData);
+                    model = _mannerEstimationLogic.GetMannerEstimationStep13();
+                    model.ApplicationDate = formData.ApplicationDate;
+                    return View(model);
                 }
                 model = _mannerEstimationLogic.GetMannerEstimationStep13();
                 if (model.ApplicationDate != formData.ApplicationDate)
@@ -935,6 +974,36 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
+        }
+
+        private async Task ValidateApplicationDate(MannerEstimationStep13ViewModel formData)
+        {
+            if (formData.ApplicationDate != null)
+            {
+                MannerEstimationStep13ViewModel mannerEstimationStep13View = _mannerEstimationLogic.GetMannerEstimationStep13();
+                if (mannerEstimationStep13View.SowingDate != null)
+                {
+                    var (isValid, startDate, endDate) = ValidateApplicationDate(formData.ApplicationDate.Value, mannerEstimationStep13View.SowingDate, null);
+                    if (!isValid)
+                    {
+                        ModelState.AddModelError(_applicationDateKey, string.Format(Resource.MsgApplicationDateHarvestYearValidation, startDate, endDate));
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(mannerEstimationStep13View.EncryptedMannerEstimateId))
+                {
+                    int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep13View.EncryptedMannerEstimateId));
+                    (MannerEstimationResultResponse? mannerEstimationResultResponse, _) = await _mannerEstimationLogic.FetchMannerApplicationResultById(mannerEstimationId);
+                    if (mannerEstimationResultResponse?.MannerEstimationApplication.Count >= 1)
+                    {
+                        var (isValid, startDate, endDate) = ValidateApplicationDate(formData.ApplicationDate.Value, null, mannerEstimationResultResponse.MannerEstimationApplication[0]?.ApplicationDate);
+                        if (!isValid)
+                        {
+                            ModelState.AddModelError(_applicationDateKey, string.Format(Resource.MsgApplicationDateHarvestYearValidation, startDate, endDate));
+
+                        }
+                    }
+                }
+            }
         }
 
         private async Task<Error?> CheckApplicationDateWarnings(
@@ -2769,8 +2838,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ViewBag.LastUpdatedOn = mannerEstimationResultResponse.LastUpdatedOn;
             mannerEstimationResultResponse.MannerEstimationApplication.ForEach(x => x.EncryptedApplicationId = _mannerEstimationProtector.Protect(x.ID.ToString()));
             ViewBag.MannerEstimations = mannerEstimationResultResponse;
-            List<CropTypeResponse> cropTypeList =await  _fieldLogic.FetchAllCropTypes();
-            int cropGroupId = cropTypeList.FirstOrDefault(x=>x.CropTypeId == mannerEstimationResultResponse.MannerEstimation.CropTypeID.Value)?.CropGroupId ?? 0;
+            List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchAllCropTypes();
+            int cropGroupId = cropTypeList.FirstOrDefault(x => x.CropTypeId == mannerEstimationResultResponse.MannerEstimation.CropTypeID.Value)?.CropGroupId ?? 0;
             ViewBag.CropGroup = await _fieldLogic.FetchCropGroupById(cropGroupId);
             int count = 0;
             foreach (var application in mannerEstimationResultResponse.MannerEstimationApplication)
