@@ -237,7 +237,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep9ViewModel GetMannerEstimationStep9()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep9.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+        mannerEstimationViewModel.MannerEstimationStep9.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId; 
+        mannerEstimationViewModel.MannerEstimationStep9.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep9.IsCropGroupChange = mannerEstimationViewModel.MannerEstimationStep8.IsCropGroupChange;
         mannerEstimationViewModel.MannerEstimationStep9.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
         mannerEstimationViewModel.MannerEstimationStep9.CropGroupName = mannerEstimationViewModel.MannerEstimationStep8.CropGroupName;
@@ -487,14 +488,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     }
     public MannerEstimationStep21ViewModel GetMannerEstimationStep21()
     {
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep21.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation(); 
         return mannerEstimationViewModel.MannerEstimationStep21;
     }
     public MannerEstimationStep21ViewModel SetMannerEstimationStep21(MannerEstimationStep21ViewModel mannerEstimationStep21)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep21 = mannerEstimationStep21;
+        mannerEstimationViewModel.MannerEstimationStep21 = mannerEstimationStep21;        
         mannerEstimationViewModel.IsCopyEstimate = mannerEstimationStep21.IsCopyEstimate;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep21();
