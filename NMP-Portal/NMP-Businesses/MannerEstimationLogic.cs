@@ -488,14 +488,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     }
     public MannerEstimationStep21ViewModel GetMannerEstimationStep21()
     {
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep21.IsCheckAnswer = mannerEstimationViewModel.IsCheckAnswer;
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation(); 
         return mannerEstimationViewModel.MannerEstimationStep21;
     }
     public MannerEstimationStep21ViewModel SetMannerEstimationStep21(MannerEstimationStep21ViewModel mannerEstimationStep21)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        mannerEstimationViewModel.MannerEstimationStep21 = mannerEstimationStep21;
+        mannerEstimationViewModel.MannerEstimationStep21 = mannerEstimationStep21;        
         mannerEstimationViewModel.IsCopyEstimate = mannerEstimationStep21.IsCopyEstimate;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep21();

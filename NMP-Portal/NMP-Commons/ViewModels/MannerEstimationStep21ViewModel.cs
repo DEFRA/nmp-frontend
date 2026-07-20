@@ -11,6 +11,5 @@ namespace NMP.Commons.ViewModels
     public class MannerEstimationStep21ViewModel
     {
         public bool? IsCopyEstimate { get; set; }
-        public bool IsCheckAnswer { get; set; } = false;
     }
 }

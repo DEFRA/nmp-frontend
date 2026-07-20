@@ -2714,7 +2714,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return RedirectToAction("Name");
                 }
 
-                return model.IsCheckAnswer ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("CopyFromEstimates");
+                return  RedirectToAction("CopyFromEstimates");
             }
             catch (HttpRequestException hre)
             {
