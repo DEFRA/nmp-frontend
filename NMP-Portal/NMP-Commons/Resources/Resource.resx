@@ -2626,10 +2626,10 @@ cubic metres per hectare  not set</value>
     <value>Crop, field and soil details for {0} in {1}</value>
   </data>
   <data name="lblFertiliserOrLimeApplied" xml:space="preserve">
-    <value>Fertiliser or Lime applied</value>
+    <value>Fertiliser or lime applied</value>
   </data>
   <data name="lblFertiliserOrLimeRecommendation" xml:space="preserve">
-    <value>Fertiliser or Lime recommendation</value>
+    <value>Fertiliser or lime recommendation</value>
   </data>
   <data name="lblFertiliserPhosphateAndPotashRecommendations" xml:space="preserve">
     <value>fertiliser phosphate and potash recommendations.</value>
@@ -2644,16 +2644,16 @@ cubic metres per hectare  not set</value>
     <value>Magnesium (MgO)</value>
   </data>
   <data name="lblNutrientAndLimeRecommendations" xml:space="preserve">
-    <value>Nutrient and Lime recommendations</value>
+    <value>Nutrient and lime recommendations</value>
   </data>
   <data name="lblNutrientAndLimeRecommendationsForCropInField" xml:space="preserve">
-    <value>Nutrient and Lime recommendations for {0} in {1}</value>
+    <value>Nutrient and lime recommendations for {0} in {1}</value>
   </data>
   <data name="lblorganicAndInorganicMaterial" xml:space="preserve">
     <value>Organic and inorganic material</value>
   </data>
   <data name="lblPhosphateP2O5AndPotashK2OBalance" xml:space="preserve">
-    <value>Phosphate (P2O5) and Potash (K2O) balance</value>
+    <value>Phosphate (P2O5) and potash (K2O) balance</value>
   </data>
   <data name="lblSodium" xml:space="preserve">
     <value>Sodium</value>
@@ -8294,13 +8294,6 @@ following crop year 2</value>
   </data>
   <data name="lblTotalAndCropAvailableN" xml:space="preserve">
     <value>Total and crop available nitrogen (N)</value>
-  </data>
-  <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
-    <value>Currently available for England and Wales only. Features for Scotland will be   
-released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; below.  </value>
-  </data>
-  <data name="lblSiteUnderMaintenance" xml:space="preserve">
-    <value>NMPT service under maintenance</value>
   </data>
   <data name="lblMannerApplicationDetailCountUpdated" xml:space="preserve">
     <value>Application {0} details updated.</value>

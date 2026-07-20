@@ -6482,7 +6482,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fertiliser or Lime applied.
+        ///   Looks up a localized string similar to Fertiliser or lime applied.
         /// </summary>
         public static string lblFertiliserOrLimeApplied {
             get {
@@ -6491,7 +6491,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fertiliser or Lime recommendation.
+        ///   Looks up a localized string similar to Fertiliser or lime recommendation.
         /// </summary>
         public static string lblFertiliserOrLimeRecommendation {
             get {
@@ -11397,7 +11397,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nutrient and Lime recommendations.
+        ///   Looks up a localized string similar to Nutrient and lime recommendations.
         /// </summary>
         public static string lblNutrientAndLimeRecommendations {
             get {
@@ -11406,7 +11406,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nutrient and Lime recommendations for {0} in {1}.
+        ///   Looks up a localized string similar to Nutrient and lime recommendations for {0} in {1}.
         /// </summary>
         public static string lblNutrientAndLimeRecommendationsForCropInField {
             get {
@@ -12369,7 +12369,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phosphate (P2O5) and Potash (K2O) balance.
+        ///   Looks up a localized string similar to Phosphate (P2O5) and potash (K2O) balance.
         /// </summary>
         public static string lblPhosphateP2O5AndPotashK2OBalance {
             get {
