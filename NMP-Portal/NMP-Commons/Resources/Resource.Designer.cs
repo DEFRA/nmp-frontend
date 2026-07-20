@@ -13667,7 +13667,7 @@ namespace NMP.Commons.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Currently available for England and Wales only. Features for Scotland will be   
-        ///released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; below.  .
+        ///released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; below. .
         /// </summary>
         public static string lblReleaseScheduleContentTwo {
             get {
