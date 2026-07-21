@@ -204,6 +204,13 @@
         <div class="govuk-grid-column-full">
             @{
                 var isAnyWarning = Model.ApplicationWarnings.Any();
+                var uniqueWarnings = Model.ApplicationWarnings
+                .SelectMany(aw => aw.Warnings)
+                .Where(w => !string.IsNullOrWhiteSpace(w.Header))
+                .GroupBy(w => w.Header)
+                .Select(g => g.First())
+                .ToList();
+
             }
             @if (isAnyWarning)
             {
@@ -214,12 +221,9 @@
                 <p class="govuk-body">@((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblThePlannedApplicationsmayNotComplyWith : Resource.lblThePlannedApplicationsMayNotComplyWithTheseWater)</p>
 
                 <ul class="govuk-list govuk-list--bullet">
-                    @foreach (var applicationWarning in Model.ApplicationWarnings)
+                    @foreach (var applicationWarning in uniqueWarnings)
                     {
-                        foreach (var warning in applicationWarning.Warnings)
-                        {
-                            <li>@warning.Header</li>
-                        }
+                         <li>@applicationWarning.Header</li>
                     }
                 </ul>
             }

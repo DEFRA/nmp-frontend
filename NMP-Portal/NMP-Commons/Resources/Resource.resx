@@ -7303,7 +7303,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Planning and estimating</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent1" xml:space="preserve">
-    <value>This tool helps you to:</value>
+    <value>This tool helps you to estimate:</value>
   </data>
   <data name="lblMannerEstimateContent2" xml:space="preserve">
     <value>MANNER-NPK (Manure Nitrogen Evaluation Routine) estimates the nutrient supply from applications of organic materials.</value>
@@ -7774,28 +7774,28 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>Nutrient supply estimates</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent2" xml:space="preserve">
-    <value>estimate the nutrients supplied from applications of organic materials</value>
+    <value>the nutrients supplied from applications of organic materials</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent3" xml:space="preserve">
-    <value>compare different organic material applications to see how nutrient supply could be affected</value>
+    <value>the fate of organic manure N following land application</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent4" xml:space="preserve">
-    <value>see the financial value of organic material applications - how much you would save compared to buying inorganic fertiliser</value>
+    <value>the financial value of organic material applications based on current inorganic fertiliser prices</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent5" xml:space="preserve">
     <value>Estimates include:</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent6" xml:space="preserve">
-    <value>total nitrogen (N)</value>
+    <value>total and crop available nitrogen (N), phosphate (P2O5), potash (K2O) and sulphur (SO3)</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent7" xml:space="preserve">
-    <value>crop available nitrogen (N)</value>
+    <value>the potential financial value of the organic material</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent8" xml:space="preserve">
-    <value>nitrogen (N) losses</value>
+    <value>nitrogen mineralisation</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent9" xml:space="preserve">
-    <value>total, and crop available phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO)</value>
+    <value>nitrogen losses via ammonia volatilisation, denitrification and nitrate leaching</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent10" xml:space="preserve">
     <value>the potential financial value of the organic material</value>
@@ -7807,16 +7807,16 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>field name and soil type</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent13" xml:space="preserve">
-    <value>manure application details, including application rate, application method and soil incorporation</value>
+    <value>manure application details, including application rate and method</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent14" xml:space="preserve">
     <value>Nitrate Vulnerable Zone (NVZ) warnings</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent15" xml:space="preserve">
-    <value>The tool will warn you of possible breaches of the NVZ rules as you create estimates.</value>
+    <value>The tool will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules in England and Scotland, and the Control of Agricultural Pollution (CoAP) rules in Wales.</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent16" xml:space="preserve">
-    <value>You can save your data, edit it, and reuse it. You can also save or print estimates as PDF files.</value>
+    <value>You can save, edit, and reuse your data. You can also save or print estimates as PDF files.</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent17" xml:space="preserve">
     <value>You can manually add the results from an estimate to a nutrient management plan, if you need to.</value>
@@ -7831,10 +7831,10 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>Nutrient management planning</value>
   </data>
   <data name="lblCreateNutrientManagementPlansAndNitrateVulnerableZone" xml:space="preserve">
-    <value>Create nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports for a farm.</value>
+    <value>Create nutrient management plans and check compliance with relevant nutrient management legislation using NMPT-GB.</value>
   </data>
   <data name="lblEstimateTheNutrientSupplyAndPotentialFinancialValue" xml:space="preserve">
-    <value>Estimate the nutrient supply and potential financial value from organic materials using MANNER-NPK.</value>
+    <value>Estimate the nutrient supply from and potential financial value of organic materials using MANNER-NPK.</value>
   </data>
   <data name="lblCreateANutrientManagementPlanOrNVZReport" xml:space="preserve">
     <value>Create a nutrient management plan or NVZ report</value>
@@ -8333,5 +8333,14 @@ following crop year 2</value>
   </data>
   <data name="MsgApplicationDateHarvestYearValidation" xml:space="preserve">
     <value>Enter an Application Date between 01-Aug-{0} and 31-July-{1}.</value>
+  </data>
+  <data name="lblNutrientSupplyEstimatesFromOrganicMaterials" xml:space="preserve">
+    <value>Nutrient supply estimates from organic materials (MANNER-NPK)</value>
+  </data>
+  <data name="lblComplianceChecking" xml:space="preserve">
+    <value>Compliance checking</value>
+  </data>
+  <data name="lblNutrientManagementPlanningNMPT" xml:space="preserve">
+    <value>Nutrient management planning (NMPT-GB)</value>
   </data>
 </root>

@@ -3375,6 +3375,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compliance checking.
+        /// </summary>
+        public static string lblComplianceChecking {
+            get {
+                return ResourceManager.GetString("lblComplianceChecking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compliance indicated.
         /// </summary>
         public static string lblComplianceIndicated {
@@ -3744,7 +3753,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports for a farm..
+        ///   Looks up a localized string similar to Create nutrient management plans and check compliance with relevant nutrient management legislation using NMPT-GB..
         /// </summary>
         public static string lblCreateNutrientManagementPlansAndNitrateVulnerableZone {
             get {
@@ -5654,7 +5663,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Estimate the nutrient supply and potential financial value from organic materials using MANNER-NPK..
+        ///   Looks up a localized string similar to Estimate the nutrient supply from and potential financial value of organic materials using MANNER-NPK..
         /// </summary>
         public static string lblEstimateTheNutrientSupplyAndPotentialFinancialValue {
             get {
@@ -9849,7 +9858,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool helps you to:.
+        ///   Looks up a localized string similar to This tool helps you to estimate:.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent1 {
             get {
@@ -9885,7 +9894,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to manure application details, including application rate, application method and soil incorporation.
+        ///   Looks up a localized string similar to manure application details, including application rate and method.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent13 {
             get {
@@ -9903,7 +9912,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tool will warn you of possible breaches of the NVZ rules as you create estimates..
+        ///   Looks up a localized string similar to The tool will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules in England and Scotland, and the Control of Agricultural Pollution (CoAP) rules in Wales..
         /// </summary>
         public static string lblMannerEstimateAboutPageContent15 {
             get {
@@ -9912,7 +9921,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can save your data, edit it, and reuse it. You can also save or print estimates as PDF files..
+        ///   Looks up a localized string similar to You can save, edit, and reuse your data. You can also save or print estimates as PDF files..
         /// </summary>
         public static string lblMannerEstimateAboutPageContent16 {
             get {
@@ -9948,7 +9957,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to estimate the nutrients supplied from applications of organic materials.
+        ///   Looks up a localized string similar to the nutrients supplied from applications of organic materials.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent2 {
             get {
@@ -9957,7 +9966,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to compare different organic material applications to see how nutrient supply could be affected.
+        ///   Looks up a localized string similar to the fate of organic manure N following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {
@@ -9966,7 +9975,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to see the financial value of organic material applications - how much you would save compared to buying inorganic fertiliser.
+        ///   Looks up a localized string similar to the financial value of organic material applications based on current inorganic fertiliser prices.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent4 {
             get {
@@ -9984,7 +9993,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to total nitrogen (N).
+        ///   Looks up a localized string similar to total and crop available nitrogen (N), phosphate (P2O5), potash (K2O) and sulphur (SO3).
         /// </summary>
         public static string lblMannerEstimateAboutPageContent6 {
             get {
@@ -9993,7 +10002,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to crop available nitrogen (N).
+        ///   Looks up a localized string similar to the potential financial value of the organic material.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent7 {
             get {
@@ -10002,7 +10011,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to nitrogen (N) losses.
+        ///   Looks up a localized string similar to nitrogen mineralisation.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent8 {
             get {
@@ -10011,7 +10020,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to total, and crop available phosphate (P2O5), potash (K2O), sulphur (SO3) and magnesium (MgO).
+        ///   Looks up a localized string similar to nitrogen losses via ammonia volatilisation, denitrification and nitrate leaching.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent9 {
             get {
@@ -11442,6 +11451,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient management planning (NMPT-GB).
+        /// </summary>
+        public static string lblNutrientManagementPlanningNMPT {
+            get {
+                return ResourceManager.GetString("lblNutrientManagementPlanningNMPT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports.
         /// </summary>
         public static string lblNutrientManagementPlansAndNitrateVulnerableZoneReports {
@@ -11519,6 +11537,15 @@ namespace NMP.Commons.Resources {
         public static string lblNutrientSupplyEstimates {
             get {
                 return ResourceManager.GetString("lblNutrientSupplyEstimates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimates from organic materials (MANNER-NPK).
+        /// </summary>
+        public static string lblNutrientSupplyEstimatesFromOrganicMaterials {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimatesFromOrganicMaterials", resourceCulture);
             }
         }
         
