@@ -105,7 +105,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ViewBag.MannerEstimations = mannerEstimations;
                 return View();
             }
-
+            if (!string.IsNullOrWhiteSpace(r))
+            {
+                return View();
+            }
             return RedirectToAction("Name");
         }
 
