@@ -6833,7 +6833,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 123456.
+        ///   Looks up a localized string similar to For example, AB123456.
         /// </summary>
         public static string lblForExample123456 {
             get {
@@ -12540,7 +12540,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a href=&quot;https://www.fas.scot/downloads/managing-soil-phosphorus/&quot;  target=&quot;_blank&quot;&gt;View the FAS SRUC technical notes&lt;/a&gt; (open in a new window)..
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://www.fas.scot/publication-type/technical-notes/&quot;  target=&quot;_blank&quot;&gt;View the FAS SRUC technical notes&lt;/a&gt; (open in a new window)..
         /// </summary>
         public static string lblPhosphorusSorptionCapacityContentFive {
             get {
@@ -12585,7 +12585,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;a href=&quot;https://map.environment.gov.scot/Soil_maps/?layer=16&quot;  target=&quot;_blank&quot;&gt;View the map&lt;/a&gt; (open a new window).
+        ///   Looks up a localized string similar to &lt;a href=&quot;https://map.environment.gov.scot/Soil_maps/?layer=16&quot;  target=&quot;_blank&quot;&gt;View the map&lt;/a&gt; (open a new window)..
         /// </summary>
         public static string lblPhosphorusSorptionCapacityContentThree {
             get {
@@ -12594,7 +12594,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you are unsure about the PSC for your soil, the environment agency in scotland provides a map of soil PSC indices..
+        ///   Looks up a localized string similar to If you are unsure about the PSC for your soil, the Scotland Soils website provides a map of soil PSC indices..
         /// </summary>
         public static string lblPhosphorusSorptionCapacityContentTwo {
             get {
@@ -17715,6 +17715,24 @@ namespace NMP.Commons.Resources {
         public static string lblUseValuesFromRB209 {
             get {
                 return ResourceManager.GetString("lblUseValuesFromRB209", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid business reference number in the format AB123456..
+        /// </summary>
+        public static string lblValidBusinessReferenceNumberFormat {
+            get {
+                return ResourceManager.GetString("lblValidBusinessReferenceNumberFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a valid main location code in the format 22/333/4444..
+        /// </summary>
+        public static string lblValidMLCNumberFormat {
+            get {
+                return ResourceManager.GetString("lblValidMLCNumberFormat", resourceCulture);
             }
         }
         
