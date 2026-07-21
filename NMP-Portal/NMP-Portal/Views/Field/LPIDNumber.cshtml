@@ -33,7 +33,7 @@
         <form asp-action="LPIDNumber" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
-            <govuk-input asp-for="LPIDNumber">
+            <govuk-input for="LPIDNumber">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
                     @Resource.lblWhatIsTheLPIDNumber
                 </govuk-input-label>

@@ -36,13 +36,16 @@
                 </govuk-error-summary>
             }
 
-            <govuk-radios asp-for="@Model.CropTypeID">
+            <govuk-radios for="@Model.CropTypeID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @* @(Model.WantToApplySns == true ? Resource.lblWhatWasThePreviousCropType : Resource.lblWhatIsTheCurrentCropType) *@
                         @string.Format(Resource.lblWhatWasThePreviousCropType, Model.LastHarvestYear)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblCroupTypes)</govuk-radios-hint>
+                    <govuk-radios-hint>
+                        @string.Format(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ?
+                        Resource.lblThereOptionComeFromFasSrucTechnicalNotes : Resource.lblTheseOptionsComeFromRB209, Resource.lblCroupTypes)
+                    </govuk-radios-hint>
                     @if (ViewBag.CropTypeList != null)
                     {
                         @foreach (var item in ViewBag.CropTypeList)
