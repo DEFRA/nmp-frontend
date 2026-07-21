@@ -8,9 +8,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class AboutServiceController(ILogger<AboutServiceController> logger, IAboutMannerLogic aboutMannerLogic) : Controller
+    public class AboutMannerController(ILogger<AboutMannerController> logger, IAboutMannerLogic aboutMannerLogic) : Controller
     {
-        private readonly ILogger<AboutServiceController> _logger = logger;
+        private readonly ILogger<AboutMannerController> _logger = logger;
         private readonly IAboutMannerLogic _aboutMannerLogic = aboutMannerLogic;
         public async Task<IActionResult> Index()
         {
