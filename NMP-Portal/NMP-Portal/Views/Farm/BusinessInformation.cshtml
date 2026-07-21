@@ -21,14 +21,14 @@
             <h1 class="govuk-heading-l">
                 @string.Format(Resource.lblBusinessInformationFor, Model.Name)
             </h1>
-            <govuk-input asp-for="@Model.BusinessName">
+            <govuk-input for="@Model.BusinessName">
                 <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheBusinessName</govuk-input-label>
             </govuk-input>
-            <govuk-input asp-for="@Model.SBI">
+            <govuk-input for="@Model.SBI">
                 <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheBusinessReferenceNumber</govuk-input-label>
                 <govuk-input-hint>@Resource.lblForExample123456</govuk-input-hint>
             </govuk-input>
-            <govuk-input asp-for="@Model.CPH">
+            <govuk-input for="@Model.CPH">
                 <govuk-input-label is-page-heading="false">@Resource.lblWhatIsTheMainLocationCode</govuk-input-label>
                 <govuk-input-hint>@Resource.lblForExample223334444</govuk-input-hint>
             </govuk-input>

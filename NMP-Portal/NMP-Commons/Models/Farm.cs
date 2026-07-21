@@ -33,14 +33,17 @@ public class Farm
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheNearestPostcode))]
     public string? ClimateDataPostCode { get; set; } = string.Empty;
 
-    [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgMLCMinMaxValidation))]
+    //[StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgMLCMinMaxValidation))]
+    [RegularExpression(@"^\d{2}\/\d{3}\/\d{4}$",
+    ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblValidMLCNumberFormat))]
     public string? CPH { get; set; }
     public string? FarmerName { get; set; }
 
     [StringLength(128, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgBusinessNameMinMaxValidation))]
     public string? BusinessName { get; set; }
 
-    [StringLength(20, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgSBIMinMaxValidation))]
+    //[StringLength(20, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgSBIMinMaxValidation))]
+    [RegularExpression(@"^[A-Za-z]{2}\d{6}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblValidBusinessReferenceNumberFormat))]
     public string? SBI { get; set; }
     public string? STD { get; set; }
     public string? Telephone { get; set; }
