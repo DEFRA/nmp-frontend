@@ -18,7 +18,7 @@
                 <li class="govuk-grid-column-one-third card-group__item">
                     <div class="card card--clickable">
                         <h2 class="govuk-heading-m card__heading">
-                            <a class="govuk-link card__link govuk-link--no-visited-state" href="@Url.Action("Index", "AboutService")">@Resource.lblNutrientManagementPlanning</a>
+                            <a class="govuk-link card__link govuk-link--no-visited-state" href="@Url.Action("Index", "AboutService")">@Resource.lblNutrientManagementPlanningNMPT</a>
                         </h2>
                         <p class="govuk-body card__description">@Resource.lblCreateNutrientManagementPlansAndNitrateVulnerableZone</p>
                     </div>
@@ -29,7 +29,7 @@
                 <li class="govuk-grid-column-one-third card-group__item">
                     <div class="card card--clickable">
                         <h2 class="govuk-heading-m card__heading">
-                            <a class="govuk-link card__link govuk-link--no-visited-state" href="@Url.Action("Index", "AboutManner", new { area = "Manner" })">@Resource.lblNutrientSupplyEstimates</a>
+                            <a class="govuk-link card__link govuk-link--no-visited-state" asp-action="Index" asp-controller="AboutService" asp-area="Manner">@Resource.lblNutrientSupplyEstimatesFromOrganicMaterials</a>
                         </h2>
                         <p class="govuk-body card__description">@Resource.lblEstimateTheNutrientSupplyAndPotentialFinancialValue</p>
                     </div>
