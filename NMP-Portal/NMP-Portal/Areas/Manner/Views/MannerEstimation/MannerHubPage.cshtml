@@ -25,7 +25,7 @@ else
                     <h3 class="govuk-notification-banner__heading">
                         @Resource.lblNutrientSupplyEstimatesRemoved
                     </h3>
-                    
+
                 </govuk-notification-banner>
             }
 
@@ -52,7 +52,7 @@ else
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    @if (ViewBag.MannerEstimations != null)
+                    @if (ViewBag.MannerEstimations != null && ViewBag.MannerEstimations.Count > 0)
                     {
                         @foreach (var estimation in ViewBag.MannerEstimations)
                         {
@@ -65,10 +65,10 @@ else
                             </tr>
                         }
                     }
-                    else
+                    @if (ViewBag.MannerEstimations == null || ViewBag.MannerEstimations.Count == 0)
                     {
                         <tr class="govuk-table__row">
-                            @Resource.lblYouHaveNoNutrientSupplyEstimates
+                            <td class="govuk-table__cell" colspan="5">@Resource.lblYouHaveNoNutrientSupplyEstimates</td>
                         </tr>
                     }
 
