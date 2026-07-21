@@ -1387,7 +1387,7 @@
     <value>Climate conditions affecting nitrogen losses from this application​</value>
   </data>
   <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporation" xml:space="preserve">
-    <value>How long is there between application and incorporation for your {0}?</value>
+    <value>How long is there between application and incorporation of your {0}?</value>
   </data>
   <data name="lblIncorporationDelay" xml:space="preserve">
     <value>Incorporation Delay</value>
@@ -1489,7 +1489,7 @@
     <value>End of soil drainage</value>
   </data>
   <data name="lblHowLongIsTheGapBetweenApplicationAndIncorporation" xml:space="preserve">
-    <value>How long is the gap between application and incorporation for your {0}?</value>
+    <value>How long is the gap between application and incorporation of your {0}?</value>
   </data>
   <data name="lblHowWouldYouLikeToEnterTheApplicationRateA" xml:space="preserve">
     <value>What is the incorporation method for your {0}?</value>
@@ -1738,7 +1738,7 @@ cubic metres per hectare  not set</value>
     <value>What is the incorporation method for your {0} not set?</value>
   </data>
   <data name="MsgIncorporationDelayNotSet" xml:space="preserve">
-    <value>How long is the gap between application and incorporation for your {0} not set?</value>
+    <value>How long is the gap between application and incorporation of your {0} not set?</value>
   </data>
   <data name="MsgManureTypeNotSet" xml:space="preserve">
     <value>What type of organic material are you using in this application not set?</value>
@@ -5862,7 +5862,7 @@ livestock manure.</value>
     <value>​Quantity applied</value>
   </data>
   <data name="MsgSoilAnalysisHint3" xml:space="preserve">
-    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop.</value>
+    <value>If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient {0} for your crop, which may not be accurate for your soil or crop.</value>
   </data>
   <data name="lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount" xml:space="preserve">
     <value>This value is from the {0} and takes into account livestock occupancy.</value>
@@ -7117,7 +7117,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the FAS SRUC Technical Notes.</value>
   </data>
   <data name="lblAboutRecommendationForScotlandContent2" xml:space="preserve">
-    <value>While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​</value>
+    <value>While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, DEFRA and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​</value>
   </data>
   <data name="lblAboutRecommendationForScotlandContent3" xml:space="preserve">
     <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
@@ -8348,5 +8348,11 @@ following crop year 2</value>
   </data>
   <data name="lblValidMLCNumberFormat" xml:space="preserve">
     <value>Enter a valid main location code in the format 22/333/4444.</value>
+  </data>
+  <data name="lblThereOptionComeFromFasSrucTechnicalNotes" xml:space="preserve">
+    <value>Select one option. These are the {0} from the FAS SRUC Technical Notes.</value>
+  </data>
+  <data name="lblIndices" xml:space="preserve">
+    <value>indices </value>
   </data>
 </root>

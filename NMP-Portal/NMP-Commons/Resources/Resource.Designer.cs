@@ -828,7 +828,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​.
+        ///   Looks up a localized string similar to While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, DEFRA and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​.
         /// </summary>
         public static string lblAboutRecommendationForScotlandContent2 {
             get {
@@ -7661,7 +7661,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How long is there between application and incorporation for your {0}?.
+        ///   Looks up a localized string similar to How long is there between application and incorporation of your {0}?.
         /// </summary>
         public static string lblHowLongIsTheGapBetweenApplicationAndIncoporation {
             get {
@@ -7670,7 +7670,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0}?.
+        ///   Looks up a localized string similar to How long is the gap between application and incorporation of your {0}?.
         /// </summary>
         public static string lblHowLongIsTheGapBetweenApplicationAndIncorporation {
             get {
@@ -8242,6 +8242,15 @@ namespace NMP.Commons.Resources {
         public static string lblIndexValues {
             get {
                 return ResourceManager.GetString("lblIndexValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to indices .
+        /// </summary>
+        public static string lblIndices {
+            get {
+                return ResourceManager.GetString("lblIndices", resourceCulture);
             }
         }
         
@@ -16063,6 +16072,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select one option. These are the {0} from the FAS SRUC Technical Notes..
+        /// </summary>
+        public static string lblThereOptionComeFromFasSrucTechnicalNotes {
+            get {
+                return ResourceManager.GetString("lblThereOptionComeFromFasSrucTechnicalNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals..
         /// </summary>
         public static string lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem {
@@ -23013,7 +23031,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How long is the gap between application and incorporation for your {0} not set?.
+        ///   Looks up a localized string similar to How long is the gap between application and incorporation of your {0} not set?.
         /// </summary>
         public static string MsgIncorporationDelayNotSet {
             get {
@@ -23994,7 +24012,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient indices for your crop, which may not be accurate for your soil or crop..
+        ///   Looks up a localized string similar to If you do not enter a soil analysis, or if your most recent soil analysis is more than 5 years old, any recommendations we give will be based on the target soil pH and nutrient {0} for your crop, which may not be accurate for your soil or crop..
         /// </summary>
         public static string MsgSoilAnalysisHint3 {
             get {

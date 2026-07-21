@@ -1,17 +1,17 @@
 ﻿@using NMP.Commons.Resources
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.FieldViewModel
-@{    
+@{
     ViewData["Title"] = $"{string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)} {Resource.lblHyphen} {Resource.lblAddField}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var backAction = "";
 
-     if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
+    if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
     {
         backAction = "PscIndex";
     }
-    else if(Model.IsSoilReleasingClay)
+    else if (Model.IsSoilReleasingClay)
     {
         backAction = "SoilReleasingClay";
     }
@@ -22,7 +22,7 @@
     else
     {
         backAction = "SoilType";
-        if(Model.CopyExistingField.HasValue&&Model.CopyExistingField.Value)
+        if (Model.CopyExistingField.HasValue && Model.CopyExistingField.Value)
         {
             backAction = "AddField";
         }
@@ -43,20 +43,20 @@
                 <govuk-error-summary>
                     <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
                 </govuk-error-summary>
-            } 
+            }
             <h1 class="govuk-heading-l">@string.Format(Resource.lblDoYouWantToAddARecentSoilAnalysis, Model.Name)</h1>
             <p class="govuk-body">
                 @Resource.MsgSoilAnalysisHint1
-            </p>            
-            <p class="govuk-body margin-bottom-forty">
-                @Resource.MsgSoilAnalysisHint3
             </p>
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.RecentSoilAnalysisQuestion">
+            <p class="govuk-body margin-bottom-forty">
+                @(string.Format(Resource.MsgSoilAnalysisHint3, Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblStatus.ToLower() : Resource.lblIndices))
+            </p>
+            <govuk-radios class="govuk-radios--inline" for="@Model.RecentSoilAnalysisQuestion">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="false">
-                        @string.Format(Resource.lblDoYouWantToAddSoilAnalysisFor, Model.Name)                           
+                        @string.Format(Resource.lblDoYouWantToAddSoilAnalysisFor, Model.Name)
                     </govuk-radios-fieldset-legend>
-                    
+
                     <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
                     <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
                 </govuk-radios-fieldset>
