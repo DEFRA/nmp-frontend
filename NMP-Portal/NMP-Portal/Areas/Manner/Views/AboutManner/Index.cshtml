@@ -45,9 +45,6 @@
             <li>
                 @Resource.lblMannerEstimateAboutPageContent9
             </li>
-            @* <li>
-                @Resource.lblMannerEstimateAboutPageContent10
-            </li> *@
         </ul>
        
         <h2 class="govuk-heading-m">
@@ -76,9 +73,6 @@
         <p class="govuk-body">
             @Resource.lblMannerEstimateAboutPageContent16
         </p>
-        @* <p class="govuk-body">
-            @Resource.lblMannerEstimateAboutPageContent17
-        </p> *@
         <form class="form margin-top-forty" asp-area="Manner" asp-action="Index" asp-controller="AboutManner" method="post">
             <govuk-checkboxes name="DoNotShowAboutManner" for="@Model.DoNotShowAboutManner">
                 <govuk-checkboxes-item checked="@Model.DoNotShowAboutManner" value="true">@Resource.lblDo_not_show_this_information_again</govuk-checkboxes-item>
