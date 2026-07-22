@@ -72,6 +72,14 @@
                 <hr class="seperator_thirty">
                 <h2 class="govuk-heading-m">@Resource.lblFarmSummaryContent1</h2>
                 <p class="govuk-body">@Resource.lblFarmSummaryContent2</p>
+                @if(Model.CountryID==(int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    <p class="govuk-body">@Resource.lblFarmSummaryContent2Scotland</p>
+                }
+                else
+                {
+                    <p class="govuk-body">@Resource.lblFarmSummaryContent2</p>
+                }
                 <ul class="menu-list govuk-list govuk-list--spaced">
                     <li>
                         @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))

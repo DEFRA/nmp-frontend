@@ -3036,6 +3036,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         model.EncryptedFarmId = farmId;
         model.PscIndexID = field.PscIndexID;
         model.NVZProgrammeID = field.NVZProgrammeID;
+        model.LPIDNumber = field.LPIDNumber;
 
         if (farm != null)
         {
