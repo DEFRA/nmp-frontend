@@ -4405,7 +4405,7 @@ cubic metres per hectare  not set</value>
     <value>Total</value>
   </data>
   <data name="lblPerHa" xml:space="preserve">
-    <value>Per ha</value>
+    <value>per ha</value>
   </data>
   <data name="lblNMaxReportSummaryContent" xml:space="preserve">
     <value>To comply with the {0} limit for each crop type the total nitrogen (N) applied in fertiliser and crop available nitrogen from organic manures must not be greater than the adjusted {1} limit.</value>
@@ -7765,7 +7765,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>The green compost or green/food compost applied must be produced in accordance with the standards set out in PAS 100 and must not contain livestock manure</value>
   </data>
   <data name="lblFASSRUCTechnicalNotesGuide" xml:space="preserve">
-    <value>The FAS SRUC Technical Notes recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
+    <value>The FAS SRUC Technical Notes recommend that sulphur is applied to most crops where you expect or recognise sulphur deficiency​.</value>
   </data>
   <data name="lblLastUpdatedOn" xml:space="preserve">
     <value>(Last updated on {0})</value>
@@ -8354,5 +8354,8 @@ following crop year 2</value>
   </data>
   <data name="lblIndices" xml:space="preserve">
     <value>indices </value>
+  </data>
+  <data name="lblFarmSummaryContent2Scotland" xml:space="preserve">
+    <value>Add crops, organic and inorganic material applications, and get nutrient and lime recommendations from the FAS SRUC Technical Notes</value>
   </data>
 </root>

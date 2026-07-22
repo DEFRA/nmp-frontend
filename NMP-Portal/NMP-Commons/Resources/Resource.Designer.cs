@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -6356,6 +6356,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add crops, organic and inorganic material applications, and get nutrient and lime recommendations from the FAS SRUC Technical Notes.
+        /// </summary>
+        public static string lblFarmSummaryContent2Scotland {
+            get {
+                return ResourceManager.GetString("lblFarmSummaryContent2Scotland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View, create or update a nutrient management plan.
         /// </summary>
         public static string lblFarmSummaryContent3 {
@@ -6446,7 +6455,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The FAS SRUC Technical Notes recommends that sulphur is applied to most crops where you expect or recognise sulphur deficiency​..
+        ///   Looks up a localized string similar to The FAS SRUC Technical Notes recommend that sulphur is applied to most crops where you expect or recognise sulphur deficiency​..
         /// </summary>
         public static string lblFASSRUCTechnicalNotesGuide {
             get {
@@ -12297,7 +12306,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Per ha.
+        ///   Looks up a localized string similar to per ha.
         /// </summary>
         public static string lblPerHa {
             get {
