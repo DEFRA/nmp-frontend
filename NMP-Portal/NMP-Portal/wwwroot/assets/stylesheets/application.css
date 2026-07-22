@@ -943,3 +943,13 @@ hr.seperator_five_report {
 .margin-bottom-fifty {
     margin-bottom: 50px;
 }
+.govuk-table__header, .govuk-table__cell {
+    padding: 10px 20px 10px 0;
+    border-bottom: 1px solid #b1b4b6;
+    text-align: left;
+    vertical-align: top;
+}
+
+.govuk-table__header {
+    font-weight: 700;
+}
