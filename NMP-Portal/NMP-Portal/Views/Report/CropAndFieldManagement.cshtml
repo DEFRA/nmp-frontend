@@ -1219,7 +1219,7 @@
                                                         {
                                                             <tr class="govuk-table__row">
                                                                 <td class="govuk-table__cell">@rowNumber</td>
-                                                                <td class="govuk-table__cell">@orgManure.ApplicationDate?.ToLocalTime().Date.ToString("dd MM yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
+                                                                <td class="govuk-table__cell">@orgManure.ApplicationDate?.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
                                                                 <td class="govuk-table__cell">@(orgManure.ManureTypeName != null ? orgManure.ManureTypeName : Resource.lblNotEntered)</td>
                                                                 <td class="govuk-table__cell">@(orgManure.ApplicationRate != null ? string.Format("{0:N1} {1}", orgManure.ApplicationRate, orgManure.RateUnit) : Resource.lblNotEntered)</td>
                                                                 <td class="govuk-table__cell">@(orgManure.IncorporationMethodName != null ? orgManure.IncorporationMethodName : Resource.lblNotEntered)</td>

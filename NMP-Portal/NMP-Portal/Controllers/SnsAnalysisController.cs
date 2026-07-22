@@ -17,6 +17,7 @@ namespace NMP.Portal.Controllers
         private readonly ILogger<SnsAnalysisController> _logger = logger;
         private readonly IDataProtector _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
         private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
+        private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
         private readonly IFieldLogic _fieldLogic = fieldLogic;
         private readonly ICropLogic _cropLogic = cropLogic;
         private readonly ISnsAnalysisLogic _snsAnalysisLogic = snsAnalysisLogic;
@@ -94,6 +95,16 @@ namespace NMP.Portal.Controllers
                 if (farm != null)
                 {
                     model.FarmRB209CountryId = farm.RB209CountryID;
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(model.EncryptedFieldId))
+            {
+                int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
+                Field field = await _fieldLogic.FetchFieldByFieldId(fieldId);
+                if (field != null)
+                {
+                    model.FieldName = field.Name;
+                    model.EncryptedFieldName = _fieldDataProtector.Protect(field.Name ?? string.Empty);
                 }
             }
             if (!string.IsNullOrWhiteSpace(f))
