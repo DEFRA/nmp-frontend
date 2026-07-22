@@ -2233,6 +2233,7 @@ namespace NMP.Portal.Controllers
                     x.Length,
                     x.Width,
                     x.Depth,
+                    x.IsCovered,
                     x.Diameter,
                     x.CapacityWeight,
                     x.CapacityVolume,
