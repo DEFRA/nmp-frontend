@@ -39,6 +39,7 @@ namespace NMP.Commons.Models
         public int TotalN { get; set; } = 0;
         public int CropAvailableNCurrentCrop { get; set; } = 0;
         public int CropAvailableNitrogenFollowingCropYearTwo { get; set; } = 0;
+        public int NextGrassNitrogenCropCurrentYear { get; set; } = 0;
         public int TotalP2O5 { get; set; } = 0;
         public int CropAvailableP2O5 { get; set; } = 0;
         public int TotalSO3 { get; set; } = 0;
