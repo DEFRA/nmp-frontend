@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = $"{Resource.lblEstimateOfNutrientSupplyFromOrganicMaterialResults} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     var mannerEstimation = ViewBag.MannerEstimations.MannerEstimation;
+    var totalMannerResult = ViewBag.MannerEstimations.TotalMannerCalculateNutrient;
 
     var registeredOrganicProducer = mannerEstimation.RegisteredOrganicProducer ? Resource.lblYes : Resource.lblNo;
     var isWithinNVZ = @mannerEstimation.IsWithinNVZ ? Resource.lblYes : Resource.lblNo;
@@ -140,12 +141,7 @@
                         <tbody class="govuk-table__body">
                             @{
                                 count = 0;
-                                int totalN = 0;
-                                int totalCropAvailableNCurrentCrop = 0;
-                                int totalCropAvailableNitrogenFollowingCropYearTwo = 0;
-                                int totalNextGrassNitrogenCropCurrentYear = 0;
-                                int totalNitrogenUseEfficiency = 0;
-                            }
+                                }
                             @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                             {
                                 count++;
@@ -163,37 +159,19 @@
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.NitrogenUseEfficiency, Resource.lblPercentage)</td>
                                 </tr>
-                                @if (applicationCount > 1)
-                                {
-                                    totalN += item.TotalN;
-                                    totalCropAvailableNCurrentCrop += item.CropAvailableNCurrentCrop;
-                                    totalCropAvailableNitrogenFollowingCropYearTwo += item.CropAvailableNitrogenFollowingCropYearTwo;
-                                    totalNitrogenUseEfficiency += item.NitrogenUseEfficiency;
-                                    totalNextGrassNitrogenCropCurrentYear+= item.NextGrassNitrogenCropCurrentYear;
-                                }
                             }
                             @if (applicationCount > 1)
                             {
-                                bool isTotalNZero = totalN < 0.0001;
-                                var available = totalCropAvailableNCurrentCrop;
-                                @if (isTotalNZero)
-                                {
-                                    totalNitrogenUseEfficiency = 0;
-                                }
-                                @if (mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
-                                {
-                                    available = totalCropAvailableNCurrentCrop + totalCropAvailableNitrogenFollowingCropYearTwo;
-                                }
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__header">@Resource.lblTotals</td>
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalN, Resource.lblkg)</td>
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalCropAvailableNCurrentCrop, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.TotalN, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.CurrentCropAvailableN, Resource.lblkg)</td>
                                     @if (mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     {
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalNextGrassNitrogenCropCurrentYear, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.NextGrassNCropCurrentYear, Resource.lblkg)</td>
                                     }
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalCropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", isTotalNZero ? totalNitrogenUseEfficiency:((available * 100) / totalN), Resource.lblPercentage)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.FollowingCropYear2AvailableN, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.NitrogenEfficiencePercentage, Resource.lblPercentage)</td>
                                 </tr>
                             }
                         </tbody>
@@ -219,10 +197,6 @@
                         <tbody class="govuk-table__body">
                             @{
                                 count = 0;
-                                int totalMineralisedNitrogenLosses = 0;
-                                int totalLostNitrateLosses = 0;
-                                int totalLostAmmonia = 0;
-                                int totalLostDenitrified = 0;
                             }
                             @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                             {
@@ -237,22 +211,15 @@
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostAmmonia, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.LostDenitrified, Resource.lblkg)</td>
                                 </tr>
-                                @if (applicationCount > 1)
-                                {
-                                    totalMineralisedNitrogenLosses += item.MineralisedNitrogenLosses;
-                                    totalLostNitrateLosses += item.LostNitrateLosses;
-                                    totalLostAmmonia += item.LostAmmonia;
-                                    totalLostDenitrified += item.LostDenitrified;
-                                }
                             }
                             @if (applicationCount > 1)
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__header">@Resource.lblTotals</td>
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMineralisedNitrogenLosses, Resource.lblkg)</td>
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalLostNitrateLosses, Resource.lblkg)</td>
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalLostAmmonia, Resource.lblkg)</td>
-                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalLostDenitrified, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.MineralisedN, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.NitrateNLoss, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.AmmoniaNLoss, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.DenitrifiedNLoss, Resource.lblkg)</td>
                                 </tr>
                             }
                         </tbody>
@@ -280,13 +247,6 @@
                     <tbody class="govuk-table__body">
                         @{
                             count = 0;
-                            int totalP2O5 = 0;
-                            int totalCropAvailableP2O5 = 0;
-                            int totalK2O = 0;
-                            int totalCropAvailableK2O = 0;
-                            int totalSO3 = 0;
-                            int totalCropAvailableSO3 = 0;
-                            int totalMgO = 0;
                         }
                         @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
                         {
@@ -303,28 +263,19 @@
                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalSO3, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableSO3, Resource.lblkg)</td>
                                 <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalMgO, Resource.lblkg)</td>
-                            </tr> @if (applicationCount > 1)
-                            {
-                                totalP2O5 += item.TotalP2O5;
-                                totalCropAvailableP2O5 += item.CropAvailableP2O5;
-                                totalK2O += item.TotalK2O;
-                                totalCropAvailableK2O += item.CropAvailableK2O;
-                                totalSO3 += item.TotalSO3;
-                                totalCropAvailableSO3 += item.CropAvailableSO3;
-                                totalMgO += item.TotalMgO;
-                            }
+                            </tr>
                         }
                         @if (applicationCount > 1)
                         {
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__header">@Resource.lblTotals</td>
-                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalP2O5, Resource.lblkg)</td>
-                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalCropAvailableP2O5, Resource.lblkg)</td>
-                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalK2O, Resource.lblkg)</td>
-                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalCropAvailableK2O, Resource.lblkg)</td>
-                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalSO3, Resource.lblkg)</td>
-                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalCropAvailableSO3, Resource.lblkg)</td>
-                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMgO, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.TotalP2O5, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.CropAvailableP2O5, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.TotalK2O, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.CropAvailableK2O, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.TotalSO3, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.CropAvailableSO3, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerResult.TotalMgO, Resource.lblkg)</td>
                             </tr>
                         }
                     </tbody>

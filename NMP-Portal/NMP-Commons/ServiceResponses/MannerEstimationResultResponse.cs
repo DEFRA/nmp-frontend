@@ -13,6 +13,7 @@ namespace NMP.Commons.ServiceResponses
         public MannerEstimationDetailsViewModel? MannerEstimation { get; set; }
         public List<MannerEstimationApplicationDetailsViewModel>? MannerEstimationApplication { get; set; }
         public DateTime? LastUpdatedOn { get; set; }
+        public MannerCalculateNutrientResponse? TotalMannerCalculateNutrient { get; set; }    
 
     }
 }
