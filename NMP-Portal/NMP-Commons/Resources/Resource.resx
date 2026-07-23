@@ -8358,4 +8358,7 @@ following crop year 2</value>
   <data name="lblFarmSummaryContent2Scotland" xml:space="preserve">
     <value>Add crops, organic and inorganic material applications, and get nutrient and lime recommendations from the FAS SRUC Technical Notes</value>
   </data>
+  <data name="lblNextCropGroupCurrentYear" xml:space="preserve">
+    <value>Crop available nitrogen (N) next grass crop – current year </value>
+  </data>
 </root>

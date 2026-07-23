@@ -129,6 +129,10 @@
                                 }
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenCurrentCrop</th>
+                                @if (mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                {
+                                    <th scope="row" class="govuk-table__header">@Resource.lblNextCropGroupCurrentYear</th>
+                                }
                                 <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenFollowingCropYear2</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblNitrogenUseEfficiency</th>
                             </tr>
@@ -139,6 +143,7 @@
                                 int totalN = 0;
                                 int totalCropAvailableNCurrentCrop = 0;
                                 int totalCropAvailableNitrogenFollowingCropYearTwo = 0;
+                                int totalNextGrassNitrogenCropCurrentYear = 0;
                                 int totalNitrogenUseEfficiency = 0;
                             }
                             @foreach (var item in ViewBag.MannerEstimations.MannerEstimationApplication)
@@ -151,6 +156,10 @@
                                     }
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.TotalN, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNCurrentCrop, Resource.lblkg)</td>
+                                    @if (mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                    {
+                                        <td class="govuk-table__cell">@item.NextGrassNitrogenCropCurrentYear</td>
+                                    }
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.NitrogenUseEfficiency, Resource.lblPercentage)</td>
                                 </tr>
@@ -160,6 +169,7 @@
                                     totalCropAvailableNCurrentCrop += item.CropAvailableNCurrentCrop;
                                     totalCropAvailableNitrogenFollowingCropYearTwo += item.CropAvailableNitrogenFollowingCropYearTwo;
                                     totalNitrogenUseEfficiency += item.NitrogenUseEfficiency;
+                                    totalNextGrassNitrogenCropCurrentYear+= item.NextGrassNitrogenCropCurrentYear;
                                 }
                             }
                             @if (applicationCount > 1)
@@ -178,6 +188,10 @@
                                     <td class="govuk-table__header">@Resource.lblTotals</td>
                                     <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalN, Resource.lblkg)</td>
                                     <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalCropAvailableNCurrentCrop, Resource.lblkg)</td>
+                                    @if (mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                    {
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalNextGrassNitrogenCropCurrentYear, Resource.lblkg)</td>
+                                    }
                                     <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalCropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
                                     <td class="govuk-table__header">@string.Format("{0:N0}{1}", isTotalNZero ? totalNitrogenUseEfficiency:((available * 100) / totalN), Resource.lblPercentage)</td>
                                 </tr>
