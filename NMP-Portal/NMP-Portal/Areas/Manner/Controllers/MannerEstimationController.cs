@@ -3697,7 +3697,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     (moistureType, error) = await _organicManureLogic
                         .FetchMoisterTypeDefaultByApplicationDate(
-                            model.ApplicationDate!.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                            model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
                 }
 
                 result = HandleError(error, model);
@@ -4439,7 +4439,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
 
             var (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
-                mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-364), model.ApplicationDate.Value, false, mannerAppId);
+                mannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, false, mannerAppId);
 
             if (error == null && (previousAppliedTotalN + currentApplicationNitrogen) > 250)
             {
@@ -4460,12 +4460,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!isScotland)
             {
                 (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
-                    mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-729), model.ApplicationDate.Value, true, mannerAppId);
+                    mannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, true, mannerAppId);
             }
             else
             {
                 (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
-                    mannerEstimationId??0, model.ApplicationDate!.Value.AddDays(-729), model.ApplicationDate.Value, mannerAppId);
+                    mannerEstimationId??0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, mannerAppId);
             }
 
             if (error != null)
@@ -4478,7 +4478,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             bool isGreenCompostExistIn2Year;
             (isGreenCompostExistIn2Year, error) = await _mannerEstimationLogic.CheckMannerGreenCompostExistanceByDateRange(
                 mannerEstimationId??0,
-                model.ApplicationDate!.Value.AddDays(-729).ToString(_dateStringLiteral),
+                model.ApplicationDate.Value.AddDays(-729).ToString(_dateStringLiteral),
                 model.ApplicationDate.Value.ToString(_dateStringLiteral),
                 mannerAppId);
 
@@ -4495,7 +4495,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             where TModel : MannerEstimationNWarningViewModel
         {
             var (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
-                mannerEstimationId ?? 0, model.ApplicationDate!.Value.AddDays(-1459), model.ApplicationDate.Value, true, mannerAppId);
+                mannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-1459), model.ApplicationDate.Value, true, mannerAppId);
 
             if (error == null && (previousAppliedTotalN + currentApplicationNitrogen) > 1000)
             {
