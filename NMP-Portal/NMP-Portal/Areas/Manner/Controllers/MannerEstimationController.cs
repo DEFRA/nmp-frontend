@@ -95,6 +95,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             Guid organisationId = GetOrganisationId();
             var (mannerEstimations, error) = await _mannerEstimationLogic.FetchMannerEstimationsList(organisationId);
 
+            HttpContext.Session.SetString("is_current_manner_estimate", true.ToString());
             if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
             {
                 foreach (var estimation in mannerEstimations)
@@ -109,6 +110,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return View();
             }
+            //HttpContext.Session.SetString("current_organisation_id", organisationId.ToString());
             return RedirectToAction("Name");
         }
 

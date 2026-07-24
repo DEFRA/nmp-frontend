@@ -9,6 +9,9 @@ namespace NMP.Portal.Controllers
     {
         public IActionResult Index()
         {
+            HttpContext.Session.Remove("is_current_manner_estimate");
+            HttpContext.Session.Remove("current_farm_name");
+            HttpContext.Session.Remove("current_farm_id");
             return View();
         }
     }
