@@ -648,6 +648,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         mannerEstimationViewModel.MannerEstimationStep26.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep26.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
+        mannerEstimationViewModel.MannerEstimationStep26.DefaultNutrientValue = mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue;
         return mannerEstimationViewModel.MannerEstimationStep26;
     }
     public async Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26)

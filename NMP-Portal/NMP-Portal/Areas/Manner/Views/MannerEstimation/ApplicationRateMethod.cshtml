@@ -4,12 +4,16 @@
 
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblEnterTheApplicationRate} {Resource.lblHyphen} {title}";
-    
+
     var enterAnApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
     var calculateBasedOnAreaAndQuantity = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
     var useDefaultApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
     bool isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
     var backAction = "DefaultNutrientValues";
+    if(!Model.DefaultNutrientValue.Value)
+    {
+        backAction = "ManualNutrientValues";
+    }
     if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";

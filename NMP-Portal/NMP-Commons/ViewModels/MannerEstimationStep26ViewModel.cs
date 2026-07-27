@@ -20,6 +20,7 @@ namespace NMP.Commons.ViewModels
         
         public bool IsManureTypeChange { get; set; } = false;
         public bool IsComingForAddNewApplication { get; set; } = false;
+        public bool? DefaultNutrientValue { get; set; }
 
     }
 }
