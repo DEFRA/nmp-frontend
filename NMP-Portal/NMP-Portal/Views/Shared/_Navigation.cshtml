@@ -12,6 +12,7 @@
 {
     var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
     var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
+    var isCurrentManureEstimate = httpContextAccessor?.HttpContext?.Session.GetString("is_current_manner_estimate");    
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
     bool isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
@@ -48,6 +49,12 @@
             {
                 <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" active="@(isFarmContext)">
                     @currentFarmName
+                </govuk-service-navigation-nav-item>
+            }
+            else if (!string.IsNullOrWhiteSpace(isCurrentManureEstimate))
+            {
+                <govuk-service-navigation-nav-item asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-area="Manner">
+                    @Resource.lblNutrientSupplyEstimates
                 </govuk-service-navigation-nav-item>
             }
             @if (enrolmentCount > 1)
