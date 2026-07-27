@@ -40,8 +40,9 @@
         isHelpFeedback ||
         isReleaseschedule
         );
+    var serviceName = !string.IsNullOrWhiteSpace(isNmptSection) ? Resource.lblNutrientManagementPlanningNMPT : (!string.IsNullOrWhiteSpace(isMannerEstimateSection) ? Resource.lblNutrientSupplyEstimatesMannerNpk : Resource.lblPlanAndRecordNutrientApplications);
     <govuk-header home-page-url="https://www.gov.uk" />
-    <govuk-service-navigation class="noprint" service-name="@(!string.IsNullOrWhiteSpace(isNmptSection) ? Resource.lblNutrientManagementPlanningNMPT : (!string.IsNullOrWhiteSpace(isMannerEstimateSection) ? Resource.lblNutrientSupplyEstimatesMannerNpk : Resource.lblPlanAndRecordNutrientApplications))" service-url="/Dashboard/Index">
+    <govuk-service-navigation class="noprint" service-name="@serviceName" service-url="/Dashboard/Index">
         <govuk-service-navigation-start>
         </govuk-service-navigation-start>
         <govuk-service-navigation-nav>
