@@ -11577,6 +11577,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimates (MANNER-NPK).
+        /// </summary>
+        public static string lblNutrientSupplyEstimatesMannerNpk {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimatesMannerNpk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient supply estimates removed.
         /// </summary>
         public static string lblNutrientSupplyEstimatesRemoved {

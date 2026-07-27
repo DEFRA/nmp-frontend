@@ -8361,4 +8361,7 @@ following crop year 2</value>
   <data name="lblNextCropGroupCurrentYear" xml:space="preserve">
     <value>Crop available nitrogen (N) next grass crop – current year </value>
   </data>
+  <data name="lblNutrientSupplyEstimatesMannerNpk" xml:space="preserve">
+    <value>Nutrient supply estimates (MANNER-NPK)</value>
+  </data>
 </root>

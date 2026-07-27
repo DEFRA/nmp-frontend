@@ -12,7 +12,9 @@
 {
     var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
     var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
-    var isCurrentManureEstimate = httpContextAccessor?.HttpContext?.Session.GetString("is_current_manner_estimate");    
+    var isNmptSection = httpContextAccessor?.HttpContext?.Session.GetString("is_nmpt_section");
+    var isMannerEstimateSection = httpContextAccessor?.HttpContext?.Session.GetString("is_manner_estimate_section");
+    var isCurrentManureEstimate = httpContextAccessor?.HttpContext?.Session.GetString("is_current_manner_estimate");
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
     bool isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
@@ -39,12 +41,12 @@
         isReleaseschedule
         );
     <govuk-header home-page-url="https://www.gov.uk" />
-    <govuk-service-navigation class="noprint" service-name="@Resource.lblPlanAndRecordNutrientApplications" service-url="/Dashboard/Index">
-        <govuk-service-navigation-start>          
+    <govuk-service-navigation class="noprint" service-name="@(!string.IsNullOrWhiteSpace(isNmptSection) ? Resource.lblNutrientManagementPlanningNMPT : (!string.IsNullOrWhiteSpace(isMannerEstimateSection) ? Resource.lblNutrientSupplyEstimatesMannerNpk : Resource.lblPlanAndRecordNutrientApplications))" service-url="/Dashboard/Index">
+        <govuk-service-navigation-start>
         </govuk-service-navigation-start>
         <govuk-service-navigation-nav>
             <govuk-service-navigation-nav-start></govuk-service-navigation-nav-start>
-           
+
             @if (isFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
             {
                 <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" active="@(isFarmContext)">
@@ -53,7 +55,7 @@
             }
             else if (!string.IsNullOrWhiteSpace(isCurrentManureEstimate))
             {
-                <govuk-service-navigation-nav-item asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-area="Manner">
+                <govuk-service-navigation-nav-item asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-area="Manner" active=true>
                     @Resource.lblNutrientSupplyEstimates
                 </govuk-service-navigation-nav-item>
             }
@@ -63,10 +65,10 @@
                     @Resource.lblChangeCompany
                 </govuk-service-navigation-nav-item>
             }
-            <govuk-service-navigation-nav-item asp-controller="Account"  asp-action="Logout" asp-area="">
+            <govuk-service-navigation-nav-item asp-controller="Account" asp-action="Logout" asp-area="">
                 @Resource.lblSignout
             </govuk-service-navigation-nav-item>
-            <govuk-service-navigation-nav-end>               
+            <govuk-service-navigation-nav-end>
             </govuk-service-navigation-nav-end>
         </govuk-service-navigation-nav>
         <govuk-service-navigation-end>
@@ -79,7 +81,7 @@ else
         <div class="govuk-header__container govuk-width-container">
             <div class="govuk-header__logo">
                 <a href="https://www.gov.uk" class="govuk-header__link govuk-header__link--homepage">
-                    <svg focusable="false"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324 60" height="30" width="162" fill="currentcolor" class="govuk-header__logotype" aria-label="GOV.UK">
+                    <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324 60" height="30" width="162" fill="currentcolor" class="govuk-header__logotype" aria-label="GOV.UK">
                         <title>GOV.UK</title>
                         <g>
                             <circle cx="20" cy="17.6" r="3.7"></circle>
