@@ -135,6 +135,7 @@ namespace NMP.Portal.Helpers
                 FertiliserAppliedLime = recommendation.FertiliserAppliedLime,
                 FertiliserAppliedNH4N = recommendation.FertiliserAppliedNH4N,
                 FertiliserAppliedNO3N = recommendation.FertiliserAppliedNO3N,
+                IsSacMethodology=recommendation.IsSacMethodology
 
             };
             return rec;
