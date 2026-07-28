@@ -1,9 +1,8 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.MannerEstimationStep30ViewModel
 @{
-    bool isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
-
-    ViewData["Title"] = $"{string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    
+    ViewData["Title"] = $"{string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     
     var backAction = "IncorporationMethod";
     if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange&&!Model.IsComingForAddNewApplication)
@@ -29,7 +28,7 @@
             <govuk-radios for="@Model.IncorporationDelayId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
+                        @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption

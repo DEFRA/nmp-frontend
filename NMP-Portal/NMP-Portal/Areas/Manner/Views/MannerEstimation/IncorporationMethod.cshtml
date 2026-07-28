@@ -1,8 +1,8 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.MannerEstimationStep29ViewModel
 @{
-    var isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
 
 }
 @section BeforeContent {
@@ -46,7 +46,7 @@
             <govuk-radios for="@Model.IncorporationMethodId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheIncorporationMethod, isOtherManure ? Model.OtherMaterialName : Model.ManureTypeName)
+                        @string.Format(Resource.lblWhatIsTheIncorporationMethod,  Model.ManureTypeName)
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption

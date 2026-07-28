@@ -717,12 +717,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     bool isGet)
     {
         IEnumerable<SelectListItem> selectListItems = !isUpdate
-            ? fieldList!.Select(f => new SelectListItem
+            ? fieldList.Select(f => new SelectListItem
             {
                 Value = f.Id.ToString(),
                 Text = f.Name?.ToString()
             })
-            : fertiliserResponse!
+            : fertiliserResponse
                 .Select(f => new SelectListItem
                 {
                     Value = f.Id.ToString(),
@@ -1695,7 +1695,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             if (IsQueryValid(q, r, s))
             {
                 await InitializeModel(q, r, u, model);
-                error = await LoadFertiliserData(q!, r!, s!, t!, model);
+                error = await LoadFertiliserData(q, r, s, t, model);
             }
             else
             {
@@ -2854,7 +2854,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 string fieldName = (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name;
 
-                fertiliserIds.AddRange(model.UpdatedFertiliserIds.Where(f => fieldName.Equals(f.Name) && f.FertiliserId.HasValue).Select(f => f.FertiliserId!.Value));
+                fertiliserIds.AddRange(model.UpdatedFertiliserIds.Where(f => fieldName.Equals(f.Name) && f.FertiliserId.HasValue).Select(f => f.FertiliserId.Value));
             }
         }
     }
@@ -4304,7 +4304,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         if (!fieldId.HasValue) return (empty, null);
 
         var (cropList, error) = await _cropLogic.FetchCropPlanByFieldIdAndYear(
-            fieldId.Value, model.HarvestYear!.Value);
+            fieldId.Value, model.HarvestYear.Value);
 
         if (HasErrorOrNoGrass(cropList, error))
             return (empty, error);

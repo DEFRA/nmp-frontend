@@ -70,7 +70,7 @@
         </tr>
 
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblHowAreYouApplyingTheManureType, Model.ManureType)</th>
+            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureType)</th>
             <td class="govuk-table__cell">
                 @Model.ApplicationMethod
             </td>
@@ -82,7 +82,7 @@
                        asp-controller="MannerEstimation"
                        asp-route-q="@Model.EncryptedApplicationId">
                         @Resource.lblChange
-                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", string.Format(Resource.lblHowAreYouApplyingTheManureType, Model.ManureType), Resource.lblChange))</span>
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureType), Resource.lblChange))</span>
                     </a>
                 }
             </td>
