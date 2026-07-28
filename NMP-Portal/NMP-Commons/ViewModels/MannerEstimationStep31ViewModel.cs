@@ -14,6 +14,7 @@ namespace NMP.Commons.ViewModels
         [StringLength(250, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgNameMinMaxValidation))]
         public string Name { get; set; } = string.Empty;
         public int? MannerEstimationId { get; set; }
-        public bool? IsCopyEstimate { get; set; } 
+        public bool? IsCopyEstimate { get; set; }
+        public string? EncryptedMannerEstimationId { get; set; }
     }
 }

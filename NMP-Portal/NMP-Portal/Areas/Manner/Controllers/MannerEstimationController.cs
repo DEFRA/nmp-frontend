@@ -3112,9 +3112,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Name()
+        public async Task<IActionResult> Name(string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} Name() action called");
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                await BindFarmFieldOrCropDataUpdate(q);
+            }
+
             MannerEstimationStep31ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep31();
             ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
             return View(model);
@@ -3162,6 +3167,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     action = "CopyExistingFarmAndFieldDetails";
                 }
+            }
+            if(!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId))
+            {
+                return RedirectToAction(_updateFarmFieldOrCropDataActionName);
             }
             return RedirectToAction(action);
         }
