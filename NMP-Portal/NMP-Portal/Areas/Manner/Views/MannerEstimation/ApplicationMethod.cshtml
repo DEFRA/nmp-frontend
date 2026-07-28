@@ -2,7 +2,7 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep23ViewModel
 @{
     string title = Resource.lblMannerEstimate;
-    string heading = string.Format(Resource.lblHowAreYouApplyingTheManureType, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? Model.OtherMaterialName : Model.ManureTypeName);
+    string heading = string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var backAction = "ApplicationDate";
     if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)

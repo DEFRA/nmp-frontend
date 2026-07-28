@@ -785,7 +785,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (List<ManureType> manureTypeList, Error? error) = await _mannerLogic.FetchManureTypeList(model.ManureGroupId, model.FarmRB209CountryId);
             if (error == null && manureTypeList.Count > 0)
             {
-                selectListItems = manureTypeList.OrderBy(x => x.Name).Select(f => new SelectListItem
+                selectListItems = manureTypeList.OrderBy(m => m.SortOrder).Select(f => new SelectListItem
                 {
                     Value = f.Id.ToString(),
                     Text = f.Name
