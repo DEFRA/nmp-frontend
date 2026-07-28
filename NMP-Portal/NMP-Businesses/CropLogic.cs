@@ -288,7 +288,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
         {
             string cropTypeName = recommendation.Crops.CropTypeID == (int)CropTypes.Grass
      ? nameof(CropTypes.Grass)
-     : await _fieldLogic.FetchCropTypeById(recommendation.Crops.CropTypeID!.Value);
+     : await _fieldLogic.FetchCropTypeById(recommendation.Crops.CropTypeID.Value);
             //check sns already exist or not in SnsAnalyses table by cropID
             SnsAnalysis snsData = await FetchSnsAnalysisByCropIdAsync(recommendation.Crops.ID ?? 0);
             var crop = new CropViewModel
@@ -609,7 +609,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
 
     private static TValue GetPropertyValue<TValue>(object obj, string propertyName)
     {
-        return (TValue)obj.GetType().GetProperty(propertyName)?.GetValue(obj)!;
+        return (TValue)obj.GetType().GetProperty(propertyName)?.GetValue(obj);
     }
 
     private void UpdateSortState(
