@@ -1649,6 +1649,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (error == null && manureType != null)
         {
             mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName = manureType.Name;
+             (var manureGroup, error) = await _mannerService.FetchManureGroupById(manureType.ManureGroupId??0);
+            if (error == null && manureGroup != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep11.ManureGroupName = manureGroup.Name;
+            }
             mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId = manureType.ManureGroupId;
             if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
             {

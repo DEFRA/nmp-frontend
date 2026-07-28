@@ -38,7 +38,7 @@
                 <govuk-summary-list>
                     <govuk-summary-list-row>
                     <govuk-summary-list-row-key>@title</govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
+                        <govuk-summary-list-row-value class="excessRainfall">
                         @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? isWinterRainfall450OrMore : Model.ExcessWinterRainfallName)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
