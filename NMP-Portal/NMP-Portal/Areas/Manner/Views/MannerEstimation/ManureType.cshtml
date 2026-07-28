@@ -5,7 +5,9 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading = string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroupName);
+    string heading = string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, (Model.ManureGroupName == Resource.lblOtherOrganicMaterials
+    ? Resource.lblOtherOrganicMaterial
+    : Model.ManureGroupName));
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsComingForAddNewApplication && !Model.IsManureGroupIdChange ? "MannerEstimationResult" : "ManureGroup";
 }
