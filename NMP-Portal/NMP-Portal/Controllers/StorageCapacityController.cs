@@ -71,7 +71,7 @@ namespace NMP.Portal.Controllers
             PopulateEncryptedStateIds();
 
             var storageCapacityList =
-                await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID!.Value)
+                await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID.Value)
                 .ContinueWith(t => t.Result.Item1);
 
             //copy logic write here...
@@ -2294,7 +2294,7 @@ namespace NMP.Portal.Controllers
         {
             if (_httpContextAccessor.HttpContext?.Session.Keys.Contains(_storageCapacityDataSessionKey) == true)
             {
-                return _httpContextAccessor.HttpContext!
+                return _httpContextAccessor.HttpContext
                     .Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey)
                     ?? new StorageCapacityViewModel();
             }
@@ -2392,7 +2392,7 @@ namespace NMP.Portal.Controllers
         {
             if (_httpContextAccessor.HttpContext?.Session.Keys.Contains(_storageCapacityDataSessionKey) == true)
             {
-                return _httpContextAccessor.HttpContext!
+                return _httpContextAccessor.HttpContext
                     .Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey)
                     ?? new StorageCapacityViewModel();
             }

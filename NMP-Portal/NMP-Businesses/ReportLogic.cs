@@ -462,11 +462,11 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
 
         // Run fertiliser queries in parallel
         var fertiliserTasks = manPeriodList.Select(mp =>
-            _fertiliserManureLogic.FetchTotalNByManagementPeriodIDIsAutumn(mp.ID!.Value, isAutumn));
+            _fertiliserManureLogic.FetchTotalNByManagementPeriodIDIsAutumn(mp.ID.Value, isAutumn));
 
         var fertiliserResults = await Task.WhenAll(fertiliserTasks);
 
-        decimal totalFertiliserN = fertiliserResults.Where(r => r.Item1.HasValue).Sum(r => r.Item1!.Value);
+        decimal totalFertiliserN = fertiliserResults.Where(r => r.Item1.HasValue).Sum(r => r.Item1.Value);
 
         decimal totalOrganicAvailableN = 0;
 
@@ -474,11 +474,11 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
         if (!isAutumn)
         {
             var organicTasks = manPeriodList.Select(mp =>
-                _organicManureLogic.FetchAvailableNByManagementPeriodID(mp.ID!.Value));
+                _organicManureLogic.FetchAvailableNByManagementPeriodID(mp.ID.Value));
 
             var organicResults = await Task.WhenAll(organicTasks);
 
-            totalOrganicAvailableN = organicResults.Where(r => r.Item1.HasValue).Sum(r => r.Item1!.Value);
+            totalOrganicAvailableN = organicResults.Where(r => r.Item1.HasValue).Sum(r => r.Item1.Value);
         }
 
         return (totalFertiliserN, totalOrganicAvailableN);

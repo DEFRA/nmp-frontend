@@ -3282,10 +3282,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 .Remove();
 
             oldJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
-            .Where(p => p != null).ToList().ForEach(p => p!.Remove());
+            .Where(p => p != null).ToList().ForEach(p => p.Remove());
 
             newJson["PreviousCroppingsList"]?.Children<JObject>().Select(x => x.Property(action))
-                .Where(p => p != null).ToList().ForEach(p => p!.Remove());
+                .Where(p => p != null).ToList().ForEach(p => p.Remove());
 
             isDataChanged = !JToken.DeepEquals(oldJson, newJson);
         }
