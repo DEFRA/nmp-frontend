@@ -819,6 +819,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep31.IsCopyEstimate = mannerEstimationViewModel.MannerEstimationStep21.IsCopyEstimate;
+        mannerEstimationViewModel.MannerEstimationStep31.EncryptedMannerEstimationId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep31.MannerEstimationId = mannerEstimationViewModel.MannerEstimationStep22.MannerEstimationId;
         return mannerEstimationViewModel.MannerEstimationStep31;
     }
@@ -826,6 +827,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep31 = mannerEstimationStep31;
+        mannerEstimationViewModel.MannerEstimationStep31.EncryptedMannerEstimationId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep31();
     }
