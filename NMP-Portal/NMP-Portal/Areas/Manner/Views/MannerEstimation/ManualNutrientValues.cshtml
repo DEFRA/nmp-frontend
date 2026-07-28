@@ -2,7 +2,7 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep25ViewModel
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.OtherMaterialName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.ManureTypeName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))} {Resource.lblHyphen} {title}";
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {
@@ -25,7 +25,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             
-                    <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.OtherMaterialName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
+                    <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.ManureTypeName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
             
             <govuk-input for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">

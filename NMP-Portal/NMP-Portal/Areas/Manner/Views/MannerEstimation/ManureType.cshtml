@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading =Resource.lblWhatTypeOfLivestockManureAreYouUsingInThisApplication;
+    string heading = string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroupName);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsComingForAddNewApplication && !Model.IsManureGroupIdChange ? "MannerEstimationResult" : "ManureGroup";
 }
@@ -23,7 +23,7 @@
                         @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblSelectOneOptionTheseOptionsComeFromAHDB
+                        @Resource.lblSelectOneOption
                     </govuk-radios-hint>
 
                     @foreach (var item in ViewBag.ManureTypeList)
