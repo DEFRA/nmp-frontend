@@ -5968,15 +5968,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             SetCropToSession(model);
             if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndSilage || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay)
             {
-                return RedirectToAction(_grassGrowthClassActionName);
-                //if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
-                //{
-                //    return RedirectToAction(_grassGrowthClassActionName);
-                //}
-                //else
-                //{
-                //    return RedirectToAction(_checkAnswerActionName);
-                //}
+                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
+                {
+                    return RedirectToAction(_grassGrowthClassActionName);
+                }
+                else
+                {
+                    return RedirectToAction(_checkAnswerActionName);
+                }
             }
 
             return RedirectToAction(_checkAnswerActionName);
