@@ -94,8 +94,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             Guid organisationId = GetOrganisationId();
             var (mannerEstimations, error) = await _mannerEstimationLogic.FetchMannerEstimationsList(organisationId);
-
             HttpContext.Session.SetString("is_current_manner_estimate", Resource.lblTrue);
+            HttpContext.Session.SetString("is_manner_estimate_section", Resource.lblTrue);
             if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
             {
                 foreach (var estimation in mannerEstimations)
@@ -2050,6 +2050,19 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
         }
+        private void ReplaceNumericRangeError(string key, string validationLabel, string displayLabel)
+        {
+            if (ModelState.ContainsKey(key))
+            {
+                var errorMessage = ModelState[key].Errors[0].ErrorMessage;
+                string expectedMessage = string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, validationLabel);
+                if (string.Equals(errorMessage, expectedMessage))
+                {
+                    ModelState[key].Errors.Clear();
+                    ModelState[key].Errors.Add(string.Format(Resource.MsgEnterAValueBetween0And9999, displayLabel));
+                }
+            }
+        }
         private void ValidateNutrientValues(MannerEstimationStep25ViewModel model)
         {
             if (model.N != null && model.NH4N != null && model.UricAcid != null && model.NO3N != null)
@@ -3231,7 +3244,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AutumnCropNitrogenUptake() post action called");
             if (!ModelState.IsValid)
             {
-                ReplaceNumericError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.lblAutumnCropNitrogenNUptake);
+                ReplaceNumericRangeError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.lblAutumnCropNitrogenNUptake);
             }
 
             if (model.AutumnCropNitrogenUptake == null)

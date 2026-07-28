@@ -86,7 +86,8 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = "false";
                 }
                 ViewBag.IsAnyRecordInMannerEstimate = false;
-                ViewBag.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService();
+                ViewBag.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService(); 
+                HttpContext.Session.SetString("is_nmpt_section", Resource.lblTrue);
             }
             catch (HttpRequestException hre)
             {
@@ -1285,7 +1286,7 @@ namespace NMP.Portal.Controllers
                         TempData["Error"] = error.Message;
                         return RedirectToAction(_farmListActionName);
                     }
-
+                    HttpContext.Session.SetString("is_nmpt_section", Resource.lblTrue);
                     HttpContext.Session.SetString("current_farm_name", farm?.Name ?? "");
                     HttpContext.Session.SetString("current_farm_id", id);
 
