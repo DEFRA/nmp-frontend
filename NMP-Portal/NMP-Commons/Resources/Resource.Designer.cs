@@ -13512,7 +13512,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reference must be unique from any previous estimations..
+        ///   Looks up a localized string similar to Provide a unique reference name for this estimate..
         /// </summary>
         public static string lblReferenceMustBeUniqueFromAnyPreviousEstimations {
             get {
@@ -19411,7 +19411,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What would you like to call this estimation reference?.
+        ///   Looks up a localized string similar to What would you like to call this nutrient supply estimate?.
         /// </summary>
         public static string lblWhatWouldYouLikeTocallThisEstimationReference {
             get {

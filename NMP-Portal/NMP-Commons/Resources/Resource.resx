@@ -8006,10 +8006,10 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>This name has already been added. You or someone else may have already added it.</value>
   </data>
   <data name="lblWhatWouldYouLikeTocallThisEstimationReference" xml:space="preserve">
-    <value>What would you like to call this estimation reference?</value>
+    <value>What would you like to call this nutrient supply estimate?</value>
   </data>
   <data name="lblReferenceMustBeUniqueFromAnyPreviousEstimations" xml:space="preserve">
-    <value>Reference must be unique from any previous estimations.</value>
+    <value>Provide a unique reference name for this estimate.</value>
   </data>
   <data name="lblWhatIsTheApplicationRate" xml:space="preserve">
     <value>What is the application rate?</value>

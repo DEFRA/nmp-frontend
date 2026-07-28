@@ -7063,7 +7063,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         // Fetch livestock
         Error? error = null;
-        (List<NutrientsLoadingLiveStockViewModel>? nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId!.Value, model.Year ?? 0);
+        (List<NutrientsLoadingLiveStockViewModel>? nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
         if (!string.IsNullOrWhiteSpace(error?.Message))
         {
             return (null, error);
@@ -7071,7 +7071,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
 
         // Fetch manures
-        (List<NutrientsLoadingManures> nutrientsLoadingManures, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId!.Value);
+        (List<NutrientsLoadingManures> nutrientsLoadingManures, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
 
         if (!string.IsNullOrWhiteSpace(error?.Message))
         {

@@ -19,10 +19,14 @@
             backAction = "CopyEstimate";
         }
     }
+    @if(!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimationId))
+    {
+        backAction = "MannerEstimationResult";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="MannerEstimation" asp-route-q="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimationId : ViewBag.IsBack)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -37,11 +41,6 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-
-           
-            <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
-
-        </p>
+        <partial name="_CancelLink" model="@Model.EncryptedMannerEstimationId" />
     </div>
 </div>

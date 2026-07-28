@@ -202,7 +202,7 @@ namespace NMP.Portal.Controllers
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
             model.EncryptedFarmId = q;
             model.EncryptedHarvestYear = r;
-            (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId!.Value);
+            (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
             if (HasError(error))
             {
                 TempData[_fieldGroupError] = error.Message;
@@ -252,7 +252,7 @@ namespace NMP.Portal.Controllers
             string fieldId = model.FieldList[0];
             var (manIds, error) = await _fertiliserManureLogic
                 .FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
-                    model.HarvestYear!.Value, fieldId, null, 1);
+                    model.HarvestYear.Value, fieldId, null, 1);
 
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
@@ -292,7 +292,7 @@ namespace NMP.Portal.Controllers
             foreach (var fieldId in model.FieldList)
             {
                 var (cropList, _) = await _cropLogic.FetchCropPlanByFieldIdAndYear(
-                    Convert.ToInt32(fieldId), model.HarvestYear!.Value);
+                    Convert.ToInt32(fieldId), model.HarvestYear.Value);
 
                 if (!cropList.Any()) continue;
 
@@ -304,7 +304,7 @@ namespace NMP.Portal.Controllers
 
                 var grassCrop = cropList.FirstOrDefault();
                 if (grassCrop == null || grassCrop.ID == null) continue;
-                var (mgmtList, _) = await _cropLogic.FetchManagementperiodByCropId(grassCrop.ID!.Value, false);
+                var (mgmtList, _) = await _cropLogic.FetchManagementperiodByCropId(grassCrop.ID.Value, false);
                 if (mgmtList == null) continue;
 
                 var toRemove = model.OrganicManures
@@ -491,7 +491,7 @@ namespace NMP.Portal.Controllers
 
             if (!TryGetSessionModel(nameof(Fields), out var model, out var redirect))
             {
-                return redirect!;
+                return redirect;
             }
 
             try
@@ -594,7 +594,7 @@ namespace NMP.Portal.Controllers
             try
             {
                 if (!TryGetSessionModel(nameof(Fields), out var sessionModel, out var redirect))
-                    return redirect!;
+                    return redirect;
 
                 // Field list
                 var (fieldSelectList, fieldError) = await GetFieldSelectListAsync(model);
@@ -958,7 +958,7 @@ namespace NMP.Portal.Controllers
             var removeIds = periods
                 .Skip(1)
                 .Where(p => p.ID.HasValue)
-                .Select(p => p.ID!.Value)
+                .Select(p => p.ID.Value)
                 .ToList();
 
             model.OrganicManures?.RemoveAll(x => removeIds.Contains(x.ManagementPeriodID));
@@ -1188,7 +1188,7 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace($"Organic Manure Controller : ManureGroup() action called");
             if (!TryGetSessionModel(nameof(ManureGroup), out var model, out var redirect))
             {
-                return redirect!;
+                return redirect;
             }
 
             try
@@ -1381,7 +1381,7 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace($"Organic Manure Controller : ManureApplyingDate() action called");
             if (!TryGetSessionModel(nameof(ManureApplyingDate), out var model, out var redirect))
             {
-                return redirect!;
+                return redirect;
             }
             try
             {
@@ -1805,7 +1805,7 @@ managementPeriod.CropID.HasValue
                 {
                     if (!TryGetSessionModel(nameof(ApplicationMethod), out var organicManureViewModel, out var redirect))
                     {
-                        return redirect!;
+                        return redirect;
                     }
                     ResetIncorporationMethodAndDelay(model, organicManureViewModel);
                 }
@@ -2662,7 +2662,7 @@ managementPeriod.CropID.HasValue
         private async Task<(bool ShouldContinue, IActionResult? Result, OrganicManureViewModel Model)> HandleApplicationRateMethodSelection(
         OrganicManureViewModel model, List<ManureType> manureTypeList, Error? error)
         {
-            switch ((NMP.Commons.Enums.ApplicationRate)model.ApplicationRateMethod!.Value)
+            switch ((NMP.Commons.Enums.ApplicationRate)model.ApplicationRateMethod.Value)
             {
                 case NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate:
                     model.Area = null;
@@ -2692,7 +2692,7 @@ managementPeriod.CropID.HasValue
                         {
                             x.AreaSpread = null;
                             x.ManureQuantity = null;
-                            x.ApplicationRate = model.ApplicationRate!.Value;
+                            x.ApplicationRate = model.ApplicationRate.Value;
                         });
                     }
 
@@ -5641,7 +5641,7 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace($"Organic Manure Controller : Windspeed() action called");
             if (!TryGetSessionModel(nameof(Windspeed), out var model, out var redirect))
             {
-                return redirect!;
+                return redirect;
             }
             (List<WindspeedResponse> windspeeds, Error? error) = await _organicManureLogic.FetchWindspeedList();
 
@@ -7538,7 +7538,7 @@ managementPeriod.CropID.HasValue
                 {
                     string fieldName = (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name;
 
-                    organicManureIds.AddRange(model.UpdatedOrganicIds.Where(organicManure => fieldName.Equals(organicManure.Name)).Select(organicManure => organicManure.OrganicManureId!.Value));
+                    organicManureIds.AddRange(model.UpdatedOrganicIds.Where(organicManure => fieldName.Equals(organicManure.Name)).Select(organicManure => organicManure.OrganicManureId.Value));
                 }
             }
 
@@ -7829,7 +7829,7 @@ managementPeriod.CropID.HasValue
 
             // Matches original: FieldList.Count != 1 && IsComingFromRecommendation falls through with no redirect,
             // eventually reaching the final RedirectToAction(_checkAnswer) at the bottom of the main action.
-            return null!;
+            return null;
         }
 
         private static void SetOrganicManureValues(OrganicManureViewModel model)
@@ -9892,7 +9892,7 @@ managementPeriod.CropID.HasValue
 
             foreach (var manure in grassFields)
             {
-                var (list, error) = await GetFieldDefoliationList(model.HarvestYear!.Value, manure.FieldID);
+                var (list, error) = await GetFieldDefoliationList(model.HarvestYear.Value, manure.FieldID);
                 if (error != null) return (new List<SelectListItem>(), error);
                 if (list.Any()) defoliationGroups.Add(list);
             }
@@ -9917,7 +9917,7 @@ managementPeriod.CropID.HasValue
 
             int fieldId = model.DefoliationList[model.DefoliationCurrentCounter].FieldID;
 
-            var (list, error) = await GetFieldDefoliationList(model.HarvestYear!.Value, fieldId);
+            var (list, error) = await GetFieldDefoliationList(model.HarvestYear.Value, fieldId);
             if (error != null)
             {
                 return (new List<SelectListItem>(), error);
