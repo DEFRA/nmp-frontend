@@ -844,7 +844,7 @@ namespace NMP.Portal.Controllers
                         ? null
                         : model.FieldGroup);
 
-            if (error != null) return (null!, error);
+            if (error != null) return (null, error);
 
             var selectList = ToSelectList(fieldList, f => f.Id.ToString(), f => f.Name)
                                 .OrderBy(x => x.Text)
@@ -888,7 +888,7 @@ namespace NMP.Portal.Controllers
 
             int counter = 0;
 
-            foreach (var field in model.FieldList!)
+            foreach (var field in model.FieldList)
             {
                 var cropList = GetFilteredCropList(model, cropPlans, isGetFlow, field);
 
@@ -4016,7 +4016,7 @@ managementPeriod.CropID.HasValue
 
             if (!TryGetSessionModel(nameof(CheckAnswer), out model, out var redirect))
             {
-                return (model, null, null, redirect!);
+                return (model, null, null, redirect);
             }
 
             return (model, null, null, null);
