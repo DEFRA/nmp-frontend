@@ -62,7 +62,7 @@ namespace NMP.Portal.Controllers
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     ViewBag.Error = error.Message;
-                    return View("~/Views/Home/Index.cshtml");
+                    return RedirectToAction("Index", "Error");
                 }
                 if (farms != null && farms.Count > 0)
                 {
