@@ -3712,6 +3712,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         else
         {
+            // if there is no plans on farm and last harvest year and current harvest year is same then show next year plan link as well along with last harvest year.
+            if (topPrevCroppingYear == currentHarvestYear)
+            {
+                currentHarvestYear++;
+            }
             for (int i = topPrevCroppingYear.GetValueOrDefault(); i <= currentHarvestYear; i++)
             {
                 var harvestYear = new HarvestYear
