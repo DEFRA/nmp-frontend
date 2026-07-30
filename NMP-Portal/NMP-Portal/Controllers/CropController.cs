@@ -4749,7 +4749,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
             SetHarvestYearPlanToSession(model);
-            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer", model);
+            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer");
         }
         catch (Exception ex)
         {
@@ -4811,7 +4811,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             SetHarvestYearPlanToSession(model);
-            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer", model);
+            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer");
         }
         catch (Exception ex)
         {

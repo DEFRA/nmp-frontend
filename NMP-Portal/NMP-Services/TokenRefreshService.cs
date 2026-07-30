@@ -55,9 +55,9 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
             var metadata = await configurationManager.GetConfigurationAsync(CancellationToken.None);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             var url = metadata.TokenEndpoint;
-            var response = await client.PostAsync(url, formData);
+            var response = await client.PostAsync(url, formData, CancellationToken.None);
             response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
+            var json = await response.Content.ReadAsStringAsync(CancellationToken.None);
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             tokens = JsonConvert.DeserializeObject<OAuthTokenResponse>(json);
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.

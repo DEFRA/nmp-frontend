@@ -8364,4 +8364,7 @@ following crop year 2</value>
   <data name="lblNutrientSupplyEstimatesMannerNpk" xml:space="preserve">
     <value>Nutrient supply estimates (MANNER-NPK)</value>
   </data>
+  <data name="lblOtherOrganicMaterial" xml:space="preserve">
+    <value>Other organic material</value>
+  </data>
 </root>
