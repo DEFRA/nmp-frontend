@@ -38,6 +38,7 @@ namespace NMP.Portal.Controllers
         private const string _elevationActionName = "Elevation";
         private const string _farmDataKey = "FarmData";
         private const string _addressListKey = "AddressList";
+        private const string _tempDataKey = "Error";
 
         public IActionResult Index()
         {
@@ -1283,7 +1284,7 @@ namespace NMP.Portal.Controllers
                     (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
-                        TempData["Error"] = error.Message;
+                        TempData[_tempDataKey] = error.Message;
                         return RedirectToAction(_farmListActionName);
                     }
                     HttpContext.Session.SetString("is_nmpt_section", Resource.lblTrue);
@@ -1338,7 +1339,7 @@ namespace NMP.Portal.Controllers
 
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
-                    TempData["Error"] = error.Message;
+                    TempData[_tempDataKey] = error.Message;
                     return RedirectToAction(_farmListActionName);
                 }
 
@@ -1452,7 +1453,7 @@ namespace NMP.Portal.Controllers
 
                 if (apiError != null && !string.IsNullOrWhiteSpace(apiError.Message))
                 {
-                    TempData["Error"] = apiError.Message;
+                    TempData[_tempDataKey] = apiError.Message;
                     return RedirectToAction(_farmListActionName);
                 }
 
