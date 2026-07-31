@@ -22313,9 +22313,9 @@ namespace NMP.Commons.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Enter a value between 0 and 9999..
         /// </summary>
-        public static string MsgEnterAValueBetweenZeroAndDoubleNoneDoubleNine {
+        public static string MsgEnterAValueBetweenZeroAndDoubleNineDoubleNine {
             get {
-                return ResourceManager.GetString("MsgEnterAValueBetweenZeroAndDoubleNoneDoubleNine", resourceCulture);
+                return ResourceManager.GetString("MsgEnterAValueBetweenZeroAndDoubleNineDoubleNine", resourceCulture);
             }
         }
         
