@@ -8367,4 +8367,7 @@ following crop year 2</value>
   <data name="lblOtherOrganicMaterial" xml:space="preserve">
     <value>Other organic material</value>
   </data>
+  <data name="MsgEnterAValueBetweenZeroAndDoubleNoneDoubleNine" xml:space="preserve">
+    <value>Enter a value between 0 and 9999.</value>
+  </data>
 </root>

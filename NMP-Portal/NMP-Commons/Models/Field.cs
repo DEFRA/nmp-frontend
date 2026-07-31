@@ -25,12 +25,19 @@ public class Field
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblOtherReference))]
     public string? OtherReference { get; set; }
 
+    [Range(0, 9999,
+    ErrorMessageResourceType = typeof(Resource),
+    ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetweenZeroAndDoubleNoneDoubleNine))]
     [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgTotalAreaShouldNotMoreThanTwoDecimal))]
     public decimal? TotalArea { get; set; }
-
+    [Range(0, 9999,
+    ErrorMessageResourceType = typeof(Resource),
+    ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetweenZeroAndDoubleNoneDoubleNine))]
     [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgCroppedAreaShouldNotMoreThanTwoDecimal))]
     public decimal? CroppedArea { get; set; }
-
+    [Range(0, 9999,
+    ErrorMessageResourceType = typeof(Resource),
+    ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetweenZeroAndDoubleNoneDoubleNine))]
     [RegularExpression("^\\d+(\\.\\d{0,2})?$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgManureNonSpreadingAreaNotMoreThanTwoDecimal))]
     public decimal? ManureNonSpreadingArea { get; set; }
     public bool? SoilReleasingClay { get; set; }
