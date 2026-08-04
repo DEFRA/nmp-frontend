@@ -389,11 +389,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError(_manureNonSpreadingAreaModelStateKey, Resource.MsgManureNonSpreadingAreaIsGreaterThanTotalArea);
         }
-
-        if (field.ManureNonSpreadingArea != null && field.ManureNonSpreadingArea < 0)
-        {
-            ModelState.AddModelError(_manureNonSpreadingAreaModelStateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-        }
     }
 
     private void ValidateCroppedArea(FieldViewModel field)
@@ -415,20 +410,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError(_croppedAreaModelStateKey, Resource.MsgEnterTheCroppedArea);
         }
 
-        if (field.CroppedArea != null && field.CroppedArea < 0)
-        {
-            ModelState.AddModelError(_croppedAreaModelStateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-        }
-
         if (field.CroppedArea > field.TotalArea)
         {
             ModelState.AddModelError(_croppedAreaModelStateKey, Resource.MsgCroppedAreaIsGreaterThanTotalArea);
         }
 
-        if (field.CroppedArea != null && field.CroppedArea < 0)
-        {
-            ModelState.AddModelError(_croppedAreaModelStateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-        }
     }
 
     private void ValidateTotalArea(FieldViewModel field)
@@ -450,10 +436,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError(_totalAreaModelStateKey, Resource.MsgEnterTotalFieldArea);
         }
 
-        if (field.TotalArea != null && field.TotalArea < 0)
-        {
-            ModelState.AddModelError(_totalAreaModelStateKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-        }
+
     }
 
 
