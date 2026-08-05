@@ -8,7 +8,7 @@
     : string.Empty;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation" asp-area="">@Resource.lblPlanAndRecordNutrientApplications</govuk-back-link>
+    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation" asp-area="Manner">@Resource.lblPlanAndRecordNutrientApplications</govuk-back-link>
 }
 
 @if (TempData["Error"] != null)
