@@ -712,7 +712,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (error == null && estimate != null)
                 {
                     model.CountryId = estimate.CountryID ?? 0;
-                    model.CropTypeId = estimate.CropTypeID??0;
+                    model.CropTypeId = estimate.CropTypeID ?? 0;
                     model.IsFarmOrganic = estimate.RegisteredOrganicProducer;
                     model.IsWithinNVZ = estimate.IsWithinNVZ;
                 }
@@ -2731,7 +2731,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return RedirectToAction("Name");
                 }
 
-                return  RedirectToAction("CopyFromEstimates");
+                return RedirectToAction("CopyFromEstimates");
             }
             catch (HttpRequestException hre)
             {
@@ -3112,7 +3112,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Name(string? q)
+        public async Task<IActionResult> Name(string? q, string? r)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} Name() action called");
             if (!string.IsNullOrWhiteSpace(q))
@@ -3121,6 +3121,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             MannerEstimationStep31ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep31();
+
+            if (!string.IsNullOrWhiteSpace(r))
+            {
+                model.EncryptedMannerEstimationId = r;
+                model.MannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(r));
+                model.IsCopyEstimate = true;
+                model = _mannerEstimationLogic.SetMannerEstimationStep31(model);
+            }
             ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
             return View(model);
         }
@@ -3142,8 +3150,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             string action = _farmNameKey;
             if (model.IsCopyEstimate.HasValue && model.IsCopyEstimate.Value)
             {
-
-                (int newEstimationId, Error? error) = await _mannerEstimationLogic.CopyMannerEstimation(model.MannerEstimationId ?? 0, model.Name);
+                int mannerEstimationId = model.MannerEstimationId ?? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimationId));
+                (int newEstimationId, Error? error) = await _mannerEstimationLogic.CopyMannerEstimation(mannerEstimationId, model.Name);
                 if (newEstimationId == 0 || error != null)
                 {
                     TempData["CopyFromEstimates"] = Resource.MsgWeCounldNotCopyMannerEstimation;
@@ -3168,7 +3176,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     action = "CopyExistingFarmAndFieldDetails";
                 }
             }
-            if(!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId))
+            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId))
             {
                 return RedirectToAction(_updateFarmFieldOrCropDataActionName);
             }
@@ -4429,7 +4437,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (mannerAppId != null)
             {
                 MannerEstimationResultResponse? result;
-                (result, error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(mannerEstimationId??0);
+                (result, error) = await _mannerEstimationLogic.FetchMannerApplicationResultById(mannerEstimationId ?? 0);
                 cropTypeId = result?.MannerEstimation?.CropTypeID;
             }
             else
@@ -4487,7 +4495,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             else
             {
                 (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
-                    mannerEstimationId??0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, mannerAppId);
+                    mannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-729), model.ApplicationDate.Value, mannerAppId);
             }
 
             if (error != null)
@@ -4499,7 +4507,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             bool isGreenCompostExistIn2Year;
             (isGreenCompostExistIn2Year, error) = await _mannerEstimationLogic.CheckMannerGreenCompostExistanceByDateRange(
-                mannerEstimationId??0,
+                mannerEstimationId ?? 0,
                 model.ApplicationDate.Value.AddDays(-729).ToString(_dateStringLiteral),
                 model.ApplicationDate.Value.ToString(_dateStringLiteral),
                 mannerAppId);

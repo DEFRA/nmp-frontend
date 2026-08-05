@@ -75,6 +75,9 @@
                 </li>
             }
             <li>
+                <a asp-action="Name" asp-controller="MannerEstimation" asp-route-r="@ViewBag.EncryptedEstimateId">@Resource.lblCreateACopyOfThisEstimate</a>
+            </li>
+            <li>
                 <a asp-action="Report" asp-route-q="@ViewBag.EncryptedEstimateId">@Resource.lblExportOrPrintThisEstimate</a>
             </li>
         </ul>
