@@ -34,6 +34,9 @@ namespace NMP.Core.Interfaces
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplicationServiceAsync(string applicationData);
         Task<Error?> RemoveMannerEstimationsServiceAsync(string mannerEstimationIds);
         Task<(string, Error?)> DeleteMannerEstimateApplicationByIdServiceAsync(int mannerEstimationId);
+         Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId);
+        Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int farmId);
+        Task<(List<MannerEstimationSummaryViewModel>?, Error?)> FetchMannerEstimateByFarmIdAsync(int farmId);
 
     }
 }

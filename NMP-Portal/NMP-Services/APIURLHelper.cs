@@ -282,4 +282,7 @@ internal static class ApiurlHelper
     public const string AddMannerEstimationApplicationAsyncAPI = "manner-estimation-applications";
     public const string DeleteMannerEstimateAsyncAPI = "/manner-estimations/";
     public const string DeleteMannerEstimateApplicationByIdAPI = "manner-estimation-applications/{0}";
+    public const string FetchAllMannerFarmsByOrgIdAsyncAPI = "/manner-farms/{0}";
+    public const string FetchMannerFarmByIdAsyncAPI = "/manner-farms/manner-farms-by-id/{0}";
+    public const string FetchMannerEstimateByFarmIdAsyncAPI = "/manner-estimations/by-farmId/{0}";
 }

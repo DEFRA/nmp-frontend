@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationDetailsViewModel:MannerEstimation
+    public class MannerEstimationDetailsViewModel
     {
-        public string TopSoil { get; set; } = string.Empty;
-        public string SubSoil { get; set; } = string.Empty;
-        public string CropTypeName { get; set; } = string.Empty;
-        public string Country { get; set; } = string.Empty;
-
-        public string EncryptedId { get; set; } = string.Empty;
+        public MannerFarm MannerFarm { get; set; }
+        public MannerEstimationSummaryViewModel MannerEstimation { get; set; }
 
     }
 }

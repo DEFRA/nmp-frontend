@@ -139,5 +139,9 @@ namespace NMP.Application
         MannerEstimationStep41ViewModel GetMannerEstimationStep41();
         MannerEstimationStep41ViewModel SetMannerEstimationStep41(MannerEstimationStep41ViewModel mannerEstimationStep41);
         Task<(string, Error?)> DeleteMannerEstimateApplicationById(int mannerEstimationId);
+
+        Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int farmId);
+        Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId);
+        Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int farmId);
     }
 }

@@ -3645,6 +3645,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a new supply estimate for this farm.
+        /// </summary>
+        public static string lblCreateANewSupplyEstimateForThisFarm {
+            get {
+                return ResourceManager.GetString("lblCreateANewSupplyEstimateForThisFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create an existing manure storage capacity report.
         /// </summary>
         public static string lblCreateAnExistingManureStorageCapacityReport {
@@ -3686,6 +3695,15 @@ namespace NMP.Commons.Resources {
         public static string lblCreateANutrientSupplyEstimate {
             get {
                 return ResourceManager.GetString("lblCreateANutrientSupplyEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a nutrient supply estimate for a new farm.
+        /// </summary>
+        public static string lblCreateANutrientSupplyEstimateForANewFarm {
+            get {
+                return ResourceManager.GetString("lblCreateANutrientSupplyEstimateForANewFarm", resourceCulture);
             }
         }
         
@@ -11568,6 +11586,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimates for {0}.
+        /// </summary>
+        public static string lblNutrientSupplyEstimatesForFarmName {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimatesForFarmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient supply estimates from organic materials (MANNER-NPK).
         /// </summary>
         public static string lblNutrientSupplyEstimatesFromOrganicMaterials {
@@ -18039,6 +18066,15 @@ namespace NMP.Commons.Resources {
         public static string lblViewAMapOfNitrateVulnerableZones {
             get {
                 return ResourceManager.GetString("lblViewAMapOfNitrateVulnerableZones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View, change or create new estimate.
+        /// </summary>
+        public static string lblViewChangeOrCreateNewEstimate {
+            get {
+                return ResourceManager.GetString("lblViewChangeOrCreateNewEstimate", resourceCulture);
             }
         }
         

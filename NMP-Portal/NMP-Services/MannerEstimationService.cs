@@ -577,5 +577,76 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         }
         return error;
     }
+    public async Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId)
+    {
+        List<MannerFarmViewModel> mannerEstimationsList = new List<MannerFarmViewModel>();
+        Error? error = null;
+
+        HttpClient httpClient = await GetNMPAPIClient();
+        string url = string.Format(ApiurlHelper.FetchAllMannerFarmsByOrgIdAsyncAPI, orgId);
+        var response = await httpClient.GetAsync(url);
+
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            var mannerEstimations = responseWrapper?.Data?.ToObject<List<MannerFarmViewModel>>();
+            mannerEstimationsList.AddRange(mannerEstimations);
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerEstimationsList, error);
+    }
+    public async Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int id)
+    {
+        MannerFarmViewModel? mannerFarm = null;
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerFarmByIdAsyncAPI, id));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {
+                mannerFarm = responseWrapper?.Data?.records.ToObject<MannerFarmViewModel>();
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerFarm, error);
+    }
+
+    public async Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmIdAsync(int farmId)
+    {
+        List<MannerEstimationSummaryViewModel>? mannerEstimationSummary = new List<MannerEstimationSummaryViewModel>();
+        Error? error = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateByFarmIdAsyncAPI, farmId));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper != null && responseWrapper.Data != null)
+            {                
+                var mannerEstimations = responseWrapper?.Data?.ToObject<List<MannerEstimationSummaryViewModel>>();
+                mannerEstimationSummary.AddRange(mannerEstimations);
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (mannerEstimationSummary, error);
+    }
 }
 
