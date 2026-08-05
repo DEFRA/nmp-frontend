@@ -8370,4 +8370,10 @@ following crop year 2</value>
   <data name="MsgEnterAValueBetweenZeroAndDoubleNineDoubleNine" xml:space="preserve">
     <value>Enter a value between 0 and 9999.</value>
   </data>
+  <data name="lblCreateACopyOfThisEstimate" xml:space="preserve">
+    <value>Create a copy of this estimate</value>
+  </data>
+  <data name="lblNutrientSupplyEstimateCopied" xml:space="preserve">
+    <value>Nutrient supply estimate copied</value>
+  </data>
 </root>
