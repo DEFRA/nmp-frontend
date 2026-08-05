@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -3614,6 +3614,15 @@ namespace NMP.Commons.Resources {
         public static string lblCPHNumberSingleBusinessIdentifier {
             get {
                 return ResourceManager.GetString("lblCPHNumberSingleBusinessIdentifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a copy of this estimate.
+        /// </summary>
+        public static string lblCreateACopyOfThisEstimate {
+            get {
+                return ResourceManager.GetString("lblCreateACopyOfThisEstimate", resourceCulture);
             }
         }
         
@@ -11564,6 +11573,15 @@ namespace NMP.Commons.Resources {
         public static string lblNutrients {
             get {
                 return ResourceManager.GetString("lblNutrients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimate copied.
+        /// </summary>
+        public static string lblNutrientSupplyEstimateCopied {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimateCopied", resourceCulture);
             }
         }
         
