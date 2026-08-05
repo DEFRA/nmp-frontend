@@ -49,11 +49,11 @@
                         <th class="govuk-table__header">@Resource.lblInANVZ</th>
                     </tr>
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.FieldName</td>
-                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.TopSoil</td>
-                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.SubSoil</td>
-                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.CropTypeName</td>
-                        <td class="govuk-table__cell">@(Model.MannerFieldAndCropDetails.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
+                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.MannerEstimation.FieldName</td>
+                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.MannerEstimation.TopSoil</td>
+                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.MannerEstimation.SubSoil</td>
+                        <td class="govuk-table__cell">@Model.MannerFieldAndCropDetails.MannerEstimation.CropTypeName</td>
+                        <td class="govuk-table__cell">@(Model.MannerFieldAndCropDetails.MannerEstimation.IsWithinNVZ == true ? Resource.lblYes : Resource.lblNo)</td>
                     </tr>
                 </tbody>
             </table>
@@ -215,7 +215,7 @@
             @if (isAnyWarning)
             {
                 <h2 class="govuk-heading-m">
-                    @string.Format((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNvzWarningFor : Resource.lblWaterResourcesRegulationsWarningsFor, Model.MannerFieldAndCropDetails.FieldName)
+                    @string.Format((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNvzWarningFor : Resource.lblWaterResourcesRegulationsWarningsFor, Model.MannerFieldAndCropDetails.MannerEstimation.FieldName)
                 </h2>
 
                 <p class="govuk-body">@((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblThePlannedApplicationsmayNotComplyWith : Resource.lblThePlannedApplicationsMayNotComplyWithTheseWater)</p>

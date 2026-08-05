@@ -8376,4 +8376,16 @@ following crop year 2</value>
   <data name="lblNutrientSupplyEstimateCopied" xml:space="preserve">
     <value>Nutrient supply estimate copied</value>
   </data>
+  <data name="lblCreateANutrientSupplyEstimateForANewFarm" xml:space="preserve">
+    <value>Create a nutrient supply estimate for a new farm</value>
+  </data>
+  <data name="lblViewChangeOrCreateNewEstimate" xml:space="preserve">
+    <value>View, change or create new estimate</value>
+  </data>
+  <data name="lblNutrientSupplyEstimatesForFarmName" xml:space="preserve">
+    <value>Nutrient supply estimates for {0}</value>
+  </data>
+  <data name="lblCreateANewSupplyEstimateForThisFarm" xml:space="preserve">
+    <value>Create a new supply estimate for this farm</value>
+  </data>
 </root>
