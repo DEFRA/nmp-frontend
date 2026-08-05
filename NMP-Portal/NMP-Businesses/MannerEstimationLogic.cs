@@ -966,43 +966,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return mannerEstimationApplication;
     }
 
-    //private async Task<(MannerEstimationApplication, Error?)> BindMannerOutputData(MannerEstimation mannerEstimate, MannerEstimationApplication mannerEstimationApplication)
-    //{
-    //    (string? mannerRequestbody, Error? error) = await BindManureOutput(mannerEstimate, mannerEstimationApplication);
-    //    if (!string.IsNullOrEmpty(error?.Message))
-    //    {
-    //        return (mannerEstimationApplication, error);
-    //    }
-
-    //    (MannerCalculateNutrientResponse mannerOutput, error) = await _organicManureLogic.FetchMannerCalculateNutrient(mannerRequestbody);
-    //    if (error == null && mannerOutput != null)
-    //    {
-    //        mannerEstimationApplication.TotalN = mannerOutput.TotalN;
-    //        mannerEstimationApplication.CropAvailableNCurrentCrop = mannerOutput.CurrentCropAvailableN;
-    //        mannerEstimationApplication.CropAvailableNitrogenFollowingCropYearTwo = mannerOutput.FollowingCropYear2AvailableN;
-
-    //        mannerEstimationApplication.TotalP2O5 = mannerOutput.TotalP2O5;
-    //        mannerEstimationApplication.CropAvailableP2O5 = mannerOutput.CropAvailableP2O5;
-
-    //        mannerEstimationApplication.TotalSO3 = mannerOutput.TotalSO3;
-    //        mannerEstimationApplication.CropAvailableSO3 = mannerOutput.CropAvailableSO3 ?? 0;
-
-    //        mannerEstimationApplication.TotalMgO = mannerOutput.TotalMgO;
-
-    //        mannerEstimationApplication.TotalK2O = mannerOutput.TotalK2O;
-    //        mannerEstimationApplication.CropAvailableK2O = mannerOutput.CropAvailableK2O;
-
-    //        mannerEstimationApplication.NitrogenUseEfficiency = mannerOutput.NitrogenEfficiencePercentage;
-
-    //        mannerEstimationApplication.MineralisedNitrogenLosses = mannerOutput.MineralisedN;
-    //        mannerEstimationApplication.LostNitrateLosses = mannerOutput.NitrateNLoss;
-    //        mannerEstimationApplication.LostAmmonia = mannerOutput.AmmoniaNLoss;
-    //        mannerEstimationApplication.LostDenitrified = mannerOutput.DenitrifiedNLoss;
-    //    }
-
-    //    return (mannerEstimationApplication, error);
-    //}
-
+   
     private static void BindApplicationRateForUpdate(MannerEstimationViewModel mannerEstimationViewModel)
     {
         if (mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
@@ -1072,79 +1036,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return (mannerEstimationViewModel, mannerEstimate,mannerFarm);
     }
 
-    //private async Task<(string?, Error?)> BindManureOutput(MannerEstimation mannerEstimation, MannerEstimationApplication mannerEstimationApplication)
-    //{
-    //    Error? error = null;
-    //    bool isMannerScotland = mannerEstimation.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland;
-    //    int rb209CountryId = mannerEstimation.CountryID == (int)NMP.Commons.Enums.FarmCountry.England ||
-    //        mannerEstimation.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ? (int)NMP.Commons.Enums.RB209Country.England : (int)NMP.Commons.Enums.RB209Country.Scotland;
-    //    string? manureName = string.Empty;
-    //    bool? isLiquid = false;
-    //    (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationApplication.ManureTypeID.Value);
-    //    if (manureType != null)
-    //    {
-    //        manureName = manureType.Name;
-    //        isLiquid = manureType.IsLiquid ?? false;
-    //    }
-    //    var mannerOutput = new
-    //    {
-    //        runType = isMannerScotland ? (int)NMP.Commons.Enums.RunType.MannerScotland : (int)NMP.Commons.Enums.RunType.MannerEngland,
-    //        postcode = mannerEstimation.Postcode.Split(" ")[0],
-    //        countryID = rb209CountryId,
-    //        field = new
-    //        {
-    //            fieldID = 0,
-    //            fieldName = mannerEstimation.FieldName,
-    //            MannerCropTypeID = mannerEstimation.MannerCropTypeID,
-    //            topsoilID = mannerEstimation.TopSoilID,
-    //            subsoilID = mannerEstimation.SubSoilID,
-    //            isInNVZ = mannerEstimation.IsWithinNVZ
-    //        },
-    //        manureApplications = new[]
-    //                                  {
-    //                                            new
-    //                                            {
-    //                                                manureDetails = new
-    //                                                {
-    //                                                    manureID = mannerEstimationApplication.ManureTypeID,
-    //                                                    name = manureName,
-    //                                                    isLiquid = isLiquid,
-    //                                                    dryMatter = mannerEstimationApplication.DryMatterPercent,
-    //                                                    totalN = mannerEstimationApplication.N,
-    //                                                    nH4N = mannerEstimationApplication.NH4N,
-    //                                                    uric = mannerEstimationApplication.UricAcid,
-    //                                                    nO3N = mannerEstimationApplication.NO3N,
-    //                                                    p2O5 = mannerEstimationApplication.P2O5,
-    //                                                    k2O = mannerEstimationApplication.K2O,
-    //                                                    sO3 = mannerEstimationApplication.SO3,
-    //                                                    mgO = mannerEstimationApplication.MgO
-    //                                                },
-    //                                                applicationDate = mannerEstimationApplication.ApplicationDate.ToString(_dateStringLiteral),
-    //                                                applicationRate = new
-    //                                                {
-    //                                                    value = mannerEstimationApplication.ApplicationRate,
-    //                                                    unit = isLiquid.Value ? Resource.lblMeterCubePerHectare : Resource.lblTonnesPerHectare
-    //                                                },
-    //                                                applicationMethodID = mannerEstimationApplication.ApplicationMethodID,
-    //                                                incorporationMethodID = mannerEstimationApplication.IncorporationMethodID,
-    //                                                incorporationDelayID = mannerEstimationApplication.IncorporationDelayID,
-    //                                                autumnCropNitrogenUptake = new
-    //                                                {
-    //                                                    value = mannerEstimationApplication.AutumnCropNitrogenUptake,
-    //                                                    unit = Resource.lblKgPerHectare
-    //                                                },
-    //                                                endOfDrainageDate = mannerEstimationApplication.EndOfDrainageDate?.ToString(_dateStringLiteral),
-    //                                                rainfallPostApplication = mannerEstimationApplication.RainfallPostApplication,
-    //                                                windspeedID = mannerEstimationApplication.WindspeedID,
-    //                                                rainTypeID = mannerEstimationApplication.RainfallWithinSixHoursID,
-    //                                                topsoilMoistureID = mannerEstimationApplication.MoistureID
-    //                                            }
-    //                                        }
-    //    };
-    //    return (JsonConvert.SerializeObject(mannerOutput), error);
-
-
-    //}
+ 
     private async Task<int?> BindMannerCropTypeId(MannerEstimationStep20ViewModel model, int cropTypeId)
     {
         (CropTypeLinkingResponse cropTypeLinkingResponse, _) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(cropTypeId);
@@ -1605,7 +1497,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public async Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId)
     {
-        (_, MannerEstimation mannerEstimation, MannerFarm mannerFarm) = await BindMannerEstimationDataForAdd(null, mannerEstimationId);
+        (_, MannerEstimation mannerEstimation,_) = await BindMannerEstimationDataForAdd(null, mannerEstimationId);
         string jsonData = JsonConvert.SerializeObject(new
         {
             MannerEstimation = mannerEstimation

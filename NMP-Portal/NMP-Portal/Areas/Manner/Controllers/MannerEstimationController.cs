@@ -710,7 +710,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (error == null && estimate != null)
                 {
                     (MannerFarmViewModel? mannerFarm, error) = await _mannerEstimationLogic.FetchMannerFarmById(estimate.FarmID.Value);
-                    if (error == null && estimate != null)
+                    if (error == null && mannerFarm != null)
                     {
                         model.CountryId = mannerFarm.CountryID ?? 0;
                         model.CropTypeId = estimate.CropTypeID ?? 0;
@@ -5097,9 +5097,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (string.IsNullOrWhiteSpace(error?.Message) && mannerEstimations.Count > 0)
             {
-                foreach (var estimation in mannerEstimations)
+                foreach (var estimation in mannerEstimations.Select(x => x.MannerEstimation))
                 {
-                    estimation.MannerEstimation.EncryptedId = _mannerEstimationProtector.Protect(estimation.MannerEstimation.ID.ToString());
+                    estimation.EncryptedId = _mannerEstimationProtector.Protect(estimation.ID.ToString());
                 }
                 var selectList = ToSelectList(mannerEstimations, f => f.MannerEstimation.ID.ToString(), f => string.Format(Resource.lblRemoveEstimationNames, f.MannerEstimation.Name, f.MannerFarm.Name, f.MannerEstimation.ModifiedOn != null ? f.MannerEstimation.ModifiedOn.Value.ToString("d MMMM yyyy") : f.MannerEstimation.CreatedOn.Value.ToString("d MMMM yyyy")))
                                 .OrderBy(x => x.Text)

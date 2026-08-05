@@ -18,17 +18,7 @@ else
 {
     <div class="govuk-grid-row">
         <div id="all-plans-table" class="govuk-grid-column-full">
-
-            @if (ViewBag.Success != null && ViewBag.Success == "true")
-            {
-                <govuk-notification-banner type="NotificationBannerType.Success">
-                    <h3 class="govuk-notification-banner__heading">
-                        @Resource.lblNutrientSupplyEstimatesRemoved
-                    </h3>
-
-                </govuk-notification-banner>
-            }
-
+                     
             <h1 class="govuk-heading-l">@Resource.lblNutrientSupplyEstimates</h1>
 
             

@@ -600,12 +600,12 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimationsList, error);
     }
-    public async Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int id)
+    public async Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int farmId)
     {
         MannerFarmViewModel? mannerFarm = null;
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerFarmByIdAsyncAPI, id));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerFarmByIdAsyncAPI, farmId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
