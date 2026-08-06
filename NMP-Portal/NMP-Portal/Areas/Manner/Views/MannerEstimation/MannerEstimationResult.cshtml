@@ -375,7 +375,7 @@
                         </td>
                         <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.NitrogenProductPrice)</td>
                         <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.NitrogenPrice, Resource.lblPerKg))</td>
-                        <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.EncryptedNitrogenId>@Resource.lblChange</a></td>
+                        <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblPhosphateP2O5</td>
@@ -384,7 +384,7 @@
                         </td>
                         <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PhosphateProductPrice)</td>
                         <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.PhosphatePrice, Resource.lblPerKg))</td>
-                        <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.EncryptedPhosphateId>@Resource.lblChange</a></td>
+                        <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                     </tr>
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblPotashK2O</td>
@@ -393,7 +393,7 @@
                         </td>
                         <td class="govuk-table__cell">@string.Format(Resource.lblPoundValuePerTonne, mannerEstimation.PotashProductPrice)</td>
                         <td class="govuk-table__cell">@string.Format(Resource.lblPoundWithValue, string.Format("{0:N2} {1}", mannerEstimation.PotashPrice, Resource.lblPerKg))</td>
-                        <td class="govuk-table__cell"><a asp-action="NutrientProduct" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId asp-route-r=@ViewBag.EncryptedPotashId>@Resource.lblChange</a></td>
+                        <td class="govuk-table__cell"><a href="#">@Resource.lblChange</a></td>
                     </tr>
 
                 </tbody>
@@ -410,10 +410,7 @@
                             @mannerEstimation.Name
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="Name" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblReference)</span>
-                            </a>
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -423,10 +420,7 @@
                             @mannerFarm.Name
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="FarmName" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblFarmName)</span>
-                            </a>
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -436,10 +430,8 @@
                             @ViewBag.CountryName
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="Country" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblCountry)</span>
-                            </a>
+
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -449,10 +441,8 @@
                             @mannerFarm.Postcode
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="PostCode" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span>
-                            </a>
+
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -462,10 +452,8 @@
                             @registeredOrganicProducer
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="IsFarmOrganic" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblRegisteredOrganicProducerOnly)</span>
-                            </a>
+
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -475,10 +463,8 @@
                             @string.Format("{0}{1}", mannerFarm.AverageAnuualRainfall, Resource.lblmm)
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="AverageAnnualRainfall" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(string.Format(Resource.lblAverageAnnualRainfallFor, mannerFarm.Postcode))</span>
-                            </a>
+
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -488,10 +474,7 @@
                             @mannerEstimation.FieldName
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="FieldName" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblFieldName)</span>
-                            </a>
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -501,10 +484,7 @@
                             @isWithinNVZ
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="NVZField" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblIsInsideANitrateVulnerableZone)</span>
-                            </a>
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -514,10 +494,7 @@
                             @mannerEstimation.TopSoil
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="Topsoil" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblTopsoil)</span>
-                            </a>
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -527,10 +504,7 @@
                             @mannerEstimation.SubSoil
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="Subsoil" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblSubSoil)</span>
-                            </a>
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -540,10 +514,7 @@
                             @ViewBag.CropGroup
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="CropGroup" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblCropGroup)</span>
-                            </a>
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -553,10 +524,7 @@
                             @mannerEstimation.CropTypeName
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="CropType" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(Resource.lblCropType)</span>
-                            </a>
+                            <a href="#">@Resource.lblChange</a>
                         </td>
                     </tr>
 
@@ -568,10 +536,7 @@
                                 @mannerEstimation.SowingDate.ToString("dd MMMM yyyy")
                             </td>
                             <td class="govuk-table__cell">
-                                <a class="govuk-link" asp-action="SowingDate" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
-                                    @Resource.lblChange
-                                    <span class="govuk-visually-hidden">@(Resource.lblPlantingDate)</span>
-                                </a>
+                                <a href="#">@Resource.lblChange</a>
                             </td>
                         </tr>
                     }
