@@ -97,7 +97,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ViewBag.EncryptedFarmId = _mannerEstimationProtector.Protect(farmId.ToString());
                     ViewBag.MannerEstimations = mannerEstimateList;
                     HttpContext.Session.SetString("current_manner_estimate_farm_name", mannerEstimateList[0].FarmName);
-                    HttpContext.Session.SetString("current_manner_estimate_farm_id", _mannerEstimationProtector.Protect(mannerEstimateList[0].ID.ToString()));
+                    HttpContext.Session.SetString("current_manner_estimate_farm_id", q);
                     MannerEstimationViewModel? model = _mannerEstimationLogic.GetMannerEstimationFromSession();
                     if (model == null)
                     {

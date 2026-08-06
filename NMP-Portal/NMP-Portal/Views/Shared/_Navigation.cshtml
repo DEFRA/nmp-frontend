@@ -16,7 +16,7 @@
     var isMannerEstimateSection = httpContextAccessor?.HttpContext?.Session.GetString("is_manner_estimate_section");
     var isCurrentManureEstimate = httpContextAccessor?.HttpContext?.Session.GetString("is_current_manner_estimate");
     var currentManureEstimateFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_farm_name");
-    var currentManureEstimateFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_farm_Id");
+    var currentManureEstimateFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_farm_id");
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
     bool isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
