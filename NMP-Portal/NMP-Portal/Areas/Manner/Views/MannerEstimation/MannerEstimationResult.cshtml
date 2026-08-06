@@ -3,17 +3,18 @@
 @{
     ViewData["Title"] = $"{Resource.lblEstimateOfNutrientSupplyFromOrganicMaterialResults} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     var mannerEstimation = ViewBag.MannerEstimations.MannerEstimation;
+    var mannerFarm = ViewBag.MannerEstimations.MannerFarm;
     var totalMannerResult = ViewBag.MannerEstimations.TotalMannerCalculateNutrient;
 
-    var registeredOrganicProducer = mannerEstimation.RegisteredOrganicProducer ? Resource.lblYes : Resource.lblNo;
-    var isWithinNVZ = @mannerEstimation.IsWithinNVZ ? Resource.lblYes : Resource.lblNo;
+    var registeredOrganicProducer = mannerFarm.RegisteredOrganicProducer ? Resource.lblYes : Resource.lblNo;
+    var isWithinNVZ = mannerEstimation.IsWithinNVZ ? Resource.lblYes : Resource.lblNo;
     int applicationCount = ViewBag.MannerEstimations.MannerEstimationApplication.Count;
     int count = 0;
     int countApp = 0;
     var applcationTabName = Resource.lblApplicationDetail;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation">@Resource.lblBackToAllNutrientSupplyEstimates</govuk-back-link>
+    <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@ViewBag.EncryptedFarmId">@Resource.lblBackToAllNutrientSupplyEstimates</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -419,7 +420,7 @@
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblFarmName</th>
                         <td class="govuk-table__cell">
-                            @mannerEstimation.FarmName
+                            @mannerFarm.Name
                         </td>
                         <td class="govuk-table__cell">
                             <a class="govuk-link" asp-action="FarmName" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
@@ -432,7 +433,7 @@
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblCountry</th>
                         <td class="govuk-table__cell">
-                            @mannerEstimation.Country
+                            @ViewBag.CountryName
                         </td>
                         <td class="govuk-table__cell">
                             <a class="govuk-link" asp-action="Country" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
@@ -445,7 +446,7 @@
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblPostCode</th>
                         <td class="govuk-table__cell">
-                            @mannerEstimation.Postcode
+                            @mannerFarm.Postcode
                         </td>
                         <td class="govuk-table__cell">
                             <a class="govuk-link" asp-action="PostCode" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
@@ -469,14 +470,14 @@
                     </tr>
 
                     <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">@string.Format(Resource.lblAverageAnnualRainfallFor, mannerEstimation.Postcode)</th>
+                        <th scope="row" class="govuk-table__header">@string.Format(Resource.lblAverageAnnualRainfallFor, mannerFarm.Postcode)</th>
                         <td class="govuk-table__cell">
-                            @string.Format("{0}{1}", mannerEstimation.AverageAnuualRainfall, Resource.lblmm)
+                            @string.Format("{0}{1}", mannerFarm.AverageAnuualRainfall, Resource.lblmm)
                         </td>
                         <td class="govuk-table__cell">
                             <a class="govuk-link" asp-action="AverageAnnualRainfall" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
                                 @Resource.lblChange
-                                <span class="govuk-visually-hidden">@(string.Format(Resource.lblAverageAnnualRainfallFor, mannerEstimation.Postcode))</span>
+                                <span class="govuk-visually-hidden">@(string.Format(Resource.lblAverageAnnualRainfallFor, mannerFarm.Postcode))</span>
                             </a>
                         </td>
                     </tr>
