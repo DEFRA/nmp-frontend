@@ -935,20 +935,25 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
-            int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
-
-            var (soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(model.TopSoilId ?? 0, model.SubSoilId ?? 0);
-            if (string.IsNullOrEmpty(error?.Message))
+            var ( manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
+            if(manureType?.HighReadilyAvailableNitrogen == true)
             {
-                string closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, model.SowingDate, model.FarmRB209CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
-                model.ClosedPeriod = closedPeriod;
-            }
+                bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
+                int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
 
-            model.IsWarningMsgNeedToShow = false;
-            model.IsClosedPeriodWarning = false;
-            model.IsApplicationJulyToSeptWarning = false;
-            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
+                (var soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(model.TopSoilId ?? 0, model.SubSoilId ?? 0);
+                if (string.IsNullOrEmpty(error?.Message))
+                {
+                    string closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, model.SowingDate, model.FarmRB209CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
+                    model.ClosedPeriod = closedPeriod;
+                }
+
+                model.IsWarningMsgNeedToShow = false;
+                model.IsClosedPeriodWarning = false;
+                model.IsApplicationJulyToSeptWarning = false;
+                model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
+            }
+            
             model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
             return View(model);
         }
@@ -4504,6 +4509,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             // Warning excel sheet row 4: >500 total N in last 730 days (compost/Scotland, non-trigger crops or Scotland)
             if (!isTriggerCrop || isScotland)
             {
+                error = await CheckNFieldLimitPAS100Compost(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId, mannerAppId);
+
                 error = await CheckNFieldLimit500Compost(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId, mannerAppId);
             }
 
@@ -4532,6 +4539,34 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return error;
         }
 
+        private async Task<Error?> CheckNFieldLimitPAS100Compost<TModel>(
+            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, bool isScotland, bool isCompost, int? mannerEstimationId, int? mannerAppId)
+            where TModel : MannerEstimationNWarningViewModel
+        {
+            decimal previousAppliedTotalN = 0;
+            Error? error=null;
+
+            if (isScotland)
+            {
+                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
+                    mannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, true, mannerAppId);
+            }
+            
+
+            if (error != null)
+            {
+                return error;
+            }
+
+            decimal totalN = previousAppliedTotalN + currentApplicationNitrogen;
+
+            if (isCompost && totalN > 250)
+            {
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostPAS.ToString());
+            }
+
+            return error;
+        }
 
         private async Task<Error?> CheckNFieldLimit500Compost<TModel>(
             TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, bool isScotland, bool isCompost, int? mannerEstimationId, int? mannerAppId)
@@ -4884,44 +4919,49 @@ namespace NMP.Portal.Areas.Manner.Controllers
             Error? error = null;
 
             string? closedPeriod = string.Empty;
-            int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.MannerEstimation.CropTypeID);
-            bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
-            int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
-
-            (var soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(estimation.MannerEstimation.TopSoilID ?? 0, estimation.MannerEstimation.SubSoilID ?? 0);
-            if (string.IsNullOrEmpty(error?.Message))
-            {
-                closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, estimation.MannerEstimation.SowingDate, estimation.MannerFarm.CountryID ?? 0, cropGroupId, estimation.MannerEstimation.CropTypeID ?? 0, isPerennial);
-            }
-            int harvestYear = GetHarvestYearFromApplicationDate(application.ApplicationDate);
+            var dateWarningViewModel = new MannerEstimationStep13ViewModel();
             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID ?? 0);
-
-            // --- date-based warnings ---
-            MannerEstimationStep13ViewModel dateWarningViewModel = new MannerEstimationStep13ViewModel
+            if (manureType?.HighReadilyAvailableNitrogen == true)
             {
-                ApplicationDate = application.ApplicationDate,
-                FieldName = estimation.MannerEstimation.FieldName ?? string.Empty,
-                ManureTypeName = application.ManureType ?? string.Empty,
-                CountryId = estimation.MannerFarm.CountryID ?? 0,
-                FarmRB209CountryId = estimation.MannerFarm.CountryID ?? 0,
-                CropTypeId = estimation.MannerEstimation.CropTypeID,
-                CropGroupId = cropGroupId,
-                TopSoilId = estimation.MannerEstimation.TopSoilID,
-                SubSoilId = estimation.MannerEstimation.SubSoilID,
-                SowingDate = estimation.MannerEstimation.SowingDate,
-                IsWithinNVZ = estimation.MannerEstimation.IsWithinNVZ,
-                IsFarmOrganic = estimation.MannerFarm.RegisteredOrganicProducer,
-                ManureTypeId = application.ManureTypeID,
-                ClosedPeriod = closedPeriod,
-                MannerEstimationId = estimation.MannerEstimation.ID,
-                MannerEstimationApplicationsId = application.ID,
-                IsWarningMsgNeedToShow = false,
-                IsClosedPeriodWarning = false,
-                IsApplicationJulyToSeptWarning = false,
-                IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false
-            };
+                int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.MannerEstimation.CropTypeID);
+                bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
+                int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
 
-            error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
+                (var soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(estimation.MannerEstimation.TopSoilID ?? 0, estimation.MannerEstimation.SubSoilID ?? 0);
+                if (string.IsNullOrEmpty(error?.Message))
+                {
+                    closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, estimation.MannerEstimation.SowingDate, estimation.MannerFarm.CountryID ?? 0, cropGroupId, estimation.MannerEstimation.CropTypeID ?? 0, isPerennial);
+                }
+                int harvestYear = GetHarvestYearFromApplicationDate(application.ApplicationDate);
+
+                // --- date-based warnings ---
+                dateWarningViewModel = new MannerEstimationStep13ViewModel
+                {
+                    ApplicationDate = application.ApplicationDate,
+                    FieldName = estimation.MannerEstimation.FieldName ?? string.Empty,
+                    ManureTypeName = application.ManureType ?? string.Empty,
+                    CountryId = estimation.MannerFarm.CountryID ?? 0,
+                    FarmRB209CountryId = estimation.MannerFarm.CountryID ?? 0,
+                    CropTypeId = estimation.MannerEstimation.CropTypeID,
+                    CropGroupId = cropGroupId,
+                    TopSoilId = estimation.MannerEstimation.TopSoilID,
+                    SubSoilId = estimation.MannerEstimation.SubSoilID,
+                    SowingDate = estimation.MannerEstimation.SowingDate,
+                    IsWithinNVZ = estimation.MannerEstimation.IsWithinNVZ,
+                    IsFarmOrganic = estimation.MannerFarm.RegisteredOrganicProducer,
+                    ManureTypeId = application.ManureTypeID,
+                    ClosedPeriod = closedPeriod,
+                    MannerEstimationId = estimation.MannerEstimation.ID,
+                    MannerEstimationApplicationsId = application.ID,
+                    IsWarningMsgNeedToShow = false,
+                    IsClosedPeriodWarning = false,
+                    IsApplicationJulyToSeptWarning = false,
+                    IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false
+                };
+
+                error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
+            }
+            
             // --- N-field-limit warnings ---
             MannerEstimationNWarningViewModel nWarningViewModel = new MannerEstimationNWarningViewModel
             {
