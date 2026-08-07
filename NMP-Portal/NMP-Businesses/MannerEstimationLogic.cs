@@ -981,10 +981,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
     }
 
-    private async Task<(MannerEstimationViewModel, MannerEstimation, MannerFarm?)> BindMannerEstimationDataForAdd(Guid? organisationId, int? mannerEstimationId)
+    private async Task<(MannerEstimationViewModel, MannerEstimation, MannerFarm)> BindMannerEstimationDataForAdd(Guid? organisationId, int? mannerEstimationId)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        MannerFarm? mannerFarm = null;
+        MannerFarm mannerFarm = new MannerFarm();
         MannerEstimation mannerEstimate = new MannerEstimation
         {
             FarmID = mannerEstimationViewModel.FarmId,
@@ -995,9 +995,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
             CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
             MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
-            SowingDate = Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), mannerEstimationViewModel.MannerEstimationStep9.CropTypeId) ? mannerEstimationViewModel.MannerEstimationStep20.SowingDate : null,
+            SowingDate = Enum.IsDefined(
+                typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes),
+                mannerEstimationViewModel.MannerEstimationStep9.CropTypeId)
+                    ? mannerEstimationViewModel.MannerEstimationStep20.SowingDate
+                    : null,
         };
-
 
         if (mannerEstimationId != null)
         {
@@ -1006,7 +1009,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             {
                 (MannerFarmViewModel? mannerFarmData, _) = await FetchMannerFarmById(mannerEstimate.FarmID.Value);
                 mannerEstimate.ID = mannerEstimationId;
-                mannerFarm.OrganisationID = mannerFarmData.OrganisationID;
+                mannerFarm.OrganisationID = mannerFarmData?.OrganisationID;
 
                 mannerEstimate.NitrogenPrice = mannerEstimateData.NitrogenPrice;
                 mannerEstimate.NitrogenProductId = mannerEstimateData.NitrogenProductId;
@@ -1026,16 +1029,14 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
         else if (organisationId != null)
         {
-            mannerFarm = new MannerFarm
-            {
-                Name = mannerEstimationViewModel.MannerEstimationStep1.FarmName,
-                CountryID = mannerEstimationViewModel.MannerEstimationStep2.CountryID,
-                Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode,
-                AverageAnuualRainfall = mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall,
-                RegisteredOrganicProducer = mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic,
-            };
+            mannerFarm.Name = mannerEstimationViewModel.MannerEstimationStep1.FarmName;
+            mannerFarm.CountryID = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+            mannerFarm.Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
+            mannerFarm.AverageAnuualRainfall = mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall;
+            mannerFarm.RegisteredOrganicProducer = mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic;
             mannerFarm.OrganisationID = organisationId.Value;
         }
+
         return (mannerEstimationViewModel, mannerEstimate, mannerFarm);
     }
 
@@ -1471,9 +1472,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (MannerEstimation? mannerEstimate, Error? error) = await FetchMannerEstimateById(mannerEstimateId);
         if (mannerEstimate != null && string.IsNullOrWhiteSpace(error?.Message))
         {
-            (MannerFarmViewModel? mannerFarm,  error) = await FetchMannerFarmById(mannerEstimate.FarmID.Value);
+            (MannerFarmViewModel? mannerFarm, error) = await FetchMannerFarmById(mannerEstimate.FarmID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimate.ID;
-            //mannerEstimationViewModel.MannerEstimationStep1.FarmId = mannerFarm.ID;
             mannerEstimationViewModel.MannerEstimationStep31.Name = mannerEstimate.Name;
             mannerEstimationViewModel.MannerEstimationStep1.FarmName = mannerFarm.Name;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID.Value;
@@ -1501,7 +1501,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public async Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId)
     {
-        (_, MannerEstimation mannerEstimation,_) = await BindMannerEstimationDataForAdd(null, mannerEstimationId);
+        (_, MannerEstimation mannerEstimation, _) = await BindMannerEstimationDataForAdd(null, mannerEstimationId);
         string jsonData = JsonConvert.SerializeObject(new
         {
             MannerEstimation = mannerEstimation
