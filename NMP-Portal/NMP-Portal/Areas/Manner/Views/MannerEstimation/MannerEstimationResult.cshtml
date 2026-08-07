@@ -423,7 +423,7 @@
                             @mannerFarm.Name
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="FarmName" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
+                            <a class="govuk-link" href="#">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblFarmName)</span>
                             </a>
@@ -436,7 +436,7 @@
                             @ViewBag.CountryName
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="Country" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
+                            <a class="govuk-link" href="#">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblCountry)</span>
                             </a>
@@ -449,7 +449,7 @@
                             @mannerFarm.Postcode
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="PostCode" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
+                            <a class="govuk-link" href="#">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span>
                             </a>
@@ -462,7 +462,7 @@
                             @registeredOrganicProducer
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="IsFarmOrganic" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
+                            <a class="govuk-link" href="#">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblRegisteredOrganicProducerOnly)</span>
                             </a>
@@ -475,7 +475,7 @@
                             @string.Format("{0}{1}", mannerFarm.AverageAnuualRainfall, Resource.lblmm)
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="AverageAnnualRainfall" asp-controller="MannerEstimation" asp-route-q=@ViewBag.EncryptedEstimateId>
+                            <a class="govuk-link" href="#">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(string.Format(Resource.lblAverageAnnualRainfallFor, mannerFarm.Postcode))</span>
                             </a>
