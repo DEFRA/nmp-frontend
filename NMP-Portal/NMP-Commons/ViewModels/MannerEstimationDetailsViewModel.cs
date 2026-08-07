@@ -9,8 +9,8 @@ namespace NMP.Commons.ViewModels
 {
     public class MannerEstimationDetailsViewModel
     {
-        public MannerFarm MannerFarm { get; set; }
-        public MannerEstimationSummaryViewModel MannerEstimation { get; set; }
+        public MannerFarm? MannerFarm { get; set; }
+        public MannerEstimationSummaryViewModel? MannerEstimation { get; set; }
 
     }
 }

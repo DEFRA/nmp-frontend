@@ -32,15 +32,18 @@ else
                 </govuk-notification-banner>
             }
 
-            <h1 class="govuk-heading-l">@string.Format(Resource.lblNutrientSupplyEstimatesForFarmName,farmName) </h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblNutrientSupplyEstimatesForFarmName, farmName) </h1>
 
-         
-                <govuk-button type="button">
+            <form asp-action="Name" method="get" asp-controller="MannerEstimation" autocomplete="off">
+                <govuk-button type="submit">
                     @Resource.lblCreateANewSupplyEstimateForThisFarm
                 </govuk-button>
-         
+            </form>
 
-            <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a href="#">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
+            @if (ViewBag.MannerEstimations != null && ViewBag.MannerEstimations.Count > 1)
+            {
+                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveEstimations" asp-route-q="@ViewBag.EncryptedFarmId">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
+            }
 
             <h2 class="govuk-heading-m">@Resource.lblNutrientSupplyEstimates</h2>
 
@@ -64,7 +67,7 @@ else
                                 <td class="govuk-table__cell">@estimation.FarmName</td>
                                 <td class="govuk-table__cell">@estimation.FieldName</td>
                                 <td class="govuk-table__cell">@(estimation.ModifiedOn == null ? estimation.CreatedOn.ToString("dd MMMM yyyy") : estimation.ModifiedOn.ToString("dd MMMM yyyy"))</td>
-                                <td class="govuk-table__cell"><a href="#">@Resource.lblViewOrChange</a></td>
+                                <td class="govuk-table__cell"><a asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@estimation.EncryptedId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, estimation.FarmName)))">@Resource.lblViewOrChange</a></td>
                             </tr>
                         }
                     }
