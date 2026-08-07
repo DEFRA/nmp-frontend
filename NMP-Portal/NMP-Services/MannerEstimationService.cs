@@ -100,6 +100,48 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
     }
 
+    public async Task<(MannerFarmEstimationApplicationResponse?, Error?)> AddMannerFarmEstimationServiceAsync(string MannerData)
+    {
+        MannerFarmEstimationApplicationResponse? mannerFarmEstimationApplication = null;
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            var response = await httpClient.PostAsync(
+                ApiurlHelper.AddFarmMannerEstimationAsyncAPI,
+                new StringContent(MannerData, Encoding.UTF8, _contentType));
+
+            string result = await response.Content.ReadAsStringAsync();
+
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper?.Data is not null)
+                {
+                    mannerFarmEstimationApplication = responseWrapper.Data?.ToObject<MannerFarmEstimationApplicationResponse>();
+                }
+            }
+            else
+            {
+                error = new Error();
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, error);
+        }
+
+        return (mannerFarmEstimationApplication, error);
+
+    }
+
     public async Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId)
     {
         int? soilTypeId = null;

@@ -20,11 +20,11 @@ else
         <div id="all-plans-table" class="govuk-grid-column-full">
                      
             <h1 class="govuk-heading-l">@Resource.lblNutrientSupplyEstimates</h1>
-
-            
-                <govuk-button type="button">
+            <form asp-action="Name" method="get" asp-controller="MannerEstimation" autocomplete="off">
+                <govuk-button type="submit">
                     @Resource.lblCreateANutrientSupplyEstimateForANewFarm
                 </govuk-button>
+            </form>
             
 
             <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a href="#">@Resource.lblRemoveANutrientSupplyEstimate</a></p>

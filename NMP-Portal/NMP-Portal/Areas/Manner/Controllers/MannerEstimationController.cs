@@ -3782,8 +3782,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return RedirectToAction("AddApplicationData");
                 }
                 Guid organisationId = GetOrganisationId();
-                (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error)
-                   = await _mannerEstimationLogic.AddMannerEstimation(organisationId);
+                
+                (MannerFarmEstimationApplicationResponse? mannerFarmEstimationApplicationResult, Error? error)
+                   = await _mannerEstimationLogic.AddMannerFarmEstimation(organisationId);
 
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
@@ -3791,12 +3792,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                if (mannerEstimationApplicationResult != null && mannerEstimationApplicationResult.MannerEstimationID != null)
+                if (mannerFarmEstimationApplicationResult != null && mannerFarmEstimationApplicationResult.MannerEstimation.ID != null)
                 {
                     return RedirectToAction(_mannerEstimationResultKey, new
                     {
                         q = _mannerEstimationProtector.Protect(
-                          mannerEstimationApplicationResult.MannerEstimationID.ToString()),
+                          mannerFarmEstimationApplicationResult.MannerEstimation.ID.ToString()),
                         r = _mannerEstimationProtector.Protect(Resource.lblTrue)
                     });
                 }
