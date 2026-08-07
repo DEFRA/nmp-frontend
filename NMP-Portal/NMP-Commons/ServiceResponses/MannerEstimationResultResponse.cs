@@ -10,7 +10,8 @@ namespace NMP.Commons.ServiceResponses
 {
     public class MannerEstimationResultResponse
     {
-        public MannerEstimationDetailsViewModel? MannerEstimation { get; set; }
+        public MannerFarm? MannerFarm { get; set; }
+        public MannerEstimationSummaryViewModel? MannerEstimation { get; set; }
         public List<MannerEstimationApplicationDetailsViewModel>? MannerEstimationApplication { get; set; }
         public DateTime? LastUpdatedOn { get; set; }
         public MannerCalculateNutrientResponse? TotalMannerCalculateNutrient { get; set; }    

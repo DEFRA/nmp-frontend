@@ -144,5 +144,6 @@ namespace NMP.Application
         Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int farmId);
         Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId);
         Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int farmId);
+        Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation();
     }
 }

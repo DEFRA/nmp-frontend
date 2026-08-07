@@ -8,6 +8,10 @@
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.FarmName;
     var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "IsFarmOrganic";
+    @if(Model.FarmId!=null)
+    {
+        backAction = "Name";
+    }
 }
 
 @section BeforeContent {

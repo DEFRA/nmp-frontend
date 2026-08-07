@@ -5,7 +5,7 @@
     ViewData["Title"] = Resource.lblWhichEstimatesWouldYouLikeToRemove;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
 }
 
 @if (TempData["Error"] != null)
