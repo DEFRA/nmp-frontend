@@ -16,5 +16,6 @@ namespace NMP.Commons.ViewModels
         public int? MannerEstimationId { get; set; }
         public bool? IsCopyEstimate { get; set; }
         public string? EncryptedMannerEstimationId { get; set; }
+        public string? EncryptedFarmId { get; set; }
     }
 }

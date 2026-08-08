@@ -820,6 +820,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep31ViewModel GetMannerEstimationStep31()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep31.EncryptedFarmId = mannerEstimationViewModel.EncryptedFarmId;
         if (mannerEstimationViewModel.IsCopyEstimate == null)
         {
             mannerEstimationViewModel.MannerEstimationStep31.IsCopyEstimate = mannerEstimationViewModel.MannerEstimationStep21.IsCopyEstimate;
@@ -1474,6 +1475,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             (MannerFarmViewModel? mannerFarm, error) = await FetchMannerFarmById(mannerEstimate.FarmID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimate.ID;
+            mannerEstimationViewModel.FarmId = mannerEstimate.FarmID;
             mannerEstimationViewModel.MannerEstimationStep31.Name = mannerEstimate.Name;
             mannerEstimationViewModel.MannerEstimationStep1.FarmName = mannerFarm.Name;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID.Value;
