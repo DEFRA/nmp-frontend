@@ -15,6 +15,6 @@ namespace NMP.Commons.ViewModels
         public string FarmName { get; set; } = string.Empty;
         public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public bool IsFarmCopied { get; set; } = false;
-        public int? FarmId { get; set; }
+        public int? MannerFarmId { get; set; }
     }
 }
