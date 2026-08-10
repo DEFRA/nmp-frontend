@@ -3668,7 +3668,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
 
-            if (mannerEstimationViewModel?.IsComingForAddNewApplication == true||(!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId)))
+            if (mannerEstimationViewModel?.IsComingForAddNewApplication == true||(!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerFarmId)))
             {
                 if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId))
                 {

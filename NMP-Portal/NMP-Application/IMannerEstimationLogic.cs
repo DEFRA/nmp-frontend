@@ -141,9 +141,9 @@ namespace NMP.Application
         MannerEstimationStep41ViewModel SetMannerEstimationStep41(MannerEstimationStep41ViewModel mannerEstimationStep41);
         Task<(string, Error?)> DeleteMannerEstimateApplicationById(int mannerEstimationId);
 
-        Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int MannerfarmId);
+        Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int mannerfarmId);
         Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId);
-        Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int MannerfarmId);
+        Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int mannerfarmId);
         Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation();
         bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId);
     }

@@ -1726,10 +1726,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     }
 
-    public async Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int MannerFarmId)
+    public async Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int mannerFarmId)
     {
         _logger.LogTrace("MannerEstimationLogic : FetchMannerFarmById() called");
-        return await _mannerEstimationService.FetchMannerFarmById(MannerFarmId);
+        return await _mannerEstimationService.FetchMannerFarmById(mannerFarmId);
     }
 
     public async Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId)
@@ -1737,10 +1737,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         _logger.LogTrace("MannerEstimationLogic : FetchMannerFarmListByOrgId() called");
         return await _mannerEstimationService.FetchMannerFarmListByOrgId(orgId);
     }
-    public async Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int MannerFarmId)
+    public async Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int mannerFarmId)
     {
         _logger.LogTrace("MannerEstimationLogic : FetchMannerEstimateByFarmId() called");
-        return await _mannerEstimationService.FetchMannerEstimateByFarmIdAsync(MannerFarmId);
+        return await _mannerEstimationService.FetchMannerEstimateByFarmIdAsync(mannerFarmId);
     }
 
     public async Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation()
