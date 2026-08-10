@@ -937,10 +937,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
                 int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
 
-                (var soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(model.TopSoilId ?? 0, model.SubSoilId ?? 0);
+                bool isSandyShallowSoil =  _mannerEstimationLogic.CheckSandyShallowByTopSoilSubSoilId(model.TopSoilId ?? 0, model.SubSoilId ?? 0);
                 if (string.IsNullOrEmpty(error?.Message))
                 {
-                    string closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, model.SowingDate, model.FarmRB209CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
+                    string closedPeriod = Functions.GetMannerClosedPeriod(isSandyShallowSoil, fieldType, model.SowingDate, model.FarmRB209CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
                     model.ClosedPeriod = closedPeriod;
                 }
 
@@ -4923,11 +4923,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.MannerEstimation.CropTypeID);
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
                 int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
-
-                (var soilTypeId, error) = await _mannerEstimationLogic.FetchSoilTypeSoilTextureByTopSoilSubSoilId(estimation.MannerEstimation.TopSoilID ?? 0, estimation.MannerEstimation.SubSoilID ?? 0);
+                
+                bool isSandyShallowSoil =  _mannerEstimationLogic.CheckSandyShallowByTopSoilSubSoilId(estimation.MannerEstimation.TopSoilID ?? 0, estimation.MannerEstimation.SubSoilID ?? 0);
                 if (string.IsNullOrEmpty(error?.Message))
                 {
-                    closedPeriod = Functions.GetMannerClosedPeriod(soilTypeId, fieldType, estimation.MannerEstimation.SowingDate, estimation.MannerFarm.CountryID ?? 0, cropGroupId, estimation.MannerEstimation.CropTypeID ?? 0, isPerennial);
+                    closedPeriod = Functions.GetMannerClosedPeriod(isSandyShallowSoil, fieldType, estimation.MannerEstimation.SowingDate, estimation.MannerFarm.CountryID ?? 0, cropGroupId, estimation.MannerEstimation.CropTypeID ?? 0, isPerennial);
                 }
                 int harvestYear = GetHarvestYearFromApplicationDate(application.ApplicationDate);
 
@@ -5302,6 +5302,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
         public async Task<IActionResult> MannerFarmList()
         {
+            RemoveMannerEstimationSession();
             Guid organisationId = GetOrganisationId();
             (List<MannerFarmViewModel> mannerFarmList, _) = await _mannerEstimationLogic.FetchMannerFarmListByOrgId(organisationId);
             if (mannerFarmList.Count > 0)
