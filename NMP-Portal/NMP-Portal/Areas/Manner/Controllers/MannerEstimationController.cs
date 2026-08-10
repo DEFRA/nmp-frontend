@@ -3187,7 +3187,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             string action = _farmNameKey;
 
-            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId))
+            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId) && model.IsCopyEstimate == false)
             {
                 return RedirectToAction(_updateFarmFieldOrCropDataActionName);
             }
@@ -4671,7 +4671,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> UpdateFarmFieldOrCropData()
         {
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-
+            
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.UpdateFarmFieldAndCropData(mannerEstimationViewModel.MannerEstimationId.Value);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
