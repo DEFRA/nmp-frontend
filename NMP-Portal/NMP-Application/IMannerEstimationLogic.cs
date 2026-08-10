@@ -145,5 +145,6 @@ namespace NMP.Application
         Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId);
         Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int farmId);
         Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation();
+        bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId);
     }
 }
