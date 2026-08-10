@@ -896,6 +896,22 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
+    public async Task<(MannerFarmEstimationApplicationResponse?, Error?)> AddMannerFarmEstimation(Guid organisationId)
+    {
+        (MannerEstimationViewModel mannerEstimationViewModel, MannerEstimation mannerEstimate, MannerFarm mannerFarm) = await BindMannerEstimationDataForAdd(organisationId, null);
+
+        MannerEstimationApplication? mannerEstimationApplication = await BindMannerEstinationApplicationData(mannerEstimationViewModel, false);
+
+        string jsonData = JsonConvert.SerializeObject(new
+        {
+            MannerFarm = mannerFarm,
+            MannerEstimation = mannerEstimate,
+            MannerEstimationApplication = mannerEstimationApplication
+        });
+
+        (MannerFarmEstimationApplicationResponse? mannerFarmEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerFarmEstimationServiceAsync(jsonData);
+        return (mannerFarmEstimationApplicationResult, error);
+    }
 
     private async Task<MannerEstimationApplication?> BindMannerEstinationApplicationData(MannerEstimationViewModel mannerEstimationViewModel, bool isUpdate)
     {
