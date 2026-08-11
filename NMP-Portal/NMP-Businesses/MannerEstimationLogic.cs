@@ -1758,9 +1758,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
-    public bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId)
+    public bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId, int countryId)
     {
-        _logger.LogTrace("MannerEstimationLogic : FetchSandyShallowByTopSoilSubSoilId() called");
+        _logger.LogTrace("MannerEstimationLogic : CheckSandyShallowByTopSoilSubSoilId() called");
+
         var topSoil = (TopSoil)topSoilId;
         var subSoil = (SubSoil)subSoilId;
 
@@ -1770,16 +1771,37 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             return true;
         }
 
-        // Specific sandy topsoil/subsoil combinations
-        var sandyShallowCombinations = new (TopSoil Top, SubSoil Sub)[]
+        (TopSoil Top, SubSoil Sub)[] sandyShallowCombinations;
+
+        switch (countryId)
         {
-        (TopSoil.Sand, SubSoil.Sand),
-        (TopSoil.Sand, SubSoil.LoamySand),
-        (TopSoil.LoamySand, SubSoil.Sand),
-        (TopSoil.LoamySand, SubSoil.LoamySand),
-        (TopSoil.SandyLoam, SubSoil.Sand),
-        (TopSoil.SandyLoam, SubSoil.LoamySand),
-        };
+            case 2:
+                sandyShallowCombinations = new (TopSoil Top, SubSoil Sub)[]
+                {
+                (TopSoil.Sand, SubSoil.Sand),
+                (TopSoil.Sand, SubSoil.LoamySand),
+                (TopSoil.Sand, SubSoil.SandyLoam),
+                (TopSoil.LoamySand, SubSoil.Sand),
+                (TopSoil.LoamySand, SubSoil.LoamySand),
+                (TopSoil.LoamySand, SubSoil.SandyLoam),
+                (TopSoil.SandyLoam, SubSoil.Sand),
+                (TopSoil.SandyLoam, SubSoil.LoamySand),
+                (TopSoil.SandyLoam, SubSoil.SandyLoam),
+                };
+                break;
+
+            default:
+                sandyShallowCombinations = new (TopSoil Top, SubSoil Sub)[]
+                {
+                (TopSoil.Sand, SubSoil.Sand),
+                (TopSoil.Sand, SubSoil.LoamySand),
+                (TopSoil.LoamySand, SubSoil.Sand),
+                (TopSoil.LoamySand, SubSoil.LoamySand),
+                (TopSoil.SandyLoam, SubSoil.Sand),
+                (TopSoil.SandyLoam, SubSoil.LoamySand),
+                };
+                break;
+        }
 
         return sandyShallowCombinations.Any(c => c.Top == topSoil && c.Sub == subSoil);
     }
