@@ -4938,7 +4938,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
                 int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
                 
-                bool isSandyShallowSoil =  _mannerEstimationLogic.CheckSandyShallowByTopSoilSubSoilId(estimation.MannerEstimation.TopSoilID ?? 0, estimation.MannerEstimation.SubSoilID ?? 0, estimation?.MannerFarm?.CountryID ?? 0);
+                bool isSandyShallowSoil =  _mannerEstimationLogic.CheckSandyShallowByTopSoilSubSoilId(estimation.MannerEstimation.TopSoilID ?? 0, estimation.MannerEstimation.SubSoilID ?? 0, estimation.MannerFarm?.CountryID ?? 0);
                 if (string.IsNullOrEmpty(error?.Message))
                 {
                     closedPeriod = Functions.GetMannerClosedPeriod(isSandyShallowSoil, fieldType, estimation.MannerEstimation.SowingDate, estimation.MannerFarm.CountryID ?? 0, cropGroupId, estimation.MannerEstimation.CropTypeID ?? 0, isPerennial);
