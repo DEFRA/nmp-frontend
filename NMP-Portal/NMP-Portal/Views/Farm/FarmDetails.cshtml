@@ -107,7 +107,7 @@
                             <td class="govuk-table__cell">@fieldsInNVZ</td>
                         </tr>
                     }
-                    @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ)
                     {
                         if (ViewBag.SelectedNVZs != null)
                         {
