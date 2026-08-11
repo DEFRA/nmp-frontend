@@ -11,7 +11,7 @@ namespace NMP.Commons.Models
     public class MannerEstimation
     {
         public int? ID { get; set; }
-        public int? FarmID { get; set; }
+        public int? MannerFarmID { get; set; }
 
         public string? Name { get; set; }
 

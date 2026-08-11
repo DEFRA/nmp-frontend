@@ -42,7 +42,7 @@ else
 
             @if (ViewBag.MannerEstimations != null && ViewBag.MannerEstimations.Count > 1)
             {
-                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveEstimations" asp-route-q="@ViewBag.EncryptedFarmId">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
+                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveEstimations" asp-route-q="@ViewBag.EncryptedMannerFarmId">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
             }
 
             <h2 class="govuk-heading-m">@Resource.lblNutrientSupplyEstimates</h2>

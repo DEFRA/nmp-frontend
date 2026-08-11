@@ -15,7 +15,7 @@ namespace NMP.Portal.Controllers
             HttpContext.Session.Remove("current_farm_name");
             HttpContext.Session.Remove("current_farm_id");
             HttpContext.Session.Remove("current_manner_estimate_farm_name");
-            HttpContext.Session.Remove("current_manner_estimate_farm_id");
+            HttpContext.Session.Remove("current_manner_estimate_manner_farm_id");
             return View();
         }
     }
