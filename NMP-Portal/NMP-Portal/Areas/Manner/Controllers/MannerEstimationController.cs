@@ -262,9 +262,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View("Country", model);
                 }
 
-                model = await _mannerEstimationLogic.SetMannerEstimationStep2(model);
-
-               
+                await _mannerEstimationLogic.SetMannerEstimationStep2(model);               
                 return  RedirectToAction("PostCode");
             }
             catch (HttpRequestException hre)
@@ -318,8 +316,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                model = await _mannerEstimationLogic.SetMannerEstimationStep3(model);
-                              
+                await _mannerEstimationLogic.SetMannerEstimationStep3(model);                              
                 return  RedirectToAction("AverageAnnualRainfall");
             }
             catch (HttpRequestException hre)
@@ -3193,14 +3190,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             string action = _farmNameKey;
 
-            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId) && (model.IsCopyEstimate == false||model.IsCopyEstimate==null))
+            (bool flowControl, IActionResult? value) = RedirectForName(model);
+            if (!flowControl&&value!=null)
             {
-                return RedirectToAction(_updateFieldOrCropDataActionName);
-            }
-            MannerEstimationViewModel? mannerEstimation = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            if (mannerEstimation != null && mannerEstimation.MannerFarmId != null)
-            {
-                return RedirectToAction("FieldName");
+                return value;
             }
             if (model.IsCopyEstimate.HasValue && model.IsCopyEstimate.Value)
             {
@@ -3233,6 +3226,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
 
             return RedirectToAction(action);
+        }
+
+        private (bool flowControl, IActionResult? value) RedirectForName(MannerEstimationStep31ViewModel model)
+        {
+            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId) && (model.IsCopyEstimate == false || model.IsCopyEstimate == null))
+            {
+                return (flowControl: false, value: RedirectToAction(_updateFieldOrCropDataActionName));
+            }
+            MannerEstimationViewModel? mannerEstimation = _mannerEstimationLogic.GetMannerEstimationFromSession();
+            if (mannerEstimation != null && mannerEstimation.MannerFarmId != null)
+            {
+                return (flowControl: false, value: RedirectToAction("FieldName"));
+            }
+
+            return (flowControl: true, value: null);
         }
 
         private async Task ValidationForName(MannerEstimationStep31ViewModel model)
