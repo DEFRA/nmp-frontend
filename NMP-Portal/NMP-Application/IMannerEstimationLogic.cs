@@ -87,7 +87,8 @@ namespace NMP.Application
         MannerEstimationStep31ViewModel SetMannerEstimationStep31(MannerEstimationStep31ViewModel mannerEstimationStep31);
         MannerEstimationStep32ViewModel GetMannerEstimationStep32();
         MannerEstimationStep32ViewModel SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32);
-        Task<(MannerEstimationApplication?, Error?)> AddMannerEstimation(Guid organisationId);        
+        Task<(MannerEstimationApplication?, Error?)> AddMannerEstimation(Guid organisationId);
+        Task<(MannerFarmEstimationApplicationResponse?, Error?)> AddMannerFarmEstimation(Guid organisationId);
         Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);
         Task<(List<MannerEstimationApplication>, Error?)> FetchMannerApplicationsByMannerEstimationId(int mannerEstimationId);
         Task<(MannerEstimationApplication, Error?)> FetchMannerApplicationById(int mannerApplicationId);
@@ -139,5 +140,12 @@ namespace NMP.Application
         MannerEstimationStep41ViewModel GetMannerEstimationStep41();
         MannerEstimationStep41ViewModel SetMannerEstimationStep41(MannerEstimationStep41ViewModel mannerEstimationStep41);
         Task<(string, Error?)> DeleteMannerEstimateApplicationById(int mannerEstimationId);
+
+        Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int mannerFarmId);
+        Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId);
+        Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int mannerFarmId);
+        Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation();
+        bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId, int countryId);  
+        Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId);
     }
 }

@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -3618,6 +3618,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a copy of this estimate.
+        /// </summary>
+        public static string lblCreateACopyOfThisEstimate {
+            get {
+                return ResourceManager.GetString("lblCreateACopyOfThisEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create a crop nutrient management plan.
         /// </summary>
         public static string lblCreateACropNutrientManagementPlan {
@@ -3641,6 +3650,15 @@ namespace NMP.Commons.Resources {
         public static string lblCreateALivestockManureNitrogenFarmLimitReportYear {
             get {
                 return ResourceManager.GetString("lblCreateALivestockManureNitrogenFarmLimitReportYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new supply estimate for this farm.
+        /// </summary>
+        public static string lblCreateANewSupplyEstimateForThisFarm {
+            get {
+                return ResourceManager.GetString("lblCreateANewSupplyEstimateForThisFarm", resourceCulture);
             }
         }
         
@@ -3686,6 +3704,15 @@ namespace NMP.Commons.Resources {
         public static string lblCreateANutrientSupplyEstimate {
             get {
                 return ResourceManager.GetString("lblCreateANutrientSupplyEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a nutrient supply estimate for a new farm.
+        /// </summary>
+        public static string lblCreateANutrientSupplyEstimateForANewFarm {
+            get {
+                return ResourceManager.GetString("lblCreateANutrientSupplyEstimateForANewFarm", resourceCulture);
             }
         }
         
@@ -11550,6 +11577,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimate copied.
+        /// </summary>
+        public static string lblNutrientSupplyEstimateCopied {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimateCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient supply estimate created.
         /// </summary>
         public static string lblNutrientSupplyEstimateCreated {
@@ -11564,6 +11600,15 @@ namespace NMP.Commons.Resources {
         public static string lblNutrientSupplyEstimates {
             get {
                 return ResourceManager.GetString("lblNutrientSupplyEstimates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient supply estimates for {0}.
+        /// </summary>
+        public static string lblNutrientSupplyEstimatesForFarmName {
+            get {
+                return ResourceManager.GetString("lblNutrientSupplyEstimatesForFarmName", resourceCulture);
             }
         }
         
@@ -18039,6 +18084,15 @@ namespace NMP.Commons.Resources {
         public static string lblViewAMapOfNitrateVulnerableZones {
             get {
                 return ResourceManager.GetString("lblViewAMapOfNitrateVulnerableZones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View, change or create new estimate.
+        /// </summary>
+        public static string lblViewChangeOrCreateNewEstimate {
+            get {
+                return ResourceManager.GetString("lblViewChangeOrCreateNewEstimate", resourceCulture);
             }
         }
         

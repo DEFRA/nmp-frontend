@@ -9,5 +9,6 @@ namespace NMP.Commons.ViewModels
     public class MannerEstimationStep40ViewModel
     {
         public List<string>? MannerEstimationIdList { get; set; }
+        public string EncryptedMannerFarmId { get; set; } = string.Empty;
     }
 }

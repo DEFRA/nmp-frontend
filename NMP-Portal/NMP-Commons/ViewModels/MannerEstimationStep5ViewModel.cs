@@ -14,5 +14,6 @@ namespace NMP.Commons.ViewModels
         [StringLength(50, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFieldNameMaxLengthValidation))]
         public string FieldName { get; set; } = string.Empty;
         public string? EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public int? MannerFarmId { get; set; }
     }
 }

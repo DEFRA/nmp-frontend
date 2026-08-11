@@ -263,7 +263,7 @@ namespace NMP.Commons.Helpers
                 : sowingDate.Value.Year;
         }
         public static string GetMannerClosedPeriod(
-    int? soilTypeId,
+    bool isSandyShallowSoil,
     int fieldType,
     DateTime? sowingDate,
     int countryId,
@@ -272,8 +272,6 @@ namespace NMP.Commons.Helpers
     bool isPerennial = false)
         {
             int? harvestYear = GetHarvestYear(sowingDate);
-
-            bool isSandyShallowSoil = IsSandyShallowSoil(soilTypeId, countryId);
 
             DateTime? september16 = harvestYear.HasValue
                 ? new DateTime(harvestYear.Value - 1, 9, 16, 00, 00, 00, DateTimeKind.Unspecified)
@@ -301,15 +299,7 @@ namespace NMP.Commons.Helpers
                     isPerennial,
                     september16);
         }
-        private static bool IsSandyShallowSoil(int? soilTypeId, int countryId)
-        {
-            if (!soilTypeId.HasValue)
-                return false;
-
-            return countryId == 2
-                ? soilTypeId is 10 or 11 or 12
-                : soilTypeId is 0 or 1;
-        }
+        
         private static string GetScotlandClosedPeriod(
     int fieldType,
     bool isSandyShallowSoil,

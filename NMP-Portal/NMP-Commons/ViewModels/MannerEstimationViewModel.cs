@@ -108,6 +108,9 @@ namespace NMP.Commons.ViewModels
         public MannerEstimationStep39ViewModel MannerEstimationStep39 { get; set; }
         public MannerEstimationStep40ViewModel MannerEstimationStep40 { get; set; }
         public MannerEstimationStep41ViewModel MannerEstimationStep41 { get; set; }
+        public bool IsNewEstimate { get; set; } = false;
+        public int? MannerFarmId { get; set; }
+        public string? EncryptedMannerFarmId { get; set; }
     }
 }
 

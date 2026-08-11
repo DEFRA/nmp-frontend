@@ -3,9 +3,12 @@
 
 @{
     ViewData["Title"] = Resource.lblMannerHubPage;
+    var farmName = ViewBag.MannerEstimations != null && ViewBag.MannerEstimations.Count > 0
+    ? ViewBag.MannerEstimations[0].FarmName
+    : string.Empty;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="Index" asp-controller="Dashboard" asp-area="">@Resource.lblPlanAndRecordNutrientApplications</govuk-back-link>
+    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation" asp-area="Manner">@Resource.lblPlanAndRecordNutrientApplications</govuk-back-link>
 }
 
 @if (TempData["Error"] != null)
@@ -29,15 +32,18 @@ else
                 </govuk-notification-banner>
             }
 
-            <h1 class="govuk-heading-l">@Resource.lblNutrientSupplyEstimates</h1>
+            <h1 class="govuk-heading-l">@string.Format(Resource.lblNutrientSupplyEstimatesForFarmName, farmName) </h1>
 
-            <form asp-action="CopyEstimate" method="get" asp-controller="MannerEstimation" autocomplete="off">
+            <form asp-action="Name" method="get" asp-controller="MannerEstimation" autocomplete="off">
                 <govuk-button type="submit">
-                    @Resource.lblCreateANutrientSupplyEstimate
+                    @Resource.lblCreateANewSupplyEstimateForThisFarm
                 </govuk-button>
             </form>
 
-            <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveEstimations">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
+            @if (ViewBag.MannerEstimations != null && ViewBag.MannerEstimations.Count > 1)
+            {
+                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveEstimations" asp-route-q="@ViewBag.EncryptedMannerFarmId">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
+            }
 
             <h2 class="govuk-heading-m">@Resource.lblNutrientSupplyEstimates</h2>
 
