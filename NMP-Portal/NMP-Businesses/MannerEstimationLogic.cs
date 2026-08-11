@@ -1783,5 +1783,23 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         return sandyShallowCombinations.Any(c => c.Top == topSoil && c.Sub == subSoil);
     }
+   
+    public async Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId)
+    {
+        (MannerFarmViewModel mannerFarm, _) = await FetchMannerFarmById(mannerFarmId);
+        if (mannerFarm != null)
+        {
+            MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession();
+            if (mannerEstimationViewModel != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID??0;
+                mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerFarm.CountryID ?? 0);
+                mannerEstimationViewModel.MannerEstimationStep3.Postcode = mannerFarm.Postcode;
+                mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = mannerFarm.AverageAnuualRainfall??0;
+                mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;
+            }
+            SetMannerEstimationToSession(mannerEstimationViewModel);
+        }
+    }
 }
 

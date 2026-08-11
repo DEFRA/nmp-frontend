@@ -46,7 +46,7 @@ else
                         {
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@mannerFarm.Name</td>
-                                <td class="govuk-table__cell">@(mannerFarm.ModifiedOn == null ? mannerFarm.CreatedOn.ToString("dd MMMM yyyy") : mannerFarm.ModifiedOn.ToString("dd MMMM yyyy"))</td>
+                                <td class="govuk-table__cell">@(mannerFarm.LastUpdatedDate != null ? mannerFarm.LastUpdatedDate.ToString("dd MMMM yyyy") : string.Empty)</td>
                                 <td class="govuk-table__cell"><a asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@mannerFarm.EncryptedId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, mannerFarm.Name)))">@Resource.lblViewChangeOrCreateNewEstimate</a></td>
                             </tr>
                         }
