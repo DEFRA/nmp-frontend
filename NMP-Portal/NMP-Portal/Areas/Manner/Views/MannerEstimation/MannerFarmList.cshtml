@@ -5,7 +5,7 @@
     ViewData["Title"] = Resource.lblMannerHubPage;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="Index" asp-controller="Dashboard" asp-area="">@Resource.lblPlanAndRecordNutrientApplications</govuk-back-link>
+    <govuk-back-link asp-action="Index" asp-controller="Dashboard" asp-area="">@Resource.lblBack</govuk-back-link>
 }
 
 @if (TempData["Error"] != null)
@@ -29,7 +29,7 @@ else
 
             <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a href="#">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
 
-            <h2 class="govuk-heading-m">@Resource.lblNutrientSupplyEstimates</h2>
+            <h2 class="govuk-heading-m">@Resource.lblYourFarms</h2>
 
             <table class="govuk-table data-table">
                 <thead class="govuk-table__head">
