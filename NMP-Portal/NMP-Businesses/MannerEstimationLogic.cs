@@ -1546,7 +1546,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (MannerEstimationApplication? mannerEstimateApplication, Error? error) = await FetchMannerEstimateApplicationById(mannerEstimateApplicationId);
         if (mannerEstimateApplication != null && string.IsNullOrWhiteSpace(error?.Message))
         {
-           // await BindMannerEstimationDataForUpdate(mannerEstimateApplication.MannerEstimationID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimateApplication.MannerEstimationID;
             mannerEstimationViewModel.MannerEstimationApplicationId = mannerEstimateApplication.ID;
             mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId = mannerEstimateApplication.ManureTypeID;

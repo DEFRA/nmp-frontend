@@ -76,6 +76,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _mgOKey = "MgO";
         private const string _updateApplicationDataActionName = "UpdateApplicationData";
         private const string _mannerHubPageAction = "MannerHubPage";
+        private const string _dateFormat = "d MMMM yyyy";
 
         public IActionResult Index()
         {
@@ -165,7 +166,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() action called");
 
             MannerEstimationStep1ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep1();
-            (List<SelectListItem> farmsWithFields, bool isAnyFarmExists) = await BindAllFarmList();
+            (_, bool isAnyFarmExists) = await BindAllFarmList();
             if (isAnyFarmExists)
             {
                 model.IsFarmCopied = true;
@@ -185,7 +186,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 ModelState.AddModelError(_farmNameKey, Resource.MsgEnterTheFarmName);
             }
-            (List<SelectListItem> farmsWithFields, bool isAnyFarmExists) = await BindAllFarmList();
+            (_, bool isAnyFarmExists) = await BindAllFarmList();
             if (isAnyFarmExists)
             {
                 model.IsFarmCopied = true;
@@ -1373,7 +1374,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
-                (List<SelectListItem> farmsWithFields, bool isAnyFarmExists) = await BindAllFarmList(Resource.lblTrue);
+                (_, bool isAnyFarmExists) = await BindAllFarmList(Resource.lblTrue);
                 if (isAnyFarmExists)
                 {
                     return View(model);
@@ -1413,7 +1414,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (!ModelState.IsValid)
                 {
                     model = _mannerEstimationLogic.GetMannerEstimationStep14();
-                    await BindAllFarmList();
+                    await BindAllFarmList(Resource.lblTrue);
                     return View(model);
                 }
 
@@ -5229,7 +5230,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     estimation.EncryptedId = _mannerEstimationProtector.Protect(estimation.ID.ToString());
                 }
-                var selectList = ToSelectList(mannerEstimations, f => f.ID.ToString(), f => string.Format(Resource.lblRemoveEstimationNames, f.Name, f.FarmName, f.ModifiedOn != null ? f.ModifiedOn.Value.ToString("d MMMM yyyy") : f.CreatedOn.Value.ToString("d MMMM yyyy")))
+                var selectList = ToSelectList(mannerEstimations, f => f.ID.ToString(), f => string.Format(Resource.lblRemoveEstimationNames, f.Name, f.FarmName, f.ModifiedOn != null ? f.ModifiedOn.Value.ToString(_dateFormat) : f.CreatedOn.Value.ToString(_dateFormat)))
                                 .OrderBy(x => x.Text)
                                 .ToList();
                 ViewBag.MannerEstimationIdList = selectList;
@@ -5483,7 +5484,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     mannerfarm.EncryptedId = _mannerEstimationProtector.Protect(mannerfarm.ID.ToString());
                 }
-                var selectList = ToSelectList(mannerFarmList, f => f.ID.ToString(), f => string.Format(Resource.lblRemoveMannerFarm, f.Name, f.LastUpdatedDate != null ? f.LastUpdatedDate.Value.ToString("d MMMM yyyy") : f.CreatedOn.Value.ToString("d MMMM yyyy")))
+                var selectList = ToSelectList(mannerFarmList, f => f.ID.ToString(), f => string.Format(Resource.lblRemoveMannerFarm, f.Name, f.LastUpdatedDate != null ? f.LastUpdatedDate.Value.ToString(_dateFormat) : f.CreatedOn.Value.ToString(_dateFormat)))
                             .OrderBy(x => x.Text)
                             .ToList();
                 selectListItems = selectList;

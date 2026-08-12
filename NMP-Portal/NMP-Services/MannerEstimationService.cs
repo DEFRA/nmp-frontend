@@ -696,11 +696,9 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var content = new StringContent(mannerFarmIds, Encoding.UTF8, "application/json");
-            var url = ApiurlHelper.DeleteMannerFarmAsyncAPI;
-            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
+            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, ApiurlHelper.DeleteMannerFarmAsyncAPI)
             {
-                Content = content
+                Content = new StringContent(mannerFarmIds, Encoding.UTF8, "application/json")
             };
             var response = await httpClient.SendAsync(requestMessage);
 
