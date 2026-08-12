@@ -1500,6 +1500,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep31.Name = mannerEstimate.Name;
             mannerEstimationViewModel.MannerEstimationStep1.FarmName = mannerFarm.Name;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID.Value;
+            mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerFarm.CountryID.Value);
             mannerEstimationViewModel.MannerEstimationStep3.Postcode = mannerFarm.Postcode;
             mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = mannerFarm.AverageAnuualRainfall.Value;
             mannerEstimationViewModel.MannerEstimationStep5.FieldName = mannerEstimate.FieldName;
@@ -1545,6 +1546,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (MannerEstimationApplication? mannerEstimateApplication, Error? error) = await FetchMannerEstimateApplicationById(mannerEstimateApplicationId);
         if (mannerEstimateApplication != null && string.IsNullOrWhiteSpace(error?.Message))
         {
+           // await BindMannerEstimationDataForUpdate(mannerEstimateApplication.MannerEstimationID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimateApplication.MannerEstimationID;
             mannerEstimationViewModel.MannerEstimationApplicationId = mannerEstimateApplication.ID;
             mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId = mannerEstimateApplication.ManureTypeID;
@@ -1701,6 +1703,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep40();
     }
+
     public async Task<Error?> RemoveMannerEstimations(string mannerEstimationIds)
     {
         Error? error = await _mannerEstimationService.RemoveMannerEstimationsServiceAsync(mannerEstimationIds);
@@ -1805,23 +1808,42 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         return sandyShallowCombinations.Any(c => c.Top == topSoil && c.Sub == subSoil);
     }
-   
+
     public async Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId)
     {
-        (MannerFarmViewModel mannerFarm, _) = await FetchMannerFarmById(mannerFarmId);
+        (MannerFarmViewModel? mannerFarm, _) = await FetchMannerFarmById(mannerFarmId);
         if (mannerFarm != null)
         {
             MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession();
             if (mannerEstimationViewModel != null)
             {
-                mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID??0;
+                _httpContextAccessor.HttpContext?.Session.SetString("current_manner_estimate_farm_name", mannerFarm.Name);
+                mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID ?? 0;
                 mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerFarm.CountryID ?? 0);
                 mannerEstimationViewModel.MannerEstimationStep3.Postcode = mannerFarm.Postcode;
-                mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = mannerFarm.AverageAnuualRainfall??0;
+                mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = mannerFarm.AverageAnuualRainfall ?? 0;
                 mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;
             }
             SetMannerEstimationToSession(mannerEstimationViewModel);
         }
+    }
+    public MannerEstimationStep42ViewModel GetMannerEstimationStep42()
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        return mannerEstimationViewModel.MannerEstimationStep42;
+    }
+    public MannerEstimationStep42ViewModel SetMannerEstimationStep42(MannerEstimationStep42ViewModel mannerEstimationStep42)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        mannerEstimationViewModel.MannerEstimationStep42 = mannerEstimationStep42;
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return GetMannerEstimationStep42();
+    }
+
+    public async Task<Error?> RemoveMannerFarms(string mannerFarmIds)
+    {
+        Error? error = await _mannerEstimationService.RemoveMannerFarmsServiceAsync(mannerFarmIds);
+        return error;
     }
 }
 

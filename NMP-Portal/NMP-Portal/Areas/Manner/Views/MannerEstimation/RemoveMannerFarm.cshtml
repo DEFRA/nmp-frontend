@@ -1,11 +1,11 @@
 ﻿@using NMP.Commons.Resources;
-@model NMP.Commons.ViewModels.MannerEstimationStep40ViewModel
+@model NMP.Commons.ViewModels.MannerEstimationStep42ViewModel
 
 @{
-    ViewData["Title"] = Resource.lblWhichEstimatesWouldYouLikeToRemove;
+    ViewData["Title"] = Resource.lblWhichMannerFarmWouldYouLikeToRemove;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 @if (TempData["Error"] != null)
@@ -18,25 +18,25 @@ else
 {
     <div class="govuk-grid-row">
         <div id="all-plans-table" class="govuk-grid-column-full">
-            <form asp-action="RemoveEstimations" asp-controller="MannerEstimation" method="post" autocomplete="off">
+            <form asp-action="RemoveMannerFarm" asp-controller="MannerEstimation" method="post" autocomplete="off">
                 @Html.AntiForgeryToken()
-                @if (TempData["MannerEstimationRemoveError"] != null)
+                @if (TempData["MannerFarmRemoveError"] != null)
                 {
                     <govuk-error-summary>
-                        <govuk-error-summary-item href="#">@TempData["MannerEstimationRemoveError"]</govuk-error-summary-item>
+                        <govuk-error-summary-item href="#">@TempData["MannerFarmRemoveError"]</govuk-error-summary-item>
                     </govuk-error-summary>
                 }
-                <govuk-checkboxes name="MannerEstimationIdList" for="MannerEstimationIdList">
+                <govuk-checkboxes name="MannerFarmIdList" for="MannerFarmIdList">
                     <govuk-checkboxes-fieldset>
                         <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                            @Resource.lblWhichEstimatesWouldYouLikeToRemove
+                            @Resource.lblWhichMannerFarmWouldYouLikeToRemove
                         </govuk-checkboxes-fieldset-legend>
                         <govuk-checkboxes-hint>
                             @Resource.lblSelectAllThatApply
                         </govuk-checkboxes-hint>
-                        @if (ViewBag.MannerEstimationIdList != null)
+                        @if (ViewBag.MannerFarmIdList != null)
                         {
-                            @foreach (var item in ViewBag.MannerEstimationIdList)
+                            @foreach (var item in ViewBag.MannerFarmIdList)
                             {
                                 <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
                             }
@@ -52,7 +52,7 @@ else
                 </govuk-button>
 
                 <p class="govuk-body cancel-link">
-                    <a class="govuk-link" asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerFarmId">@Resource.lblCancel</a>
+                    <a class="govuk-link" asp-action="MannerFarmList" asp-controller="MannerEstimation">@Resource.lblCancel</a>
                 </p>
 
             </form>

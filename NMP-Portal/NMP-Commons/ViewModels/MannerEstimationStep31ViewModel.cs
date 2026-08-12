@@ -17,5 +17,6 @@ namespace NMP.Commons.ViewModels
         public bool? IsCopyEstimate { get; set; }
         public string? EncryptedMannerEstimationId { get; set; }
         public string? EncryptedMannerFarmId { get; set; }
+        public bool IsAnyFarmExist { get; set; } = true;
     }
 }

@@ -690,5 +690,38 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimationSummary, error);
     }
+    public async Task<Error?> RemoveMannerFarmsServiceAsync(string mannerFarmIds)
+    {
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var content = new StringContent(mannerFarmIds, Encoding.UTF8, "application/json");
+            var url = ApiurlHelper.DeleteMannerFarmAsyncAPI;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
+            {
+                Content = content
+            };
+            var response = await httpClient.SendAsync(requestMessage);
+
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                error = new Error();
+                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, error);
+        }
+        return error;
+    }
 }
 

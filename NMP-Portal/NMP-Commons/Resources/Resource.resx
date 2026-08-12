@@ -7855,7 +7855,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>or to save an NVZ report.</value>
   </data>
   <data name="CopyExistingFarmAndFieldDetailsContent1" xml:space="preserve">
-    <value>Do you want to use existing farm and field details?</value>
+    <value>Do you want to use existing farm and field details from NMPT?</value>
   </data>
   <data name="CopyExistingFarmAndFieldDetailsContent2" xml:space="preserve">
     <value>You can start with rainfall, field and soil details from an existing farm and one of its fields. You can change any of these details just for this estimate.</value>
@@ -8387,5 +8387,23 @@ following crop year 2</value>
   </data>
   <data name="lblCreateANewSupplyEstimateForThisFarm" xml:space="preserve">
     <value>Create a new supply estimate for this farm</value>
+  </data>
+  <data name="lblRemoveAFarm" xml:space="preserve">
+    <value>remove a farm</value>
+  </data>
+  <data name="lblRemoveMannerFarm" xml:space="preserve">
+    <value>{0} - Updated {1}</value>
+  </data>
+  <data name="lblFarmRemoved" xml:space="preserve">
+    <value>Manner farm removed</value>
+  </data>
+  <data name="lblYouHaveNoMannerFarms" xml:space="preserve">
+    <value>You have no farms.</value>
+  </data>
+  <data name="lblMannerFarmList" xml:space="preserve">
+    <value>Manner farm list</value>
+  </data>
+  <data name="lblWhichMannerFarmWouldYouLikeToRemove" xml:space="preserve">
+    <value>Which farm would you like to remove?</value>
   </data>
 </root>
