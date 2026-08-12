@@ -6,7 +6,6 @@
 @{
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
-    ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.FarmName;
     string backAction = "MannerHubPage";
     var parameter=ViewBag.IsBack;
     if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId))

@@ -52,6 +52,7 @@ namespace NMP.Commons.ViewModels
             MannerEstimationStep39 = new MannerEstimationStep39ViewModel();
             MannerEstimationStep40 = new MannerEstimationStep40ViewModel();
             MannerEstimationStep41 = new MannerEstimationStep41ViewModel();
+            MannerEstimationStep42 = new MannerEstimationStep42ViewModel();
         }
         public bool IsCheckAnswer { get; set; } = false;
         public bool? IsCopyEstimate { get; set; }
@@ -108,6 +109,7 @@ namespace NMP.Commons.ViewModels
         public MannerEstimationStep39ViewModel MannerEstimationStep39 { get; set; }
         public MannerEstimationStep40ViewModel MannerEstimationStep40 { get; set; }
         public MannerEstimationStep41ViewModel MannerEstimationStep41 { get; set; }
+        public MannerEstimationStep42ViewModel MannerEstimationStep42 { get; set; }
         public bool IsNewEstimate { get; set; } = false;
         public int? MannerFarmId { get; set; }
         public string? EncryptedMannerFarmId { get; set; }

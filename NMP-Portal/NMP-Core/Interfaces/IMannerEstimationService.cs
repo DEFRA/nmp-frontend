@@ -38,6 +38,7 @@ namespace NMP.Core.Interfaces
          Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId);
         Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int mannerFarmId);
         Task<(List<MannerEstimationSummaryViewModel>?, Error?)> FetchMannerEstimateByFarmIdAsync(int mannerFarmId);
+        Task<Error?> RemoveMannerFarmsServiceAsync(string mannerFarmIds);
 
     }
 }
