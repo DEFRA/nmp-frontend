@@ -936,7 +936,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 bool isSandyShallowSoil = _mannerEstimationLogic.CheckSandyShallowByTopSoilSubSoilId(model.TopSoilId ?? 0, model.SubSoilId ?? 0, model.CountryId);
                 if (string.IsNullOrEmpty(error?.Message))
                 {
-                    string closedPeriod = Functions.GetMannerClosedPeriod(isSandyShallowSoil, fieldType, model.SowingDate, model.FarmRB209CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
+                    string closedPeriod = Functions.GetMannerClosedPeriod(isSandyShallowSoil, fieldType, model.SowingDate, model.CountryId, model.CropGroupId ?? 0, model.CropTypeId ?? 0, isPerennial);
                     model.ClosedPeriod = closedPeriod;
                 }
 
@@ -1071,7 +1071,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return error;
             }
 
-            if (model.FarmRB209CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            if (model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
                 //01 July to 30 September scotland warning
                 await HandleScotlandHighN(model, harvestYear);
@@ -1106,11 +1106,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private async Task<Error?> EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(MannerEstimationStep13ViewModel model)
         {
             Error? error = null;
-
+            int? mannerEstimationId = null;
+            if (model.MannerEstimationId == null && !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId))
+            {
+                mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
+            }
             bool? isWithinClosedPeriodAndFebruary = WarningWithinPeriod.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, model.ClosedPeriod);
             if (isWithinClosedPeriodAndFebruary == true)
             {
-                (List<MannerEstimationApplication> mannerApplications, error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(model.MannerEstimationId ?? 0);
+                (List<MannerEstimationApplication> mannerApplications, error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
                 if (mannerApplications.Count > 0)
                 {
                     var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
@@ -1147,7 +1151,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private async Task<Error?> HandleLivestockManureRule(MannerEstimationStep13ViewModel model)
         {
-            (List<MannerEstimationApplication> mannerApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(model.MannerEstimationId ?? 0);
+            int? mannerEstimationId = null;
+            if (model.MannerEstimationId == null && !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId))
+            {
+                mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
+            }
+            (List<MannerEstimationApplication> mannerApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
             if (mannerApplications.Count > 0)
             {
                 var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
