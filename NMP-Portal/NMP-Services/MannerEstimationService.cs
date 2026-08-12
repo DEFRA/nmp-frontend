@@ -703,12 +703,10 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             var response = await httpClient.SendAsync(requestMessage);
 
             string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
             if (!response.IsSuccessStatusCode)
             {
-                error = new Error();
-                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+                var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+                error = _logger.ExtractError(responseWrapper, new Error()) ?? new Error();
             }
         }
         catch (HttpRequestException hre)
