@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -342,7 +342,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use existing farm and field details?.
+        ///   Looks up a localized string similar to Do you want to use existing farm and field details from NMPT?.
         /// </summary>
         public static string CopyExistingFarmAndFieldDetailsContent1 {
             get {
@@ -6320,6 +6320,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manner farm removed.
+        /// </summary>
+        public static string lblFarmRemoved {
+            get {
+                return ResourceManager.GetString("lblFarmRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to STD.
         /// </summary>
         public static string lblFarmSTDcode {
@@ -10101,6 +10110,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manner farm list.
+        /// </summary>
+        public static string lblMannerFarmList {
+            get {
+                return ResourceManager.GetString("lblMannerFarmList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manner hub page.
         /// </summary>
         public static string lblMannerHubPage {
@@ -13811,6 +13829,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove a farm.
+        /// </summary>
+        public static string lblRemoveAFarm {
+            get {
+                return ResourceManager.GetString("lblRemoveAFarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove an inorganic fertiliser application.
         /// </summary>
         public static string lblRemoveAnInorganicFertiliserApplication {
@@ -13978,6 +14005,15 @@ namespace NMP.Commons.Resources {
         public static string lblRemoveField {
             get {
                 return ResourceManager.GetString("lblRemoveField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} - Updated {1}.
+        /// </summary>
+        public static string lblRemoveMannerFarm {
+            get {
+                return ResourceManager.GetString("lblRemoveMannerFarm", resourceCulture);
             }
         }
         
@@ -19870,6 +19906,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Which farm would you like to remove?.
+        /// </summary>
+        public static string lblWhichMannerFarmWouldYouLikeToRemove {
+            get {
+                return ResourceManager.GetString("lblWhichMannerFarmWouldYouLikeToRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which Nitrate Vulnerable Zone (NVZ) is {0} in?.
         /// </summary>
         public static string lblWhichNitrateVulnerableZoneNVZIsIn {
@@ -20568,6 +20613,15 @@ namespace NMP.Commons.Resources {
         public static string lblYouHaveNoInorganicFertiliserApplicationForFieldInYear {
             get {
                 return ResourceManager.GetString("lblYouHaveNoInorganicFertiliserApplicationForFieldInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no farms..
+        /// </summary>
+        public static string lblYouHaveNoMannerFarms {
+            get {
+                return ResourceManager.GetString("lblYouHaveNoMannerFarms", resourceCulture);
             }
         }
         

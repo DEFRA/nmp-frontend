@@ -147,5 +147,8 @@ namespace NMP.Application
         Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation();
         bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId, int countryId);  
         Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId);
+        MannerEstimationStep42ViewModel GetMannerEstimationStep42();
+        MannerEstimationStep42ViewModel SetMannerEstimationStep42(MannerEstimationStep42ViewModel mannerEstimationStep42);
+        Task<Error?> RemoveMannerFarms(string mannerFarmIds);
     }
 }
