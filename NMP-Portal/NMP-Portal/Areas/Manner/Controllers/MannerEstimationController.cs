@@ -4577,11 +4577,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             bool isTriggerCrop = cropTypeIdsForTrigger.Contains(cropTypeId ?? 0);
 
+            error = await CheckNFieldLimitPAS100Compost(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId, mannerAppId);
+
             // Warning excel sheet row 4: >500 total N in last 730 days (compost/Scotland, non-trigger crops or Scotland)
             if (!isTriggerCrop || isScotland)
             {
-                error = await CheckNFieldLimitPAS100Compost(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId, mannerAppId);
-
                 error = await CheckNFieldLimit500Compost(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId, mannerAppId);
             }
 
