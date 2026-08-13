@@ -188,10 +188,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.IsFarmCopied = true;
             }
-
+            
             if (!ModelState.IsValid)
             {
                 model = _mannerEstimationLogic.GetMannerEstimationStep1();
+                model.IsFarmCopied = isAnyFarmExists;
                 return View(model);
             }
 
@@ -210,7 +211,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             bool isExist = await _mannerEstimationLogic.FetchIsExistMannerFarmByOrgIdAndName(organisationId, model.FarmName);
             if (isExist)
             {
-                ModelState.AddModelError(_farmNameKey, Resource.MsgNameAlreadyExist);
+                ModelState.AddModelError(_farmNameKey, Resource.MsgFarmNameAlreadyExist);
             }
         }
 
@@ -1531,17 +1532,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     bool isExist = await _mannerEstimationLogic.FetchIsExistMannerFarmByOrgIdAndName(organisationId, farmName);
                     if (isExist)
                     {
-                        ModelState.AddModelError(_farmNameKey, Resource.MsgNameAlreadyExist);
+                        ModelState.AddModelError("FarmId", Resource.MsgFarmNameAlreadyExist);
                     }
                 }
                 if (!ModelState.IsValid)
                 {
-                    model = _mannerEstimationLogic.GetMannerEstimationStep15();
+                    MannerEstimationStep15ViewModel mannerEstimationStep15ViewModel = _mannerEstimationLogic.GetMannerEstimationStep15();
+                    if(mannerEstimationStep15ViewModel!=null)
+                    {
+                        mannerEstimationStep15ViewModel.FarmId = model.FarmId;
+                    }
                     if (isAnyFarmExists)
                     {
                         ViewBag.FarmList = farmsWithFields;
                     }
-                    return View(model);
+                    return View(mannerEstimationStep15ViewModel);
                 }
 
                 model = _mannerEstimationLogic.SetMannerEstimationStep15(model);
@@ -3289,11 +3294,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheName);
             }
-            int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerFarmId));
-            bool isExist = await _mannerEstimationLogic.FetchIsExistMannerEstimationsByMannerFarmIdAndName(mannerFarmId, model.Name);
-            if (isExist)
+            MannerEstimationViewModel mannerEstimationViewModel=_mannerEstimationLogic.GetMannerEstimationFromSession();
+            if (mannerEstimationViewModel != null&&!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
             {
-                ModelState.AddModelError("Name", Resource.MsgNameAlreadyExist);
+                int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationViewModel.EncryptedMannerFarmId));
+                bool isExist = await _mannerEstimationLogic.FetchIsExistMannerEstimationsByMannerFarmIdAndName(mannerFarmId, model.Name);
+                if (isExist)
+                {
+                    ModelState.AddModelError("Name", Resource.MsgNameAlreadyExist);
+                }
             }
         }
         private Guid GetOrganisationId()

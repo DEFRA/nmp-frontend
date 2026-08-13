@@ -8406,4 +8406,7 @@ following crop year 2</value>
   <data name="lblWhichMannerFarmWouldYouLikeToRemove" xml:space="preserve">
     <value>Which farm would you like to remove?</value>
   </data>
+  <data name="MsgFarmNameAlreadyExist" xml:space="preserve">
+    <value>This farm name has already been added. You or someone else may have already added it.</value>
+  </data>
 </root>

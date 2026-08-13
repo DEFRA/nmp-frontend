@@ -22824,6 +22824,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This farm name has already been added. You or someone else may have already added it..
+        /// </summary>
+        public static string MsgFarmNameAlreadyExist {
+            get {
+                return ResourceManager.GetString("MsgFarmNameAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a farm name that is no more than 250 characters long.
         /// </summary>
         public static string MsgFarmNameMinMaxValidation {

@@ -264,7 +264,7 @@ internal static class ApiurlHelper
     public const string FetchYearsAndLastUpdatedDateByFarmIDAndYearAsyncAPI = "farms/last-updated/{0}?years={1}";
     public const string FetchAllFarmsWithLastUpdatedDateByOrgIdAPI = "/farmsWithLastUpdatedDate/{0}";
     public const string FetchAllMannerEstimationsAsyncAPI = "/manner-estimations/{0}";
-    public const string FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI = "manner-estimations/exists?mannerFarmId={0}&name={1}";
+    public const string FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI = "manner-estimations/exists?mannerFarmID={0}&name={1}";
     public const string AddMannerEstimationAsyncAPI = "manner-estimations";
     public const string FetchSoilTypeIdByTopSoilIdAndSubSoilIdAsyncAPI = "/soil-type-soil-texture/{0}/{1}";
     public const string FetchMannerApplicationsByEstimationIdAsyncAPI = "/manner-estimation-applications/{0}";
