@@ -145,7 +145,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace("MannerEstimation Controller : MannerEstimationCancel() action called");
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            if (mannerEstimationViewModel != null)
+            if (mannerEstimationViewModel != null&&!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
             {
                 return RedirectToAction(_mannerHubPageAction, new { q = mannerEstimationViewModel.EncryptedMannerFarmId });
             }
@@ -182,25 +182,37 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() post action called");
             ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
 
-            if (string.IsNullOrWhiteSpace(model.FarmName))
-            {
-                ModelState.AddModelError(_farmNameKey, Resource.MsgEnterTheFarmName);
-            }
+            await ValidationForFarmName(model);
             (_, bool isAnyFarmExists) = await BindAllFarmList();
             if (isAnyFarmExists)
             {
                 model.IsFarmCopied = true;
             }
-
+            
             if (!ModelState.IsValid)
             {
                 model = _mannerEstimationLogic.GetMannerEstimationStep1();
+                model.IsFarmCopied = isAnyFarmExists;
                 return View(model);
             }
 
             _mannerEstimationLogic.SetMannerEstimationStep1(model);
 
             return RedirectToAction("Country");
+        }
+
+        private async Task ValidationForFarmName(MannerEstimationStep1ViewModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.FarmName))
+            {
+                ModelState.AddModelError(_farmNameKey, Resource.MsgEnterTheFarmName);
+            }
+            Guid organisationId = GetOrganisationId();
+            bool isExist = await _mannerEstimationLogic.FetchIsExistMannerFarmByOrgIdAndName(organisationId, model.FarmName);
+            if (isExist)
+            {
+                ModelState.AddModelError(_farmNameKey, Resource.MsgFarmNameAlreadyExist);
+            }
         }
 
         [HttpGet]
@@ -1508,20 +1520,33 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FarmToCopy() post action called");
             try
             {
+                (List<SelectListItem> farmsWithFields, bool isAnyFarmExists) = await BindAllFarmList();
                 if (!model.FarmId.HasValue)
                 {
                     ModelState.AddModelError("FarmId", string.Format(Resource.MsgSelectAnJourneyName, Resource.lblFarm));
                 }
-
+                else
+                {
+                    string farmName= farmsWithFields?.FirstOrDefault(x=>x.Value==model.FarmId.ToString())?.Text;
+                    Guid organisationId = GetOrganisationId();
+                    bool isExist = await _mannerEstimationLogic.FetchIsExistMannerFarmByOrgIdAndName(organisationId, farmName);
+                    if (isExist)
+                    {
+                        ModelState.AddModelError("FarmId", Resource.MsgFarmNameAlreadyExist);
+                    }
+                }
                 if (!ModelState.IsValid)
                 {
-                    model = _mannerEstimationLogic.GetMannerEstimationStep15();
-                    (List<SelectListItem> farmsWithFields, bool isAnyFarmExists) = await BindAllFarmList();
+                    MannerEstimationStep15ViewModel mannerEstimationStep15ViewModel = _mannerEstimationLogic.GetMannerEstimationStep15();
+                    if(mannerEstimationStep15ViewModel!=null)
+                    {
+                        mannerEstimationStep15ViewModel.FarmId = model.FarmId;
+                    }
                     if (isAnyFarmExists)
                     {
                         ViewBag.FarmList = farmsWithFields;
                     }
-                    return View(model);
+                    return View(mannerEstimationStep15ViewModel);
                 }
 
                 model = _mannerEstimationLogic.SetMannerEstimationStep15(model);
@@ -3269,14 +3294,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheName);
             }
-
-            Claim? claim = HttpContext.User.FindFirst(_organisationId);
-            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
-            Guid.TryParse(orgId, out Guid organisationId);
-            bool isExist = await _mannerEstimationLogic.FetchIsExistMannerEstimationsByOrgIdAndName(organisationId, model.Name);
-            if (isExist)
+            MannerEstimationViewModel mannerEstimationViewModel=_mannerEstimationLogic.GetMannerEstimationFromSession();
+            if (mannerEstimationViewModel != null&&!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
             {
-                ModelState.AddModelError("Name", Resource.MsgNameAlreadyExist);
+                int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationViewModel.EncryptedMannerFarmId));
+                bool isExist = await _mannerEstimationLogic.FetchIsExistMannerEstimationsByMannerFarmIdAndName(mannerFarmId, model.Name);
+                if (isExist)
+                {
+                    ModelState.AddModelError("Name", Resource.MsgNameAlreadyExist);
+                }
             }
         }
         private Guid GetOrganisationId()

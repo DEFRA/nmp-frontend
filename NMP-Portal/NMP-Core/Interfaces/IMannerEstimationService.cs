@@ -12,7 +12,7 @@ namespace NMP.Core.Interfaces
     public interface IMannerEstimationService
     {
         Task<(List<MannerEstimationDetailsViewModel>, Error?)> FetchMannerEstimationsList(Guid orgId);
-        Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
+        Task<bool> FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI(int mannerFarmId, string name);
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationServiceAsync(string MannerData);
         Task<(MannerFarmEstimationApplicationResponse?, Error?)> AddMannerFarmEstimationServiceAsync(string MannerData);
 
@@ -39,6 +39,7 @@ namespace NMP.Core.Interfaces
         Task<(MannerFarmViewModel?, Error?)> FetchMannerFarmById(int mannerFarmId);
         Task<(List<MannerEstimationSummaryViewModel>?, Error?)> FetchMannerEstimateByFarmIdAsync(int mannerFarmId);
         Task<Error?> RemoveMannerFarmsServiceAsync(string mannerFarmIds);
+        Task<bool> FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI(Guid organisationId, string name);
 
     }
 }

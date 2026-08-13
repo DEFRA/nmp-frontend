@@ -7,7 +7,7 @@
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     var backAction = "";
 
-    if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
+    if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland && (Model.CopyExistingField.HasValue && !Model.CopyExistingField.Value))
     {
         backAction = "PscIndex";
     }
