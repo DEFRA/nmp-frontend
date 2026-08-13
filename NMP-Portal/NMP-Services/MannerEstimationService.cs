@@ -48,10 +48,10 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimationsList, error);
     }
-    public async Task<bool> FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(Guid organisationId, string name)
+    public async Task<bool> FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI(int mannerFarmId, string name)
     {
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI, organisationId, name));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI, mannerFarmId, name));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         bool isExist = responseWrapper?.Data?["exists"] ?? false;
@@ -718,6 +718,17 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             _logger.HandleException(ex, error);
         }
         return error;
+    }
+
+    public async Task<bool> FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI(Guid organisationId, string name)
+    {
+        HttpClient httpClient = await GetNMPAPIClient();
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI, organisationId, name));
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        bool isExist = responseWrapper?.Data?["exists"] ?? false;
+
+        return isExist;
     }
 }
 

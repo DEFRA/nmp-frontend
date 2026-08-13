@@ -182,10 +182,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() post action called");
             ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
 
-            if (string.IsNullOrWhiteSpace(model.FarmName))
-            {
-                ModelState.AddModelError(_farmNameKey, Resource.MsgEnterTheFarmName);
-            }
+            await ValidationForFarmName(model);
             (_, bool isAnyFarmExists) = await BindAllFarmList();
             if (isAnyFarmExists)
             {
@@ -201,6 +198,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _mannerEstimationLogic.SetMannerEstimationStep1(model);
 
             return RedirectToAction("Country");
+        }
+
+        private async Task ValidationForFarmName(MannerEstimationStep1ViewModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.FarmName))
+            {
+                ModelState.AddModelError(_farmNameKey, Resource.MsgEnterTheFarmName);
+            }
+            Guid organisationId = GetOrganisationId();
+            bool isExist = await _mannerEstimationLogic.FetchIsExistMannerFarmByOrgIdAndName(organisationId, model.FarmName);
+            if (isExist)
+            {
+                ModelState.AddModelError(_farmNameKey, Resource.MsgNameAlreadyExist);
+            }
         }
 
         [HttpGet]
@@ -1508,15 +1519,24 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FarmToCopy() post action called");
             try
             {
+                (List<SelectListItem> farmsWithFields, bool isAnyFarmExists) = await BindAllFarmList();
                 if (!model.FarmId.HasValue)
                 {
                     ModelState.AddModelError("FarmId", string.Format(Resource.MsgSelectAnJourneyName, Resource.lblFarm));
                 }
-
+                else
+                {
+                    string farmName= farmsWithFields?.FirstOrDefault(x=>x.Value==model.FarmId.ToString())?.Text;
+                    Guid organisationId = GetOrganisationId();
+                    bool isExist = await _mannerEstimationLogic.FetchIsExistMannerFarmByOrgIdAndName(organisationId, farmName);
+                    if (isExist)
+                    {
+                        ModelState.AddModelError(_farmNameKey, Resource.MsgNameAlreadyExist);
+                    }
+                }
                 if (!ModelState.IsValid)
                 {
                     model = _mannerEstimationLogic.GetMannerEstimationStep15();
-                    (List<SelectListItem> farmsWithFields, bool isAnyFarmExists) = await BindAllFarmList();
                     if (isAnyFarmExists)
                     {
                         ViewBag.FarmList = farmsWithFields;
@@ -3269,11 +3289,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheName);
             }
-
-            Claim? claim = HttpContext.User.FindFirst(_organisationId);
-            string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
-            Guid.TryParse(orgId, out Guid organisationId);
-            bool isExist = await _mannerEstimationLogic.FetchIsExistMannerEstimationsByOrgIdAndName(organisationId, model.Name);
+            int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerFarmId));
+            bool isExist = await _mannerEstimationLogic.FetchIsExistMannerEstimationsByMannerFarmIdAndName(mannerFarmId, model.Name);
             if (isExist)
             {
                 ModelState.AddModelError("Name", Resource.MsgNameAlreadyExist);

@@ -82,7 +82,7 @@ namespace NMP.Application
 
         MannerEstimationStep30ViewModel GetMannerEstimationStep30();
         MannerEstimationStep30ViewModel SetMannerEstimationStep30(MannerEstimationStep30ViewModel mannerEstimationStep30);
-        Task<bool> FetchIsExistMannerEstimationsByOrgIdAndName(Guid organisationId, string name);
+        Task<bool> FetchIsExistMannerEstimationsByMannerFarmIdAndName(int mannerFarmId, string name);
         MannerEstimationStep31ViewModel GetMannerEstimationStep31();
         MannerEstimationStep31ViewModel SetMannerEstimationStep31(MannerEstimationStep31ViewModel mannerEstimationStep31);
         MannerEstimationStep32ViewModel GetMannerEstimationStep32();
@@ -150,5 +150,6 @@ namespace NMP.Application
         MannerEstimationStep42ViewModel GetMannerEstimationStep42();
         MannerEstimationStep42ViewModel SetMannerEstimationStep42(MannerEstimationStep42ViewModel mannerEstimationStep42);
         Task<Error?> RemoveMannerFarms(string mannerFarmIds);
+        Task<bool> FetchIsExistMannerFarmByOrgIdAndName(Guid organisationId, string farmName);
     }
 }

@@ -817,10 +817,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep30();
     }
-    public async Task<bool> FetchIsExistMannerEstimationsByOrgIdAndName(Guid organisationId, string name)
+    public async Task<bool> FetchIsExistMannerEstimationsByMannerFarmIdAndName(int mannerFarmId, string name)
     {
-        _logger.LogTrace("ManureLogic : FetchIsExistMannerEstimationsByOrgIdAndName() called");
-        return await _mannerEstimationService.FetchIsExistMannerEstimationsByOrgIdAndNameAsyncAPI(organisationId, name);
+        _logger.LogTrace("ManureLogic : FetchIsExistMannerEstimationsByMannerFarmIdAndName() called");
+        return await _mannerEstimationService.FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI(mannerFarmId, name);
     }
     public MannerEstimationStep31ViewModel GetMannerEstimationStep31()
     {
@@ -1844,5 +1844,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         Error? error = await _mannerEstimationService.RemoveMannerFarmsServiceAsync(mannerFarmIds);
         return error;
     }
+    public async Task<bool> FetchIsExistMannerFarmByOrgIdAndName(Guid organisationId, string farmName)
+    {
+        _logger.LogTrace("ManureLogic : FetchIsExistMannerFarmByOrgIdAndName() called");
+        return await _mannerEstimationService.FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI(organisationId, farmName);
+    }
+
 }
 
