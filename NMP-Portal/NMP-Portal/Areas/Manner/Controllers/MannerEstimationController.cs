@@ -145,7 +145,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace("MannerEstimation Controller : MannerEstimationCancel() action called");
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            if (mannerEstimationViewModel != null)
+            if (mannerEstimationViewModel != null&&!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
             {
                 return RedirectToAction(_mannerHubPageAction, new { q = mannerEstimationViewModel.EncryptedMannerFarmId });
             }
