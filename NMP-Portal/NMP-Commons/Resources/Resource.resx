@@ -8406,4 +8406,10 @@ following crop year 2</value>
   <data name="lblWhichMannerFarmWouldYouLikeToRemove" xml:space="preserve">
     <value>Which farm would you like to remove?</value>
   </data>
+  <data name="MsgFarmNameAlreadyExist" xml:space="preserve">
+    <value>This farm name has already been added. You or someone else may have already added it.</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1" xml:space="preserve">
+    <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB).</value>
+  </data>
 </root>
