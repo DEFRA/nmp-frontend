@@ -1510,7 +1510,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep19.SubSoilId = mannerEstimate.SubSoilID;
             mannerEstimationViewModel.MannerEstimationStep9.CropTypeId = mannerEstimate.CropTypeID;
             mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = mannerEstimate.MannerCropTypeID;
-            mannerEstimationViewModel.MannerEstimationStep20.SowingDate = mannerEstimate.SowingDate;
+            mannerEstimationViewModel.MannerEstimationStep20.SowingDate = mannerEstimate.SowingDate.Value.ToLocalTime();
             var cropType = cropTypes?
     .FirstOrDefault(x => x.CropTypeId == mannerEstimate?.CropTypeID);
 

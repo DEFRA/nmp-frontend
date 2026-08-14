@@ -145,7 +145,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace("MannerEstimation Controller : MannerEstimationCancel() action called");
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            if (mannerEstimationViewModel != null&&!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
+            if (mannerEstimationViewModel != null && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
             {
                 return RedirectToAction(_mannerHubPageAction, new { q = mannerEstimationViewModel.EncryptedMannerFarmId });
             }
@@ -188,7 +188,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.IsFarmCopied = true;
             }
-            
+
             if (!ModelState.IsValid)
             {
                 model = _mannerEstimationLogic.GetMannerEstimationStep1();
@@ -880,7 +880,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = _mannerEstimationLogic.SetMannerEstimationStep12(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationDate");
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && !model.IsComingForAddNewApplication) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationDate");
         }
         public static (DateTime StartDate, DateTime EndDate) GetHarvestYear(DateTime date)
         {
@@ -938,9 +938,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (mannerEstimationViewModel != null && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId))
             {
                 await BindFarmFieldOrCropDataUpdate(mannerEstimationViewModel.EncryptedMannerEstimationId);
+                model = _mannerEstimationLogic.GetMannerEstimationStep13();
             }
+
             var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
-            if (manureType?.HighReadilyAvailableNitrogen == true)
+            if (manureType?.HighReadilyAvailableNitrogen == true && model.IsWithinNVZ == true)
             {
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
                 int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
@@ -1527,7 +1529,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 else
                 {
-                    string farmName= farmsWithFields?.FirstOrDefault(x=>x.Value==model.FarmId.ToString())?.Text;
+                    string farmName = farmsWithFields?.FirstOrDefault(x => x.Value == model.FarmId.ToString())?.Text;
                     Guid organisationId = GetOrganisationId();
                     bool isExist = await _mannerEstimationLogic.FetchIsExistMannerFarmByOrgIdAndName(organisationId, farmName);
                     if (isExist)
@@ -1538,7 +1540,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (!ModelState.IsValid)
                 {
                     MannerEstimationStep15ViewModel mannerEstimationStep15ViewModel = _mannerEstimationLogic.GetMannerEstimationStep15();
-                    if(mannerEstimationStep15ViewModel!=null)
+                    if (mannerEstimationStep15ViewModel != null)
                     {
                         mannerEstimationStep15ViewModel.FarmId = model.FarmId;
                     }
@@ -2338,7 +2340,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ResetWarnings(model, false);
 
                     var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
-
                     (model, error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
 
                     bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
@@ -2463,6 +2464,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ViewBag.Error = error.Message;
                     return View(model);
                 }
+
                 bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                 if (hasAnyWarning)
                 {
@@ -2574,6 +2576,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ViewBag.Error = error.Message;
                     return View(model);
                 }
+
                 bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                 if (hasAnyWarning)
                 {
@@ -3294,8 +3297,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 ModelState.AddModelError("Name", Resource.MsgEnterTheName);
             }
-            MannerEstimationViewModel mannerEstimationViewModel=_mannerEstimationLogic.GetMannerEstimationFromSession();
-            if (mannerEstimationViewModel != null&&!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
+            MannerEstimationViewModel mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+            if (mannerEstimationViewModel != null && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
             {
                 int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationViewModel.EncryptedMannerFarmId));
                 bool isExist = await _mannerEstimationLogic.FetchIsExistMannerEstimationsByMannerFarmIdAndName(mannerFarmId, model.Name);
@@ -4506,6 +4509,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private async Task<(TModel, Error?)> NFieldLimitWarningMessage<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) //mannerEstimationId will be null for new application and will have value for updated application and add another application
     where TModel : MannerEstimationNWarningViewModel
         {
+            if (model.IsWithinNVZ == false || model.IsWithinNVZ == null)
+            {
+                return (model, null);
+            }
             Error? error = null;
             decimal defaultNitrogen = 0;
             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
@@ -4992,7 +4999,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             string? closedPeriod = string.Empty;
             var dateWarningViewModel = new MannerEstimationStep13ViewModel();
             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID ?? 0);
-            if (manureType?.HighReadilyAvailableNitrogen == true)
+            if (manureType?.HighReadilyAvailableNitrogen == true && estimation.MannerEstimation.IsWithinNVZ == true)
             {
                 int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.MannerEstimation.CropTypeID);
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
