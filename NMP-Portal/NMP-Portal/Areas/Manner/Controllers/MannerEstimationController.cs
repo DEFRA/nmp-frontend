@@ -868,7 +868,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = _mannerEstimationLogic.SetMannerEstimationStep12(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationDate");
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && !model.IsComingForAddNewApplication) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationDate");
         }
         public static (DateTime StartDate, DateTime EndDate) GetHarvestYear(DateTime date)
         {
@@ -926,9 +926,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (mannerEstimationViewModel != null && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId))
             {
                 await BindFarmFieldOrCropDataUpdate(mannerEstimationViewModel.EncryptedMannerEstimationId);
+                model = _mannerEstimationLogic.GetMannerEstimationStep13();
             }
+
             var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
-            if (manureType?.HighReadilyAvailableNitrogen == true)
+            if (manureType?.HighReadilyAvailableNitrogen == true && model.IsWithinNVZ == true)
             {
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(model.CropTypeId ?? 0);
                 int fieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
@@ -2313,8 +2315,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ResetWarnings(model, false);
 
                     var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
+                    if(model.IsWithinNVZ == true)
+                    {
+                        (model, error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
 
-                    (model, error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
+                    }
 
                     bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                     if (hasAnyWarning)
@@ -2431,13 +2436,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ResetWarnings(model, false);
 
                 var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
-
-                (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
-                if (!string.IsNullOrWhiteSpace(error?.Message))
+                if (model.IsWithinNVZ == true)
                 {
-                    ViewBag.Error = error.Message;
-                    return View(model);
+                    (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        ViewBag.Error = error.Message;
+                        return View(model);
+                    }
                 }
+                
                 bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                 if (hasAnyWarning)
                 {
@@ -2542,13 +2550,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ResetWarnings(model, false);
 
                 var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
-
-                (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
-                if (!string.IsNullOrWhiteSpace(error?.Message))
+                if (model.IsWithinNVZ == true)
                 {
-                    ViewBag.Error = error.Message;
-                    return View(model);
+                    (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
+                    if (!string.IsNullOrWhiteSpace(error?.Message))
+                    {
+                        ViewBag.Error = error.Message;
+                        return View(model);
+                    }
                 }
+                   
                 bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                 if (hasAnyWarning)
                 {
@@ -4966,7 +4977,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             string? closedPeriod = string.Empty;
             var dateWarningViewModel = new MannerEstimationStep13ViewModel();
             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID ?? 0);
-            if (manureType?.HighReadilyAvailableNitrogen == true)
+            if (manureType?.HighReadilyAvailableNitrogen == true && estimation.MannerEstimation.IsWithinNVZ == true)
             {
                 int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.MannerEstimation.CropTypeID);
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
@@ -5019,8 +5030,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 UpdatedMannerAppId = application.ID,
                 IsOrgManureNfieldLimitWarning = false
             };
-
-            (nWarningViewModel, error) = await NFieldLimitWarningMessage(nWarningViewModel, estimation.MannerEstimation.ID, application.ID);
+            if (estimation.MannerEstimation.IsWithinNVZ == true)
+            {
+                (nWarningViewModel, error) = await NFieldLimitWarningMessage(nWarningViewModel, estimation.MannerEstimation.ID, application.ID);
+            }
+                
 
             // --- combine and store against this application ---
             var combinedWarnings = new List<WarningItemViewModel>();
