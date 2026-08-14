@@ -819,6 +819,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A new sward is one that is established in the current harvest year. A sward established by undersowing last year should be treated as an existing sward..
+        /// </summary>
+        public static string lblAboutNewSwardHintForScotland {
+            get {
+                return ResourceManager.GetString("lblAboutNewSwardHintForScotland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the FAS SRUC Technical Notes..
         /// </summary>
         public static string lblAboutRecommendationForScotlandContent1 {
@@ -19060,7 +19069,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the top soil in {0}?.
+        ///   Looks up a localized string similar to What is the topsoil type in {0}?.
         /// </summary>
         public static string lblWhatIsTheTopSoilInFieldName {
             get {

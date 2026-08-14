@@ -308,8 +308,7 @@ namespace NMP.Portal.Controllers
                 if (mgmtList == null) continue;
 
                 var toRemove = model.OrganicManures
-                    .Where(fm => mgmtList.Any(mp => mp.ID == fm.ManagementPeriodID)
-                              && fm.Defoliation == null)
+                    .Where(fm => mgmtList.Any(mp => mp.ID == fm.ManagementPeriodID))
                     .Skip(1)
                     .Select(mp => mp.ManagementPeriodID)
                     .ToList();
