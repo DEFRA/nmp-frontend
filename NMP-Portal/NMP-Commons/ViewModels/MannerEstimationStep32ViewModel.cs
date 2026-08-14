@@ -22,8 +22,9 @@ namespace NMP.Commons.ViewModels
         public int? IncorporationMethodId { get; set; }
         public int? ApplicationRateMethod { get; set; }
         public int? TotalRainfall { get; set; }
-
-        [Range(typeof(decimal), "0", "9999", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And9999))]
+        [Range(0, 9999,
+    ErrorMessageResourceType = typeof(Resource),
+    ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And9999))]
         public int? AutumnCropNitrogenUptake { get; set; }
         public DateTime? ApplicationDate { get; set; }
         public string? PostCode { get; set; }
