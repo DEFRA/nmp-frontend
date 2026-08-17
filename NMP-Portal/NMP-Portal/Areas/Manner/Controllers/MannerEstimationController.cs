@@ -3318,12 +3318,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private async Task<int> BuildAutumnCropNitrogenUptakeAsync(MannerEstimationStep32ViewModel model)
         {
 
-            var (link, _) = await _organicManureLogic
-                .FetchCropTypeLinkingByCropTypeId(model.CropTypeId.Value);
+            //var (link, _) = await _organicManureLogic
+            //    .FetchCropTypeLinkingByCropTypeId(model.CropTypeId.Value);
 
             var payload = new
             {
-                cropTypeId = link.MannerCropTypeID,
+                cropTypeId = model.MannerCropTypeId,
                 applicationMonth = model.ApplicationDate.Value.Month
             };
 
@@ -3744,6 +3744,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         {
                             model.PostCode = mannerFarm.Postcode;
                             model.CropTypeId = mannerEstimate.CropTypeID;
+                            model.MannerCropTypeId = mannerEstimate.MannerCropTypeID;
                         }
                     }
                 }
@@ -3755,6 +3756,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     {
                         model.PostCode = mannerFarm.Postcode;
                         model.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+                        model.MannerCropTypeId = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId;
                     }
                 }
 
@@ -3771,7 +3773,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindPostCodeAndCropTypeDataForAddNewApplication(model);
                 //Autumn crop Nitrogen uptake
-                model.AutumnCropNitrogenUptake ??= await BuildAutumnCropNitrogenUptakeAsync(model);
+                model.AutumnCropNitrogenUptake = await BuildAutumnCropNitrogenUptakeAsync(model);
 
                 //Soil drainage end date
                 if (model.SoilDrainageEndDate == null)
