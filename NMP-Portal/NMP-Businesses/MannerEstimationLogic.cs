@@ -866,6 +866,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep32.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep32.PostCode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
         mannerEstimationViewModel.MannerEstimationStep32.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep32.MannerCropTypeId = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId;
         mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = mannerEstimationViewModel.MannerEstimationStep9.CropTypeName;
         mannerEstimationViewModel.MannerEstimationStep32.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
 
@@ -1510,7 +1511,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep19.SubSoilId = mannerEstimate.SubSoilID;
             mannerEstimationViewModel.MannerEstimationStep9.CropTypeId = mannerEstimate.CropTypeID;
             mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = mannerEstimate.MannerCropTypeID;
-            mannerEstimationViewModel.MannerEstimationStep20.SowingDate = mannerEstimate.SowingDate.Value.ToLocalTime();
+            mannerEstimationViewModel.MannerEstimationStep20.SowingDate = mannerEstimate.SowingDate??null;
             var cropType = cropTypes?
     .FirstOrDefault(x => x.CropTypeId == mannerEstimate?.CropTypeID);
 
