@@ -3318,9 +3318,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private async Task<int> BuildAutumnCropNitrogenUptakeAsync(MannerEstimationStep32ViewModel model)
         {
 
-            //var (link, _) = await _organicManureLogic
-            //    .FetchCropTypeLinkingByCropTypeId(model.CropTypeId.Value);
-
             var payload = new
             {
                 cropTypeId = model.MannerCropTypeId,
