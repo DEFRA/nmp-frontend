@@ -7154,7 +7154,7 @@ managementPeriod.CropID.HasValue
         {
             Error? error = null;
             (Crop? crop, Field? fieldData, List<Country> countryList, error) = await FetchDataForMannerOutput(organic);
-            if (crop == null && !string.IsNullOrWhiteSpace(error?.Message))
+            if (crop == null)
             {
                 return (null, error);
             }
