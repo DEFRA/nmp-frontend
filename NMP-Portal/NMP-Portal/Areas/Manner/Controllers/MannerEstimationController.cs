@@ -3808,8 +3808,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
 
                     if (model.ApplicationDate.HasValue &&
-                        model.SoilDrainageEndDate.HasValue &&
-                        model.TotalRainfall == null)
+                        model.SoilDrainageEndDate.HasValue)
                     {
                         var rainfallPostCodeApplication = new
                         {
