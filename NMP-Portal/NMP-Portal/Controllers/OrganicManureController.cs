@@ -7166,6 +7166,7 @@ managementPeriod.CropID.HasValue
                     DateTimeKind.Unspecified);
 
                 isLateSownCropType = sowingDate.Date > cutoff;
+
             }
 
             int topSoilID = 0;
