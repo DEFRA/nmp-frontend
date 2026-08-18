@@ -7159,12 +7159,15 @@ managementPeriod.CropID.HasValue
                 return (null, error);
             }
             bool isLateSownCropType = false;
-            if (crop?.SowingDate != null)
+            if (crop?.SowingDate is DateTime sowingDate)
             {
-                DateTime cutoff = new DateTime(crop.SowingDate.Value.Year, 9, 15, 0, 0, 0, DateTimeKind.Unspecified);
+                DateTime cutoff = new DateTime(
+                    sowingDate.Year, 9, 15, 0, 0, 0,
+                    DateTimeKind.Unspecified);
 
-                isLateSownCropType = crop.SowingDate.Value.Date > cutoff;
+                isLateSownCropType = sowingDate.Date > cutoff;
             }
+
             int topSoilID = 0;
             int subSoilID = 0;
             (SoilTypeSoilTextureResponse soilTexture, error) = await _organicManureLogic.FetchSoilTypeSoilTextureBySoilTypeId(fieldData.SoilTypeID ?? 0);
