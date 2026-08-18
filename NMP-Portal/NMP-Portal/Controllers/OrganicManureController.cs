@@ -3681,7 +3681,7 @@ managementPeriod.CropID.HasValue
         // Fetches total rainfall for the application/drainage date range, if not already set.
         private async Task SetTotalRainfallAsync(OrganicManureViewModel model, string halfPostCode)
         {
-            if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue && model.TotalRainfall == null)
+            if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue)
             {
                 var rainfallPostCodeApplication = new
                 {
@@ -7049,7 +7049,7 @@ managementPeriod.CropID.HasValue
         }
 
         // Wales warning.
-        
+
 
         // Row 14: Brassica crops, England.
         private async Task ApplyBrassicaWarningAsync(
@@ -7744,7 +7744,7 @@ managementPeriod.CropID.HasValue
             return (organicManureList, null);
         }
 
-        
+
 
         private async Task<(int FieldTypeId, int? FieldId)> ResolveFieldTypeAndIdAsync(OrganicManureUpdateData orgManure)
         {
@@ -10193,16 +10193,16 @@ managementPeriod.CropID.HasValue
                 if (fieldData == null) continue;
 
                 var (crop, _) = await _organicManureLogic
-                    .FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
-
-                var (link, error) = await _organicManureLogic
-                    .FetchCropTypeLinkingByCropTypeId(crop.CropTypeId);
+                     .FetchCropTypeByFieldIdAndHarvestYear(fieldId, model.HarvestYear.Value, false);
+                (bool isLateSownCropType, Crop? cropData) = await BindIsLateSownCropType(model, fieldId);
+                (CropTypeLinkingResponse cropTypeLinkingResponse, Error error) = await _organicManureLogic
+                    .FetchCropTypeLinkingByCropTypeId(cropData.CropTypeID.Value);
 
                 if (error != null) continue;
 
                 var payload = new
                 {
-                    cropTypeId = link.MannerCropTypeID,
+                    cropTypeId = isLateSownCropType ? cropTypeLinkingResponse.LateSownMannerCropTypeID.Value : cropTypeLinkingResponse.MannerCropTypeID,
                     applicationMonth = model.ApplicationDate.Value.Month
                 };
 
@@ -10216,13 +10216,42 @@ managementPeriod.CropID.HasValue
                 {
                     EncryptedFieldId = _organicManureProtector.Protect(fieldId.ToString()),
                     FieldName = fieldData.Name ?? "",
-                    CropTypeId = crop.CropTypeId,
+                    CropTypeId = cropData.CropTypeID.Value,
                     CropTypeName = crop.CropType,
                     AutumnCropNitrogenUptake = uptake.value
                 });
             }
 
             return result;
+        }
+
+        private async Task<(bool isLateSownCropType, Crop? cropData)> BindIsLateSownCropType(OrganicManureViewModel model, int fieldId)
+        {
+            bool isLateSownCropType = false;
+            (List<Crop> cropList, _) = await _cropLogic.FetchCropPlanByFieldIdAndYear(fieldId, model.HarvestYear.Value);
+            Crop? cropData = null;
+            if (cropList.Count > 1)
+            {
+                int cropid = model.DoubleCrop?
+                    .FirstOrDefault(x => x.FieldID == cropList[0].FieldID)?
+                    .CropID ?? cropList[0].ID.Value;
+
+                cropData = cropList.FirstOrDefault(x => x.ID == cropid);
+            }
+
+            else
+            {
+                cropData = cropList[0];
+            }
+
+            if (cropData != null && cropData.SowingDate != null)
+            {
+                DateTime cutoff = new DateTime(cropData.SowingDate.Value.Year, 9, 15, 0, 0, 0, DateTimeKind.Unspecified);
+
+                isLateSownCropType = cropData.SowingDate.Value.Date > cutoff;
+            }
+
+            return (isLateSownCropType, cropData);
         }
 
         private static void ResetOrganicManures(OrganicManureViewModel model)
