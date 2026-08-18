@@ -7154,12 +7154,12 @@ managementPeriod.CropID.HasValue
         {
             Error? error = null;
             (Crop? crop, Field? fieldData, List<Country> countryList, error) = await FetchDataForMannerOutput(organic);
-            if (error != null && string.IsNullOrWhiteSpace(error.Message))
+            if (crop == null && !string.IsNullOrWhiteSpace(error?.Message))
             {
                 return (null, error);
             }
             bool isLateSownCropType = false;
-            if (crop?.SowingDate is DateTime sowingDate)
+            if (crop.SowingDate is DateTime sowingDate)
             {
                 DateTime cutoff = new DateTime(
                     sowingDate.Year, 9, 15, 0, 0, 0,
