@@ -7158,6 +7158,13 @@ managementPeriod.CropID.HasValue
             {
                 return (null, error);
             }
+            bool isLateSownCropType = false;
+            if (crop?.SowingDate != null)
+            {
+                DateTime cutoff = new DateTime(crop.SowingDate.Value.Year, 9, 15, 0, 0, 0, DateTimeKind.Unspecified);
+
+                isLateSownCropType = crop.SowingDate.Value.Date > cutoff;
+            }
             int topSoilID = 0;
             int subSoilID = 0;
             (SoilTypeSoilTextureResponse soilTexture, error) = await _organicManureLogic.FetchSoilTypeSoilTextureBySoilTypeId(fieldData.SoilTypeID ?? 0);
@@ -7178,14 +7185,14 @@ managementPeriod.CropID.HasValue
             }
             var mannerOutput = new
             {
-                runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.MannerEngland : (int)NMP.Commons.Enums.RunType.MannerScotland,
+                runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.PlanetEngland : (int)NMP.Commons.Enums.RunType.PlanetScotland,
                 postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                 countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
                 field = new
                 {
                     fieldID = fieldData.ID,
                     fieldName = fieldData.Name,
-                    MannerCropTypeID = cropTypeLinkingResponse.MannerCropTypeID,
+                    MannerCropTypeID = isLateSownCropType ? cropTypeLinkingResponse.LateSownMannerCropTypeID.Value : cropTypeLinkingResponse.MannerCropTypeID,
                     topsoilID = topSoilID,
                     subsoilID = subSoilID,
                     isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
