@@ -10232,9 +10232,13 @@ managementPeriod.CropID.HasValue
             Crop? cropData = null;
             if (cropList.Count > 1)
             {
-                int cropid = model.DoubleCrop.FirstOrDefault(x => x.FieldID == cropList[0].FieldID).CropID;
+                int cropid = model.DoubleCrop?
+                    .FirstOrDefault(x => x.FieldID == cropList[0].FieldID)?
+                    .CropID ?? cropList[0].ID.Value;
+
                 cropData = cropList.FirstOrDefault(x => x.ID == cropid);
             }
+
             else
             {
                 cropData = cropList[0];
