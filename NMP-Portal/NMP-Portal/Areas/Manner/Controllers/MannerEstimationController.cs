@@ -2343,7 +2343,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
                     (model, error) = await NitrogenApplicationLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
 
-                    bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
+                    bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsStartClosedPeriodEndFebWarning;
                     if (hasAnyWarning)
                     {
                         if (!model.IsWarningMsgNeedToShow)
@@ -2466,7 +2466,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
+                bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsStartClosedPeriodEndFebWarning;
                 if (hasAnyWarning)
                 {
                     if (!model.IsWarningMsgNeedToShow)
@@ -2518,6 +2518,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             model.IsOrgManureNfieldLimitWarning = false;
+            model.IsEndClosedPeriodFebruaryWarning = false;
+            model.IsStartClosedPeriodEndFebWarning = false;
         }
         [HttpGet]
         public async Task<IActionResult> AreaQuantity(string? q)
@@ -2578,7 +2580,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
 
-                bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
+                bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning || model.IsEndClosedPeriodFebruaryWarning || model.IsStartClosedPeriodEndFebWarning;
                 if (hasAnyWarning)
                 {
                     if (!model.IsWarningMsgNeedToShow)
@@ -4588,9 +4590,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 isHighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen ?? false;
             }
 
-            bool isFieldIsInNVZ = model.IsWithinNVZ.Value;
+            bool? isFieldIsInNVZ = model.IsWithinNVZ;
 
-            if (!(model.IsFarmOrganic.Value && isHighReadilyAvailableNitrogen && isFieldIsInNVZ))
+            if (!(model.IsFarmOrganic.Value && isHighReadilyAvailableNitrogen && isFieldIsInNVZ.Value))
             {
                 return (model, error);
             }
@@ -5402,7 +5404,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationId = estimation.MannerEstimation.ID,
                 CropTypeId = estimation.MannerEstimation.CropTypeID,
                 UpdatedMannerAppId = application.ID,
-                IsOrgManureNfieldLimitWarning = false
+                IsWithinNVZ= estimation.MannerEstimation.IsWithinNVZ,
+                IsFarmOrganic=estimation.MannerFarm.RegisteredOrganicProducer,
+                ClosedPeriod= closedPeriod,
+                IsOrgManureNfieldLimitWarning = false,
+                IsEndClosedPeriodFebruaryWarning = false,
+                IsStartClosedPeriodEndFebWarning = false
             };
 
             (nWarningViewModel, error) = await NitrogenApplicationLimitWarningMessage(nWarningViewModel, estimation.MannerEstimation.ID, application.ID);
