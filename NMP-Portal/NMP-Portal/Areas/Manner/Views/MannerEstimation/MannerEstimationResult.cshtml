@@ -57,7 +57,7 @@
     </div>
 </div>
 <p class="govuk-body">
-    @string.Format(Resource.lblLastUpdatedDate, ViewBag.LastUpdatedOn.ToString("dd MMMM yyyy"))
+    @string.Format(Resource.lblLastUpdatedDate, ViewBag.LastUpdatedOn.ToLocalTime().ToString("dd MMMM yyyy"))
 </p>
 <div class="govuk-grid-row margin-bottom-thirty">
     <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -132,7 +132,7 @@
                                 {
                                     <th scope="row" class="govuk-table__header">@Resource.lblApplication</th>
                                 }
-                                <th scope="row" class="govuk-table__header">@Resource.lblTotalNitrogen</th>
+                                <th scope="row" class="govuk-table__header">@Resource.lblTotalNitrogenN</th>
                                 <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenCurrentCrop</th>
                                 @if (mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                 {
@@ -243,9 +243,9 @@
                             <th scope="row" class="govuk-table__header">@Resource.lblCropAvailablePhosphate</th>
                             <th scope="row" class="govuk-table__header">@Resource.lblTotalPotashK2O</th>
                             <th scope="row" class="govuk-table__header">@Resource.lblCropAvailablePotash</th>
-                            <th scope="row" class="govuk-table__header">@Resource.lblTotalSulphur</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblTotalSulphurSO3</th>
                             <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableSulphur</th>
-                            <th scope="row" class="govuk-table__header">@Resource.lblTotalMagnesium</th>
+                            <th scope="row" class="govuk-table__header">@Resource.lblTotalMagnesiumMgO</th>
                         </tr>
                     </thead>
                     <tbody class="govuk-table__body">

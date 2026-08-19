@@ -99,7 +99,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     BindEncryptedIdForMannerHubPage(mannerEstimateList);
                     ViewBag.EncryptedMannerFarmId = _mannerEstimationProtector.Protect(mannerFarmId.ToString());
-                    ViewBag.MannerEstimations = mannerEstimateList;
+                    ViewBag.MannerEstimations = mannerEstimateList.OrderByDescending(x => x.ModifiedOn ?? x.CreatedOn).ToList();
                 }
 
                 await BindMannerEstimationSessionForHubPage(q, mannerFarmId);
@@ -5372,7 +5372,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
          Text = $"Application {index + 1}",
          Group = new SelectListGroup
          {
-             Name = $"{x.ManureType}, {(x.ModifiedOn ?? x.CreatedOn):dd MMM yyyy}"
+             Name = $"{x.ManureType}, {(x.ApplicationDate.ToLocalTime()):dd MMM yyyy}"
          }
      })
      .ToList();
@@ -5397,7 +5397,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             HttpContext.Session.SetString("is_manner_estimate_section", Resource.lblTrue);
             HttpContext.Session.Remove("current_manner_estimate_farm_name");
             HttpContext.Session.Remove("current_manner_estimate_manner_farm_id");
-            ViewBag.MannerFarmList = mannerFarmList;
+            ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();
 
             if (!string.IsNullOrWhiteSpace(q))
             {

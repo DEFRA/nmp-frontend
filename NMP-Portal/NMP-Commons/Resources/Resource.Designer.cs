@@ -342,7 +342,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use existing farm and field details from NMPT?.
+        ///   Looks up a localized string similar to Do you want to use existing farm and field details from NMPT-GB?.
         /// </summary>
         public static string CopyExistingFarmAndFieldDetailsContent1 {
             get {
@@ -351,7 +351,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can start with rainfall, field and soil details from an existing farm and one of its fields. You can change any of these details just for this estimate..
+        ///   Looks up a localized string similar to You can start with rainfall, field and soil details from an existing farm and one of its fields saved in NMPT-GB. You can change any of these details just for this estimate..
         /// </summary>
         public static string CopyExistingFarmAndFieldDetailsContent2 {
             get {
@@ -5699,7 +5699,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Estimate of nutrient supply from organic material results.
+        ///   Looks up a localized string similar to Estimate of nutrient supply from organic material.
         /// </summary>
         public static string lblEstimateOfNutrientSupplyFromOrganicMaterialResults {
             get {
@@ -10578,7 +10578,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mineralisated nitrogen (N).
+        ///   Looks up a localized string similar to Mineralised nitrogen (N).
         /// </summary>
         public static string lblMineralisedNitrogen {
             get {
@@ -14567,7 +14567,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the farm, field and crop tab, or an application details tab, to update the results..
+        ///   Looks up a localized string similar to Select the farm, field and crop , or application details tab, to update the results..
         /// </summary>
         public static string lblSelectTheFarmFieldAndCropTabOrAnApplication {
             get {
