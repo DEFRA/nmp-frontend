@@ -866,6 +866,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep32.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep32.PostCode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
         mannerEstimationViewModel.MannerEstimationStep32.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+        mannerEstimationViewModel.MannerEstimationStep32.MannerCropTypeId = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId;
         mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = mannerEstimationViewModel.MannerEstimationStep9.CropTypeName;
         mannerEstimationViewModel.MannerEstimationStep32.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
 
@@ -1510,7 +1511,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep19.SubSoilId = mannerEstimate.SubSoilID;
             mannerEstimationViewModel.MannerEstimationStep9.CropTypeId = mannerEstimate.CropTypeID;
             mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = mannerEstimate.MannerCropTypeID;
-            mannerEstimationViewModel.MannerEstimationStep20.SowingDate = mannerEstimate.SowingDate.Value.ToLocalTime();
+            mannerEstimationViewModel.MannerEstimationStep20.SowingDate = mannerEstimate.SowingDate != null ? mannerEstimate.SowingDate.Value.ToLocalTime() : null;
             var cropType = cropTypes?
     .FirstOrDefault(x => x.CropTypeId == mannerEstimate?.CropTypeID);
 
@@ -1549,7 +1550,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationId = mannerEstimateApplication.MannerEstimationID;
             mannerEstimationViewModel.MannerEstimationApplicationId = mannerEstimateApplication.ID;
             mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId = mannerEstimateApplication.ManureTypeID;
-            mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate = mannerEstimateApplication.ApplicationDate;
+            mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate = mannerEstimateApplication.ApplicationDate.ToLocalTime();
             mannerEstimationViewModel.MannerEstimationStep25.N = mannerEstimateApplication.N;
             mannerEstimationViewModel.MannerEstimationStep25.P2O5 = mannerEstimateApplication.P2O5;
             mannerEstimationViewModel.MannerEstimationStep25.K2O = mannerEstimateApplication.K2O;
@@ -1583,7 +1584,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep32.RainfallWithinSixHoursId = mannerEstimateApplication.RainfallWithinSixHoursID;
             mannerEstimationViewModel.MannerEstimationStep32.MoistureTypeId = mannerEstimateApplication.MoistureID;
             mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = mannerEstimateApplication.AutumnCropNitrogenUptake;
-            mannerEstimationViewModel.MannerEstimationStep32.SoilDrainageEndDate = mannerEstimateApplication.EndOfDrainageDate;
+            mannerEstimationViewModel.MannerEstimationStep32.SoilDrainageEndDate = mannerEstimateApplication.EndOfDrainageDate.Value.ToLocalTime();
             mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall = mannerEstimateApplication.RainfallPostApplication;
             mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue = await FetchDefaultNutrientValue(mannerEstimateApplication.ManureTypeID.Value, mannerEstimateApplication);
         }

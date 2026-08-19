@@ -2730,11 +2730,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             crop.OtherCropName = harvestYearPlanResponse[i].OtherCropName;
             crop.CropInfo1 = harvestYearPlanResponse[i].CropInfo1;
             crop.CropInfo2 = harvestYearPlanResponse[i].CropInfo2;
-            model = await BindCropGroupIdAndNameForCheckAnswer(model, crop);
             counter++;
             model.Crops.Add(crop);
         }
 
+        model = await BindCropGroupIdAndNameForCheckAnswer(model);
         return (isBasePlan, allSowingAreSame, firstSowingDate, counter);
     }
 
@@ -2777,12 +2777,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (model, crop, allSowingAreSame, firstSowingDate, yields);
     }
 
-    private async Task<PlanViewModel> BindCropGroupIdAndNameForCheckAnswer(PlanViewModel model, Crop crop)
+    private async Task<PlanViewModel> BindCropGroupIdAndNameForCheckAnswer(PlanViewModel model)
     {
         List<CropTypeResponse> cropTypeResponseList = (await _fieldLogic.FetchAllCropTypes());
         if (cropTypeResponseList != null)
         {
-            CropTypeResponse? cropTypeResponse = cropTypeResponseList.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
+            CropTypeResponse? cropTypeResponse = cropTypeResponseList.FirstOrDefault(x => x.CropTypeId == model.Crops[0].CropTypeID);
             if (cropTypeResponse != null)
             {
                 model.CropGroupId = cropTypeResponse.CropGroupId;

@@ -29,6 +29,7 @@ namespace NMP.Commons.ViewModels
         public DateTime? ApplicationDate { get; set; }
         public string? PostCode { get; set; }
         public int? CropTypeId { get; set; }
+        public int? MannerCropTypeId { get; set; }
         public string? FieldName { get; set; }
         public string? CropTypeName { get; set; }
         public bool IsApplicationDateChange { get; set; } = false;

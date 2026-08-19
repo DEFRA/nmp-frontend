@@ -99,7 +99,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     BindEncryptedIdForMannerHubPage(mannerEstimateList);
                     ViewBag.EncryptedMannerFarmId = _mannerEstimationProtector.Protect(mannerFarmId.ToString());
-                    ViewBag.MannerEstimations = mannerEstimateList;
+                    ViewBag.MannerEstimations = mannerEstimateList.OrderByDescending(x => x.ModifiedOn ?? x.CreatedOn).ToList();
                 }
 
                 await BindMannerEstimationSessionForHubPage(q, mannerFarmId);
@@ -3318,12 +3318,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private async Task<int> BuildAutumnCropNitrogenUptakeAsync(MannerEstimationStep32ViewModel model)
         {
 
-            var (link, _) = await _organicManureLogic
-                .FetchCropTypeLinkingByCropTypeId(model.CropTypeId.Value);
-
             var payload = new
             {
-                cropTypeId = link.MannerCropTypeID,
+                cropTypeId = model.MannerCropTypeId,
                 applicationMonth = model.ApplicationDate.Value.Month
             };
 
@@ -3744,6 +3741,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         {
                             model.PostCode = mannerFarm.Postcode;
                             model.CropTypeId = mannerEstimate.CropTypeID;
+                            model.MannerCropTypeId = mannerEstimate.MannerCropTypeID;
                         }
                     }
                 }
@@ -3755,6 +3753,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     {
                         model.PostCode = mannerFarm.Postcode;
                         model.CropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;
+                        model.MannerCropTypeId = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId;
                     }
                 }
 
@@ -3771,7 +3770,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindPostCodeAndCropTypeDataForAddNewApplication(model);
                 //Autumn crop Nitrogen uptake
-                model.AutumnCropNitrogenUptake ??= await BuildAutumnCropNitrogenUptakeAsync(model);
+                model.AutumnCropNitrogenUptake = await BuildAutumnCropNitrogenUptakeAsync(model);
 
                 //Soil drainage end date
                 if (model.SoilDrainageEndDate == null)
@@ -3809,8 +3808,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
 
                     if (model.ApplicationDate.HasValue &&
-                        model.SoilDrainageEndDate.HasValue &&
-                        model.TotalRainfall == null)
+                        model.SoilDrainageEndDate.HasValue)
                     {
                         var rainfallPostCodeApplication = new
                         {
@@ -5374,7 +5372,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
          Text = $"Application {index + 1}",
          Group = new SelectListGroup
          {
-             Name = $"{x.ManureType}, {(x.ModifiedOn ?? x.CreatedOn):dd MMM yyyy}"
+             Name = $"{x.ManureType}, {(x.ApplicationDate.ToLocalTime()):dd MMM yyyy}"
          }
      })
      .ToList();
@@ -5399,7 +5397,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             HttpContext.Session.SetString("is_manner_estimate_section", Resource.lblTrue);
             HttpContext.Session.Remove("current_manner_estimate_farm_name");
             HttpContext.Session.Remove("current_manner_estimate_manner_farm_id");
-            ViewBag.MannerFarmList = mannerFarmList;
+            ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();
 
             if (!string.IsNullOrWhiteSpace(q))
             {
