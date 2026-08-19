@@ -5,10 +5,13 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading = string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, (Model.ManureGroupName == Resource.lblOtherOrganicMaterials
-    ? Resource.lblOtherOrganicMaterial
-    : Model.ManureGroupName));
+    string heading = Resource.lblWhatTypeOfOrganicMaterialAreYouUsing;
+    if (Model.ManureGroupId != (int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial)
+    {
+        heading = string.Format(Resource.lblWhatTypeOfManureGroupAreYouUsingInThisApplication, Model.ManureGroupName);
+    }
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+    
     var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsComingForAddNewApplication && !Model.IsManureGroupIdChange ? "MannerEstimationResult" : "ManureGroup";
 }
 @section BeforeContent {
