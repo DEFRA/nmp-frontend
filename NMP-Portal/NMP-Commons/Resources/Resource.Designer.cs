@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -5177,6 +5177,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EndClosedPeriodEndFeb.
+        /// </summary>
+        public static string lblEndClosedPeriodEndFeb {
+            get {
+                return ResourceManager.GetString("lblEndClosedPeriodEndFeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End of Feb.
         /// </summary>
         public static string lblEndOfFeb {
@@ -7594,6 +7603,42 @@ namespace NMP.Commons.Resources {
         public static string lblHighCloverContent {
             get {
                 return ResourceManager.GetString("lblHighCloverContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HighNOrganicManureMaxRate.
+        /// </summary>
+        public static string lblHighNOrganicManureMaxRate {
+            get {
+                return ResourceManager.GetString("lblHighNOrganicManureMaxRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HighNOrganicManureMaxRateGrass.
+        /// </summary>
+        public static string lblHighNOrganicManureMaxRateGrass {
+            get {
+                return ResourceManager.GetString("lblHighNOrganicManureMaxRateGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HighNOrganicManureMaxRateOSR.
+        /// </summary>
+        public static string lblHighNOrganicManureMaxRateOSR {
+            get {
+                return ResourceManager.GetString("lblHighNOrganicManureMaxRateOSR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HighNOrganicManureMaxRateWeeks.
+        /// </summary>
+        public static string lblHighNOrganicManureMaxRateWeeks {
+            get {
+                return ResourceManager.GetString("lblHighNOrganicManureMaxRateWeeks", resourceCulture);
             }
         }
         
@@ -10790,6 +10835,15 @@ namespace NMP.Commons.Resources {
         public static string lblNextYearForReport {
             get {
                 return ResourceManager.GetString("lblNextYearForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NFieldLimit.
+        /// </summary>
+        public static string lblNFieldLimit {
+            get {
+                return ResourceManager.GetString("lblNFieldLimit", resourceCulture);
             }
         }
         

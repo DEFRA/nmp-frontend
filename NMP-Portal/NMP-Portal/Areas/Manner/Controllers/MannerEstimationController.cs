@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Identity.Client;
@@ -2340,7 +2341,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ResetWarnings(model, false);
 
                     var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
-                    (model, error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
+                    (model, error) = await NitrogenApplicationLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
 
                     bool hasAnyWarning = model.IsOrgManureNfieldLimitWarning;
                     if (hasAnyWarning)
@@ -2458,7 +2459,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
 
-                (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
+                (model, Error? error) = await NitrogenApplicationLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     ViewBag.Error = error.Message;
@@ -2570,7 +2571,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 var (updatingEstimateId, updatingApplicationId) = await GetUpdatingEstimationAndApplicationId(model.EncryptedMannerEstimateId, model.EncryptedMannerApplicationsId);
 
-                (model, Error? error) = await NFieldLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
+                (model, Error? error) = await NitrogenApplicationLimitWarningMessage(model, updatingEstimateId, updatingApplicationId);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     ViewBag.Error = error.Message;
@@ -4506,6 +4507,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (updatingEstimateId, updatingApplicationId);
         }
 
+        private async Task<(TModel, Error?)> NitrogenApplicationLimitWarningMessage<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId)
+    where TModel : MannerEstimationNWarningViewModel
+        {
+            Error? error = null;
+            
+            (model, error) = await NFieldLimitWarningMessage(model, mannerEstimationId, mannerAppId);
+            (model, error) = await NitrogenLimitWarningMessage(model, mannerEstimationId, mannerAppId);
+            return (model, error);
+        }
+
         private async Task<(TModel, Error?)> NFieldLimitWarningMessage<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) //mannerEstimationId will be null for new application and will have value for updated application and add another application
     where TModel : MannerEstimationNWarningViewModel
         {
@@ -4549,6 +4560,328 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (model, error);
         }
 
+        private async Task<(TModel, Error?)> NitrogenLimitWarningMessage<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) //mannerEstimationId will be null for new application and will have value for updated application and add another application
+    where TModel : MannerEstimationNWarningViewModel
+        {
+            Error? error = null;
+            if (!(IsOtherManureType(model.ManureTypeId)))
+            {
+                (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, mannerEstimationId, mannerAppId);
+
+            }
+            if (!(IsOtherManureType(model.ManureTypeId)))
+            {
+                (model, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, mannerEstimationId, mannerAppId);
+                
+            }
+            return (model, error);
+        }
+        private async Task<(TModel, Error?)> IsClosedPeriodStartAndEndFebExceedNRateException<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) where TModel : MannerEstimationNWarningViewModel
+        {
+            Error? error = null;
+            string warningMsg = string.Empty;
+
+            List<ManureType> manureTypeList;
+            
+            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
+            bool isHighReadilyAvailableNitrogen = false;
+            if (error == null)
+            {
+                isHighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen ?? false;
+            }
+
+            bool isFieldIsInNVZ = model.IsWithinNVZ.Value;
+
+            if (!(model.IsFarmOrganic.Value && isHighReadilyAvailableNitrogen && isFieldIsInNVZ))
+            {
+                return (model, error);
+            }
+            
+            await ApplyClosedPeriodEndFebWarningsAsync(model, mannerEstimationId, mannerAppId);
+
+            return (model, error);
+        }
+
+        private async Task<(TModel, Error?)> ApplyClosedPeriodEndFebWarningsAsync<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) where TModel : MannerEstimationNWarningViewModel
+        {
+            Error? error = null;
+            HashSet<int> cropTypeIdsForTrigger = WarningWithinPeriod.FilteredCropForWarning();
+            HashSet<int> brassicaCrops = WarningWithinPeriod.BrassicaCrops();
+
+            int cropTypeId = model.CropTypeId??0;
+            int harvestYear = GetHarvestYearFromApplicationDate(model.ApplicationDate ?? DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
+            DateTime endDateFebruary = new DateTime((harvestYear), 3, 1, 0, 0, 0, DateTimeKind.Utc).AddDays(-1);
+            DateTime endOfOctober = new DateTime((harvestYear) - 1, 10, 31, 0, 0, 0, DateTimeKind.Utc);
+
+            decimal totalNitrogen = 0;
+            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+            if (string.IsNullOrWhiteSpace(error?.Message))
+            {
+                totalNitrogen = manureType?.TotalN ?? 0;
+            }
+
+
+            // warning excel sheet row no. 15
+            if (model.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass && model.CountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+            {
+                await ApplyGrassWarningAsync(model, mannerEstimationId, mannerAppId, endOfOctober, totalNitrogen);
+            }
+
+            // warning excel sheet row no. 13
+            if ((cropTypeId == (int)NMP.Commons.Enums.CropTypes.Asparagus || cropTypeId == (int)NMP.Commons.Enums.CropTypes.BulbOnions || cropTypeId == (int)NMP.Commons.Enums.CropTypes.SaladOnions)
+                && model.CountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+            {
+                await ApplyAllumWarningAsync(model, mannerEstimationId, mannerAppId, endDateFebruary, totalNitrogen);
+            }
+
+            // wales warning
+            if (cropTypeIdsForTrigger.Contains(cropTypeId) && model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Wales)
+            {
+                await ApplyAllumWarningAsync(model, mannerEstimationId, mannerAppId, endDateFebruary, totalNitrogen);
+            }
+
+            // warning excel sheet row no. 14
+            if (brassicaCrops.Contains(cropTypeId) && model.CountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+            {
+                await ApplyBrassicaWarningAsync(model, mannerEstimationId, mannerAppId, endDateFebruary, totalNitrogen);
+            }
+
+            // warning excel sheet row no. 16
+            if (cropTypeId == (int)NMP.Commons.Enums.CropTypes.WinterOilseedRape && model.CountryId == (int)NMP.Commons.Enums.FarmCountry.England)
+            {
+                await ApplyWinterOilseedRapeWarningAsync(model, mannerEstimationId, mannerAppId, endOfOctober, totalNitrogen);
+            }
+            return (model, error);
+        }
+
+        private async Task ApplyWinterOilseedRapeWarningAsync<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId, DateTime endOfOctober, decimal totalNitrogen) where TModel : MannerEstimationNWarningViewModel
+        {
+            var (startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            bool isWithinDateRange = WarningWithinPeriod.IsApplicationDateWithinDateRange(model.ApplicationDate, startDate, endOfOctober);
+            if (!isWithinDateRange)
+            {
+                return;
+            }
+
+            decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
+            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId??0, startDate, endOfOctober, mannerAppId);
+
+            if (currentNitrogen + totalN > 150)
+            {
+                List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateOSR.ToString(), Resource.lblHighNOrganicManureMaxRateOSR);
+            }
+        }
+
+        private async Task ApplyBrassicaWarningAsync<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId, DateTime endDateFebruary, decimal totalNitrogen) where TModel : MannerEstimationNWarningViewModel
+        {
+            var (startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            bool isWithinDateRange = WarningWithinPeriod.IsApplicationDateWithinDateRange(model.ApplicationDate, startDate, endDateFebruary);
+            if (!isWithinDateRange)
+            {
+                return;
+            }
+
+            (decimal totalN, Error? error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId??0, startDate, endDateFebruary, mannerAppId);
+
+            decimal nitrogenWithin4Weeks=0;
+            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId))
+            {
+                
+                (nitrogenWithin4Weeks, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
+                    mannerEstimationId??0, model.ApplicationDate.Value.AddDays(-27), model.ApplicationDate.Value, mannerAppId);
+            }
+
+            decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
+            if (currentNitrogen != null && (currentNitrogen > 50 || currentNitrogen + totalN > 150 || (nitrogenWithin4Weeks>0)))
+            {
+                List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateWeeks.ToString(), Resource.lblHighNOrganicManureMaxRateWeeks);
+            }
+        }
+
+
+
+        private async Task ApplyAllumWarningAsync<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId, DateTime endDateFebruary, decimal totalNitrogen) where TModel : MannerEstimationNWarningViewModel
+        {
+            var (startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            bool isWithinDateRange = WarningWithinPeriod.IsApplicationDateWithinDateRange(model.ApplicationDate, startDate, endDateFebruary);
+            if (!isWithinDateRange)
+            {
+                return;
+            }
+
+            decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
+            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId??0, startDate, endDateFebruary, mannerAppId);
+
+            if (currentNitrogen + totalN > 150)
+            {
+                List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRate.ToString(), Resource.lblHighNOrganicManureMaxRate);
+            }
+        }
+
+        private async Task ApplyGrassWarningAsync<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId, DateTime endOfOctober, decimal totalNitrogen) where TModel : MannerEstimationNWarningViewModel
+        {
+            var (startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            bool isWithinDateRange = WarningWithinPeriod.IsApplicationDateWithinDateRange(model.ApplicationDate, startDate, endOfOctober);
+            if (!isWithinDateRange)
+            {
+                return;
+            }
+
+            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId??0, startDate, endOfOctober, mannerAppId);
+
+            decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
+            if (currentNitrogen != null && (currentNitrogen > 40 || currentNitrogen + totalN > 150))
+            {
+                List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
+                ApplyWarning(model,warningList, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateGrass.ToString(), Resource.lblHighNOrganicManureMaxRateGrass);
+            }
+        }
+
+        
+
+        private async Task<(TModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) where TModel : MannerEstimationNWarningViewModel
+        {
+
+            var warningList = await _warningLogic.FetchAllWarningAsync();
+
+            bool isSlurry = IsSlurry(model.ManureTypeId);
+            bool isPoultry = IsPoultryManure(model.ManureTypeId);
+
+
+            if (model.CountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                return await HandleNonScotland(model, mannerEstimationId, mannerAppId, model.ClosedPeriod, isSlurry, isPoultry, warningList);
+            }
+
+            return await HandleScotland(model, mannerEstimationId, mannerAppId, model.ClosedPeriod, isSlurry, isPoultry, warningList);
+        }
+        private async Task<(TModel, Error?)> HandleNonScotland<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId, string? closedPeriod,bool isSlurry, bool isPoultry, List<WarningResponse> warningList) where TModel : MannerEstimationNWarningViewModel
+        {
+            Error? error = null;
+            if (!IsWithinClosedPeriodAndFeb(model.ApplicationDate, closedPeriod))
+                return (model, error);
+
+            if (isSlurry && model.ApplicationRate > 30)
+            {
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.SlurryMaxRate.ToString(),Resource.lblEndClosedPeriodEndFeb);
+            }
+
+            if (isPoultry && model.ApplicationRate > 8)
+            {
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.PoultryManureMaxApplicationRate.ToString(), Resource.lblEndClosedPeriodEndFeb);
+            }
+
+            return (model, error);
+        }
+        private async Task<(TModel, Error?)> HandleScotland<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId,string closedPeriod, bool isSlurry, bool isPoultry, List<WarningResponse> warningList) where TModel : MannerEstimationNWarningViewModel
+        {
+            Error? error = null;
+            (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
+
+            bool isRanExceptPoultry =
+                (manureType.HighReadilyAvailableNitrogen ?? false) && !isPoultry;
+
+            if (!model.ApplicationDate.HasValue ||
+                string.IsNullOrWhiteSpace(closedPeriod) ||
+                !closedPeriod.Contains("to"))
+                return (model, error);
+
+            var parts = closedPeriod.Split(" to ", StringSplitOptions.TrimEntries);
+            if (parts.Length != 2)
+                return (model, error);
+
+            DateTime applicationDate = model.ApplicationDate.Value;
+            int year = applicationDate.Year;
+
+            DateTime closedStartDate = DateTime.ParseExact($"{parts[0]} {year}", "d MMMM yyyy", CultureInfo.InvariantCulture);
+
+            // Feb window
+            string period = $"{parts[1]} to 14 February";
+            var (febStart, febEnd) =
+                GetClosedPeriodDates(period, applicationDate);
+
+            // 28-day pre-closed window
+            DateTime preStart = closedStartDate.AddDays(-28);
+            DateTime preEnd = closedStartDate.AddDays(-1);
+
+            bool isInFebPeriod = WarningWithinPeriod.IsApplicationDateWithinDateRange(applicationDate, febStart, febEnd);
+
+
+            bool isInPreClosedPeriod =
+                applicationDate >= preStart && applicationDate <= preEnd;
+
+            if (!isInFebPeriod && !isInPreClosedPeriod)
+                return (model, error);
+
+            DateTime startDate = isInFebPeriod ? febStart : preStart;
+            DateTime endDate = isInFebPeriod ? febEnd : preEnd;
+
+            var (totalApplicationRate, _) =
+                await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
+                    mannerEstimationId ?? 0,
+                    startDate,
+                    endDate,
+                    mannerAppId);
+
+            totalApplicationRate = model.ApplicationRate + totalApplicationRate ?? 0;
+
+            ApplyWarningsRanAndPoultryTotalRateLimit(
+                model,
+                warningList,
+                isRanExceptPoultry,
+                totalApplicationRate,
+                isPoultry, isInFebPeriod);
+            return (model, error);
+
+        }
+        
+
+        private async Task<(TModel, Error?)> ApplyWarningsRanAndPoultryTotalRateLimit<TModel>(TModel model, List<WarningResponse> warningList, bool isRanExceptPoultry, decimal? totalApplicationRate, bool isPoultry, bool isInFebPeriod) where TModel : MannerEstimationNWarningViewModel
+        {
+            Error? error = null;
+            if (isRanExceptPoultry && totalApplicationRate > 30)
+            {
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.Slurry4WeekPriorToClosedPeriodStart.ToString(), Resource.lblEndClosedPeriodEndFeb); 
+            }
+
+            if (isPoultry && totalApplicationRate > 5)
+            {
+                string warningKey = isInFebPeriod ? NMP.Commons.Enums.WarningKey.PoultryManureMaxApplicationRate.ToString() : NMP.Commons.Enums.WarningKey.Poultry4WeekPriorToClosedPeriodStart.ToString();
+                ApplyWarning(model, warningList, warningKey, Resource.lblEndClosedPeriodEndFeb);
+            }
+            return (model, error);
+        }
+        
+        private static bool IsWithinClosedPeriodAndFeb(DateTime? applicationDate, string? closedPeriod)
+        {
+            if (!applicationDate.HasValue)
+                return false;
+
+            return WarningWithinPeriod.CheckEndClosedPeriodAndFebruary(applicationDate.Value, closedPeriod) == true;
+        }
+        private static bool IsSlurry(int? manureTypeId)
+        {
+            if (!manureTypeId.HasValue) return false;
+
+            var slurryTypes = new[]
+            {
+                (int)NMP.Commons.Enums.ManureTypes.PigSlurry,
+                (int)NMP.Commons.Enums.ManureTypes.CattleSlurry,
+                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox,
+                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall,
+                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator,
+                (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion
+            };
+
+            return slurryTypes.Contains(manureTypeId.Value);
+        }
+        private static bool IsPoultryManure(int? manureTypeId)
+        {
+            return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
+        }
         private async Task<Error?> CheckCompostAndScotlandLimits<TModel>(
             TModel model,
             List<WarningResponse> warningList,
@@ -4584,7 +4917,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             bool isTriggerCrop = cropTypeIdsForTrigger.Contains(cropTypeId ?? 0);
 
-            error = await CheckNFieldLimitPAS100Compost(model, warningList, currentApplicationNitrogen, isScotland, isCompost, mannerEstimationId, mannerAppId);
+            //pas100 warning for england/wales and scotland
+            error = await CheckNFieldLimitPAS100Compost(model, warningList, currentApplicationNitrogen, isCompost, mannerEstimationId, mannerAppId);
 
             // Warning excel sheet row 4: >500 total N in last 730 days (compost/Scotland, non-trigger crops or Scotland)
             if (!isTriggerCrop || isScotland)
@@ -4611,25 +4945,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (error == null && (previousAppliedTotalN + currentApplicationNitrogen) > 250)
             {
-                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimit.ToString());
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimit.ToString(), Resource.lblNFieldLimit);
             }
 
             return error;
         }
 
         private async Task<Error?> CheckNFieldLimitPAS100Compost<TModel>(
-            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, bool isScotland, bool isCompost, int? mannerEstimationId, int? mannerAppId)
+            TModel model, List<WarningResponse> warningList, decimal currentApplicationNitrogen, bool isCompost, int? mannerEstimationId, int? mannerAppId)
             where TModel : MannerEstimationNWarningViewModel
         {
             decimal previousAppliedTotalN = 0;
             Error? error = null;
-
-            if (isScotland)
-            {
-                (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
+            
+            (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
                     mannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, true, mannerAppId);
-            }
-
 
             if (error != null)
             {
@@ -4640,7 +4970,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (isCompost && totalN > 250)
             {
-                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostPAS.ToString());
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostPAS.ToString(), Resource.lblNFieldLimit);
             }
 
             return error;
@@ -4680,7 +5010,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if ((!isScotland || isGreenCompostExistIn2Year || isCompost) && totalN > 500)
             {
-                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString());
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompost.ToString(), Resource.lblNFieldLimit);
             }
 
             return error;
@@ -4695,17 +5025,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (error == null && (previousAppliedTotalN + currentApplicationNitrogen) > 1000)
             {
-                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostMulch.ToString());
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.OrganicManureNFieldLimitCompostMulch.ToString(), Resource.lblNFieldLimit);
             }
 
             return error;
         }
 
 
-        private static void ApplyWarning<TModel>(TModel model, List<WarningResponse> warningList, string warningKey)
+        private static void ApplyWarning<TModel>(TModel model, List<WarningResponse> warningList, string warningKey, string warningType)
             where TModel : MannerEstimationNWarningViewModel
         {
-            model.IsOrgManureNfieldLimitWarning = true;
 
             WarningResponse? warning = warningList.FirstOrDefault(x =>
                 x.CountryID == model.CountryId &&
@@ -4713,12 +5042,37 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (warning != null)
             {
-                model.NFieldLimitWarningHeader = warning.Header;
-                model.NFieldLimitWarningCodeID = warning.WarningCodeID;
-                model.NFieldLimitWarningLevelID = warning.WarningLevelID;
-                model.NFieldLimitWarningPara1 = warning.Para1;
-                model.NFieldLimitWarningPara2 = warning.Para2;
-                model.NFieldLimitWarningPara3 = warning.Para3;
+                if(warningType.Equals(Resource.lblNFieldLimit))
+                {
+                    model.IsOrgManureNfieldLimitWarning = true;
+                    model.NFieldLimitWarningHeader = warning.Header;
+                    model.NFieldLimitWarningCodeID = warning.WarningCodeID;
+                    model.NFieldLimitWarningLevelID = warning.WarningLevelID;
+                    model.NFieldLimitWarningPara1 = warning.Para1;
+                    model.NFieldLimitWarningPara2 = warning.Para2;
+                    model.NFieldLimitWarningPara3 = warning.Para3;
+                }
+                if(warningType.Equals(Resource.lblEndClosedPeriodEndFeb))
+                {
+                    model.IsEndClosedPeriodFebruaryWarning = true;
+                    model.EndClosedPeriodEndFebWarningHeader = warning.Header;
+                    model.EndClosedPeriodEndFebWarningCodeID = warning.WarningCodeID;
+                    model.EndClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
+                    model.EndClosedPeriodEndFebWarningPara1 = warning.Para1;
+                    model.EndClosedPeriodEndFebWarningPara2 = warning.Para2;
+                    model.EndClosedPeriodEndFebWarningPara3 = warning.Para3;
+                }
+                if (warningType.Equals(Resource.lblHighNOrganicManureMaxRateGrass) || warningType.Equals(Resource.lblHighNOrganicManureMaxRate) || warningType.Equals(Resource.lblHighNOrganicManureMaxRateWeeks) || warningType.Equals(Resource.lblHighNOrganicManureMaxRateOSR))
+                {
+                    model.IsStartClosedPeriodEndFebWarning = true;
+                    model.StartClosedPeriodEndFebWarningHeader = warning.Header;
+                    model.StartClosedPeriodEndFebFebWarningCodeID = warning.WarningCodeID;
+                    model.StartClosedPeriodEndFebWarningLevelID = warning.WarningLevelID;
+                    model.StartClosedPeriodEndFebWarningPara1 = warning.Para1;
+                    model.StartClosedPeriodEndFebWarningPara2 = warning.Para2;
+                    model.StartClosedPeriodEndFebWarningPara3 = warning.Para3;
+                }
+
             }
         }
 
@@ -5053,12 +5407,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 IsOrgManureNfieldLimitWarning = false
             };
 
-            (nWarningViewModel, error) = await NFieldLimitWarningMessage(nWarningViewModel, estimation.MannerEstimation.ID, application.ID);
+            (nWarningViewModel, error) = await NitrogenApplicationLimitWarningMessage(nWarningViewModel, estimation.MannerEstimation.ID, application.ID);
 
             // --- combine and store against this application ---
             var combinedWarnings = new List<WarningItemViewModel>();
             combinedWarnings.AddRange(BuildApplicationDateWarnings(dateWarningViewModel));
-            combinedWarnings.AddRange(BuildNFieldLimitWarnings(nWarningViewModel));
+            combinedWarnings.AddRange(BuildNitrogenLimitWarnings(nWarningViewModel));
 
             model.ApplicationWarnings.Add(new MannerEstimationApplicationWarningViewModel
             {
@@ -5160,7 +5514,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return warnings;
         }
-        private List<WarningItemViewModel> BuildNFieldLimitWarnings(MannerEstimationNWarningViewModel model)
+        private List<WarningItemViewModel> BuildNitrogenLimitWarnings(MannerEstimationNWarningViewModel model)
         {
             var warnings = new List<WarningItemViewModel>();
 
@@ -5174,6 +5528,30 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     Para3 = model.NFieldLimitWarningPara3,
                     CodeID = model.NFieldLimitWarningCodeID,
                     LevelID = model.NFieldLimitWarningLevelID
+                });
+            }
+            if (model.IsEndClosedPeriodFebruaryWarning)
+            {
+                warnings.Add(new WarningItemViewModel
+                {
+                    Header = model.EndClosedPeriodEndFebWarningHeader,
+                    Para1 = model.EndClosedPeriodEndFebWarningPara1,
+                    Para2 = model.EndClosedPeriodEndFebWarningPara2,
+                    Para3 = model.EndClosedPeriodEndFebWarningPara3,
+                    CodeID = model.EndClosedPeriodEndFebWarningCodeID,
+                    LevelID = model.EndClosedPeriodEndFebWarningLevelID
+                });
+            }
+            if (model.IsStartClosedPeriodEndFebWarning)
+            {
+                warnings.Add(new WarningItemViewModel
+                {
+                    Header = model.StartClosedPeriodEndFebWarningHeader,
+                    Para1 = model.StartClosedPeriodEndFebWarningPara1,
+                    Para2 = model.StartClosedPeriodEndFebWarningPara2,
+                    Para3 = model.StartClosedPeriodEndFebWarningPara3,
+                    CodeID = model.StartClosedPeriodEndFebFebWarningCodeID,
+                    LevelID = model.StartClosedPeriodEndFebWarningLevelID
                 });
             }
 

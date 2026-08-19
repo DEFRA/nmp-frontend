@@ -8412,4 +8412,22 @@ following crop year 2</value>
   <data name="lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1" xml:space="preserve">
     <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (‘Defra and partners’). Nutrient recommendations are derived from RB209 Application Programming Interface (API); the Nutrient Management Guide (RB209) is the intellectual property of the Agriculture and Horticulture Development Board (AHDB).</value>
   </data>
+  <data name="lblNFieldLimit" xml:space="preserve">
+    <value>NFieldLimit</value>
+  </data>
+  <data name="lblEndClosedPeriodEndFeb" xml:space="preserve">
+    <value>EndClosedPeriodEndFeb</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateGrass" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateGrass</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRate" xml:space="preserve">
+    <value>HighNOrganicManureMaxRate</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateWeeks" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateWeeks</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateOSR" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateOSR</value>
+  </data>
 </root>

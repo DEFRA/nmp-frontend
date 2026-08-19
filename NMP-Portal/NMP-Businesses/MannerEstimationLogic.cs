@@ -25,7 +25,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IMannerEstimationService mannerEstimationService, IMannerService mannerService, IFieldService fieldService, IFarmService farmService, IOrganicManureLogic organicManureLogic, IHttpContextAccessor httpContextAccessor) : IMannerEstimationLogic
+public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IMannerEstimationService mannerEstimationService, IMannerService mannerService, IFieldService fieldService, IFarmService farmService, IOrganicManureLogic organicManureLogic, ICropLogic cropLogic, IHttpContextAccessor httpContextAccessor) : IMannerEstimationLogic
 {
     private readonly ILogger<MannerEstimationLogic> _logger = logger;
     private readonly IMannerEstimationService _mannerEstimationService = mannerEstimationService;
@@ -34,6 +34,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     private readonly IFieldService _fieldService = fieldService;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
+    private readonly ICropLogic _cropLogic = cropLogic;
     private const string _mannerEstimationSessionName = "MannerEstimation";
     private const string _dateStringLiteral = "yyyy-MM-dd";
 
@@ -656,6 +657,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep26.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep26.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
         mannerEstimationViewModel.MannerEstimationStep26.DefaultNutrientValue = mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue;
+        mannerEstimationViewModel.MannerEstimationStep26.ClosedPeriod = mannerEstimationViewModel.MannerEstimationStep13.ClosedPeriod;
         return mannerEstimationViewModel.MannerEstimationStep26;
     }
     public async Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26)
@@ -700,6 +702,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         mannerEstimationViewModel.MannerEstimationStep27.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep27.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
+        mannerEstimationViewModel.MannerEstimationStep27.ClosedPeriod = mannerEstimationViewModel.MannerEstimationStep13.ClosedPeriod;
         return mannerEstimationViewModel.MannerEstimationStep27;
     }
     public async Task<MannerEstimationStep27ViewModel> SetMannerEstimationStep27(MannerEstimationStep27ViewModel mannerEstimationStep27)
@@ -736,6 +739,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         mannerEstimationViewModel.MannerEstimationStep28.ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate;
         mannerEstimationViewModel.MannerEstimationStep28.ManureGroupId = mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId;
+        mannerEstimationViewModel.MannerEstimationStep28.ClosedPeriod = mannerEstimationViewModel.MannerEstimationStep13.ClosedPeriod;
         return mannerEstimationViewModel.MannerEstimationStep28;
     }
     public async Task<MannerEstimationStep28ViewModel> SetMannerEstimationStep28(MannerEstimationStep28ViewModel mannerEstimationStep28)
@@ -1594,6 +1598,25 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (ManureType? manureType, error) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimateApplication.ManureTypeID.Value);
         if (error == null && manureType != null)
         {
+            //bind closed period if manure type is high readily available nitrogen and field is within NVZ
+            (MannerEstimation? mannerEstimation, _) = await FetchMannerEstimateById(mannerEstimateApplication.MannerEstimationID??0);
+            if (manureType?.HighReadilyAvailableNitrogen == true && mannerEstimation.IsWithinNVZ == true)
+            {
+                bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(mannerEstimation.CropTypeID ?? 0);
+                int fieldType = mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
+
+                bool isSandyShallowSoil = CheckSandyShallowByTopSoilSubSoilId(mannerEstimation.TopSoilID ?? 0, mannerEstimation.SubSoilID ?? 0, mannerEstimationViewModel.CountryId??0);
+                var crops = await _fieldService.FetchAllCropTypesServiceAsync();
+                int cropGroupId = crops.FirstOrDefault(x=>x.CropTypeId== mannerEstimation.CropTypeID).CropGroupId;
+                if (string.IsNullOrEmpty(error?.Message))
+                {
+                    string closedPeriod = Functions.GetMannerClosedPeriod(isSandyShallowSoil, fieldType, mannerEstimation.SowingDate, mannerEstimationViewModel.CountryId??0, cropGroupId, mannerEstimation.CropTypeID ?? 0, isPerennial);
+                    mannerEstimationViewModel.MannerEstimationStep13.ClosedPeriod = closedPeriod;
+                }
+
+
+            }
+
             mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName = manureType.Name;
             (var manureGroup, error) = await _mannerService.FetchManureGroupById(manureType.ManureGroupId ?? 0);
             if (error == null && manureGroup != null)
