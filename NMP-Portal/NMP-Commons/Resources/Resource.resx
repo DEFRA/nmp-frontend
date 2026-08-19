@@ -7855,10 +7855,10 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>or to save an NVZ report.</value>
   </data>
   <data name="CopyExistingFarmAndFieldDetailsContent1" xml:space="preserve">
-    <value>Do you want to use existing farm and field details from NMPT?</value>
+    <value>Do you want to use existing farm and field details from NMPT-GB?</value>
   </data>
   <data name="CopyExistingFarmAndFieldDetailsContent2" xml:space="preserve">
-    <value>You can start with rainfall, field and soil details from an existing farm and one of its fields. You can change any of these details just for this estimate.</value>
+    <value>You can start with rainfall, field and soil details from an existing farm and one of its fields saved in NMPT-GB. You can change any of these details just for this estimate.</value>
   </data>
   <data name="lblWhichFarmWouldYouLikeToUse" xml:space="preserve">
     <value>Which farm would you like to use?</value>
@@ -7991,7 +7991,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>Nutrient supply estimate created</value>
   </data>
   <data name="lblSelectTheFarmFieldAndCropTabOrAnApplication" xml:space="preserve">
-    <value>Select the farm, field and crop tab, or an application details tab, to update the results.</value>
+    <value>Select the farm, field and crop , or application details tab, to update the results.</value>
   </data>
   <data name="lblEstimationForFarm" xml:space="preserve">
     <value>{0} for {1}</value>
@@ -8021,7 +8021,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>The calculated Application Rate cannot be less than 0 or greater than 250.</value>
   </data>
   <data name="lblEstimateOfNutrientSupplyFromOrganicMaterialResults" xml:space="preserve">
-    <value>Estimate of nutrient supply from organic material results</value>
+    <value>Estimate of nutrient supply from organic material</value>
   </data>
   <data name="lblOptionForManner" xml:space="preserve">
     <value>Options</value>
@@ -8074,7 +8074,7 @@ following crop year 2</value>
     <value>Lost denitrified-N</value>
   </data>
   <data name="lblMineralisedNitrogen" xml:space="preserve">
-    <value>Mineralisated nitrogen (N)</value>
+    <value>Mineralised nitrogen (N)</value>
   </data>
   <data name="lblCropAvailablePhosphate" xml:space="preserve">
     <value>Crop available phosphate (P2O5)</value>
