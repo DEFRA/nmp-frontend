@@ -8418,6 +8418,24 @@ following crop year 2</value>
   <data name="lblPercent" xml:space="preserve">
     <value>percent</value>
   </data>
+  <data name="lblNFieldLimit" xml:space="preserve">
+    <value>NFieldLimit</value>
+  </data>
+  <data name="lblEndClosedPeriodEndFeb" xml:space="preserve">
+    <value>EndClosedPeriodEndFeb</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateGrass" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateGrass</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRate" xml:space="preserve">
+    <value>HighNOrganicManureMaxRate</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateWeeks" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateWeeks</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateOSR" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateOSR</value>
+  </data>
   <data name="lblMannerEstimateAboutPageContent20" xml:space="preserve">
     <value>This tool will provide you with an estimate of crop available nutrient supply from applications of organic materials to a single field. If you want to plan applications of organic materials with applications of fertiliser nutrients as part of a nutrient management plan, you should use NMPT-GB.</value>
   </data>
