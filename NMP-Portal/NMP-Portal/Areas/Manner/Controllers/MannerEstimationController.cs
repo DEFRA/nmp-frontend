@@ -2956,7 +2956,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     }
                     else
                     {
-                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, application.ManureType);
+                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manureUnit);
                     }
                 }
             }
