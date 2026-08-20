@@ -322,7 +322,7 @@
     <value>true</value>
   </data>
   <data name="lblUseThisServiceToPlan" xml:space="preserve">
-    <value>This is a free tool, provided by Defra, to help farmers, land managers and advisers record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it.</value>
+    <value>This is a free tool, provided by Defra, to help farmers, land managers and advisers plan and manage nutrient applications. It provides guidance only - there is no legal requirement to use it.</value>
   </data>
   <data name="lblWhatIsTheFarmName" xml:space="preserve">
     <value>What is the farm name?</value>
@@ -7848,8 +7848,8 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   <data name="lblNutrientManagementPlansAndNitrateVulnerableZoneReports" xml:space="preserve">
     <value>Nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports</value>
   </data>
-  <data name="lblSelectAFarmToCreateOrUpdateANutrientManagementPlan" xml:space="preserve">
-    <value>Select a farm to create or update a nutrient management plan,</value>
+  <data name="lblSelectAFarmToViewOrEdit" xml:space="preserve">
+    <value>Select a farm to view or edit</value>
   </data>
   <data name="lblOrToSaveAnNVZReport" xml:space="preserve">
     <value>or to save an NVZ report.</value>
@@ -8308,10 +8308,10 @@ following crop year 2</value>
     <value>Organic material application added</value>
   </data>
   <data name="lblWhichEstimatesWouldYouLikeToRemove" xml:space="preserve">
-    <value>Which estimates would you like to remove?</value>
+    <value>Which estimate would you like to remove?</value>
   </data>
   <data name="lblRemoveEstimationNames" xml:space="preserve">
-    <value>{0} -{1} - Updated {2}</value>
+    <value>{0} - {1} - Updated {2}</value>
   </data>
   <data name="lblNutrientSupplyEstimatesRemoved" xml:space="preserve">
     <value>Nutrient supply estimates removed</value>
@@ -8435,6 +8435,12 @@ following crop year 2</value>
   </data>
   <data name="lblHighNOrganicManureMaxRateOSR" xml:space="preserve">
     <value>HighNOrganicManureMaxRateOSR</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent20" xml:space="preserve">
+    <value>This tool will provide you with an estimate of crop available nutrient supply from applications of organic materials to a single field. If you want to plan applications of organic materials with applications of fertiliser nutrients as part of a nutrient management plan, you should use NMPT-GB.</value>
+  </data>
+  <data name="lblViewOrEdit" xml:space="preserve">
+    <value>View or edit</value>
   </data>
   <data name="lblKgPerCubicMetre" xml:space="preserve">
     <value>{0} kg per cubic metre</value>
