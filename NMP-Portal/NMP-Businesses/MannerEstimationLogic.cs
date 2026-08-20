@@ -25,18 +25,17 @@ using static System.Net.Mime.MediaTypeNames;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IMannerEstimationService mannerEstimationService, IMannerService mannerService, IFieldService fieldService, IFarmService farmService, IOrganicManureLogic organicManureLogic, ICropLogic cropLogic, IHttpContextAccessor httpContextAccessor) : IMannerEstimationLogic
+public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IMannerEstimationServiceDependencies dependencies,  IOrganicManureLogic organicManureLogic, IHttpContextAccessor httpContextAccessor) : IMannerEstimationLogic
 {
     private readonly ILogger<MannerEstimationLogic> _logger = logger;
-    private readonly IMannerEstimationService _mannerEstimationService = mannerEstimationService;
-    private readonly IMannerService _mannerService = mannerService;
-    private readonly IFarmService _farmService = farmService;
-    private readonly IFieldService _fieldService = fieldService;
+    private readonly IMannerEstimationService _mannerEstimationService = dependencies.MannerEstimationService;
+    private readonly IMannerService _mannerService = dependencies.MannerService;
+    private readonly IFarmService _farmService = dependencies.FarmService;
+    private readonly IFieldService _fieldService = dependencies.FieldService;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
-    private readonly ICropLogic _cropLogic = cropLogic;
+    private readonly ICropService _cropService = dependencies.CropService;
     private const string _mannerEstimationSessionName = "MannerEstimation";
-    private const string _dateStringLiteral = "yyyy-MM-dd";
 
     public MannerEstimationStep1ViewModel SetMannerEstimationStep1(MannerEstimationStep1ViewModel mannerEstimationStep1)
     {
@@ -1549,103 +1548,135 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         (MannerEstimationApplication? mannerEstimateApplication, Error? error) = await FetchMannerEstimateApplicationById(mannerEstimateApplicationId);
-        if (mannerEstimateApplication != null && string.IsNullOrWhiteSpace(error?.Message))
-        {
-            mannerEstimationViewModel.MannerEstimationId = mannerEstimateApplication.MannerEstimationID;
-            mannerEstimationViewModel.MannerEstimationApplicationId = mannerEstimateApplication.ID;
-            mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId = mannerEstimateApplication.ManureTypeID;
-            mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate = mannerEstimateApplication.ApplicationDate.ToLocalTime();
-            mannerEstimationViewModel.MannerEstimationStep25.N = mannerEstimateApplication.N;
-            mannerEstimationViewModel.MannerEstimationStep25.P2O5 = mannerEstimateApplication.P2O5;
-            mannerEstimationViewModel.MannerEstimationStep25.K2O = mannerEstimateApplication.K2O;
-            mannerEstimationViewModel.MannerEstimationStep25.MgO = mannerEstimateApplication.MgO;
-            mannerEstimationViewModel.MannerEstimationStep25.SO3 = mannerEstimateApplication.SO3;
-            mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent = mannerEstimateApplication.DryMatterPercent;
-            mannerEstimationViewModel.MannerEstimationStep25.UricAcid = mannerEstimateApplication.UricAcid;
-            mannerEstimationViewModel.MannerEstimationStep25.NH4N = mannerEstimateApplication.NH4N;
-            mannerEstimationViewModel.MannerEstimationStep25.NO3N = mannerEstimateApplication.NO3N;
 
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType = new ManureType();
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.TotalN = mannerEstimateApplication.N;
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.P2O5 = mannerEstimateApplication.P2O5;
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.K2O = mannerEstimateApplication.K2O;
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.MgO = mannerEstimateApplication.MgO;
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.SO3 = mannerEstimateApplication.SO3;
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.DryMatter = mannerEstimateApplication.DryMatterPercent;
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.Uric = mannerEstimateApplication.UricAcid;
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.NH4N = mannerEstimateApplication.NH4N;
-            mannerEstimationViewModel.MannerEstimationStep24.ManureType.NO3N = mannerEstimateApplication.NO3N;
-
-            mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate = mannerEstimateApplication.ApplicationRate;
-            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRate = mannerEstimateApplication.ApplicationRate;
-            mannerEstimationViewModel.MannerEstimationStep28.ApplicationRate = mannerEstimateApplication.ApplicationRate;
-            mannerEstimationViewModel.MannerEstimationStep28.AreaSpread = mannerEstimateApplication.AreaSpread;
-            mannerEstimationViewModel.MannerEstimationStep28.ManureQuantity = mannerEstimateApplication.ManureQuantity;
-            mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId = mannerEstimateApplication.ApplicationMethodID;
-            mannerEstimationViewModel.MannerEstimationStep29.IncorporationMethodId = mannerEstimateApplication.IncorporationMethodID;
-            mannerEstimationViewModel.MannerEstimationStep30.IncorporationDelayId = mannerEstimateApplication.IncorporationDelayID;
-            mannerEstimationViewModel.MannerEstimationStep32.WindspeedId = mannerEstimateApplication.WindspeedID;
-            mannerEstimationViewModel.MannerEstimationStep32.RainfallWithinSixHoursId = mannerEstimateApplication.RainfallWithinSixHoursID;
-            mannerEstimationViewModel.MannerEstimationStep32.MoistureTypeId = mannerEstimateApplication.MoistureID;
-            mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = mannerEstimateApplication.AutumnCropNitrogenUptake;
-            mannerEstimationViewModel.MannerEstimationStep32.SoilDrainageEndDate = mannerEstimateApplication.EndOfDrainageDate.Value.ToLocalTime();
-            mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall = mannerEstimateApplication.RainfallPostApplication;
-            mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue = await FetchDefaultNutrientValue(mannerEstimateApplication.ManureTypeID.Value, mannerEstimateApplication);
-        }
-        else
+        if (mannerEstimateApplication == null || !string.IsNullOrWhiteSpace(error?.Message))
         {
             return error;
         }
+
+        MapApplicationDetailToViewModel(mannerEstimationViewModel, mannerEstimateApplication);
+        mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue =
+            await FetchDefaultNutrientValue(mannerEstimateApplication.ManureTypeID.Value, mannerEstimateApplication);
+
         (ManureType? manureType, error) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimateApplication.ManureTypeID.Value);
         if (error == null && manureType != null)
         {
-            //bind closed period if manure type is high readily available nitrogen and field is within NVZ
-            (MannerEstimation? mannerEstimation, _) = await FetchMannerEstimateById(mannerEstimateApplication.MannerEstimationID??0);
-            if (manureType?.HighReadilyAvailableNitrogen == true && mannerEstimation.IsWithinNVZ == true)
-            {
-                bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(mannerEstimation.CropTypeID ?? 0);
-                int fieldType = mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
-
-                bool isSandyShallowSoil = CheckSandyShallowByTopSoilSubSoilId(mannerEstimation.TopSoilID ?? 0, mannerEstimation.SubSoilID ?? 0, mannerEstimationViewModel.CountryId??0);
-                var crops = await _fieldService.FetchAllCropTypesServiceAsync();
-                int cropGroupId = crops.FirstOrDefault(x=>x.CropTypeId== mannerEstimation.CropTypeID).CropGroupId;
-                if (string.IsNullOrEmpty(error?.Message))
-                {
-                    string closedPeriod = Functions.GetMannerClosedPeriod(isSandyShallowSoil, fieldType, mannerEstimation.SowingDate, mannerEstimationViewModel.CountryId??0, cropGroupId, mannerEstimation.CropTypeID ?? 0, isPerennial);
-                    mannerEstimationViewModel.MannerEstimationStep13.ClosedPeriod = closedPeriod;
-                }
-
-
-            }
-
-            mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName = manureType.Name;
-            (var manureGroup, error) = await _mannerService.FetchManureGroupById(manureType.ManureGroupId ?? 0);
-            if (error == null && manureGroup != null)
-            {
-                mannerEstimationViewModel.MannerEstimationStep11.ManureGroupName = manureGroup.Name;
-            }
-            mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId = manureType.ManureGroupId;
-            if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
-            {
-                mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
-            }
-            else if (mannerEstimateApplication.AreaSpread != null && mannerEstimateApplication.ManureQuantity != null)
-            {
-                mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
-            }
-            else
-            {
-                mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
-            }
-            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
-
+            await BindClosedPeriod(mannerEstimationViewModel, mannerEstimateApplication, manureType);
+            await BindManureGroupDetails(mannerEstimationViewModel, manureType);
+            BindApplicationRateMethod(mannerEstimationViewModel, mannerEstimateApplication, manureType);
         }
+
         await BindConditionAffectingNutrientValues(mannerEstimationViewModel);
         SetMannerEstimationToSession(mannerEstimationViewModel);
         await BindMannerEstimationDataForUpdate(mannerEstimateApplication.MannerEstimationID.Value);
 
         return error;
+    }
 
+    private void MapApplicationDetailToViewModel(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication)
+    {
+        mannerEstimationViewModel.MannerEstimationId = mannerEstimateApplication.MannerEstimationID;
+        mannerEstimationViewModel.MannerEstimationApplicationId = mannerEstimateApplication.ID;
+        mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId = mannerEstimateApplication.ManureTypeID;
+        mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate = mannerEstimateApplication.ApplicationDate.ToLocalTime();
+
+        mannerEstimationViewModel.MannerEstimationStep25.N = mannerEstimateApplication.N;
+        mannerEstimationViewModel.MannerEstimationStep25.P2O5 = mannerEstimateApplication.P2O5;
+        mannerEstimationViewModel.MannerEstimationStep25.K2O = mannerEstimateApplication.K2O;
+        mannerEstimationViewModel.MannerEstimationStep25.MgO = mannerEstimateApplication.MgO;
+        mannerEstimationViewModel.MannerEstimationStep25.SO3 = mannerEstimateApplication.SO3;
+        mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent = mannerEstimateApplication.DryMatterPercent;
+        mannerEstimationViewModel.MannerEstimationStep25.UricAcid = mannerEstimateApplication.UricAcid;
+        mannerEstimationViewModel.MannerEstimationStep25.NH4N = mannerEstimateApplication.NH4N;
+        mannerEstimationViewModel.MannerEstimationStep25.NO3N = mannerEstimateApplication.NO3N;
+
+        mannerEstimationViewModel.MannerEstimationStep24.ManureType = new ManureType
+        {
+            TotalN = mannerEstimateApplication.N,
+            P2O5 = mannerEstimateApplication.P2O5,
+            K2O = mannerEstimateApplication.K2O,
+            MgO = mannerEstimateApplication.MgO,
+            SO3 = mannerEstimateApplication.SO3,
+            DryMatter = mannerEstimateApplication.DryMatterPercent,
+            Uric = mannerEstimateApplication.UricAcid,
+            NH4N = mannerEstimateApplication.NH4N,
+            NO3N = mannerEstimateApplication.NO3N
+        };
+
+        mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate = mannerEstimateApplication.ApplicationRate;
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRate = mannerEstimateApplication.ApplicationRate;
+        mannerEstimationViewModel.MannerEstimationStep28.ApplicationRate = mannerEstimateApplication.ApplicationRate;
+        mannerEstimationViewModel.MannerEstimationStep28.AreaSpread = mannerEstimateApplication.AreaSpread;
+        mannerEstimationViewModel.MannerEstimationStep28.ManureQuantity = mannerEstimateApplication.ManureQuantity;
+        mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId = mannerEstimateApplication.ApplicationMethodID;
+        mannerEstimationViewModel.MannerEstimationStep29.IncorporationMethodId = mannerEstimateApplication.IncorporationMethodID;
+        mannerEstimationViewModel.MannerEstimationStep30.IncorporationDelayId = mannerEstimateApplication.IncorporationDelayID;
+        mannerEstimationViewModel.MannerEstimationStep32.WindspeedId = mannerEstimateApplication.WindspeedID;
+        mannerEstimationViewModel.MannerEstimationStep32.RainfallWithinSixHoursId = mannerEstimateApplication.RainfallWithinSixHoursID;
+        mannerEstimationViewModel.MannerEstimationStep32.MoistureTypeId = mannerEstimateApplication.MoistureID;
+        mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = mannerEstimateApplication.AutumnCropNitrogenUptake;
+        mannerEstimationViewModel.MannerEstimationStep32.SoilDrainageEndDate = mannerEstimateApplication.EndOfDrainageDate.Value.ToLocalTime();
+        mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall = mannerEstimateApplication.RainfallPostApplication;
+    }
+
+    private async Task BindClosedPeriod(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
+    {
+        // bind closed period only if manure type is high readily available nitrogen and field is within NVZ
+        (MannerEstimation? mannerEstimation, _) = await FetchMannerEstimateById(mannerEstimateApplication.MannerEstimationID ?? 0);
+
+        bool shouldBindClosedPeriod = manureType.HighReadilyAvailableNitrogen == true
+            && mannerEstimation?.IsWithinNVZ == true;
+
+        if (!shouldBindClosedPeriod)
+        {
+            return;
+        }
+
+        bool isPerennial = await _cropService.FetchIsPerennialByCropTypeIdServiceAsync(mannerEstimation.CropTypeID ?? 0);
+        int fieldType = mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass
+            ? (int)NMP.Commons.Enums.FieldType.Grass
+            : (int)NMP.Commons.Enums.FieldType.Arable;
+
+        bool isSandyShallowSoil = CheckSandyShallowByTopSoilSubSoilId(mannerEstimation.TopSoilID ?? 0, mannerEstimation.SubSoilID ?? 0, mannerEstimationViewModel.CountryId ?? 0);
+        var crops = await _fieldService.FetchAllCropTypesServiceAsync();
+        var matchedCrop = crops.FirstOrDefault(x => x.CropTypeId == mannerEstimation.CropTypeID);
+        int cropGroupId = matchedCrop?.CropGroupId ?? 0;
+
+        string closedPeriod = Functions.GetMannerClosedPeriod(isSandyShallowSoil, fieldType, mannerEstimation.SowingDate, mannerEstimationViewModel.CountryId ?? 0, cropGroupId, mannerEstimation.CropTypeID ?? 0, isPerennial);
+        mannerEstimationViewModel.MannerEstimationStep13.ClosedPeriod = closedPeriod;
+    }
+
+    private async Task BindManureGroupDetails(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType)
+    {
+        mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName = manureType.Name;
+        mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId = manureType.ManureGroupId;
+
+        (var manureGroup, Error? error) = await _mannerService.FetchManureGroupById(manureType.ManureGroupId ?? 0);
+        if (error == null && manureGroup != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep11.ManureGroupName = manureGroup.Name;
+        }
+    }
+
+    private static void BindApplicationRateMethod(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
+    {
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = DetermineApplicationRateMethod(mannerEstimateApplication, manureType);
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+    }
+
+    private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
+    {
+        if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
+        {
+            return (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
+        }
+
+        if (mannerEstimateApplication.AreaSpread != null && mannerEstimateApplication.ManureQuantity != null)
+        {
+            return (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
+        }
+
+        return (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
     }
 
     private async Task BindConditionAffectingNutrientValues(MannerEstimationViewModel mannerEstimationViewModel)
