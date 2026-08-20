@@ -14576,7 +14576,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the farm, field and crop , or application details tab, to update the results..
+        ///   Looks up a localized string similar to Select the farm, field and crop, or application details tab, to update the results..
         /// </summary>
         public static string lblSelectTheFarmFieldAndCropTabOrAnApplication {
             get {

@@ -7189,7 +7189,7 @@ managementPeriod.CropID.HasValue
             }
             var mannerOutput = new
             {
-                runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.PlanetEngland : (int)NMP.Commons.Enums.RunType.PlanetScotland,
+                runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.MannerEngland : (int)NMP.Commons.Enums.RunType.MannerScotland,
                 postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                 countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
                 field = new

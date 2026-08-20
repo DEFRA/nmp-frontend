@@ -7991,7 +7991,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>Nutrient supply estimate created</value>
   </data>
   <data name="lblSelectTheFarmFieldAndCropTabOrAnApplication" xml:space="preserve">
-    <value>Select the farm, field and crop , or application details tab, to update the results.</value>
+    <value>Select the farm, field and crop, or application details tab, to update the results.</value>
   </data>
   <data name="lblEstimationForFarm" xml:space="preserve">
     <value>{0} for {1}</value>
