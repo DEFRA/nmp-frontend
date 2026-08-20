@@ -24,7 +24,7 @@
     }
     int applicationMonth = Model?.ApplicationDate != null ? Model.ApplicationDate.Month : 0;
 
-    var nutrientSuffix = Model.IsManureTypeLiquid == true ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
+    var nutrientSuffix = Model.IsManureTypeLiquid ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
     
 }
 
