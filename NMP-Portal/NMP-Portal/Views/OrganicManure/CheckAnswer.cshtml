@@ -912,7 +912,7 @@
                     </govuk-summary-list-row>
                     <govuk-summary-list-row class=@((!Model.TotalRainfall.HasValue)?"govuk-error-message":"")>
                         <govuk-summary-list-row-key>
-                            @Resource.lblTotalRainfallSinceApplication
+                            @Resource.lblEffectiveRainfallAfterApplication
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((Model.TotalRainfall.HasValue) ? string.Format(Resource.lblRainfallMM, Model.TotalRainfall) : Resource.lblNotSet)
@@ -920,7 +920,7 @@
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="EffectiveRainfall" asp-controller="OrganicManure">@Resource.lblChange
                                <span class="govuk-visually-hidden">
-                                  @Resource.lblTotalRainfallSinceApplication
+                                @Resource.lblEffectiveRainfallAfterApplication
                                </span>
                             </govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>

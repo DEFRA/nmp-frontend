@@ -82,7 +82,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> MannerHubPage(string? q, string? r)
+        public async Task<IActionResult> MannerHubPage(string? q, string? r,string? s)
         {
             RemoveMannerEstimationSession();
             if (!string.IsNullOrWhiteSpace(q))
@@ -107,6 +107,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!string.IsNullOrWhiteSpace(r))
             {
                 ViewBag.Success = _mannerEstimationProtector.Unprotect(r);
+            }
+            if (!string.IsNullOrWhiteSpace(s))
+            {
+                ViewBag.SuccessForCopyEstimate = _mannerEstimationProtector.Unprotect(s); 
             }
 
             if (!string.IsNullOrWhiteSpace(q) || !string.IsNullOrWhiteSpace(r))
@@ -3249,6 +3253,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (model.IsCopyEstimate.HasValue && model.IsCopyEstimate.Value)
             {
+                MannerEstimationViewModel mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 int mannerEstimationId = model.MannerEstimationId ?? Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimationId));
                 (int newEstimationId, Error? error) = await _mannerEstimationLogic.CopyMannerEstimation(mannerEstimationId, model.Name);
                 if (newEstimationId == 0 || error != null)
@@ -3259,11 +3264,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (newEstimationId > 0)
                 {
-                    return RedirectToAction(_mannerEstimationResultKey, new
+                    return RedirectToAction(_mannerHubPageAction, new
                     {
-                        q = _mannerEstimationProtector.Protect(
-                         newEstimationId.ToString()),
-                        r = _mannerEstimationProtector.Protect(Resource.lblTrue)
+                        q = mannerEstimationViewModel.EncryptedMannerFarmId,
+                        r = _mannerEstimationProtector.Protect(Resource.lblTrue),
+                        s = _mannerEstimationProtector.Protect(Resource.lblTrue),
+
                     });
                 }
             }
@@ -4011,7 +4017,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 Value = x.id.ToString(),
                 Text = x.name,
-                Hint = string.Format("{0:0.##} {1}", x.nutrientPercentage, Resource.lblNitrogenLowercase)
+                Hint = string.Format("{0:0.##} {1} {2}", x.nutrientPercentage,Resource.lblPercent, Resource.lblNitrogenLowercase)
             }).ToList();
 
             model.EncryptedMannerEstimateId = q;

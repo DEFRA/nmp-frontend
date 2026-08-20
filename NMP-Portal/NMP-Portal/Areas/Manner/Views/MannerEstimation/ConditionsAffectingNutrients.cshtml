@@ -65,23 +65,9 @@
                         <h3 class="govuk-heading-s">@Resource.lblAutumnCropNitrogenNUptake</h3>
                         <p class="govuk-body">@Resource.lblAmountOfNFromTheApplicationTaken.</p>
                     }
-                    <h3 class="govuk-heading-s">@Resource.lblEndOfSoilDrainage</h3>
-                    <p class="govuk-body">@Resource.lblDateWhenSoilDrainageEnds.</p>
+                    <partial name="~/Views/OrganicManure/_ConditionsAffectingNutrientsDetails.cshtml" />
 
-
-                    <h3 class="govuk-heading-s">@Resource.lblRainfallWithin6HoursOfApplication</h3>
-                    <p class="govuk-body">@Resource.lblAmountOfRainThatFallsInThe6Hours.</p>
-
-
-                    <h3 class="govuk-heading-s">@Resource.lblEffectiveRainfallAfterApplication</h3>
-                    <p class="govuk-body">@Resource.lblAverageRainfallBetweenManAppAndEndOfSoilDrainage.</p>
-
-
-                    <h3 class="govuk-heading-s">@Resource.lblWindspeedDuringApplication</h3>
-                    <p class="govuk-body">@Resource.lblWindspeedWhenTheMaterialIsApplied.</p>
-
-                    <h3 class="govuk-heading-s">@Resource.lblTopsoilMoisture</h3>
-                    <p class="govuk-body"> @Resource.lblHowMoistTheTopsoilIs.</p>
+                   
                 </govuk-details-text>
             </govuk-details>
 
@@ -131,10 +117,10 @@
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
-                    <govuk-summary-list-row-key>@Resource.lblWindspeedDuringApplication</govuk-summary-list-row-key>
+                    <govuk-summary-list-row-key>@Resource.lblWindspeedAtApplication</govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>@Model.Windspeed</govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="Windspeed" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWindspeedDuringApplication</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="Windspeed" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWindspeedAtApplication</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
