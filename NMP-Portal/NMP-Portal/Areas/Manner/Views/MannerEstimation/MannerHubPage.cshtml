@@ -21,12 +21,23 @@ else
 
             @if (ViewBag.Success != null && ViewBag.Success == "true")
             {
+                @if (ViewBag.SuccessForCopyEstimate != null)
+                {
+                    <govuk-notification-banner type="NotificationBannerType.Success">
+                        <h3 class="govuk-notification-banner__heading">
+                            @Resource.lblNutrientSupplyEstimateCreated
+                        </h3>
+                        <p class="govuk-body">@Resource.lblSelectTheFarmFieldAndCropTabOrAnApplication</p>
+                    </govuk-notification-banner>
+                }
+                else{
                 <govuk-notification-banner type="NotificationBannerType.Success">
                     <h3 class="govuk-notification-banner__heading">
                         @Resource.lblNutrientSupplyEstimatesRemoved
                     </h3>
 
                 </govuk-notification-banner>
+                }
             }
 
             <h1 class="govuk-heading-l">@string.Format(Resource.lblNutrientSupplyEstimatesForFarmName, ViewBag.FarmName) </h1>

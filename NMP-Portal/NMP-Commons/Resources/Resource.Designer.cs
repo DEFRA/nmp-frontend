@@ -2700,7 +2700,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average rainfall (in mm) between manure application and end of soil drainage.
+        ///   Looks up a localized string similar to Average rainfall (in mm) between material application and end of soil drainage.
         /// </summary>
         public static string lblAverageRainfallBetweenManAppAndEndOfSoilDrainage {
             get {
@@ -6590,6 +6590,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertiliser Product.
+        /// </summary>
+        public static string lblFertiliserProduct {
+            get {
+                return ResourceManager.GetString("lblFertiliserProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inorganic fertiliser added to fields in this plan.
         /// </summary>
         public static string lblFertilisersHavebeenSuccessfullyAdded {
@@ -10011,7 +10020,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to manure application details, including application rate and method.
+        ///   Looks up a localized string similar to organic material application details, including application rate and method.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent13 {
             get {
@@ -10083,7 +10092,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the fate of organic manure N following land application.
+        ///   Looks up a localized string similar to the fate of organic material N following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {
@@ -12396,6 +12405,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to percent.
+        /// </summary>
+        public static string lblPercent {
+            get {
+                return ResourceManager.GetString("lblPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to %.
         /// </summary>
         public static string lblPercentage {
@@ -12410,15 +12428,6 @@ namespace NMP.Commons.Resources {
         public static string lblPercentageLable {
             get {
                 return ResourceManager.GetString("lblPercentageLable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Percentage of nutrient.
-        /// </summary>
-        public static string lblPercentageOfNutrient {
-            get {
-                return ResourceManager.GetString("lblPercentageOfNutrient", resourceCulture);
             }
         }
         
@@ -14621,7 +14630,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the farm, field and crop , or application details tab, to update the results..
+        ///   Looks up a localized string similar to Select the farm, field and crop, or application details tab, to update the results..
         /// </summary>
         public static string lblSelectTheFarmFieldAndCropTabOrAnApplication {
             get {
