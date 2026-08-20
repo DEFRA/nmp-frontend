@@ -8436,4 +8436,7 @@ following crop year 2</value>
   <data name="lblHighNOrganicManureMaxRateOSR" xml:space="preserve">
     <value>HighNOrganicManureMaxRateOSR</value>
   </data>
+  <data name="lblKgPerCubicMetre" xml:space="preserve">
+    <value>{0} kg per cubic metre</value>
+  </data>
 </root>

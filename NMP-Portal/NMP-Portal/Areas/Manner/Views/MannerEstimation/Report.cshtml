@@ -95,7 +95,11 @@
                                 }
                                 <td class="govuk-table__cell">@application.ManureType</td>
                                 <td class="govuk-table__cell">@application.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
-                                <td class="govuk-table__cell">@(application.ApplicationRate != 0 ? string.Format("{0:N0} {1}", application.ApplicationRate, Resource.lblMetresCubed) : "0")</td>
+                            <td class="govuk-table__cell">
+                                @(application.ApplicationRate != 0 ? string.Format("{0:N0} {1}", application.ApplicationRate, (application.IsManureTypeLiquid
+                                                            ? Resource.lblMeterCubePerHa
+                                                            : Resource.lblTonPerHa)) : "0")
+                        </td>
                                 <td class="govuk-table__cell">@application.ApplicationMethod</td>
                                 <td class="govuk-table__cell">@application.IncorporationMethod</td>
                                 <td class="govuk-table__cell">@application.IncorporationDelay</td>

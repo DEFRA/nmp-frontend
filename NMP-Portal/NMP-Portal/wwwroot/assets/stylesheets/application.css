@@ -788,6 +788,9 @@ hr.seperator_thirty {
         .nutrient_list .nutrient_row .figure.w35 {
             width: 35%;
         }
+        .nutrient_list .nutrient_row .figure.w50 {
+            width: 50%;
+        }
 
 #totalCropNeed{
     width:87px !important;
