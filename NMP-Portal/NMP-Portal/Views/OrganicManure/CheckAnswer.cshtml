@@ -4,14 +4,14 @@
 @model NMP.Commons.ViewModels.OrganicManureViewModel
 
 @functions{
-    public static IHtmlContent RenderNutrientRow(decimal? value, string label, bool isPercent = false)
+    public IHtmlContent RenderNutrientRow(decimal? value, string label, bool isPercent = false)
     {
         if (!value.HasValue || value.Value < 0)
             return HtmlString.Empty;
 
-        var formattedValue = isPercent
-            ? string.Format("{0}%", value.Value)
-            : string.Format(Resource.lblValueKgPerTonne, value.Value);
+        var unit = Model.IsManureTypeLiquid??false ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
+
+        var formattedValue = isPercent ? string.Format("{0}%", value.Value) : string.Format(unit, value.Value);
 
         return new HtmlString($@"
             <span class='nutrient_row'>
@@ -27,7 +27,7 @@
             : existingText;
     }
     
-    public static IHtmlContent RenderNutrients(IEnumerable<dynamic> items)
+    public IHtmlContent RenderNutrients(IEnumerable<dynamic> items)
     {
         var sb = new HtmlContentBuilder();
         foreach (var item in items)

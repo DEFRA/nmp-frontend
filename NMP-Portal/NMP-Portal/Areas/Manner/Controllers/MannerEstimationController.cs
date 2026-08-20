@@ -2962,7 +2962,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     }
                     else
                     {
-                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, application.ManureType);
+                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manureUnit);
                     }
                 }
             }
@@ -5215,6 +5215,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         //warnings
                         await BindWarnings(model.MannerFieldAndCropDetails, application, model);
 
+                        bool isLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID??0);
+
                         // Application details
                         model.MannerEstimationApplicationDetails.Add(new MannerEstimationApplicationDetailsViewModel
                         {
@@ -5273,7 +5275,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                             MoistureType = application.MoistureType,
                             ApplicationMethod = application.ApplicationMethod,
                             IncorporationMethod = application.IncorporationMethod,
-                            IncorporationDelay = application.IncorporationDelay
+                            IncorporationDelay = application.IncorporationDelay,
+                            IsManureTypeLiquid = isLiquid
                         });
 
                         // Manure analysis (one per application)
