@@ -8418,4 +8418,22 @@ following crop year 2</value>
   <data name="lblPercent" xml:space="preserve">
     <value>percent</value>
   </data>
+  <data name="lblNFieldLimit" xml:space="preserve">
+    <value>NFieldLimit</value>
+  </data>
+  <data name="lblEndClosedPeriodEndFeb" xml:space="preserve">
+    <value>EndClosedPeriodEndFeb</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateGrass" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateGrass</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRate" xml:space="preserve">
+    <value>HighNOrganicManureMaxRate</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateWeeks" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateWeeks</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateOSR" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateOSR</value>
+  </data>
 </root>
