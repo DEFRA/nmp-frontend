@@ -4747,8 +4747,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             var warningList = await _warningLogic.FetchAllWarningAsync();
 
-            bool isSlurry = IsSlurry(model.ManureTypeId);
-            bool isPoultry = IsPoultryManure(model.ManureTypeId);
+            bool isSlurry = Functions.IsSlurry(model.ManureTypeId);
+            bool isPoultry = Functions.IsPoultryManure(model.ManureTypeId);
 
 
             if (model.CountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
@@ -4862,26 +4862,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return WarningWithinPeriod.CheckEndClosedPeriodAndFebruary(applicationDate.Value, closedPeriod) == true;
         }
-        private static bool IsSlurry(int? manureTypeId)
-        {
-            if (!manureTypeId.HasValue) return false;
-
-            var slurryTypes = new[]
-            {
-                (int)NMP.Commons.Enums.ManureTypes.PigSlurry,
-                (int)NMP.Commons.Enums.ManureTypes.CattleSlurry,
-                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox,
-                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall,
-                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator,
-                (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion
-            };
-
-            return slurryTypes.Contains(manureTypeId.Value);
-        }
-        private static bool IsPoultryManure(int? manureTypeId)
-        {
-            return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
-        }
+        
         private async Task<Error?> CheckCompostAndScotlandLimits<TModel>(
             TModel model,
             List<WarningResponse> warningList,

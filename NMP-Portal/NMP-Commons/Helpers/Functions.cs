@@ -430,5 +430,26 @@ namespace NMP.Commons.Helpers
                    !comparisonDate.HasValue ||
                    sowingDate >= comparisonDate;
         }
+
+        public static bool IsSlurry(int? manureTypeId)
+        {
+            if (!manureTypeId.HasValue) return false;
+
+            var slurryTypes = new[]
+            {
+                (int)NMP.Commons.Enums.ManureTypes.PigSlurry,
+                (int)NMP.Commons.Enums.ManureTypes.CattleSlurry,
+                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox,
+                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall,
+                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator,
+                (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion
+            };
+
+            return slurryTypes.Contains(manureTypeId.Value);
+        }
+        public static bool IsPoultryManure(int? manureTypeId)
+        {
+            return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
+        }
     }
 }
