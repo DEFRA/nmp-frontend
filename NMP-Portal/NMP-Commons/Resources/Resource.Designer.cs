@@ -10047,6 +10047,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This tool will provide you with an estimate of crop available nutrient supply from applications of organic materials to a single field. If you want to plan applications of organic materials with applications of fertiliser nutrients as part of a nutrient management plan, you should use NMPT-GB..
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent20 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to the fate of organic material N following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
@@ -14009,7 +14018,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} -{1} - Updated {2}.
+        ///   Looks up a localized string similar to {0} - {1} - Updated {2}.
         /// </summary>
         public static string lblRemoveEstimationNames {
             get {
@@ -14396,20 +14405,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a farm to create or update a nutrient management plan,.
-        /// </summary>
-        public static string lblSelectAFarmToCreateOrUpdateANutrientManagementPlan {
-            get {
-                return ResourceManager.GetString("lblSelectAFarmToCreateOrUpdateANutrientManagementPlan", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Select a farm to create or update it&apos;s nutrient management plans or to create a report..
         /// </summary>
         public static string lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans {
             get {
                 return ResourceManager.GetString("lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a farm to view or edit.
+        /// </summary>
+        public static string lblSelectAFarmToViewOrEdit {
+            get {
+                return ResourceManager.GetString("lblSelectAFarmToViewOrEdit", resourceCulture);
             }
         }
         
@@ -17854,7 +17863,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a free tool, provided by Defra, to help farmers, land managers and advisers record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it..
+        ///   Looks up a localized string similar to This is a free tool, provided by Defra, to help farmers, land managers and advisers plan and manage nutrient applications. It provides guidance only - there is no legal requirement to use it..
         /// </summary>
         public static string lblUseThisServiceToPlan {
             get {
@@ -18219,6 +18228,15 @@ namespace NMP.Commons.Resources {
         public static string lblViewOrCreateANutrientSupplyEstimate {
             get {
                 return ResourceManager.GetString("lblViewOrCreateANutrientSupplyEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View or edit.
+        /// </summary>
+        public static string lblViewOrEdit {
+            get {
+                return ResourceManager.GetString("lblViewOrEdit", resourceCulture);
             }
         }
         
@@ -19771,7 +19789,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which estimates would you like to remove?.
+        ///   Looks up a localized string similar to Which estimate would you like to remove?.
         /// </summary>
         public static string lblWhichEstimatesWouldYouLikeToRemove {
             get {
