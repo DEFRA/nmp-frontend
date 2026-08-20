@@ -8,7 +8,13 @@
 }
 
 @section BeforeContent {
+    @if(Model.IsSoilDrainageEndDateChange)
+    {
+        <govuk-back-link asp-action="SoilDrainageEndDate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    }
+    else{
     <partial name="_BackLinkForConditionPages" model="Model" />
+    }
 }
 
 <form asp-action="EffectiveRainfall" asp-controller="MannerEstimation" method="post" autocomplete="off">

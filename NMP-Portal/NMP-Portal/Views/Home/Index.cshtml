@@ -36,6 +36,17 @@
             @Resource.lblPlanAndRecordNutrientApplications
         </h1>
         <p class="govuk-body">@Resource.lblUseThisServiceToPlan</p>
+        
+        <p class="govuk-body">@Resource.lblThisToolIncludes</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>
+                @Resource.lblNutrientManagementPlanningNMPT
+            </li>
+            <li>
+                @Resource.lblNutrientSupplyEstimatesFromOrganicMaterials
+            </li>
+            
+        </ul>
         <p class="govuk-body">@Resource.lblTheServiceWill</p>
         <ul class="govuk-list govuk-list--bullet">
             <li>
@@ -49,17 +60,9 @@
             </li>
         </ul>
         <h2 class="govuk-heading-m">@Resource.lblHowitworks</h2>  
-        <p class="govuk-body">@Resource.lblTheToolGivesFertiliserRecommendationsForAllMajorNutrients</p>
-        <p class="govuk-body">@Resource.lblTheRecommendationsFromThisToolComeFrom</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>
-                @Html.Raw(Resource.lblEnglandAndWalesUrl)
-            </li>
-            <li>
-                @Html.Raw(Resource.lblScotlandRecommendationTool)
-            </li>
-        </ul>
-        <p class="govuk-body">@Resource.lblYourPlanWillBasedOn</p>
+        <h3 class="govuk-heading-s">@Resource.lblNutrientManagementPlanningNMPT</h3>  
+        <p class="govuk-body">@Html.Raw(Resource.lblThisToolWillHelpYouPlanAndRecordYourNutrientUseAndCheckCompliance)</p>
+         <p class="govuk-body">@Resource.lblYourPlanWillBasedOn</p>
         <ul class="govuk-list govuk-list--bullet">
             <li>
                 @Resource.lblTheCropsYouGrow
@@ -71,15 +74,20 @@
                 @Resource.lblTheManuresAndFertilisersYouUseAndHowYouApplyThem
             </li>
         </ul>
+        <p class="govuk-body">@Resource.lblTheToolUsesTheMannerNpkModelToEstimateTheCropAvailable</p>
         <p class="govuk-body">@Resource.lblDevelopNutrientApplicationPlan</p>
         <p class="govuk-body">@Resource.lbldownloadablePdftext</p>
+         <h3 class="govuk-heading-s">@Resource.lblMannerNpkForHomePage</h3>
+        <p class="govuk-body">@Resource.lblThisToolWillHelpYouEstimateTheNutrientSupplyFromAndThePotential</p>
+        <p class="govuk-body">@Resource.lblIfYouWantToPlanApplicationsOfOrganicMaterialsWithApplications</p>
+          
+        
         <h2 class="govuk-heading-m">@Resource.lblYourData</h2>
         <p class="govuk-body">
             @Resource.lblYourDataContentOne
         </p>
         <p class="govuk-body">@Html.Raw(Resource.lblYourDataContentSecond)</p>
         
-        <govuk-inset-text>@Resource.lblYouCanNotCurrentlyImportFieldDataFromTheRPA</govuk-inset-text>
 
         <h2 class="govuk-heading-m">@Resource.lblReleaseSchedule</h2>
         <p class="govuk-body">@Resource.lblOurReleaseScheduleShowsYouWhenNewFeatures</p>
