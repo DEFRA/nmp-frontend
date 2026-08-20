@@ -9,7 +9,7 @@
         if (!value.HasValue || value.Value < 0)
             return HtmlString.Empty;
 
-        var unit = Model.IsManureTypeLiquid ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
+        var unit = Model.IsManureTypeLiquid??false ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
 
         var formattedValue = isPercent ? string.Format("{0}%", value.Value) : string.Format(unit, value.Value);
 
