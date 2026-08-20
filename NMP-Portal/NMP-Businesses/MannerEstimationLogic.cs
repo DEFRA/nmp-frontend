@@ -577,6 +577,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep24.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep24.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep24.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        mannerEstimationViewModel.MannerEstimationStep24.IsManureTypeLiquid = mannerEstimationViewModel.MannerEstimationStep24.ManureType.IsLiquid;
+
         return mannerEstimationViewModel.MannerEstimationStep24;
     }
     public async Task<MannerEstimationStep24ViewModel> SetMannerEstimationStep24(MannerEstimationStep24ViewModel mannerEstimationStep24)
