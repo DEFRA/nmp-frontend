@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -2700,7 +2700,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average rainfall (in mm) between manure application and end of soil drainage.
+        ///   Looks up a localized string similar to Average rainfall (in mm) between material application and end of soil drainage.
         /// </summary>
         public static string lblAverageRainfallBetweenManAppAndEndOfSoilDrainage {
             get {
@@ -5186,6 +5186,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EndClosedPeriodEndFeb.
+        /// </summary>
+        public static string lblEndClosedPeriodEndFeb {
+            get {
+                return ResourceManager.GetString("lblEndClosedPeriodEndFeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End of Feb.
         /// </summary>
         public static string lblEndOfFeb {
@@ -6581,6 +6590,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fertiliser Product.
+        /// </summary>
+        public static string lblFertiliserProduct {
+            get {
+                return ResourceManager.GetString("lblFertiliserProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inorganic fertiliser added to fields in this plan.
         /// </summary>
         public static string lblFertilisersHavebeenSuccessfullyAdded {
@@ -7603,6 +7621,42 @@ namespace NMP.Commons.Resources {
         public static string lblHighCloverContent {
             get {
                 return ResourceManager.GetString("lblHighCloverContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HighNOrganicManureMaxRate.
+        /// </summary>
+        public static string lblHighNOrganicManureMaxRate {
+            get {
+                return ResourceManager.GetString("lblHighNOrganicManureMaxRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HighNOrganicManureMaxRateGrass.
+        /// </summary>
+        public static string lblHighNOrganicManureMaxRateGrass {
+            get {
+                return ResourceManager.GetString("lblHighNOrganicManureMaxRateGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HighNOrganicManureMaxRateOSR.
+        /// </summary>
+        public static string lblHighNOrganicManureMaxRateOSR {
+            get {
+                return ResourceManager.GetString("lblHighNOrganicManureMaxRateOSR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HighNOrganicManureMaxRateWeeks.
+        /// </summary>
+        public static string lblHighNOrganicManureMaxRateWeeks {
+            get {
+                return ResourceManager.GetString("lblHighNOrganicManureMaxRateWeeks", resourceCulture);
             }
         }
         
@@ -9966,7 +10020,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to manure application details, including application rate and method.
+        ///   Looks up a localized string similar to organic material application details, including application rate and method.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent13 {
             get {
@@ -10038,7 +10092,16 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the fate of organic manure N following land application.
+        ///   Looks up a localized string similar to This tool will provide you with an estimate of crop available nutrient supply from applications of organic materials to a single field. If you want to plan applications of organic materials with applications of fertiliser nutrients as part of a nutrient management plan, you should use NMPT-GB..
+        /// </summary>
+        public static string lblMannerEstimateAboutPageContent20 {
+            get {
+                return ResourceManager.GetString("lblMannerEstimateAboutPageContent20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to the fate of organic material N following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {
@@ -10799,6 +10862,15 @@ namespace NMP.Commons.Resources {
         public static string lblNextYearForReport {
             get {
                 return ResourceManager.GetString("lblNextYearForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NFieldLimit.
+        /// </summary>
+        public static string lblNFieldLimit {
+            get {
+                return ResourceManager.GetString("lblNFieldLimit", resourceCulture);
             }
         }
         
@@ -12342,6 +12414,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to percent.
+        /// </summary>
+        public static string lblPercent {
+            get {
+                return ResourceManager.GetString("lblPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to %.
         /// </summary>
         public static string lblPercentage {
@@ -12356,15 +12437,6 @@ namespace NMP.Commons.Resources {
         public static string lblPercentageLable {
             get {
                 return ResourceManager.GetString("lblPercentageLable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Percentage of nutrient.
-        /// </summary>
-        public static string lblPercentageOfNutrient {
-            get {
-                return ResourceManager.GetString("lblPercentageOfNutrient", resourceCulture);
             }
         }
         
@@ -14000,7 +14072,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} -{1} - Updated {2}.
+        ///   Looks up a localized string similar to {0} - {1} - Updated {2}.
         /// </summary>
         public static string lblRemoveEstimationNames {
             get {
@@ -14387,20 +14459,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a farm to create or update a nutrient management plan,.
-        /// </summary>
-        public static string lblSelectAFarmToCreateOrUpdateANutrientManagementPlan {
-            get {
-                return ResourceManager.GetString("lblSelectAFarmToCreateOrUpdateANutrientManagementPlan", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Select a farm to create or update it&apos;s nutrient management plans or to create a report..
         /// </summary>
         public static string lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans {
             get {
                 return ResourceManager.GetString("lblSelectAFarmToCreateOrUpdateItsNutrientManagementPlans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a farm to view or edit.
+        /// </summary>
+        public static string lblSelectAFarmToViewOrEdit {
+            get {
+                return ResourceManager.GetString("lblSelectAFarmToViewOrEdit", resourceCulture);
             }
         }
         
@@ -14567,7 +14639,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the farm, field and crop , or application details tab, to update the results..
+        ///   Looks up a localized string similar to Select the farm, field and crop, or application details tab, to update the results..
         /// </summary>
         public static string lblSelectTheFarmFieldAndCropTabOrAnApplication {
             get {
@@ -17845,7 +17917,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a free tool, provided by Defra, to help farmers, land managers and advisers record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it..
+        ///   Looks up a localized string similar to This is a free tool, provided by Defra, to help farmers, land managers and advisers plan and manage nutrient applications. It provides guidance only - there is no legal requirement to use it..
         /// </summary>
         public static string lblUseThisServiceToPlan {
             get {
@@ -18210,6 +18282,15 @@ namespace NMP.Commons.Resources {
         public static string lblViewOrCreateANutrientSupplyEstimate {
             get {
                 return ResourceManager.GetString("lblViewOrCreateANutrientSupplyEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View or edit.
+        /// </summary>
+        public static string lblViewOrEdit {
+            get {
+                return ResourceManager.GetString("lblViewOrEdit", resourceCulture);
             }
         }
         
@@ -19762,7 +19843,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Which estimates would you like to remove?.
+        ///   Looks up a localized string similar to Which estimate would you like to remove?.
         /// </summary>
         public static string lblWhichEstimatesWouldYouLikeToRemove {
             get {

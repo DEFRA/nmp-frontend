@@ -19,6 +19,33 @@
             Para3 = Model.NFieldLimitWarningPara3
         });
     }
+    if (Model.IsOrgManureNfieldLimitWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.NFieldLimitWarningPara1,
+            Para2 = Model.NFieldLimitWarningPara2,
+            Para3 = Model.NFieldLimitWarningPara3
+        });
+    }
+    if (Model.IsEndClosedPeriodFebruaryWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.EndClosedPeriodEndFebWarningPara1,
+            Para2 = Model.EndClosedPeriodEndFebWarningPara2,
+            Para3 = Model.EndClosedPeriodEndFebWarningPara3
+        });
+    }
+    if (Model.IsStartClosedPeriodEndFebWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.StartClosedPeriodEndFebWarningPara1,
+            Para2 = Model.StartClosedPeriodEndFebWarningPara2,
+            Para3 = Model.StartClosedPeriodEndFebWarningPara3
+        });
+    }
 
     
 }

@@ -6258,8 +6258,8 @@ managementPeriod.CropID.HasValue
 
             string? closedPeriod = await GetClosedPeriod(model, farm, model.HighReadilyAvailableNitrogen ?? false);
 
-            bool isSlurry = IsSlurry(model.ManureTypeId);
-            bool isPoultry = IsPoultryManure(model.ManureTypeId);
+            bool isSlurry = Functions.IsSlurry(model.ManureTypeId);
+            bool isPoultry = Functions.IsPoultryManure(model.ManureTypeId);
 
 
             if (IsNonScotland(model))
@@ -6397,26 +6397,6 @@ managementPeriod.CropID.HasValue
                 return (null, error);
 
             return (list.FirstOrDefault(x => x.Id == model.ManureTypeId), null);
-        }
-        private static bool IsSlurry(int? manureTypeId)
-        {
-            if (!manureTypeId.HasValue) return false;
-
-            var slurryTypes = new[]
-            {
-                (int)NMP.Commons.Enums.ManureTypes.PigSlurry,
-                (int)NMP.Commons.Enums.ManureTypes.CattleSlurry,
-                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryStrainerBox,
-                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall,
-                (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator,
-                (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion
-            };
-
-            return slurryTypes.Contains(manureTypeId.Value);
-        }
-        private static bool IsPoultryManure(int? manureTypeId)
-        {
-            return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
         }
         private static bool IsWithinClosedPeriodAndFeb(OrganicManureViewModel model, string? closedPeriod)
         {
@@ -7189,7 +7169,7 @@ managementPeriod.CropID.HasValue
             }
             var mannerOutput = new
             {
-                runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.PlanetEngland : (int)NMP.Commons.Enums.RunType.PlanetScotland,
+                runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.MannerEngland : (int)NMP.Commons.Enums.RunType.MannerScotland,
                 postcode = farmData.ClimateDataPostCode.Split(" ")[0],
                 countryID = countryList.Where(x => x.ID == farmData.CountryID).Select(x => x.RB209CountryID).First(),
                 field = new

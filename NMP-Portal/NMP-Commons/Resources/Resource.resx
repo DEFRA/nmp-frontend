@@ -322,7 +322,7 @@
     <value>true</value>
   </data>
   <data name="lblUseThisServiceToPlan" xml:space="preserve">
-    <value>This is a free tool, provided by Defra, to help farmers, land managers and advisers record nutrient use on their land. It gives you guidance only - there is no legal requirement to use it.</value>
+    <value>This is a free tool, provided by Defra, to help farmers, land managers and advisers plan and manage nutrient applications. It provides guidance only - there is no legal requirement to use it.</value>
   </data>
   <data name="lblWhatIsTheFarmName" xml:space="preserve">
     <value>What is the farm name?</value>
@@ -1546,7 +1546,7 @@
     <value>Amount of rain (in mm) that falls in the 6 hours after the material is applied</value>
   </data>
   <data name="lblAverageRainfallBetweenManAppAndEndOfSoilDrainage" xml:space="preserve">
-    <value>Average rainfall (in mm) between manure application and end of soil drainage</value>
+    <value>Average rainfall (in mm) between material application and end of soil drainage</value>
   </data>
   <data name="lblConditionsAffectingNutrientLoss" xml:space="preserve">
     <value>Conditions affecting nutrient loss</value>
@@ -7777,7 +7777,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>the nutrients supplied from applications of organic materials</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent3" xml:space="preserve">
-    <value>the fate of organic manure N following land application</value>
+    <value>the fate of organic material N following land application</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent4" xml:space="preserve">
     <value>the financial value of organic material applications based on current inorganic fertiliser prices</value>
@@ -7807,7 +7807,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>field name and soil type</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent13" xml:space="preserve">
-    <value>manure application details, including application rate and method</value>
+    <value>organic material application details, including application rate and method</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent14" xml:space="preserve">
     <value>Nitrate Vulnerable Zone (NVZ) warnings</value>
@@ -7848,8 +7848,8 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
   <data name="lblNutrientManagementPlansAndNitrateVulnerableZoneReports" xml:space="preserve">
     <value>Nutrient management plans and Nitrate Vulnerable Zone (NVZ) reports</value>
   </data>
-  <data name="lblSelectAFarmToCreateOrUpdateANutrientManagementPlan" xml:space="preserve">
-    <value>Select a farm to create or update a nutrient management plan,</value>
+  <data name="lblSelectAFarmToViewOrEdit" xml:space="preserve">
+    <value>Select a farm to view or edit</value>
   </data>
   <data name="lblOrToSaveAnNVZReport" xml:space="preserve">
     <value>or to save an NVZ report.</value>
@@ -7991,7 +7991,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>Nutrient supply estimate created</value>
   </data>
   <data name="lblSelectTheFarmFieldAndCropTabOrAnApplication" xml:space="preserve">
-    <value>Select the farm, field and crop , or application details tab, to update the results.</value>
+    <value>Select the farm, field and crop, or application details tab, to update the results.</value>
   </data>
   <data name="lblEstimationForFarm" xml:space="preserve">
     <value>{0} for {1}</value>
@@ -8115,8 +8115,8 @@ following crop year 2</value>
   <data name="lblPriceOfProduct" xml:space="preserve">
     <value>Price of product</value>
   </data>
-  <data name="lblPercentageOfNutrient" xml:space="preserve">
-    <value>Percentage of nutrient</value>
+  <data name="lblFertiliserProduct" xml:space="preserve">
+    <value>Fertiliser Product</value>
   </data>
   <data name="lblPriceOfNutrient" xml:space="preserve">
     <value>Price of nutrient</value>
@@ -8308,10 +8308,10 @@ following crop year 2</value>
     <value>Organic material application added</value>
   </data>
   <data name="lblWhichEstimatesWouldYouLikeToRemove" xml:space="preserve">
-    <value>Which estimates would you like to remove?</value>
+    <value>Which estimate would you like to remove?</value>
   </data>
   <data name="lblRemoveEstimationNames" xml:space="preserve">
-    <value>{0} -{1} - Updated {2}</value>
+    <value>{0} - {1} - Updated {2}</value>
   </data>
   <data name="lblNutrientSupplyEstimatesRemoved" xml:space="preserve">
     <value>Nutrient supply estimates removed</value>
@@ -8414,5 +8414,32 @@ following crop year 2</value>
   </data>
   <data name="lblAboutNewSwardHintForScotland" xml:space="preserve">
     <value>A new sward is one that is established in the current harvest year. A sward established by undersowing last year should be treated as an existing sward.</value>
+  </data>
+  <data name="lblPercent" xml:space="preserve">
+    <value>percent</value>
+  </data>
+  <data name="lblNFieldLimit" xml:space="preserve">
+    <value>NFieldLimit</value>
+  </data>
+  <data name="lblEndClosedPeriodEndFeb" xml:space="preserve">
+    <value>EndClosedPeriodEndFeb</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateGrass" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateGrass</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRate" xml:space="preserve">
+    <value>HighNOrganicManureMaxRate</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateWeeks" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateWeeks</value>
+  </data>
+  <data name="lblHighNOrganicManureMaxRateOSR" xml:space="preserve">
+    <value>HighNOrganicManureMaxRateOSR</value>
+  </data>
+  <data name="lblMannerEstimateAboutPageContent20" xml:space="preserve">
+    <value>This tool will provide you with an estimate of crop available nutrient supply from applications of organic materials to a single field. If you want to plan applications of organic materials with applications of fertiliser nutrients as part of a nutrient management plan, you should use NMPT-GB.</value>
+  </data>
+  <data name="lblViewOrEdit" xml:space="preserve">
+    <value>View or edit</value>
   </data>
 </root>
