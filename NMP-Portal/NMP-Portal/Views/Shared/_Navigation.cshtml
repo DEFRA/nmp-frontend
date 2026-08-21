@@ -4,51 +4,51 @@
 @inject FarmContext FarmContext
 @inject IHttpContextAccessor httpContextAccessor
 @{
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-}
+}   
 
 @if (User.Identity?.IsAuthenticated == true)
 {
+    bool isDashboard = string.Equals(currentController, "Dashboard", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "Index", StringComparison.OrdinalIgnoreCase);
+    
+    bool isMannerContext = string.Equals(currentArea, "Manner", StringComparison.OrdinalIgnoreCase)
+            && (string.Equals(currentController, "MannerEstimation", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(currentController, "AboutManner", StringComparison.OrdinalIgnoreCase));
     var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
     var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
-    var isNmptSection = httpContextAccessor?.HttpContext?.Session.GetString("is_nmpt_section");
-    var isMannerEstimateSection = httpContextAccessor?.HttpContext?.Session.GetString("is_manner_estimate_section");
+    //var isNmptSection = httpContextAccessor?.HttpContext?.Session.GetString("is_nmpt_section");
+    //var isMannerEstimateSection = httpContextAccessor?.HttpContext?.Session.GetString("is_manner_estimate_section");
     var isCurrentManureEstimate = httpContextAccessor?.HttpContext?.Session.GetString("is_current_manner_estimate");
     var currentManureEstimateFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_farm_name");
     var currentManureEstimateFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_manner_farm_id");
-    int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);
+    
+    
+    int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);    
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
     bool isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
-    bool isAbout = string.Equals(currentController, "AboutService", StringComparison.OrdinalIgnoreCase);
-    bool isAcceptTerms = string.Equals(currentController, "AcceptTerms", StringComparison.OrdinalIgnoreCase);
+    //bool isAbout = string.Equals(currentController, "AboutService", StringComparison.OrdinalIgnoreCase);
+    bool isAcceptTerms = string.Equals(currentController, "AcceptTerms", StringComparison.OrdinalIgnoreCase);    
     bool isAccessibilityStatement = string.Equals(currentController, "AccessibilityStatement", StringComparison.OrdinalIgnoreCase);
     bool isPrivacyNotice = string.Equals(currentController, "PrivacyNotice", StringComparison.OrdinalIgnoreCase);
     bool isCookie = string.Equals(currentController, "Cookie", StringComparison.OrdinalIgnoreCase);
-
     bool isAccount = string.Equals(currentController, "Account", StringComparison.OrdinalIgnoreCase);
     bool isError = string.Equals(currentController, "Error", StringComparison.OrdinalIgnoreCase);
     bool isHelpFeedback = string.Equals(currentController, "HelpAndFeedback", StringComparison.OrdinalIgnoreCase);
     bool isReleaseschedule = string.Equals(currentController, "ReleaseSchedule", StringComparison.OrdinalIgnoreCase);
-    bool isFarmContext = !isAllFarm && !(
-        isHome ||
-        isAbout ||
-        isAcceptTerms ||
-        isAccessibilityStatement ||
-        isPrivacyNotice ||
-        isCookie ||
-        isAccount ||
-        isError ||
-        isHelpFeedback ||
-        isReleaseschedule
-        );
-    string serviceName = Resource.lblPlanAndRecordNutrientApplications;
+    bool isCommonContext = (isDashboard ||isHome || isAcceptTerms || isAccessibilityStatement || isPrivacyNotice ||
+        isCookie || isAccount || isError || isHelpFeedback || isReleaseschedule);
+    bool isNmptFarmContext = !isMannerContext && !isAllFarm && !isCommonContext;
+    bool isNmptContext = !isCommonContext && !isMannerContext;
 
-    if (!string.IsNullOrWhiteSpace(isNmptSection))
+    string serviceName = Resource.lblPlanAndRecordNutrientApplications;
+    
+    if (isNmptContext)
     {
         serviceName = Resource.lblNutrientManagementPlanningNMPT;
     }
-    else if (!string.IsNullOrWhiteSpace(isMannerEstimateSection))
+    else if (isMannerContext)
     {
         serviceName = Resource.lblNutrientSupplyEstimatesMannerNpk;
     }
@@ -60,9 +60,9 @@
         <govuk-service-navigation-nav>
             <govuk-service-navigation-nav-start></govuk-service-navigation-nav-start>
 
-            @if (isFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
+            @if (isNmptFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
             {
-                <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" active="@(isFarmContext)">
+                <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" active="@(isNmptFarmContext)">
                     @currentFarmName
                 </govuk-service-navigation-nav-item>
             }
