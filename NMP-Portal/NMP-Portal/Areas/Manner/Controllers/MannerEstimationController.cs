@@ -3560,25 +3560,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> EffectiveRainfall(string? q)
-        {
-            _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() action called");
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                await BindApplicationDetailForUpdate(q);
-            }
-            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
-            if (model.IsSoilDrainageEndDateChange && model.PostCode != null)
-            {
-                // Effective rainfall after application
-                await FetchDefaultTotalRainfall(model);
-
-            }
-            return View(model);
-
-        }
-
         private async Task FetchDefaultTotalRainfall(MannerEstimationStep32ViewModel model)
         {
             string halfPostCode = model.PostCode[..4].Trim();
@@ -3598,6 +3579,25 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         JsonConvert.SerializeObject(rainfallPostCodeApplication));
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> EffectiveRainfall(string? q)
+        {
+            _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() action called");
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                await BindApplicationDetailForUpdate(q);
+            }
+            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
+            if (model.IsSoilDrainageEndDateChange && model.PostCode != null)
+            {
+                // Effective rainfall after application
+                await FetchDefaultTotalRainfall(model);
+
+            }
+            return View(model);
+
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

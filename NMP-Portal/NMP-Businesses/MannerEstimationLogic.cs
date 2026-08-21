@@ -294,8 +294,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         if (mannerEstimationViewModel.IsComingForAddNewApplication)
-        {
-            //mannerEstimationViewModel.EncryptedMannerEstimationId = mannerEstimationStep11.EncryptedMannerEstimationId;
+        {            
             mannerEstimationStep11.IsComingForAddNewApplication = true;
             if (mannerEstimationStep11.IsComingForAddNewApplication)
             {
