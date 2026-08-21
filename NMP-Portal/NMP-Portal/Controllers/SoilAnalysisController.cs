@@ -40,6 +40,7 @@ namespace NMP.Portal.Controllers
         private const string _soilAnalysisDataKey = "SoilAnalysisData";
         private const string _fieldSoilAnalysisDetailAction = "FieldSoilAnalysisDetail";
         private const string _fieldController = "Field";
+        private const string _phosphorusKey = "Phosphorus";
         private SoilAnalysisViewModel? GetSoilAnalysisFromSession()
         {
             if (HttpContext.Session.Exists(_soilAnalysisDataKey))
@@ -760,15 +761,15 @@ namespace NMP.Portal.Controllers
             if (model.Phosphorus != null)
             {
                 if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland
-                && (ModelState.ContainsKey("Phosphorus") && Math.Round(model.Phosphorus.Value, 1) != model.Phosphorus))
+                && (ModelState.ContainsKey(_phosphorusKey) && Math.Round(model.Phosphorus.Value, 1) != model.Phosphorus))
                 {
-                    ModelState.AddModelError("Phosphorus", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces, 0, 999));
+                    ModelState.AddModelError(_phosphorusKey, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces, 0, 999));
                 }
-                else if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && ModelState.ContainsKey("Phosphorus") &&
+                else if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && ModelState.ContainsKey(_phosphorusKey) &&
         model.Phosphorus.HasValue &&
         model.Phosphorus.Value % 1 != 0)
                 {
-                    ModelState.AddModelError("Phosphorus", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999));
+                    ModelState.AddModelError(_phosphorusKey, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999));
                 }
             }
             if (ModelState.IsValid && model.PH == null && model.Potassium == null &&
@@ -802,7 +803,7 @@ namespace NMP.Portal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var phosphoruskey = "Phosphorus";
+                var phosphoruskey = _phosphorusKey;
 
                 if (ModelState.TryGetValue(phosphoruskey, out var entry) && entry.Errors.Count > 0)
                 {

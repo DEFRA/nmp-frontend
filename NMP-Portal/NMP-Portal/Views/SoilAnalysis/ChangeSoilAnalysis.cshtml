@@ -13,7 +13,7 @@
     {
         ViewData["Title"] = $"{Resource.lblCheckYourAnswers} {Resource.lblHyphen} {Resource.lblAddASoilAnalysis}";
     }
-    
+
     ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.ChangeSoilAnalysis;
     string? phosphorusIndex = string.Empty;
     string? potassiumIndex = string.Empty;
@@ -35,7 +35,7 @@
     }
     <form class="form-with-overlay" asp-action="UpdateSoil" asp-controller="SoilAnalysis" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
-        
+
         @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
         {
 
@@ -48,10 +48,10 @@
             @if (Model.PH.HasValue || Model.PhosphorusIndex.HasValue ||
                                                                    (!string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) || Model.MagnesiumIndex.HasValue)
             {
-                
+
                 phosphorusIndex = Model.PhosphorusIndex.HasValue
-                     ? Model.PhosphorusIndex.ToString()
-                     : Resource.lblNotEntered;
+                                     ? Model.PhosphorusIndex.ToString()
+                                     : Resource.lblNotEntered;
                 potassiumIndex = ((string.IsNullOrWhiteSpace(Model.PotassiumIndexValue)) ? Resource.lblNotEntered : Model.PotassiumIndexValue);
 
                 magnesiumIndex = ((!Model.MagnesiumIndex.HasValue) ? Resource.lblNotEntered : Model.MagnesiumIndex.ToString());
@@ -60,18 +60,22 @@
         }
         else if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Miligram)
         {
+            var phosphorusFormat = Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland
+   ? "{0:N1}"
+   : "{0:N0}";
             @if (Model.PhosphorusMethodologyID == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac)
             {
-                @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
-                                                                                        Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
+                @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
                 {
-                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}" : "{0:N0}"), Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
+
+                   
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format(phosphorusFormat, Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
                     potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PotassiumStatus})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.MagnesiumStatus})");
                 }
                 else
                 {
-                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}" : "{0:N0}"), Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format(phosphorusFormat, Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
                     potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PotassiumStatus})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.MagnesiumStatus})");
                 }
@@ -81,13 +85,13 @@
                 @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
                                                                     Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
                 {
-                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}": "{0:N0}"), Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format(phosphorusFormat, Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
                     potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
                 }
                 else
                 {
-                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}" : "{0:N0}"), Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format(phosphorusFormat, Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
                     potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
                 }
@@ -175,7 +179,7 @@
                             @Resource.lblSulphurDeficiencyStatus
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
-                            @if(Model.SulphurDeficient.HasValue)
+                            @if (Model.SulphurDeficient.HasValue)
                             {
                                 @if (Model.SulphurDeficient.Value)
                                 {
@@ -189,7 +193,7 @@
                             else
                             {
                                 @Resource.lblNotEntered
-                            }                            
+                            }
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SulphurDeficient" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblSulphurDeficiencyStatus)</span></govuk-summary-list-row-action>
@@ -229,7 +233,7 @@
                             {
                                 @Model.SoilNutrientValueTypeName
                             }
-                            
+
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
                             <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblHowValuesAreEntered)</span></govuk-summary-list-row-action>
@@ -249,7 +253,7 @@
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
-                    {                       
+                    {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>
                                 @Resource.lblPhosphorusIndex
@@ -266,7 +270,7 @@
                                 @Resource.lblPotassiumIndex
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @potassiumIndex                                
+                                @potassiumIndex
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotassiumIndex)</span></govuk-summary-list-row-action>
@@ -291,7 +295,7 @@
                                 @Resource.lblPhosphorusPerLitreOfSoil
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @phosphorus                               
+                                @phosphorus
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusPerLitreOfSoil)</span></govuk-summary-list-row-action>
@@ -302,7 +306,7 @@
                                 @Resource.lblPotassiumPerLitreOfSoil
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @potassium                                
+                                @potassium
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotassiumPerLitreOfSoil)</span></govuk-summary-list-row-action>
@@ -313,12 +317,12 @@
                                 @Resource.lblMagnesiumPerLitreOfSoil
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @magnesium                                
+                                @magnesium
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumPerLitreOfSoil)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>                     
+                        </govuk-summary-list-row>
                     }
                     else if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Status)
                     {
@@ -327,7 +331,7 @@
                                 @Resource.lblPhosphorusStatus
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @phosphorusStatus                               
+                                @phosphorusStatus
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusStatus)</span></govuk-summary-list-row-action>

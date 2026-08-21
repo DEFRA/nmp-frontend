@@ -2943,26 +2943,29 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 count++;
                 (ManureType? manure, _) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID.Value);
-                int manureGroupId = manure?.ManureGroupId ?? 0;
-                application.ManureGroup = (await _mannerLogic.FetchManureGroupById(manureGroupId)).Item1.Name;
-                bool isManureLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID.Value);
-                application.IsManureTypeLiquid = isManureLiquid;
-                string manureUnit = isManureLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
-                TempData[$"ApplicationDefaultValues{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
-                if (application.AreaSpread != null && application.ManureQuantity != null)
+                if (manure != null)
                 {
-                    TempData[$"ApplicationRateOption{count}"] = Resource.lblCalculateBasedOnTheAreaAndQuantity;
-                }
-                else
-                {
-                    (bool isDefaultRate, int defaultRate) = await _mannerEstimationLogic.FetchApplicationRateOptionValue(application.ManureTypeID.Value, application, mannerEstimationResultResponse.MannerEstimation);
-                    if (isDefaultRate)
+                    int manureGroupId = manure?.ManureGroupId ?? 0;
+                    application.ManureGroup = (await _mannerLogic.FetchManureGroupById(manureGroupId)).Item1.Name;
+                    bool isManureLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID.Value);
+                    application.IsManureTypeLiquid = isManureLiquid;
+                    string manureUnit = isManureLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
+                    TempData[$"ApplicationDefaultValues{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
+                    if (application.AreaSpread != null && application.ManureQuantity != null)
                     {
-                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblUseTypicalApplicationRate, defaultRate, manureUnit);
+                        TempData[$"ApplicationRateOption{count}"] = Resource.lblCalculateBasedOnTheAreaAndQuantity;
                     }
                     else
                     {
-                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manure.Name);
+                        (bool isDefaultRate, int defaultRate) = await _mannerEstimationLogic.FetchApplicationRateOptionValue(application.ManureTypeID.Value, application, mannerEstimationResultResponse.MannerEstimation);
+                        if (isDefaultRate)
+                        {
+                            TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblUseTypicalApplicationRate, defaultRate, manureUnit);
+                        }
+                        else
+                        {
+                            TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manure.Name);
+                        }
                     }
                 }
             }
@@ -3362,7 +3365,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindApplicationDetailForUpdate(q);
             }
-            MannerEstimationStep32ViewModel model =await _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel model = await _mannerEstimationLogic.GetMannerEstimationStep32();
             return View(model);
 
         }
@@ -3605,7 +3608,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() post action called");
             MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
-
+            mannerEstimationStep32ViewModel.TotalRainfall = model.TotalRainfall;
             if (!ModelState.IsValid)
             {
                 return View("EffectiveRainfall", mannerEstimationStep32ViewModel);
@@ -5217,7 +5220,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         //warnings
                         await BindWarnings(model.MannerFieldAndCropDetails, application, model);
 
-                        bool isLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID??0);
+                        bool isLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID ?? 0);
 
                         // Application details
                         model.MannerEstimationApplicationDetails.Add(new MannerEstimationApplicationDetailsViewModel
