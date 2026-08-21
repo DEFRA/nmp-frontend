@@ -331,13 +331,13 @@
         @* <hr class="seperator_five"> *@
         <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
         <p class="govuk-body">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblService)
+            @(ViewBag.FarmRB209CountryID != null && ViewBag.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1)
         </p>
         <p class="govuk-body">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblService)
+            @(ViewBag.FarmRB209CountryID != null && ViewBag.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
         </p>
         <p class="govuk-body">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblService)
+            @(ViewBag.FarmRB209CountryID != null && ViewBag.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
         </p>
     </div>
 </div>

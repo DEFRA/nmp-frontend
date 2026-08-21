@@ -1074,14 +1074,14 @@ else
         <h2 class="govuk-heading-s">
             @Resource.lblAboutRecommendationGuidenceAdvice
         </h2>
-        <p class="govuk-body-s">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblService)
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1)
         </p>
-        <p class="govuk-body-s">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblService)
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
         </p>
-        <p class="govuk-body-s">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblService)
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
         </p>
     </div>
 </div>
