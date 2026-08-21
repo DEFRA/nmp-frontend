@@ -1185,7 +1185,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.PotassiumIndexValue = value;
         }
     }
-    private async Task<bool> TryPopulateIndexAsync(string nutrientName, int? nutrientValue, Action<int, dynamic> assignIndex, int methodologyId, List<NutrientResponseWrapper> nutrients, int countryId)
+    private async Task<bool> TryPopulateIndexAsync(string nutrientName, decimal? nutrientValue, Action<int, dynamic> assignIndex, int methodologyId, List<NutrientResponseWrapper> nutrients, int countryId)
     {
         if (nutrientValue == null)
         {
@@ -1246,6 +1246,20 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         ValidateSoilAnalysesMagnesium();
         ValidateSoilAnalysesPhosphorus();
 
+        if (model.SoilAnalyses!=null&&model.SoilAnalyses.Phosphorus != null)
+        {
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland
+                   && (ModelState.ContainsKey(_soilAnalysesPhosphorusValue) && Math.Round(model.SoilAnalyses.Phosphorus.Value, 1) != model.SoilAnalyses.Phosphorus))
+            {
+                ModelState.AddModelError(_soilAnalysesPhosphorusValue, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces, 0, 999));
+            }
+            else if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && ModelState.ContainsKey(_soilAnalysesPhosphorusValue) &&
+        model.SoilAnalyses.Phosphorus.HasValue &&
+        model.SoilAnalyses.Phosphorus.Value % 1 != 0)
+            {
+                ModelState.AddModelError(_soilAnalysesPhosphorusValue, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999));
+            }
+        }
         if (ModelState.IsValid && model.SoilAnalyses.PH == null && model.SoilAnalyses.Potassium == null &&
             model.SoilAnalyses.Phosphorus == null && model.SoilAnalyses.Magnesium == null)
         {

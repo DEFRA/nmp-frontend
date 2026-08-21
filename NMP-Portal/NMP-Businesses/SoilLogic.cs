@@ -11,7 +11,7 @@ public class SoilLogic(ILogger<SoilLogic> logger, ISoilService soilService) : IS
 {
     private readonly ILogger<SoilLogic> _logger = logger;
     private readonly ISoilService _soilService = soilService;
-    public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId, int countryId)
+    public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, decimal? nutrientValue, int methodologyId, int countryId)
     {
         _logger.LogTrace("Fetching soil nutrient index");
         return await _soilService.FetchSoilNutrientIndex(nutrientId, nutrientValue, methodologyId,countryId);
