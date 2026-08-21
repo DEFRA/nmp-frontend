@@ -17,7 +17,7 @@ public class SoilAnalysis
 
     [Range(0, 999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForPhosphorus))]
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPhosphorusPerLitreOfSoil))]
-    public int? Phosphorus { get; set; }
+    public decimal? Phosphorus { get; set; }
         
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPhosphorusIndex))]
     public int? PhosphorusIndex { get; set; }

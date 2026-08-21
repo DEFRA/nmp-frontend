@@ -40,6 +40,7 @@ namespace NMP.Portal.Controllers
         private const string _soilAnalysisDataKey = "SoilAnalysisData";
         private const string _fieldSoilAnalysisDetailAction = "FieldSoilAnalysisDetail";
         private const string _fieldController = "Field";
+        private const string _phosphorusKey = "Phosphorus";
         private SoilAnalysisViewModel? GetSoilAnalysisFromSession()
         {
             if (HttpContext.Session.Exists(_soilAnalysisDataKey))
@@ -652,7 +653,7 @@ namespace NMP.Portal.Controllers
                 phosphorusId = phosphorusNutrient.nutrientId;
             }
 
-            (string PhosphorusIndexValue, error) = await _soilLogic.FetchSoilNutrientIndex(phosphorusId, model.Phosphorus, model.PhosphorusMethodologyID.Value, model.FarmRB209CountryID.Value);
+            (string PhosphorusIndexValue, error) = await _soilLogic.FetchSoilNutrientIndex(phosphorusId, model.Phosphorus.Value, model.PhosphorusMethodologyID.Value, model.FarmRB209CountryID.Value);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 ViewBag.Error = error.Message;
@@ -677,6 +678,7 @@ namespace NMP.Portal.Controllers
             {
                 potassiumId = potassiumNutrient.nutrientId;
             }
+
             (string PotassiumIndexValue, error) = await _soilLogic.FetchSoilNutrientIndex(potassiumId, model.Potassium, model.PotassiumMethodologyID.Value, model.FarmRB209CountryID.Value);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
@@ -756,6 +758,20 @@ namespace NMP.Portal.Controllers
             ValidatePhosphorus();
             ValidateMagnesium();
 
+            if (model.Phosphorus != null)
+            {
+                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland
+                && (ModelState.ContainsKey(_phosphorusKey) && Math.Round(model.Phosphorus.Value, 1) != model.Phosphorus))
+                {
+                    ModelState.AddModelError(_phosphorusKey, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithOneDecimalPlaces, 0, 999));
+                }
+                else if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && ModelState.ContainsKey(_phosphorusKey) &&
+        model.Phosphorus.HasValue &&
+        model.Phosphorus.Value % 1 != 0)
+                {
+                    ModelState.AddModelError(_phosphorusKey, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999));
+                }
+            }
             if (ModelState.IsValid && model.PH == null && model.Potassium == null &&
                 model.Phosphorus == null && model.Magnesium == null)
             {
@@ -787,7 +803,7 @@ namespace NMP.Portal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var phosphoruskey = "Phosphorus";
+                var phosphoruskey = _phosphorusKey;
 
                 if (ModelState.TryGetValue(phosphoruskey, out var entry) && entry.Errors.Count > 0)
                 {
