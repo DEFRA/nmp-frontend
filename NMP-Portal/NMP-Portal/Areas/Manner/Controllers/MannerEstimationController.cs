@@ -2962,7 +2962,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     }
                     else
                     {
-                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manureUnit);
+                        TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manure.Name);
                     }
                 }
             }
@@ -3808,8 +3808,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindPostCodeAndCropTypeDataForAddNewApplication(model);
                 //Autumn crop Nitrogen uptake
-                model.AutumnCropNitrogenUptake = await BuildAutumnCropNitrogenUptakeAsync(model);
-
+                if (model.AutumnCropNitrogenUptake == null && model.IsApplicationDateChange)
+                {
+                    model.AutumnCropNitrogenUptake = await BuildAutumnCropNitrogenUptakeAsync(model);
+                }
                 //Soil drainage end date
                 if (model.SoilDrainageEndDate == null)
                 {

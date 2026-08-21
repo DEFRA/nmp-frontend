@@ -333,7 +333,7 @@
                             summaryRows.Add(new SummaryListRowViewModel
                             {
                                 Key = Resource.lblPhosphorusPerLitreOfSoil,
-                                Value = ((!Model.SoilAnalyses.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Phosphorus) + Resource.lblMg + phosphorusSuffix),
+                            Value = ((!Model.SoilAnalyses.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}" : "{0:N0}"), Model.SoilAnalyses.Phosphorus) + Resource.lblMg + phosphorusSuffix),
                                 ActionName = "SoilNutrientValue",
                                 ControllerName = "Field"
                             });
@@ -362,7 +362,7 @@
                                 summaryRows.Add(new SummaryListRowViewModel
                                 {
                                     Key = Resource.lblPhosphorusPerLitreOfSoil,
-                                    Value = ((!Model.SoilAnalyses.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.SoilAnalyses.Phosphorus) + Resource.lblMg + phosphorusSuffix),
+                                Value = ((!Model.SoilAnalyses.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}" : "{0:N0}"), Model.SoilAnalyses.Phosphorus) + Resource.lblMg + phosphorusSuffix),
                                     ActionName = "SoilNutrientValue",
                                     ControllerName = "Field"
                                 });

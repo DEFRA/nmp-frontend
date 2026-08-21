@@ -65,13 +65,13 @@
                 @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
                                                                                         Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
                 {
-                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}" : "{0:N0}"), Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
                     potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PotassiumStatus})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.MagnesiumStatus})");
                 }
                 else
                 {
-                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}" : "{0:N0}"), Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PhosphorusStatus})");
                     potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.PotassiumStatus})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblStatus} {Model.MagnesiumStatus})");
                 }
@@ -81,13 +81,13 @@
                 @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
                                                                     Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
                 {
-                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}": "{0:N0}"), Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
                     potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
                 }
                 else
                 {
-                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
+                    phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? "{0:N1}" : "{0:N0}"), Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
                     potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
                 }
