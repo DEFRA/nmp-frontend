@@ -3601,6 +3601,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 // Effective rainfall after application
                 await FetchDefaultTotalRainfall(model);
+                await _mannerEstimationLogic.SetMannerEstimationStep32(model);
 
             }
             return View(model);
@@ -3614,7 +3615,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() post action called");
             MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
-            mannerEstimationStep32ViewModel.TotalRainfall = model.TotalRainfall;
+            
             if (!ModelState.IsValid)
             {
                 return View("EffectiveRainfall", mannerEstimationStep32ViewModel);
