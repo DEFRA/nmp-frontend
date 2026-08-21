@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -8120,6 +8120,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you want to plan applications of organic materials with applications of fertiliser nutrients as part of a nutrient management plan, you should use NMPT-GB..
+        /// </summary>
+        public static string lblIfYouWantToPlanApplicationsOfOrganicMaterialsWithApplications {
+            get {
+                return ResourceManager.GetString("lblIfYouWantToPlanApplicationsOfOrganicMaterialsWithApplications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import.
         /// </summary>
         public static string lblImport {
@@ -8791,6 +8800,15 @@ namespace NMP.Commons.Resources {
         public static string lblKgPerCubicMeterWithNutrient {
             get {
                 return ResourceManager.GetString("lblKgPerCubicMeterWithNutrient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} kg per cubic metre.
+        /// </summary>
+        public static string lblKgPerCubicMetre {
+            get {
+                return ResourceManager.GetString("lblKgPerCubicMetre", resourceCulture);
             }
         }
         
@@ -10214,6 +10232,15 @@ namespace NMP.Commons.Resources {
         public static string lblMannerNPK {
             get {
                 return ResourceManager.GetString("lblMannerNPK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manner-NPK.
+        /// </summary>
+        public static string lblMannerNpkForHomePage {
+            get {
+                return ResourceManager.GetString("lblMannerNpkForHomePage", resourceCulture);
             }
         }
         
@@ -16414,6 +16441,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The tool uses the MANNER-NPK model to estimate the crop available nutrient supply from applications of organic materials. You can use the MANNER-NPK tool if you only want to review the crop available nutrient supply from applications of organic materials..
+        /// </summary>
+        public static string lblTheToolUsesTheMannerNpkModelToEstimateTheCropAvailable {
+            get {
+                return ResourceManager.GetString("lblTheToolUsesTheMannerNpkModelToEstimateTheCropAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The tool will warn you of possible breaches of the NVZ rules as you make nutrient management plans..
         /// </summary>
         public static string lblTheToolWillWarnYouOfPossibleBreachesOfTheNVZ {
@@ -16671,6 +16707,33 @@ namespace NMP.Commons.Resources {
         public static string lblThisShouldBeWithinTheFollowingRange {
             get {
                 return ResourceManager.GetString("lblThisShouldBeWithinTheFollowingRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool includes:  .
+        /// </summary>
+        public static string lblThisToolIncludes {
+            get {
+                return ResourceManager.GetString("lblThisToolIncludes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool will help you estimate the nutrient supply from and the potential financial value of organic material applications.   .
+        /// </summary>
+        public static string lblThisToolWillHelpYouEstimateTheNutrientSupplyFromAndThePotential {
+            get {
+                return ResourceManager.GetString("lblThisToolWillHelpYouEstimateTheNutrientSupplyFromAndThePotential", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This tool will help you plan and record your nutrient use and check compliance with relevant nutrient management legislation. The recommendations from this tool come from &lt;a target=&quot;_blank&quot; href=&quot;https://ahdb.org.uk/nutrient-management-guide-rb209&quot;&gt;RB209 (Nutrient Management Guide).&lt;/a&gt; It gives fertiliser recommendations for all major nutrients and lime, and for most agricultural and horticultural crops..
+        /// </summary>
+        public static string lblThisToolWillHelpYouPlanAndRecordYourNutrientUseAndCheckCompliance {
+            get {
+                return ResourceManager.GetString("lblThisToolWillHelpYouPlanAndRecordYourNutrientUseAndCheckCompliance", resourceCulture);
             }
         }
         
@@ -21022,7 +21085,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool will never share your data with any other organisations. In particular, please note that this tool does not share data with the Rural Payments Agency (RPA)..
+        ///   Looks up a localized string similar to This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the &lt;a target=&quot;_blank&quot; href=&quot;https://www.gov.uk/government/organisations/rural-payments-agency&quot;&gt;Rural Payments Agency (RPA)&lt;/a&gt;or the Environment Agency (EA). .
         /// </summary>
         public static string lblYourDataContentSecond {
             get {

@@ -85,8 +85,8 @@ namespace NMP.Application
         Task<bool> FetchIsExistMannerEstimationsByMannerFarmIdAndName(int mannerFarmId, string name);
         MannerEstimationStep31ViewModel GetMannerEstimationStep31();
         MannerEstimationStep31ViewModel SetMannerEstimationStep31(MannerEstimationStep31ViewModel mannerEstimationStep31);
-        MannerEstimationStep32ViewModel GetMannerEstimationStep32();
-        MannerEstimationStep32ViewModel SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32);
+        Task<MannerEstimationStep32ViewModel> GetMannerEstimationStep32();
+        Task<MannerEstimationStep32ViewModel> SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32);
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimation(Guid organisationId);
         Task<(MannerFarmEstimationApplicationResponse?, Error?)> AddMannerFarmEstimation(Guid organisationId);
         Task<(int?, Error?)> FetchSoilTypeSoilTextureByTopSoilSubSoilId(int topSoilId, int subSoilId);

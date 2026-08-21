@@ -25,7 +25,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IMannerEstimationServiceDependencies dependencies,  IOrganicManureLogic organicManureLogic, IHttpContextAccessor httpContextAccessor) : IMannerEstimationLogic
+public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IMannerEstimationServiceDependencies dependencies, IOrganicManureLogic organicManureLogic, IHttpContextAccessor httpContextAccessor) : IMannerEstimationLogic
 {
     private readonly ILogger<MannerEstimationLogic> _logger = logger;
     private readonly IMannerEstimationService _mannerEstimationService = dependencies.MannerEstimationService;
@@ -293,10 +293,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<MannerEstimationStep11ViewModel> SetMannerEstimationStep11(MannerEstimationStep11ViewModel mannerEstimationStep11)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        if (mannerEstimationStep11.IsComingForAddNewApplication)
-        {
-            mannerEstimationViewModel.EncryptedMannerEstimationId = mannerEstimationStep11.EncryptedMannerEstimationId;
-            mannerEstimationViewModel.IsComingForAddNewApplication = true;
+        if (mannerEstimationViewModel.IsComingForAddNewApplication)
+        {            
+            mannerEstimationStep11.IsComingForAddNewApplication = true;
             if (mannerEstimationStep11.IsComingForAddNewApplication)
             {
                 mannerEstimationViewModel.CountryId = mannerEstimationStep11.CountryId;
@@ -577,6 +576,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep24.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep24.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep24.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        mannerEstimationViewModel.MannerEstimationStep24.IsManureTypeLiquid = mannerEstimationViewModel.MannerEstimationStep24.ManureType.IsLiquid;
+
         return mannerEstimationViewModel.MannerEstimationStep24;
     }
     public async Task<MannerEstimationStep24ViewModel> SetMannerEstimationStep24(MannerEstimationStep24ViewModel mannerEstimationStep24)
@@ -860,7 +861,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return GetMannerEstimationStep31();
     }
 
-    public MannerEstimationStep32ViewModel GetMannerEstimationStep32()
+    public async Task<MannerEstimationStep32ViewModel> GetMannerEstimationStep32()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep32.ApplicationMethodId = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId;
@@ -878,15 +879,20 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep32.IsApplicationDateChange = mannerEstimationViewModel.MannerEstimationStep13.IsApplicationDateChange;
 
         mannerEstimationViewModel.MannerEstimationStep32.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = await _fieldService.FetchCropTypeByIdServiceAsync(mannerEstimationViewModel.MannerEstimationStep32.CropTypeId.Value);
         return mannerEstimationViewModel.MannerEstimationStep32;
     }
-    public MannerEstimationStep32ViewModel SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32)
+    public async Task<MannerEstimationStep32ViewModel> SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (mannerEstimationViewModel.MannerEstimationStep32.SoilDrainageEndDate != mannerEstimationStep32.SoilDrainageEndDate)
+        {
+            mannerEstimationStep32.IsSoilDrainageEndDateChange = true;
+        }
         mannerEstimationViewModel.MannerEstimationStep32 = mannerEstimationStep32;
         mannerEstimationViewModel.MannerEstimationStep32.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         SetMannerEstimationToSession(mannerEstimationViewModel);
-        return GetMannerEstimationStep32();
+        return await GetMannerEstimationStep32();
     }
 
     public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimation(Guid organisationId)
