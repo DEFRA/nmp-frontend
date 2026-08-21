@@ -8463,4 +8463,7 @@ following crop year 2</value>
   <data name="lblMannerNpkForHomePage" xml:space="preserve">
     <value>Manner-NPK</value>
   </data>
+  <data name="lblkgmetercube" xml:space="preserve">
+    <value>{0}kg/m³</value>
+  </data>
 </root>
