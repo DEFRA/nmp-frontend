@@ -6840,7 +6840,7 @@ livestock manure.</value>
     <value>This tool only gathers the data required to provide you with nutrient recommendations.</value>
   </data>
   <data name="lblYourDataContentSecond" xml:space="preserve">
-    <value>This tool will never share your data with any other organisations. In particular, please note that this tool does not share data with the Rural Payments Agency (RPA).</value>
+    <value>This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the &lt;a target="_blank" href="https://www.gov.uk/government/organisations/rural-payments-agency"&gt;Rural Payments Agency (RPA)&lt;/a&gt;or the Environment Agency (EA). </value>
   </data>
   <data name="lblNutrientCanHaveOnlyOneDecimalPlace" xml:space="preserve">
     <value>Enter the {0} to one decimal place</value>
@@ -8444,5 +8444,23 @@ following crop year 2</value>
   </data>
   <data name="lblKgPerCubicMetre" xml:space="preserve">
     <value>{0} kg per cubic metre</value>
+  </data>
+  <data name="lblThisToolIncludes" xml:space="preserve">
+    <value>This tool includes:  </value>
+  </data>
+  <data name="lblThisToolWillHelpYouPlanAndRecordYourNutrientUseAndCheckCompliance" xml:space="preserve">
+    <value>This tool will help you plan and record your nutrient use and check compliance with relevant nutrient management legislation. The recommendations from this tool come from &lt;a target="_blank" href="https://ahdb.org.uk/nutrient-management-guide-rb209"&gt;RB209 (Nutrient Management Guide).&lt;/a&gt; It gives fertiliser recommendations for all major nutrients and lime, and for most agricultural and horticultural crops.</value>
+  </data>
+  <data name="lblTheToolUsesTheMannerNpkModelToEstimateTheCropAvailable" xml:space="preserve">
+    <value>The tool uses the MANNER-NPK model to estimate the crop available nutrient supply from applications of organic materials. You can use the MANNER-NPK tool if you only want to review the crop available nutrient supply from applications of organic materials.</value>
+  </data>
+  <data name="lblThisToolWillHelpYouEstimateTheNutrientSupplyFromAndThePotential" xml:space="preserve">
+    <value>This tool will help you estimate the nutrient supply from and the potential financial value of organic material applications.   </value>
+  </data>
+  <data name="lblIfYouWantToPlanApplicationsOfOrganicMaterialsWithApplications" xml:space="preserve">
+    <value>If you want to plan applications of organic materials with applications of fertiliser nutrients as part of a nutrient management plan, you should use NMPT-GB.</value>
+  </data>
+  <data name="lblMannerNpkForHomePage" xml:space="preserve">
+    <value>Manner-NPK</value>
   </data>
 </root>

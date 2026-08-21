@@ -36,5 +36,6 @@ namespace NMP.Commons.ViewModels
         public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public bool IsManureTypeChange { get; set; } = false;
         public bool IsComingForAddNewApplication { get; set; } = false;
+        public bool IsSoilDrainageEndDateChange { get; set; } = false;
     }
 }

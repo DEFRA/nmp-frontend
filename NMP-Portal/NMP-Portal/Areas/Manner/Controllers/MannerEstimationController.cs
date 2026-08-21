@@ -83,7 +83,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> MannerHubPage(string? q, string? r,string? s)
+        public async Task<IActionResult> MannerHubPage(string? q, string? r, string? s)
         {
             RemoveMannerEstimationSession();
             if (!string.IsNullOrWhiteSpace(q))
@@ -111,7 +111,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (!string.IsNullOrWhiteSpace(s))
             {
-                ViewBag.SuccessForCopyEstimate = _mannerEstimationProtector.Unprotect(s); 
+                ViewBag.SuccessForCopyEstimate = _mannerEstimationProtector.Unprotect(s);
             }
 
             if (!string.IsNullOrWhiteSpace(q) || !string.IsNullOrWhiteSpace(r))
@@ -738,7 +738,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.EncryptedMannerEstimationId = r;
                 model.IsComingForAddNewApplication = true;
-
+                MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+                if (mannerEstimationViewModel != null)
+                {
+                    mannerEstimationViewModel.EncryptedMannerEstimationId = r;
+                    mannerEstimationViewModel.IsComingForAddNewApplication = true;
+                    _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
+                }
                 (MannerEstimation? estimate, error) = await _mannerEstimationLogic.FetchMannerEstimateById(Convert.ToInt32(_mannerEstimationProtector.Unprotect(r)));
                 if (error == null && estimate != null)
                 {
@@ -3356,13 +3362,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindApplicationDetailForUpdate(q);
             }
-            MannerEstimationStep32ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep32();
-
-            ViewBag.FieldName = model.FieldName;
-            ViewBag.CropTypeName = model.CropTypeName;
-
-
-
+            MannerEstimationStep32ViewModel model =await _mannerEstimationLogic.GetMannerEstimationStep32();
             return View(model);
 
         }
@@ -3395,7 +3395,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
             }
-            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptake;
             if (!ModelState.IsValid)
             {
@@ -3405,7 +3405,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
 
-            _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
+            await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
 
@@ -3419,7 +3419,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindApplicationDetailForUpdate(q);
             }
-            MannerEstimationStep32ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
 
 
             return View(model);
@@ -3434,14 +3434,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             AddErrorIfNull(model.SoilDrainageEndDate, _soilDrainageEndDateKey, Resource.MsgEnterADateBeforeContinuing);
             ValidateMinMaxSoilDrainageDate(model);
-            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.SoilDrainageEndDate = model.SoilDrainageEndDate;
             if (!ModelState.IsValid)
             {
                 return View(_soilDrainageEndDateKey, mannerEstimationStep32ViewModel);
             }
 
-            _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
+            model = await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
+            if (model.IsSoilDrainageEndDateChange)
+            {
+                return RedirectToAction("EffectiveRainfall");
+            }
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
@@ -3522,7 +3526,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindApplicationDetailForUpdate(q);
             }
-            MannerEstimationStep32ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
 
             (List<RainTypeResponse> rainType, Error error) = await _organicManureLogic.FetchRainTypeList();
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -3544,18 +3548,37 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} RainfallWithinSixHour() post action called");
             AddErrorIfNull(model.RainfallWithinSixHoursId, "RainfallWithinSixHoursId", Resource.MsgSelectAnOptionBeforeContinuing);
-            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.RainfallWithinSixHoursId = model.RainfallWithinSixHoursId;
             if (!ModelState.IsValid)
             {
                 return View("RainfallWithinSixHour", mannerEstimationStep32ViewModel);
             }
 
-            _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
+            await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
 
+        private async Task FetchDefaultTotalRainfall(MannerEstimationStep32ViewModel model)
+        {
+            string halfPostCode = model.PostCode[..4].Trim();
+
+            if (model.ApplicationDate.HasValue &&
+                model.SoilDrainageEndDate.HasValue)
+            {
+                var rainfallPostCodeApplication = new
+                {
+                    applicationDate = model.ApplicationDate.Value.ToString(_dateStringLiteral),
+                    endOfSoilDrainageDate = model.SoilDrainageEndDate.Value.ToString(_dateStringLiteral),
+                    climateDataPostcode = halfPostCode
+                };
+
+                model.TotalRainfall = await _organicManureLogic
+                    .FetchRainfallByPostcodeAndDateRange(
+                        JsonConvert.SerializeObject(rainfallPostCodeApplication));
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> EffectiveRainfall(string? q)
         {
@@ -3564,23 +3587,31 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindApplicationDetailForUpdate(q);
             }
-            MannerEstimationStep32ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
+            if (model.IsSoilDrainageEndDateChange && model.PostCode != null)
+            {
+                // Effective rainfall after application
+                await FetchDefaultTotalRainfall(model);
+
+            }
             return View(model);
 
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EffectiveRainfall(MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() post action called");
-            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
 
             if (!ModelState.IsValid)
             {
                 return View("EffectiveRainfall", mannerEstimationStep32ViewModel);
             }
 
-            _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
+            await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
@@ -3589,7 +3620,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> EffectiveRainfallManual()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} EffectiveRainfallManual() action called");
-            MannerEstimationStep32ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
 
             return View(model);
 
@@ -3609,14 +3640,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError(_totalRainfallKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblEffectiveRainfall, 0, 9999));
 
             }
-            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.TotalRainfall = model.TotalRainfall;
             if (!ModelState.IsValid)
             {
                 return View("EffectiveRainfallManual", mannerEstimationStep32ViewModel);
             }
 
-            _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
+            await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
@@ -3651,7 +3682,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindApplicationDetailForUpdate(q);
             }
-            MannerEstimationStep32ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
             (List<WindspeedResponse> windspeeds, Error? error) = await _organicManureLogic.FetchWindspeedList();
 
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -3673,7 +3704,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} Windspeed() post action called");
             AddErrorIfNull(model.WindspeedId, "WindspeedID", Resource.MsgSelectAWindConditionBeforeContinuing);
-            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.WindspeedId = model.WindspeedId;
             if (!ModelState.IsValid)
             {
@@ -3681,7 +3712,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
 
-            _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
+            await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
@@ -3694,7 +3725,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindApplicationDetailForUpdate(q);
             }
-            MannerEstimationStep32ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
 
             (List<MoistureTypeResponse> moisterTypes, Error error) = await _organicManureLogic.FetchMoisterTypeList();
             if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
@@ -3716,14 +3747,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  TopsoilMoisture() post action called");
             AddErrorIfNull(model.MoistureTypeId, "MoistureTypeId", Resource.MsgSelectATopsoilWetnessConditionBeforeContinuing);
-            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.MoistureTypeId = model.MoistureTypeId;
             if (!ModelState.IsValid)
             {
                 return View("TopsoilMoisture", mannerEstimationStep32ViewModel);
             }
 
-            _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
+            await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
@@ -3771,7 +3802,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> ConditionsAffectingNutrients()
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() action called");
-            MannerEstimationStep32ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep32();
+            MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
             Error error = new Error();
             try
             {
@@ -3810,24 +3841,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (model.PostCode != null)
                 {
-                    // Effective rainfall after application
-                    string halfPostCode = model.PostCode[..4].Trim();
-
-
-                    if (model.ApplicationDate.HasValue &&
-                        model.SoilDrainageEndDate.HasValue)
-                    {
-                        var rainfallPostCodeApplication = new
-                        {
-                            applicationDate = model.ApplicationDate.Value.ToString(_dateStringLiteral),
-                            endOfSoilDrainageDate = model.SoilDrainageEndDate.Value.ToString(_dateStringLiteral),
-                            climateDataPostcode = halfPostCode
-                        };
-
-                        model.TotalRainfall = await _organicManureLogic
-                            .FetchRainfallByPostcodeAndDateRange(
-                                JsonConvert.SerializeObject(rainfallPostCodeApplication));
-                    }
+                    await FetchDefaultTotalRainfall(model);
                 }
 
 
@@ -4018,7 +4032,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 Value = x.id.ToString(),
                 Text = x.name,
-                Hint = string.Format("{0:0.##} {1} {2}", x.nutrientPercentage,Resource.lblPercent, Resource.lblNitrogenLowercase)
+                Hint = string.Format("{0:0.##} {1} {2}", x.nutrientPercentage, Resource.lblPercent, Resource.lblNitrogenLowercase)
             }).ToList();
 
             model.EncryptedMannerEstimateId = q;
@@ -4515,7 +4529,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
     where TModel : MannerEstimationNWarningViewModel
         {
             Error? error = null;
-            
+
             (model, error) = await NFieldLimitWarningMessage(model, mannerEstimationId, mannerAppId);
             (model, error) = await NitrogenLimitWarningMessage(model, mannerEstimationId, mannerAppId);
             return (model, error);
@@ -4576,7 +4590,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!(IsOtherManureType(model.ManureTypeId)))
             {
                 (model, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, mannerEstimationId, mannerAppId);
-                
+
             }
             return (model, error);
         }
@@ -4596,7 +4610,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return (model, error);
             }
-            
+
             await ApplyClosedPeriodEndFebWarningsAsync(model, mannerEstimationId, mannerAppId);
 
             return (model, error);
@@ -4608,7 +4622,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             HashSet<int> cropTypeIdsForTrigger = WarningWithinPeriod.FilteredCropForWarning();
             HashSet<int> brassicaCrops = WarningWithinPeriod.BrassicaCrops();
 
-            int cropTypeId = model.CropTypeId??0;
+            int cropTypeId = model.CropTypeId ?? 0;
             int harvestYear = GetHarvestYearFromApplicationDate(model.ApplicationDate ?? DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
             DateTime endDateFebruary = new DateTime((harvestYear), 3, 1, 0, 0, 0, DateTimeKind.Utc).AddDays(-1);
             DateTime endOfOctober = new DateTime((harvestYear) - 1, 10, 31, 0, 0, 0, DateTimeKind.Utc);
@@ -4664,7 +4678,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
-            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId??0, startDate, endOfOctober, mannerAppId);
+            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId ?? 0, startDate, endOfOctober, mannerAppId);
 
             if (currentNitrogen + totalN > 150)
             {
@@ -4682,18 +4696,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return;
             }
 
-            (decimal totalN, Error? error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId??0, startDate, endDateFebruary, mannerAppId);
+            (decimal totalN, Error? error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId ?? 0, startDate, endDateFebruary, mannerAppId);
 
-            decimal nitrogenWithin4Weeks=0;
+            decimal nitrogenWithin4Weeks = 0;
             if (!string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId))
             {
-                
+
                 (nitrogenWithin4Weeks, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
-                    mannerEstimationId??0, model.ApplicationDate.Value.AddDays(-27), model.ApplicationDate.Value, mannerAppId);
+                    mannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-27), model.ApplicationDate.Value, mannerAppId);
             }
 
             decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
-            if (currentNitrogen != null && (currentNitrogen > 50 || currentNitrogen + totalN > 150 || (nitrogenWithin4Weeks>0)))
+            if (currentNitrogen != null && (currentNitrogen > 50 || currentNitrogen + totalN > 150 || (nitrogenWithin4Weeks > 0)))
             {
                 List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
                 ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateWeeks.ToString(), Resource.lblHighNOrganicManureMaxRateWeeks);
@@ -4712,7 +4726,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
-            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId??0, startDate, endDateFebruary, mannerAppId);
+            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId ?? 0, startDate, endDateFebruary, mannerAppId);
 
             if (currentNitrogen + totalN > 150)
             {
@@ -4730,17 +4744,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return;
             }
 
-            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId??0, startDate, endOfOctober, mannerAppId);
+            (decimal totalN, _) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId ?? 0, startDate, endOfOctober, mannerAppId);
 
             decimal? currentNitrogen = totalNitrogen * model.ApplicationRate;
             if (currentNitrogen != null && (currentNitrogen > 40 || currentNitrogen + totalN > 150))
             {
                 List<WarningResponse> warningList = await _warningLogic.FetchAllWarningAsync();
-                ApplyWarning(model,warningList, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateGrass.ToString(), Resource.lblHighNOrganicManureMaxRateGrass);
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.HighNOrganicManureMaxRateGrass.ToString(), Resource.lblHighNOrganicManureMaxRateGrass);
             }
         }
 
-        
+
 
         private async Task<(TModel, Error?)> IsEndClosedPeriodFebruaryWarningMessage<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId) where TModel : MannerEstimationNWarningViewModel
         {
@@ -4758,7 +4772,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return await HandleScotland(model, mannerEstimationId, mannerAppId, model.ClosedPeriod, isPoultry, warningList);
         }
-        private static async Task<(TModel, Error?)> HandleNonScotland<TModel>(TModel model, string? closedPeriod,bool isSlurry, bool isPoultry, List<WarningResponse> warningList) where TModel : MannerEstimationNWarningViewModel
+        private static async Task<(TModel, Error?)> HandleNonScotland<TModel>(TModel model, string? closedPeriod, bool isSlurry, bool isPoultry, List<WarningResponse> warningList) where TModel : MannerEstimationNWarningViewModel
         {
             Error? error = null;
             if (!IsWithinClosedPeriodAndFeb(model.ApplicationDate, closedPeriod))
@@ -4766,7 +4780,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (isSlurry && model.ApplicationRate > 30)
             {
-                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.SlurryMaxRate.ToString(),Resource.lblEndClosedPeriodEndFeb);
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.SlurryMaxRate.ToString(), Resource.lblEndClosedPeriodEndFeb);
             }
 
             if (isPoultry && model.ApplicationRate > 8)
@@ -4776,7 +4790,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return (model, error);
         }
-        private async Task<(TModel, Error?)> HandleScotland<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId,string closedPeriod, bool isPoultry, List<WarningResponse> warningList) where TModel : MannerEstimationNWarningViewModel
+        private async Task<(TModel, Error?)> HandleScotland<TModel>(TModel model, int? mannerEstimationId, int? mannerAppId, string closedPeriod, bool isPoultry, List<WarningResponse> warningList) where TModel : MannerEstimationNWarningViewModel
         {
             Error? error = null;
             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
@@ -4837,14 +4851,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (model, error);
 
         }
-        
+
 
         private static async Task<(TModel, Error?)> ApplyWarningsRanAndPoultryTotalRateLimit<TModel>(TModel model, List<WarningResponse> warningList, bool isRanExceptPoultry, decimal? totalApplicationRate, bool isPoultry, bool isInFebPeriod) where TModel : MannerEstimationNWarningViewModel
         {
             Error? error = null;
             if (isRanExceptPoultry && totalApplicationRate > 30)
             {
-                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.Slurry4WeekPriorToClosedPeriodStart.ToString(), Resource.lblEndClosedPeriodEndFeb); 
+                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.Slurry4WeekPriorToClosedPeriodStart.ToString(), Resource.lblEndClosedPeriodEndFeb);
             }
 
             if (isPoultry && totalApplicationRate > 5)
@@ -4854,7 +4868,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return (model, error);
         }
-        
+
         private static bool IsWithinClosedPeriodAndFeb(DateTime? applicationDate, string? closedPeriod)
         {
             if (!applicationDate.HasValue)
@@ -4862,7 +4876,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return WarningWithinPeriod.CheckEndClosedPeriodAndFebruary(applicationDate.Value, closedPeriod) == true;
         }
-        
+
         private async Task<Error?> CheckCompostAndScotlandLimits<TModel>(
             TModel model,
             List<WarningResponse> warningList,
@@ -4938,7 +4952,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             decimal previousAppliedTotalN = 0;
             Error? error = null;
-            
+
             (previousAppliedTotalN, error) = await _mannerEstimationLogic.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompost(
                     mannerEstimationId ?? 0, model.ApplicationDate.Value.AddDays(-364), model.ApplicationDate.Value, true, mannerAppId);
 
@@ -5023,7 +5037,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (warning != null)
             {
-                if(warningType.Equals(Resource.lblNFieldLimit))
+                if (warningType.Equals(Resource.lblNFieldLimit))
                 {
                     model.IsOrgManureNfieldLimitWarning = true;
                     model.NFieldLimitWarningHeader = warning.Header;
@@ -5033,7 +5047,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model.NFieldLimitWarningPara2 = warning.Para2;
                     model.NFieldLimitWarningPara3 = warning.Para3;
                 }
-                if(warningType.Equals(Resource.lblEndClosedPeriodEndFeb))
+                if (warningType.Equals(Resource.lblEndClosedPeriodEndFeb))
                 {
                     model.IsEndClosedPeriodFebruaryWarning = true;
                     model.EndClosedPeriodEndFebWarningHeader = warning.Header;
@@ -5388,9 +5402,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationId = estimation.MannerEstimation.ID,
                 CropTypeId = estimation.MannerEstimation.CropTypeID,
                 UpdatedMannerAppId = application.ID,
-                IsWithinNVZ= estimation.MannerEstimation.IsWithinNVZ,
-                IsFarmOrganic=estimation.MannerFarm.RegisteredOrganicProducer,
-                ClosedPeriod= closedPeriod,
+                IsWithinNVZ = estimation.MannerEstimation.IsWithinNVZ,
+                IsFarmOrganic = estimation.MannerFarm.RegisteredOrganicProducer,
+                ClosedPeriod = closedPeriod,
                 IsOrgManureNfieldLimitWarning = false,
                 IsEndClosedPeriodFebruaryWarning = false,
                 IsStartClosedPeriodEndFebWarning = false
