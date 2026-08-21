@@ -2727,9 +2727,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A Water Resources (Control of   
-        ///Agricultural Pollution) (Wales)   
-        ///Regulations report.
+        ///   Looks up a localized string similar to A Water Resources (Control of Agricultural Pollution) (Wales) Regulations report.
         /// </summary>
         public static string lblAWaterResourceRegulationsReport {
             get {

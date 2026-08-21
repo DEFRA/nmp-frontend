@@ -7059,9 +7059,7 @@ Regulations</value>
     <value>Holding nitrogen limit ‘the 170 limit’  </value>
   </data>
   <data name="lblAWaterResourceRegulationsReport" xml:space="preserve">
-    <value>A Water Resources (Control of   
-Agricultural Pollution) (Wales)   
-Regulations report</value>
+    <value>A Water Resources (Control of Agricultural Pollution) (Wales) Regulations report</value>
   </data>
   <data name="lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit" xml:space="preserve">
     <value>Which year would you like to create a holding nitrogen limit ‘the 170 limit’ report for?</value>
