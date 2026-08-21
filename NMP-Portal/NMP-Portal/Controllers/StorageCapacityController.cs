@@ -1636,7 +1636,7 @@ namespace NMP.Portal.Controllers
                 PopulateNavigationFlagsReport(model, x, v);
 
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-
+                
                 var (storeCapacities, error) =
                     await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID.Value);
 
@@ -1645,6 +1645,8 @@ namespace NMP.Portal.Controllers
 
                 var (farm, farmError) =
                     await _farmLogic.FetchFarmByIdAsync(model.FarmID.Value);
+
+                ViewBag.FarmRB209CountryID = farm?.RB209CountryID;
 
                 if (!IsValidResult(farmError, farm))
                     return View(model);

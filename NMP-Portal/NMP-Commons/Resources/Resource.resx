@@ -3895,7 +3895,7 @@ cubic metres per hectare  not set</value>
     <value>All agricultural land in Wales is subject to the Water Resources (Control of Agricultural Pollution) (Wales) Regulations 2021. These regulations have been introduced to reduce losses of pollutants from agriculture to the environment by setting rules for certain farming practices.</value>
   </data>
   <data name="lblFarmingRuleOfWaterSecondForWale" xml:space="preserve">
-    <value>You must follow these rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
+    <value>You must follow these rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with some of the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications.</value>
   </data>
   <data name="lblFarmingRuleOfWaterThirdForWale" xml:space="preserve">
     <value>The Water Resources (Control of Agricultural Pollution)  Regulations 2021 (Wales)</value>
@@ -6840,7 +6840,7 @@ livestock manure.</value>
     <value>This tool only gathers the data required to provide you with nutrient recommendations.</value>
   </data>
   <data name="lblYourDataContentSecond" xml:space="preserve">
-    <value>This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the &lt;a target="_blank" href="https://www.gov.uk/government/organisations/rural-payments-agency"&gt;Rural Payments Agency (RPA)&lt;/a&gt;or the Environment Agency (EA). </value>
+    <value>This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the &lt;a target="_blank" href="https://www.gov.uk/government/organisations/rural-payments-agency"&gt;Rural Payments Agency (RPA)&lt;/a&gt; or the Environment Agency (EA). </value>
   </data>
   <data name="lblNutrientCanHaveOnlyOneDecimalPlace" xml:space="preserve">
     <value>Enter the {0} to one decimal place</value>
@@ -6991,10 +6991,11 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>If you have harvested your crop for {0}, then use {1} as your last harvest year.</value>
   </data>
   <data name="lblWaterResourcesRegulationsWarningsFor" xml:space="preserve">
-    <value>Water Resources Regulations warnings for {0}</value>
+    <value>Water Resources (Control of Agricultural Pollution) (Wales)   
+Regulations warnings for {0}</value>
   </data>
   <data name="lblThePlannedApplicationsMayNotComplyWithTheseWater" xml:space="preserve">
-    <value>The planned applications may not comply with these Water Resources Regulations:</value>
+    <value>The planned applications may not comply with these Water Resources (Control of Agricultural Pollution) (Wales) Regulations:</value>
   </data>
   <data name="lblSelectOneOptionYouCanAddMoreLivestock" xml:space="preserve">
     <value>Select one option. You can add more livestock types later.</value>
@@ -7051,13 +7052,16 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Please enter the value for soil mineral nitrogen (N) as a whole number</value>
   </data>
   <data name="lblFarmSummaryContentForWalesOne" xml:space="preserve">
-    <value>Create a report to check compliance with the Water Resource Regulations</value>
+    <value>Create a report to check compliance with the Water Resources (Control of Agricultural Pollution) (Wales)   
+Regulations</value>
   </data>
   <data name="lblHoldingNitrogenLimitThe170Limit" xml:space="preserve">
     <value>Holding nitrogen limit ‘the 170 limit’  </value>
   </data>
   <data name="lblAWaterResourceRegulationsReport" xml:space="preserve">
-    <value>A Water Resource Regulations report</value>
+    <value>A Water Resources (Control of   
+Agricultural Pollution) (Wales)   
+Regulations report</value>
   </data>
   <data name="lblWhichYearWouldYouLikeToCreateAHoldingNitrogenLimit" xml:space="preserve">
     <value>Which year would you like to create a holding nitrogen limit ‘the 170 limit’ report for?</value>
@@ -7072,7 +7076,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Compliance with the holding nitrogen limit ‘the 170 limit’</value>
   </data>
   <data name="lblWaterResourceRegulationsForWales" xml:space="preserve">
-    <value>This assessment is based on the Water Resources Regulations holding nitrogen limit of {0}kg of nitrogen (N) per hectare.</value>
+    <value>This assessment is based on the Water Resources (Control of Agricultural Pollution) (Wales) Regulations holding nitrogen limit of {0}kg of nitrogen (N) per hectare.</value>
   </data>
   <data name="MsgSuccessForWalesLivestock" xml:space="preserve">
     <value>Continue to create a holding nitrogen limit ‘the 170 limit’ report for {0}</value>
@@ -7813,7 +7817,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>Nitrate Vulnerable Zone (NVZ) warnings</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent15" xml:space="preserve">
-    <value>The tool will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules in England and Scotland, and the Control of Agricultural Pollution (CoAP) rules in Wales.</value>
+    <value>The tool will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules in England and Scotland, and the Water Resources (Control of Agricultural Pollution) Regulations in Wales.</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent16" xml:space="preserve">
     <value>You can save, edit, and reuse your data. You can also save or print estimates as PDF files.</value>
@@ -8465,5 +8469,8 @@ following crop year 2</value>
   </data>
   <data name="lblkgmetercube" xml:space="preserve">
     <value>{0}kg/m³</value>
+  </data>
+  <data name="lblWaterResourcesControlOfAgriculturalPollutionWalesRegulations" xml:space="preserve">
+    <value>Water Resources (Control of Agricultural Pollution) (Wales) Regulations</value>
   </data>
 </root>
