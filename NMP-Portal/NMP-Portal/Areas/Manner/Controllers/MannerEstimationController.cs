@@ -4616,9 +4616,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 isHighReadilyAvailableNitrogen = manureType?.HighReadilyAvailableNitrogen ?? false;
             }
 
-            bool? isFieldIsInNVZ = model.IsWithinNVZ;
+            bool isFieldIsInNVZ = model.IsWithinNVZ ?? false;
 
-            if (!(model.IsFarmOrganic.Value && isHighReadilyAvailableNitrogen && isFieldIsInNVZ.Value))
+            if (!(model.IsFarmOrganic.Value && isHighReadilyAvailableNitrogen && isFieldIsInNVZ))
             {
                 return (model, error);
             }
