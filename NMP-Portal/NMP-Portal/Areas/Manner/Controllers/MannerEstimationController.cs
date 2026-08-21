@@ -2945,28 +2945,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 (ManureType? manure, _) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID.Value);
                 if (manure != null)
                 {
-                    int manureGroupId = manure?.ManureGroupId ?? 0;
+                    int manureGroupId = manure.ManureGroupId ?? 0;
                     application.ManureGroup = (await _mannerLogic.FetchManureGroupById(manureGroupId)).Item1.Name;
                     bool isManureLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID.Value);
                     application.IsManureTypeLiquid = isManureLiquid;
                     string manureUnit = isManureLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
                     TempData[$"ApplicationDefaultValues{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
-                    if (application.AreaSpread != null && application.ManureQuantity != null)
-                    {
-                        TempData[$"ApplicationRateOption{count}"] = Resource.lblCalculateBasedOnTheAreaAndQuantity;
-                    }
-                    else
-                    {
-                        (bool isDefaultRate, int defaultRate) = await _mannerEstimationLogic.FetchApplicationRateOptionValue(application.ManureTypeID.Value, application, mannerEstimationResultResponse.MannerEstimation);
-                        if (isDefaultRate)
-                        {
-                            TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblUseTypicalApplicationRate, defaultRate, manureUnit);
-                        }
-                        else
-                        {
-                            TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manure.Name);
-                        }
-                    }
+                    await BindTempDataForMannerestimationResultPage(mannerEstimationResultResponse, count, application, manure, manureUnit);
                 }
             }
             Country? country = await _mannerLogic.FetchCountryById(mannerEstimationResultResponse.MannerFarm?.CountryID ?? 0);
@@ -2993,6 +2978,27 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0);
         }
+
+        private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application, ManureType? manure, string manureUnit)
+        {
+            if (application.AreaSpread != null && application.ManureQuantity != null)
+            {
+                TempData[$"ApplicationRateOption{count}"] = Resource.lblCalculateBasedOnTheAreaAndQuantity;
+            }
+            else
+            {
+                (bool isDefaultRate, int defaultRate) = await _mannerEstimationLogic.FetchApplicationRateOptionValue(application.ManureTypeID.Value, application, mannerEstimationResultResponse.MannerEstimation);
+                if (isDefaultRate)
+                {
+                    TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblUseTypicalApplicationRate, defaultRate, manureUnit);
+                }
+                else
+                {
+                    TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manure.Name);
+                }
+            }
+        }
+
         private async Task LoadMannerEstimations()
         {
             Guid organisationId = GetOrganisationId();
