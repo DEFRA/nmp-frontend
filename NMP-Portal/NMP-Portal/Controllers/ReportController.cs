@@ -194,7 +194,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             else
             {
-                if (await IsAnyCropTypeForAverageYield(model))
+                if (await IsAnyCropTypeForAverageYield(model) && model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                 {
                     return RedirectToAction("FarmAverageYieldAdjustment");
                 }

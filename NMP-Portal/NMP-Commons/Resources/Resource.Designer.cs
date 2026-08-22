@@ -2727,7 +2727,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A Water Resource Regulations report.
+        ///   Looks up a localized string similar to A Water Resources (Control of Agricultural Pollution) (Wales) Regulations report.
         /// </summary>
         public static string lblAWaterResourceRegulationsReport {
             get {
@@ -6248,7 +6248,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must follow these rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications..
+        ///   Looks up a localized string similar to You must follow these rules when you use inorganic fertilisers and organic materials. This tool will help you demonstrate compliance with some of the rules. It will also tell you if you are at risk of breaking the rules as you plan nutrient applications..
         /// </summary>
         public static string lblFarmingRuleOfWaterSecondForWale {
             get {
@@ -6491,7 +6491,8 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a report to check compliance with the Water Resource Regulations.
+        ///   Looks up a localized string similar to Create a report to check compliance with the Water Resources (Control of Agricultural Pollution) (Wales)   
+        ///Regulations.
         /// </summary>
         public static string lblFarmSummaryContentForWalesOne {
             get {
@@ -8759,6 +8760,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0}kg/m³.
+        /// </summary>
+        public static string lblkgmetercube {
+            get {
+                return ResourceManager.GetString("lblkgmetercube", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} kg Nitrogen (N).
         /// </summary>
         public static string lblKgNitrogen {
@@ -10056,7 +10066,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tool will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules in England and Scotland, and the Control of Agricultural Pollution (CoAP) rules in Wales..
+        ///   Looks up a localized string similar to The tool will warn you of possible breaches of the Nitrate Vulnerable Zone (NVZ) rules in England and Scotland, and the Water Resources (Control of Agricultural Pollution) Regulations in Wales..
         /// </summary>
         public static string lblMannerEstimateAboutPageContent15 {
             get {
@@ -16223,7 +16233,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The planned applications may not comply with these Water Resources Regulations:.
+        ///   Looks up a localized string similar to The planned applications may not comply with these Water Resources (Control of Agricultural Pollution) (Wales) Regulations:.
         /// </summary>
         public static string lblThePlannedApplicationsMayNotComplyWithTheseWater {
             get {
@@ -18412,11 +18422,20 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This assessment is based on the Water Resources Regulations holding nitrogen limit of {0}kg of nitrogen (N) per hectare..
+        ///   Looks up a localized string similar to This assessment is based on the Water Resources (Control of Agricultural Pollution) (Wales) Regulations holding nitrogen limit of {0}kg of nitrogen (N) per hectare..
         /// </summary>
         public static string lblWaterResourceRegulationsForWales {
             get {
                 return ResourceManager.GetString("lblWaterResourceRegulationsForWales", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Water Resources (Control of Agricultural Pollution) (Wales) Regulations.
+        /// </summary>
+        public static string lblWaterResourcesControlOfAgriculturalPollutionWalesRegulations {
+            get {
+                return ResourceManager.GetString("lblWaterResourcesControlOfAgriculturalPollutionWalesRegulations", resourceCulture);
             }
         }
         
@@ -18430,7 +18449,8 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Water Resources Regulations warnings for {0}.
+        ///   Looks up a localized string similar to Water Resources (Control of Agricultural Pollution) (Wales)   
+        ///Regulations warnings for {0}.
         /// </summary>
         public static string lblWaterResourcesRegulationsWarningsFor {
             get {
@@ -21085,7 +21105,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the &lt;a target=&quot;_blank&quot; href=&quot;https://www.gov.uk/government/organisations/rural-payments-agency&quot;&gt;Rural Payments Agency (RPA)&lt;/a&gt;or the Environment Agency (EA). .
+        ///   Looks up a localized string similar to This tool will not share your personal data with any other organisations. In particular, please note that this tool does not share your personal data with the &lt;a target=&quot;_blank&quot; href=&quot;https://www.gov.uk/government/organisations/rural-payments-agency&quot;&gt;Rural Payments Agency (RPA)&lt;/a&gt; or the Environment Agency (EA). .
         /// </summary>
         public static string lblYourDataContentSecond {
             get {

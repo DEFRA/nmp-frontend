@@ -16,7 +16,7 @@ public class SoilService(ILogger<SoilService> logger, IHttpContextAccessor httpC
 {
     private readonly ILogger<SoilService> _logger = logger;
     private const string _errorLog= "{Code} : {Message} : {Stack} : {Path}";
-    public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, int? nutrientValue, int methodologyId,int countryId)
+    public async Task<(string, Error)> FetchSoilNutrientIndex(int nutrientId, decimal? nutrientValue, int methodologyId,int countryId)
     {
         Error? error = null;
         string nutrientIndex = string.Empty;

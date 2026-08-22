@@ -3,7 +3,7 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
 
-    string heading = string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesRegulations : Resource.lblNVZShortForm);
+    string heading = string.Format(Resource.lblWhichNVZComplianceReport, (Model.Country != null && Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales) ? Resource.lblWaterResourcesControlOfAgriculturalPollutionWalesRegulations : Resource.lblNVZShortForm);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblReport}";
 
     var nmaxReport = (int)NMP.Commons.Enums.NvzReportOption.NmaxReport;
