@@ -296,7 +296,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (mannerEstimationViewModel.IsComingForAddNewApplication)
         {            
             mannerEstimationStep11.IsComingForAddNewApplication = true;
-            if (mannerEstimationStep11.IsComingForAddNewApplication)
+            if (mannerEstimationStep11.IsComingForAddNewApplication&&mannerEstimationStep11.ManureGroupId==null)
             {
                 mannerEstimationViewModel.CountryId = mannerEstimationStep11.CountryId;
                 mannerEstimationViewModel.IsFarmOrganic = mannerEstimationStep11.IsFarmOrganic;
@@ -1516,7 +1516,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             (MannerFarmViewModel? mannerFarm, error) = await FetchMannerFarmById(mannerEstimate.MannerFarmID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimate.ID;
+            mannerEstimationViewModel.IsWithinNVZ = mannerEstimate.IsWithinNVZ;
             mannerEstimationViewModel.MannerFarmId = mannerEstimate.MannerFarmID;
+            mannerEstimationViewModel.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;
+            mannerEstimationViewModel.CropTypeId = mannerEstimate.CropTypeID;
+            mannerEstimationViewModel.CountryId = mannerFarm.CountryID;
             mannerEstimationViewModel.MannerEstimationStep31.Name = mannerEstimate.Name;
             mannerEstimationViewModel.MannerEstimationStep1.FarmName = mannerFarm.Name;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID.Value;

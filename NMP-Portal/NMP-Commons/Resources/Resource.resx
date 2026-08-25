@@ -8118,7 +8118,7 @@ following crop year 2</value>
     <value>Price of product</value>
   </data>
   <data name="lblFertiliserProduct" xml:space="preserve">
-    <value>Fertiliser Product</value>
+    <value>Fertiliser product</value>
   </data>
   <data name="lblPriceOfNutrient" xml:space="preserve">
     <value>Price of nutrient</value>
