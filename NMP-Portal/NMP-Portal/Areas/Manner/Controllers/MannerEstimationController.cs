@@ -5956,6 +5956,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateNutrientValues(model);
             if (!ModelState.IsValid)
             {
+                model = await _mannerEstimationLogic.GetMannerEstimationStep25(false);
                 return View(_manualNutrientValuesKey, model);
             }
             
