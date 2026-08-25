@@ -3337,8 +3337,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         (DefoliationSequenceResponse defoliationSequence, Error error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
         if (error == null && defoliationSequence != null)
         {
-            CommonHelpers commonHelpers = new CommonHelpers();
-            selectedDefoliation = await commonHelpers.GetDefoliationName(model.DefoliationList[index].Defoliation.Value,
+            selectedDefoliation = await CommonHelpers.GetDefoliationName(model.DefoliationList[index].Defoliation.Value,
                defoliationSequence);
         }
 
@@ -3483,19 +3482,18 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         if (crop.DefoliationSequenceID != null && model.DefoliationList[0].Defoliation != null)
         {
             string selectedDefoliation = string.Empty;
-            (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-            if (error == null && defoliationSequence != null)
+            (DefoliationSequenceResponse defoliationSequence, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            if (defoliationSequence != null)
             {
-                CommonHelpers commonHelpers = new CommonHelpers();
-                selectedDefoliation = await commonHelpers.GetDefoliationName(model.DefoliationList[0].Defoliation.Value,
+                selectedDefoliation = await CommonHelpers.GetDefoliationName(model.DefoliationList[0].Defoliation.Value,
                    defoliationSequence);
             }
 
-            if (error == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
+            if (!string.IsNullOrWhiteSpace(selectedDefoliation))
             {
                 model.DefoliationList[i].DefoliationName = selectedDefoliation;
                 model.DefoliationList[i].Defoliation = model.DefoliationList[0].Defoliation;
-                if (model.FertiliserManures != null && model.FertiliserManures.Count > 0)
+                if (model.FertiliserManures?.Count > 0)
                 {
                     int index = model.FertiliserManures
                     .FindIndex(f => f.IsGrass && f.FieldID == fieldId);

@@ -2388,24 +2388,27 @@ managementPeriod.CropID.HasValue
 
         private void ValidateNutrientValuesIfNull(OrganicManureViewModel model)
         {
-            AddErrorIfNull(model.DryMatterPercent, _dryMatterPercentKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
-
-            AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
-
-            AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
-
-            AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
-
-            AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
-
-            AddErrorIfNull(model.P2O5, "P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
-
-            AddErrorIfNull(model.K2O, "K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
-
-            AddErrorIfNull(model.SO3, "SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
-
-            AddErrorIfNull(model.MgO, "MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
+            ValidateIfNull(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter);
+            ValidateIfNull(model.N, "N", Resource.lblTotalNitrogen);
+            ValidateIfNull(model.NH4N, "NH4N", Resource.lblAmmoniumForError);
+            ValidateIfNull(model.UricAcid, "UricAcid", Resource.MsgUricAcid);
+            ValidateIfNull(model.NO3N, "NO3N", Resource.lblNitrateForErrorMsg);
+            ValidateIfNull(model.P2O5, "P2O5", Resource.lblPhosphate);
+            ValidateIfNull(model.K2O, "K2O", Resource.lblPotash);
+            ValidateIfNull(model.SO3, "SO3", Resource.lblSulphur);
+            ValidateIfNull(model.MgO, "MgO", Resource.lblMagnesiumMgO);
         }
+
+        private void ValidateIfNull<T>(T value, string key, string label)
+        {
+            AddErrorIfNull(
+                value,
+                key,
+                string.Format(
+                    Resource.MsgEnterTheValueBeforeContinuing,
+                    label.ToLower()));
+        }
+
 
         private (bool flowControl, IActionResult? value) RedirectIfCheckAnswerForManualNutrientValues(OrganicManureViewModel model)
         {
@@ -3979,6 +3982,7 @@ managementPeriod.CropID.HasValue
                     model.DefoliationCurrentCounter = model.DefoliationList.Count;
                 }
                 model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+                SetOrganicManureToSession(model);
             }
         }
 
@@ -8960,6 +8964,8 @@ managementPeriod.CropID.HasValue
             {
                 model.DefoliationCurrentCounter = 0;
                 model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+                SetOrganicManureToSession(model);
+
                 if (HttpContext.Session.Keys.Contains(_organicManureSessionKey))
                 {
                     OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
@@ -9124,6 +9130,7 @@ managementPeriod.CropID.HasValue
 
             model.DefoliationCurrentCounter = model.DefoliationList.Count;
             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+            SetOrganicManureToSession(model);
 
             return model;
         }
@@ -9131,7 +9138,7 @@ managementPeriod.CropID.HasValue
 
 
         [HttpGet]
-        public async Task<IActionResult> Defoliation(string q)
+        public async Task<IActionResult> Defoliation(string q,string? r)
         {
             _logger.LogTrace("OrganicManure Controller : Defoliation({Q}) action called", q);
             OrganicManureViewModel? model = GetOrganicManureFromSession();
@@ -9144,7 +9151,7 @@ managementPeriod.CropID.HasValue
                 }
 
                 IActionResult? earlyResult;
-                (model, earlyResult) = await HandleDefoliationQueryParamAsync(model, q);
+                (model, earlyResult) = await HandleDefoliationQueryParamAsync(model, q,r);
                 if (earlyResult != null)
                 {
                     return earlyResult;
@@ -9218,7 +9225,7 @@ managementPeriod.CropID.HasValue
 
         // ===================== Query param ("q") handling =====================
 
-        private async Task<(OrganicManureViewModel Model, IActionResult? EarlyResult)> HandleDefoliationQueryParamAsync(OrganicManureViewModel model, string q)
+        private async Task<(OrganicManureViewModel Model, IActionResult? EarlyResult)> HandleDefoliationQueryParamAsync(OrganicManureViewModel model, string q,string? r)
         {
             bool shouldReset = string.IsNullOrWhiteSpace(q) && model != null &&
                 (model.DefoliationList == null ||
@@ -9232,7 +9239,7 @@ managementPeriod.CropID.HasValue
                 return (model, null);
             }
 
-            if (model != null && !string.IsNullOrWhiteSpace(q) && model.OrganicManures != null && model.OrganicManures.Count > 0)
+            if (model != null && string.IsNullOrWhiteSpace(r)&&!string.IsNullOrWhiteSpace(q) && model.OrganicManures != null && model.OrganicManures.Count > 0)
             {
                 return await HandleDefoliationIndexAsync(model, q);
             }
@@ -9463,7 +9470,7 @@ managementPeriod.CropID.HasValue
                 return RedirectToAction(_manureApplyingDateAction);
             }
 
-            return await ReturnDefoliationView(model);
+            return RedirectToAction(_defoliationAction, new {r=_organicManureProtector.Protect(true.ToString())});
         }
 
         // ---------- "Different defoliation per field" branch ----------
@@ -9510,19 +9517,18 @@ managementPeriod.CropID.HasValue
             if (crop.DefoliationSequenceID != null && model.DefoliationList[i].Defoliation != null)
             {
                 string selectedDefoliation = string.Empty;
-                (DefoliationSequenceResponse defoliationSequence, Error? nameError) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-                if (nameError == null && defoliationSequence != null)
+                (DefoliationSequenceResponse defoliationSequence, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                if (defoliationSequence != null)
                 {
-                    CommonHelpers commonHelpers = new CommonHelpers();
-                    selectedDefoliation = await commonHelpers.GetDefoliationName(model.DefoliationList[i].Defoliation.Value,
+                    selectedDefoliation = await CommonHelpers.GetDefoliationName(model.DefoliationList[i].Defoliation.Value,
                        defoliationSequence);
                 }
 
-                if (nameError == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
+                if (!string.IsNullOrWhiteSpace(selectedDefoliation))
                 {
                     model.DefoliationList[i].DefoliationName = selectedDefoliation;
 
-                    if (model.OrganicManures != null && model.OrganicManures.Count > 0)
+                    if (model.OrganicManures?.Count > 0)
                     {
                         int index = model.OrganicManures.FindIndex(f => f.IsGrass && f.FieldID == crop.FieldID);
                         if (index >= 0)
@@ -9597,15 +9603,14 @@ managementPeriod.CropID.HasValue
             (DefoliationSequenceResponse defoliationSequence, Error? nameError) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
             
             
-            if (nameError != null || string.IsNullOrWhiteSpace(selectedDefoliation))
+            if (nameError != null)
             {
                 return;
             }
 
             if (defoliationSequence != null)
             {
-                CommonHelpers commonHelpers = new CommonHelpers();
-                selectedDefoliation = await commonHelpers.GetDefoliationName(currentDefoliation.Value,
+                selectedDefoliation = await CommonHelpers.GetDefoliationName(currentDefoliation.Value,
                    defoliationSequence);
             }
 

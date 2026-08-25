@@ -210,7 +210,7 @@ namespace NMP.Portal.Helpers
                    manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator ||
                    manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion;
         }
-        public async Task<string> GetDefoliationName(int defoliation, DefoliationSequenceResponse defoliationSequence)
+        public static async Task<string> GetDefoliationName(int defoliation, DefoliationSequenceResponse defoliationSequence)
         {
             string selectedDefoliation = string.Empty;
 
