@@ -5950,13 +5950,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateNutrientValues(MannerEstimationStep25ViewModel model)
         {
+            MannerEstimationStep25ViewModel mannerEstimationStep25ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep25(false);
+            model.ManureTypeId = mannerEstimationStep25ViewModel.ManureTypeId;
             CheckNutrientValuesIfNull(model);
             ValidateNutrientValues(model);
             if (!ModelState.IsValid)
             {
                 return View(_manualNutrientValuesKey, model);
             }
-            MannerEstimationStep25ViewModel mannerEstimationStep25ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep25(false);
+            
             var manureNutrientResponse = new ManureNutrientResponse
             {
                 id = mannerEstimationStep25ViewModel.ManureTypeId.Value,
