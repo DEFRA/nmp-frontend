@@ -6591,7 +6591,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fertiliser Product.
+        ///   Looks up a localized string similar to Fertiliser product.
         /// </summary>
         public static string lblFertiliserProduct {
             get {
