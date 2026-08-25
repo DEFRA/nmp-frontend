@@ -167,4 +167,5 @@ public class OrganicManureViewModel
     public string? ApplicationJulyToSeptHeader { get; set; } = string.Empty;
     public int ApplicationJulyToSeptCodeID { get; set; }
     public int ApplicationJulyToSeptLevelID { get; set; }
+    public bool IsCalculateBasedOnDryMatter { get; set; } = false;
 }

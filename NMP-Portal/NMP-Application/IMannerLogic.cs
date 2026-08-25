@@ -30,6 +30,7 @@ public interface IMannerLogic
     Task<(string, Error)> FetchIncorporationDelayById(int Id);
     Task<(List<CommonResponse>?, Error?)> FetchTopsoilList();
     Task<(List<CommonResponse>?, Error?)> FetchSubsoilList();
+    Task<(ManureNutrientResponse?, Error?)> CalculateDefaultNutrientValueBasedOnDryMatter(ManureNutrientResponse manureNutrientResponse);
 
 
 }

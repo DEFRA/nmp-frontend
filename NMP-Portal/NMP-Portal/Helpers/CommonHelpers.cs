@@ -135,7 +135,7 @@ namespace NMP.Portal.Helpers
                 FertiliserAppliedLime = recommendation.FertiliserAppliedLime,
                 FertiliserAppliedNH4N = recommendation.FertiliserAppliedNH4N,
                 FertiliserAppliedNO3N = recommendation.FertiliserAppliedNO3N,
-                IsSacMethodology=recommendation.IsSacMethodology
+                IsSacMethodology = recommendation.IsSacMethodology
 
             };
             return rec;
@@ -209,6 +209,18 @@ namespace NMP.Portal.Helpers
                    manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryWeepingWall ||
                    manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedCattleSlurryMechanicalSeparator ||
                    manureTypeId == (int)NMP.Commons.Enums.ManureTypes.SeparatedPigSlurryLiquidPortion;
+        }
+        public static async Task<string> GetDefoliationName(int defoliation, DefoliationSequenceResponse defoliationSequence)
+        {
+            string selectedDefoliation = string.Empty;
+
+            string description = defoliationSequence.DefoliationSequenceDescription;
+            if (!string.IsNullOrWhiteSpace(description))
+            {
+                selectedDefoliation = CommonHelpers.BindDefoliationName(defoliation, description);
+            }
+
+            return selectedDefoliation;
         }
     }
 }

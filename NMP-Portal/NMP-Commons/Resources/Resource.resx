@@ -8471,4 +8471,7 @@ following crop year 2</value>
   <data name="lblWaterResourcesControlOfAgriculturalPollutionWalesRegulations" xml:space="preserve">
     <value>Water Resources (Control of Agricultural Pollution) (Wales) Regulations</value>
   </data>
+  <data name="lblUpdateNutrientValuesBasedOnDryMatterContent" xml:space="preserve">
+    <value>Update nutrient values based on dry matter content</value>
+  </data>
 </root>

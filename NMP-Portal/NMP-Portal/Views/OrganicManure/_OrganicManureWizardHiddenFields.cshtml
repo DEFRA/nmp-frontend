@@ -280,6 +280,8 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationJulyToSeptCodeID" value="@Model.ApplicationJulyToSeptCodeID" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ApplicationJulyToSeptLevelID" value="@Model.ApplicationJulyToSeptLevelID" />
 
+     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateBasedOnDryMatter" />
+
     @* warning model properties end *@
 
     @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
