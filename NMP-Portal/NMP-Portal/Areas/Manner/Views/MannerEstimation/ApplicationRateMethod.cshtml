@@ -20,7 +20,7 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)" asp-route-r="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
 
 }
 

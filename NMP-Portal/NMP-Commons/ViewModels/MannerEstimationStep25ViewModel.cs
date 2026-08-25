@@ -8,6 +8,7 @@ namespace NMP.Commons.ViewModels
 {
     public class MannerEstimationStep25ViewModel
     {
+        public bool IsCalculateBasedOnDryMatter { get; set; } = false;
         public string? OtherMaterialName { get; set; }
         public bool? IsManureTypeLiquid { get; set; }
         public int? ManureTypeId { get; set; }

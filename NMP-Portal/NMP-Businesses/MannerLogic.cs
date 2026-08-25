@@ -132,6 +132,9 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
         _logger.LogTrace("Fetch manner sub soil list");
         return await _mannerService.FetchSubsoilList();
     }
-    
-    
+    public async Task<(ManureNutrientResponse?, Error?)> FetchDefaultNutrientValueBasedOnDryMatter(ManureNutrientResponse manureNutrientResponse)
+    {
+        _logger.LogTrace("Fetch manner default nutrient value based on dry matter");
+        return await _mannerService.FetchDefaultNutrientValueBasedOnDryMatter(manureNutrientResponse);
+    }
 }

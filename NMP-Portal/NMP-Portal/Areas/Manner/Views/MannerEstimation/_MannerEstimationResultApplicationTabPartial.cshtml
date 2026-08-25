@@ -140,7 +140,7 @@
                     <a class="govuk-link"
                        asp-action="ManualNutrientValues"
                        asp-controller="MannerEstimation"
-                       asp-route-q="@Model.EncryptedApplicationId">
+                       asp-route-q="@Model.EncryptedApplicationId" asp-route-r="@ViewBag.IsDefault">
                         @Resource.lblChange
                         <span class="govuk-visually-hidden">
                             @(string.Format("{0} {1}", string.Format(Resource.lblNutrientValuesForManureTypeName, Model.ManureType), Resource.lblChange))

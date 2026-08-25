@@ -60,8 +60,8 @@ namespace NMP.Application
         ManureType? GetAndApplyManureType(int manureTypeId, List<ManureType> manureTypeList);
         Task<MannerEstimationStep24ViewModel> GetMannerEstimationStep24();
         Task<MannerEstimationStep24ViewModel> SetMannerEstimationStep24(MannerEstimationStep24ViewModel mannerEstimationStep24);
-        Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25();
-        Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25);
+        Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25(bool isDefault);
+        Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25, bool isDefault);
         Task<MannerEstimationStep26ViewModel> GetMannerEstimationStep26();
         Task<MannerEstimationStep26ViewModel> SetMannerEstimationStep26(MannerEstimationStep26ViewModel mannerEstimationStep26);
         Task<MannerEstimationStep27ViewModel> GetMannerEstimationStep27();

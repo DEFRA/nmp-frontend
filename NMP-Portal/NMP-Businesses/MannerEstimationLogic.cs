@@ -338,6 +338,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId != mannerEstimationStep12.ManureTypeId)
         {
             mannerEstimationStep12.IsManureTypeChange = true;
+            mannerEstimationViewModel.MannerEstimationStep25.IsCalculateBasedOnDryMatter = false;
         }
         mannerEstimationStep12.IsManureGroupIdChange = mannerEstimationViewModel.MannerEstimationStep11.IsManureGroupIdChange;
         mannerEstimationViewModel.MannerEstimationStep12 = mannerEstimationStep12;
@@ -598,7 +599,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return manureType;
     }
 
-    public async Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25()
+    public async Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25(bool isDefault=false)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep25.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
@@ -606,29 +607,38 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep25.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep25.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
-        (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
-        if (manureType != null)
-        {
-            mannerEstimationViewModel.MannerEstimationStep25.MgO = manureType.MgO;
-            mannerEstimationViewModel.MannerEstimationStep25.N = manureType.TotalN;
-            mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent = manureType.DryMatter;
-            mannerEstimationViewModel.MannerEstimationStep25.P2O5 = manureType.P2O5;
-            mannerEstimationViewModel.MannerEstimationStep25.SO3 = manureType.SO3;
-            mannerEstimationViewModel.MannerEstimationStep25.K2O = manureType.K2O;
-            mannerEstimationViewModel.MannerEstimationStep25.NH4N = manureType.NH4N;
-            mannerEstimationViewModel.MannerEstimationStep25.NO3N = manureType.NO3N;
-            mannerEstimationViewModel.MannerEstimationStep25.UricAcid = manureType.Uric;
+        
+            (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
+            if (manureType != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep25.ManureTypeId = manureType.Id;
             mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeLiquid = manureType.IsLiquid;
+            if (!isDefault)
+            {
+                mannerEstimationViewModel.MannerEstimationStep25.MgO = manureType.MgO;
+                mannerEstimationViewModel.MannerEstimationStep25.N = manureType.TotalN;
+                mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent = manureType.DryMatter;
+                mannerEstimationViewModel.MannerEstimationStep25.P2O5 = manureType.P2O5;
+                mannerEstimationViewModel.MannerEstimationStep25.SO3 = manureType.SO3;
+                mannerEstimationViewModel.MannerEstimationStep25.K2O = manureType.K2O;
+                mannerEstimationViewModel.MannerEstimationStep25.NH4N = manureType.NH4N;
+                mannerEstimationViewModel.MannerEstimationStep25.NO3N = manureType.NO3N;
+                mannerEstimationViewModel.MannerEstimationStep25.UricAcid = manureType.Uric;
+            }
         }
         return mannerEstimationViewModel.MannerEstimationStep25;
     }
-    public async Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25)
+    public async Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25,bool isDefault)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (!isDefault)
+        {
+            mannerEstimationStep25.IsCalculateBasedOnDryMatter = mannerEstimationViewModel.MannerEstimationStep25.IsCalculateBasedOnDryMatter;
+        }
         mannerEstimationViewModel.MannerEstimationStep25 = mannerEstimationStep25;
         mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         SetMannerEstimationToSession(mannerEstimationViewModel);
-        return await GetMannerEstimationStep25();
+        return await GetMannerEstimationStep25(isDefault);
     }
     public async Task<MannerEstimationStep26ViewModel> GetMannerEstimationStep26()
     {
@@ -1567,6 +1577,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (ManureType? manureType, error) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimateApplication.ManureTypeID.Value);
         if (error == null && manureType != null)
         {
+            mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeLiquid = manureType.IsLiquid;
             await BindClosedPeriod(mannerEstimationViewModel, mannerEstimateApplication, manureType);
             await BindManureGroupDetails(mannerEstimationViewModel, manureType);
             BindApplicationRateMethod(mannerEstimationViewModel, mannerEstimateApplication, manureType);

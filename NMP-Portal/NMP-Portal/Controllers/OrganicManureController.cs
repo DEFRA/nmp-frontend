@@ -2332,35 +2332,10 @@ managementPeriod.CropID.HasValue
             {
                 if (!ModelState.IsValid)
                 {
-                    ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
-                    ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
-                    ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
-                    ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
-                    ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
-                    ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
-                    ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
-                    ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
-                    ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
+                    ValidateNumericErrorForNutrientValues();
                 }
 
-                AddErrorIfNull(model.DryMatterPercent, _dryMatterPercentKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
-
-                AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
-
-                AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
-
-                AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
-
-                AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
-
-                AddErrorIfNull(model.P2O5, "P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
-
-                AddErrorIfNull(model.K2O, "K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
-
-                AddErrorIfNull(model.SO3, "SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
-
-                AddErrorIfNull(model.MgO, "MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
-
+                ValidateNutrientValuesIfNull(model);
 
                 ValidateNutrientValues(model);
 
@@ -2394,6 +2369,40 @@ managementPeriod.CropID.HasValue
                 return View(model);
             }
 
+        }
+
+        private void ValidateNumericErrorForNutrientValues()
+        {
+            ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
+            ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
+            ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
+            ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
+            ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
+            ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
+            ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
+            ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
+            ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
+        }
+
+        private void ValidateNutrientValuesIfNull(OrganicManureViewModel model)
+        {
+            AddErrorIfNull(model.DryMatterPercent, _dryMatterPercentKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
+
+            AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
+
+            AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
+
+            AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
+
+            AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
+
+            AddErrorIfNull(model.P2O5, "P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
+
+            AddErrorIfNull(model.K2O, "K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
+
+            AddErrorIfNull(model.SO3, "SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
+
+            AddErrorIfNull(model.MgO, "MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
         }
 
         private (bool flowControl, IActionResult? value) RedirectIfCheckAnswerForManualNutrientValues(OrganicManureViewModel model)
@@ -10661,6 +10670,63 @@ managementPeriod.CropID.HasValue
 
             }
             return model;
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateNutrientValues(OrganicManureViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ValidateNumericErrorForNutrientValues();
+            }
+
+            ValidateNutrientValuesIfNull(model);
+            ValidateNutrientValues(model);
+            if (!ModelState.IsValid)
+            {
+
+                return View("ManualNutrientValues", model);
+            }
+            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+            var manureNutrientResponse = new ManureNutrientResponse
+            {
+                id = organicManureViewModel.ManureTypeId!.Value,
+                dryMatter = model.DryMatterPercent!.Value,
+                totalN = model.N!.Value,
+                uric = model.UricAcid!.Value,
+                p2O5 = model.P2O5!.Value,
+                k2O = model.K2O!.Value,
+                sO3 = model.SO3!.Value,
+                mgO = model.MgO!.Value
+            };
+
+            var (result, error) =
+                await _mannerLogic.FetchDefaultNutrientValueBasedOnDryMatter(manureNutrientResponse);
+
+            if (result != null)
+            {
+                UpdateModelWithNutrients(model, result);
+            }
+
+
+            SetOrganicManureToSession(model);
+            ModelState.Clear();
+            return View("ManualNutrientValues", model);
+        }
+        private static void UpdateModelWithNutrients(
+    OrganicManureViewModel model,
+    ManureNutrientResponse result)
+        {
+            model.N = result.totalN;
+            model.NO3N = result.nO3N;
+            model.NH4N = result.nH4N;
+            model.UricAcid = result.uric;
+            model.P2O5 = result.p2O5;
+            model.K2O = result.k2O;
+            model.SO3 = result.sO3;
+            model.MgO = result.mgO;
+            model.DryMatterPercent = result.dryMatter;
+            model.IsCalculateBasedOnDryMatter = true;
         }
 
 

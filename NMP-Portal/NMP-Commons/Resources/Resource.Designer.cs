@@ -17720,6 +17720,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update nutrient values based on dry matter content.
+        /// </summary>
+        public static string lblUpdateNutrientValuesBasedOnDryMatterContent {
+            get {
+                return ResourceManager.GetString("lblUpdateNutrientValuesBasedOnDryMatterContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update organic manure.
         /// </summary>
         public static string lblUpdateOrganicManure {
