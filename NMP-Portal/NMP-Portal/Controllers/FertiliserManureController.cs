@@ -3333,11 +3333,14 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             return;
         }
-
-        var (selectedDefoliation, error) =
-            await GetDefoliationName(
-                model.DefoliationList[index].Defoliation.Value,
-                crop.DefoliationSequenceID.Value);
+        string selectedDefoliation = string.Empty;
+        (DefoliationSequenceResponse defoliationSequence, Error error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+        if (error == null && defoliationSequence != null)
+        {
+            CommonHelpers commonHelpers = new CommonHelpers();
+            selectedDefoliation = await commonHelpers.GetDefoliationName(model.DefoliationList[index].Defoliation.Value,
+               defoliationSequence);
+        }
 
         if (error != null || string.IsNullOrWhiteSpace(selectedDefoliation))
         {
@@ -3479,7 +3482,15 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     {
         if (crop.DefoliationSequenceID != null && model.DefoliationList[0].Defoliation != null)
         {
-            (string? selectedDefoliation, error) = await GetDefoliationName(model.DefoliationList[0].Defoliation.Value, crop.DefoliationSequenceID.Value);
+            string selectedDefoliation = string.Empty;
+            (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            if (error == null && defoliationSequence != null)
+            {
+                CommonHelpers commonHelpers = new CommonHelpers();
+                selectedDefoliation = await commonHelpers.GetDefoliationName(model.DefoliationList[0].Defoliation.Value,
+                   defoliationSequence);
+            }
+
             if (error == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
             {
                 model.DefoliationList[i].DefoliationName = selectedDefoliation;
@@ -4370,21 +4381,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             : num.ToString();
     }
 
-    private async Task<(string?, Error?)> GetDefoliationName(int defoliation, int defoliationSequenceID)
-    {
-        string selectedDefoliation = string.Empty;
-        Error? error = null;
-        (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(defoliationSequenceID);
-        if (error == null && defoliationSequence != null)
-        {
-            string description = defoliationSequence.DefoliationSequenceDescription;
-            if (!string.IsNullOrWhiteSpace(description))
-            {
-                selectedDefoliation = CommonHelpers.BindDefoliationName(defoliation, description);
-            }
-        }
-        return (selectedDefoliation, error);
-    }
 
     private FertiliserManureViewModel? GetFertiliserManureBeforeUpdateFromSession()
     {

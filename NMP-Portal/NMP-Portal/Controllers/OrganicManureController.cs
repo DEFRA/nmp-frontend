@@ -9509,8 +9509,14 @@ managementPeriod.CropID.HasValue
         {
             if (crop.DefoliationSequenceID != null && model.DefoliationList[i].Defoliation != null)
             {
-                (string selectedDefoliation, Error? nameError) = await GetDefoliationName(
-                    model.DefoliationList[i].Defoliation.Value, crop.DefoliationSequenceID.Value);
+                string selectedDefoliation = string.Empty;
+                (DefoliationSequenceResponse defoliationSequence, Error? nameError) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                if (nameError == null && defoliationSequence != null)
+                {
+                    CommonHelpers commonHelpers = new CommonHelpers();
+                    selectedDefoliation = await commonHelpers.GetDefoliationName(model.DefoliationList[i].Defoliation.Value,
+                       defoliationSequence);
+                }
 
                 if (nameError == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
                 {
@@ -9587,10 +9593,20 @@ managementPeriod.CropID.HasValue
                 return;
             }
 
-            (string selectedDefoliation, Error? nameError) = await GetDefoliationName(currentDefoliation.Value, crop.DefoliationSequenceID.Value);
+            string selectedDefoliation = string.Empty;
+            (DefoliationSequenceResponse defoliationSequence, Error? nameError) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            
+            
             if (nameError != null || string.IsNullOrWhiteSpace(selectedDefoliation))
             {
                 return;
+            }
+
+            if (defoliationSequence != null)
+            {
+                CommonHelpers commonHelpers = new CommonHelpers();
+                selectedDefoliation = await commonHelpers.GetDefoliationName(currentDefoliation.Value,
+                   defoliationSequence);
             }
 
             model.DefoliationList[i].DefoliationName = selectedDefoliation;
@@ -9979,23 +9995,7 @@ managementPeriod.CropID.HasValue
 
             return (list, null);
         }
-
-        private async Task<(string?, Error?)> GetDefoliationName(int defoliation, int defoliationSequenceID)
-        {
-            string selectedDefoliation = string.Empty;
-            Error? error = null;
-            (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(defoliationSequenceID);
-            if (error == null && defoliationSequence != null)
-            {
-                string description = defoliationSequence.DefoliationSequenceDescription;
-                if (!string.IsNullOrWhiteSpace(description))
-                {
-                    selectedDefoliation = CommonHelpers.BindDefoliationName(defoliation, description);
-
-                }
-            }
-            return (selectedDefoliation, error);
-        }
+                
 
         private static async Task<OrganicManureViewModel> GetDatesFromClosedPeriod(OrganicManureViewModel model, string closedPeriod)
         {
