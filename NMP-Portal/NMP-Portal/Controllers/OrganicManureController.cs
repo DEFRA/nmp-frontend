@@ -84,6 +84,7 @@ namespace NMP.Portal.Controllers
         private const string _manureTypeError = "ManureTypeError";  //Defoliation
         private const string _doubleCropError = "DoubleCropError";
         private const string _defoliationAction = "Defoliation";
+        private const string _manualNutrientValuesKey = "ManualNutrientValues";
 
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
@@ -1246,6 +1247,7 @@ managementPeriod.CropID.HasValue
                 if (model.IsCheckAnswer)
                 {
                     model.IsManureTypeChange = true;
+                    model.IsCalculateBasedOnDryMatter = false;
                 }
                 if (IsOtherManureType(model.ManureGroupIdForFilter))
                 {
@@ -1991,7 +1993,7 @@ managementPeriod.CropID.HasValue
                     {
                         model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
                         HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                        return RedirectToAction("ManualNutrientValues");
+                        return RedirectToAction(_manualNutrientValuesKey);
                     }
 
                     if (farmManure != null)
@@ -2051,7 +2053,7 @@ managementPeriod.CropID.HasValue
                         BindNutrientsFromManureType(model);
 
                     HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                    return RedirectToAction("ManualNutrientValues");
+                    return RedirectToAction(_manualNutrientValuesKey);
                 }
 
                 // ✅ Reset nutrients
@@ -2332,35 +2334,10 @@ managementPeriod.CropID.HasValue
             {
                 if (!ModelState.IsValid)
                 {
-                    ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
-                    ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
-                    ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
-                    ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
-                    ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
-                    ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
-                    ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
-                    ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
-                    ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
+                    ValidateNumericErrorForNutrientValues();
                 }
 
-                AddErrorIfNull(model.DryMatterPercent, _dryMatterPercentKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblDryMatter.ToLower()));
-
-                AddErrorIfNull(model.N, "N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblTotalNitrogen.ToLower()));
-
-                AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
-
-                AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
-
-                AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
-
-                AddErrorIfNull(model.P2O5, "P2O5", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPhosphate.ToLower()));
-
-                AddErrorIfNull(model.K2O, "K2O", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblPotash.ToLower()));
-
-                AddErrorIfNull(model.SO3, "SO3", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblSulphur.ToLower()));
-
-                AddErrorIfNull(model.MgO, "MgO", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblMagnesiumMgO.ToLower()));
-
+                ValidateNutrientValuesIfNull(model);
 
                 ValidateNutrientValues(model);
 
@@ -2395,6 +2372,43 @@ managementPeriod.CropID.HasValue
             }
 
         }
+
+        private void ValidateNumericErrorForNutrientValues()
+        {
+            ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
+            ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
+            ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
+            ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
+            ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
+            ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
+            ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
+            ReplaceNumericError("SO3", Resource.lblSO3, Resource.lblTotalSulphur);
+            ReplaceNumericError("MgO", Resource.lblMgO, Resource.lblMagnesiumMgO);
+        }
+
+        private void ValidateNutrientValuesIfNull(OrganicManureViewModel model)
+        {
+            ValidateIfNull(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter);
+            ValidateIfNull(model.N, "N", Resource.lblTotalNitrogen);
+            ValidateIfNull(model.NH4N, "NH4N", Resource.lblAmmoniumForError);
+            ValidateIfNull(model.UricAcid, "UricAcid", Resource.MsgUricAcid);
+            ValidateIfNull(model.NO3N, "NO3N", Resource.lblNitrateForErrorMsg);
+            ValidateIfNull(model.P2O5, "P2O5", Resource.lblPhosphate);
+            ValidateIfNull(model.K2O, "K2O", Resource.lblPotash);
+            ValidateIfNull(model.SO3, "SO3", Resource.lblSulphur);
+            ValidateIfNull(model.MgO, "MgO", Resource.lblMagnesiumMgO);
+        }
+
+        private void ValidateIfNull<T>(T value, string key, string label)
+        {
+            AddErrorIfNull(
+                value,
+                key,
+                string.Format(
+                    Resource.MsgEnterTheValueBeforeContinuing,
+                    label.ToLower()));
+        }
+
 
         private (bool flowControl, IActionResult? value) RedirectIfCheckAnswerForManualNutrientValues(OrganicManureViewModel model)
         {
@@ -3968,6 +3982,7 @@ managementPeriod.CropID.HasValue
                     model.DefoliationCurrentCounter = model.DefoliationList.Count;
                 }
                 model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+                SetOrganicManureToSession(model);
             }
         }
 
@@ -8718,6 +8733,7 @@ managementPeriod.CropID.HasValue
             OrganicManureViewModel model, OrganicManureViewModel orgManureViewModel)
         {
             model.IsManureTypeChange = true;
+            model.IsCalculateBasedOnDryMatter = false;
 
             if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
             {
@@ -8948,6 +8964,8 @@ managementPeriod.CropID.HasValue
             {
                 model.DefoliationCurrentCounter = 0;
                 model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+                SetOrganicManureToSession(model);
+
                 if (HttpContext.Session.Keys.Contains(_organicManureSessionKey))
                 {
                     OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
@@ -9112,6 +9130,7 @@ managementPeriod.CropID.HasValue
 
             model.DefoliationCurrentCounter = model.DefoliationList.Count;
             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
+            SetOrganicManureToSession(model);
 
             return model;
         }
@@ -9119,7 +9138,7 @@ managementPeriod.CropID.HasValue
 
 
         [HttpGet]
-        public async Task<IActionResult> Defoliation(string q)
+        public async Task<IActionResult> Defoliation(string q,string? r)
         {
             _logger.LogTrace("OrganicManure Controller : Defoliation({Q}) action called", q);
             OrganicManureViewModel? model = GetOrganicManureFromSession();
@@ -9132,7 +9151,7 @@ managementPeriod.CropID.HasValue
                 }
 
                 IActionResult? earlyResult;
-                (model, earlyResult) = await HandleDefoliationQueryParamAsync(model, q);
+                (model, earlyResult) = await HandleDefoliationQueryParamAsync(model, q,r);
                 if (earlyResult != null)
                 {
                     return earlyResult;
@@ -9206,7 +9225,7 @@ managementPeriod.CropID.HasValue
 
         // ===================== Query param ("q") handling =====================
 
-        private async Task<(OrganicManureViewModel Model, IActionResult? EarlyResult)> HandleDefoliationQueryParamAsync(OrganicManureViewModel model, string q)
+        private async Task<(OrganicManureViewModel Model, IActionResult? EarlyResult)> HandleDefoliationQueryParamAsync(OrganicManureViewModel model, string q,string? r)
         {
             bool shouldReset = string.IsNullOrWhiteSpace(q) && model != null &&
                 (model.DefoliationList == null ||
@@ -9220,7 +9239,7 @@ managementPeriod.CropID.HasValue
                 return (model, null);
             }
 
-            if (model != null && !string.IsNullOrWhiteSpace(q) && model.OrganicManures != null && model.OrganicManures.Count > 0)
+            if (model != null && string.IsNullOrWhiteSpace(r)&&!string.IsNullOrWhiteSpace(q) && model.OrganicManures != null && model.OrganicManures.Count > 0)
             {
                 return await HandleDefoliationIndexAsync(model, q);
             }
@@ -9451,7 +9470,7 @@ managementPeriod.CropID.HasValue
                 return RedirectToAction(_manureApplyingDateAction);
             }
 
-            return await ReturnDefoliationView(model);
+            return RedirectToAction(_defoliationAction, new {r=_organicManureProtector.Protect(true.ToString())});
         }
 
         // ---------- "Different defoliation per field" branch ----------
@@ -9497,14 +9516,19 @@ managementPeriod.CropID.HasValue
         {
             if (crop.DefoliationSequenceID != null && model.DefoliationList[i].Defoliation != null)
             {
-                (string selectedDefoliation, Error? nameError) = await GetDefoliationName(
-                    model.DefoliationList[i].Defoliation.Value, crop.DefoliationSequenceID.Value);
+                string selectedDefoliation = string.Empty;
+                (DefoliationSequenceResponse defoliationSequence, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+                if (defoliationSequence != null)
+                {
+                    selectedDefoliation = await CommonHelpers.GetDefoliationName(model.DefoliationList[i].Defoliation.Value,
+                       defoliationSequence);
+                }
 
-                if (nameError == null && !string.IsNullOrWhiteSpace(selectedDefoliation))
+                if (!string.IsNullOrWhiteSpace(selectedDefoliation))
                 {
                     model.DefoliationList[i].DefoliationName = selectedDefoliation;
 
-                    if (model.OrganicManures != null && model.OrganicManures.Count > 0)
+                    if (model.OrganicManures?.Count > 0)
                     {
                         int index = model.OrganicManures.FindIndex(f => f.IsGrass && f.FieldID == crop.FieldID);
                         if (index >= 0)
@@ -9575,10 +9599,19 @@ managementPeriod.CropID.HasValue
                 return;
             }
 
-            (string selectedDefoliation, Error? nameError) = await GetDefoliationName(currentDefoliation.Value, crop.DefoliationSequenceID.Value);
-            if (nameError != null || string.IsNullOrWhiteSpace(selectedDefoliation))
+            string selectedDefoliation = string.Empty;
+            (DefoliationSequenceResponse defoliationSequence, Error? nameError) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+            
+            
+            if (nameError != null)
             {
                 return;
+            }
+
+            if (defoliationSequence != null)
+            {
+                selectedDefoliation = await CommonHelpers.GetDefoliationName(currentDefoliation.Value,
+                   defoliationSequence);
             }
 
             model.DefoliationList[i].DefoliationName = selectedDefoliation;
@@ -9967,23 +10000,7 @@ managementPeriod.CropID.HasValue
 
             return (list, null);
         }
-
-        private async Task<(string?, Error?)> GetDefoliationName(int defoliation, int defoliationSequenceID)
-        {
-            string selectedDefoliation = string.Empty;
-            Error? error = null;
-            (DefoliationSequenceResponse defoliationSequence, error) = await _cropLogic.FetchDefoliationSequencesById(defoliationSequenceID);
-            if (error == null && defoliationSequence != null)
-            {
-                string description = defoliationSequence.DefoliationSequenceDescription;
-                if (!string.IsNullOrWhiteSpace(description))
-                {
-                    selectedDefoliation = CommonHelpers.BindDefoliationName(defoliation, description);
-
-                }
-            }
-            return (selectedDefoliation, error);
-        }
+                
 
         private static async Task<OrganicManureViewModel> GetDatesFromClosedPeriod(OrganicManureViewModel model, string closedPeriod)
         {
@@ -10661,6 +10678,63 @@ managementPeriod.CropID.HasValue
 
             }
             return model;
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateNutrientValues(OrganicManureViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ValidateNumericErrorForNutrientValues();
+            }
+
+            ValidateNutrientValuesIfNull(model);
+            ValidateNutrientValues(model);
+            if (!ModelState.IsValid)
+            {
+
+                return View(_manualNutrientValuesKey, model);
+            }
+            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+            var manureNutrientResponse = new ManureNutrientResponse
+            {
+                id = organicManureViewModel.ManureTypeId.Value,
+                dryMatter = model.DryMatterPercent.Value,
+                totalN = model.N.Value,
+                uric = model.UricAcid.Value,
+                p2O5 = model.P2O5.Value,
+                k2O = model.K2O.Value,
+                sO3 = model.SO3.Value,
+                mgO = model.MgO.Value
+            };
+
+            var (result, _) =
+                await _mannerLogic.CalculateDefaultNutrientValueBasedOnDryMatter(manureNutrientResponse);
+
+            if (result != null)
+            {
+                UpdateModelWithNutrients(model, result);
+            }
+
+
+            SetOrganicManureToSession(model);
+            ModelState.Clear();
+            return View(_manualNutrientValuesKey, model);
+        }
+        private static void UpdateModelWithNutrients(
+    OrganicManureViewModel model,
+    ManureNutrientResponse result)
+        {
+            model.N = Math.Round(result.totalN, 2);
+            model.NO3N = Math.Round(result.nO3N, 2);
+            model.NH4N = Math.Round(result.nH4N, 2);
+            model.UricAcid = Math.Round(result.uric, 2);
+            model.P2O5 = Math.Round(result.p2O5, 2);
+            model.K2O = Math.Round(result.k2O, 2);
+            model.SO3 = Math.Round(result.sO3, 2);
+            model.MgO = Math.Round(result.mgO, 2);
+            model.DryMatterPercent = result.dryMatter;
+            model.IsCalculateBasedOnDryMatter = true;
         }
 
 

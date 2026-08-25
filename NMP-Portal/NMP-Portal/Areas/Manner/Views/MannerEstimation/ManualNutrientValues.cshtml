@@ -8,9 +8,9 @@
     {
         suffixUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne;
     }
-    
+
     var backAction = "DefaultNutrientValues";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";
     }
@@ -24,9 +24,9 @@
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            
-                    <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.ManureTypeName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
-            
+
+            <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.ManureTypeName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
+
             <govuk-input for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblDryMatter
@@ -34,6 +34,16 @@
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblPercentage</govuk-input-suffix>
             </govuk-input>
+
+            @if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure)
+            {
+
+                <govuk-button type="submit" class="govuk-button--secondary"
+                              formaction="@Url.Action("UpdateNutrientValues", "MannerEstimation")">
+
+                    @Resource.lblUpdateNutrientValuesBasedOnDryMatterContent
+                </govuk-button>
+            }
             <govuk-input for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblTotalNitrogenN
@@ -90,9 +100,9 @@
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
-               <govuk-button type="submit" class="margin-bottom-forty">
-                    @Resource.lblContinue
-                </govuk-button> 
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
 
             <partial name="_CancelLink" model="@Model.EncryptedMannerEstimateId" />
 
