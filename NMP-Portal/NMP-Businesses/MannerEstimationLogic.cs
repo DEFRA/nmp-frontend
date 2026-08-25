@@ -599,7 +599,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return manureType;
     }
 
-    public async Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25(bool isDefault=false)
+    public async Task<MannerEstimationStep25ViewModel> GetMannerEstimationStep25(bool isDefault)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep25.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;

@@ -84,6 +84,7 @@ namespace NMP.Portal.Controllers
         private const string _manureTypeError = "ManureTypeError";  //Defoliation
         private const string _doubleCropError = "DoubleCropError";
         private const string _defoliationAction = "Defoliation";
+        private const string _manualNutrientValuesKey = "ManualNutrientValues";
 
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
@@ -1246,6 +1247,7 @@ managementPeriod.CropID.HasValue
                 if (model.IsCheckAnswer)
                 {
                     model.IsManureTypeChange = true;
+                    model.IsCalculateBasedOnDryMatter = false;
                 }
                 if (IsOtherManureType(model.ManureGroupIdForFilter))
                 {
@@ -1991,7 +1993,7 @@ managementPeriod.CropID.HasValue
                     {
                         model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
                         HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                        return RedirectToAction("ManualNutrientValues");
+                        return RedirectToAction(_manualNutrientValuesKey);
                     }
 
                     if (farmManure != null)
@@ -2051,7 +2053,7 @@ managementPeriod.CropID.HasValue
                         BindNutrientsFromManureType(model);
 
                     HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                    return RedirectToAction("ManualNutrientValues");
+                    return RedirectToAction(_manualNutrientValuesKey);
                 }
 
                 // ✅ Reset nutrients
@@ -8727,6 +8729,7 @@ managementPeriod.CropID.HasValue
             OrganicManureViewModel model, OrganicManureViewModel orgManureViewModel)
         {
             model.IsManureTypeChange = true;
+            model.IsCalculateBasedOnDryMatter = false;
 
             if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
             {
@@ -10685,23 +10688,23 @@ managementPeriod.CropID.HasValue
             if (!ModelState.IsValid)
             {
 
-                return View("ManualNutrientValues", model);
+                return View(_manualNutrientValuesKey, model);
             }
             OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
             var manureNutrientResponse = new ManureNutrientResponse
             {
-                id = organicManureViewModel.ManureTypeId!.Value,
-                dryMatter = model.DryMatterPercent!.Value,
-                totalN = model.N!.Value,
-                uric = model.UricAcid!.Value,
-                p2O5 = model.P2O5!.Value,
-                k2O = model.K2O!.Value,
-                sO3 = model.SO3!.Value,
-                mgO = model.MgO!.Value
+                id = organicManureViewModel.ManureTypeId.Value,
+                dryMatter = model.DryMatterPercent.Value,
+                totalN = model.N.Value,
+                uric = model.UricAcid.Value,
+                p2O5 = model.P2O5.Value,
+                k2O = model.K2O.Value,
+                sO3 = model.SO3.Value,
+                mgO = model.MgO.Value
             };
 
-            var (result, error) =
-                await _mannerLogic.FetchDefaultNutrientValueBasedOnDryMatter(manureNutrientResponse);
+            var (result, _) =
+                await _mannerLogic.CalculateDefaultNutrientValueBasedOnDryMatter(manureNutrientResponse);
 
             if (result != null)
             {
@@ -10711,20 +10714,20 @@ managementPeriod.CropID.HasValue
 
             SetOrganicManureToSession(model);
             ModelState.Clear();
-            return View("ManualNutrientValues", model);
+            return View(_manualNutrientValuesKey, model);
         }
         private static void UpdateModelWithNutrients(
     OrganicManureViewModel model,
     ManureNutrientResponse result)
         {
-            model.N = result.totalN;
-            model.NO3N = result.nO3N;
-            model.NH4N = result.nH4N;
-            model.UricAcid = result.uric;
-            model.P2O5 = result.p2O5;
-            model.K2O = result.k2O;
-            model.SO3 = result.sO3;
-            model.MgO = result.mgO;
+            model.N = Math.Round(result.totalN, 2);
+            model.NO3N = Math.Round(result.nO3N, 2);
+            model.NH4N = Math.Round(result.nH4N, 2);
+            model.UricAcid = Math.Round(result.uric, 2);
+            model.P2O5 = Math.Round(result.p2O5, 2);
+            model.K2O = Math.Round(result.k2O, 2);
+            model.SO3 = Math.Round(result.sO3, 2);
+            model.MgO = Math.Round(result.mgO, 2);
             model.DryMatterPercent = result.dryMatter;
             model.IsCalculateBasedOnDryMatter = true;
         }

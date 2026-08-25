@@ -578,13 +578,13 @@ responseWrapper?.Data is not null)
 
         return (subSoilList, error);
     }
-    public async Task<(ManureNutrientResponse?, Error?)> FetchDefaultNutrientValueBasedOnDryMatter(ManureNutrientResponse manureNutrientResponse)
+    public async Task<(ManureNutrientResponse?, Error?)> CalculateDefaultNutrientValueBasedOnDryMatter(ManureNutrientResponse manureNutrientResponse)
     {
         Error? error = null;
         ManureNutrientResponse? manureNutrientResponseResult = null;
         HttpClient httpClient = await GetNMPAPIClient();
         string jsonData = JsonConvert.SerializeObject(manureNutrientResponse);
-        var requestUrl = string.Format(ApiurlHelper.CalculateNutrientValueBasedOnDryMatterAsyncAPI, jsonData);
+        var requestUrl = ApiurlHelper.CalculateNutrientValueBasedOnDryMatterAsyncAPI;
         var response = await httpClient.PostAsync(requestUrl, new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json"));
         response.EnsureSuccessStatusCode();
         string result = await response.Content.ReadAsStringAsync();
