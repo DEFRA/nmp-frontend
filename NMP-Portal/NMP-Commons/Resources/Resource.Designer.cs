@@ -3573,6 +3573,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy of nutrient supply estimate created. .
+        /// </summary>
+        public static string lblCopyOfNutrientSupplyEstimateCreated {
+            get {
+                return ResourceManager.GetString("lblCopyOfNutrientSupplyEstimateCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Plan Years.
         /// </summary>
         public static string lblCopyPlanYears {
@@ -14685,6 +14694,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select view or change to edit this estimate or to view the results..
+        /// </summary>
+        public static string lblSelectViewOrChangeToEditThisEstimateOrToViewTheResults {
+            get {
+                return ResourceManager.GetString("lblSelectViewOrChangeToEditThisEstimateOrToViewTheResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SEPA publish rainfall data for Scotland. &lt;a href=&quot;https://www2.sepa.org.uk/rainfall&quot; target=&quot;_blank&quot;&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;.
         /// </summary>
         public static string lblSEPAPublishRainfallDataForScotland {
@@ -23614,6 +23632,15 @@ namespace NMP.Commons.Resources {
         public static string MsgMinMaxValidation {
             get {
                 return ResourceManager.GetString("MsgMinMaxValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a value for {0} between {1} and {2}..
+        /// </summary>
+        public static string MsgMinMaxValidationForDryMatter {
+            get {
+                return ResourceManager.GetString("MsgMinMaxValidationForDryMatter", resourceCulture);
             }
         }
         
