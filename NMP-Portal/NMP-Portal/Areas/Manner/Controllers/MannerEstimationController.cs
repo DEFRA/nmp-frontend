@@ -1083,11 +1083,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             Error? error = null;
             DateTime endDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
-            DateTime startDate= DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
-            if(model.ClosedPeriod != null && model.ApplicationDate != null)
-            {
-                (startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
-            }
+            DateTime startDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+            GetStartEndDates(model, ref endDate, ref startDate);
 
             if (model.CountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
@@ -1134,6 +1131,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             return error;
+        }
+
+        private static void GetStartEndDates(MannerEstimationStep13ViewModel model, ref DateTime endDate, ref DateTime startDate)
+        {
+            if (model.ClosedPeriod != null && model.ApplicationDate != null)
+            {
+                (startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            }
         }
 
         private async Task CheckScotlandClosedPeriodWarning(MannerEstimationStep13ViewModel model, ManureType? manureType, DateTime endDate, DateTime startDate)
@@ -5435,7 +5440,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if ((manureType?.HighReadilyAvailableNitrogen == true || countryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) && estimation.MannerEstimation.IsWithinNVZ == true)
             {
                 int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.MannerEstimation.CropTypeID);
-                int? manureGroupId = manureType.ManureGroupId;
+                int? manureGroupId = manureType?.ManureGroupId;
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
                 int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
 
