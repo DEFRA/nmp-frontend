@@ -3573,6 +3573,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy of nutrient supply estimate created. .
+        /// </summary>
+        public static string lblCopyOfNutrientSupplyEstimateCreated {
+            get {
+                return ResourceManager.GetString("lblCopyOfNutrientSupplyEstimateCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Plan Years.
         /// </summary>
         public static string lblCopyPlanYears {
@@ -14681,6 +14690,15 @@ namespace NMP.Commons.Resources {
         public static string lblSelectTheFarmFieldAndCropTabOrAnApplication {
             get {
                 return ResourceManager.GetString("lblSelectTheFarmFieldAndCropTabOrAnApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select view or change to edit this estimate or to view the results..
+        /// </summary>
+        public static string lblSelectViewOrChangeToEditThisEstimateOrToViewTheResults {
+            get {
+                return ResourceManager.GetString("lblSelectViewOrChangeToEditThisEstimateOrToViewTheResults", resourceCulture);
             }
         }
         
