@@ -730,5 +730,46 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return isExist;
     }
+
+    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeServiceAsync(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry)
+    {
+        Error? error = null;
+        decimal? totalRate = (decimal?)null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            string requestUrl = ApiurlHelper.FetchMannerTotalApplicationRateByDateRangeAsyncAPI;
+
+            if (mannerApplicationId.HasValue)
+            {
+                requestUrl += $"&mannerEstimationApplicationId={mannerApplicationId.Value}";
+            }
+            requestUrl += $"&isPoultry={isPoultry}";
+
+            requestUrl = string.Format(requestUrl, mannerEstimationId, dateFrom, dateTo);
+
+            var response = await httpClient.GetAsync(requestUrl);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            {
+                totalRate = Convert.ToDecimal(responseWrapper?.Data.TotalApplicationRate);
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            error = _logger.HandleException(ex, error);
+        }
+        return (totalRate, error);
+    }
 }
 

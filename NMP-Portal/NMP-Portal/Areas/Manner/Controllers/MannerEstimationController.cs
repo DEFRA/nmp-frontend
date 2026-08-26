@@ -966,11 +966,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model.ClosedPeriod = closedPeriod;
                 }
 
-                model.IsWarningMsgNeedToShow = false;
-                model.IsClosedPeriodWarning = false;
-                model.IsApplicationJulyToSeptWarning = false;
-                model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
             }
+            model.IsWarningMsgNeedToShow = false;
+            model.IsClosedPeriodWarning = false;
+            model.IsApplicationJulyToSeptWarning = false;
+            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
 
             model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
             return View(model);
@@ -993,15 +993,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
                 model = _mannerEstimationLogic.GetMannerEstimationStep13();
-                if (model.ApplicationDate != formData.ApplicationDate)
-                {
-                    model.IsWarningMsgNeedToShow = false;
-                }
+                CheckClosedPeriodWarningForManureApplyingDate(model);
                 model.ApplicationDate = formData.ApplicationDate;
                 var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
                 model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
                 //non organic farm, high N, NVZ
-                if (!string.IsNullOrWhiteSpace(model.ClosedPeriod) && string.IsNullOrWhiteSpace(error?.Message))
+                if ((!string.IsNullOrWhiteSpace(model.ClosedPeriod) || model.CountryId==(int)NMP.Commons.Enums.FarmCountry.Scotland) && string.IsNullOrWhiteSpace(error?.Message))
                 {
                     int harvestYear = GetHarvestYearFromApplicationDate(model.ApplicationDate ?? DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
 
@@ -1032,6 +1029,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
+        }
+
+        private void CheckClosedPeriodWarningForManureApplyingDate(MannerEstimationStep13ViewModel model)
+        {
+            MannerEstimationStep13ViewModel manureViewModel = _mannerEstimationLogic.GetMannerEstimationStep13();
+            if (model.ApplicationDate != manureViewModel.ApplicationDate)
+            {
+                model.IsWarningMsgNeedToShow = false;
+                model.IsApplicationDateChange = true;
+            }
+
+            model.IsClosedPeriodWarning = false;
+            model.IsApplicationJulyToSeptWarning = false;
+            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
         }
 
         private async Task ValidateApplicationDate(MannerEstimationStep13ViewModel formData)
@@ -1072,7 +1083,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             Error? error = null;
             DateTime endDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
-            (var startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            DateTime startDate= DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+            if(model.ClosedPeriod != null && model.ApplicationDate != null)
+            {
+                (startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            }
 
             if (model.CountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
@@ -1180,7 +1195,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private async Task<Error?> HandleLivestockManureRule(MannerEstimationStep13ViewModel model)
         {
-            int? mannerEstimationId = null;
+            int? mannerEstimationId = model.MannerEstimationId;
             if (model.MannerEstimationId == null && !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId))
             {
                 mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
@@ -1315,11 +1330,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 "MMMM",
                 CultureInfo.InvariantCulture).Month;
 
-            // Determine years
-            int startYear = harvestYear - 1;
-            int endYear = endMonth < startMonth
-                ? harvestYear          // crosses year boundary
-                : harvestYear - 1;     // same calendar year
+            int startYear = startMonth >= 8 ? harvestYear - 1 : harvestYear;
+
+            int endYear = endMonth >= 8 ? harvestYear - 1 : harvestYear;
 
             DateTime startDate = new(startYear, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
             DateTime endDate = new(endYear, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
@@ -4861,11 +4874,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             DateTime endDate = isInFebPeriod ? febEnd : preEnd;
 
             var (totalApplicationRate, _) =
-                await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
+                await _mannerEstimationLogic.FetchTotalApplicationRateByDateRange(
                     mannerEstimationId ?? 0,
-                    startDate,
-                    endDate,
-                    mannerAppId);
+                    startDate.ToString(_dateStringLiteral),
+                    endDate.ToString(_dateStringLiteral),
+                    mannerAppId, isPoultry);
 
             totalApplicationRate = model.ApplicationRate + totalApplicationRate ?? 0;
 
@@ -5241,7 +5254,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     foreach (var application in applications)
                     {
                         //warnings
-                        await BindWarnings(model.MannerFieldAndCropDetails, application, model);
+                        await BindWarnings(model.MannerFieldAndCropDetails, application, model, mannerFarm?.CountryID??0);
 
                         bool isLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID ?? 0);
 
@@ -5372,16 +5385,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-        private async Task BindWarnings(MannerEstimationDetailsViewModel estimation, MannerEstimationApplicationDetailsViewModel application, MannerEstimationReportViewModel model)
+        private async Task BindWarnings(MannerEstimationDetailsViewModel estimation, MannerEstimationApplicationDetailsViewModel application, MannerEstimationReportViewModel model, int countryId)
         {
             Error? error = null;
 
             string? closedPeriod = string.Empty;
             var dateWarningViewModel = new MannerEstimationStep13ViewModel();
             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID ?? 0);
-            if (manureType?.HighReadilyAvailableNitrogen == true && estimation.MannerEstimation.IsWithinNVZ == true)
+            if ((manureType?.HighReadilyAvailableNitrogen == true || countryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) && estimation.MannerEstimation.IsWithinNVZ == true)
             {
                 int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.MannerEstimation.CropTypeID);
+                int? manureGroupId = manureType.ManureGroupId;
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
                 int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
 
@@ -5414,7 +5428,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     IsWarningMsgNeedToShow = false,
                     IsClosedPeriodWarning = false,
                     IsApplicationJulyToSeptWarning = false,
-                    IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false
+                    IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false,
+                    ManureGroupId= manureGroupId
                 };
 
                 error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
