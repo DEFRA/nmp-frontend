@@ -1132,7 +1132,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private async Task<Error?> EndClosedPeriodEndFebSlurryPoultryTwentyDayWarning(MannerEstimationStep13ViewModel model)
         {
             Error? error = null;
-            int? mannerEstimationId = null;
+            int? mannerEstimationId = model.MannerEstimationId;
             if (model.MannerEstimationId == null && !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId))
             {
                 mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
@@ -1143,30 +1143,33 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 (List<MannerEstimationApplication> mannerApplications, error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
                 if (mannerApplications.Count > 0)
                 {
-                    var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
-
-                    bool isSlurry = CommonHelpers.IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
-                    bool isPoultryManure =
-                        model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
-
-                    if (isSlurry || isPoultryManure)
+                    var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
+                    if(mannerApplicationWithin21Days != null)
                     {
-                        // warning excel sheet row no. 21
-                        model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
+                        bool isSlurry = CommonHelpers.IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
+                        bool isPoultryManure =
+                            model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
 
-                        WarningResponse warning =
-                            await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
-                                model.CountryId,
-                                NMP.Commons.Enums.WarningKey
-                                    .AllowWeeksBetweenSlurryPoultryApplications.ToString());
+                        if (isSlurry || isPoultryManure)
+                        {
+                            // warning excel sheet row no. 21
+                            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
 
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
-                        model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
+                            WarningResponse warning =
+                                await _warningLogic.FetchWarningByCountryIdAndWarningKeyAsync(
+                                    model.CountryId,
+                                    NMP.Commons.Enums.WarningKey
+                                        .AllowWeeksBetweenSlurryPoultryApplications.ToString());
+
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksHeader = warning.Header;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksCodeID = warning.WarningCodeID;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksLevelID = warning.WarningLevelID;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1 = warning.Para1;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2 = warning.Para2;
+                            model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
+                        }
                     }
+                    
                 }
 
             }
@@ -4723,7 +4726,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (decimal totalN, Error? error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(mannerEstimationId ?? 0, startDate, endDateFebruary, mannerAppId);
 
             decimal nitrogenWithin4Weeks = 0;
-            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId))
+            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId))
             {
 
                 (nitrogenWithin4Weeks, error) = await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
