@@ -8477,4 +8477,10 @@ following crop year 2</value>
   <data name="MsgMinMaxValidationForDryMatter" xml:space="preserve">
     <value>Enter a value for {0} between {1} and {2}.</value>
   </data>
+  <data name="lblCopyOfNutrientSupplyEstimateCreated" xml:space="preserve">
+    <value>Copy of nutrient supply estimate created. </value>
+  </data>
+  <data name="lblSelectViewOrChangeToEditThisEstimateOrToViewTheResults" xml:space="preserve">
+    <value>Select view or change to edit this estimate or to view the results.</value>
+  </data>
 </root>

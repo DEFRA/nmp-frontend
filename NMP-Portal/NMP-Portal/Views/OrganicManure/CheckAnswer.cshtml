@@ -15,18 +15,18 @@
 
         return new HtmlString($@"
             <span class='nutrient_row'>
-                {label}
+        {label}
                 <span class='figure w31'>{formattedValue}</span>
             </span>");
     }
 
-     public string GetManureText(string newText, string existingText)
+    public string GetManureText(string newText, string existingText)
     {
         return string.IsNullOrWhiteSpace(Model.EncryptedOrgManureId)
             ? newText
             : existingText;
     }
-    
+
     public IHtmlContent RenderNutrients(IEnumerable<dynamic> items)
     {
         var sb = new HtmlContentBuilder();
@@ -40,12 +40,29 @@
     {
         if (!Model.ApplicationRate.HasValue)
             return Resource.lblNotSet;
-    
+
         var unit = (Model.IsManureTypeLiquid == true)
             ? Resource.lblMeterCubePerHa
             : Resource.lblTonPerHa;
-    
+
         return $"{Model.ApplicationRate} {unit}";
+    }
+
+    string GetQuantityText()
+    {
+        string Quantity = string.Empty;
+        @if (Model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+        {
+            if (!Model.Quantity.HasValue)
+                return Resource.lblNotSet;
+
+            var unit = (Model.IsManureTypeLiquid == true)
+                        ? Resource.lblCubicMeters
+                        : Resource.lbltonnes;
+
+            Quantity= $"{Model.Quantity} {unit}";
+        }
+        return Quantity;
     }
 
     public class NutrientInput
@@ -756,7 +773,7 @@
                                     @Resource.lblQuantityApplied
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                @((Model.Quantity.HasValue) ? string.Format(Resource.lblRateWithTonnes, string.Format("{0:N0}", Model.Quantity)) : Resource.lblNotSet)
+                                @GetQuantityText()
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action class=@((Model.ManureTypeId.HasValue)?"":"disabled") asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblChange
