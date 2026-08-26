@@ -85,6 +85,7 @@ namespace NMP.Portal.Controllers
         private const string _doubleCropError = "DoubleCropError";
         private const string _defoliationAction = "Defoliation";
         private const string _manualNutrientValuesKey = "ManualNutrientValues";
+        private const string _uricAcidKey = "UricAcid";
 
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
@@ -2378,7 +2379,7 @@ managementPeriod.CropID.HasValue
             ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
             ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
             ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
-            ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
+            ReplaceNumericError(_uricAcidKey, Resource.lblUricAcidForError, Resource.lblUricAcid);
             ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
             ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
             ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
@@ -2391,7 +2392,7 @@ managementPeriod.CropID.HasValue
             ValidateIfNull(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter);
             ValidateIfNull(model.N, "N", Resource.lblTotalNitrogen);
             ValidateIfNull(model.NH4N, "NH4N", Resource.lblAmmoniumForError);
-            ValidateIfNull(model.UricAcid, "UricAcid", Resource.MsgUricAcid);
+            ValidateIfNull(model.UricAcid, _uricAcidKey, Resource.MsgUricAcid);
             ValidateIfNull(model.NO3N, "NO3N", Resource.lblNitrateForErrorMsg);
             ValidateIfNull(model.P2O5, "P2O5", Resource.lblPhosphate);
             ValidateIfNull(model.K2O, "K2O", Resource.lblPotash);
@@ -2454,6 +2455,16 @@ managementPeriod.CropID.HasValue
             {
                 ModelState.AddModelError("N", string.Format(Resource.MsgMinMaxValidation, Resource.lblTotalNitrogenN, 297));
             }
+            // Max 2 decimal places
+            if (HasMoreThanTwoDecimalPlaces(model.N))
+            {
+                ModelState.AddModelError(
+                    "N",
+                    string.Format(
+                        Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                        Resource.lblTotalNitrogenN.ToLower()));
+            }
+
             ValidateNH4NUricAcidNO3NAndP2O5(model);
 
             ValidateK2OMgOAndSO3(model);
@@ -2468,18 +2479,34 @@ managementPeriod.CropID.HasValue
                 {
                     if (model.DryMatterPercent < 0 || model.DryMatterPercent > 25)
                     {
-                        ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter.ToLower(), 25));
+                        ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidationForDryMatter, Resource.lblDryMatter.ToLower(),0, 25));
                     }
                 }
                 else
                 {
                     if (model.DryMatterPercent < 0 || model.DryMatterPercent > 99)
                     {
-                        ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidation, Resource.lblDryMatter, 99));
+                        ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidationForDryMatter, Resource.lblDryMatter.ToLower(), 0, 99));
                     }
                 }
+                // Max 2 decimal places
+                if (HasMoreThanTwoDecimalPlaces(model.DryMatterPercent))
+                {
+                    ModelState.AddModelError(
+                        _dryMatterPercentKey,
+                        string.Format(
+                            Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                            Resource.lblDryMatter.ToLower()));
+                }
+
             }
 
+        }
+
+        private static bool HasMoreThanTwoDecimalPlaces(decimal? value)
+        {
+            return value.HasValue &&
+                   Math.Round(value.Value, 2) != value.Value;
         }
 
         private void ValidateNH4NUricAcidNO3NAndP2O5(OrganicManureViewModel model)
@@ -2491,7 +2518,7 @@ managementPeriod.CropID.HasValue
 
             if (model.UricAcid != null && (model.UricAcid < 0 || model.UricAcid > 99))
             {
-                ModelState.AddModelError("UricAcid", string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
+                ModelState.AddModelError(_uricAcidKey, string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
             }
 
             if (model.NO3N != null && (model.NO3N < 0 || model.NO3N > 99))
@@ -2502,6 +2529,45 @@ managementPeriod.CropID.HasValue
             if (model.P2O5 != null && (model.P2O5 < 0 || model.P2O5 > 99))
             {
                 ModelState.AddModelError("P2O5", string.Format(Resource.MsgMinMaxValidation, Resource.lblPhosphateP2O5, 99));
+            }
+            ValidationForNh4nUricNo3nAndP2o5TwoDecimal(model);
+
+        }
+
+        private void ValidationForNh4nUricNo3nAndP2o5TwoDecimal(OrganicManureViewModel model)
+        {
+            // Max 2 decimal places
+            if (HasMoreThanTwoDecimalPlaces(model.NH4N))
+            {
+                ModelState.AddModelError(
+                    "NH4N",
+                    string.Format(
+                        Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                        Resource.lblAmmonium.ToLower()));
+            }
+            if (HasMoreThanTwoDecimalPlaces(model.UricAcid))
+            {
+                ModelState.AddModelError(
+                    _uricAcidKey,
+                    string.Format(
+                        Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                        Resource.lblUricAcid.ToLower()));
+            }
+            if (HasMoreThanTwoDecimalPlaces(model.NO3N))
+            {
+                ModelState.AddModelError(
+                    "NO3N",
+                    string.Format(
+                        Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                        Resource.lblNitrate.ToLower()));
+            }
+            if (HasMoreThanTwoDecimalPlaces(model.P2O5))
+            {
+                ModelState.AddModelError(
+                    "P2O5",
+                    string.Format(
+                        Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                        Resource.lblPhosphateP2O5.ToLower()));
             }
         }
 
@@ -2519,6 +2585,36 @@ managementPeriod.CropID.HasValue
             if (model.SO3 != null && (model.SO3 < 0 || model.SO3 > 99))
             {
                 ModelState.AddModelError("SO3", string.Format(Resource.MsgMinMaxValidation, Resource.lblSulphurSO3, 99));
+            }
+            TwoDecimalValitionForK2oMgOAndSo3(model);
+        }
+
+        private void TwoDecimalValitionForK2oMgOAndSo3(OrganicManureViewModel model)
+        {
+            // Max 2 decimal places
+            if (HasMoreThanTwoDecimalPlaces(model.K2O))
+            {
+                ModelState.AddModelError(
+                    "K2O",
+                    string.Format(
+                        Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                        Resource.lblPotashK2O.ToLower()));
+            }
+            if (HasMoreThanTwoDecimalPlaces(model.MgO))
+            {
+                ModelState.AddModelError(
+                    "MgO",
+                    string.Format(
+                        Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                        Resource.lblMagnesiumMgO.ToLower()));
+            }
+            if (HasMoreThanTwoDecimalPlaces(model.SO3))
+            {
+                ModelState.AddModelError(
+                    "SO3",
+                    string.Format(
+                        Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
+                        Resource.lblSulphurSO3.ToLower()));
             }
         }
 
