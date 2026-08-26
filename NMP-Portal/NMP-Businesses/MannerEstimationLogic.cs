@@ -351,7 +351,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
 
         mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
-        mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerApplicationId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
+        mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerApplicationsId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep13.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep13.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep13.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CountryId ?? 0 : mannerEstimationViewModel.MannerEstimationStep2.CountryID;
@@ -1516,11 +1516,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             (MannerFarmViewModel? mannerFarm, error) = await FetchMannerFarmById(mannerEstimate.MannerFarmID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimate.ID;
-            mannerEstimationViewModel.IsWithinNVZ = mannerEstimate.IsWithinNVZ;
             mannerEstimationViewModel.MannerFarmId = mannerEstimate.MannerFarmID;
-            mannerEstimationViewModel.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;
-            mannerEstimationViewModel.CropTypeId = mannerEstimate.CropTypeID;
+            mannerEstimationViewModel.IsWithinNVZ= mannerEstimate.IsWithinNVZ;
             mannerEstimationViewModel.CountryId = mannerFarm.CountryID;
+            mannerEstimationViewModel.CropTypeId = mannerEstimate.CropTypeID;
+            mannerEstimationViewModel.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;
             mannerEstimationViewModel.MannerEstimationStep31.Name = mannerEstimate.Name;
             mannerEstimationViewModel.MannerEstimationStep1.FarmName = mannerFarm.Name;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID.Value;
