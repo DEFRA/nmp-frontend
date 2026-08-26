@@ -22,7 +22,6 @@ namespace NMP.Commons.ViewModels
 
         public int? MannerEstimationApplicationsId { get; set; }
         public bool IsApplicationDateChange { get; set; } = false;
-        public string EncryptedMannerApplicationId { get; set; } = string.Empty;
         public bool IsManureTypeChange { get; set; } = false;
         public bool IsComingForAddNewApplication { get; set; } = false;
 
