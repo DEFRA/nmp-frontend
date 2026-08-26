@@ -8474,4 +8474,7 @@ following crop year 2</value>
   <data name="lblUpdateNutrientValuesBasedOnDryMatterContent" xml:space="preserve">
     <value>Update nutrient values based on dry matter content</value>
   </data>
+  <data name="MsgMinMaxValidationForDryMatter" xml:space="preserve">
+    <value>Enter a value for {0} between {1} and {2}.</value>
+  </data>
 </root>

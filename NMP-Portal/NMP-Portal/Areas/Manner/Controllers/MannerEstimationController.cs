@@ -2165,6 +2165,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateNH4NUricAcidNO3NAndP2O5(model);
 
         }
+        private static bool IsValidDecimal(decimal? value) =>
+    value.HasValue &&
+                   Math.Round(value.Value, 2) == value.Value;
+
 
         private void ValidateDryMatter(MannerEstimationStep25ViewModel model)
         {
@@ -2181,6 +2185,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
+            if (!IsValidDecimal(model.DryMatterPercent))
+                ModelState.AddModelError(_dryMatterPercentKey,
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblDryMatter.ToLower()));
+
+
         }
 
         private void MinMaxValidationForDryMatterAndTotalN(decimal? value,
@@ -2188,7 +2197,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
     string displayName, decimal minValue,
     decimal maxValue)
         {
-            if (value < minValue || value > maxValue)
+            if (fieldName == _dryMatterPercentKey&& (value < minValue || value > maxValue))
+            {
+                ModelState.AddModelError(fieldName, string.Format(Resource.MsgMinMaxValidationForDryMatter, displayName, 0, maxValue));
+            }
+            else if (value < minValue || value > maxValue)
             {
                 ModelState.AddModelError(fieldName, string.Format(Resource.MsgMinMaxValidation, displayName, maxValue));
             }
@@ -2203,7 +2216,34 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateMaxValue(model.K2O, "K2O", Resource.lblPotashK2O, 99);
             ValidateMaxValue(model.MgO, "MgO", Resource.lblMagnesiumMgO, 99);
             ValidateMaxValue(model.SO3, "SO3", Resource.lblSulphurSO3, 99);
+            TwoDecimalValidationFoNutrientValues(model);
         }
+
+        private void TwoDecimalValidationFoNutrientValues(MannerEstimationStep25ViewModel model)
+        {
+            if (!IsValidDecimal(model.NH4N))
+                ModelState.AddModelError("NH4N",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblAmmonium.ToLower()));
+            if (!IsValidDecimal(model.UricAcid))
+                ModelState.AddModelError("UricAcid",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblUricAcid.ToLower()));
+            if (!IsValidDecimal(model.NO3N))
+                ModelState.AddModelError("NO3N",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblNitrate.ToLower()));
+            if (!IsValidDecimal(model.P2O5))
+                ModelState.AddModelError("P2O5",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblPhosphateP2O5.ToLower()));
+            if (!IsValidDecimal(model.K2O))
+                ModelState.AddModelError("K2O",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblPotashK2O.ToLower()));
+            if (!IsValidDecimal(model.MgO))
+                ModelState.AddModelError("MgO",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblMagnesiumMgO.ToLower()));
+            if (!IsValidDecimal(model.SO3))
+                ModelState.AddModelError("SO3",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblSulphurSO3.ToLower()));
+        }
+
         private void ValidateMaxValue(
     decimal? value,
     string fieldName,
@@ -5959,7 +5999,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerEstimationLogic.GetMannerEstimationStep25(false);
                 return View(_manualNutrientValuesKey, model);
             }
-            
+
             var manureNutrientResponse = new ManureNutrientResponse
             {
                 id = mannerEstimationStep25ViewModel.ManureTypeId.Value,

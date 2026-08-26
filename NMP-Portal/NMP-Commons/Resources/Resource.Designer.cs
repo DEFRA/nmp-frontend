@@ -23618,6 +23618,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value for {0} between {1} and {2}..
+        /// </summary>
+        public static string MsgMinMaxValidationForDryMatter {
+            get {
+                return ResourceManager.GetString("MsgMinMaxValidationForDryMatter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a main location code that is no more than 50 characters long.
         /// </summary>
         public static string MsgMLCMinMaxValidation {
