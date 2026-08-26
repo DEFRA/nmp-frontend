@@ -2213,7 +2213,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private void ValidateNH4NUricAcidNO3NAndP2O5(MannerEstimationStep25ViewModel model)
         {
             ValidateMaxValue(model.NH4N, "NH4N", Resource.lblAmmonium, 99);
-            ValidateMaxValue(model.UricAcid, "UricAcid", Resource.lblUricAcid, 99);
+            ValidateMaxValue(model.UricAcid, _uricAcidKey, Resource.lblUricAcid, 99);
             ValidateMaxValue(model.NO3N, "NO3N", Resource.lblNitrate, 99);
             ValidateMaxValue(model.P2O5, "P2O5", Resource.lblPhosphateP2O5, 99);
             ValidateMaxValue(model.K2O, "K2O", Resource.lblPotashK2O, 99);
@@ -2228,7 +2228,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError("NH4N",
                     string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblAmmonium.ToLower()));
             if (!IsValidDecimal(model.UricAcid))
-                ModelState.AddModelError("UricAcid",
+                ModelState.AddModelError(_uricAcidKey,
                     string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblUricAcid.ToLower()));
             if (!IsValidDecimal(model.NO3N))
                 ModelState.AddModelError("NO3N",
@@ -2325,7 +2325,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
 
-            AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
+            AddErrorIfNull(model.UricAcid, _uricAcidKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
 
             AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
 

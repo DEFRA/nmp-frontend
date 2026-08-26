@@ -85,6 +85,7 @@ namespace NMP.Portal.Controllers
         private const string _doubleCropError = "DoubleCropError";
         private const string _defoliationAction = "Defoliation";
         private const string _manualNutrientValuesKey = "ManualNutrientValues";
+        private const string _uricAcidKey = "UricAcid";
 
         private OrganicManureViewModel? GetOrganicManureFromSession()
         {
@@ -2378,7 +2379,7 @@ managementPeriod.CropID.HasValue
             ReplaceNumericError(_dryMatterPercentKey, Resource.lblDryMatterPercent, Resource.lblDryMatter);
             ReplaceNumericError("N", Resource.lblN, Resource.lblTotalNitrogen);
             ReplaceNumericError("NH4N", Resource.lblNH4N, Resource.lblAmmonium);
-            ReplaceNumericError("UricAcid", Resource.lblUricAcidForError, Resource.lblUricAcid);
+            ReplaceNumericError(_uricAcidKey, Resource.lblUricAcidForError, Resource.lblUricAcid);
             ReplaceNumericError("NO3N", Resource.lblNO3N, Resource.lblNitrogen);
             ReplaceNumericError("P2O5", Resource.lblP2O5, Resource.lblTotalPhosphate);
             ReplaceNumericError("K2O", Resource.lblK2O, Resource.lblTotalPotassium);
@@ -2391,7 +2392,7 @@ managementPeriod.CropID.HasValue
             ValidateIfNull(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter);
             ValidateIfNull(model.N, "N", Resource.lblTotalNitrogen);
             ValidateIfNull(model.NH4N, "NH4N", Resource.lblAmmoniumForError);
-            ValidateIfNull(model.UricAcid, "UricAcid", Resource.MsgUricAcid);
+            ValidateIfNull(model.UricAcid, _uricAcidKey, Resource.MsgUricAcid);
             ValidateIfNull(model.NO3N, "NO3N", Resource.lblNitrateForErrorMsg);
             ValidateIfNull(model.P2O5, "P2O5", Resource.lblPhosphate);
             ValidateIfNull(model.K2O, "K2O", Resource.lblPotash);
@@ -2517,7 +2518,7 @@ managementPeriod.CropID.HasValue
 
             if (model.UricAcid != null && (model.UricAcid < 0 || model.UricAcid > 99))
             {
-                ModelState.AddModelError("UricAcid", string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
+                ModelState.AddModelError(_uricAcidKey, string.Format(Resource.MsgMinMaxValidation, Resource.lblUricAcid, 99));
             }
 
             if (model.NO3N != null && (model.NO3N < 0 || model.NO3N > 99))
@@ -2547,7 +2548,7 @@ managementPeriod.CropID.HasValue
             if (HasMoreThanTwoDecimalPlaces(model.UricAcid))
             {
                 ModelState.AddModelError(
-                    "UricAcid",
+                    _uricAcidKey,
                     string.Format(
                         Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace,
                         Resource.lblUricAcid.ToLower()));
