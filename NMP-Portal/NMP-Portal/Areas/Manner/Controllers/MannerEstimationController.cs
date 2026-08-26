@@ -5844,8 +5844,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
-            HttpContext.Session.SetString("is_current_manner_estimate", Resource.lblTrue);
-            HttpContext.Session.SetString("is_manner_estimate_section", Resource.lblTrue);
+                      
             HttpContext.Session.Remove("current_manner_estimate_farm_name");
             HttpContext.Session.Remove("current_manner_estimate_manner_farm_id");
             ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();

@@ -166,6 +166,7 @@ internal static class ApiurlHelper
     public const string FetchMannerAutumnCropNitrogenUptakeAsyncAPI = "vendors/manner/crop-types/autumn-crop-nitrogen-uptake";
     public const string FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI = "vendors/manner/climates/rainfall-post-application";
     public const string FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI = "vendors/manner/manure-types?manureGroupId={0}&countryId={1}";
+    public const string FetchMannerManureTypesAsyncAPI = "vendors/manner/manure-types";
     public const string FetchMannerManureTypeByManureTypeIdAsyncAPI = "vendors/manner/manure-types/{0}";
     public const string FetchMannerRainfallAverageAsyncAPI = "vendors/manner/climates/avarage-annual-rainfall/{0}";
     public const string FetchFarmManureTypesByFarmIdAsyncAPI = "farm-manure-type/{0}";

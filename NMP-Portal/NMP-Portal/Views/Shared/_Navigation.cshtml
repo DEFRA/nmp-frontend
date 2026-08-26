@@ -17,10 +17,7 @@
             && (string.Equals(currentController, "MannerEstimation", StringComparison.OrdinalIgnoreCase)
             || string.Equals(currentController, "AboutManner", StringComparison.OrdinalIgnoreCase));
     var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
-    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
-    //var isNmptSection = httpContextAccessor?.HttpContext?.Session.GetString("is_nmpt_section");
-    //var isMannerEstimateSection = httpContextAccessor?.HttpContext?.Session.GetString("is_manner_estimate_section");
-    var isCurrentManureEstimate = httpContextAccessor?.HttpContext?.Session.GetString("is_current_manner_estimate");
+    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");       
     var currentManureEstimateFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_farm_name");
     var currentManureEstimateFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_manner_farm_id");
     
@@ -28,7 +25,7 @@
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);    
     bool isAllFarm = (string.Equals(currentController, "Farm", StringComparison.OrdinalIgnoreCase) && string.Equals(currentAction, "FarmList", StringComparison.OrdinalIgnoreCase));
     bool isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase);
-    //bool isAbout = string.Equals(currentController, "AboutService", StringComparison.OrdinalIgnoreCase);
+    
     bool isAcceptTerms = string.Equals(currentController, "AcceptTerms", StringComparison.OrdinalIgnoreCase);    
     bool isAccessibilityStatement = string.Equals(currentController, "AccessibilityStatement", StringComparison.OrdinalIgnoreCase);
     bool isPrivacyNotice = string.Equals(currentController, "PrivacyNotice", StringComparison.OrdinalIgnoreCase);
@@ -72,12 +69,12 @@
                     @currentManureEstimateFarmName
                 </govuk-service-navigation-nav-item>
             }
-            else if (!string.IsNullOrWhiteSpace(isCurrentManureEstimate))
+            @* else if (!string.IsNullOrWhiteSpace(isCurrentManureEstimate))
             {
                 <govuk-service-navigation-nav-item asp-action="MannerFarmList" asp-controller="MannerEstimation" asp-area="Manner" active=true>
                     @Resource.lblNutrientSupplyEstimates
                 </govuk-service-navigation-nav-item>
-            }
+            } *@
             @if (enrolmentCount > 1)
             {
                 <govuk-service-navigation-nav-item asp-controller="Account" asp-action="ChangeOrganisation" asp-area="">
