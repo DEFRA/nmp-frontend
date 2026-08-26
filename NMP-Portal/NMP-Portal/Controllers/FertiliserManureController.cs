@@ -4085,7 +4085,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         model.DefoliationList.RemoveAll(x => x.FieldID == fieldId);
     }
-    private async Task MoveToNextField(FertiliserManureViewModel model,List<Field> fieldList)
+    private static async Task MoveToNextField(FertiliserManureViewModel model,List<Field> fieldList)
     {
         for (int i = 0; i < model.DoubleCrop.Count; i++)
         {
