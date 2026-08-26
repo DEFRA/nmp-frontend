@@ -296,7 +296,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (mannerEstimationViewModel.IsComingForAddNewApplication)
         {            
             mannerEstimationStep11.IsComingForAddNewApplication = true;
-            if (mannerEstimationStep11.IsComingForAddNewApplication)
+            if (mannerEstimationStep11.IsComingForAddNewApplication&&mannerEstimationStep11.ManureGroupId==null)
             {
                 mannerEstimationViewModel.CountryId = mannerEstimationStep11.CountryId;
                 mannerEstimationViewModel.IsFarmOrganic = mannerEstimationStep11.IsFarmOrganic;

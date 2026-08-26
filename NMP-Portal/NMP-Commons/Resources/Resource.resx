@@ -3616,7 +3616,7 @@ cubic metres per hectare  not set</value>
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on grass between the start of the closed spreading period and end of October must not exceed 150kg of total nitrogen per hectare, and that no more than 40kg of total nitrogen can be applied at any one time.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1Wales" xml:space="preserve">
-    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg per hectare.</value>
+    <value>The Water Resources (Control of Agricultural Pollution) Regulations 2021 (Wales) state that the application rate of high readily available nitrogen manures on this crop type between the start of the closed spreading period and the end of February must not exceed 150kg of total nitrogen per hectare.</value>
   </data>
   <data name="MsgStartClosedPeriodEndFebWarningPara1WinterOilseed" xml:space="preserve">
     <value>The Nitrate Vulnerable Zone (NVZ) rules state that on organic farms the application rate of high readily available nitrogen manures on winter oilseed rape between the start of the closed spreading period and 31 October must not exceed 150kg of total nitrogen per hectare.</value>
@@ -8118,7 +8118,7 @@ following crop year 2</value>
     <value>Price of product</value>
   </data>
   <data name="lblFertiliserProduct" xml:space="preserve">
-    <value>Fertiliser Product</value>
+    <value>Fertiliser product</value>
   </data>
   <data name="lblPriceOfNutrient" xml:space="preserve">
     <value>Price of nutrient</value>
