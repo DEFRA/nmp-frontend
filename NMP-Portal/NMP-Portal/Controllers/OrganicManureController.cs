@@ -1523,7 +1523,7 @@ managementPeriod.CropID.HasValue
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
             }
 
-            if (model.OrganicManures.Count > 0)
+            if (model.OrganicManures?.Count > 0)
             {
                 foreach (var orgManure in model.OrganicManures)
                 {
@@ -3403,7 +3403,7 @@ managementPeriod.CropID.HasValue
         // Stamps the selected incorporation method onto every organic manure entry.
         private static void ApplyIncorporationMethodToManures(OrganicManureViewModel model)
         {
-            if (model.OrganicManures.Count > 0)
+            if (model.OrganicManures?.Count > 0)
             {
                 foreach (var orgManure in model.OrganicManures)
                 {
@@ -3415,7 +3415,7 @@ managementPeriod.CropID.HasValue
         // Stamps the resolved incorporation delay onto every organic manure entry.
         private static void ApplyIncorporationDelayToManures(OrganicManureViewModel model)
         {
-            if (model.OrganicManures.Count > 0)
+            if (model.OrganicManures?.Count > 0)
             {
                 foreach (var orgManure in model.OrganicManures)
                 {
@@ -3669,7 +3669,7 @@ managementPeriod.CropID.HasValue
             }
             try
             {
-                if (model.OrganicManures.Count > 0)
+                if (model.OrganicManures?.Count > 0)
                 {
                     int i = 0;
                     foreach (var orgManure in model.OrganicManures)
@@ -8784,25 +8784,27 @@ managementPeriod.CropID.HasValue
 
             model.ManureTypeName = manureType.Name;
             model.IsManureTypeLiquid = manureType.IsLiquid.Value;
-
-            foreach (var orgManure in model.OrganicManures)
+            if (model.OrganicManures?.Count > 0)
             {
-                orgManure.ManureTypeID = model.ManureTypeId.Value;
-                orgManure.K2O = manureType.K2O.Value;
-                if (manureType.MgO != null)
+                foreach (var orgManure in model.OrganicManures)
                 {
-                    orgManure.MgO = manureType.MgO.Value;
+                    orgManure.ManureTypeID = model.ManureTypeId.Value;
+                    orgManure.K2O = manureType.K2O.Value;
+                    if (manureType.MgO != null)
+                    {
+                        orgManure.MgO = manureType.MgO.Value;
+                    }
+                    orgManure.P2O5 = manureType.P2O5.Value;
+                    if (manureType.SO3 != null)
+                    {
+                        orgManure.SO3 = manureType.SO3.Value;
+                    }
+                    orgManure.NH4N = manureType.NH4N.Value;
+                    orgManure.NO3N = manureType.NO3N.Value;
+                    orgManure.UricAcid = manureType.Uric.Value;
+                    orgManure.DryMatterPercent = manureType.DryMatter.Value;
+                    orgManure.N = manureType.TotalN.Value;
                 }
-                orgManure.P2O5 = manureType.P2O5.Value;
-                if (manureType.SO3 != null)
-                {
-                    orgManure.SO3 = manureType.SO3.Value;
-                }
-                orgManure.NH4N = manureType.NH4N.Value;
-                orgManure.NO3N = manureType.NO3N.Value;
-                orgManure.UricAcid = manureType.Uric.Value;
-                orgManure.DryMatterPercent = manureType.DryMatter.Value;
-                orgManure.N = manureType.TotalN.Value;
             }
         }
 
