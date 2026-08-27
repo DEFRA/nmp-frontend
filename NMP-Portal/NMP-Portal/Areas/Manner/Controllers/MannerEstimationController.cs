@@ -1166,11 +1166,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
                     if (mannerApplicationWithin21Days != null)
                     {
-                        bool isSlurry = CommonHelpers.IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
-                        bool isPoultryManure =
-                            model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
+                        bool isSlurryPrevApp = CommonHelpers.IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
+                        bool isPoultryManurePrevApp = mannerApplicationWithin21Days.ManureTypeID == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
+                        bool isSlurryCurrentApp = CommonHelpers.IsSlurryType(model.ManureTypeId);
+                        bool isPoultryManureCurrentApp = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
 
-                        if (isSlurry || isPoultryManure)
+                        if ((isSlurryPrevApp || isPoultryManurePrevApp) && (isSlurryCurrentApp || isPoultryManureCurrentApp))
                         {
                             // warning excel sheet row no. 21
                             model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
