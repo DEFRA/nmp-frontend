@@ -1098,12 +1098,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         Error? error = null;
         int? nmaxLimit = 0;
         List<FieldDetails> fieldDetail = new List<FieldDetails>();
-        List<ScotlandNMaxValue>? scotlandNMaxValueList = new List<ScotlandNMaxValue>();
+        
         (List<CropTypeLinkingResponse> cropTypeLinkingList, _) = await _organicManureLogic.FetchAllCropTypeLinking();
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-        {
-            (scotlandNMaxValueList, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
-        }
+        
         foreach (var cropData in cropDetails)
         {
             (Crop? crop, error) = await _cropLogic.FetchCropById(cropData.CropID);
@@ -1111,7 +1108,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
-                    nmaxLimit = await GetNMaxValueForScotland(error, cropData, isAutumn, scotlandNMaxValueList);
+                    nmaxLimit = await GetNMaxValueForScotland(error, cropData, isAutumn, scotlandNMaxValue);
                 }
                 else
                 {
