@@ -7290,7 +7290,7 @@ managementPeriod.CropID.HasValue
                 topSoilID = soilTexture.TopSoilID;
                 subSoilID = soilTexture.SubSoilID;
             }
-            //CropTypeLinkingResponse cropTypeLinkingData = cropTypeLinkingResponse.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
+            
             var cropTypeLinkingData = cropTypeLinkingResponse
     .FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
             int mannerCropTypeID = isLateSownCropType
