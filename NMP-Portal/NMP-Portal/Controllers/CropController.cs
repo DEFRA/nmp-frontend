@@ -5668,10 +5668,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
             (FarmResponse? farm,_)=await _farmLogic.FetchFarmByIdAsync(farmID);
             int countryId = farm?.RB209CountryID ?? 3;
-            (List<SwardTypeResponse> swardTypeResponses, Error error) =
-                await _cropLogic.FetchSwardTypesByCountry(countryId);
+            (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropLogic.FetchSwardTypesByCountry(countryId);
 
-            (List<SwardTypeResponse> swardTypeResponses, Error error) = await _cropLogic.FetchSwardTypesByCountry(model.FarmRB209CountryID.Value);
+            
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_sowingDateError] = error.Message;
