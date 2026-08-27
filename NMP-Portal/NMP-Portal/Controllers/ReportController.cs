@@ -1103,29 +1103,29 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         
         foreach (var cropData in cropDetails)
         {
-            (Crop? crop, error) = await _cropLogic.FetchCropById(cropData.CropID);
-            if (crop != null)
-            {
+            //(Crop? crop, error) = await _cropLogic.FetchCropById(cropData.CropID);
+            //if (crop != null)
+            //{
                 if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
                     nmaxLimit = await GetNMaxValueForScotland(error, cropData, isAutumn, scotlandNMaxValue);
                 }
                 else
                 {
-                    nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingList?.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID.Value));
+                    nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingList?.FirstOrDefault(x => x.CropTypeId == cropData.CropTypeID));
                 }
                 if (nmaxLimit != null)
                 {
                     (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue, isAutumn);
                 }
 
-            }
-            else
-            {
+            //}
+            //else
+            //{
 
-                TempData[_errorOnSelectField] = error?.Message;
-                return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
-            }
+            //    TempData[_errorOnSelectField] = error?.Message;
+            //    return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
+            //}
 
         }
         return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
