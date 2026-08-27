@@ -272,35 +272,11 @@ responseWrapper?.Data is not null)
 
     public async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId)
     {
-        if(_manureTypeList == null)
+        if(_manureTypeList == null || !_manureTypeList.Any())
         {
             await PopulateManureTypeList();
-        }
-        
+        }        
         return (_manureTypeList.Where(m=>m.ManureGroupId == manureGroupId && (m.CountryId == countryId || m.CountryId == 3)).ToList(), null);
-                
-        //List<ManureType> manureTypeList = new List<ManureType>();
-        //Error? error = null;
-        //HttpClient httpClient = await GetNMPAPIClient();
-        //var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString()), HttpUtility.UrlEncode(countryId.ToString())));
-
-        //string result = await response.Content.ReadAsStringAsync();
-        //ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        //if (response.IsSuccessStatusCode)
-        //{
-        //    if (responseWrapper != null && responseWrapper.Data != null)
-        //    {
-        //        var manureTypes = responseWrapper?.Data?.ToObject<List<ManureType>>();
-        //        manureTypeList.AddRange(manureTypes);
-        //        _manureTypeList = manureTypeList;
-        //    }
-        //}
-        //else
-        //{
-        //    error = _logger.ExtractError(responseWrapper, error);
-        //}
-
-        //return (manureTypeList, error);
     }
     public async Task<(CommonResponse?, Error?)> FetchManureGroupById(int manureGroupId)
     {
@@ -328,34 +304,12 @@ responseWrapper?.Data is not null)
 
     public async Task<(ManureType?, Error?)> FetchManureTypeByManureTypeId(int manureTypeId)
     {
-        if (_manureTypeList == null)
+        if (_manureTypeList == null || !_manureTypeList.Any())
         {
             await PopulateManureTypeList();
         }
 
         return (_manureTypeList?.FirstOrDefault(m => m.Id == manureTypeId), null);
-
-        //ManureType? manureType = null;
-        //Error? error = null;
-
-        //HttpClient httpClient = await GetNMPAPIClient();
-        //var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(manureTypeId.ToString())));
-
-        //string result = await response.Content.ReadAsStringAsync();
-        //ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        //if (response.IsSuccessStatusCode)
-        //{
-        //    if (responseWrapper != null && responseWrapper.Data != null)
-        //    {
-        //        manureType = responseWrapper?.Data?.ToObject<ManureType>();
-        //    }
-        //}
-        //else
-        //{
-        //    error = _logger.ExtractError(responseWrapper, error);
-        //}
-
-        //return (manureType, error);
     }
 
     public async Task<(List<ApplicationMethodResponse>, Error?)> FetchApplicationMethodList(int fieldType, bool isLiquid)
