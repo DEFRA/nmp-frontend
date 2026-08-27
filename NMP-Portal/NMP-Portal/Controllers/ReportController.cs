@@ -1098,7 +1098,12 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         Error? error = null;
         int? nmaxLimit = 0;
         List<FieldDetails> fieldDetail = new List<FieldDetails>();
-
+        List<ScotlandNMaxValue>? scotlandNMaxValueList = new List<ScotlandNMaxValue>();
+        (List<CropTypeLinkingResponse> cropTypeLinkingList, _) = await _organicManureLogic.FetchAllCropTypeLinking();
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            (scotlandNMaxValueList, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
+        }
         foreach (var cropData in cropDetails)
         {
             (Crop? crop, error) = await _cropLogic.FetchCropById(cropData.CropID);
@@ -1106,15 +1111,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
-                    nmaxLimit = await GetNMaxValueForScotland(error, cropData, isAutumn);
+                    nmaxLimit = await GetNMaxValueForScotland(error, cropData, isAutumn, scotlandNMaxValueList);
                 }
                 else
                 {
-                    (CropTypeLinkingResponse cropTypeLinkingResponse, _) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(crop.CropTypeID.Value);
-                    if (cropTypeLinkingResponse != null)
-                    {
-                        nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingResponse);
-                    }
+                    nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingList?.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID.Value));
                 }
                 if (nmaxLimit != null)
                 {
@@ -1274,7 +1275,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             : 0;
     }
 
-    private async Task<int?> GetNMaxValueForScotland(Error? error, HarvestYearPlanResponse cropData, bool isAutumn)
+    private async Task<int?> GetNMaxValueForScotland(Error? error, HarvestYearPlanResponse cropData, bool isAutumn, List<ScotlandNMaxValue>? scotlandNMaxValueList)
     {
         int? nMaxLimit = null;
         Recommendation? recommendation = null;
@@ -1288,14 +1289,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return null;
             }
-            nMaxLimit = await CalculateNmax(recommendation, nMaxLimit, cropData, isAutumn);
+            nMaxLimit = await CalculateNmax(recommendation, nMaxLimit, cropData, isAutumn, scotlandNMaxValueList);
         }
 
         return nMaxLimit;
     }
-    private async Task<int?> CalculateNmax(Recommendation recommendation, int? nMaxLimit, HarvestYearPlanResponse cropData, bool isAutumn)
+    private async Task<int?> CalculateNmax(Recommendation recommendation, int? nMaxLimit, HarvestYearPlanResponse cropData, bool isAutumn, List<ScotlandNMaxValue>? scotlandNMaxValueList)
     {
-        (List<ScotlandNMaxValue>? scotlandNMaxValueList, _) = await _scotlandNMaxValueLogic.FetchAllScotlandNMaxValue();
         if (scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
         {
             ScotlandNMaxValue? scotlandNMaxValue = scotlandNMaxValueList.FirstOrDefault(x => x.CropTypeID == cropData.CropTypeID && x.SoilTypeID == (isAutumn ? -1 : cropData.SoilTypeID));
@@ -3785,7 +3785,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     {
                         return result;
                     }
-                   
+
                 }
 
             }

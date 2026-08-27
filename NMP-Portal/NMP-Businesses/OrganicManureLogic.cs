@@ -12,8 +12,8 @@ namespace NMP.Businesses;
 [Business(ServiceLifetime.Transient)]
 public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManureService organicManureService) : IOrganicManureLogic
 {
-    private readonly ILogger<OrganicManureLogic> _logger= logger;
-    private readonly IOrganicManureService _organicManureService= organicManureService;
+    private readonly ILogger<OrganicManureLogic> _logger = logger;
+    private readonly IOrganicManureService _organicManureService = organicManureService;
     public async Task<(bool, Error?)> AddOrganicManuresAsync(string organicManureData)
     {
         _logger.LogTrace("OrganicManureLogic : AddOrganicManuresAsync() called");
@@ -26,7 +26,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.DeleteOrganicManureByIdServiceAsync(orgManureIds);
     }
 
-   
+
     public async Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptake(string jsonString)
     {
         _logger.LogTrace("OrganicManureLogic : FetchAutumnCropNitrogenUptake() called");
@@ -80,8 +80,8 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         _logger.LogTrace("OrganicManureLogic : FetchFieldWithSameDateAndManureType() called");
         return await _organicManureService.FetchFieldWithSameDateAndManureTypeServiceAsync(fertiliserId, farmId, harvestYear);
     }
-       
-   
+
+
 
     public async Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {
@@ -95,7 +95,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
         return await _organicManureService.FetchMannerCalculateNutrientServiceAsync(jsonData);
     }
 
-  
+
 
     public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManure(int fieldId, int year, bool confirm)
     {
@@ -267,5 +267,10 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
     {
         _logger.LogTrace("OrganicManureLogic : FetchSoilTypeSoilTextureBySoilTypeIdServiceAsync() called");
         return await _organicManureService.FetchSoilTypeSoilTextureBySoilTypeIdServiceAsync(soilTypeId);
+    }
+    public async Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinking()
+    {
+        _logger.LogTrace("OrganicManureLogic : FetchAllCropTypeLinking() called");
+        return await _organicManureService.FetchAllCropTypeLinkingServiceAsync();
     }
 }

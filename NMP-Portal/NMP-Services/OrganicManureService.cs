@@ -1401,6 +1401,40 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (scotlandNmax, error);
     }
+    public async Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinkingServiceAsync()
+    {
+        List<CropTypeLinkingResponse> cropTypeLinkingList = new List<CropTypeLinkingResponse>();
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchCropTypeLinkingsAsyncAPI);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper?.Data?.CropTypeLinking is JToken cropTypeLinkingToken)
+                {
+                    cropTypeLinkingList =
+                        cropTypeLinkingToken["records"]?.ToObject<List<CropTypeLinkingResponse>>()
+                        ?? new List<CropTypeLinkingResponse>();
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            error = _logger.HandleException(ex, error);
+        }
+        return (cropTypeLinkingList, error);
+    }
 
 
 }
