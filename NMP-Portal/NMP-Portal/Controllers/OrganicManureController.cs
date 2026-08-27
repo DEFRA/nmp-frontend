@@ -2479,7 +2479,7 @@ managementPeriod.CropID.HasValue
                 {
                     if (model.DryMatterPercent < 0 || model.DryMatterPercent > 25)
                     {
-                        ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidationForDryMatter, Resource.lblDryMatter.ToLower(),0, 25));
+                        ModelState.AddModelError(_dryMatterPercentKey, string.Format(Resource.MsgMinMaxValidationForDryMatter, Resource.lblDryMatter.ToLower(), 0, 25));
                     }
                 }
                 else
@@ -4916,7 +4916,7 @@ managementPeriod.CropID.HasValue
             {
                 return (model, await BuildManerFailureResultAsync(model));
             }
-            (ManureType? manureTypeData,  error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+            (ManureType? manureTypeData, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
             if (error != null && string.IsNullOrWhiteSpace(error.Message))
             {
                 return (model, await BuildManerFailureResultAsync(model));
@@ -4929,7 +4929,7 @@ managementPeriod.CropID.HasValue
             foreach (var organic in model.OrganicManures)
             {
                 IActionResult? earlyResult;
-                (model, earlyResult) = await ApplyManerNutrientsToOrganicAsync(model, organic, farmData, currentApplicationNitrogen,cropTypeLinkingList,manureTypeData);
+                (model, earlyResult) = await ApplyManerNutrientsToOrganicAsync(model, organic, farmData, currentApplicationNitrogen, cropTypeLinkingList, manureTypeData);
                 if (earlyResult != null)
                 {
                     return (model, earlyResult);
@@ -5315,7 +5315,10 @@ managementPeriod.CropID.HasValue
 
                 if (cropList != null && cropList.Count == 2)
                 {
-                    string fieldName = fieldList.FirstOrDefault(x => x.ID == Convert.ToInt32(fieldId)).Name;
+                    string fieldName = fieldList
+    .FirstOrDefault(x => x.ID == Convert.ToInt32(fieldId))
+    ?.Name ?? string.Empty;
+
 
                     ModelState.AddModelError(
                         "FieldName",
@@ -7234,7 +7237,7 @@ managementPeriod.CropID.HasValue
                 return (availableNfromManner, error);
             }
 
-            (ManureType? manureTypeData,  error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
+            (ManureType? manureTypeData, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
             if (error != null && string.IsNullOrWhiteSpace(error.Message))
             {
                 return (availableNfromManner, error);
@@ -7245,7 +7248,7 @@ managementPeriod.CropID.HasValue
                 return (availableNfromManner, error);
             }
 
-            (string? mannerJsonString, Error? mannerOutputError) = await BindManureOutput(farmData, organicManure, model, cropTypeLinkingList,manureTypeData);
+            (string? mannerJsonString, Error? mannerOutputError) = await BindManureOutput(farmData, organicManure, model, cropTypeLinkingList, manureTypeData);
             if (string.IsNullOrWhiteSpace(mannerJsonString))
             {
                 return (availableNfromManner, mannerOutputError);
@@ -7287,7 +7290,13 @@ managementPeriod.CropID.HasValue
                 topSoilID = soilTexture.TopSoilID;
                 subSoilID = soilTexture.SubSoilID;
             }
-            CropTypeLinkingResponse cropTypeLinkingData = cropTypeLinkingResponse.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
+            //CropTypeLinkingResponse cropTypeLinkingData = cropTypeLinkingResponse.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
+            var cropTypeLinkingData = cropTypeLinkingResponse
+    .FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
+            int mannerCropTypeID = isLateSownCropType
+      ? cropTypeLinkingData?.LateSownMannerCropTypeID ?? 0
+      : cropTypeLinkingData?.MannerCropTypeID ?? 0;
+
             var mannerOutput = new
             {
                 runType = farmData.EnglishRules ? (int)NMP.Commons.Enums.RunType.MannerEngland : (int)NMP.Commons.Enums.RunType.MannerScotland,
@@ -7297,7 +7306,7 @@ managementPeriod.CropID.HasValue
                 {
                     fieldID = fieldData.ID,
                     fieldName = fieldData.Name,
-                    MannerCropTypeID = isLateSownCropType ? cropTypeLinkingData.LateSownMannerCropTypeID.Value : cropTypeLinkingData.MannerCropTypeID,
+                    MannerCropTypeID = mannerCropTypeID,
                     topsoilID = topSoilID,
                     subsoilID = subSoilID,
                     isInNVZ = Convert.ToBoolean(fieldData.IsWithinNVZ)
@@ -8004,12 +8013,12 @@ managementPeriod.CropID.HasValue
                    percentage;
         }
         private async Task<(OrganicManureUpdateData?, Error?)> FetchManureOutput(OrganicManureViewModel model, FarmResponse farmData, OrganicManureDataViewModel organic, decimal? currentApplicationNitrogen,
-            List<CropTypeLinkingResponse> cropTypeLinkingList,ManureType manureTypeData)
+            List<CropTypeLinkingResponse> cropTypeLinkingList, ManureType manureTypeData)
         {
             Error? error = null;
             OrganicManureUpdateData? organicManure = null;
 
-            (string? mannerJsonString, Error? mannerOutputError) = await BindManureOutput(farmData, organic, model, cropTypeLinkingList,manureTypeData);
+            (string? mannerJsonString, Error? mannerOutputError) = await BindManureOutput(farmData, organic, model, cropTypeLinkingList, manureTypeData);
             if (!string.IsNullOrWhiteSpace(mannerJsonString))
             {
                 (MannerCalculateNutrientResponse mannerCalculateNutrientResponse, error) = await _organicManureLogic.FetchMannerCalculateNutrient(mannerJsonString);
@@ -10568,7 +10577,7 @@ managementPeriod.CropID.HasValue
 
             if (model.ApplicationRate > 250)
                 ModelState.AddModelError(_applicationRateKey, Resource.MsgForApplicationRate);
-           
+
         }
 
 

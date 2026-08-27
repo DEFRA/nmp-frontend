@@ -223,7 +223,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (cropTypeList, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
             if (string.IsNullOrWhiteSpace(error?.Message) && cropTypeList != null && cropTypeList.Count > 0)
             {
-                cropTypeList = await FilterNonNVZFieldsList(cropTypeList);
+                cropTypeList = await FilterNonNVZFieldsList(cropTypeList, model.FarmId.Value);
                 if (cropTypeList != null && cropTypeList.Any())
                 {
                     cropTypeList = await AddOrRemoveCropTypeItems(farm.CountryID.Value, cropTypeList, error);
@@ -246,14 +246,15 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return cropTypeList;
     }
 
-    private async Task<List<HarvestYearPlanResponse>?> FilterNonNVZFieldsList(List<HarvestYearPlanResponse>? cropTypeList)
+    private async Task<List<HarvestYearPlanResponse>?> FilterNonNVZFieldsList(List<HarvestYearPlanResponse>? cropTypeList,int farmId)
     {
         List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
+        (_,List<Field> fieldList)=await _fieldLogic.FetchFieldByFarmId(farmId, Resource.lblTrue);
         if (cropTypeList != null)
         {
             foreach (var cropType in cropTypeList)
             {
-                Field field = await _fieldLogic.FetchFieldByFieldId(cropType.FieldID);
+                Field field =fieldList.FirstOrDefault(f => f.ID == cropType.FieldID);
                 if (field != null && (!field.IsWithinNVZ.Value))
                 {
                     filteredList.Add(cropType);
@@ -1103,9 +1104,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         
         foreach (var cropData in cropDetails)
         {
-            //(Crop? crop, error) = await _cropLogic.FetchCropById(cropData.CropID);
-            //if (crop != null)
-            //{
                 if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
                     nmaxLimit = await GetNMaxValueForScotland(error, cropData, isAutumn, scotlandNMaxValue);
@@ -1118,15 +1116,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 {
                     (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue, isAutumn);
                 }
-
-            //}
-            //else
-            //{
-
-            //    TempData[_errorOnSelectField] = error?.Message;
-            //    return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
-            //}
-
         }
         return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
     }
@@ -1291,7 +1280,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return nMaxLimit;
     }
-    private async Task<int?> CalculateNmax(Recommendation recommendation, int? nMaxLimit, HarvestYearPlanResponse cropData, bool isAutumn, List<ScotlandNMaxValue>? scotlandNMaxValueList)
+    private static async Task<int?> CalculateNmax(Recommendation recommendation, int? nMaxLimit, HarvestYearPlanResponse cropData, bool isAutumn, List<ScotlandNMaxValue>? scotlandNMaxValueList)
     {
         if (scotlandNMaxValueList != null && scotlandNMaxValueList.Count > 0 && scotlandNMaxValueList.Any(x => x.CropTypeID == cropData.CropTypeID))
         {

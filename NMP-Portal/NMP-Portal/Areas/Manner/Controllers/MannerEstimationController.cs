@@ -3025,7 +3025,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     application.IsManureTypeLiquid = isManureLiquid;
                     string manureUnit = isManureLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
                     TempData[$"ApplicationDefaultValues{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
-                    await BindTempDataForMannerestimationResultPage(mannerEstimationResultResponse, count, application, manure, manureUnit);
+                    await BindTempDataForMannerestimationResultPage(mannerEstimationResultResponse, count, application, manureUnit);
                 }
             }
             Country? country = await _mannerLogic.FetchCountryById(mannerEstimationResultResponse.MannerFarm?.CountryID ?? 0);
@@ -3053,7 +3053,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0);
         }
 
-        private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application, ManureType? manure, string manureUnit)
+        private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application,  string manureUnit)
         {
             if (application.AreaSpread != null && application.ManureQuantity != null)
             {
