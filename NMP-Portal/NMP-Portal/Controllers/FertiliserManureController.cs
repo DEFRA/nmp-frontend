@@ -3743,19 +3743,19 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
 
 
-    private async Task<(bool flowControl, IActionResult? value)> PrepareDoubleCroppingList(FertiliserManureViewModel? model)
+    private async Task<(bool flowControl, IActionResult? value)> PrepareDoubleCroppingList(FertiliserManureViewModel? model,List<Field> fieldList,List<CropTypeResponse> cropTypeList)
     {
         if (model.DoubleCrop != null && model.DoubleCrop.Count > 0 && model.DoubleCropCurrentCounter < model.DoubleCrop.Count)
         {
             model.FieldID = model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID;
-            model.FieldName = model.DoubleCrop[model.DoubleCropCurrentCounter].FieldName;
+            model.FieldName = fieldList.FirstOrDefault(x => x.ID == model.FieldID)?.Name;
         }
         List<Crop> cropList = new List<Crop>();
         string cropTypeName = string.Empty;
         Error error = new Error();
         if (model.DoubleCrop == null || model.IsAnyChangeInField)
         {
-            (cropList, cropTypeName) = await BindDoubleCroppingListForGet(model, cropList, cropTypeName);
+            (cropList, cropTypeName) = await BindDoubleCroppingListForGet(model, cropList, cropTypeName, fieldList);
         }
         RemoveFieldFromDoubleCrop(model);
         (cropList, error) = await _cropLogic.FetchCropPlanByFieldIdAndYear(Convert.ToInt32(model.DoubleCrop[model.DoubleCropCurrentCounter].FieldID), model.HarvestYear.Value);
@@ -3763,11 +3763,11 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             return (flowControl: false, value: BindErrorForDoubleCropping(model, error.Message));
         }
-        await BindDoubleCropViewBeg(model, cropList);
+        await BindDoubleCropViewBeg(model, cropList, cropTypeList);
         if (model.DoubleCropCurrentCounter == 0)
         {
             model.FieldID = model.DoubleCrop[0].FieldID;
-            model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DoubleCrop[0].FieldID)).Name;
+            model.FieldName = fieldList.FirstOrDefault(x => x.ID == model.FieldID)?.Name;
         }
 
         return (flowControl: true, value: null);
@@ -3782,14 +3782,14 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         }
     }
 
-    private async Task BindDoubleCropViewBeg(FertiliserManureViewModel? model, List<Crop> cropList)
+    private async Task BindDoubleCropViewBeg(FertiliserManureViewModel? model, List<Crop> cropList, List<CropTypeResponse> cropTypeList)
     {
         if (cropList != null && cropList.Count == 2)
         {
             var cropOptions = new List<SelectListItem>();
             foreach (var crop in cropList.OrderBy(x => x.CropOrder))
             {
-                string cropTypeName = await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
+                string cropTypeName = cropTypeList.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID)?.CropType;
                 cropOptions.Add(new SelectListItem
                 {
                     Text = $"{Resource.lblCrop} {crop.CropOrder} : {cropTypeName}",
@@ -3830,7 +3830,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return RedirectToAction(_fieldGroupActionName);
     }
 
-    private async Task<(List<Crop> cropList, string cropTypeName)> BindDoubleCroppingListForGet(FertiliserManureViewModel? model, List<Crop> cropList, string cropTypeName)
+    private async Task<(List<Crop> cropList, string cropTypeName)> BindDoubleCroppingListForGet(FertiliserManureViewModel? model, List<Crop> cropList, string cropTypeName,List<Field> fieldList)
     {
         if (model.DoubleCrop == null)
         {
@@ -3854,13 +3854,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 if (cropTypeId.HasValue)
                 {
                     cropTypeName = await _fieldLogic.FetchCropTypeById(cropTypeId.Value);
-                    var field = await _fieldLogic.FetchFieldByFieldId(fieldId);
+                    var field = fieldList.FirstOrDefault(x => x.ID == fieldId);
                     var doubleCrop = new DoubleCrop
                     {
                         CropName = cropTypeName,
                         CropOrder = cropList[0].CropOrder ?? 1,
                         FieldID = fieldId,
-                        FieldName = field.Name ?? string.Empty,
+                        FieldName = field?.Name ?? string.Empty,
                         EncryptedCounter = _fieldDataProtector.Protect(counter.ToString()),
                         Counter = counter,
                     };
@@ -3887,7 +3887,8 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 _logger.LogError("Fertiliser Manure Controller : Session not found in DoubleCrop() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-
+            (_, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
+           List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchAllCropTypes();
             if (_fertiliserManureLogic.IsInitialLoadAfterFieldChange(model, q))
             {
                 model.DoubleCropCurrentCounter = 0;
@@ -3911,13 +3912,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     return BackActionForInOrganicAndDoubleCrop(model);
                 }
                 model.FieldID = model.DoubleCrop[index].FieldID;
-                model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DoubleCrop[index].FieldID)).Name;
+                model.FieldName = fieldList.FirstOrDefault(x => x.ID == model.DoubleCrop[index].FieldID)?.Name;
                 model.DoubleCropCurrentCounter = index;
                 model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
             }
             if (model.FieldList != null && model.FieldList.Count > 0)
             {
-                (bool flowControl, IActionResult value) = await PrepareDoubleCroppingList(model);
+                (bool flowControl, IActionResult value) = await PrepareDoubleCroppingList(model,fieldList,cropTypeList);
                 if (!flowControl && value != null)
                 {
                     return value;
@@ -3942,16 +3943,17 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         try
         {
+            List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchAllCropTypes();
             if (!ModelState.IsValid)
-                return await HandleInvalidModel(model);
-
+                return await HandleInvalidModel(model, cropTypeList);
+            (_, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
             var sessionModel = GetFertiliserManureFromSession() ?? new FertiliserManureViewModel();
 
-            await UpdateSelectedCrop(model);
+            await UpdateSelectedCrop(model, cropTypeList);
             await UpdateManagementPeriod(model);
 
             await HandleDefoliationRemoval(model);
-            await MoveToNextField(model);
+            await MoveToNextField(model, fieldList);
 
             PersistDoubleCropState(model);
 
@@ -3968,7 +3970,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 {
                     cropList = cropList.Where(x => x.Year == model.HarvestYear).ToList();
                 }
-                await BindDoubleCropViewBeg(model, cropList);
+                await BindDoubleCropViewBeg(model, cropList,cropTypeList);
                 return View(model);
             }
         }
@@ -3988,7 +3990,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 Resource.MsgSelectAnOptionBeforeContinuing);
         }
     }
-    private async Task<IActionResult> HandleInvalidModel(FertiliserManureViewModel model)
+    private async Task<IActionResult> HandleInvalidModel(FertiliserManureViewModel model,List<CropTypeResponse> cropTypeList)
     {
         if (model.FieldList != null && model.HarvestYear.HasValue)
         {
@@ -4002,12 +4004,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             model.DoubleCrop ??= new List<DoubleCrop>();
 
-            await BindDoubleCropViewBeg(model, cropList);
+            await BindDoubleCropViewBeg(model, cropList, cropTypeList);
         }
 
         return View(model);
     }
-    private async Task UpdateSelectedCrop(FertiliserManureViewModel model)
+    private async Task UpdateSelectedCrop(FertiliserManureViewModel model,List<CropTypeResponse> cropTypeList)
     {
         if (!model.DoubleCrop.Any(x => x.FieldID == model.FieldID))
             return;
@@ -4027,7 +4029,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         model.DoubleCrop[model.DoubleCropCurrentCounter].CropOrder = crop.CropOrder.Value;
         model.DoubleCrop[model.DoubleCropCurrentCounter].CropName =
-            await _fieldLogic.FetchCropTypeById(crop.CropTypeID.Value);
+            cropTypeList.FirstOrDefault(x => x.CropTypeId == crop.CropTypeID)?.CropType;
     }
     private async Task UpdateManagementPeriod(FertiliserManureViewModel model)
     {
@@ -4083,7 +4085,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         model.DefoliationList.RemoveAll(x => x.FieldID == fieldId);
     }
-    private async Task MoveToNextField(FertiliserManureViewModel model)
+    private static async Task MoveToNextField(FertiliserManureViewModel model,List<Field> fieldList)
     {
         for (int i = 0; i < model.DoubleCrop.Count; i++)
         {
@@ -4095,7 +4097,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 model.FieldID = model.DoubleCrop[i + 1].FieldID;
                 model.FieldName =
-                    (await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value)).Name;
+                    fieldList.FirstOrDefault(x => x.ID == model.FieldID)?.Name;
             }
 
             break;

@@ -966,11 +966,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     model.ClosedPeriod = closedPeriod;
                 }
 
-                model.IsWarningMsgNeedToShow = false;
-                model.IsClosedPeriodWarning = false;
-                model.IsApplicationJulyToSeptWarning = false;
-                model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
             }
+            model.IsWarningMsgNeedToShow = false;
+            model.IsClosedPeriodWarning = false;
+            model.IsApplicationJulyToSeptWarning = false;
+            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
 
             model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
             return View(model);
@@ -993,15 +993,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return View(model);
                 }
                 model = _mannerEstimationLogic.GetMannerEstimationStep13();
-                if (model.ApplicationDate != formData.ApplicationDate)
-                {
-                    model.IsWarningMsgNeedToShow = false;
-                }
+                CheckClosedPeriodWarningForManureApplyingDate(model);
                 model.ApplicationDate = formData.ApplicationDate;
                 var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
                 model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
                 //non organic farm, high N, NVZ
-                if (!string.IsNullOrWhiteSpace(model.ClosedPeriod) && string.IsNullOrWhiteSpace(error?.Message))
+                if ((!string.IsNullOrWhiteSpace(model.ClosedPeriod) || model.CountryId==(int)NMP.Commons.Enums.FarmCountry.Scotland) && string.IsNullOrWhiteSpace(error?.Message))
                 {
                     int harvestYear = GetHarvestYearFromApplicationDate(model.ApplicationDate ?? DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
 
@@ -1032,6 +1029,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
+        }
+
+        private void CheckClosedPeriodWarningForManureApplyingDate(MannerEstimationStep13ViewModel model)
+        {
+            MannerEstimationStep13ViewModel manureViewModel = _mannerEstimationLogic.GetMannerEstimationStep13();
+            if (model.ApplicationDate != manureViewModel.ApplicationDate)
+            {
+                model.IsWarningMsgNeedToShow = false;
+                model.IsApplicationDateChange = true;
+            }
+
+            model.IsClosedPeriodWarning = false;
+            model.IsApplicationJulyToSeptWarning = false;
+            model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
         }
 
         private async Task ValidateApplicationDate(MannerEstimationStep13ViewModel formData)
@@ -1072,7 +1083,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             Error? error = null;
             DateTime endDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
-            (var startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            DateTime startDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
+            GetStartEndDates(model, ref endDate, ref startDate);
 
             if (model.CountryId != (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
@@ -1119,6 +1131,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             return error;
+        }
+
+        private static void GetStartEndDates(MannerEstimationStep13ViewModel model, ref DateTime endDate, ref DateTime startDate)
+        {
+            if (model.ClosedPeriod != null && model.ApplicationDate != null)
+            {
+                (startDate, endDate) = GetClosedPeriodDates(model.ClosedPeriod, model.ApplicationDate.Value);
+            }
         }
 
         private async Task CheckScotlandClosedPeriodWarning(MannerEstimationStep13ViewModel model, ManureType? manureType, DateTime endDate, DateTime startDate)
@@ -1180,7 +1200,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private async Task<Error?> HandleLivestockManureRule(MannerEstimationStep13ViewModel model)
         {
-            int? mannerEstimationId = null;
+            int? mannerEstimationId = model.MannerEstimationId;
             if (model.MannerEstimationId == null && !string.IsNullOrWhiteSpace(model.EncryptedMannerEstimateId))
             {
                 mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
@@ -1315,11 +1335,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 "MMMM",
                 CultureInfo.InvariantCulture).Month;
 
-            // Determine years
-            int startYear = harvestYear - 1;
-            int endYear = endMonth < startMonth
-                ? harvestYear          // crosses year boundary
-                : harvestYear - 1;     // same calendar year
+            int startYear = startMonth >= 8 ? harvestYear - 1 : harvestYear;
+
+            int endYear = endMonth >= 8 ? harvestYear - 1 : harvestYear;
 
             DateTime startDate = new(startYear, startMonth, startDay, 00, 00, 00, DateTimeKind.Unspecified);
             DateTime endDate = new(endYear, endMonth, endDay, 00, 00, 00, DateTimeKind.Unspecified);
@@ -2168,6 +2186,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ValidateNH4NUricAcidNO3NAndP2O5(model);
 
         }
+        private static bool IsValidDecimal(decimal? value) =>
+    value.HasValue &&
+                   Math.Round(value.Value, 2) == value.Value;
+
 
         private void ValidateDryMatter(MannerEstimationStep25ViewModel model)
         {
@@ -2184,6 +2206,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
+            if (!IsValidDecimal(model.DryMatterPercent))
+                ModelState.AddModelError(_dryMatterPercentKey,
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblDryMatter.ToLower()));
+
+
         }
 
         private void MinMaxValidationForDryMatterAndTotalN(decimal? value,
@@ -2191,7 +2218,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
     string displayName, decimal minValue,
     decimal maxValue)
         {
-            if (value < minValue || value > maxValue)
+            if (fieldName == _dryMatterPercentKey&& (value < minValue || value > maxValue))
+            {
+                ModelState.AddModelError(fieldName, string.Format(Resource.MsgMinMaxValidationForDryMatter, displayName, 0, maxValue));
+            }
+            else if (value < minValue || value > maxValue)
             {
                 ModelState.AddModelError(fieldName, string.Format(Resource.MsgMinMaxValidation, displayName, maxValue));
             }
@@ -2200,13 +2231,40 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private void ValidateNH4NUricAcidNO3NAndP2O5(MannerEstimationStep25ViewModel model)
         {
             ValidateMaxValue(model.NH4N, "NH4N", Resource.lblAmmonium, 99);
-            ValidateMaxValue(model.UricAcid, "UricAcid", Resource.lblUricAcid, 99);
+            ValidateMaxValue(model.UricAcid, _uricAcidKey, Resource.lblUricAcid, 99);
             ValidateMaxValue(model.NO3N, "NO3N", Resource.lblNitrate, 99);
             ValidateMaxValue(model.P2O5, "P2O5", Resource.lblPhosphateP2O5, 99);
             ValidateMaxValue(model.K2O, "K2O", Resource.lblPotashK2O, 99);
             ValidateMaxValue(model.MgO, "MgO", Resource.lblMagnesiumMgO, 99);
             ValidateMaxValue(model.SO3, "SO3", Resource.lblSulphurSO3, 99);
+            TwoDecimalValidationFoNutrientValues(model);
         }
+
+        private void TwoDecimalValidationFoNutrientValues(MannerEstimationStep25ViewModel model)
+        {
+            if (!IsValidDecimal(model.NH4N))
+                ModelState.AddModelError("NH4N",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblAmmonium.ToLower()));
+            if (!IsValidDecimal(model.UricAcid))
+                ModelState.AddModelError(_uricAcidKey,
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblUricAcid.ToLower()));
+            if (!IsValidDecimal(model.NO3N))
+                ModelState.AddModelError("NO3N",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblNitrate.ToLower()));
+            if (!IsValidDecimal(model.P2O5))
+                ModelState.AddModelError("P2O5",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblPhosphateP2O5.ToLower()));
+            if (!IsValidDecimal(model.K2O))
+                ModelState.AddModelError("K2O",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblPotashK2O.ToLower()));
+            if (!IsValidDecimal(model.MgO))
+                ModelState.AddModelError("MgO",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblMagnesiumMgO.ToLower()));
+            if (!IsValidDecimal(model.SO3))
+                ModelState.AddModelError("SO3",
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblSulphurSO3.ToLower()));
+        }
+
         private void ValidateMaxValue(
     decimal? value,
     string fieldName,
@@ -2285,7 +2343,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             AddErrorIfNull(model.NH4N, "NH4N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblAmmoniumForError));
 
-            AddErrorIfNull(model.UricAcid, "UricAcid", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
+            AddErrorIfNull(model.UricAcid, _uricAcidKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.MsgUricAcid));
 
             AddErrorIfNull(model.NO3N, "NO3N", string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblNitrateForErrorMsg));
 
@@ -4861,11 +4919,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             DateTime endDate = isInFebPeriod ? febEnd : preEnd;
 
             var (totalApplicationRate, _) =
-                await _mannerEstimationLogic.FetchTotalNByMannerEstimationIdAppDate(
+                await _mannerEstimationLogic.FetchTotalApplicationRateByDateRange(
                     mannerEstimationId ?? 0,
-                    startDate,
-                    endDate,
-                    mannerAppId);
+                    startDate.ToString(_dateStringLiteral),
+                    endDate.ToString(_dateStringLiteral),
+                    mannerAppId, isPoultry);
 
             totalApplicationRate = model.ApplicationRate + totalApplicationRate ?? 0;
 
@@ -5241,7 +5299,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     foreach (var application in applications)
                     {
                         //warnings
-                        await BindWarnings(model.MannerFieldAndCropDetails, application, model);
+                        await BindWarnings(model.MannerFieldAndCropDetails, application, model, mannerFarm?.CountryID??0);
 
                         bool isLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID ?? 0);
 
@@ -5372,16 +5430,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-        private async Task BindWarnings(MannerEstimationDetailsViewModel estimation, MannerEstimationApplicationDetailsViewModel application, MannerEstimationReportViewModel model)
+        private async Task BindWarnings(MannerEstimationDetailsViewModel estimation, MannerEstimationApplicationDetailsViewModel application, MannerEstimationReportViewModel model, int countryId)
         {
             Error? error = null;
 
             string? closedPeriod = string.Empty;
             var dateWarningViewModel = new MannerEstimationStep13ViewModel();
             (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(application.ManureTypeID ?? 0);
-            if (manureType?.HighReadilyAvailableNitrogen == true && estimation.MannerEstimation.IsWithinNVZ == true)
+            if ((manureType?.HighReadilyAvailableNitrogen == true || countryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) && estimation.MannerEstimation.IsWithinNVZ == true)
             {
                 int? cropGroupId = await _mannerEstimationLogic.GetCropGroupByCropTypeId(estimation.MannerEstimation.CropTypeID);
+                int? manureGroupId = manureType?.ManureGroupId;
                 bool isPerennial = await _cropLogic.FetchIsPerennialByCropTypeId(estimation.MannerEstimation.CropTypeID ?? 0);
                 int fieldType = cropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
 
@@ -5414,7 +5473,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     IsWarningMsgNeedToShow = false,
                     IsClosedPeriodWarning = false,
                     IsApplicationJulyToSeptWarning = false,
-                    IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false
+                    IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false,
+                    ManureGroupId= manureGroupId
                 };
 
                 error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
@@ -5804,8 +5864,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
-            HttpContext.Session.SetString("is_current_manner_estimate", Resource.lblTrue);
-            HttpContext.Session.SetString("is_manner_estimate_section", Resource.lblTrue);
+                      
             HttpContext.Session.Remove("current_manner_estimate_farm_name");
             HttpContext.Session.Remove("current_manner_estimate_manner_farm_id");
             ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();
@@ -5962,7 +6021,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerEstimationLogic.GetMannerEstimationStep25(false);
                 return View(_manualNutrientValuesKey, model);
             }
-            
+
             var manureNutrientResponse = new ManureNutrientResponse
             {
                 id = mannerEstimationStep25ViewModel.ManureTypeId.Value,

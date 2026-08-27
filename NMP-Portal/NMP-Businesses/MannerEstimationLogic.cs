@@ -1925,6 +1925,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         _logger.LogTrace("ManureLogic : FetchIsExistMannerFarmByOrgIdAndName() called");
         return await _mannerEstimationService.FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI(organisationId, farmName);
     }
+    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry)
+    {
+        _logger.LogTrace("MannerEstimationLogic : FetchTotalApplicationRateByDateRange() called");
+        return await _mannerEstimationService.FetchTotalApplicationRateByDateRangeServiceAsync(mannerEstimationId, dateFrom, dateTo, mannerApplicationId, isPoultry);
+    }
 
 }
 
