@@ -151,5 +151,6 @@ namespace NMP.Application
         MannerEstimationStep42ViewModel SetMannerEstimationStep42(MannerEstimationStep42ViewModel mannerEstimationStep42);
         Task<Error?> RemoveMannerFarms(string mannerFarmIds);
         Task<bool> FetchIsExistMannerFarmByOrgIdAndName(Guid organisationId, string farmName);
+        Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry);
     }
 }

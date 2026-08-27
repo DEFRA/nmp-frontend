@@ -291,4 +291,6 @@ internal static class ApiurlHelper
     public const string FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI = "manner-farms/exists?organisationId={0}&name={1}";
 
     public const string CalculateNutrientValueBasedOnDryMatterAsyncAPI = "vendors/manner/calculate-nutrients-by-dry-matter-percentage";
+
+    public const string FetchMannerTotalApplicationRateByDateRangeAsyncAPI = "manner-estimations/total-application-rate/{0}?fromDate={1}&toDate={2}";
 }
