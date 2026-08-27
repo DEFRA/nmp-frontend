@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.FieldViewModel
-@{    
+@{
     ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
     int grassGroupId = (int)NMP.Commons.Enums.CropGroup.Grass;
 
@@ -26,6 +26,10 @@
             {
                 backAction = "HasGreaterThan30PercentClover";
             }
+        }
+        else if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            backAction = "LastHarvestYear";
         }
         else
         {
@@ -59,13 +63,16 @@
                 </govuk-error-summary>
             }
 
-            <govuk-radios asp-for="@Model.CropGroupId">
+            <govuk-radios for="@Model.CropGroupId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @* @(Model.WantToApplySns == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup) *@
                         @string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>@string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblCropGroups)</govuk-radios-hint>
+                    <govuk-radios-hint>
+                        @(string.Format(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ?
+                        Resource.lblThereOptionComeFromFasSrucTechnicalNotes : Resource.lblTheseOptionsComeFromRB209, Resource.lblCropGroups))
+                    </govuk-radios-hint>
 
                     @if (ViewBag.CropGroupList != null)
                     {

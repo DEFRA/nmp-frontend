@@ -1,0 +1,75 @@
+﻿@using NMP.Commons.Resources;
+@using NMP.Commons.ViewModels;
+
+@{
+    ViewData["Title"] = Resource.lblMannerFarmList;
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="Index" asp-controller="Dashboard" asp-area="">@Resource.lblBack</govuk-back-link>
+}
+
+@if (TempData["Error"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+else
+{
+    <div class="govuk-grid-row">
+        <div id="all-plans-table" class="govuk-grid-column-full">
+            @if (ViewBag.Success != null && ViewBag.Success == "true")
+            {
+                <govuk-notification-banner type="NotificationBannerType.Success">
+                    <h3 class="govuk-notification-banner__heading">
+                        @Resource.lblFarmRemoved
+                    </h3>
+
+                </govuk-notification-banner>
+            }
+            <h1 class="govuk-heading-l">@Resource.lblNutrientSupplyEstimatesFromOrganicMaterials</h1>
+            <a class="govuk-button" asp-action="Name"  asp-controller="MannerEstimation" asp-route-s="@ViewBag.IsNewFarm"> @Resource.lblCreateANutrientSupplyEstimateForANewFarm</a>
+
+            @if (ViewBag.MannerFarmList != null && ViewBag.MannerFarmList.Count > 0)
+            {
+                  <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveMannerFarm" asp-controller="MannerEstimation">@Resource.lblRemoveAFarm</a></p>
+            }
+            <h2 class="govuk-heading-m">@Resource.lblYourFarms</h2>
+
+            <table class="govuk-table data-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">@Resource.lblFarm</th>
+                        <th scope="col" class="govuk-table__header">@Resource.lblLastUpdate</th>
+                        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">@Resource.lblUpdateOrMakeACopy</span></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @if (ViewBag.MannerFarmList != null && ViewBag.MannerFarmList.Count > 0)
+                    {
+                        @foreach (var mannerFarm in ViewBag.MannerFarmList)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@mannerFarm.Name</td>
+                                <td class="govuk-table__cell">@(mannerFarm.LastUpdatedDate != null ? mannerFarm.LastUpdatedDate.ToString("dd MMMM yyyy") : string.Empty)</td>
+                                <td class="govuk-table__cell"><a asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@mannerFarm.EncryptedId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, mannerFarm.Name)))">@Resource.lblViewChangeOrCreateNewEstimate</a></td>
+                            </tr>
+                        }
+                    }
+                    @if (ViewBag.MannerFarmList == null || ViewBag.MannerFarmList.Count == 0)
+                    {
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell" colspan="5">@Resource.lblYouHaveNoMannerFarms</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+}

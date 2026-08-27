@@ -71,7 +71,7 @@
                 </govuk-error-summary>
             }
 
-            <govuk-radios asp-for="SoilTypeID">
+            <govuk-radios for="SoilTypeID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true"
                                                   class="govuk-fieldset__legend--l">
@@ -79,7 +79,7 @@
                     </govuk-radios-fieldset-legend>
 
                     <govuk-radios-hint>
-                        @string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSoilTypes)
+                        @(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblSelectOneOption : string.Format(Resource.lblTheseOptionsComeFromRB209, Resource.lblSoilTypes))
                     </govuk-radios-hint>
 
                     @foreach (var item in ViewBag.SoilTypesList ?? Enumerable.Empty<dynamic>())

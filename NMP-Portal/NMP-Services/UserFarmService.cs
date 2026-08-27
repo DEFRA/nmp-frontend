@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NMP.Commons.Helpers;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
@@ -25,22 +27,18 @@ public class UserFarmService(ILogger<UserFarmService> logger, IHttpContextAccess
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
         {
-            if (responseWrapper != null && responseWrapper.Data != null)
+            if (responseWrapper?.Data is JToken data)
             {
-                UserFarmResponse userFarmResponse = responseWrapper.Data.ToObject<UserFarmResponse>();
-                userFarmList.Farms = userFarmResponse.Farms;
+                var userFarmResponse = data.ToObject<UserFarmResponse>();
+                if (userFarmResponse?.Farms != null)
+                {
+                    userFarmList.Farms = userFarmResponse.Farms;
+                }
             }
         }
         else
         {
-            if (responseWrapper != null && responseWrapper.Error != null)
-            {
-                error = responseWrapper?.Error?.ToObject<Error>();
-                if (error != null)
-                {
-                    _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                }
-            }
+            error = _logger.ExtractError(responseWrapper, error);
         }
 
         return (userFarmList, error);

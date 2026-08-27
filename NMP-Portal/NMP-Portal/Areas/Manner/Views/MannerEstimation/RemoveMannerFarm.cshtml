@@ -1,0 +1,66 @@
+﻿@using NMP.Commons.Resources;
+@model NMP.Commons.ViewModels.MannerEstimationStep42ViewModel
+
+@{
+    ViewData["Title"] = Resource.lblWhichMannerFarmWouldYouLikeToRemove;
+}
+@section BeforeContent {
+    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+}
+
+@if (TempData["Error"] != null)
+{
+    <govuk-error-summary>
+        <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+    </govuk-error-summary>
+}
+else
+{
+    <div class="govuk-grid-row">
+        <div id="all-plans-table" class="govuk-grid-column-full">
+            <form asp-action="RemoveMannerFarm" asp-controller="MannerEstimation" method="post" autocomplete="off">
+                @Html.AntiForgeryToken()
+                @if (TempData["MannerFarmRemoveError"] != null)
+                {
+                    <govuk-error-summary>
+                        <govuk-error-summary-item href="#">@TempData["MannerFarmRemoveError"]</govuk-error-summary-item>
+                    </govuk-error-summary>
+                }
+                <govuk-checkboxes name="MannerFarmIdList" for="MannerFarmIdList">
+                    <govuk-checkboxes-fieldset>
+                        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @Resource.lblWhichMannerFarmWouldYouLikeToRemove
+                        </govuk-checkboxes-fieldset-legend>
+                        <govuk-checkboxes-hint>
+                            @Resource.lblSelectAllThatApply
+                        </govuk-checkboxes-hint>
+                        @if (ViewBag.MannerFarmIdList != null)
+                        {
+                            @foreach (var item in ViewBag.MannerFarmIdList)
+                            {
+                                <govuk-checkboxes-item value="@item.Value">@item.Text</govuk-checkboxes-item>
+                            }
+                        }
+
+                        <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
+                        <govuk-checkboxes-item value=@Resource.lblSelectAll id="select-all" name="select-all">@Resource.lblSelectAll</govuk-checkboxes-item>
+                    </govuk-checkboxes-fieldset>
+                </govuk-checkboxes>
+
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+
+                <p class="govuk-body cancel-link">
+                    <a class="govuk-link" asp-action="MannerFarmList" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+}

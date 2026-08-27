@@ -6,13 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using NMP.Core;
 using NMP.Core.Attributes;
-using System.Security.Claims;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
@@ -54,12 +52,12 @@ public class TokenRefreshService(IHttpClientFactory httpClientFactory, IConfigur
 
             IConfigurationManager<OpenIdConnectConfiguration>? configurationManager = GetConfigurationManager();
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-            var metadata = await configurationManager?.GetConfigurationAsync(CancellationToken.None);
+            var metadata = await configurationManager.GetConfigurationAsync(CancellationToken.None);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             var url = metadata.TokenEndpoint;
-            var response = await client.PostAsync(url, formData);
+            var response = await client.PostAsync(url, formData, CancellationToken.None);
             response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
+            var json = await response.Content.ReadAsStringAsync(CancellationToken.None);
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             tokens = JsonConvert.DeserializeObject<OAuthTokenResponse>(json);
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.

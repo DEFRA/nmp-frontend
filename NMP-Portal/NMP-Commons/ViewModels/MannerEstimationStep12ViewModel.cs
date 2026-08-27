@@ -12,7 +12,10 @@ namespace NMP.Commons.ViewModels
         public string ManureGroupName { get; set; } = string.Empty;
         public int? ManureTypeId { get; set; }
         public string ManureTypeName { get; set; } = string.Empty;
-        public bool IsCheckAnswer { get; set; } = false;
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public int FarmRB209CountryId { get; set; }
+        public bool IsManureTypeChange { get; set; }=false;
+        public bool IsComingForAddNewApplication { get; set; } = false;
+        public bool IsManureGroupIdChange { get; set; } = false;
     }
 }

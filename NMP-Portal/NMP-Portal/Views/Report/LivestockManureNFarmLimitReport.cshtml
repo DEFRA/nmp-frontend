@@ -24,9 +24,9 @@
 }
 @await Html.PartialAsync("_ReportPrintHeader")
 
-<div class="govuk-grid-row margin-bottom-ten">
-    <div class="govuk-grid-column-full">
-        <span class="govuk-caption-l">@Model.Farm.Name</span>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full margin-bottom-ten">
+        <span class="govuk-caption-l">@Model.Farm?.Name</span>
         <h1 class="govuk-heading-xl margin-bottom-twenty">
             @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ?
                         string.Format(Resource.lblHoldingNitrogenLimitForYear, Model.Year) :
@@ -38,23 +38,23 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
         <p class="govuk-body">
-            @Model.Farm.Name, <br>
-            @if (!string.IsNullOrWhiteSpace(Model.Farm.Address1))
+            @Model.Farm?.Name, <br>
+            @if (!string.IsNullOrWhiteSpace(Model.Farm?.Address1))
             {
                 @Model.Farm.Address1
                 <br />
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Farm.Address2))
+            @if (!string.IsNullOrWhiteSpace(Model.Farm?.Address2))
             {
                 @Model.Farm.Address2
                 <br />
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Farm.Address3))
+            @if (!string.IsNullOrWhiteSpace(Model.Farm?.Address3))
             {
                 @Model.Farm.Address3
                 <br />
             }
-            @Model.Farm.Postcode
+            @Model.Farm?.Postcode
         </p>
     </div>
     <div class="govuk-grid-column-two-third">
@@ -87,8 +87,6 @@
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m">
             @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? @Resource.lblComplianceWithHoldingNitrogenLimit : Resource.lblComplianceWithNVZLivestockManureNitrogenFarmLimit)
-
-
         </h2>
         <h3 class="govuk-heading-s">
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
@@ -113,7 +111,9 @@
                     @Resource.lblLivestockReportContentFifteen
                 }
             }
+
         </h3>
+
         @if (ViewBag.IsAllNotInNVZ != null)
         {
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
@@ -133,7 +133,6 @@
                     {
                         @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
                     }
-
                 </p>
             }
         }
@@ -156,7 +155,6 @@
                     {
                         @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
                     }
-                    @* @string.Format("{0}{1}", string.Format((Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblWaterResourceRegulationsForWales : Resource.lblLivestockContentTwoForNonDerogation), ViewBag.FarmLimit), ".") *@
                 </p>
             }
         }
@@ -168,6 +166,12 @@
             </h3>
             <div class="table-container">
                 <table class="govuk-table data-table">
+                    @* <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header"></th>
+                            <th scope="col" class="govuk-table__header"></th>
+                        </tr>
+                    </thead> *@
                     <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblLivestockManureTotalNitrogenCapacity</td>
@@ -199,11 +203,13 @@
         {
             <div class="table-container margin-bottom-ten">
                 <table class="farm_area_derogated govuk-table data-table">
-                    <tbody class="govuk-table__body">
+                    <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th scope="col" class="govuk-table__header">@Resource.lblAreaRequiredForLivestockManure</th>
                             <th scope="col" class="govuk-table__header">@Resource.lblAreas</th>
                         </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">@Resource.lblForGrazingLivestockManure</td>
                             <td class="govuk-table__cell">
@@ -299,6 +305,7 @@
         </div>
     </div>
 </div>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m">
@@ -339,18 +346,85 @@
                         else
                         {
                             <td class="govuk-table__cell">
-                                @((ViewBag.NutrientsLoadingLiveStockGrazingList == null) ? Resource.lblHyphen : (ViewBag.NutrientsLoadingLiveStockGrazingTotalN != null && ViewBag.NutrientsLoadingLiveStockGrazingTotalN > 0) ? string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalN, Resource.lblkg) : 0)
-                            </td>
-                            <td class="govuk-table__cell">
-                                @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null) ? Resource.lblHyphen : (ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN != null && ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN > 0) ? string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN, Resource.lblkg) : 0)
-                            </td>
-                            <td class="govuk-table__cell">
-                                @((ViewBag.NutrientsLoadingLiveStockGrazingList == null) ? Resource.lblHyphen : (ViewBag.NutrientsLoadingLiveStockGrazingTotalP != null && ViewBag.NutrientsLoadingLiveStockGrazingTotalP > 0) ? string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalP, Resource.lblkg) : 0)
-                            </td>
-                            <td class="govuk-table__cell">
-                                @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null) ? Resource.lblHyphen : (ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP != null && ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP > 0) ? string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP, Resource.lblkg) : 0)
-                            </td>
+                                @{
+                                    string grazingTotalNText;
 
+                                    if (ViewBag.NutrientsLoadingLiveStockGrazingList == null)
+                                    {
+                                        grazingTotalNText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.NutrientsLoadingLiveStockGrazingTotalN != null &&
+                                    ViewBag.NutrientsLoadingLiveStockGrazingTotalN > 0)
+                                    {
+                                        grazingTotalNText = string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalN, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        grazingTotalNText = "0";
+                                    }
+                                }
+                                @grazingTotalNText
+                            </td>
+                            <td class="govuk-table__cell">
+                                @{
+                                    string nonGrazingTotalNText;
+
+                                    if (ViewBag.NutrientsLoadingLiveStockNonGrazingList == null)
+                                    {
+                                        nonGrazingTotalNText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN != null &&
+                                    ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN > 0)
+                                    {
+                                        nonGrazingTotalNText = string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        nonGrazingTotalNText = "0";
+                                    }
+                                }
+                                @nonGrazingTotalNText
+                            </td>
+                            <td class="govuk-table__cell">
+                                @{
+                                    string grazingTotalPText;
+
+                                    if (ViewBag.NutrientsLoadingLiveStockGrazingList == null)
+                                    {
+                                        grazingTotalPText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.NutrientsLoadingLiveStockGrazingTotalP != null &&
+                                    ViewBag.NutrientsLoadingLiveStockGrazingTotalP > 0)
+                                    {
+                                        grazingTotalPText = string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalP, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        grazingTotalPText = "0";
+                                    }
+                                }
+                                @grazingTotalPText
+                            </td>
+                            <td class="govuk-table__cell">
+                                @{
+                                    string nonGrazingTotalPText;
+
+                                    if (ViewBag.NutrientsLoadingLiveStockNonGrazingList == null)
+                                    {
+                                        nonGrazingTotalPText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP != null &&
+                                    ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP > 0)
+                                    {
+                                        nonGrazingTotalPText = string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        nonGrazingTotalPText = "0";
+                                    }
+                                }
+                                @nonGrazingTotalPText
+                            </td>
                         }
                     </tr>
                     <tr class="govuk-table__row">
@@ -364,16 +438,84 @@
                         else
                         {
                             <td class="govuk-table__cell">
-                                @((ViewBag.ImportOfLivestockManureList == null) ? Resource.lblHyphen : (ViewBag.TotalNImportedGrazingLivestock != null && ViewBag.TotalNImportedGrazingLivestock > 0) ? string.Format("{0:N0}{1}", ViewBag.TotalNImportedGrazingLivestock, Resource.lblkg) : 0)
+                                @{
+                                    string totalNImportedText;
+
+                                    if (ViewBag.ImportOfLivestockManureList == null)
+                                    {
+                                        totalNImportedText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.TotalNImportedGrazingLivestock != null &&
+                                    ViewBag.TotalNImportedGrazingLivestock > 0)
+                                    {
+                                        totalNImportedText = string.Format("{0:N0}{1}", ViewBag.TotalNImportedGrazingLivestock, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        totalNImportedText = "0";
+                                    }
+                                }
+                                @totalNImportedText
                             </td>
                             <td class="govuk-table__cell">
-                                @((ViewBag.ImportOfLivestockManureList == null) ? Resource.lblHyphen : (ViewBag.TotalNImportedNonGrazingLivestock != null && ViewBag.TotalNImportedNonGrazingLivestock > 0) ? string.Format("{0:N0}{1}", ViewBag.TotalNImportedNonGrazingLivestock, Resource.lblkg) : 0)
+                                @{
+                                    string totalNImportedNonGrazingText;
+
+                                    if (ViewBag.ImportOfLivestockManureList == null)
+                                    {
+                                        totalNImportedNonGrazingText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.TotalNImportedNonGrazingLivestock != null &&
+                                    ViewBag.TotalNImportedNonGrazingLivestock > 0)
+                                    {
+                                        totalNImportedNonGrazingText = string.Format("{0:N0}{1}", ViewBag.TotalNImportedNonGrazingLivestock, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        totalNImportedNonGrazingText = "0";
+                                    }
+                                }
+                                @totalNImportedNonGrazingText
                             </td>
                             <td class="govuk-table__cell">
-                                @((ViewBag.ImportOfLivestockManureList == null) ? Resource.lblHyphen : (ViewBag.TotalPImportedGrazingLivestock != null && ViewBag.TotalPImportedGrazingLivestock > 0) ? string.Format("{0:N0}{1}", ViewBag.TotalPImportedGrazingLivestock, Resource.lblkg) : 0)
+                                @{
+                                    string totalPImportedGrazingText;
+
+                                    if (ViewBag.ImportOfLivestockManureList == null)
+                                    {
+                                        totalPImportedGrazingText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.TotalPImportedGrazingLivestock != null &&
+                                    ViewBag.TotalPImportedGrazingLivestock > 0)
+                                    {
+                                        totalPImportedGrazingText = string.Format("{0:N0}{1}", ViewBag.TotalPImportedGrazingLivestock, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        totalPImportedGrazingText = "0";
+                                    }
+                                }
+                                @totalPImportedGrazingText
                             </td>
                             <td class="govuk-table__cell">
-                                @((ViewBag.ImportOfLivestockManureList == null) ? Resource.lblHyphen : (ViewBag.TotalPImportedNonGrazingLivestock != null && ViewBag.TotalPImportedNonGrazingLivestock > 0) ? string.Format("{0:N0}{1}", ViewBag.TotalPImportedNonGrazingLivestock, Resource.lblkg) : 0)
+                                @{
+                                    string totalPImportedNonGrazingText;
+
+                                    if (ViewBag.ImportOfLivestockManureList == null)
+                                    {
+                                        totalPImportedNonGrazingText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.TotalPImportedNonGrazingLivestock != null &&
+                                    ViewBag.TotalPImportedNonGrazingLivestock > 0)
+                                    {
+                                        totalPImportedNonGrazingText = string.Format("{0:N0}{1}", ViewBag.TotalPImportedNonGrazingLivestock, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        totalPImportedNonGrazingText = "0";
+                                    }
+                                }
+                                @totalPImportedNonGrazingText
                             </td>
                         }
                     </tr>
@@ -388,16 +530,96 @@
                         else
                         {
                             <td class="govuk-table__cell">
-                                @((ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : (ViewBag.TotalNExportedGrazingLivestock != null && ViewBag.TotalNExportedGrazingLivestock > 0) ? string.Format("{0:N0}{1}", ViewBag.TotalNExportedGrazingLivestock, Resource.lblkg) : 0)
+                                @{
+                                    string totalNExportedGrazingText;
+
+                                    if (ViewBag.ExportOfLivestockManureList == null)
+                                    {
+                                        totalNExportedGrazingText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.TotalNExportedGrazingLivestock != null &&
+                                    ViewBag.TotalNExportedGrazingLivestock > 0)
+                                    {
+                                        totalNExportedGrazingText = string.Format("{0:N0}{1}", ViewBag.TotalNExportedGrazingLivestock, Resource.lblkg);
+                                    }
+                                    else
+                                    {
+                                        totalNExportedGrazingText = "0";
+                                    }
+                                }
+                                @totalNExportedGrazingText
                             </td>
                             <td class="govuk-table__cell">
-                                @((ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : (ViewBag.TotalNExportedNonGrazingLivestock != null && ViewBag.TotalNExportedNonGrazingLivestock > 0) ? string.Format("{0:N0}{1}", ViewBag.TotalNExportedNonGrazingLivestock, Resource.lblkg) : 0)
+                                @{
+                                    string totalNExportedNonGrazingText;
+
+                                    if (ViewBag.ExportOfLivestockManureList == null)
+                                    {
+                                        totalNExportedNonGrazingText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.TotalNExportedNonGrazingLivestock != null &&
+                                    ViewBag.TotalNExportedNonGrazingLivestock > 0)
+                                    {
+                                        totalNExportedNonGrazingText = string.Format(
+                                        "{0:N0}{1}",
+                                        ViewBag.TotalNExportedNonGrazingLivestock,
+                                        Resource.lblkg
+                                        );
+                                    }
+                                    else
+                                    {
+                                        totalNExportedNonGrazingText = "0";
+                                    }
+                                }
+                                @totalNExportedNonGrazingText
                             </td>
                             <td class="govuk-table__cell">
-                                @((ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : (ViewBag.TotalPExportedGrazingLivestock != null && ViewBag.TotalPExportedGrazingLivestock > 0) ? string.Format("{0:N0}{1}", ViewBag.TotalPExportedGrazingLivestock, Resource.lblkg) : 0)
+                                @{
+                                    string totalPExportedGrazingText;
+
+                                    if (ViewBag.ExportOfLivestockManureList == null)
+                                    {
+                                        totalPExportedGrazingText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.TotalPExportedGrazingLivestock != null &&
+                                    ViewBag.TotalPExportedGrazingLivestock > 0)
+                                    {
+                                        totalPExportedGrazingText = string.Format(
+                                        "{0:N0}{1}",
+                                        ViewBag.TotalPExportedGrazingLivestock,
+                                        Resource.lblkg
+                                        );
+                                    }
+                                    else
+                                    {
+                                        totalPExportedGrazingText = "0";
+                                    }
+                                }
+                                @totalPExportedGrazingText
                             </td>
                             <td class="govuk-table__cell">
-                                @((ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : (ViewBag.TotalPExportedNonGrazingLivestock != null && ViewBag.TotalPExportedNonGrazingLivestock > 0) ? string.Format("{0:N0}{1}", ViewBag.TotalPExportedNonGrazingLivestock, Resource.lblkg) : 0)
+                                @{
+                                    string totalPExportedNonGrazingText;
+
+                                    if (ViewBag.ExportOfLivestockManureList == null)
+                                    {
+                                        totalPExportedNonGrazingText = Resource.lblHyphen;
+                                    }
+                                    else if (ViewBag.TotalPExportedNonGrazingLivestock != null &&
+                                    ViewBag.TotalPExportedNonGrazingLivestock > 0)
+                                    {
+                                        totalPExportedNonGrazingText = string.Format(
+                                        "{0:N0}{1}",
+                                        ViewBag.TotalPExportedNonGrazingLivestock,
+                                        Resource.lblkg
+                                        );
+                                    }
+                                    else
+                                    {
+                                        totalPExportedNonGrazingText = "0";
+                                    }
+                                }
+                                @totalPExportedNonGrazingText
                             </td>
                         }
                     </tr>
@@ -446,7 +668,7 @@
         </div>
     </div>
 </div>
-<div id="printbreak"></div>
+
 @if (ViewBag.NutrientsLoadingLiveStockGrazingList != null)
 {
     <div class="govuk-grid-row">
@@ -513,10 +735,10 @@
                                         @Resource.lblTotals
                                     }
                                 </th>
-                                <td scope="col" class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalN, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalN, Resource.lblkg)</td>
                                 @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
                                 {
-                                    <td scope="col" class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalP, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockGrazingTotalP, Resource.lblkg)</td>
                                 }
                             </tr>
                         }
@@ -536,6 +758,7 @@ else
         </div>
     </div>
 }
+
 @if (ViewBag.NutrientsLoadingLiveStockNonGrazingList != null)
 {
     <div class="govuk-grid-row">
@@ -617,10 +840,10 @@ else
                                         @Resource.lblTotals
                                     }
                                 </th>
-                                <td scope="col" class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN, Resource.lblkg)</td>
                                 @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
                                 {
-                                    <td scope="col" class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP, Resource.lblkg)</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP, Resource.lblkg)</td>
                                 }
                             </tr>
                         }
@@ -640,15 +863,14 @@ else
         </div>
     </div>
 }
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full margin-bottom-ten">
-        @if (ViewBag.ImportOfLivestockManureList != null || ViewBag.ExportOfLivestockManureList != null)
-        {
 
+@if (ViewBag.ImportOfLivestockManureList != null || ViewBag.ExportOfLivestockManureList != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full margin-bottom-ten">
             <h2 class="govuk-heading-m">@Resource.lblLivestockReportContentThirtyTwo</h2>
             <p class="govuk-body">
-                @Resource.lblLivestockReportContentThirtyThree
-                @* @(ViewBag.TotalImportExportTotalN=string.Format("{0:N0}", ViewBag.TotalImportExportTotalN)) *@
+                @Resource.lblLivestockReportContentThirtyThree                
                 <span class="">@string.Format(Resource.lblLivestockReportContentThirtyFour, ViewBag.TotalImportExportTotalN)</span>
             </p>
             @if (ViewBag.ImportOfLivestockManureList != null)
@@ -778,10 +1000,8 @@ else
                                             if (!string.IsNullOrEmpty(exportOfLivestockManure.Manure.Address4)) parts.Add(exportOfLivestockManure.Manure.Address4);
                                             if (!string.IsNullOrEmpty(exportOfLivestockManure.Manure.PostCode)) parts.Add(exportOfLivestockManure.Manure.PostCode);
 
-                                            var displayString = string.Join(", ", parts);
-                                            displayString.Trim();
+                                            var displayString = string.Join(", ", parts).Trim();
                                         }
-
                                         @displayString
                                     </td>
                                 </tr>
@@ -791,7 +1011,6 @@ else
                                         <td class="govuk-table__cell" colspan="6">@string.Format(Resource.lblNoteWithComment, exportOfLivestockManure.Manure.Comments)</td>
                                     </tr>
                                 }
-
                             }
                             <tr class="govuk-table__row total_row">
                                 <td class="govuk-table__cell">@Resource.lblTotal</td>
@@ -816,40 +1035,53 @@ else
                     @Resource.lblThereAreNoExportsOfLivestockManure
                 </h3>
             }
-        }
-        else
-        {
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full margin-bottom-thirty">
             <h3 class="govuk-heading-s">
                 @Resource.lblThereAreNoImportsOfLivestockManure
             </h3>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full margin-bottom-ten">
             <h3 class="govuk-heading-s">
                 @Resource.lblThereAreNoExportsOfLivestockManure
             </h3>
-        }
-
+        </div>
     </div>
-</div>
+}
 
+<hr class="seperator_forty margin-bottom-forty">
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <hr class="margin-bottom-forty">
         <h2 class="govuk-heading-s">
             @Resource.lblLivestockReportContentThirtyFive
         </h2>
         <p class="govuk-body-s">
             @Resource.lblLivestockReportContentThirtySix
         </p>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-s">
             @Resource.lblAboutRecommendationGuidenceAdvice
         </h2>
-        <p class="govuk-body-s">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent1, Resource.lblService)
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1)
         </p>
-        <p class="govuk-body-s">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent2, Resource.lblService)
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
         </p>
-        <p class="govuk-body-s">
-            @string.Format(Resource.lblAboutRecommendationGuidenceAdviceContent3, Resource.lblService)
+        <p class="govuk-body">
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
         </p>
     </div>
 </div>

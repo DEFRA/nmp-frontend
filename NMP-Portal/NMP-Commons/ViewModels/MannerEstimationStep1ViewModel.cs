@@ -11,7 +11,10 @@ namespace NMP.Commons.ViewModels
     public class MannerEstimationStep1ViewModel
     {
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmName))]
+        [StringLength(250, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFarmNameMinMaxValidation))]
         public string FarmName { get; set; } = string.Empty;
-        public bool IsCheckAnswer { get; set; } = false;
+        public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public bool IsFarmCopied { get; set; } = false;
+        public int? MannerFarmId { get; set; }
     }
 }

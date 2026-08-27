@@ -42,6 +42,7 @@
         public int? SBalance { get; set; }
         public int? NaBalance { get; set; }
         public int? LimeBalance { get; set; }
+        public bool IsSacMethodology { get; set; } = false;
         public DateTime? CreatedOn { get; set; }
         public int? CreatedByID { get; set; }
         public DateTime? ModifiedOn { get; set; }

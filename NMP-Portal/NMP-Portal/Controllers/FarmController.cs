@@ -23,17 +23,22 @@ namespace NMP.Portal.Controllers
 {
     [Authorize]
     public class FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
-        IFarmLogic farmLogic) : Controller
+        IFarmLogic farmLogic, IAboutServiceLogic aboutServiceLogic) : Controller
     {
         private readonly ILogger<FarmController> _logger = logger;
         private readonly IDataProtector _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
         private readonly IAddressLookupLogic _addressLookupLogic = addressLookupLogic;
         private readonly IFarmLogic _farmLogic = farmLogic;
+        private readonly IAboutServiceLogic _aboutServiceLogic = aboutServiceLogic;
         private const string _farmListActionName = "FarmList";
         private const string _checkAnswerActionName = "CheckAnswer";
         private const string _rainfallActionName = "Rainfall";
         private const string _farmDataBeforeUpdateSessionKey = "FarmDataBeforeUpdate";
         private const string _organisationId = "organisationId";
+        private const string _elevationActionName = "Elevation";
+        private const string _farmDataKey = "FarmData";
+        private const string _addressListKey = "AddressList";
+        private const string _tempDataKey = "Error";
 
         public IActionResult Index()
         {
@@ -54,16 +59,23 @@ namespace NMP.Portal.Controllers
                 Claim? claim = HttpContext.User.FindFirst(_organisationId);
                 string orgId = claim != null ? claim.Value : Guid.Empty.ToString();
                 Guid.TryParse(orgId, out Guid organisationId);
-                (List<Farm> farms, error) = await _farmLogic.FetchFarmByOrgIdAsync(organisationId);
+                (List<FarmListSummary> farms, error) = await _farmLogic.FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(organisationId);
                 if (error != null && (!string.IsNullOrWhiteSpace(error.Message)))
                 {
                     ViewBag.Error = error.Message;
-                    return View("~/Views/Home/Index.cshtml");
+                    return RedirectToAction("Index", "Error");
                 }
                 if (farms != null && farms.Count > 0)
                 {
-                    model.Farms.AddRange(farms);
-                    model.Farms.ForEach(m => m.EncryptedFarmId = _dataProtector.Protect(m.ID.ToString()));
+                    model.Farms.AddRange(
+                        farms.Select(f => new Farm
+                        {
+                            ID = f.ID,
+                            Name = f.Name,
+                            ModifiedOn = f.ModifiedOn,
+                            EncryptedFarmId = _dataProtector.Protect(f.ID.ToString())
+                        })
+                    );
                 }
                 if (!string.IsNullOrWhiteSpace(q))
                 {
@@ -75,6 +87,8 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = "false";
                 }
                 ViewBag.IsAnyRecordInMannerEstimate = false;
+                ViewBag.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService(); 
+                
             }
             catch (HttpRequestException hre)
             {
@@ -478,7 +492,7 @@ namespace NMP.Portal.Controllers
             var address = addresses.FirstOrDefault(a => a.AddressLine == farm.FullAddress);
             if (address == null) return;
 
-            farm.Address1 = $"{Functions.FormatPart(address.SubBuildingName)}{Functions.FormatPart(address.BuildingNumber)}{Functions.FormatPart(address.BuildingName)}{address.Street}";
+            farm.Address1 = $"{Functions.FormatPart(address.SubBuildingName)}{Functions.FormatPart(address.BuildingNumber)}{Functions.FormatPart(address.BuildingName)}{address.Street}".TrimEnd(',', ' ');
             farm.Address2 = address.Locality;
             farm.Address3 = address.Town;
             farm.Address4 = address.HistoricCounty;
@@ -715,10 +729,8 @@ namespace NMP.Portal.Controllers
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.ClimateDataPostCode);
 
                     var rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
-                    if (rainfall != null)
-                    {
-                        model.Rainfall = (int)Math.Round(rainfall);
-                    }
+
+                    model.Rainfall = (int)Math.Round(rainfall);
                     if (model.Rainfall == null || model.Rainfall == 0)
                     {
                         ModelState.AddModelError("ClimateDataPostCode", Resource.lblWeatherDataCannotBeFoundForTheCurrentPostcode);
@@ -746,10 +758,8 @@ namespace NMP.Portal.Controllers
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
 
                     decimal? rainfall = await _farmLogic.FetchRainfallAverageAsync(firstHalfPostcode);
-                    if (rainfall != null)
-                    {
-                        model.Rainfall = (int)Math.Round(rainfall.Value);
-                    }
+
+                    model.Rainfall = (int)Math.Round(rainfall.Value);
 
                     SetFarmToSession(model);
                 }
@@ -828,22 +838,13 @@ namespace NMP.Portal.Controllers
             string key = "Rainfall";
             if ((!ModelState.IsValid) && ModelState.ContainsKey(key))
             {
-
                 var RainfallError = ModelState[key]?.Errors.Count > 0 ?
                                 ModelState[key]?.Errors[0].ErrorMessage.ToString() : null;
 
                 if (RainfallError != null && RainfallError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[key]?.RawValue, Resource.lblRainfall)))
                 {
                     ModelState[key]?.Errors.Clear();
-                    decimal decimalValue;
-                    if (decimal.TryParse(ModelState[key]?.RawValue?.ToString(), out decimalValue))
-                    {
-                        ModelState[key]?.Errors.Add(RainfallError);
-                    }
-                    else
-                    {
-                        ModelState[key]?.Errors.Add(Resource.MsgForRainfallManual);
-                    }
+                    ModelState[key]?.Errors.Add(Resource.MsgEnterRainfallBetween1And3000);
                 }
             }
 
@@ -852,11 +853,13 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError(key, Resource.MsgEnterTheAverageAnnualRainfall);
             }
-
-            if (farm.Rainfall != null && farm.Rainfall < 0)
+            else if (farm.Rainfall < 1 || farm.Rainfall > 3000)
             {
-                ModelState.AddModelError(key, Resource.MsgEnterANumberWhichIsGreaterThanZero);
+
+                ModelState.AddModelError(key, Resource.MsgEnterRainfallBetween1And3000);
+
             }
+
         }
 
         [HttpGet]
@@ -875,7 +878,7 @@ namespace NMP.Portal.Controllers
             {
                 model.NVZFields = (int)NMP.Commons.Enums.NvzFields.AllFieldsInNVZ;
                 SetFarmToSession(model);
-                return await Task.FromResult(RedirectToAction("Elevation"));
+                return await Task.FromResult(RedirectToAction(_elevationActionName));
             }
             return View(model);
         }
@@ -906,7 +909,7 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction("NitrateVulnerableZones");
             }
-            return RedirectToAction("Elevation");
+            return RedirectToAction(_elevationActionName);
         }
         [HttpGet]
         public async Task<IActionResult> NitrateVulnerableZones()
@@ -947,7 +950,7 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction(_checkAnswerActionName);
             }
 
-            return RedirectToAction("Elevation");
+            return RedirectToAction(_elevationActionName);
         }
 
         [HttpGet]
@@ -978,7 +981,7 @@ namespace NMP.Portal.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View("Elevation", farm);
+                return View(_elevationActionName, farm);
             }
 
             SetFarmToSession(farm);
@@ -1245,7 +1248,7 @@ namespace NMP.Portal.Controllers
                 SetFarmToSession(model);
                 if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                 {
-                    return RedirectToAction("Elevation");
+                    return RedirectToAction(_elevationActionName);
                 }
                 return RedirectToAction("Organic");
             }
@@ -1281,10 +1284,10 @@ namespace NMP.Portal.Controllers
                     (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(farmId));
                     if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                     {
-                        TempData["Error"] = error.Message;
+                        TempData[_tempDataKey] = error.Message;
                         return RedirectToAction(_farmListActionName);
                     }
-
+                    
                     HttpContext.Session.SetString("current_farm_name", farm?.Name ?? "");
                     HttpContext.Session.SetString("current_farm_id", id);
 
@@ -1336,7 +1339,7 @@ namespace NMP.Portal.Controllers
 
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
-                    TempData["Error"] = error.Message;
+                    TempData[_tempDataKey] = error.Message;
                     return RedirectToAction(_farmListActionName);
                 }
 
@@ -1450,7 +1453,7 @@ namespace NMP.Portal.Controllers
 
                 if (apiError != null && !string.IsNullOrWhiteSpace(apiError.Message))
                 {
-                    TempData["Error"] = apiError.Message;
+                    TempData[_tempDataKey] = apiError.Message;
                     return RedirectToAction(_farmListActionName);
                 }
 
@@ -1464,7 +1467,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.ClimateDataPostCode = model.Postcode;
                 }
-                
+
                 var nvzData = await PrepareNvzDataAsync(model);
 
                 var farmData = new FarmData
@@ -1686,23 +1689,23 @@ namespace NMP.Portal.Controllers
 
         private FarmViewModel? GetFarmFromSession()
         {
-            if (HttpContext.Session.Exists("FarmData"))
+            if (HttpContext.Session.Exists(_farmDataKey))
             {
-                return HttpContext.Session.GetObjectFromJson<FarmViewModel>("FarmData");
+                return HttpContext.Session.GetObjectFromJson<FarmViewModel>(_farmDataKey);
             }
             return null;
         }
 
         private void SetFarmToSession(FarmViewModel farm)
         {
-            HttpContext.Session.SetObjectAsJson("FarmData", farm);
+            HttpContext.Session.SetObjectAsJson(_farmDataKey, farm);
         }
 
         private void RemoveFarmSession()
         {
-            if (HttpContext.Session.Exists("FarmData"))
+            if (HttpContext.Session.Exists(_farmDataKey))
             {
-                HttpContext.Session.Remove("FarmData");
+                HttpContext.Session.Remove(_farmDataKey);
             }
         }
 
@@ -1730,23 +1733,23 @@ namespace NMP.Portal.Controllers
 
         private List<AddressLookupResponse>? GetAddressesFromSession()
         {
-            if (HttpContext.Session.Exists("AddressList"))
+            if (HttpContext.Session.Exists(_addressListKey))
             {
-                return HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>("AddressList");
+                return HttpContext.Session.GetObjectFromJson<List<AddressLookupResponse>>(_addressListKey);
             }
             return null;
         }
 
         private void SetAddressesToSession(List<AddressLookupResponse> addresses)
         {
-            HttpContext.Session.SetObjectAsJson("AddressList", addresses);
+            HttpContext.Session.SetObjectAsJson(_addressListKey, addresses);
         }
 
         private void RemoveAddressesSession()
         {
-            if (HttpContext.Session.Exists("AddressList"))
+            if (HttpContext.Session.Exists(_addressListKey))
             {
-                HttpContext.Session.Remove("AddressList");
+                HttpContext.Session.Remove(_addressListKey);
             }
         }
         private async Task<List<SelectListItem>> GetNvzActionProgramItemsByCountryIdAsync(int countryId)

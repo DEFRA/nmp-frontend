@@ -1,4 +1,6 @@
 ﻿using NMP.Commons.Models;
+using NMP.Commons.Resources;
+using System.ComponentModel.DataAnnotations;
 namespace NMP.Commons.ViewModels;
 public class SoilAnalysisViewModel : SoilAnalysis
 {
@@ -8,7 +10,7 @@ public class SoilAnalysisViewModel : SoilAnalysis
 
     public string EncryptedFieldId { get; set; } = string.Empty;
     public string? EncryptedSoilAnalysisId { get; set; } = string.Empty;
-    public bool? IsSoilNutrientValueTypeIndex { get; set; }
+    public int? SoilNutrientValueType { get; set; }
     public string IsSoilDataChanged { get; set; } = string.Empty;
 
     public PKBalance? PKBalance { get; set; }
@@ -19,4 +21,9 @@ public class SoilAnalysisViewModel : SoilAnalysis
     public bool? IsCancel { get; set; }
     public bool IsCheckAnswer { get; set; } = false;
     public int? FarmRB209CountryID { get; set; }
+    public string? SoilNutrientValueTypeName { get; set; } = string.Empty;
+
+    
+    public bool IsSoilAnalysesMethodChange { get; set; } = false;
+    public bool IsSoilNutrientValueTypeChange { get; set; } = false;
 }

@@ -1,0 +1,56 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ViewModels
+
+@model NMP.Commons.ViewModels.OrganicManureViewModel
+
+@{
+    var warningModel = new WarningMessageViewModel
+    {
+        IsWales = Model.FarmCountryId ==
+                   (int)NMP.Commons.Enums.FarmCountry.Wales
+    };
+
+    if (Model.IsOrgManureNfieldLimitWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.NmaxWarningPara1,
+            Para2 = Model.NmaxWarningPara2,
+            Para3 = Model.NmaxWarningPara3
+        });
+    }
+
+    if (Model.IsNMaxLimitWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.CropNmaxLimitWarningPara1,
+            Para2 = Model.CropNmaxLimitWarningPara2,
+            Para3 = Model.CropNmaxLimitWarningPara3
+        });
+    }
+
+    if (Model.IsEndClosedPeriodFebruaryWarning)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.EndClosedPeriodEndFebWarningPara1,
+            Para2 = Model.EndClosedPeriodEndFebWarningPara2,
+            Para3 = Model.EndClosedPeriodEndFebWarningPara3
+        });
+    }
+
+    if (Model.IsStartPeriodEndFebOrganicAppRateExceedMaxN150)
+    {
+        warningModel.Warnings.Add(new WarningMessage
+        {
+            Header = Model.StartClosedPeriodEndFebWarningPara1,
+            Para2 = Model.StartClosedPeriodEndFebWarningPara2,
+            Para3 = Model.StartClosedPeriodEndFebWarningPara3
+        });
+    }
+}
+
+@await Html.PartialAsync(
+"~/Views/OrganicManure/_WarningMessagePartial.cshtml",
+    warningModel)

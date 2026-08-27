@@ -1,0 +1,378 @@
+﻿@using NMP.Commons.Resources;
+@using NMP.Commons.ViewModels;
+@model MannerEstimationApplicationDetailsViewModel;
+@{
+    var count = ViewBag.Count ?? 0;
+
+    var value = TempData[$"ApplicationDefaultValues{count}"];
+    var isDefaultNutrient = value != null && bool.TryParse(value.ToString(), out var result) && result;
+
+    var defaultNutrientValue = isDefaultNutrient ? Resource.lblYes : Resource.lblNo;
+    var applicationRateMethod = TempData[$"ApplicationRateOption{count}"] ?? string.Empty;
+    bool needToShowIncorporationChangeBtn = true;
+    @if (Model.ApplicationMethod != null)
+    {
+        needToShowIncorporationChangeBtn = Model.ApplicationMethodID != (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm && Model.ApplicationMethodID != (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm;
+    }
+    bool needToShowIncorporationDelayChangeBtn = true;
+    if (Model.IncorporationMethod != null)
+    {
+        needToShowIncorporationDelayChangeBtn =
+     Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated
+     && Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.ShallowInjection
+     && Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.DeepInjection;
+    }
+    int applicationMonth = Model?.ApplicationDate != null ? Model.ApplicationDate.Month : 0;
+
+    var nutrientSuffix = Model.IsManureTypeLiquid ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
+
+}
+
+<table class="govuk-table data-table manner-answers-table margin-bottom-none">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lbOrganicMaterialType</th>
+            <td class="govuk-table__cell">@Model.ManureType</td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="ManureGroup"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lbOrganicMaterialType, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblApplicationDate</th>
+            <td class="govuk-table__cell">@Model.ApplicationDate.ToLocalTime().ToString("dd MMM yyyy")</td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="ApplicationDate"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblApplicationDate, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureType)</th>
+            <td class="govuk-table__cell">
+                @Model.ApplicationMethod
+            </td>
+            <td class="govuk-table__cell">
+                @if (Model.IsManureTypeLiquid)
+                {
+                    <a class="govuk-link"
+                       asp-action="ApplicationMethod"
+                       asp-controller="MannerEstimation"
+                       asp-route-q="@Model.EncryptedApplicationId">
+                        @Resource.lblChange
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureType), Resource.lblChange))</span>
+                    </a>
+                }
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureType)</th>
+            <td class="govuk-table__cell">
+                @defaultNutrientValue
+
+            </td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="DefaultNutrientValues"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureType), Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row nutrient_list">
+            <th scope="row" class="govuk-table__header">@string.Format(Resource.lblNutrientValuesForManureTypeName, Model.ManureType)</th>
+            <td class="govuk-table__cell">
+                @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w50">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
+                }
+                @if ((Model.N.HasValue) && Model.N.Value > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w50">@string.Format(nutrientSuffix, Model.N.Value)</span></span>
+                }
+                @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblAmmoniumHypenN <span class="figure w50">@string.Format(nutrientSuffix, Model.NH4N.Value)</span></span>
+                }
+                @if (Model.UricAcid > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblUricAcid <span class="figure w50">@string.Format(nutrientSuffix, Model.UricAcid)</span></span>
+                }
+                @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblNitrate <span class="figure w50">@string.Format(nutrientSuffix, Model.NO3N.Value)</span></span>
+                }
+                @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w50">@string.Format(nutrientSuffix, Model.P2O5.Value)</span></span>
+                }
+                @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w50">@string.Format(nutrientSuffix, Model.K2O.Value)</span></span>
+                }
+                @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w50">@string.Format(nutrientSuffix, Model.SO3.Value)</span></span>
+                }
+                @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
+                {
+                    <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w50">@string.Format(nutrientSuffix, Model.MgO.Value)</span></span>
+                }
+            </td>
+            <td class="govuk-table__cell">
+                @if (!isDefaultNutrient)
+                {
+                    <a class="govuk-link"
+                       asp-action="ManualNutrientValues"
+                       asp-controller="MannerEstimation"
+                       asp-route-q="@Model.EncryptedApplicationId" asp-route-r="@ViewBag.IsDefault">
+                        @Resource.lblChange
+                        <span class="govuk-visually-hidden">
+                            @(string.Format("{0} {1}", string.Format(Resource.lblNutrientValuesForManureTypeName, Model.ManureType), Resource.lblChange))
+                        </span>
+                    </a>
+                }
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblHowToEnterTheApplicationRate</th>
+            <td class="govuk-table__cell">
+                @applicationRateMethod
+            </td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="ApplicationRateMethod"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblHowToEnterTheApplicationRate, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+       
+
+        @if (applicationRateMethod.Equals(Resource.lblCalculateBasedOnTheAreaAndQuantity))
+        {
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">@Resource.lblAreaSpread</th>
+                <td class="govuk-table__cell">
+                    @string.Format(Resource.lblHectare, Model.AreaSpread)
+                </td>
+                <td class="govuk-table__cell">
+
+                    <a class="govuk-link"
+                       asp-action="AreaQuantity"
+                       asp-controller="MannerEstimation"
+                       asp-route-q="@Model.EncryptedApplicationId">
+                        @Resource.lblChange
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblAreaSpread, Resource.lblChange))</span>
+                    </a>
+
+                </td>
+            </tr>
+
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">@Resource.lblQuantityApplied</th>
+                <td class="govuk-table__cell">
+                    @{
+
+                        var unit = (Model.IsManureTypeLiquid)
+                                                            ? Resource.lblCubicMeters
+                                                            : Resource.lbltonnes;
+
+                        string Quantity = $"{Model.ManureQuantity} {unit}";
+
+                    }
+                    @Quantity
+                </td>
+                <td class="govuk-table__cell">
+
+                    <a class="govuk-link"
+                       asp-action="AreaQuantity"
+                       asp-controller="MannerEstimation"
+                       asp-route-q="@Model.EncryptedApplicationId">
+                        @Resource.lblChange
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblQuantityApplied, Resource.lblChange))</span>
+                    </a>
+
+                </td>
+            </tr>
+        }
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblApplicationRate</th>
+            <td class="govuk-table__cell">
+                @string.Concat(Model.ApplicationRate, " ", (Model.IsManureTypeLiquid
+                                ? Resource.lblMeterCubePerHa
+                                : Resource.lblTonPerHa))
+            </td>
+            <td class="govuk-table__cell">
+                @if (applicationRateMethod.Equals(string.Format(Resource.lblEnterAnApplicationRate, Model.ManureType)))
+                {
+                    <a class="govuk-link"
+                       asp-action="ManualApplicationRate"
+                       asp-controller="MannerEstimation"
+                       asp-route-q="@Model.EncryptedApplicationId">
+                        @Resource.lblChange
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblApplicationRate, Resource.lblChange))</span>
+                    </a>
+                }
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblIncorporationMethod</th>
+            <td class="govuk-table__cell">
+                @Model.IncorporationMethod
+            </td>
+            <td class="govuk-table__cell">
+                @if (needToShowIncorporationChangeBtn)
+                {
+                    <a class="govuk-link"
+                       asp-action="IncorporationMethod"
+                       asp-controller="MannerEstimation"
+                       asp-route-q="@Model.EncryptedApplicationId">
+                        @Resource.lblChange
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblIncorporationMethod, Resource.lblChange))</span>
+                    </a>
+                }
+            </td>
+        </tr>
+        @if (Model.IncorporationMethodID != (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated)
+        {
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">@Resource.lblIncorporationDelay</th>
+                <td class="govuk-table__cell">
+                    @Model.IncorporationDelay
+                </td>
+                <td class="govuk-table__cell">
+                    @if (needToShowIncorporationDelayChangeBtn)
+                    {
+                        <a class="govuk-link"
+                           asp-action="IncorporationDelay"
+                           asp-controller="MannerEstimation"
+                           asp-route-q="@Model.EncryptedApplicationId">
+                            @Resource.lblChange
+                            <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblIncorporationDelay, Resource.lblChange))</span>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+
+        @if (applicationMonth >= 8 && applicationMonth <= 10)
+        {
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">@Resource.lblAutumnCropNitrogenNUptake</th>
+                <td class="govuk-table__cell">
+                    @string.Format(Resource.lblAutumnCropNitrogenPerHectare, Model.AutumnCropNitrogenUptake)
+                </td>
+                <td class="govuk-table__cell">
+                    <a class="govuk-link"
+                       asp-action="AutumnCropNitrogenUptake"
+                       asp-controller="MannerEstimation"
+                       asp-route-q="@Model.EncryptedApplicationId">
+                        @Resource.lblChange
+                        <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblAutumnCropNitrogenNUptake, Resource.lblChange))</span>
+                    </a>
+                </td>
+            </tr>
+        }
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblEndOfSoilDrainage</th>
+            <td class="govuk-table__cell">
+                @Model.EndOfDrainageDate.Value.ToLocalTime().ToString("d MMM yyyy")
+            </td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="SoilDrainageEndDate"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblEndOfSoilDrainage, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblRainfallWithin6HoursOfApplication</th>
+            <td class="govuk-table__cell">
+                @Model.RainType
+            </td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="RainfallWithinSixHour"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblRainfallWithin6HoursOfApplication, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblEffectiveRainfallAfterApplication</th>
+            <td class="govuk-table__cell">
+                @string.Format(Resource.lblRainfallMM, Model.RainfallPostApplication)
+            </td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="EffectiveRainfall"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblEffectiveRainfallAfterApplication, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblWindspeedAtApplication</th>
+            <td class="govuk-table__cell">
+                @Model.Windspeed
+            </td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="Windspeed"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblWindspeedAtApplication, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Resource.lblTopsoilMoisture</th>
+            <td class="govuk-table__cell">
+                @Model.MoistureType
+            </td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link"
+                   asp-action="TopsoilMoisture"
+                   asp-controller="MannerEstimation"
+                   asp-route-q="@Model.EncryptedApplicationId">
+                    @Resource.lblChange
+                    <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblTopsoilMoisture, Resource.lblChange))</span>
+                </a>
+            </td>
+        </tr>
+
+    </tbody>
+</table>

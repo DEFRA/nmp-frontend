@@ -31,7 +31,7 @@ public class HomeController : Controller
                 ViewBag.Error = Resource.MsgDefraIdentityServiceDown;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             ViewBag.IsDefraCustomerIdentifyConfigurationWorking = false;
             ViewBag.Error = Resource.MsgDefraIdentityServiceDown;

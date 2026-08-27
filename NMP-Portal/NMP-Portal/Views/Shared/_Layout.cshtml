@@ -22,7 +22,7 @@
     <govuk-footer class="noprint">
         <govuk-footer-meta>
             <govuk-footer-meta-items>
-                <govuk-footer-meta-item asp-action="Index" asp-controller="AccessibilityStatement">@Resource.lblAccessibilityStatement</govuk-footer-meta-item>
+                <govuk-footer-meta-item asp-action="Index" asp-controller="AccessibilityStatement" asp-area="">@Resource.lblAccessibilityStatement</govuk-footer-meta-item>
                 <govuk-footer-meta-item>
                     <a class="govuk-footer__link" href="https://www.gov.uk/government/collections/defras-privacy-notices"
                        target="_blank"
@@ -30,8 +30,8 @@
                         @Resource.lblPrivacyNotice <span class="govuk-visually-hidden">(opens in new tab)</span>
                     </a>
                 </govuk-footer-meta-item>
-                <govuk-footer-meta-item asp-action="Index" asp-controller="Cookie">@Resource.lblCookies</govuk-footer-meta-item>
-                <govuk-footer-meta-item asp-action="Index" asp-controller="AcceptTerms">@Resource.lblTermsOfUse</govuk-footer-meta-item>
+                <govuk-footer-meta-item asp-action="Index" asp-controller="Cookie" asp-area="" >@Resource.lblCookies</govuk-footer-meta-item>
+                <govuk-footer-meta-item asp-action="Index" asp-controller="AcceptTerms" asp-area="">@Resource.lblTermsOfUse</govuk-footer-meta-item>
             </govuk-footer-meta-items>
         </govuk-footer-meta>
     </govuk-footer>

@@ -50,6 +50,12 @@
             <h2 class="govuk-heading-m plan_title">@Resource.lblFarmInformation</h2>
 
             <table class="govuk-table">
+                <thead class="govuk-visually-hidden">
+                    <tr>
+                        <th scope="col">@Resource.lblField</th>
+                        <th scope="col">@Resource.lblValue</th>
+                    </tr>
+                </thead>
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">@Resource.lblAddress</td>
@@ -101,7 +107,7 @@
                             <td class="govuk-table__cell">@fieldsInNVZ</td>
                         </tr>
                     }
-                    @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    @if (Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.NVZFields != (int)NMP.Commons.Enums.NvzFields.NoFieldsInNVZ)
                     {
                         if (ViewBag.SelectedNVZs != null)
                         {

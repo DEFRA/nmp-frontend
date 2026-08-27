@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -15,285 +16,85 @@ namespace NMP.Services;
 public class FertiliserManureService : Service, IFertiliserManureService
 {
     private readonly ILogger<FertiliserManureService> _logger;
+    private const string _logError = "{Code} : {Message} : {Stack} : {Path}";
     public FertiliserManureService(ILogger<FertiliserManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
     {
         _logger = logger;
     }
-    public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
+    public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameServiceAsync(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {
-        List<int> managementIds = new List<int>();
-        Error error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, fieldIds, cropOrder);
-            if (cropOrder == null)
-            {
-                url = url.Replace("&cropOrder=", "");
-            }
-            if (string.IsNullOrWhiteSpace(cropGroupName))
-            {
-                url = url.Replace("cropGroupName=&", "");
-            }
-            var response = await httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    List<CommonResponse> managementIdsList = responseWrapper.Data.ManagementPeriods.ToObject<List<CommonResponse>>();
-                    managementIds.AddRange(managementIdsList.Select(x => x.Id));
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw;
-        }
-        return (managementIds, error);
+        string url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI,
+        harvestYear, cropGroupName, fieldIds, cropOrder);
+
+        if (cropOrder == null)
+            url = url.Replace("&cropOrder=", "");
+
+        if (string.IsNullOrWhiteSpace(cropGroupName))
+            url = url.Replace("cropGroupName=&", "");
+
+        var (data, error) = await HandleApiRequest<List<int>>(
+    rw => ((JToken)rw.Data["ManagementPeriods"])
+            .ToObject<List<CommonResponse>>()
+            .Select(x => x.Id)
+            .ToList(),
+    url
+);
+        return (data ?? new List<int>(), error);
+
     }
-    public async Task<(List<ManureCropTypeResponse>, Error)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
+    public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYearServiceAsync(int farmId, int harvestYear)
     {
-        List<ManureCropTypeResponse> cropTypeList = new List<ManureCropTypeResponse>();
-        Error error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Format(ApiurlHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
-            var response = await httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var cropTypeResponseList = responseWrapper.Data.ToObject<List<ManureCropTypeResponse>>();
-                    cropTypeList.AddRange(cropTypeResponseList);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper?.Error?.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-        return (cropTypeList, error);
+        string url = string.Format(ApiurlHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.ToObject<List<ManureCropTypeResponse>>(), url);
+        return (data ?? new List<ManureCropTypeResponse>(), error);
+
     }
-    public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName)
+    public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupNameServiceAsync(int harvestYear, int farmId, string? cropGroupName)
     {
-        List<CommonResponse> fieldResponses = new List<CommonResponse>();
-        Error error = null;
-        try
+        string url = string.Empty;
+        if (!string.IsNullOrWhiteSpace(cropGroupName))
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = string.Empty;
-            if (!string.IsNullOrWhiteSpace(cropGroupName))
-            {
-                url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, farmId);
-            }
-            else
-            {
-                url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
-            }
-            var response = await httpClient.GetAsync(url);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var fieldResponseList = responseWrapper.Data.ToObject<List<CommonResponse>>();
-                    fieldResponses.AddRange(fieldResponseList);
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
+            url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, harvestYear, cropGroupName, farmId);
         }
-        catch (HttpRequestException hre)
+        else
         {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
+            url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAsyncAPI, harvestYear, farmId);
         }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-        return (fieldResponses, error);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.ToObject<List<CommonResponse>>(), url);
+        return (data ?? new List<CommonResponse>(), error);
+
     }
 
-    public async Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurations()
+    public async Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurationsServiceAsync()
     {
-        List<InOrganicManureDurationResponse> inOrganicManureDurationList = new List<InOrganicManureDurationResponse>();
-        Error error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchInOrganicManureDurationsAsyncAPI));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var inOrganicManureDurationResponseList = responseWrapper.Data.InorganicManureDurations.ToObject<List<InOrganicManureDurationResponse>>();
-                    if (inOrganicManureDurationResponseList != null)
-                    {
-                        inOrganicManureDurationList.AddRange(inOrganicManureDurationResponseList);
-                    }
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-        return (inOrganicManureDurationList, error);
+        string url = ApiurlHelper.FetchInOrganicManureDurationsAsyncAPI;
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.InorganicManureDurations.ToObject<List<InOrganicManureDurationResponse>>(), url);
+        return (data ?? new List<InOrganicManureDurationResponse>(), error);
     }
-    public async Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsById(int id)
+    public async Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsByIdServiceAsync(int id)
     {
-        InOrganicManureDurationResponse inOrganicManureDuration = new InOrganicManureDurationResponse();
-        Error error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchInOrganicManureDurationsByIdAsyncAPI, id));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var inOrganicManureDurationResponse = responseWrapper.Data.InorganicManureDuration.ToObject<InOrganicManureDurationResponse>();
-                    if (inOrganicManureDurationResponse != null)
-                    {
-                        inOrganicManureDuration = inOrganicManureDurationResponse;
-                    }
-
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error = new Error();
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-        return (inOrganicManureDuration, error);
+        string url = string.Format(ApiurlHelper.FetchInOrganicManureDurationsByIdAsyncAPI, id);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.InorganicManureDuration.ToObject<InOrganicManureDurationResponse>(), url);
+        return (data ?? new InOrganicManureDurationResponse(), error);
     }
 
-    public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure)
+    public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureServiceAsync(string fertiliserManure)
     {
         Error? error = null;
         List<FertiliserManure> fertilisers = new List<FertiliserManure>();
         try
-        {            
+        {
             HttpClient httpClient = await GetNMPAPIClient();
             var response = await httpClient.PostAsync(ApiurlHelper.AddFertiliserManuresAsyncAPI, new StringContent(fertiliserManure, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+            if (response.IsSuccessStatusCode && responseWrapper?.Data?.FertiliserManure is JToken fertiliserManures)
             {
-                List<FertiliserManure> fertiliser = responseWrapper.Data.FertiliserManure.ToObject<List<FertiliserManure>>();
-                if (fertiliser != null && fertiliser.Count > 0)
+                List<FertiliserManure> fertiliser = fertiliserManures.ToObject<List<FertiliserManure>>() ?? new List<FertiliserManure>();
+
+                if (fertiliser.Count > 0)
                 {
                     fertilisers.AddRange(fertiliser);
                 }
@@ -305,87 +106,39 @@ public class FertiliserManureService : Service, IFertiliserManureService
                     error = responseWrapper?.Error?.ToObject<Error>();
                     if (error != null)
                     {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
+                        _logger.LogError(_logError, error.Code, error.Message, error.Stack, error.Path);
                     }
                 }
             }
         }
         catch (HttpRequestException hre)
         {
+            error ??= new Error();
             error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);            
+            _logger.LogError(hre, hre.Message);
         }
         catch (Exception ex)
         {
+            error ??= new Error();
             error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);          
+            _logger.LogError(ex, ex.Message);
         }
         return (fertilisers, error);
     }
-    public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDate(int fieldId, DateTime startDate, DateTime endDate,int? fertiliserId, bool confirm)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDateServiceAsync(int fieldId, DateTime startDate, DateTime endDate, int? fertiliserId, bool confirm)
     {
-        Error error = null;
-        decimal totalN = 0;
         string fromdate = startDate.ToString("yyyy-MM-dd");
         string toDate = endDate.ToString("yyyy-MM-dd");
-        try
+        string url = ApiurlHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI;
+        if (fertiliserId.HasValue)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            string url = ApiurlHelper.FetchTotalNFromFertiliserBasedOnManIdAndAppDateAsyncAPI;
-
-            if (fertiliserId.HasValue)
-            {
-                url += $"&fertiliserId={fertiliserId.Value}";
-            }
-
-            url = string.Format(url, fieldId, fromdate, toDate, confirm);
-            var response = await httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    totalN = responseWrapper.Data.TotalN != null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0;
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
+            url += $"&fertiliserId={fertiliserId.Value}";
         }
-        catch (HttpRequestException hre)
-        {
-            if (error == null)
-            {
-                error = new Error();
-            }
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            if (error == null)
-            {
-                error = new Error();
-            }
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-        return (totalN, error);
+        url = string.Format(url, fieldId, fromdate, toDate, confirm);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
+        return (data ?? 0, error);
     }
-    public async Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds)
+    public async Task<(string, Error)> DeleteFertiliserByIdServiceAsync(string fertiliserIds)
     {
         Error error = new Error();
         string message = string.Empty;
@@ -398,22 +151,20 @@ public class FertiliserManureService : Service, IFertiliserManureService
             {
                 Content = content
             };
-            var response = await httpClient.SendAsync(requestMessage);            
+            var response = await httpClient.SendAsync(requestMessage);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
             {
-                message = responseWrapper.Data["message"].Value;
+                message = data["message"]?.Value<string>() ?? string.Empty;
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                if (responseWrapper?.Error is JToken errorToken)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
+                    error = errorToken.ToObject<Error>() ?? new Error();                    
+                        _logger.LogError(_logError, error.Code, error.Message, error.Stack, error.Path);
+                    
                 }
             }
         }
@@ -421,130 +172,55 @@ public class FertiliserManureService : Service, IFertiliserManureService
         {
             error.Message = Resource.MsgServiceNotAvailable;
             _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
             error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
         }
 
         return (message, error);
     }
-    public async Task<(FertiliserManureDataViewModel, Error)> FetchFertiliserByIdAsync(int fertiliserId)
+    public async Task<(FertiliserManureDataViewModel, Error)> FetchFertiliserByIdServiceAsync(int fertiliserId)
     {
-        Error error = new Error();
-        FertiliserManureDataViewModel fertiliserManure = new FertiliserManureDataViewModel();
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFertiliserByIdAPI, fertiliserId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-            {
-                var fertiliser = responseWrapper.Data.ToObject<FertiliserManureDataViewModel>();
-                if (fertiliser != null)
-                {
-                    fertiliserManure = fertiliser;
-                }
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-
-        return (fertiliserManure, error);
+        string url = string.Format(ApiurlHelper.FetchFertiliserByIdAPI, fertiliserId);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.ToObject<FertiliserManureDataViewModel>(), url);
+        return (data ?? new FertiliserManureDataViewModel(), error);
     }
-    public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId, int farmId, int harvestYear)
+    public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndNutrientServiceAsync(int fertiliserId, int farmId, int harvestYear)
     {
-        Error error = new Error();
-        List<FertiliserAndOrganicManureUpdateResponse> fertiliserResponse = new List<FertiliserAndOrganicManureUpdateResponse>();
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFieldWithSameDateAndNutrientAPI, fertiliserId,farmId,harvestYear));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-            {
-                fertiliserResponse = responseWrapper.Data.ToObject<List<FertiliserAndOrganicManureUpdateResponse>>();                    
-            }
-            else
-            {
-                if (responseWrapper != null && responseWrapper.Error != null)
-                {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
-                }
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
-        }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
-        }
-
-        return (fertiliserResponse, error);
+        string url = string.Format(ApiurlHelper.FetchFieldWithSameDateAndNutrientAPI, fertiliserId, farmId, harvestYear);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.ToObject<List<FertiliserAndOrganicManureUpdateResponse>>(), url);
+        return (data ?? new List<FertiliserAndOrganicManureUpdateResponse>(), error);
     }
-    public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData)
+    public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliserServiceAsync(string fertliserData)
     {
-        Error? error =null;
+        Error? error = null;
         List<FertiliserManure> fertiliser = new List<FertiliserManure>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(string.Format(ApiurlHelper.UpdateFertiliserAPI), new StringContent(fertliserData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateFertiliserAPI, new StringContent(fertliserData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+
+            if (response.IsSuccessStatusCode && responseWrapper?.Data?.FertiliserManure is JToken fertiliserManureToken)
             {
-                List<FertiliserManure> fertilisers = responseWrapper.Data.FertiliserManure.ToObject<List<FertiliserManure>>();
-                if (fertilisers != null && fertilisers.Count > 0)
+                List<FertiliserManure> fertilisers = fertiliserManureToken.ToObject<List<FertiliserManure>>()
+                    ?? new List<FertiliserManure>();
+                if (fertilisers.Count > 0)
                 {
                     fertiliser.AddRange(fertilisers);
                 }
             }
-            else
+            else if (responseWrapper?.Error is JToken errorToken)
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                error = errorToken.ToObject<Error>();
+
+                if (error != null)
                 {
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
+                    _logger.LogError(_logError, error.Code, error.Message, error.Stack, error.Path);
+
                 }
             }
         }
@@ -555,7 +231,6 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 Message = Resource.MsgServiceNotAvailable
             };
             _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
@@ -564,55 +239,76 @@ public class FertiliserManureService : Service, IFertiliserManureService
                 Message = ex.Message
             };
             _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
         }
 
         return (fertiliser, error);
     }
-    public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID)
+    public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodIDServiceAsync(int managementPeriodID)
     {
-        Error error = null;
-        decimal? totalN = null;
+        string url = string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDAPI, managementPeriodID);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
+        return (data ?? 0, error);
+
+    }
+
+    public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriodServiceAsync(
+    int countryId, int cropTypeId, int? nvzProgramId)
+    {
+        string url = nvzProgramId == null
+            ? string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodAsyncAPI, countryId, cropTypeId)
+            : string.Format(ApiurlHelper.FetchFertiliserManureClosedPeriodByNvzIdAsyncAPI, countryId, cropTypeId, nvzProgramId);
+
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.ClosedPeriod.ToObject<string>(), url);
+        return (data ?? string.Empty, error);
+
+    }
+
+    public async Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumnServiceAsync(int managementPeriodID, bool isAutumn)
+    {
+        string url = string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDIsAutumnAsyncAPI, managementPeriodID, isAutumn);
+        var (data, error) = await HandleApiRequest(rw => rw?.Data?.TotalN?.ToObject<decimal?>() ?? 0m, url);
+        return (data ?? 0, error);
+    }
+
+    private async Task<(T? data, Error? error)> HandleApiRequest<T>(Func<ResponseWrapper, T> mapData, string url)
+    {
+        Error? error = null;
+
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFertiliserTotalNByManagementPeriodIDAPI, managementPeriodID));
+            var response = await httpClient.GetAsync(url);
+
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
+                if (responseWrapper?.Data != null)
                 {
-                    totalN = responseWrapper.Data.TotalN;//!= null ? responseWrapper.Data.TotalN.ToObject<decimal>() : 0
+                    return (mapData(responseWrapper), null);
                 }
             }
             else
             {
-                if (responseWrapper != null && responseWrapper.Error != null)
+                if (responseWrapper?.Error is JToken errorToken)
                 {
-                    error = new Error();
-                    error = responseWrapper.Error.ToObject<Error>();
-                    if (error != null)
-                    {
-                        _logger.LogError("{Code} : {Message} : {Stack} : {Path}", error.Code, error.Message, error.Stack, error.Path);
-                    }
+                    error = errorToken.ToObject<Error>();
+                    _logger.LogError(_logError,
+                        error?.Code, error?.Message, error?.Stack, error?.Path);
                 }
             }
         }
         catch (HttpRequestException hre)
         {
-            error ??= new Error();
-            error.Message = Resource.MsgServiceNotAvailable;
+            error = new Error { Message = Resource.MsgServiceNotAvailable };
             _logger.LogError(hre, hre.Message);
-            throw new Exception(error.Message, hre);
         }
         catch (Exception ex)
         {
-            error ??= new Error();
-            error.Message = ex.Message;
             _logger.LogError(ex, ex.Message);
-            throw new Exception(error.Message, ex);
         }
-        return (totalN, error);
+
+        return (default, error);
     }
 }

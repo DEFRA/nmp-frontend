@@ -8,6 +8,7 @@ using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
+using System.Text;
 using System.Web;
 namespace NMP.Services;
 
@@ -15,8 +16,9 @@ namespace NMP.Services;
 public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IMannerService
 {
     private readonly ILogger<MannerService> _logger = logger;
-    private const string _errorLogTemplate = "{Code} : {Message} : {Stack} : {Path}";
-    Dictionary<int, int> cropTypeToCategoryId = new Dictionary<int, int>
+    private List<ManureType>? _manureTypeList = null;
+
+    private readonly Dictionary<int, int> cropTypeToCategoryId = new Dictionary<int, int>
     {
         { 0, 2 },
         { 1, 2 },
@@ -247,29 +249,58 @@ responseWrapper?.Data is not null)
 
         return (manureGroupList, error);
     }
-    public async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId)
+
+    private async Task PopulateManureTypeList()
     {
         List<ManureType> manureTypeList = new List<ManureType>();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString()), HttpUtility.UrlEncode(countryId.ToString())));
-
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerManureTypesAsyncAPI);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
         {
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                var manureTypes = responseWrapper?.Data?.ToObject<List<ManureType>>();
-                manureTypeList.AddRange(manureTypes);
-            }
+            var manureTypes = responseWrapper?.Data?.ToObject<List<ManureType>>();
+            manureTypeList.AddRange(manureTypes);
+            _manureTypeList = manureTypeList;
         }
         else
         {
-            error = _logger.ExtractError(responseWrapper, error);
+            _logger.ExtractError(responseWrapper, error);
         }
+    }
 
-        return (manureTypeList, error);
+    public async Task<(List<ManureType>, Error?)> FetchManureTypeList(int manureGroupId, int countryId)
+    {
+        if(_manureTypeList == null)
+        {
+            await PopulateManureTypeList();
+        }
+        
+        return (_manureTypeList.Where(m=>m.ManureGroupId == manureGroupId && (m.CountryId == countryId || m.CountryId == 3)).ToList(), null);
+                
+        //List<ManureType> manureTypeList = new List<ManureType>();
+        //Error? error = null;
+        //HttpClient httpClient = await GetNMPAPIClient();
+        //var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeListByGroupIdAndCountryAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString()), HttpUtility.UrlEncode(countryId.ToString())));
+
+        //string result = await response.Content.ReadAsStringAsync();
+        //ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        //if (response.IsSuccessStatusCode)
+        //{
+        //    if (responseWrapper != null && responseWrapper.Data != null)
+        //    {
+        //        var manureTypes = responseWrapper?.Data?.ToObject<List<ManureType>>();
+        //        manureTypeList.AddRange(manureTypes);
+        //        _manureTypeList = manureTypeList;
+        //    }
+        //}
+        //else
+        //{
+        //    error = _logger.ExtractError(responseWrapper, error);
+        //}
+
+        //return (manureTypeList, error);
     }
     public async Task<(CommonResponse?, Error?)> FetchManureGroupById(int manureGroupId)
     {
@@ -297,27 +328,34 @@ responseWrapper?.Data is not null)
 
     public async Task<(ManureType?, Error?)> FetchManureTypeByManureTypeId(int manureTypeId)
     {
-        ManureType? manureType = null;
-        Error? error = null;
-
-        HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(manureTypeId.ToString())));
-
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode)
+        if (_manureTypeList == null)
         {
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                manureType = responseWrapper?.Data?.ToObject<ManureType>();
-            }
-        }
-        else
-        {
-            error = _logger.ExtractError(responseWrapper, error);
+            await PopulateManureTypeList();
         }
 
-        return (manureType, error);
+        return (_manureTypeList?.FirstOrDefault(m => m.Id == manureTypeId), null);
+
+        //ManureType? manureType = null;
+        //Error? error = null;
+
+        //HttpClient httpClient = await GetNMPAPIClient();
+        //var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(manureTypeId.ToString())));
+
+        //string result = await response.Content.ReadAsStringAsync();
+        //ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        //if (response.IsSuccessStatusCode)
+        //{
+        //    if (responseWrapper != null && responseWrapper.Data != null)
+        //    {
+        //        manureType = responseWrapper?.Data?.ToObject<ManureType>();
+        //    }
+        //}
+        //else
+        //{
+        //    error = _logger.ExtractError(responseWrapper, error);
+        //}
+
+        //return (manureType, error);
     }
 
     public async Task<(List<ApplicationMethodResponse>, Error?)> FetchApplicationMethodList(int fieldType, bool isLiquid)
@@ -525,5 +563,83 @@ responseWrapper?.Data is not null)
 
         }
         return (incorporationDelay, error);
+    }
+    public async Task<(List<CommonResponse>?, Error?)> FetchTopsoilList()
+    {
+        Error? error = null;
+        List<CommonResponse>? topSoilList = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = ApiurlHelper.FetchAllMannerTopSoilListAsyncAPI;
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper?.Data != null)
+            {
+                topSoilList = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+
+            }
+
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (topSoilList, error);
+    }
+    public async Task<(List<CommonResponse>?, Error?)> FetchSubsoilList()
+    {
+        Error? error = null;
+        List<CommonResponse>? subSoilList = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = ApiurlHelper.FetchAllMannerSubSoilListAsyncAPI;
+        var response = await httpClient.GetAsync(requestUrl);
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper?.Data != null)
+            {
+                subSoilList = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
+
+            }
+
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (subSoilList, error);
+    }
+    public async Task<(ManureNutrientResponse?, Error?)> CalculateDefaultNutrientValueBasedOnDryMatter(ManureNutrientResponse manureNutrientResponse)
+    {
+        Error? error = null;
+        ManureNutrientResponse? manureNutrientResponseResult = null;
+        HttpClient httpClient = await GetNMPAPIClient();
+        string jsonData = JsonConvert.SerializeObject(manureNutrientResponse);
+        var requestUrl = ApiurlHelper.CalculateNutrientValueBasedOnDryMatterAsyncAPI;
+        var response = await httpClient.PostAsync(requestUrl, new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json"));
+        response.EnsureSuccessStatusCode();
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode)
+        {
+            if (responseWrapper?.Data != null)
+            {
+                manureNutrientResponseResult = responseWrapper?.Data?.ToObject<ManureNutrientResponse>();
+
+            }
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (manureNutrientResponseResult, error);
     }
 }

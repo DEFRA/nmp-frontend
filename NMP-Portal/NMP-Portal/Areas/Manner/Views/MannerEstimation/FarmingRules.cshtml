@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Country")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.EncryptedMannerEstimateId!=null ? "CheckAnswer" : "Country")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -128,7 +128,7 @@
 
         </form> 
         <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
+            @if (Model.EncryptedMannerEstimateId!=null)
             {
                 <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
             }
