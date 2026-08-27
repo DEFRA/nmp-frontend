@@ -10651,8 +10651,7 @@ managementPeriod.CropID.HasValue
             // No decimal allowed
             if (rawValue.Contains("."))
             {
-                ModelState.AddModelError(_quantityKey,
-                    string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
+                ModelState.AddModelError(_quantityKey,Resource.MsgIfUserEnterDecimalValueInRainfall);
                 return;
             }
 
