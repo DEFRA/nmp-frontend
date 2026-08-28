@@ -1207,13 +1207,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
             }
             (List<MannerEstimationApplication> mannerApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
-            if (mannerApplications.Count > 0)
+            if (mannerApplications.Count > 0 && model.ApplicationDate != null)
             {
-                var mannerApplicationWithin21Days = mannerApplications.First(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
-                (ManureType manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(mannerApplicationWithin21Days.ManureTypeID ?? 0);
-                if (manureType.ManureGroupId == (int)NMP.Commons.Enums.ManureGroup.LivestockManure)
+                var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
+                if(mannerApplicationWithin21Days != null)
                 {
-                    await ApplyLivestockWarning(model);
+                    (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(mannerApplicationWithin21Days.ManureTypeID ?? 0);
+                    if (manureType != null && manureType.ManureGroupId == (int)NMP.Commons.Enums.ManureGroup.LivestockManure)
+                    {
+                        await ApplyLivestockWarning(model);
+                    }
                 }
             }
             return error;
@@ -4944,7 +4947,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             Error? error = null;
             if (isRanExceptPoultry && totalApplicationRate > 30)
             {
-                ApplyWarning(model, warningList, NMP.Commons.Enums.WarningKey.Slurry4WeekPriorToClosedPeriodStart.ToString(), Resource.lblEndClosedPeriodEndFeb);
+                string warningKey = isInFebPeriod ? NMP.Commons.Enums.WarningKey.SlurryMaxRate.ToString() : NMP.Commons.Enums.WarningKey.Slurry4WeekPriorToClosedPeriodStart.ToString();
+                ApplyWarning(model, warningList, warningKey, Resource.lblEndClosedPeriodEndFeb);
             }
 
             if (isPoultry && totalApplicationRate > 5)
