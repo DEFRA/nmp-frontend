@@ -998,7 +998,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId ?? 0);
                 model = _mannerEstimationLogic.SetMannerEstimationStep13(model);
                 //non organic farm, high N, NVZ
-                if ((!string.IsNullOrWhiteSpace(model.ClosedPeriod) || model.CountryId==(int)NMP.Commons.Enums.FarmCountry.Scotland) && string.IsNullOrWhiteSpace(error?.Message))
+                if ((!string.IsNullOrWhiteSpace(model.ClosedPeriod) || model.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) && string.IsNullOrWhiteSpace(error?.Message))
                 {
                     int harvestYear = GetHarvestYearFromApplicationDate(model.ApplicationDate ?? DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc));
 
@@ -1015,7 +1015,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     }
                 }
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && model.IsApplicationDateChange&&!mannerEstimationViewModel.IsComingForAddNewApplication)
+                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && model.IsApplicationDateChange && !mannerEstimationViewModel.IsComingForAddNewApplication)
                 {
                     return RedirectToAction(_conditionsAffectingNutrients);
                 }
@@ -1164,7 +1164,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (mannerApplications.Count > 0)
                 {
                     var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
-                    if(mannerApplicationWithin21Days != null)
+                    if (mannerApplicationWithin21Days != null)
                     {
                         bool isSlurryPrevApp = CommonHelpers.IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
                         bool isPoultryManurePrevApp = mannerApplicationWithin21Days.ManureTypeID == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
@@ -1190,7 +1190,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                             model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3 = warning.Para3;
                         }
                     }
-                    
+
                 }
 
             }
@@ -2123,7 +2123,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     MannerEstimationViewModel? mannerEstimationView = _mannerEstimationLogic.GetMannerEstimationFromSession();
                     bool isDefaultValue = true;
-                    if (mannerEstimationView != null && mannerEstimationView.MannerEstimationStep25!=null&&mannerEstimationView.MannerEstimationStep25.IsCalculateBasedOnDryMatter)
+                    if (mannerEstimationView != null && mannerEstimationView.MannerEstimationStep25 != null && mannerEstimationView.MannerEstimationStep25.IsCalculateBasedOnDryMatter)
                     {
                         isDefaultValue = false;
                     }
@@ -2219,7 +2219,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
     string displayName, decimal minValue,
     decimal maxValue)
         {
-            if (fieldName == _dryMatterPercentKey&& (value < minValue || value > maxValue))
+            if (fieldName == _dryMatterPercentKey && (value < minValue || value > maxValue))
             {
                 ModelState.AddModelError(fieldName, string.Format(Resource.MsgMinMaxValidationForDryMatter, displayName, 0, maxValue));
             }
@@ -2585,9 +2585,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (formData.ApplicationRate > 250)
                     ModelState.AddModelError(_applicationRateKey, Resource.MsgForApplicationRate);
-                if (formData.ApplicationRate != Math.Round(formData.ApplicationRate.Value, 2))
+                if (formData.ApplicationRate != Math.Round(formData.ApplicationRate.Value, 1))
                 {
-                    ModelState.AddModelError(_applicationRateKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblApplicationRate));
+                    ModelState.AddModelError(_applicationRateKey, Resource.MsgForApplicationRate);
                 }
             }
         }
@@ -3025,7 +3025,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     application.IsManureTypeLiquid = isManureLiquid;
                     string manureUnit = isManureLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
                     TempData[$"ApplicationDefaultValues{count}"] = await _mannerEstimationLogic.FetchDefaultNutrientValue(application.ManureTypeID.Value, application);
-                    await BindTempDataForMannerestimationResultPage(mannerEstimationResultResponse, count, application, manure, manureUnit);
+                    await BindTempDataForMannerestimationResultPage(mannerEstimationResultResponse, count, application, manureUnit);
                 }
             }
             Country? country = await _mannerLogic.FetchCountryById(mannerEstimationResultResponse.MannerFarm?.CountryID ?? 0);
@@ -3053,7 +3053,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0);
         }
 
-        private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application, ManureType? manure, string manureUnit)
+        private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application,  string manureUnit)
         {
             if (application.AreaSpread != null && application.ManureQuantity != null)
             {
@@ -3068,7 +3068,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 else
                 {
-                    TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manure.Name);
+                    TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manureUnit);
                 }
             }
         }
@@ -5206,7 +5206,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             if (!string.IsNullOrWhiteSpace(q))
             {
-                ViewBag.IsDefault =_mannerEstimationProtector.Protect(true.ToString());
+                ViewBag.IsDefault = _mannerEstimationProtector.Protect(true.ToString());
                 int mannerEstimateApplicationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
 
                 Error? error = await _mannerEstimationLogic.BindApplicationDetailForUpdate(mannerEstimateApplicationId);
@@ -5300,7 +5300,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     foreach (var application in applications)
                     {
                         //warnings
-                        await BindWarnings(model.MannerFieldAndCropDetails, application, model, mannerFarm?.CountryID??0);
+                        await BindWarnings(model.MannerFieldAndCropDetails, application, model, mannerFarm?.CountryID ?? 0);
 
                         bool isLiquid = await _mannerEstimationLogic.FetchIsManureLiquid(application.ManureTypeID ?? 0);
 
@@ -5475,7 +5475,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     IsClosedPeriodWarning = false,
                     IsApplicationJulyToSeptWarning = false,
                     IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false,
-                    ManureGroupId= manureGroupId
+                    ManureGroupId = manureGroupId
                 };
 
                 error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
@@ -5865,7 +5865,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
-                      
+
             HttpContext.Session.Remove("current_manner_estimate_farm_name");
             HttpContext.Session.Remove("current_manner_estimate_manner_farm_id");
             ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();

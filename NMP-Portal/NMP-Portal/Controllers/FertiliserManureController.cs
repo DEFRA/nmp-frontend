@@ -2179,12 +2179,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             if (model.DoubleCrop == null)
             {
+                (_, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
                 foreach (string fieldId in model.FieldList)
                 {
                     List<HarvestYearPlanResponse> cropList = cropPlans.Where(x => x.FieldID == Convert.ToInt32(fieldId)).ToList();
                     if (cropList.Count == 2)
                     {
-                        ModelState.AddModelError("FieldName", string.Format(_twoParamStringFormat, string.Format(Resource.lblWhichCropIsThisManureApplication, (await _fieldLogic.FetchFieldByFieldId(Convert.ToInt32(fieldId))).Name), Resource.lblNotSet));
+                        ModelState.AddModelError("FieldName", string.Format(_twoParamStringFormat, string.Format(Resource.lblWhichCropIsThisManureApplication, fieldList.FirstOrDefault(f => f.ID == Convert.ToInt32(fieldId))?.Name), Resource.lblNotSet));
                         index++;
                     }
 
@@ -2212,6 +2213,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 ModelState.AddModelError(string.Concat("DefoliationList[", i, "].Defoliation"), string.Format(_twoParamStringFormat, string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, defoliation.FieldName), Resource.lblNotSet));
             }
+            i++;
         }
 
     }
@@ -3888,7 +3890,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
             (_, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
-           List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchAllCropTypes();
+            List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchAllCropTypes();
             if (_fertiliserManureLogic.IsInitialLoadAfterFieldChange(model, q))
             {
                 model.DoubleCropCurrentCounter = 0;

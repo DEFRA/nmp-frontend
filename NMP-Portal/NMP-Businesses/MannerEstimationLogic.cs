@@ -294,9 +294,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         if (mannerEstimationViewModel.IsComingForAddNewApplication)
-        {            
+        {
             mannerEstimationStep11.IsComingForAddNewApplication = true;
-            if (mannerEstimationStep11.IsComingForAddNewApplication&&mannerEstimationStep11.ManureGroupId==null)
+            if (mannerEstimationStep11.IsComingForAddNewApplication && mannerEstimationStep11.ManureGroupId == null)
             {
                 mannerEstimationViewModel.CountryId = mannerEstimationStep11.CountryId;
                 mannerEstimationViewModel.IsFarmOrganic = mannerEstimationStep11.IsFarmOrganic;
@@ -607,11 +607,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep25.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep25.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
-        
-            (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
-            if (manureType != null)
-            {
-                mannerEstimationViewModel.MannerEstimationStep25.ManureTypeId = manureType.Id;
+
+        (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
+        if (manureType != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep25.ManureTypeId = manureType.Id;
             mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeLiquid = manureType.IsLiquid;
             if (!isDefault)
             {
@@ -628,7 +628,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
         return mannerEstimationViewModel.MannerEstimationStep25;
     }
-    public async Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25,bool isDefault)
+    public async Task<MannerEstimationStep25ViewModel> SetMannerEstimationStep25(MannerEstimationStep25ViewModel mannerEstimationStep25, bool isDefault)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         if (!isDefault)
@@ -696,6 +696,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep27.IsManureTypeLiquid = mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid;
 
         mannerEstimationViewModel.MannerEstimationStep27.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        mannerEstimationViewModel.MannerEstimationStep28.ManureQuantity = null;
+        mannerEstimationViewModel.MannerEstimationStep28.AreaSpread = null;
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
         if (manureType != null)
         {
@@ -1517,7 +1519,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             (MannerFarmViewModel? mannerFarm, error) = await FetchMannerFarmById(mannerEstimate.MannerFarmID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimate.ID;
             mannerEstimationViewModel.MannerFarmId = mannerEstimate.MannerFarmID;
-            mannerEstimationViewModel.IsWithinNVZ= mannerEstimate.IsWithinNVZ;
+            mannerEstimationViewModel.IsWithinNVZ = mannerEstimate.IsWithinNVZ;
             mannerEstimationViewModel.CountryId = mannerFarm.CountryID;
             mannerEstimationViewModel.CropTypeId = mannerEstimate.CropTypeID;
             mannerEstimationViewModel.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;

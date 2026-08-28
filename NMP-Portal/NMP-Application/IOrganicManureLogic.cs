@@ -56,4 +56,5 @@ public interface IOrganicManureLogic
     Task<(bool, Error)> CheckGreenCompostExistanceByDateRange(int fieldId, string dateFrom, string dateTo, int? organicManureId);
     Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(int cropTypeId, int soilTypeId, int residueGroup);
     Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeIdServiceAsync(int soilTypeId);
+    Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinking();
 }
