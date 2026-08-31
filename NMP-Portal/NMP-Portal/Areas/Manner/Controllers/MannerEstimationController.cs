@@ -2764,8 +2764,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return;
             }
-
-
+           
+           
             const int maxLength = 10;
 
             if (rawValue.Length > maxLength)
@@ -2777,12 +2777,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         Resource.lblQuantity,
                         maxLength));
             }
-            var expectedError = string.Format(Resource.lblEnterNumericValue, rawValue, Resource.lblQuantity);
+            var expectedError = string.Format(Resource.lblEnterNumericValue, rawValue, Resource.lblManureQuantity);
 
             if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
             {
                 state.Errors.Clear();
-                state.Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, Resource.MsgQuantity));
+                state.Errors.Add(Resource.MsgIfUserEnterDecimalValueInRainfall);
             }
         }
 
@@ -2812,10 +2812,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (model.ManureQuantity < 0)
                 ModelState.AddModelError(_quantityKey, Resource.MsgEnterANumberWhichIsGreaterThanZero);
-            if (model.ManureQuantity != Math.Round(model.ManureQuantity.Value, 2))
-            {
-                ModelState.AddModelError(_quantityKey, string.Format(Resource.MsgEnterAnPropertyOnlyTwoDecimal, Resource.lblQuantity));
-            }
+           
         }
 
         [HttpGet]

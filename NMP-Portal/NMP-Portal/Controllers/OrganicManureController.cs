@@ -10648,13 +10648,7 @@ managementPeriod.CropID.HasValue
             if (string.IsNullOrEmpty(rawValue))
                 return;
 
-            // No decimal allowed
-            if (rawValue.Contains("."))
-            {
-                ModelState.AddModelError(_quantityKey,Resource.MsgIfUserEnterDecimalValueInRainfall);
-                return;
-            }
-
+           
             // Max 10 digits
             if (rawValue.Length > 10)
             {
@@ -10662,8 +10656,12 @@ managementPeriod.CropID.HasValue
                  string.Format(Resource.lblValueMustNotExeedXDigit, Resource.lblQuantity, 10));
                 return;
             }
+            var expectedError = string.Format(Resource.lblEnterNumericValue, rawValue, Resource.lblQuantity);
 
-            ReplaceNumericError(state, firstError, rawValue, Resource.lblQuantity, Resource.MsgQuantity);
+            if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
+            {
+                ReplaceError(state,Resource.MsgIfUserEnterDecimalValueInRainfall);
+            }
         }
 
 
