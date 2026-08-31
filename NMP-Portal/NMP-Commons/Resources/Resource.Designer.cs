@@ -13919,7 +13919,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable.
+        ///   Looks up a localized string similar to Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable.
         /// </summary>
         public static string lblReleaseScheduleContentTwelve {
             get {
@@ -14370,7 +14370,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date format is &apos;27 3 {0}&apos;..
+        ///   Looks up a localized string similar to The date format is &apos;27 03 {0}&apos;..
         /// </summary>
         public static string lblSampleDate {
             get {
@@ -21989,7 +21989,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 27 3 {0}.
+        ///   Looks up a localized string similar to For example, 27 03 {0}.
         /// </summary>
         public static string MsgDateExample {
             get {
@@ -22799,7 +22799,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the date in numbers. For example, 27 3 2023.
+        ///   Looks up a localized string similar to Enter the date in numbers. For example, 27 03 2023.
         /// </summary>
         public static string MsgEnterTheDateInNumber {
             get {
