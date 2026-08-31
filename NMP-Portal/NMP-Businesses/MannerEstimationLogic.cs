@@ -1894,7 +1894,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession();
             if (mannerEstimationViewModel != null)
             {
-                _httpContextAccessor.HttpContext?.Session.SetString("current_manner_estimate_farm_name", mannerFarm.Name);
+                mannerEstimationViewModel.FarmName=mannerFarm.Name;               
                 mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID ?? 0;
                 mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerFarm.CountryID ?? 0);
                 mannerEstimationViewModel.MannerEstimationStep3.Postcode = mannerFarm.Postcode;
