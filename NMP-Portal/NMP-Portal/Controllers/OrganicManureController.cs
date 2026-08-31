@@ -10648,12 +10648,7 @@ managementPeriod.CropID.HasValue
             if (string.IsNullOrEmpty(rawValue))
                 return;
 
-            // No decimal allowed
-            if (rawValue.Contains("."))
-            {
-                ModelState.AddModelError(_quantityKey,Resource.MsgIfUserEnterDecimalValueInRainfall);
-            }
-
+           
             // Max 10 digits
             if (rawValue.Length > 10)
             {
