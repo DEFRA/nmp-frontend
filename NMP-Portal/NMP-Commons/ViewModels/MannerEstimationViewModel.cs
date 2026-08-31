@@ -113,6 +113,7 @@ namespace NMP.Commons.ViewModels
         public bool IsNewEstimate { get; set; } = false;
         public int? MannerFarmId { get; set; }
         public string? EncryptedMannerFarmId { get; set; }
+        public string? FarmName { get; set; }
     }
 }
 
