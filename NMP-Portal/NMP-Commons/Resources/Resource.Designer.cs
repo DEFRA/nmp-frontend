@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -13937,6 +13937,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Standalone MANNER-NPK calculator.
+        /// </summary>
+        public static string lblReleaseScheduleContentTwentyOne {
+            get {
+                return ResourceManager.GetString("lblReleaseScheduleContentTwentyOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;a href=&quot;/HelpAndFeedback&quot;&gt;Get help or give your feedback &lt;/a&gt;.
         /// </summary>
         public static string lblReleaseScheduleContentTwentyTwo {
@@ -13956,7 +13965,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 13th July 2026.
+        ///   Looks up a localized string similar to 2nd September 2026.
         /// </summary>
         public static string lblReleaseScheduleDate {
             get {
