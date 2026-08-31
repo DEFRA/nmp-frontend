@@ -5832,8 +5832,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                                 .OrderBy(x => x.Text)
                                 .ToList();
                 ViewBag.MannerEstimationIdList = selectList;
-                ViewBag.MannerFarmName = mannerEstimations.FirstOrDefault().FarmName;
-                ViewBag.MannerFarmId = _mannerEstimationProtector.Protect(mannerEstimations.FirstOrDefault().ID.ToString());
+                ViewBag.MannerFarmName = mannerEstimations.FirstOrDefault()?.FarmName;
+                int? farmId = mannerEstimations.FirstOrDefault()?.ID;
+                ViewBag.MannerFarmId = _mannerEstimationProtector.Protect(farmId.ToString());
             }
         }
         private static void SelectAllLogic(MannerEstimationStep40ViewModel model, List<SelectListItem> fieldSelectList)
