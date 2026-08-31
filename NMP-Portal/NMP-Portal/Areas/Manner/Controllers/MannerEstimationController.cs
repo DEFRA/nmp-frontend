@@ -1218,7 +1218,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         bool isSlurryCurrentApp = CommonHelpers.IsSlurryType(model.ManureTypeId);
                         bool isPoultryManureCurrentApp = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
 
-                        if ((isSlurryPrevApp || isPoultryManurePrevApp) && (isSlurryCurrentApp || isPoultryManureCurrentApp))
+                        if (CheckIsSlurryOrPoultry(isSlurryPrevApp, isPoultryManurePrevApp, isSlurryCurrentApp, isPoultryManureCurrentApp))
                         {
                             // warning excel sheet row no. 21
                             model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
@@ -1243,6 +1243,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return error;
 
+        }
+
+        private static bool CheckIsSlurryOrPoultry(bool isSlurryPrevApp, bool isPoultryManurePrevApp, bool isSlurryCurrentApp, bool isPoultryManureCurrentApp)
+        {
+            return (isSlurryPrevApp || isPoultryManurePrevApp) && (isSlurryCurrentApp || isPoultryManureCurrentApp);
         }
 
         private static MannerEstimationApplication? GetApplicationWithinThreeWeeks(MannerEstimationStep13ViewModel model, List<MannerEstimationApplication> mannerApplications)
