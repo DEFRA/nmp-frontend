@@ -6901,7 +6901,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
-    <value>13th July 2026</value>
+    <value>2nd September 2026</value>
   </data>
   <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
     <value>Add or update fields and soil analysis</value>
@@ -8482,5 +8482,8 @@ following crop year 2</value>
   </data>
   <data name="lblSelectViewOrChangeToEditThisEstimateOrToViewTheResults" xml:space="preserve">
     <value>Select view or change to edit this estimate or to view the results.</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwentyOne" xml:space="preserve">
+    <value>Standalone MANNER-NPK calculator</value>
   </data>
 </root>
