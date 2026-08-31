@@ -8483,4 +8483,7 @@ following crop year 2</value>
   <data name="lblSelectViewOrChangeToEditThisEstimateOrToViewTheResults" xml:space="preserve">
     <value>Select view or change to edit this estimate or to view the results.</value>
   </data>
+  <data name="lblManureQuantity" xml:space="preserve">
+    <value>ManureQuantity</value>
+  </data>
 </root>
