@@ -1163,9 +1163,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 (List<MannerEstimationApplication> mannerApplications, error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
                 if (mannerApplications.Count > 0)
                 {
-                    var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x =>
-                    (model.ApplicationDate.Value - x.ApplicationDate).TotalDays >= 0 &&
-                    (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
+                    MannerEstimationApplication? mannerApplicationWithin21Days = GetApplicationWithinThreeWeeks(model, mannerApplications);
                     if (mannerApplicationWithin21Days != null)
                     {
                         bool isSlurryPrevApp = CommonHelpers.IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
@@ -1200,6 +1198,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
+        private static MannerEstimationApplication? GetApplicationWithinThreeWeeks(MannerEstimationStep13ViewModel model, List<MannerEstimationApplication> mannerApplications)
+        {
+            return mannerApplications.FirstOrDefault(x =>
+            (model.ApplicationDate.Value - x.ApplicationDate).TotalDays >= 0 &&
+            (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
+        }
 
         private async Task<Error?> HandleLivestockManureRule(MannerEstimationStep13ViewModel model)
         {
