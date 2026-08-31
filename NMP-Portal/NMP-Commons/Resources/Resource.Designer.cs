@@ -10381,6 +10381,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ManureQuantity.
+        /// </summary>
+        public static string lblManureQuantity {
+            get {
+                return ResourceManager.GetString("lblManureQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manure store.
         /// </summary>
         public static string lblManureStorage {

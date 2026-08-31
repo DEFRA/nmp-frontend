@@ -33,7 +33,7 @@ public class OrganicManureViewModel
     public decimal? ApplicationRate { get; set; }
     public int? ApplicationMethod { get; set; }        
     public decimal? Area { get; set; }
-    public decimal? Quantity { get; set; }
+    public int? Quantity { get; set; }
     public int? ApplicationRateArable { get; set; }
     public int? IncorporationMethod { get; set; }
     public int? ApplicationMethodCount { get; set; }

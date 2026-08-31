@@ -26,7 +26,7 @@ namespace NMP.Commons.Models
         public decimal? ApplicationRate { get; set; }
         public decimal? AreaSpread { get; set; }
 
-        public decimal? ManureQuantity { get; set; }
+        public int? ManureQuantity { get; set; }
         public int? ApplicationMethodID { get; set; }
         public int? IncorporationMethodID { get; set; }
         public int? IncorporationDelayID { get; set; }
