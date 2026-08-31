@@ -215,7 +215,6 @@
     <div class="govuk-grid-row margin-bottom-forty">
         <div class="govuk-grid-column-full">
             @{
-                var isAnyWarning = Model.ApplicationWarnings.Any();
                 var uniqueWarnings = Model.ApplicationWarnings
                 .SelectMany(aw => aw.Warnings)
                 .Where(w => !string.IsNullOrWhiteSpace(w.Header))
@@ -224,7 +223,7 @@
                 .ToList();
 
             }
-            @if (isAnyWarning)
+            @if (uniqueWarnings.Count > 0)
             {
                 <h2 class="govuk-heading-m">
                     @string.Format((ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.England || ViewBag.CountryId == (int)NMP.Commons.Enums.FarmCountry.Scotland) ? Resource.lblNvzWarningFor : Resource.lblWaterResourcesRegulationsWarningsFor, Model.MannerFieldAndCropDetails.MannerEstimation.FieldName)
