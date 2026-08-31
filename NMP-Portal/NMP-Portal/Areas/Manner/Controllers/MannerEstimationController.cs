@@ -1163,7 +1163,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 (List<MannerEstimationApplication> mannerApplications, error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
                 if (mannerApplications.Count > 0)
                 {
-                    var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
+                    var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x =>
+                    (model.ApplicationDate.Value - x.ApplicationDate).TotalDays >= 0 &&
+                    (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
                     if (mannerApplicationWithin21Days != null)
                     {
                         bool isSlurryPrevApp = CommonHelpers.IsSlurryType(mannerApplicationWithin21Days.ManureTypeID);
@@ -1209,7 +1211,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (List<MannerEstimationApplication> mannerApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
             if (mannerApplications.Count > 0 && model.ApplicationDate != null)
             {
-                var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x => (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
+                var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x =>
+                (model.ApplicationDate.Value - x.ApplicationDate).TotalDays >= 0 &&
+                (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
                 if(mannerApplicationWithin21Days != null)
                 {
                     (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(mannerApplicationWithin21Days.ManureTypeID ?? 0);
