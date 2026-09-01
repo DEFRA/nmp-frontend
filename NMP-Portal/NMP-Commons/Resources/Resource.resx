@@ -634,7 +634,7 @@
     <value>Soil pH value</value>
   </data>
   <data name="MsgDateExample" xml:space="preserve">
-    <value>For example, 27 3 {0}</value>
+    <value>For example, 27 03 {0}</value>
   </data>
   <data name="MsgEnterADateBeforeContinuing" xml:space="preserve">
     <value>Enter a date before continuing</value>
@@ -649,7 +649,7 @@
     <value>Enter a date after DD/MM/YYYY</value>
   </data>
   <data name="MsgEnterTheDateInNumber" xml:space="preserve">
-    <value>Enter the date in numbers. For example, 27 3 2023</value>
+    <value>Enter the date in numbers. For example, 27 03 2023</value>
   </data>
   <data name="lblAddThisField" xml:space="preserve">
     <value>Add this field</value>
@@ -1249,7 +1249,7 @@
     <value>If you do not know the exact application date enter an estimate. You can change it later.</value>
   </data>
   <data name="lblSampleDate" xml:space="preserve">
-    <value>The date format is '27 3 {0}'.</value>
+    <value>The date format is '27 03 {0}'.</value>
   </data>
   <data name="lblAmmonium" xml:space="preserve">
     <value>Ammonium (N)</value>
@@ -6880,7 +6880,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Next releases</value>
   </data>
   <data name="lblReleaseScheduleContentTwelve" xml:space="preserve">
-    <value>Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable</value>
+    <value>Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable</value>
   </data>
   <data name="lblReleaseScheduleContentThirteen" xml:space="preserve">
     <value>Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Grassland</value>
@@ -6901,7 +6901,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
-    <value>13th July 2026</value>
+    <value>2nd September 2026</value>
   </data>
   <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
     <value>Add or update fields and soil analysis</value>
@@ -8482,5 +8482,11 @@ following crop year 2</value>
   </data>
   <data name="lblSelectViewOrChangeToEditThisEstimateOrToViewTheResults" xml:space="preserve">
     <value>Select view or change to edit this estimate or to view the results.</value>
+  </data>
+  <data name="lblManureQuantity" xml:space="preserve">
+    <value>ManureQuantity</value>
+  </data>
+  <data name="lblReleaseScheduleContentTwentyOne" xml:space="preserve">
+    <value>Standalone MANNER-NPK calculator</value>
   </data>
 </root>

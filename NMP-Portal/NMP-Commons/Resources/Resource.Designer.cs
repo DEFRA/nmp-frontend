@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -10381,6 +10381,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ManureQuantity.
+        /// </summary>
+        public static string lblManureQuantity {
+            get {
+                return ResourceManager.GetString("lblManureQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manure store.
         /// </summary>
         public static string lblManureStorage {
@@ -13910,7 +13919,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable.
+        ///   Looks up a localized string similar to Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable.
         /// </summary>
         public static string lblReleaseScheduleContentTwelve {
             get {
@@ -13924,6 +13933,15 @@ namespace NMP.Commons.Resources {
         public static string lblReleaseScheduleContentTwenty {
             get {
                 return ResourceManager.GetString("lblReleaseScheduleContentTwenty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standalone MANNER-NPK calculator.
+        /// </summary>
+        public static string lblReleaseScheduleContentTwentyOne {
+            get {
+                return ResourceManager.GetString("lblReleaseScheduleContentTwentyOne", resourceCulture);
             }
         }
         
@@ -13947,7 +13965,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 13th July 2026.
+        ///   Looks up a localized string similar to 2nd September 2026.
         /// </summary>
         public static string lblReleaseScheduleDate {
             get {
@@ -14352,7 +14370,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date format is &apos;27 3 {0}&apos;..
+        ///   Looks up a localized string similar to The date format is &apos;27 03 {0}&apos;..
         /// </summary>
         public static string lblSampleDate {
             get {
@@ -21971,7 +21989,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, 27 3 {0}.
+        ///   Looks up a localized string similar to For example, 27 03 {0}.
         /// </summary>
         public static string MsgDateExample {
             get {
@@ -22781,7 +22799,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the date in numbers. For example, 27 3 2023.
+        ///   Looks up a localized string similar to Enter the date in numbers. For example, 27 03 2023.
         /// </summary>
         public static string MsgEnterTheDateInNumber {
             get {

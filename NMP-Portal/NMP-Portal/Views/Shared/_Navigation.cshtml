@@ -17,9 +17,9 @@
             && (string.Equals(currentController, "MannerEstimation", StringComparison.OrdinalIgnoreCase)
             || string.Equals(currentController, "AboutManner", StringComparison.OrdinalIgnoreCase));
     var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
-    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");       
-    var currentManureEstimateFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_farm_name");
-    var currentManureEstimateFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_manner_estimate_manner_farm_id");
+    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
+    var currentManureEstimateFarmName = ViewBag.MannerFarmName;
+    var currentManureEstimateFarmId = ViewBag.MannerFarmId;
     
     
     int enrolmentCount = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == "enrolmentCount")?.Value);    

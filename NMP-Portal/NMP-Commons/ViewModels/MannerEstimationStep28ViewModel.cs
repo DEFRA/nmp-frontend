@@ -11,7 +11,7 @@ namespace NMP.Commons.ViewModels
         public bool? IsManureTypeLiquid { get; set; }
         public string? ManureTypeName { get; set; }
         public decimal? AreaSpread { get; set; }
-        public decimal? ManureQuantity { get; set; }
+        public int? ManureQuantity { get; set; }
         public int FarmRB209CountryId { get; set; }
         public int? CropGroupId { get; set; }
         public int? ManureGroupId { get; set; }
