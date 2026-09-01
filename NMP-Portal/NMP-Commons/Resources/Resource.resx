@@ -8489,4 +8489,10 @@ following crop year 2</value>
   <data name="lblReleaseScheduleContentTwentyOne" xml:space="preserve">
     <value>Standalone MANNER-NPK calculator</value>
   </data>
+  <data name="MsgEnterANumberFrom0To100With1Decimal" xml:space="preserve">
+    <value>Enter a number from 0 to 100, to 1 decimal place.</value>
+  </data>
+  <data name="lblOrganicMatterPercentage" xml:space="preserve">
+    <value>Organic matter (%)</value>
+  </data>
 </root>
