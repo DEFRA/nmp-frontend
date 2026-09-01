@@ -1201,7 +1201,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             bool? isWithinClosedPeriodAndFebruary = WarningWithinPeriod.CheckEndClosedPeriodAndFebruary(model.ApplicationDate.Value, model.ClosedPeriod);
             if (isWithinClosedPeriodAndFebruary == true)
             {
+                int currentApplicationId = 0;
+                if (!string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId))
+                {
+                    currentApplicationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId));
+                }
                 (List<MannerEstimationApplication> mannerApplications, error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
+                mannerApplications = mannerApplications.Where(x => x.ID != currentApplicationId).ToList();
                 if (mannerApplications.Count > 0)
                 {
                     MannerEstimationApplication? mannerApplicationWithin21Days = GetApplicationWithinThreeWeeks(model, mannerApplications);
@@ -1212,7 +1218,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         bool isSlurryCurrentApp = CommonHelpers.IsSlurryType(model.ManureTypeId);
                         bool isPoultryManureCurrentApp = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
 
-                        if ((isSlurryPrevApp || isPoultryManurePrevApp) && (isSlurryCurrentApp || isPoultryManureCurrentApp))
+                        if (CheckIsSlurryOrPoultry(isSlurryPrevApp, isPoultryManurePrevApp, isSlurryCurrentApp, isPoultryManureCurrentApp))
                         {
                             // warning excel sheet row no. 21
                             model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = true;
@@ -1239,6 +1245,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
+        private static bool CheckIsSlurryOrPoultry(bool isSlurryPrevApp, bool isPoultryManurePrevApp, bool isSlurryCurrentApp, bool isPoultryManureCurrentApp)
+        {
+            return (isSlurryPrevApp || isPoultryManurePrevApp) && (isSlurryCurrentApp || isPoultryManureCurrentApp);
+        }
+
         private static MannerEstimationApplication? GetApplicationWithinThreeWeeks(MannerEstimationStep13ViewModel model, List<MannerEstimationApplication> mannerApplications)
         {
             return mannerApplications.FirstOrDefault(x =>
@@ -1253,7 +1264,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
             }
+
+            int currentApplicationId = 0;
+            if(!string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId))
+            { 
+                currentApplicationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId));
+            }
+            
             (List<MannerEstimationApplication> mannerApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
+            mannerApplications = mannerApplications.Where(x => x.ID != currentApplicationId).ToList();
             if (mannerApplications.Count > 0 && model.ApplicationDate != null)
             {
                 var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x =>
@@ -5569,7 +5588,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     IsClosedPeriodWarning = false,
                     IsApplicationJulyToSeptWarning = false,
                     IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false,
-                    ManureGroupId = manureGroupId
+                    ManureGroupId = manureGroupId,
+                    EncryptedMannerApplicationsId=_mannerEstimationProtector.Protect(application.ID.ToString())
                 };
 
                 error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
