@@ -740,14 +740,11 @@ namespace NMP.Portal.Controllers
         {
             if (model.OrganicMatterPercentage != null)
             {
-                if (model.OrganicMatterPercentage < 0 || model.OrganicMatterPercentage > 100)
-                {
-                    ModelState.AddModelError("OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
-                }
+                var value = model.OrganicMatterPercentage.Value;
 
-                if (model.OrganicMatterPercentage.Value % 1 != 0)
+                if (value < 0 || value > 100 || decimal.Round(value, 1) != value)
                 {
-                    ModelState.AddModelError("OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
+                    ModelState.AddModelError("OrganicMatterPercentage", string.Format(Resource.MsgEnterANumberFrom0To100With1Decimal, 0, 100));
                 }
             }
         }
