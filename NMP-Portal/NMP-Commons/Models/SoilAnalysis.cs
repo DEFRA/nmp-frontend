@@ -47,7 +47,7 @@ public class SoilAnalysis
     public int? MagnesiumMethodologyID { get; set; }
     public string? MagnesiumStatus { get; set; }
     public string? NitrogenResidueGroup { get; set; }
-    public int? OrganicMatterPercentage { get; set; }
+    public decimal? OrganicMatterPercentage { get; set; }
     public string? Comments { get; set; }
     public int? PreviousID { get; set; }
     public DateTime? CreatedOn { get; set; }
