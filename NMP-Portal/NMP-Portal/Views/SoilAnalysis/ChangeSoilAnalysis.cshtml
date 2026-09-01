@@ -363,7 +363,7 @@
 
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key>
-                            @Resource.lblOrganicMatter
+                            @Resource.lblOrganicMatterPercentage
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value>
                             @((!Model.OrganicMatterPercentage.HasValue) ? Resource.lblNotEntered : (string.Format("{0}{1}", Model.OrganicMatterPercentage, Resource.lblPercentage)))

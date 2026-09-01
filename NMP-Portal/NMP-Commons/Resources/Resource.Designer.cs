@@ -12316,6 +12316,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organic matter (%).
+        /// </summary>
+        public static string lblOrganicMatterPercentage {
+            get {
+                return ResourceManager.GetString("lblOrganicMatterPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to lblOrgenisation.
         /// </summary>
         public static string lblOrgenisation {
@@ -22480,6 +22489,15 @@ namespace NMP.Commons.Resources {
         public static string MsgEnterAnQuantityBetweenValue {
             get {
                 return ResourceManager.GetString("MsgEnterAnQuantityBetweenValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a number from 0 to 100, to 1 decimal place..
+        /// </summary>
+        public static string MsgEnterANumberFrom0To100With1Decimal {
+            get {
+                return ResourceManager.GetString("MsgEnterANumberFrom0To100With1Decimal", resourceCulture);
             }
         }
         

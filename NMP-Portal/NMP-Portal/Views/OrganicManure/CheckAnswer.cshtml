@@ -9,14 +9,14 @@
         if (!value.HasValue || value.Value < 0)
             return HtmlString.Empty;
 
-        var unit = Model.IsManureTypeLiquid ?? false ? Resource.lblkgmetercube : Resource.lblValueKgPerTonne;
+        var unit = Model.IsManureTypeLiquid ?? false ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
 
         var formattedValue = isPercent ? string.Format("{0}%", value.Value) : string.Format(unit, value.Value);
 
         return new HtmlString($@"
-            <span class='nutrient_row'>
-        {label}
-                <span class='figure w31'>{formattedValue}</span>
+            <span class='nutrient_row organic_nutrients'>
+            <span>{label}</span>
+                <span>{formattedValue}</span>
             </span>");
     }
 
@@ -618,16 +618,15 @@
                                         </govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-                                <govuk-summary-list-row>
-                                    <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value   class="margin-bottom-thirty nutrient_list">
-                                        @RenderNutrients(manureNutrients)
-                                    </govuk-summary-list-row-value>                                  
-                                    <govuk-summary-list-row-actions>
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
+                            <govuk-summary-list-row class="nutrient-summary-row">
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
+                                </govuk-summary-list-row-key>
+
+                                <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
+                                    @RenderNutrients(manureNutrients)
+                                </govuk-summary-list-row-value>
+                            </govuk-summary-list-row>
                             }
                             else
                             {
