@@ -1061,7 +1061,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return RedirectToAction(_conditionsAffectingNutrients);
                 }
 
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationMethod");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationMethod");
             }
             catch (Exception ex)
             {
@@ -2143,12 +2143,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 model = await _mannerEstimationLogic.SetMannerEstimationStep23(model);
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange && model.IsApplicationMethodChange)
+                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange && model.IsApplicationMethodChange)
                 {
                     return RedirectToAction("IncorporationMethod");
                 }
 
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("DefaultNutrientValues");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("DefaultNutrientValues");
             }
             catch (HttpRequestException hre)
             {
@@ -2214,7 +2214,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction);
             }
             catch (HttpRequestException hre)
             {
@@ -2412,7 +2412,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction);
             }
             catch (Exception ex)
             {
@@ -2540,7 +2540,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private IActionResult RedirectAfterApplicationRateMethod(MannerEstimationViewModel? mannerEstimationViewModel, MannerEstimationStep26ViewModel model)
         {
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange)
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && !mannerEstimationViewModel.IsComingForAddNewApplication)
                 ? RedirectToAction(_updateApplicationDataActionName)
                 : RedirectToAction(_incorporationMethodAction);
         }
@@ -2655,7 +2655,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerEstimationLogic.SetMannerEstimationStep27(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_incorporationMethodAction);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_incorporationMethodAction);
             }
             catch (Exception ex)
             {
@@ -2771,7 +2771,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerEstimationLogic.SetMannerEstimationStep28(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_incorporationMethodAction);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_incorporationMethodAction);
 
             }
             catch (Exception ex)
@@ -3140,7 +3140,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 mannerEstimationViewModel.EncryptedMannerFarmId = encryptedMannerFarmId;
                 _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
             }
-            await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0);
+            await _mannerEstimationLogic.BindMannerEstimationDataForUpdate(mannerEstimationResultResponse.MannerEstimation.ID ?? 0);
         }
 
         private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application, string manureUnit)
@@ -3256,7 +3256,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = _mannerEstimationLogic.SetMannerEstimationStep29(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && !model.IsIncorporationMethodChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("IncorporationDelay");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !model.IsManureTypeChange && !model.IsIncorporationMethodChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("IncorporationDelay");
             }
             catch (HttpRequestException hre)
             {
@@ -3367,7 +3367,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = _mannerEstimationLogic.SetMannerEstimationStep30(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
             }
             catch (HttpRequestException hre)
             {
@@ -3588,7 +3588,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
 
         }
 
@@ -3630,7 +3630,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return RedirectToAction("EffectiveRainfall");
             }
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
 
         private void ValidateMinMaxSoilDrainageDate(MannerEstimationStep32ViewModel model)
@@ -3742,7 +3742,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
 
         private async Task FetchDefaultTotalRainfall(MannerEstimationStep32ViewModel model)
@@ -3801,7 +3801,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
 
         [HttpGet]
@@ -3839,7 +3839,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
 
         private void ValidationEffectiveRainfall()
@@ -3906,7 +3906,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
 
         [HttpGet]
@@ -3950,7 +3950,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
         }
 
 
@@ -4110,7 +4110,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction("AddNewMannerEstimate");
                 }
-                if (mannerEstimationViewModel != null && (!mannerEstimationViewModel.IsComingForAddNewApplication && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId) && !model.IsManureTypeChange))
+                if (mannerEstimationViewModel != null && (!mannerEstimationViewModel.IsComingForAddNewApplication && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)))
                 {
                     return RedirectToAction(_updateApplicationDataActionName);
                 }
@@ -4175,6 +4175,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdateNitrogenPriceQuestion() action called");
             MannerEstimationStep33ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep33();
+            BindMannerFarmNameAndIdOnNavigation();
             int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
@@ -4198,6 +4199,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdateNitrogenPriceQuestion() post action called");
             AddErrorIfNull(model.UpdateNitrogenPriceQuestion, "UpdateNitrogenPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
 
+            BindMannerFarmNameAndIdOnNavigation();
             MannerEstimationStep33ViewModel mannerEstimationStep33ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep33();
             if (!ModelState.IsValid)
             {
@@ -4215,6 +4217,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} NutrientProduct() action called");
             MannerEstimationStep35ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep35();
             int nutrientId = 1;
+            BindMannerFarmNameAndIdOnNavigation();
             if (!string.IsNullOrWhiteSpace(r))
             {
                 nutrientId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(r));
@@ -4282,6 +4285,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  NutrientProduct() post action called");
             AddErrorIfNull(model.NutrientProductId, "NutrientProductId", Resource.MsgSelectAnOptionBeforeContinuing);
+            BindMannerFarmNameAndIdOnNavigation();
             MannerEstimationStep35ViewModel? mannerEstimationStep35ViewModel = _mannerEstimationLogic.GetMannerEstimationStep35();
             if (!ModelState.IsValid)
             {
@@ -4380,7 +4384,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdateNutrientPrice() action called");
             MannerEstimationStep34ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep34();
-
+            BindMannerFarmNameAndIdOnNavigation();
             return View(model);
 
         }
@@ -4393,6 +4397,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdateNutrientPrice() post action called");
 
             MannerEstimationStep34ViewModel mannerEstimationStep34ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep34();
+            BindMannerFarmNameAndIdOnNavigation();
             ValidateNitrogenPrice(model, nitrogenProductPriceKey, mannerEstimationStep34ViewModel);
 
             if (!ModelState.IsValid)
@@ -4456,6 +4461,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPriceQuestion() action called");
             MannerEstimationStep36ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep36();
+            BindMannerFarmNameAndIdOnNavigation();
             int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
@@ -4480,6 +4486,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePhosphorusPriceQuestion() post action called");
             AddErrorIfNull(model.UpdatePhosphorusPriceQuestion, "UpdatePhosphorusPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
 
+            BindMannerFarmNameAndIdOnNavigation();
             MannerEstimationStep36ViewModel mannerEstimationStep36ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep36();
             if (!ModelState.IsValid)
             {
@@ -4495,7 +4502,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPrice() action called");
             MannerEstimationStep37ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep37();
-
+            BindMannerFarmNameAndIdOnNavigation();
             return View(model);
 
         }
@@ -4507,6 +4514,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             string phosphorusProductPriceKey = "PhosphorusProductPrice";
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePhosphorusPrice() post action called");
 
+            BindMannerFarmNameAndIdOnNavigation();
             MannerEstimationStep37ViewModel mannerEstimationStep37ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep37();
             ValidatePhosphorusPrice(model, phosphorusProductPriceKey, mannerEstimationStep37ViewModel);
 
@@ -4572,6 +4580,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPriceQuestion() action called");
             MannerEstimationStep38ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep38();
+            BindMannerFarmNameAndIdOnNavigation();
             int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
@@ -4594,6 +4603,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePotashPriceQuestion() post action called");
             AddErrorIfNull(model.UpdatePotashPriceQuestion, "UpdatePotashPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+            BindMannerFarmNameAndIdOnNavigation();
 
             MannerEstimationStep38ViewModel mannerEstimationStep38ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep38();
             if (!ModelState.IsValid)
@@ -4611,6 +4621,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPrice() action called");
             MannerEstimationStep39ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep39();
 
+            BindMannerFarmNameAndIdOnNavigation();
             return View(model);
 
         }
@@ -4623,6 +4634,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             MannerEstimationStep39ViewModel mannerEstimationStep39ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep39();
             ValidatePotashPrice(model, mannerEstimationStep39ViewModel);
+            BindMannerFarmNameAndIdOnNavigation();
 
             if (!ModelState.IsValid)
             {
