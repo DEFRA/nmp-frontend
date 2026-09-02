@@ -1246,7 +1246,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         ValidateSoilAnalysesMagnesium();
         ValidateSoilAnalysesPhosphorus();
 
-        if (model.SoilAnalyses!=null&&model.SoilAnalyses.Phosphorus != null)
+        if (model.SoilAnalyses != null && model.SoilAnalyses.Phosphorus != null)
         {
             if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland
                    && (ModelState.ContainsKey(_soilAnalysesPhosphorusValue) && Math.Round(model.SoilAnalyses.Phosphorus.Value, 1) != model.SoilAnalyses.Phosphorus))
@@ -1301,15 +1301,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (model.SoilAnalyses.OrganicMatterPercentage != null)
         {
-            if (model.SoilAnalyses.OrganicMatterPercentage < 0 || model.SoilAnalyses.OrganicMatterPercentage > 100)
+            var value = model.SoilAnalyses.OrganicMatterPercentage.Value;
+
+            if (value < 0 || value > 100 || decimal.Round(value, 1) != value)
             {
-                ModelState.AddModelError("SoilAnalyses.OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
+                ModelState.AddModelError("SoilAnalyses.OrganicMatterPercentage", string.Format(Resource.MsgEnterANumberFrom0To100With1Decimal, 0, 100));
             }
 
-            if (model.SoilAnalyses.OrganicMatterPercentage.Value % 1 != 0)
-            {
-                ModelState.AddModelError("SoilAnalyses.OrganicMatterPercentage", string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
-            }
         }
     }
 

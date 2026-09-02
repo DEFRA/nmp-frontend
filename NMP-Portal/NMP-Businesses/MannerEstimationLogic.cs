@@ -1564,6 +1564,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             (MannerFarmViewModel? mannerFarm, error) = await FetchMannerFarmById(mannerEstimate.MannerFarmID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimate.ID;
             mannerEstimationViewModel.MannerFarmId = mannerEstimate.MannerFarmID;
+            mannerEstimationViewModel.FarmName = mannerEstimate.Name;
             mannerEstimationViewModel.IsWithinNVZ = mannerEstimate.IsWithinNVZ;
             mannerEstimationViewModel.CountryId = mannerFarm.CountryID;
             mannerEstimationViewModel.CropTypeId = mannerEstimate.CropTypeID;

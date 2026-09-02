@@ -959,3 +959,11 @@ hr.seperator_five_report {
 .excessRainfall{
     text-align:center;
 }
+.nutrient-summary-row .govuk-summary-list__value {
+    width: 100%;
+}
+.organic_nutrients {
+    width: 125% !important;
+    display: grid !important;
+    grid-template-columns: 50% 50%;
+}
