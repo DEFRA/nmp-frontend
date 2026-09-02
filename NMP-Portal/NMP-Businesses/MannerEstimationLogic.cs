@@ -1521,11 +1521,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             (MannerFarmViewModel? mannerFarm, error) = await FetchMannerFarmById(mannerEstimate.MannerFarmID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimate.ID;
             mannerEstimationViewModel.MannerFarmId = mannerEstimate.MannerFarmID;
+            mannerEstimationViewModel.FarmName = mannerEstimate.Name;
             mannerEstimationViewModel.IsWithinNVZ = mannerEstimate.IsWithinNVZ;
             mannerEstimationViewModel.CountryId = mannerFarm.CountryID;
             mannerEstimationViewModel.CropTypeId = mannerEstimate.CropTypeID;
-            mannerEstimationViewModel.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;
-            mannerEstimationViewModel.MannerEstimationStep31.Name = mannerEstimate.Name;
+            mannerEstimationViewModel.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;            
+                mannerEstimationViewModel.MannerEstimationStep31.Name = mannerEstimate.Name;            
             mannerEstimationViewModel.MannerEstimationStep1.FarmName = mannerFarm.Name;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID.Value;
             mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerFarm.CountryID.Value);
@@ -1594,7 +1595,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         await BindConditionAffectingNutrientValues(mannerEstimationViewModel);
         SetMannerEstimationToSession(mannerEstimationViewModel);
         await BindMannerEstimationDataForUpdate(mannerEstimateApplication.MannerEstimationID.Value);
-
+        mannerEstimationViewModel.MannerEstimationStep31.Name = string.Empty;
         return error;
     }
 
@@ -1896,7 +1897,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession();
             if (mannerEstimationViewModel != null)
             {
-                mannerEstimationViewModel.FarmName=mannerFarm.Name;               
+                mannerEstimationViewModel.FarmName=mannerFarm.Name;
                 mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID ?? 0;
                 mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerFarm.CountryID ?? 0);
                 mannerEstimationViewModel.MannerEstimationStep3.Postcode = mannerFarm.Postcode;
