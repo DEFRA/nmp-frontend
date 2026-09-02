@@ -32,7 +32,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace NMP.Portal.Areas.Manner.Controllers
 {
-    [ApiController]
+    
     [Area("Manner")]
     [Authorize]
     public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IDataProtectionProvider dataProtectionProvider, IMannerEstimationLogicDependencies dependencies) : Controller
