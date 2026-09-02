@@ -26,84 +26,84 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
     public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure)
     {
         _logger.LogTrace("Adding Fertiliser Manure");
-        return await _fertiliserManureService.AddFertiliserManureServiceAsync(fertiliserManure);
+        return await _fertiliserManureService.AddFertiliserManureAsync(fertiliserManure);
     }
 
     public async Task<(string, Error)> DeleteFertiliserByIdAsync(string fertiliserIds)
     {
         _logger.LogTrace("Deleting Fertiliser by Id");
-        return await _fertiliserManureService.DeleteFertiliserByIdServiceAsync(fertiliserIds);
+        return await _fertiliserManureService.DeleteFertiliserByIdAsync(fertiliserIds);
     }
 
     public async Task<(List<ManureCropTypeResponse>, Error)> FetchCropTypeByFarmIdAndHarvestYear(int farmId, int harvestYear)
     {
         _logger.LogTrace("Fetching Crop Type by FarmId:{FarmId} and HarvestYear:{HarvestYear}", farmId, harvestYear);
-        return await _fertiliserManureService.FetchCropTypeByFarmIdAndHarvestYearServiceAsync(farmId, harvestYear);
+        return await _fertiliserManureService.FetchCropTypeByFarmIdAndHarvestYearAsync(farmId, harvestYear);
     }
 
     public async Task<(FertiliserManureDataViewModel, Error)> FetchFertiliserByIdAsync(int fertiliserId)
     {
         _logger.LogTrace("Fetching Fertiliser by Id");
-        return await _fertiliserManureService.FetchFertiliserByIdServiceAsync(fertiliserId);
+        return await _fertiliserManureService.FetchFertiliserByIdAsync(fertiliserId);
     }
 
     public async Task<(List<CommonResponse>, Error)> FetchFieldByFarmIdAndHarvestYearAndCropGroupName(int harvestYear, int farmId, string? cropGroupName)
     {
         _logger.LogTrace("Fetching Field by Farm Id, Harvest Year and Crop Group name");
-        return await _fertiliserManureService.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameServiceAsync(harvestYear, farmId, cropGroupName);
+        return await _fertiliserManureService.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsync(harvestYear, farmId, cropGroupName);
     }
 
     public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndNutrient(int fertiliserId, int farmId, int harvestYear)
     {
         _logger.LogTrace("Fetching field with samedate and nutrient");
-        return await _fertiliserManureService.FetchFieldWithSameDateAndNutrientServiceAsync(fertiliserId, farmId, harvestYear);
+        return await _fertiliserManureService.FetchFieldWithSameDateAndNutrientAsync(fertiliserId, farmId, harvestYear);
     }
 
     public async Task<(List<InOrganicManureDurationResponse>, Error)> FetchInOrganicManureDurations()
     {
         _logger.LogTrace("Fetching inorganic manure durations");
-        return await _fertiliserManureService.FetchInOrganicManureDurationsServiceAsync();
+        return await _fertiliserManureService.FetchInOrganicManureDurationsAsync();
     }
 
     public async Task<(InOrganicManureDurationResponse, Error)> FetchInOrganicManureDurationsById(int id)
     {
         _logger.LogTrace("Fetching Inorganic manure duration by Id");
-        return await _fertiliserManureService.FetchInOrganicManureDurationsByIdServiceAsync(id);
+        return await _fertiliserManureService.FetchInOrganicManureDurationsByIdAsync(id);
     }
 
     public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {
         _logger.LogTrace("Fetching ManagementId by Field Id and Harvest year and Crop group name");
-        return await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameServiceAsync(harvestYear, fieldIds, cropGroupName, cropOrder);
+        return await _fertiliserManureService.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsync(harvestYear, fieldIds, cropGroupName, cropOrder);
     }
 
     public async Task<(decimal, Error)> FetchTotalNBasedOnFieldIdAndAppDate(int fieldId, DateTime startDate, DateTime endDate, int? fertiliserId, bool confirm)
     {
         _logger.LogTrace("Fetch total N based on Field Id and application date");
-        return await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDateServiceAsync(fieldId, startDate, endDate, fertiliserId, confirm);
+        return await _fertiliserManureService.FetchTotalNBasedOnFieldIdAndAppDateAsync(fieldId, startDate, endDate, fertiliserId, confirm);
     }
 
     public async Task<(decimal?, Error)> FetchTotalNByManagementPeriodID(int managementPeriodID)
     {
         _logger.LogTrace("Fetching total N by management perios Id");
-        return await _fertiliserManureService.FetchTotalNByManagementPeriodIDServiceAsync(managementPeriodID);
+        return await _fertiliserManureService.FetchTotalNByManagementPeriodIDAsync(managementPeriodID);
     }
 
     public async Task<(List<FertiliserManure>, Error?)> UpdateFertiliser(string fertliserData)
     {
         _logger.LogTrace("Updating fertiliser");
-        return await _fertiliserManureService.UpdateFertiliserServiceAsync(fertliserData);
+        return await _fertiliserManureService.UpdateFertiliserAsync(fertliserData);
     }
     public async Task<(string?, Error?)> FetchFertiliserManureClosedPeriod(int countryId, int cropTypeId, int? nvzProgramId)
     {
         _logger.LogTrace("Fetch fertiliser manure closed period");
-        return await _fertiliserManureService.FetchFertiliserManureClosedPeriodServiceAsync(countryId, cropTypeId, nvzProgramId);
+        return await _fertiliserManureService.FetchFertiliserManureClosedPeriodAsync(countryId, cropTypeId, nvzProgramId);
     }
 
     public async Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumn(int managementPeriodID, bool isAutumn)
     {
         _logger.LogTrace("Fetching total N by management perios Id and isAutumn");
-        return await _fertiliserManureService.FetchTotalNByManagementPeriodIDIsAutumnServiceAsync(managementPeriodID, isAutumn);
+        return await _fertiliserManureService.FetchTotalNByManagementPeriodIDIsAutumnAsync(managementPeriodID, isAutumn);
     }
 
     //warning logic

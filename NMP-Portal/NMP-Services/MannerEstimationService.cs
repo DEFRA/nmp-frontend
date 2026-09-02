@@ -31,7 +31,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        string url = string.Format(ApiurlHelper.FetchAllMannerEstimationsAsyncAPI, orgId);
+        string url = string.Format(ApiurlHelper.FetchAllMannerEstimationsAPI, orgId);
         var response = await httpClient.GetAsync(url);
 
         string result = await response.Content.ReadAsStringAsync();
@@ -48,17 +48,17 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimationsList, error);
     }
-    public async Task<bool> FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI(int mannerFarmId, string name)
+    public async Task<bool> FetchIsExistMannerEstimationsByMannerFarmIdAndNameAPI(int mannerFarmId, string name)
     {
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI, mannerFarmId, name));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerEstimationsByMannerFarmIdAndNameAPI, mannerFarmId, name));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         bool isExist = responseWrapper?.Data?["exists"] ?? false;
 
         return isExist;
     }
-    public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationServiceAsync(string MannerData)
+    public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationAsync(string MannerData)
     {
         MannerEstimationApplication? mannerEstimationApplication = null;
         Error? error = null;
@@ -67,7 +67,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             HttpClient httpClient = await GetNMPAPIClient();
 
             var response = await httpClient.PostAsync(
-                ApiurlHelper.AddMannerEstimationAsyncAPI,
+                ApiurlHelper.AddMannerEstimationAPI,
                 new StringContent(MannerData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();
@@ -100,7 +100,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
     }
 
-    public async Task<(MannerFarmEstimationApplicationResponse?, Error?)> AddMannerFarmEstimationServiceAsync(string MannerData)
+    public async Task<(MannerFarmEstimationApplicationResponse?, Error?)> AddMannerFarmEstimationAsync(string MannerData)
     {
         MannerFarmEstimationApplicationResponse? mannerFarmEstimationApplication = null;
         Error? error = null;
@@ -109,7 +109,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             HttpClient httpClient = await GetNMPAPIClient();
 
             var response = await httpClient.PostAsync(
-                ApiurlHelper.AddFarmMannerEstimationAsyncAPI,
+                ApiurlHelper.AddFarmMannerEstimationAPI,
                 new StringContent(MannerData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();
@@ -151,7 +151,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             HttpClient httpClient = await GetNMPAPIClient();
             string url = string.Empty;
 
-            url = string.Format(ApiurlHelper.FetchSoilTypeIdByTopSoilIdAndSubSoilIdAsyncAPI, topSoilId, subSoilId);
+            url = string.Format(ApiurlHelper.FetchSoilTypeIdByTopSoilIdAndSubSoilIdAPI, topSoilId, subSoilId);
 
             var response = await httpClient.GetAsync(url);
 
@@ -181,7 +181,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         List<MannerEstimationApplication> mannerEstimationApplications = new List<MannerEstimationApplication>();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerApplicationsByEstimationIdAsyncAPI, mannerEstimationId));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerApplicationsByEstimationIdAPI, mannerEstimationId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -206,7 +206,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAsyncAPI, HttpUtility.UrlEncode(mannerApplicationId.ToString())));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAPI, HttpUtility.UrlEncode(mannerApplicationId.ToString())));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -230,7 +230,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimationResultByIdAsyncAPI, HttpUtility.UrlEncode(mannerEstimationId.ToString())));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimationResultByIdAPI, HttpUtility.UrlEncode(mannerEstimationId.ToString())));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -260,7 +260,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         });
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.PostAsync(ApiurlHelper.CopyMannerEstimationAsyncAPI,
+        var response = await httpClient.PostAsync(ApiurlHelper.CopyMannerEstimationAPI,
                 new StringContent(jsonData, Encoding.UTF8, _contentType));
 
         string result = await response.Content.ReadAsStringAsync();
@@ -287,7 +287,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         List<NutrientProductResponse> nutrientProducts = new List<NutrientProductResponse>();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientProductByNutrientIdAsyncAPI, nurteintId));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchNutrientProductByNutrientIdAPI, nurteintId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -311,7 +311,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         MannerEstimation? mannerEstimation = null;
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateByIdAsyncAPI, mannerEstimateId));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateByIdAPI, mannerEstimateId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -329,7 +329,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimation, error);
     }
-    public async Task<(MannerEstimation?, Error?)> UpdateMannerEstimationServiceAsync(string MannerData)
+    public async Task<(MannerEstimation?, Error?)> UpdateMannerEstimationAsync(string MannerData)
     {
         MannerEstimation? mannerEstimation = null;
         Error? error = null;
@@ -338,7 +338,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             HttpClient httpClient = await GetNMPAPIClient();
 
             var response = await httpClient.PutAsync(
-                ApiurlHelper.UpdateMannerEstimateAsyncAPI,
+                ApiurlHelper.UpdateMannerEstimateAPI,
                 new StringContent(MannerData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();
@@ -376,7 +376,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
        
-        string url = ApiurlHelper.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompostAsyncAPI;
+        string url = ApiurlHelper.FetchTotalNBasedByMannerEstimationIdAppDateAndIsGreenCompostAPI;
         if (mannerApplicationId.HasValue)
         {
             url += $"&mannerApplicationId={mannerApplicationId.Value}";
@@ -400,7 +400,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         decimal totalN = 0;
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        string url = ApiurlHelper.FetchTotalNByMannerEstimationIdAppDateAsyncAPI;
+        string url = ApiurlHelper.FetchTotalNByMannerEstimationIdAppDateAPI;
         if (mannerApplicationId.HasValue)
         {
             url += $"&mannerApplicationId={mannerApplicationId.Value}";
@@ -425,7 +425,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
         
-        string url = ApiurlHelper.CheckMannerGreenCompostExistanceByDateRangeAsyncAPI;
+        string url = ApiurlHelper.CheckMannerGreenCompostExistanceByDateRangeAPI;
         if (mannerApplicationId.HasValue)
         {
             url += $"&mannerApplicationId={mannerApplicationId.Value}";
@@ -449,7 +449,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         MannerEstimationApplication? mannerEstimationApplication = null;
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateApplicationByIdAsyncAPI, mannerEstimateApplicationId));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateApplicationByIdAPI, mannerEstimateApplicationId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -467,7 +467,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimationApplication, error);
     }
-    public async Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationServiceAsync(string MannerApplicationData)
+    public async Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationAsync(string MannerApplicationData)
     {
         MannerEstimationApplication? mannerEstimationApplication = null;
         Error? error = null;
@@ -476,7 +476,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             HttpClient httpClient = await GetNMPAPIClient();
 
             var response = await httpClient.PutAsync(
-              ApiurlHelper.UpdateMannerEstimateApplicationAsyncAPI,
+              ApiurlHelper.UpdateMannerEstimateApplicationAPI,
                 new StringContent(MannerApplicationData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();
@@ -514,7 +514,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         }
     }
 
-    public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplicationServiceAsync(string applicationData)
+    public async Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplicationAsync(string applicationData)
     {
         MannerEstimationApplication? mannerEstimationApplication = null;
         Error? error = null;
@@ -523,7 +523,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             HttpClient httpClient = await GetNMPAPIClient();
 
             var response = await httpClient.PostAsync(
-                ApiurlHelper.AddMannerEstimationApplicationAsyncAPI,
+                ApiurlHelper.AddMannerEstimationApplicationAPI,
                 new StringContent(applicationData, Encoding.UTF8, _contentType));
 
             string result = await response.Content.ReadAsStringAsync();
@@ -555,7 +555,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
             _logger.HandleException(ex, error);
         }
     }
-    public async Task<(string, Error?)> DeleteMannerEstimateApplicationByIdServiceAsync(int mannerEstimationId)
+    public async Task<(string, Error?)> DeleteMannerEstimateApplicationByIdAsync(int mannerEstimationId)
     {
         Error? error = null;
         string message = string.Empty;
@@ -586,14 +586,14 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         return (message, error);
     }
 
-    public async Task<Error?> RemoveMannerEstimationsServiceAsync(string mannerEstimationIds)
+    public async Task<Error?> RemoveMannerEstimationsAsync(string mannerEstimationIds)
     {
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
             var content = new StringContent(mannerEstimationIds, Encoding.UTF8, "application/json");
-            var url = ApiurlHelper.DeleteMannerEstimateAsyncAPI;
+            var url = ApiurlHelper.DeleteMannerEstimateAPI;
             var requestMessage = new HttpRequestMessage(HttpMethod.Delete, url)
             {
                 Content = content
@@ -625,7 +625,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        string url = string.Format(ApiurlHelper.FetchAllMannerFarmsByOrgIdAsyncAPI, orgId);
+        string url = string.Format(ApiurlHelper.FetchAllMannerFarmsByOrgIdAPI, orgId);
         var response = await httpClient.GetAsync(url);
 
         string result = await response.Content.ReadAsStringAsync();
@@ -647,7 +647,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         MannerFarmViewModel? mannerFarm = null;
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerFarmByIdAsyncAPI, mannerFarmId));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerFarmByIdAPI, mannerFarmId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -671,7 +671,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         List<MannerEstimationSummaryViewModel>? mannerEstimationSummary = new List<MannerEstimationSummaryViewModel>();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateByFarmIdAsyncAPI, mannerFarmId));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateByFarmIdAPI, mannerFarmId));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -690,13 +690,13 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimationSummary, error);
     }
-    public async Task<Error?> RemoveMannerFarmsServiceAsync(string mannerFarmIds)
+    public async Task<Error?> RemoveMannerFarmsAsync(string mannerFarmIds)
     {
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, ApiurlHelper.DeleteMannerFarmAsyncAPI)
+            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, ApiurlHelper.DeleteMannerFarmAPI)
             {
                 Content = new StringContent(mannerFarmIds, Encoding.UTF8, "application/json")
             };
@@ -720,10 +720,10 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         return error;
     }
 
-    public async Task<bool> FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI(Guid organisationId, string name)
+    public async Task<bool> FetchIsExistMannerFarmByOrgIdAndNameAPI(Guid organisationId, string name)
     {
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI, organisationId, name));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchIsExistMannerFarmByOrgIdAndNameAPI, organisationId, name));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         bool isExist = responseWrapper?.Data?["exists"] ?? false;
@@ -731,7 +731,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         return isExist;
     }
 
-    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeServiceAsync(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry)
+    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeAsync(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry)
     {
         Error? error = null;
         decimal? totalRate = (decimal?)null;
@@ -739,7 +739,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            string requestUrl = ApiurlHelper.FetchMannerTotalApplicationRateByDateRangeAsyncAPI;
+            string requestUrl = ApiurlHelper.FetchMannerTotalApplicationRateByDateRangeAPI;
 
             if (mannerApplicationId.HasValue)
             {

@@ -25,7 +25,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IMannerEstimationServiceDependencies dependencies, IOrganicManureLogic organicManureLogic, IHttpContextAccessor httpContextAccessor) : IMannerEstimationLogic
+public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IMannerEstimationServiceDependencies dependencies, IOrganicManureLogic organicManureLogic, IHttpContextAccessor httpContextAccessor, IRb209Service rb209Service) : IMannerEstimationLogic
 {
     private readonly ILogger<MannerEstimationLogic> _logger = logger;
     private readonly IMannerEstimationService _mannerEstimationService = dependencies.MannerEstimationService;
@@ -35,6 +35,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
     private readonly ICropService _cropService = dependencies.CropService;
+    private readonly IRb209Service _rb209Service = rb209Service;
+
     private const string _mannerEstimationSessionName = "MannerEstimation";
 
     public MannerEstimationStep1ViewModel SetMannerEstimationStep1(MannerEstimationStep1ViewModel mannerEstimationStep1)
@@ -773,10 +775,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep3.Postcode = farm.Postcode;
             mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic = farm.RegisteredOrganicProducer;
             mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = farm.Rainfall.Value;
-            Field field = await _fieldService.FetchFieldByFieldIdServiceAsync(fieldId);
+            Field field = await _fieldService.FetchFieldByFieldIdAsync(fieldId);
             mannerEstimationViewModel.MannerEstimationStep5.FieldName = field.Name;
             mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ = field.IsWithinNVZ;
-            (SoilTypeSoilTextureResponse soilTypeSoilTextureResponse, _) = await _organicManureLogic.FetchSoilTypeSoilTextureBySoilTypeIdServiceAsync(field.SoilTypeID.Value);
+            (SoilTypeSoilTextureResponse soilTypeSoilTextureResponse, _) = await _organicManureLogic.FetchSoilTypeSoilTextureBySoilTypeIdAsync(field.SoilTypeID.Value);
             mannerEstimationViewModel.MannerEstimationStep18.TopSoilId = soilTypeSoilTextureResponse.TopSoilID;
             mannerEstimationViewModel.MannerEstimationStep19.SubSoilId = soilTypeSoilTextureResponse.SubSoilID;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = farm.CountryID ?? 0;
@@ -836,7 +838,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<bool> FetchIsExistMannerEstimationsByMannerFarmIdAndName(int mannerFarmId, string name)
     {
         _logger.LogTrace("ManureLogic : FetchIsExistMannerEstimationsByMannerFarmIdAndName() called");
-        return await _mannerEstimationService.FetchIsExistMannerEstimationsByMannerFarmIdAndNameAsyncAPI(mannerFarmId, name);
+        return await _mannerEstimationService.FetchIsExistMannerEstimationsByMannerFarmIdAndNameAPI(mannerFarmId, name);
     }
     public MannerEstimationStep31ViewModel GetMannerEstimationStep31()
     {
@@ -891,7 +893,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep32.IsApplicationDateChange = mannerEstimationViewModel.MannerEstimationStep13.IsApplicationDateChange;
 
         mannerEstimationViewModel.MannerEstimationStep32.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
-        mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = await _fieldService.FetchCropTypeByIdServiceAsync(mannerEstimationViewModel.MannerEstimationStep32.CropTypeId.Value);
+        mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = await _rb209Service.FetchCropTypeByIdAsync(mannerEstimationViewModel.MannerEstimationStep32.CropTypeId.Value);
         return mannerEstimationViewModel.MannerEstimationStep32;
     }
     public async Task<MannerEstimationStep32ViewModel> SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32)
@@ -920,7 +922,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             MannerEstimationApplication = mannerEstimationApplication
         });
 
-        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
+        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
     public async Task<(MannerFarmEstimationApplicationResponse?, Error?)> AddMannerFarmEstimation(Guid organisationId)
@@ -936,7 +938,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             MannerEstimationApplication = mannerEstimationApplication
         });
 
-        (MannerFarmEstimationApplicationResponse? mannerFarmEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerFarmEstimationServiceAsync(jsonData);
+        (MannerFarmEstimationApplicationResponse? mannerFarmEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerFarmEstimationAsync(jsonData);
         return (mannerFarmEstimationApplicationResult, error);
     }
 
@@ -1365,7 +1367,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             MannerEstimation = mannerEstimation
         });
 
-        (MannerEstimation? mannerEstimationResult, error) = await _mannerEstimationService.UpdateMannerEstimationServiceAsync(jsonData);
+        (MannerEstimation? mannerEstimationResult, error) = await _mannerEstimationService.UpdateMannerEstimationAsync(jsonData);
         return (mannerEstimationResult, error);
     }
     public MannerEstimationStep36ViewModel GetMannerEstimationStep36()
@@ -1511,7 +1513,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public async Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId)
     {
-        List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypesServiceAsync();
+        List<CropTypeResponse> cropTypes = await _rb209Service.FetchAllCropTypesAsync();
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         (MannerEstimation? mannerEstimate, Error? error) = await FetchMannerEstimateById(mannerEstimateId);
         if (mannerEstimate != null && string.IsNullOrWhiteSpace(error?.Message))
@@ -1557,7 +1559,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             MannerEstimation = mannerEstimation
         });
 
-        (MannerEstimation? mannerEstimationResult, Error? error) = await _mannerEstimationService.UpdateMannerEstimationServiceAsync(jsonData);
+        (MannerEstimation? mannerEstimationResult, Error? error) = await _mannerEstimationService.UpdateMannerEstimationAsync(jsonData);
         return (mannerEstimationResult, error);
     }
 
@@ -1655,13 +1657,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             return;
         }
 
-        bool isPerennial = await _cropService.FetchIsPerennialByCropTypeIdServiceAsync(mannerEstimation.CropTypeID ?? 0);
+        bool isPerennial = await _cropService.FetchIsPerennialByCropTypeIdAsync(mannerEstimation.CropTypeID ?? 0);
         int fieldType = mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass
             ? (int)NMP.Commons.Enums.FieldType.Grass
             : (int)NMP.Commons.Enums.FieldType.Arable;
 
         bool isSandyShallowSoil = CheckSandyShallowByTopSoilSubSoilId(mannerEstimation.TopSoilID ?? 0, mannerEstimation.SubSoilID ?? 0, mannerEstimationViewModel.CountryId ?? 0);
-        var crops = await _fieldService.FetchAllCropTypesServiceAsync();
+        var crops = await _rb209Service.FetchAllCropTypesAsync();
         var matchedCrop = crops.FirstOrDefault(x => x.CropTypeId == mannerEstimation.CropTypeID);
         int cropGroupId = matchedCrop?.CropGroupId ?? 0;
 
@@ -1746,13 +1748,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     private async Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimateApplication(string jsonData)
     {
-        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.UpdateMannerEstimationApplicationServiceAsync(jsonData);
+        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.UpdateMannerEstimationApplicationAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
 
     public async Task<int?> GetCropGroupByCropTypeId(int? cropTypeId)
     {
-        List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypesServiceAsync();
+        List<CropTypeResponse> cropTypes = await _rb209Service.FetchAllCropTypesAsync();
         int? cropGroupId = cropTypes?.FirstOrDefault(x => x.CropTypeId == cropTypeId)?.CropGroupId;
         return cropGroupId;
     }
@@ -1764,7 +1766,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         string jsonData = JsonConvert.SerializeObject(mannerEstimationApplication);
 
-        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationApplicationServiceAsync(jsonData);
+        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationApplicationAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
 
@@ -1783,7 +1785,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public async Task<Error?> RemoveMannerEstimations(string mannerEstimationIds)
     {
-        Error? error = await _mannerEstimationService.RemoveMannerEstimationsServiceAsync(mannerEstimationIds);
+        Error? error = await _mannerEstimationService.RemoveMannerEstimationsAsync(mannerEstimationIds);
         return error;
     }
 
@@ -1802,7 +1804,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<(string, Error?)> DeleteMannerEstimateApplicationById(int mannerEstimationId)
     {
         _logger.LogTrace("MannerLogic : DeleteMannerEstimateApplicationById() called");
-        return await _mannerEstimationService.DeleteMannerEstimateApplicationByIdServiceAsync(mannerEstimationId);
+        return await _mannerEstimationService.DeleteMannerEstimateApplicationByIdAsync(mannerEstimationId);
 
     }
 
@@ -1835,7 +1837,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             MannerEstimationApplication = mannerEstimationApplication
         });
 
-        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationServiceAsync(jsonData);
+        (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error) = await _mannerEstimationService.AddMannerEstimationAsync(jsonData);
         return (mannerEstimationApplicationResult, error);
     }
     public bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId, int countryId)
@@ -1919,18 +1921,18 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public async Task<Error?> RemoveMannerFarms(string mannerFarmIds)
     {
-        Error? error = await _mannerEstimationService.RemoveMannerFarmsServiceAsync(mannerFarmIds);
+        Error? error = await _mannerEstimationService.RemoveMannerFarmsAsync(mannerFarmIds);
         return error;
     }
     public async Task<bool> FetchIsExistMannerFarmByOrgIdAndName(Guid organisationId, string farmName)
     {
         _logger.LogTrace("ManureLogic : FetchIsExistMannerFarmByOrgIdAndName() called");
-        return await _mannerEstimationService.FetchIsExistMannerFarmByOrgIdAndNameAsyncAPI(organisationId, farmName);
+        return await _mannerEstimationService.FetchIsExistMannerFarmByOrgIdAndNameAPI(organisationId, farmName);
     }
     public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry)
     {
         _logger.LogTrace("MannerEstimationLogic : FetchTotalApplicationRateByDateRange() called");
-        return await _mannerEstimationService.FetchTotalApplicationRateByDateRangeServiceAsync(mannerEstimationId, dateFrom, dateTo, mannerApplicationId, isPoultry);
+        return await _mannerEstimationService.FetchTotalApplicationRateByDateRangeAsync(mannerEstimationId, dateFrom, dateTo, mannerApplicationId, isPoultry);
     }
 
 }
