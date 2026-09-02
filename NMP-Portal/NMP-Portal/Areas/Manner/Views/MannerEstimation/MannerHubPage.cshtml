@@ -5,7 +5,7 @@
     ViewData["Title"] = Resource.lblMannerHubPage;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation" asp-area="Manner">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation" asp-area="Manner" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 @if (TempData["Error"] != null)
@@ -75,7 +75,7 @@ else
                                 <td class="govuk-table__cell">@estimation.FarmName</td>
                                 <td class="govuk-table__cell">@estimation.FieldName</td>
                                 <td class="govuk-table__cell">@(estimation.ModifiedOn == null ? estimation.CreatedOn.ToString("dd MMMM yyyy") : estimation.ModifiedOn.ToString("dd MMMM yyyy"))</td>
-                                <td class="govuk-table__cell"><a asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@estimation.EncryptedId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, estimation.FarmName)))">@Resource.lblViewOrChange</a></td>
+                                <td class="govuk-table__cell"><a asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@estimation.EncryptedId" asp-route-sid="@ViewBag.SessionId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, estimation.FarmName)))">@Resource.lblViewOrChange</a></td>
                             </tr>
                         }
                     }

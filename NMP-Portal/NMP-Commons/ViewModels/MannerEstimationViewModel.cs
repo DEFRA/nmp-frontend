@@ -11,6 +11,7 @@ namespace NMP.Commons.ViewModels
     {
         public MannerEstimationViewModel()
         {
+            SessionId = Guid.NewGuid().ToString();
             MannerEstimationStep1 = new MannerEstimationStep1ViewModel();
             MannerEstimationStep2 = new MannerEstimationStep2ViewModel();
             MannerEstimationStep3 = new MannerEstimationStep3ViewModel();
@@ -54,6 +55,7 @@ namespace NMP.Commons.ViewModels
             MannerEstimationStep41 = new MannerEstimationStep41ViewModel();
             MannerEstimationStep42 = new MannerEstimationStep42ViewModel();
         }
+        public string SessionId { get; set; } = string.Empty;
         public bool IsCheckAnswer { get; set; } = false;
         public bool? IsCopyEstimate { get; set; }
         public int? CountryId { get; set; }

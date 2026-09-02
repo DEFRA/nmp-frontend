@@ -23,19 +23,19 @@
 @section BeforeContent {
     @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationDateChange&&!Model.IsComingForAddNewApplication)
     {
-        <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationDateChange&&!Model.IsComingForAddNewApplication)
     {
-        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
     }
     else if ((Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (Model.ApplicationMethodId == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
     {
-        <govuk-back-link asp-action=@backActionIfApplicationMethodInjection asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action=@backActionIfApplicationMethodInjection asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else
     {
-        <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }
 
     
@@ -48,7 +48,7 @@
                 <govuk-error-summary-item href="#">@TempData["ConditionsAffectingNutrientsError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="ConditionsAffectingNutrients" asp-controller="MannerEstimation" method="post" autocomplete="off">
+        <form asp-action="ConditionsAffectingNutrients" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <h1 class="govuk-heading-l">@Resource.lblConditionsAffectingTheLossOfNutrients</h1>
             <p class="govuk-body">

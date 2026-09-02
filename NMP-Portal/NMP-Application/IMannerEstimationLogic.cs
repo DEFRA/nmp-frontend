@@ -107,7 +107,10 @@ namespace NMP.Application
 
         Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId);
         Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId);
-        public MannerEstimationViewModel? GetMannerEstimationFromSession();
+        MannerEstimationViewModel? GetMannerEstimationFromSession(string? sessionId = null);
+        string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
+       // void RemoveMannerEstimationSession(string? sessionId = null);
+        string? GetCurrentSessionId();
         Task<(MannerEstimation?, Error?)> UpdateMannerEstimation(int MannerEstimationId);
         MannerEstimationStep36ViewModel GetMannerEstimationStep36();
         MannerEstimationStep36ViewModel SetMannerEstimationStep36(MannerEstimationStep36ViewModel mannerEstimationStep36);
@@ -129,7 +132,7 @@ namespace NMP.Application
         Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId);
         Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId);
         Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId);
-        void SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
+        //void SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
         Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationById(int mannerEstimateApplicationId);
         Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId);
         Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData();
@@ -146,7 +149,7 @@ namespace NMP.Application
         Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int mannerFarmId);
         Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation();
         bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId, int countryId);  
-        Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId);
+        Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId,string sid);
         MannerEstimationStep42ViewModel GetMannerEstimationStep42();
         MannerEstimationStep42ViewModel SetMannerEstimationStep42(MannerEstimationStep42ViewModel mannerEstimationStep42);
         Task<Error?> RemoveMannerFarms(string mannerFarmIds);

@@ -26,6 +26,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -84,9 +85,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> MannerHubPage(string? q, string? r, string? s)
+        public async Task<IActionResult> MannerHubPage(string? q, string? r, string? s, string? sid)
         {
-            RemoveMannerEstimationSession();
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
@@ -103,9 +103,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ViewBag.EncryptedMannerFarmId = _mannerEstimationProtector.Protect(mannerFarmId.ToString());
                     ViewBag.MannerEstimations = mannerEstimateList.OrderByDescending(x => x.ModifiedOn ?? x.CreatedOn).ToList();
                 }
-                ViewBag.MannerFarmId =q;
+                ViewBag.MannerFarmId = q;
 
-                await BindMannerEstimationSessionForHubPage(q, mannerFarmId);
+                await BindMannerEstimationSessionForHubPage(q, mannerFarmId, sid);
             }
             if (!string.IsNullOrWhiteSpace(r))
             {
@@ -120,21 +120,41 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return View();
             }
-            return RedirectToAction("Name");
+            return RedirectToAction("Name", new { sid = sid });
         }
 
-        private async Task BindMannerEstimationSessionForHubPage(string? q, int mannerFarmId)
+        private async Task BindMannerEstimationSessionForHubPage(string? q, int mannerFarmId, string sid)
         {
-            MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            if (mannerEstimationViewModel == null)
+            MannerEstimationViewModel? mannerEstimationViewModel = null;
+            if (string.IsNullOrWhiteSpace(sid))
             {
                 mannerEstimationViewModel = new MannerEstimationViewModel();
+                sid = _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
+                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
+
+
+            }
+            else
+            {
+                ViewBag.SessionId = sid;
+                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
+            }
+            if (mannerEstimationViewModel != null)
+            {
                 mannerEstimationViewModel.IsNewEstimate = true;
                 mannerEstimationViewModel.MannerFarmId = mannerFarmId;
                 mannerEstimationViewModel.EncryptedMannerFarmId = q;
                 _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
-                await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerFarmId);
+                await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerFarmId, sid);
             }
+            
+            //if (mannerEstimationViewModel != null)
+            //{
+            //    //    mannerEstimationViewModel = new MannerEstimationViewModel();
+            //}
+
+            // Pass SessionId to view for use in forms and links
+            ViewBag.SessionId = sid;
         }
 
         private void BindEncryptedIdForMannerHubPage(List<MannerEstimationSummaryViewModel> mannerEstimateList)
@@ -153,16 +173,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             if (mannerEstimationViewModel != null && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
             {
-                return RedirectToAction(_mannerHubPageAction, new { q = mannerEstimationViewModel.EncryptedMannerFarmId });
+                return RedirectToAction(_mannerHubPageAction, new { sid = mannerEstimationViewModel.SessionId, q = mannerEstimationViewModel.EncryptedMannerFarmId });
             }
             return RedirectToAction("MannerFarmList");
         }
 
-        private void RemoveMannerEstimationSession()
+        private void RemoveMannerEstimationSession(string sessionId)
         {
-            if (HttpContext.Session.Exists(_mannerEstimationSessionName))
+            //need to remove basd on session id
+            if (HttpContext.Session.Exists(sessionId))
             {
-                HttpContext.Session.Remove(_mannerEstimationSessionName);
+                HttpContext.Session.Remove(sessionId);
             }
         }
 
@@ -180,11 +201,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> FarmName()
+        [HttpGet("FarmName/{sid?}")]
+        public async Task<IActionResult> FarmName(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() action called");
-
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep1ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep1();
             (_, bool isAnyFarmExists) = await BindAllFarmList();
             if (isAnyFarmExists)
@@ -195,11 +216,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             BindMannerFarmNameAndIdOnNavigation();
             return View(model);
-        }             
+        }
 
-        [HttpPost]
+
+        [HttpPost("FarmName/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> FarmName(MannerEstimationStep1ViewModel model)
+        public async Task<IActionResult> FarmName([FromRoute] string? sessionId, MannerEstimationStep1ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() post action called");
             ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
@@ -210,7 +232,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.IsFarmCopied = true;
             }
-
+            BindSessionIdInViewBeg(sessionId);
             if (!ModelState.IsValid)
             {
                 BindMannerFarmNameAndIdOnNavigation();
@@ -221,7 +243,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             _mannerEstimationLogic.SetMannerEstimationStep1(model);
 
-            return RedirectToAction("Country");
+            return RedirectToAction("Country", new { sid = sessionId.ToString() });
         }
 
         private async Task ValidationForFarmName(MannerEstimationStep1ViewModel model)
@@ -238,11 +260,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Country(string? q)
+        [HttpGet("Country/{sid?}")]
+        public async Task<IActionResult> Country(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  Country() action called");
-
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
@@ -256,6 +278,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
+                var mannerEstimation = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
+                ViewBag.SessionId = mannerEstimation?.SessionId ?? sid;
                 ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
 
                 BindMannerFarmNameAndIdOnNavigation();
@@ -273,9 +297,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost]
+
+        [HttpPost("Country/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Country(MannerEstimationStep2ViewModel model)
+        public async Task<IActionResult> Country([FromRoute] string? sessionId, MannerEstimationStep2ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  Country() post action called");
 
@@ -285,7 +310,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     ModelState.AddModelError("CountryID", Resource.MsgSelectTheCountryTheFarmIsIn);
                 }
-
+                BindSessionIdInViewBeg(sessionId);
                 if (!ModelState.IsValid)
                 {
                     model = _mannerEstimationLogic.GetMannerEstimationStep2();
@@ -295,7 +320,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
                 await _mannerEstimationLogic.SetMannerEstimationStep2(model);
-                return RedirectToAction("PostCode");
+                //var currentSid = _mannerEstimationLogic.GetCurrentSessionId();
+                return RedirectToAction("PostCode", new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -311,14 +337,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> PostCode(string? q)
+        [HttpGet("PostCode/{sid?}")]
+        public async Task<IActionResult> PostCode(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  PostCode() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
             }
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep3ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep3();
 
             if (model == null)
@@ -330,9 +357,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation();
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("PostCode/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PostCode(MannerEstimationStep3ViewModel model)
+        public async Task<IActionResult> PostCode([FromRoute] string? sessionId, MannerEstimationStep3ViewModel model)
         {
 
             _logger.LogTrace($"{_mannerEstimationControllerForLog} PostCode() post action called");
@@ -342,7 +369,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
                 }
-
+                BindSessionIdInViewBeg(sessionId);
                 if (!ModelState.IsValid)
                 {
                     model = _mannerEstimationLogic.GetMannerEstimationStep3();
@@ -351,7 +378,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
 
                 await _mannerEstimationLogic.SetMannerEstimationStep3(model);
-                return RedirectToAction("AverageAnnualRainfall");
+                return RedirectToAction("AverageAnnualRainfall", new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -366,13 +393,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> AverageAnnualRainfall(string? q)
+        [HttpGet("AverageAnnualRainfall/{sid?}")]
+        public async Task<IActionResult> AverageAnnualRainfall(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() action called");
 
             try
             {
+                BindSessionIdInViewBeg(sid);
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     await BindFarmFieldOrCropDataUpdate(q);
@@ -401,12 +429,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("AverageAnnualRainfall/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AverageAnnualRainfall(MannerEstimationStep4ViewModel model)
+        public async Task<IActionResult> AverageAnnualRainfall([FromRoute] string? sessionId, MannerEstimationStep4ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() post action called");
-
+            BindSessionIdInViewBeg(sessionId);
 
             if (!ModelState.IsValid)
             {
@@ -415,15 +443,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("IsFarmOrganic");
+            return RedirectToAction("IsFarmOrganic", new { sid = sessionId });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> AverageAnnualRainfallManual()
+        [HttpGet("AverageAnnualRainfallManual/{sid?}")]
+        public async Task<IActionResult> AverageAnnualRainfallManual(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfallManual() action called");
             MannerEstimationStep4ViewModel model = await _mannerEstimationLogic.GetMannerEstimationStep4();
 
+            BindSessionIdInViewBeg(sid);
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AverageAnnualRainfallManual() action");
@@ -434,13 +463,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("AverageAnnualRainfallManual/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AverageAnnualRainfallManual(MannerEstimationStep4ViewModel model)
+        public async Task<IActionResult> AverageAnnualRainfallManual([FromRoute] string? sessionId, MannerEstimationStep4ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfallManual() post action called");
             ValidateRainfall(model);
-
+            BindSessionIdInViewBeg(sessionId);
 
             if (!ModelState.IsValid)
             {
@@ -450,7 +479,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             await _mannerEstimationLogic.SetMannerEstimationStep4(model);
 
-            return RedirectToAction("IsFarmOrganic");
+            return RedirectToAction("IsFarmOrganic", new { sid = sessionId });
         }
 
         private void ValidateRainfall(MannerEstimationStep4ViewModel model)
@@ -481,10 +510,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> FieldName(string? q)
+        [HttpGet("FieldName/{sid?}")]
+        public async Task<IActionResult> FieldName(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FieldName() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
@@ -501,12 +531,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("FieldName/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult FieldName(MannerEstimationStep5ViewModel model)
+        public IActionResult FieldName([FromRoute] string? sessionId, MannerEstimationStep5ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FieldName() post action called");
-
+            BindSessionIdInViewBeg(sessionId);
 
             if (string.IsNullOrWhiteSpace(model.FieldName))
             {
@@ -523,13 +553,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _mannerEstimationLogic.SetMannerEstimationStep5(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("NVZField");
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("NVZField", new { sid = sessionId });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> NVZField(string? q)
+        [HttpGet("NVZField/{sid?}")]
+        public async Task<IActionResult> NVZField(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} NVZField() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
@@ -545,12 +576,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("NVZField/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult NVZField(MannerEstimationStep6ViewModel model)
+        public IActionResult NVZField([FromRoute] string? sessionId, MannerEstimationStep6ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} NVZField() post action called");
-
+            BindSessionIdInViewBeg(sessionId);
 
             if (!model.IsWithinNVZ.HasValue)
             {
@@ -567,13 +598,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _mannerEstimationLogic.SetMannerEstimationStep6(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("TopSoil");
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("TopSoil", new { sid = sessionId });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> SoilType(string? q)
+        [HttpGet("SoilType/{sid?}")]
+        public async Task<IActionResult> SoilType(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilType() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
@@ -590,12 +622,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("SoilType/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SoilType(MannerEstimationStep7ViewModel model)
+        public async Task<IActionResult> SoilType([FromRoute] string? sessionId, MannerEstimationStep7ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilType() post action called");
-
+            BindSessionIdInViewBeg(sessionId);
             if (model.SoilTypeId == null)
             {
                 ModelState.AddModelError("SoilTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -611,16 +643,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             model = _mannerEstimationLogic.SetMannerEstimationStep7(model);
 
-            return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("CropGroup");
+            return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("CropGroup", new { sid = sessionId });
         }
-        [HttpGet]
-        public async Task<IActionResult> CropGroup(string? q)
+        [HttpGet("CropGroup/{sid?}")]
+        public async Task<IActionResult> CropGroup(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropGroup() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
             }
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep8ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep8();
 
             if (model == null)
@@ -633,12 +666,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("CropGroup/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CropGroup(MannerEstimationStep8ViewModel model)
+        public async Task<IActionResult> CropGroup([FromRoute] string? sessionId, MannerEstimationStep8ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropGroup() post action called");
-
+            BindSessionIdInViewBeg(sessionId);
 
             if (model.CropGroupId == null)
             {
@@ -657,18 +690,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = _mannerEstimationLogic.SetMannerEstimationStep8(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsCropGroupChange) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("CropType");
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsCropGroupChange) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("CropType", new { sid = sessionId });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CropType(string? q)
+        [HttpGet("CropType/{sid?}")]
+        public async Task<IActionResult> CropType(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropType() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
             }
-
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep9ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep9();
             if (model == null)
             {
@@ -680,13 +713,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("CropType/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CropType(MannerEstimationStep9ViewModel model)
+        public async Task<IActionResult> CropType([FromRoute] string? sessionId, MannerEstimationStep9ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropType() post action called");
 
-
+            BindSessionIdInViewBeg(sessionId);
             if (model.CropTypeId == null)
             {
                 ModelState.AddModelError("CropTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -706,11 +739,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (model.CropTypeId != null && Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), model.CropTypeId) && model.IsCropTypeChange)
             {
-                return RedirectToAction("SowingDate");
+                return RedirectToAction("SowingDate", new { sid = sessionId });
             }
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("ManureGroup");
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("ManureGroup", new { sid = sessionId });
         }
 
         [HttpGet]
@@ -748,15 +781,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("ManureGroup");
         }
-        [HttpGet]
-        public async Task<IActionResult> ManureGroup(string? q, string? r, string? s)
+        [HttpGet("ManureGroup/{sid?}")]
+        public async Task<IActionResult> ManureGroup(string? sid, string? q, string? r, string? s)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureGroup() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
             }
-
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep11ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep11();
             if (model == null)
             {
@@ -802,21 +835,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("ManureGroup/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ManureGroup(MannerEstimationStep11ViewModel model)
+        public async Task<IActionResult> ManureGroup([FromRoute] string? sessionId, MannerEstimationStep11ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureGroup() post action called");
-
+            BindSessionIdInViewBeg(sessionId);
 
             if (model.ManureGroupId == null)
             {
                 ModelState.AddModelError("ManureGroupId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             Error? error = null;
+            BindMannerFarmNameAndIdOnNavigation();
             if (!ModelState.IsValid)
             {
-                BindMannerFarmNameAndIdOnNavigation();
                 model = _mannerEstimationLogic.GetMannerEstimationStep11();
                 (List<SelectListItem> manureGroupList, error) = await FetchManureGroup();
                 if (error == null)
@@ -840,7 +873,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction(_updateApplicationDataActionName);
             }
-            return RedirectToAction("ManureType");
+            return RedirectToAction("ManureType", new { sid = sessionId });
         }
         private async Task<(List<SelectListItem>, Error?)> FetchManureGroup()
         {
@@ -872,15 +905,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return (selectListItems, error);
         }
-        [HttpGet]
-        public async Task<IActionResult> ManureType(string? q)
+        [HttpGet("ManureType/{sid?}")]
+        public async Task<IActionResult> ManureType(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureType() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
             }
-
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep12ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep12();
             if (model == null)
             {
@@ -896,21 +929,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("ManureType/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ManureType(MannerEstimationStep12ViewModel model)
+        public async Task<IActionResult> ManureType([FromRoute] string? sessionId, MannerEstimationStep12ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureType() post action called");
-
+            BindSessionIdInViewBeg(sessionId);
 
             if (model.ManureTypeId == null)
             {
                 ModelState.AddModelError("ManureTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             Error? error = null;
+            BindMannerFarmNameAndIdOnNavigation();
             if (!ModelState.IsValid)
             {
-                BindMannerFarmNameAndIdOnNavigation();
+
                 model = _mannerEstimationLogic.GetMannerEstimationStep12();
                 (List<SelectListItem> manureTypeList, error) = await FetchManureType(model);
                 if (error == null)
@@ -931,7 +965,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = _mannerEstimationLogic.SetMannerEstimationStep12(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && !model.IsComingForAddNewApplication) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationDate");
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && !model.IsComingForAddNewApplication) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationDate", new { sid = sessionId });
         }
         public static (DateTime StartDate, DateTime EndDate) GetHarvestYear(DateTime date)
         {
@@ -970,15 +1004,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return (true, null, null);
         }
-        [HttpGet]
-        public async Task<IActionResult> ApplicationDate(string? q)
+        [HttpGet("ApplicationDate/{sid?}")]
+        public async Task<IActionResult> ApplicationDate( string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationDate() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
             }
-
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep13ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep13();
             if (model == null)
             {
@@ -1015,9 +1049,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation();
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("ApplicationDate/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ApplicationDate(MannerEstimationStep13ViewModel formData)
+        public async Task<IActionResult> ApplicationDate([FromRoute] string? sessionId, MannerEstimationStep13ViewModel formData)
         {
             _logger.LogTrace($"Manner Estimation Controller : ApplicationDate() post action called");
             MannerEstimationStep13ViewModel model = new MannerEstimationStep13ViewModel();
@@ -1025,10 +1059,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 AddErrorIfNull(formData.ApplicationDate, _applicationDateKey, Resource.MsgEnterADateBeforeContinuing);
                 await ValidateApplicationDate(formData);
+                BindMannerFarmNameAndIdOnNavigation();
+                BindSessionIdInViewBeg(sessionId);
 
                 if (!ModelState.IsValid)
                 {
-                    BindMannerFarmNameAndIdOnNavigation();
                     model = _mannerEstimationLogic.GetMannerEstimationStep13();
                     model.ApplicationDate = formData.ApplicationDate;
                     return View(model);
@@ -1061,7 +1096,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return RedirectToAction(_conditionsAffectingNutrients);
                 }
 
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationMethod");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("ApplicationMethod", new { sid = sessionId });
             }
             catch (Exception ex)
             {
@@ -1266,11 +1301,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             int currentApplicationId = 0;
-            if(!string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId))
-            { 
+            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerApplicationsId))
+            {
                 currentApplicationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerApplicationsId));
             }
-            
+
             (List<MannerEstimationApplication> mannerApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId ?? 0);
             mannerApplications = mannerApplications.Where(x => x.ID != currentApplicationId).ToList();
             if (mannerApplications.Count > 0 && model.ApplicationDate != null)
@@ -1278,7 +1313,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 var mannerApplicationWithin21Days = mannerApplications.FirstOrDefault(x =>
                 (model.ApplicationDate.Value - x.ApplicationDate).TotalDays >= 0 &&
                 (model.ApplicationDate.Value - x.ApplicationDate).TotalDays <= 21);
-                if(mannerApplicationWithin21Days != null)
+                if (mannerApplicationWithin21Days != null)
                 {
                     (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(mannerApplicationWithin21Days.ManureTypeID ?? 0);
                     if (manureType != null && manureType.ManureGroupId == (int)NMP.Commons.Enums.ManureGroup.LivestockManure)
@@ -1487,15 +1522,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError(key, errorMessage);
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> CopyExistingFarmAndFieldDetails()
+        [HttpGet("CopyExistingFarmAndFieldDetails/{sid?}")]
+        public async Task<IActionResult> CopyExistingFarmAndFieldDetails(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyExistingFarmAndFieldDetails() action called");
             MannerEstimationStep14ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep14();
             ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
             try
             {
-
+                BindSessionIdInViewBeg(sid);
                 if (model == null)
                 {
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyExistingFarmAndFieldDetails() action");
@@ -1509,7 +1544,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmNameKey);
+                    return RedirectToAction(_farmNameKey, new {sid=sid});
                 }
 
             }
@@ -1525,14 +1560,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("CopyExistingFarmAndFieldDetails/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CopyExistingFarmAndFieldDetails(MannerEstimationStep14ViewModel model)
+        public async Task<IActionResult> CopyExistingFarmAndFieldDetails([FromRoute] string? sessionId, MannerEstimationStep14ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyExistingFarmAndFieldDetails() post action called");
             try
             {
                 ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
+                BindSessionIdInViewBeg(sessionId);
 
                 if (!model.IsCopyExistingFarmAndFieldDetails.HasValue)
                 {
@@ -1553,7 +1589,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     action = "FarmToCopy";
                 }
 
-                return model.IsCheckAnswer ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(action);
+                return model.IsCheckAnswer ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(action, new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -1594,13 +1630,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (farmsWithFields, isAnyFarmExists);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> FarmToCopy()
+        [HttpGet("FarmToCopy/{sid?}")]
+        public async Task<IActionResult> FarmToCopy(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FarmToCopy() action called");
             MannerEstimationStep15ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep15();
             try
             {
+                BindSessionIdInViewBeg(sid);
                 (List<SelectListItem> farmsWithFields, bool isAnyFarmExists) = await BindAllFarmList();
                 if (isAnyFarmExists)
                 {
@@ -1620,9 +1657,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("FarmToCopy/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> FarmToCopy(MannerEstimationStep15ViewModel model)
+        public async Task<IActionResult> FarmToCopy([FromRoute] string? sessionId, MannerEstimationStep15ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FarmToCopy() post action called");
             try
@@ -1642,6 +1679,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         ModelState.AddModelError("FarmId", Resource.MsgFarmNameAlreadyExist);
                     }
                 }
+                BindSessionIdInViewBeg(sessionId);
                 if (!ModelState.IsValid)
                 {
                     MannerEstimationStep15ViewModel mannerEstimationStep15ViewModel = _mannerEstimationLogic.GetMannerEstimationStep15();
@@ -1658,7 +1696,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 model = _mannerEstimationLogic.SetMannerEstimationStep15(model);
 
-                return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("FieldToCopy");
+                return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("FieldToCopy", new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -1687,13 +1725,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return fieldList;
         }
-        [HttpGet]
-        public async Task<IActionResult> FieldToCopy()
+        [HttpGet("FieldToCopy/{sid?}")]
+        public async Task<IActionResult> FieldToCopy(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FieldToCopy() action called");
             MannerEstimationStep16ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep16();
             try
             {
+                BindSessionIdInViewBeg(sid);
                 List<SelectListItem> fieldList = await BindAllFieldList(model.FarmId.Value);
                 if (fieldList.Count > 0)
                 {
@@ -1712,13 +1751,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
-        [HttpPost]
+        [HttpPost("FieldToCopy/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> FieldToCopy(MannerEstimationStep16ViewModel model)
+        public async Task<IActionResult> FieldToCopy([FromRoute] string? sessionId, MannerEstimationStep16ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FieldToCopy() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 if (!model.FieldId.HasValue)
                 {
                     ModelState.AddModelError("FieldId", string.Format(Resource.MsgSelectAnJourneyName, Resource.lblField));
@@ -1741,7 +1781,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     await _mannerEstimationLogic.CopiedFarmAndFieldData(mannerEstimationStep15ViewModel.FarmId.Value, model.FieldId.Value);
                 }
-                return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("CropGroup");
+                return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("CropGroup", new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -1755,14 +1795,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
-        [HttpGet]
-        public async Task<IActionResult> IsFarmOrganic(string? q)
+        [HttpGet("IsFarmOrganic/{sid?}")]
+        public async Task<IActionResult> IsFarmOrganic(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  IsFarmOrganic() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
             }
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep17ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep17();
             if (model == null)
             {
@@ -1775,9 +1816,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("IsFarmOrganic/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IsFarmOrganic(MannerEstimationStep17ViewModel model)
+        public async Task<IActionResult> IsFarmOrganic([FromRoute] string? sessionId, MannerEstimationStep17ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  IsFarmOrganic() post action called");
             try
@@ -1786,17 +1827,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     ModelState.AddModelError("IsFarmOrganic", Resource.MsgSelectWhetherYouAreARegisteredOrganicProducer);
                 }
+                BindSessionIdInViewBeg(sessionId);
+                BindMannerFarmNameAndIdOnNavigation();
 
                 if (!ModelState.IsValid)
                 {
-                    BindMannerFarmNameAndIdOnNavigation();
                     model = _mannerEstimationLogic.GetMannerEstimationStep17();
                     return View(model);
                 }
 
                 _mannerEstimationLogic.SetMannerEstimationStep17(model);
 
-                return RedirectToAction("FieldName");
+                return RedirectToAction("FieldName", new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -1822,14 +1864,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }).ToList();
 
         }
-        [HttpGet]
-        public async Task<IActionResult> TopSoil(string? q)
+        [HttpGet("TopSoil/{sid?}")]
+        public async Task<IActionResult> TopSoil(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  TopSoil() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
             }
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep18ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep18();
             try
             {
@@ -1849,21 +1892,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("TopSoil/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TopSoil(MannerEstimationStep18ViewModel model)
+        public async Task<IActionResult> TopSoil([FromRoute] string? sessionId, MannerEstimationStep18ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  TopSoil() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 if (!model.TopSoilId.HasValue)
                 {
                     ModelState.AddModelError("TopSoilId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
 
+                BindMannerFarmNameAndIdOnNavigation();
                 if (!ModelState.IsValid)
                 {
-                    BindMannerFarmNameAndIdOnNavigation();
                     model = _mannerEstimationLogic.GetMannerEstimationStep18();
                     await BindAllTopsoilList();
                     return View(model);
@@ -1872,7 +1916,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _mannerEstimationLogic.SetMannerEstimationStep18(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("SubSoil");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("SubSoil", new { sid = sessionId });
             }
             catch (Exception ex)
             {
@@ -1915,10 +1959,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }).ToList();
 
         }
-        [HttpGet]
-        public async Task<IActionResult> SubSoil(string? q)
+        [HttpGet("SubSoil/{sid?}")]
+        public async Task<IActionResult> SubSoil(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  SubSoil() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
@@ -1941,29 +1986,30 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
-        [HttpPost]
+        [HttpPost("SubSoil/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubSoil(MannerEstimationStep19ViewModel model)
+        public async Task<IActionResult> SubSoil([FromRoute] string? sessionId, MannerEstimationStep19ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  SubSoil() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 if (!model.SubSoilId.HasValue)
                 {
                     ModelState.AddModelError("SubSoilId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+                BindMannerFarmNameAndIdOnNavigation();
 
                 if (!ModelState.IsValid)
                 {
                     model = _mannerEstimationLogic.GetMannerEstimationStep19();
                     await BindAllSubsoilList();
-                    BindMannerFarmNameAndIdOnNavigation();
                     return View(model);
                 }
                 _mannerEstimationLogic.SetMannerEstimationStep19(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("CropGroup");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("CropGroup", new { sid = sessionId });
             }
             catch (Exception ex)
             {
@@ -1971,10 +2017,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
-        [HttpGet]
-        public async Task<IActionResult> SowingDate(string? q)
+        [HttpGet("SowingDate/{sid?}")]
+        public async Task<IActionResult> SowingDate(string? sid, string? q)
         {
             _logger.LogTrace("Crop Controller : SowingDate action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
@@ -1997,14 +2044,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("SowingDate/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SowingDate(MannerEstimationStep20ViewModel model)
+        public async Task<IActionResult> SowingDate([FromRoute] string? sessionId, MannerEstimationStep20ViewModel model)
         {
             _logger.LogTrace("Manner estimation Controller : SowingDate() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 model = await ValidateSowingDatePost(model);
+                BindMannerFarmNameAndIdOnNavigation();
                 if (model.SowingDate != null)
                 {
                     ValidateCropSpecificRules(model);
@@ -2013,13 +2062,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (!ModelState.IsValid)
                 {
                     model = _mannerEstimationLogic.GetMannerEstimationStep20();
-                    BindMannerFarmNameAndIdOnNavigation();
                     return View(model);
                 }
 
                 model = await _mannerEstimationLogic.SetMannerEstimationStep20(model);
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("ManureGroup");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("ManureGroup", new { sid = sessionId });
 
             }
             catch (Exception ex)
@@ -2091,10 +2139,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return applicationMethodList;
         }
-        [HttpGet]
-        public async Task<IActionResult> ApplicationMethod(string? q)
+        [HttpGet("ApplicationMethod/{sid?}")]
+        public async Task<IActionResult> ApplicationMethod(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationMethod() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -2114,30 +2163,31 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.ApplicationMethodId = applicationMethodList[0].ID;
                 await _mannerEstimationLogic.SetMannerEstimationStep23(model);
-                return RedirectToAction("DefaultNutrientValues");
+                return RedirectToAction("DefaultNutrientValues", new {sid=sid});
             }
             await _mannerEstimationLogic.SetMannerEstimationStep23(model);
 
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("ApplicationMethod/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ApplicationMethod(MannerEstimationStep23ViewModel model)
+        public async Task<IActionResult> ApplicationMethod([FromRoute] string? sessionId, MannerEstimationStep23ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  ApplicationMethod() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 if (!model.ApplicationMethodId.HasValue)
                 {
                     ModelState.AddModelError("ApplicationMethodId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+                BindMannerFarmNameAndIdOnNavigation();
 
                 if (!ModelState.IsValid)
                 {
                     BindMannerFarmNameAndIdOnNavigation();
                     model = _mannerEstimationLogic.GetMannerEstimationStep23();
-                    await BindViewBegForApplicationMethod(model);
                     return View(model);
                 }
 
@@ -2145,10 +2195,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange && model.IsApplicationMethodChange)
                 {
-                    return RedirectToAction("IncorporationMethod");
+                    return RedirectToAction("IncorporationMethod", new { sid = sessionId });
                 }
 
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("DefaultNutrientValues");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("DefaultNutrientValues", new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -2162,10 +2212,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
-        [HttpGet]
-        public async Task<IActionResult> DefaultNutrientValues(string? q)
+        [HttpGet("DefaultNutrientValues/{sid?}")]
+        public async Task<IActionResult> DefaultNutrientValues(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} DefaultNutrientValues() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -2181,13 +2232,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation();
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("DefaultNutrientValues/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DefaultNutrientValues(MannerEstimationStep24ViewModel model)
+        public async Task<IActionResult> DefaultNutrientValues([FromRoute] string? sessionId, MannerEstimationStep24ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  DefaultNutrientValues() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
+                BindMannerFarmNameAndIdOnNavigation();
                 if (!model.DefaultNutrientValue.HasValue)
                 {
                     ModelState.AddModelError("DefaultNutrientValue", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -2196,7 +2249,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (!ModelState.IsValid)
                 {
                     model = await _mannerEstimationLogic.GetMannerEstimationStep24();
-                    BindMannerFarmNameAndIdOnNavigation();
                     return View(model);
                 }
 
@@ -2210,11 +2262,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     {
                         isDefaultValue = false;
                     }
-                    return RedirectToAction(_manualNutrientValuesKey, new { r = !isDefaultValue ? _mannerEstimationProtector.Protect(isDefaultValue.ToString()) : null });
+                    return RedirectToAction(_manualNutrientValuesKey, new { sid = sessionId, r = !isDefaultValue ? _mannerEstimationProtector.Protect(isDefaultValue.ToString()) : null });
                 }
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction, new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -2362,10 +2414,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     string.Format(Resource.MsgMinMaxValidation, displayName, max));
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> ManualNutrientValues(string? q, string? r)
+        [HttpGet("ManualNutrientValues/{sid?}")]
+        public async Task<IActionResult> ManualNutrientValues(string? sid, string? q, string? r)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManualNutrientValues() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -2384,17 +2437,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation();
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("ManualNutrientValues/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ManualNutrientValues(MannerEstimationStep25ViewModel model)
+        public async Task<IActionResult> ManualNutrientValues([FromRoute] string? sessionId, MannerEstimationStep25ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  ManualNutrientValues() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
+                BindMannerFarmNameAndIdOnNavigation();
                 if (!ModelState.IsValid)
                 {
                     model = await _mannerEstimationLogic.GetMannerEstimationStep25(false);
-                    BindMannerFarmNameAndIdOnNavigation();
                     ValidateManualNutrientValues();
                 }
 
@@ -2412,7 +2466,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_applicationRateMethodAction, new { sid = sessionId });
             }
             catch (Exception ex)
             {
@@ -2455,10 +2509,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ReplaceNumericError(_mgOKey, Resource.lblMgO, Resource.lblMagnesiumMgO);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ApplicationRateMethod(string? q)
+        [HttpGet("ApplicationRateMethod/{sid?}")]
+        public async Task<IActionResult> ApplicationRateMethod(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationRateMethod() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -2477,23 +2532,24 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("ApplicationRateMethod/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ApplicationRateMethod(MannerEstimationStep26ViewModel formData)
+        public async Task<IActionResult> ApplicationRateMethod([FromRoute] string? sessionId, MannerEstimationStep26ViewModel formData)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} : ApplicationRateMethod() post action called");
             MannerEstimationStep26ViewModel model = new MannerEstimationStep26ViewModel();
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 AddErrorIfNull(formData.ApplicationRateMethod, _applicationRateMethodAction, Resource.MsgSelectAnOptionBeforeContinuing);
+                BindMannerFarmNameAndIdOnNavigation();
                 if (!ModelState.IsValid)
                 {
                     ViewBag.IsBack = _mannerEstimationProtector.Protect(true.ToString());
                     formData = await _mannerEstimationLogic.GetMannerEstimationStep26();
-                    BindMannerFarmNameAndIdOnNavigation();
                     return View(_applicationRateMethodAction, formData);
                 }
-                (bool flowControl, IActionResult value) = RedirectForApplicationRateMethod(formData);
+                (bool flowControl, IActionResult value) = RedirectForApplicationRateMethod(formData,sessionId);
                 if (!flowControl)
                 {
                     await _mannerEstimationLogic.SetMannerEstimationStep26(formData);
@@ -2525,10 +2581,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     }
                     model.IsWarningMsgNeedToShow = false;
                     model = await _mannerEstimationLogic.SetMannerEstimationStep26(model);
-                    return RedirectAfterApplicationRateMethod(mannerEstimationViewModel, model);
+                    return RedirectAfterApplicationRateMethod(mannerEstimationViewModel, model, sessionId);
                 }
                 model = await _mannerEstimationLogic.SetMannerEstimationStep26(model);
-                return RedirectAfterApplicationRateMethod(mannerEstimationViewModel, model);
+                return RedirectAfterApplicationRateMethod(mannerEstimationViewModel, model, sessionId);
             }
             catch (Exception ex)
             {
@@ -2538,22 +2594,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        private IActionResult RedirectAfterApplicationRateMethod(MannerEstimationViewModel? mannerEstimationViewModel, MannerEstimationStep26ViewModel model)
+        private IActionResult RedirectAfterApplicationRateMethod(MannerEstimationViewModel? mannerEstimationViewModel, MannerEstimationStep26ViewModel model, string sessionId)
         {
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange)
                 ? RedirectToAction(_updateApplicationDataActionName)
-                : RedirectToAction(_incorporationMethodAction);
+                : RedirectToAction(_incorporationMethodAction, new { sid = sessionId });
         }
 
-        private (bool flowControl, IActionResult value) RedirectForApplicationRateMethod(MannerEstimationStep26ViewModel model)
+        private (bool flowControl, IActionResult value) RedirectForApplicationRateMethod(MannerEstimationStep26ViewModel model,string sid)
         {
             if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
             {
-                return (flowControl: false, value: RedirectToAction("ManualApplicationRate"));
+                return (flowControl: false, value: RedirectToAction("ManualApplicationRate", new {sid=sid}));
             }
             if (model.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
             {
-                return (flowControl: false, value: RedirectToAction("AreaQuantity"));
+                return (flowControl: false, value: RedirectToAction("AreaQuantity", new { sid = sid }));
             }
 
             return (flowControl: true, value: null);
@@ -2583,10 +2639,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return manureId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
                 || manureId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
         }
-        [HttpGet]
-        public async Task<IActionResult> ManualApplicationRate(string? q)
+        [HttpGet("ManualApplicationRate/{sid?}")]
+        public async Task<IActionResult> ManualApplicationRate(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManualApplicationRate() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -2603,20 +2660,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation();
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("ManualApplicationRate/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ManualApplicationRate(MannerEstimationStep27ViewModel formData)
+        public async Task<IActionResult> ManualApplicationRate([FromRoute] string? sessionId, MannerEstimationStep27ViewModel formData)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} : ManualApplicationRate() post action called");
             MannerEstimationStep27ViewModel model = new MannerEstimationStep27ViewModel();
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 AddErrorIfNull(formData.ApplicationRate, _applicationRateKey, string.Format(Resource.MsgEnterTheValueBeforeContinuing, Resource.lblApplicationRate));
                 ValidateManualApplicationRate(formData);
+                BindMannerFarmNameAndIdOnNavigation();
                 if (!ModelState.IsValid)
                 {
                     formData = await _mannerEstimationLogic.GetMannerEstimationStep27();
-                    BindMannerFarmNameAndIdOnNavigation();
                     return View(formData);
                 }
                 model = await _mannerEstimationLogic.GetMannerEstimationStep27();
@@ -2655,7 +2713,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerEstimationLogic.SetMannerEstimationStep27(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_incorporationMethodAction);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_incorporationMethodAction, new { sid = sessionId });
             }
             catch (Exception ex)
             {
@@ -2692,10 +2750,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model.IsEndClosedPeriodFebruaryWarning = false;
             model.IsStartClosedPeriodEndFebWarning = false;
         }
-        [HttpGet]
-        public async Task<IActionResult> AreaQuantity(string? q)
+        [HttpGet("AreaQuantity/{sid?}")]
+        public async Task<IActionResult> AreaQuantity(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AreaQuantity() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -2712,21 +2771,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation();
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("AreaQuantity/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AreaQuantity(MannerEstimationStep28ViewModel formData)
+        public async Task<IActionResult> AreaQuantity([FromRoute] string? sessionId, MannerEstimationStep28ViewModel formData)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} : AreaQuantity() post action called");
             MannerEstimationStep28ViewModel model = new MannerEstimationStep28ViewModel();
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 AddErrorIfNull(formData.AreaSpread, "AreaSpread", string.Format(Resource.MsgEnterAValidArea, Resource.lblArea));
                 AddErrorIfNull(formData.ManureQuantity, "ManureQuantity", string.Format(Resource.MsgEnterAValidQuantity, Resource.lblQuantity));
                 ValidateAreaQuantity(formData);
+                BindMannerFarmNameAndIdOnNavigation();
 
                 if (!ModelState.IsValid)
                 {
-                    BindMannerFarmNameAndIdOnNavigation();
                     formData = await _mannerEstimationLogic.GetMannerEstimationStep28();
                     return View("AreaQuantity", formData);
                 }
@@ -2771,7 +2831,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = await _mannerEstimationLogic.SetMannerEstimationStep28(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_incorporationMethodAction);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_incorporationMethodAction, new { sid = sessionId });
 
             }
             catch (Exception ex)
@@ -2903,8 +2963,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CopyEstimate()
+        [HttpGet("CopyEstimate/{sid?}")]
+        public async Task<IActionResult> CopyEstimate(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyEstimate() action called");
 
@@ -2926,6 +2986,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     isEstimateExist = estimations.Count > 0;
                 }
 
+                BindSessionIdInViewBeg(sid);
                 if (isEstimateExist)
                 {
                     return View(model);
@@ -2948,9 +3009,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost]
+
+        [HttpPost("CopyEstimate/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public IActionResult CopyEstimate(MannerEstimationStep21ViewModel model)
+        public IActionResult CopyEstimate([FromRoute] string? sessionId, MannerEstimationStep21ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyEstimate() post action called");
 
@@ -2961,6 +3023,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ModelState.AddModelError("IsCopyEstimate", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
 
+                BindSessionIdInViewBeg(sessionId);
                 if (!ModelState.IsValid)
                 {
                     model = _mannerEstimationLogic.GetMannerEstimationStep21();
@@ -2988,8 +3051,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CopyFromEstimates()
+        [HttpGet("CopyFromEstimates/{sid?}")]
+        public async Task<IActionResult> CopyFromEstimates(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyFromEstimates() action called");
 
@@ -3002,6 +3065,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyFromEstimates() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
+                BindSessionIdInViewBeg(ViewBag.SessionId);
                 await LoadMannerEstimations();
                 return View(model);
             }
@@ -3017,14 +3081,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("CopyFromEstimates/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CopyFromEstimates(MannerEstimationStep22ViewModel model)
+        public async Task<IActionResult> CopyFromEstimates([FromRoute] string? sessionId, MannerEstimationStep22ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyFromEstimates() post action called");
 
             try
             {
+                BindSessionIdInViewBeg(ViewBag.SessionId);
                 if (model.MannerEstimationId == null)
                 {
                     ModelState.AddModelError("MannerEstimationId", Resource.MsgSelectAnEstimateToContinue);
@@ -3041,7 +3106,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 //call copy api to copy the selected estimate to current estimate
 
 
-                return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("Name");
+                return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("Name", new { sessionId = ViewBag.SessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -3057,7 +3122,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MannerEstimationResult(string? q, string? r, string? s)
+        public async Task<IActionResult> MannerEstimationResult(string? q, string? r, string? s, string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  MannerEstimationResult() action called");
             if (!string.IsNullOrWhiteSpace(q))
@@ -3072,8 +3137,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return RedirectToAction(_mannerHubPageAction);
                 }
                 ViewBag.MannerFarmName = mannerEstimationResultResponse.MannerFarm.Name;
-                ViewBag.MannerFarmId =_mannerEstimationProtector.Protect(mannerEstimationResultResponse.MannerFarm.ID.ToString());
-                await BindViewBegForMannerEstimationResult(mannerEstimationResultResponse);
+                ViewBag.MannerFarmId = _mannerEstimationProtector.Protect(mannerEstimationResultResponse.MannerFarm.ID.ToString());
+                await BindViewBegForMannerEstimationResult(mannerEstimationResultResponse,sid);
             }
             if (!string.IsNullOrWhiteSpace(r))
             {
@@ -3088,9 +3153,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        private async Task BindViewBegForMannerEstimationResult(MannerEstimationResultResponse? mannerEstimationResultResponse)
+        private async Task BindViewBegForMannerEstimationResult(MannerEstimationResultResponse? mannerEstimationResultResponse,string sid)
         {
-            RemoveMannerEstimationSession();
             int nitrogenValue = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.NitrogenValue);
             int p2O5Value = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.PhosphateValue);
             int potashValue = mannerEstimationResultResponse.MannerEstimationApplication.Sum(x => x.PotashValue);
@@ -3133,14 +3197,27 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             ViewBag.EncryptedPotashId =
                 _mannerEstimationProtector.Protect(((int)NMP.Commons.Enums.MannerNutrients.Potassium).ToString());
-            MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            if (mannerEstimationViewModel == null)
+            MannerEstimationViewModel? mannerEstimationViewModel = null;
+            if (string.IsNullOrWhiteSpace(sid))
             {
                 mannerEstimationViewModel = new MannerEstimationViewModel();
+                sid= _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
+                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
+                
+
+            }
+            else
+            {
+                ViewBag.SessionId = sid;
+                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();                
+            }
+            if (mannerEstimationViewModel != null)
+            {
+                mannerEstimationViewModel.IsNewEstimate = false;
                 mannerEstimationViewModel.EncryptedMannerFarmId = encryptedMannerFarmId;
                 _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
             }
-            await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0);
+            await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0, sid);
         }
 
         private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application, string manureUnit)
@@ -3195,10 +3272,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return (incorporationMethods, error);
         }
-        [HttpGet]
-        public async Task<IActionResult> IncorporationMethod(string? q)
+        [HttpGet("IncorporationMethod/{sid?}")]
+        public async Task<IActionResult> IncorporationMethod(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} IncorporationMethod() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -3222,20 +3300,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.IncorporationMethodId = incorporationMethods[0].ID;
                 _mannerEstimationLogic.SetMannerEstimationStep29(model);
-                return RedirectToAction("IncorporationDelay");
+                return RedirectToAction("IncorporationDelay", new { sid = sid });
             }
             _mannerEstimationLogic.SetMannerEstimationStep29(model);
 
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("IncorporationMethod/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IncorporationMethod(MannerEstimationStep29ViewModel model)
+        public async Task<IActionResult> IncorporationMethod([FromRoute] string? sessionId, MannerEstimationStep29ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  IncorporationMethod() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
+                BindMannerFarmNameAndIdOnNavigation();
                 if (!model.IncorporationMethodId.HasValue)
                 {
                     ModelState.AddModelError("IncorporationMethodId", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -3243,7 +3323,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    BindMannerFarmNameAndIdOnNavigation();
                     model = _mannerEstimationLogic.GetMannerEstimationStep29();
                     (_, Error? error) = await BindViewBegForIncorporationMethod(model);
                     if (error != null)
@@ -3256,7 +3335,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = _mannerEstimationLogic.SetMannerEstimationStep29(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && !model.IsIncorporationMethodChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("IncorporationDelay");
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange && !model.IsIncorporationMethodChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction("IncorporationDelay", new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -3305,10 +3384,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return (incorporationDelaysList, error);
         }
-        [HttpGet]
-        public async Task<IActionResult> IncorporationDelay(string? q)
+        [HttpGet("IncorporationDelay/{sid?}")]
+        public async Task<IActionResult> IncorporationDelay(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} IncorporationDelay() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -3333,19 +3413,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.IncorporationDelayId = incorporationDelaysList[0].ID;
                 model = _mannerEstimationLogic.SetMannerEstimationStep30(model);
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new {sid=sid});
             }
             _mannerEstimationLogic.SetMannerEstimationStep30(model);
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("IncorporationDelay/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IncorporationDelay(MannerEstimationStep30ViewModel model)
+        public async Task<IActionResult> IncorporationDelay([FromRoute] string? sessionId, MannerEstimationStep30ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  IncorporationDelay() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
+                BindMannerFarmNameAndIdOnNavigation();
                 if (!model.IncorporationDelayId.HasValue)
                 {
                     ModelState.AddModelError("IncorporationDelayId", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -3353,7 +3435,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    BindMannerFarmNameAndIdOnNavigation();
                     model = _mannerEstimationLogic.GetMannerEstimationStep30();
                     (_, Error? error) = await BindViewBegForIncorporationDelay(model);
                     if (error != null)
@@ -3367,7 +3448,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model = _mannerEstimationLogic.SetMannerEstimationStep30(model);
 
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -3382,14 +3463,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Name(string? q, string? r, string? s)
+        [HttpGet("Name/{sid?}")]
+        public async Task<IActionResult> Name(string? sid, string? q, string? r, string? s)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} Name() action called");
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindFarmFieldOrCropDataUpdate(q);
             }
+            BindSessionIdInViewBeg(sid);
 
             MannerEstimationStep31ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep31();
             if (!string.IsNullOrWhiteSpace(s))
@@ -3409,9 +3491,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        private void BindSessionIdInViewBeg(string? sid)
+        {
+            if (!string.IsNullOrWhiteSpace(sid))
+            {
+                ViewBag.SessionId = sid;
+            }
+        }
+
+        [HttpPost("Name/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Name(MannerEstimationStep31ViewModel model)
+        public async Task<IActionResult> Name([FromRoute] string? sessionId, MannerEstimationStep31ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() post action called");
             ViewBag.IsBack = _mannerEstimationProtector.Protect(Resource.lblTrue);
@@ -3422,6 +3512,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.IsAnyFarmExist = mannerEstimationStep31ViewModel.IsAnyFarmExist;
             }
+            BindSessionIdInViewBeg(sessionId);
+            BindMannerFarmNameAndIdOnNavigation();
             model = _mannerEstimationLogic.SetMannerEstimationStep31(model);
             if (!ModelState.IsValid)
             {
@@ -3454,7 +3546,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     {
                         q = mannerEstimationViewModel.EncryptedMannerFarmId,
                         r = _mannerEstimationProtector.Protect(Resource.lblTrue),
-                        s = _mannerEstimationProtector.Protect(Resource.lblTrue),
+                        s = _mannerEstimationProtector.Protect(Resource.lblTrue),//nned to pass guid
 
                     });
                 }
@@ -3465,7 +3557,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
 
-            return RedirectToAction(action);
+            return RedirectToAction(action, new { sid = sessionId });
         }
 
         private (bool flowControl, IActionResult? value) RedirectForName(MannerEstimationStep31ViewModel model)
@@ -3533,10 +3625,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return null;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> AutumnCropNitrogenUptake(string? q)
+        [HttpGet("AutumnCropNitrogenUptake/{sid?}")]
+        public async Task<IActionResult> AutumnCropNitrogenUptake(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AutumnCropNitrogenUptake() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -3547,11 +3640,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("AutumnCropNitrogenUptake/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AutumnCropNitrogenUptake(MannerEstimationStep32ViewModel model)
+        public async Task<IActionResult> AutumnCropNitrogenUptake([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AutumnCropNitrogenUptake() post action called");
+            BindMannerFarmNameAndIdOnNavigation();
+            BindSessionIdInViewBeg(sessionId);
             if (!ModelState.IsValid)
             {
                 ReplaceNumericRangeError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.lblAutumnCropNitrogenNUptake);
@@ -3581,21 +3676,21 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 ViewBag.FieldName = mannerEstimationStep32ViewModel.FieldName;
                 ViewBag.CropTypeName = mannerEstimationStep32ViewModel.CropTypeName;
-                BindMannerFarmNameAndIdOnNavigation();
                 return View(_autumnCropNitrogenUptakeKey, mannerEstimationStep32ViewModel);
             }
 
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
 
         }
 
-        [HttpGet]
-        public async Task<IActionResult> SoilDrainageEndDate(string? q)
+        [HttpGet("SoilDrainageEndDate/{sid?}")]
+        public async Task<IActionResult> SoilDrainageEndDate(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilDrainageEndDate() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -3607,13 +3702,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("SoilDrainageEndDate/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SoilDrainageEndDate(MannerEstimationStep32ViewModel model)
+        public async Task<IActionResult> SoilDrainageEndDate([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilDrainageEndDate() post action called");
             ValidateSoilDrainageEndDate();
-
+            BindSessionIdInViewBeg(sessionId);
             AddErrorIfNull(model.SoilDrainageEndDate, _soilDrainageEndDateKey, Resource.MsgEnterADateBeforeContinuing);
             ValidateMinMaxSoilDrainageDate(model);
             MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
@@ -3627,10 +3722,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             if (model.IsSoilDrainageEndDateChange)
             {
-                return RedirectToAction("EffectiveRainfall");
+                return RedirectToAction("EffectiveRainfall", new { sid = sessionId });
             }
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
         }
 
         private void ValidateMinMaxSoilDrainageDate(MannerEstimationStep32ViewModel model)
@@ -3701,10 +3796,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> RainfallWithinSixHour(string? q)
+        [HttpGet("RainfallWithinSixHour/{sid?}")]
+        public async Task<IActionResult> RainfallWithinSixHour(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} RainfallWithinSixHour() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -3726,14 +3822,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("RainfallWithinSixHour/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RainfallWithinSixHour(MannerEstimationStep32ViewModel model)
+        public async Task<IActionResult> RainfallWithinSixHour([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} RainfallWithinSixHour() post action called");
             AddErrorIfNull(model.RainfallWithinSixHoursId, "RainfallWithinSixHoursId", Resource.MsgSelectAnOptionBeforeContinuing);
             MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.RainfallWithinSixHoursId = model.RainfallWithinSixHoursId;
+            BindSessionIdInViewBeg(sessionId);
             if (!ModelState.IsValid)
             {
                 BindMannerFarmNameAndIdOnNavigation();
@@ -3742,7 +3839,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
         }
 
         private async Task FetchDefaultTotalRainfall(MannerEstimationStep32ViewModel model)
@@ -3764,10 +3861,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         JsonConvert.SerializeObject(rainfallPostCodeApplication));
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> EffectiveRainfall(string? q)
+        [HttpGet("EffectiveRainfall/{sid?}")]
+        public async Task<IActionResult> EffectiveRainfall(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -3786,13 +3884,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("EffectiveRainfall/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EffectiveRainfall(MannerEstimationStep32ViewModel model)
+        public async Task<IActionResult> EffectiveRainfall([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() post action called");
             MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
-
+            BindSessionIdInViewBeg(sessionId);
             if (!ModelState.IsValid)
             {
                 BindMannerFarmNameAndIdOnNavigation();
@@ -3801,26 +3899,27 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> EffectiveRainfallManual()
+        [HttpGet("EffectiveRainfallManual/{sid?}")]
+        public async Task<IActionResult> EffectiveRainfallManual(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} EffectiveRainfallManual() action called");
             MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
-
+            BindSessionIdInViewBeg(sid);
             BindMannerFarmNameAndIdOnNavigation();
             return View(model);
 
         }
 
-        [HttpPost]
+        [HttpPost("EffectiveRainfallManual/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EffectiveRainfallManual(MannerEstimationStep32ViewModel model)
+        public async Task<IActionResult> EffectiveRainfallManual([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} EffectiveRainfallManual() post action called");
-
+            BindSessionIdInViewBeg(sessionId);
+            BindMannerFarmNameAndIdOnNavigation();
 
             AddErrorIfNull(model.TotalRainfall, _totalRainfallKey, Resource.MsgEnterRainfallAmountBeforeContinuing);
             ValidationEffectiveRainfall();
@@ -3833,13 +3932,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             mannerEstimationStep32ViewModel.TotalRainfall = model.TotalRainfall;
             if (!ModelState.IsValid)
             {
-                BindMannerFarmNameAndIdOnNavigation();
                 return View("EffectiveRainfallManual", mannerEstimationStep32ViewModel);
             }
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
         }
 
         private void ValidationEffectiveRainfall()
@@ -3864,10 +3962,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Windspeed(string? q)
+        [HttpGet("Windspeed/{sid?}")]
+        public async Task<IActionResult> Windspeed(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} Windspeed() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -3889,11 +3988,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("Windspeed/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Windspeed(MannerEstimationStep32ViewModel model)
+        public async Task<IActionResult> Windspeed([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} Windspeed() post action called");
+            BindSessionIdInViewBeg(sessionId);
             AddErrorIfNull(model.WindspeedId, "WindspeedID", Resource.MsgSelectAWindConditionBeforeContinuing);
             MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.WindspeedId = model.WindspeedId;
@@ -3906,13 +4006,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> TopsoilMoisture(string? q)
+        [HttpGet("TopsoilMoisture/{sid?}")]
+        public async Task<IActionResult> TopsoilMoisture(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} TopsoilMoisture() action called");
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 await BindApplicationDetailForUpdate(q);
@@ -3934,11 +4035,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("TopsoilMoisture/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TopsoilMoisture(MannerEstimationStep32ViewModel model)
+        public async Task<IActionResult> TopsoilMoisture([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  TopsoilMoisture() post action called");
+            BindSessionIdInViewBeg(sessionId);
             AddErrorIfNull(model.MoistureTypeId, "MoistureTypeId", Resource.MsgSelectATopsoilWetnessConditionBeforeContinuing);
             MannerEstimationStep32ViewModel mannerEstimationStep32ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep32();
             mannerEstimationStep32ViewModel.MoistureTypeId = model.MoistureTypeId;
@@ -3950,10 +4052,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationStep32ViewModel.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
         }
-
-
 
 
         private async Task BindPostCodeAndCropTypeDataForAddNewApplication(MannerEstimationStep32ViewModel model)
@@ -3992,14 +4092,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 _mannerEstimationLogic.SetMannerEstimationStep32(model);
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> ConditionsAffectingNutrients()
+
+        [HttpGet("ConditionsAffectingNutrients/{sid?}")]
+        public async Task<IActionResult> ConditionsAffectingNutrients(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() action called");
             MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
             Error error = new Error();
             try
             {
+                BindSessionIdInViewBeg(sid);
                 BindMannerFarmNameAndIdOnNavigation();
                 await BindPostCodeAndCropTypeDataForAddNewApplication(model);
                 //Autumn crop Nitrogen uptake
@@ -4093,14 +4195,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("ConditionsAffectingNutrients/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConditionsAffectingNutrients(MannerEstimationStep32ViewModel model)
+        public async Task<IActionResult> ConditionsAffectingNutrients([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() post action called");
+            BindSessionIdInViewBeg(sessionId);
+            BindMannerFarmNameAndIdOnNavigation();
             if (!ModelState.IsValid)
             {
-                BindMannerFarmNameAndIdOnNavigation();
                 return View(_conditionsAffectingNutrients, model);
             }
             try
@@ -4108,17 +4211,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 if (mannerEstimationViewModel != null && (mannerEstimationViewModel.IsNewEstimate && mannerEstimationViewModel.MannerFarmId != null))
                 {
-                    return RedirectToAction("AddNewMannerEstimate");
+                    return RedirectToAction("AddNewMannerEstimate", new { sid = sessionId });
                 }
                 if (mannerEstimationViewModel != null && (!mannerEstimationViewModel.IsComingForAddNewApplication && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId) && !model.IsManureTypeChange))
                 {
-                    return RedirectToAction(_updateApplicationDataActionName);
+                    return RedirectToAction(_updateApplicationDataActionName, new { sid = sessionId });
                 }
                 if (mannerEstimationViewModel?.IsComingForAddNewApplication == true)
                 {
-                    return RedirectToAction("AddApplicationData");
+                    return RedirectToAction("AddApplicationData", new { sid = sessionId });
                 }
                 Guid organisationId = GetOrganisationId();
+                (bool flowControl, IActionResult? value) = await CheckIsSameFarmNameInSameOrg(model, mannerEstimationViewModel);
+                if (!flowControl&&value!=null)
+                {
+                    return value;
+                }
 
                 (MannerFarmEstimationApplicationResponse? mannerFarmEstimationApplicationResult, Error? error)
                    = await _mannerEstimationLogic.AddMannerFarmEstimation(organisationId);
@@ -4150,6 +4258,23 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
+
+        private async Task<(bool flowControl, IActionResult? value)> CheckIsSameFarmNameInSameOrg(MannerEstimationStep32ViewModel model, MannerEstimationViewModel? mannerEstimationViewModel)
+        {
+         Guid   organisationId = GetOrganisationId();
+            bool isExist = await _mannerEstimationLogic.FetchIsExistMannerFarmByOrgIdAndName(organisationId, mannerEstimationViewModel.MannerEstimationStep1.FarmName);
+            if (isExist)
+            {
+                ModelState.AddModelError(_farmNameKey, Resource.MsgFarmNameAlreadyExist);
+            }
+            if (!ModelState.IsValid)
+            {
+                return (flowControl: false, value: View(_conditionsAffectingNutrients, model));
+            }
+
+            return (flowControl: true, value: null);
+        }
+
         private static void BindSoilDraingeDate(MannerEstimationStep32ViewModel model)
         {
 
@@ -4170,17 +4295,18 @@ namespace NMP.Portal.Areas.Manner.Controllers
             );
 
         }
-        [HttpGet]
-        public async Task<IActionResult> UpdateNitrogenPriceQuestion()
+        [HttpGet("UpdateNitrogenPriceQuestion/{sid?}")]
+        public async Task<IActionResult> UpdateNitrogenPriceQuestion(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdateNitrogenPriceQuestion() action called");
             MannerEstimationStep33ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep33();
             int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
             {
                 TempData[_nutrientProductErrorKey] = error.Message;
-                return RedirectToAction("NutrientProduct", new { q = model.EncryptedMannerEstimateId });
+                return RedirectToAction("NutrientProduct", new { sid = sid, q = model.EncryptedMannerEstimateId });
             }
             if (!model.UpdateNitrogenPriceQuestion.HasValue)
             {
@@ -4191,26 +4317,27 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("UpdateNitrogenPriceQuestion/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateNitrogenPriceQuestion(MannerEstimationStep33ViewModel model)
+        public async Task<IActionResult> UpdateNitrogenPriceQuestion([FromRoute] string? sessionId, MannerEstimationStep33ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdateNitrogenPriceQuestion() post action called");
             AddErrorIfNull(model.UpdateNitrogenPriceQuestion, "UpdateNitrogenPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
 
+            BindSessionIdInViewBeg(sessionId);
             MannerEstimationStep33ViewModel mannerEstimationStep33ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep33();
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
+            BindSessionIdInViewBeg(sessionId);
             model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep33ViewModelmodel.EncryptedMannerEstimateId));
             _mannerEstimationLogic.SetMannerEstimationStep33(model);
-            return RedirectToAction("UpdateNitrogenPrice");
+            return RedirectToAction("UpdateNitrogenPrice", new { sid = sessionId });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> NutrientProduct(string q, string r)
+        [HttpGet("NutrientProduct/{sid?}")]
+        public async Task<IActionResult> NutrientProduct(string? sid, string q, string r)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} NutrientProduct() action called");
             MannerEstimationStep35ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep35();
@@ -4219,6 +4346,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 nutrientId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(r));
             }
+            BindSessionIdInViewBeg(sid);
             (List<NutrientProductResponse> nutrientProducts, Error? error) = await _mannerEstimationLogic.FetchNutrientProductByNutrientId(nutrientId);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
@@ -4263,28 +4391,31 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (model.NutrientId == (int)NMP.Commons.Enums.MannerNutrients.Phosphorus)
                 {
-                    return RedirectToAction("UpdatePhosphorusPriceQuestion");
+                    return RedirectToAction("UpdatePhosphorusPriceQuestion", new { sid = sid });
                 }
                 else
                 {
-                    return RedirectToAction("UpdatePotashPriceQuestion");
+                    return RedirectToAction("UpdatePotashPriceQuestion", new { sid = sid });
                 }
             }
 
 
+            BindMannerFarmNameAndIdOnNavigation();
 
             return View(model);
 
         }
-        [HttpPost]
+        [HttpPost("NutrientProduct/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> NutrientProduct(MannerEstimationStep35ViewModel model)
+        public async Task<IActionResult> NutrientProduct([FromRoute] string? sessionId, MannerEstimationStep35ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  NutrientProduct() post action called");
             AddErrorIfNull(model.NutrientProductId, "NutrientProductId", Resource.MsgSelectAnOptionBeforeContinuing);
             MannerEstimationStep35ViewModel? mannerEstimationStep35ViewModel = _mannerEstimationLogic.GetMannerEstimationStep35();
+            BindSessionIdInViewBeg(sessionId);
             if (!ModelState.IsValid)
             {
+                BindMannerFarmNameAndIdOnNavigation();
                 (List<NutrientProductResponse> nutrientProducts, Error? error) = await _mannerEstimationLogic.FetchNutrientProductByNutrientId((int)NMP.Commons.Enums.MannerNutrients.Nitrogen);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
@@ -4333,7 +4464,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await RecalculateNutrientPrices(mannerEstimationStep35ViewModel, mannerEstimationViewModel);
             }
-            return RedirectToAction("UpdateNitrogenPriceQuestion");
+            return RedirectToAction("UpdateNitrogenPriceQuestion", new { sid = sessionId });
         }
 
         private static int BindDefaultNutrientProductId(int nutrientId, MannerEstimation? mannerEstimation)
@@ -4375,28 +4506,30 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> UpdateNitrogenPrice()
+        [HttpGet("UpdateNitrogenPrice/{sid?}")]
+        public async Task<IActionResult> UpdateNitrogenPrice(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdateNutrientPrice() action called");
             MannerEstimationStep34ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep34();
-
+            BindMannerFarmNameAndIdOnNavigation();
+            BindSessionIdInViewBeg(sid);
             return View(model);
 
         }
 
-        [HttpPost]
+        [HttpPost("UpdateNitrogenPrice/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateNitrogenPrice(MannerEstimationStep34ViewModel model)
+        public async Task<IActionResult> UpdateNitrogenPrice([FromRoute] string? sessionId, MannerEstimationStep34ViewModel model)
         {
             string nitrogenProductPriceKey = "NitrogenProductPrice";
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdateNutrientPrice() post action called");
 
             MannerEstimationStep34ViewModel mannerEstimationStep34ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep34();
             ValidateNitrogenPrice(model, nitrogenProductPriceKey, mannerEstimationStep34ViewModel);
-
+            BindSessionIdInViewBeg(sessionId);
             if (!ModelState.IsValid)
             {
+                BindMannerFarmNameAndIdOnNavigation();
                 if (mannerEstimationStep34ViewModel.UpdateNitrogenPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
                 {
                     mannerEstimationStep34ViewModel.NitrogenProductPrice = model.NitrogenProductPrice;
@@ -4451,11 +4584,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> UpdatePhosphorusPriceQuestion()
+        [HttpGet("UpdatePhosphorusPriceQuestion/{sid?}")]
+        public async Task<IActionResult> UpdatePhosphorusPriceQuestion(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPriceQuestion() action called");
             MannerEstimationStep36ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep36();
+            BindMannerFarmNameAndIdOnNavigation();
+            BindSessionIdInViewBeg(sid);
             int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
             if (!string.IsNullOrWhiteSpace(error?.Message) && mannerEstimation == null)
@@ -4473,43 +4608,46 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("UpdatePhosphorusPriceQuestion/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdatePhosphorusPriceQuestion(MannerEstimationStep36ViewModel model)
+        public async Task<IActionResult> UpdatePhosphorusPriceQuestion([FromRoute] string? sessionId, MannerEstimationStep36ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePhosphorusPriceQuestion() post action called");
             AddErrorIfNull(model.UpdatePhosphorusPriceQuestion, "UpdatePhosphorusPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
-
+            BindSessionIdInViewBeg(sessionId);
             MannerEstimationStep36ViewModel mannerEstimationStep36ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep36();
             if (!ModelState.IsValid)
             {
+                BindMannerFarmNameAndIdOnNavigation();
                 return View(model);
             }
 
             model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep36ViewModelmodel.EncryptedMannerEstimateId));
             _mannerEstimationLogic.SetMannerEstimationStep36(model);
-            return RedirectToAction("UpdatePhosphorusPrice");
+            return RedirectToAction("UpdatePhosphorusPrice", new { sid = sessionId });
         }
-        [HttpGet]
-        public async Task<IActionResult> UpdatePhosphorusPrice()
+        [HttpGet("UpdatePhosphorusPrice/{sid?}")]
+        public async Task<IActionResult> UpdatePhosphorusPrice(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPrice() action called");
             MannerEstimationStep37ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep37();
-
+            BindSessionIdInViewBeg(sid);
+            BindMannerFarmNameAndIdOnNavigation();
             return View(model);
 
         }
 
-        [HttpPost]
+        [HttpPost("UpdatePhosphorusPrice/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdatePhosphorusPrice(MannerEstimationStep37ViewModel model)
+        public async Task<IActionResult> UpdatePhosphorusPrice([FromRoute] string? sessionId, MannerEstimationStep37ViewModel model)
         {
             string phosphorusProductPriceKey = "PhosphorusProductPrice";
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePhosphorusPrice() post action called");
 
             MannerEstimationStep37ViewModel mannerEstimationStep37ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep37();
             ValidatePhosphorusPrice(model, phosphorusProductPriceKey, mannerEstimationStep37ViewModel);
-
+            BindSessionIdInViewBeg(sessionId);
+            BindMannerFarmNameAndIdOnNavigation();
             if (!ModelState.IsValid)
             {
                 if (mannerEstimationStep37ViewModel.UpdatePhosphorusPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)
@@ -4567,10 +4705,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> UpdatePotashPriceQuestion()
+        [HttpGet("UpdatePotashPriceQuestion/{sid?}")]
+        public async Task<IActionResult> UpdatePotashPriceQuestion(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPriceQuestion() action called");
+            BindMannerFarmNameAndIdOnNavigation();
+            BindSessionIdInViewBeg(sid);
             MannerEstimationStep38ViewModel? model = _mannerEstimationLogic.GetMannerEstimationStep38();
             int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(model.EncryptedMannerEstimateId));
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimationId);
@@ -4588,13 +4728,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost]
+        [HttpPost("UpdatePotashPriceQuestion/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdatePotashPriceQuestion(MannerEstimationStep38ViewModel model)
+        public async Task<IActionResult> UpdatePotashPriceQuestion([FromRoute] string? sessionId, MannerEstimationStep38ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePotashPriceQuestion() post action called");
             AddErrorIfNull(model.UpdatePotashPriceQuestion, "UpdatePotashPriceQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
-
+            BindMannerFarmNameAndIdOnNavigation();
+            BindSessionIdInViewBeg(sessionId);
             MannerEstimationStep38ViewModel mannerEstimationStep38ViewModelmodel = _mannerEstimationLogic.GetMannerEstimationStep38();
             if (!ModelState.IsValid)
             {
@@ -4603,26 +4744,29 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             model.MannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationStep38ViewModelmodel.EncryptedMannerEstimateId));
             _mannerEstimationLogic.SetMannerEstimationStep38(model);
-            return RedirectToAction("UpdatePotashPrice");
+            return RedirectToAction("UpdatePotashPrice", new { sid = sessionId });
         }
-        [HttpGet]
-        public async Task<IActionResult> UpdatePotashPrice()
+        [HttpGet("UpdatePotashPrice/{sid?}")]
+        public async Task<IActionResult> UpdatePotashPrice(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPrice() action called");
             MannerEstimationStep39ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep39();
-
+            BindSessionIdInViewBeg(sid);
+            BindMannerFarmNameAndIdOnNavigation();
             return View(model);
 
         }
 
-        [HttpPost]
+        [HttpPost("UpdatePotashPrice/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdatePotashPrice(MannerEstimationStep39ViewModel model)
+        public async Task<IActionResult> UpdatePotashPrice([FromRoute] string? sessionId, MannerEstimationStep39ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePotashPrice() post action called");
 
             MannerEstimationStep39ViewModel mannerEstimationStep39ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep39();
             ValidatePotashPrice(model, mannerEstimationStep39ViewModel);
+            BindMannerFarmNameAndIdOnNavigation();
+            BindSessionIdInViewBeg(sessionId);
 
             if (!ModelState.IsValid)
             {
@@ -5297,7 +5441,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return null;
         }
 
-        public async Task<IActionResult> UpdateFieldOrCropData()
+        public async Task<IActionResult> UpdateFieldOrCropData(string? sid)
         {
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
 
@@ -5311,6 +5455,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 });
             }
+            RemoveMannerEstimationSessionByKey(sid);
             string succesMsg = Resource.lblFarmFieldCropDataUpdated;
             return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, succesMsg, "FarmFieldAndCrop");
         }
@@ -5342,7 +5487,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return null;
         }
-        public async Task<IActionResult> UpdateApplicationData()
+        public async Task<IActionResult> UpdateApplicationData(string? sid)
         {
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
 
@@ -5362,6 +5507,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return RedirectToAction(_mannerHubPageAction);
             }
 
+            RemoveMannerEstimationSessionByKey(sid);
             return RedirectToResult(mannerEstimationApplication, mannerEstimationResultResponse, true);
         }
 
@@ -5589,7 +5735,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     IsApplicationJulyToSeptWarning = false,
                     IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false,
                     ManureGroupId = manureGroupId,
-                    EncryptedMannerApplicationsId=_mannerEstimationProtector.Protect(application.ID.ToString())
+                    EncryptedMannerApplicationsId = _mannerEstimationProtector.Protect(application.ID.ToString())
                 };
 
                 error = await CheckApplicationDateWarnings(dateWarningViewModel, manureType, harvestYear, persistToSession: false);
@@ -5626,7 +5772,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 Warnings = combinedWarnings
             });
         }
-        public async Task<IActionResult> AddApplicationData()
+        public async Task<IActionResult> AddApplicationData(string? sid)
         {
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             mannerEstimationViewModel.MannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationViewModel.EncryptedMannerEstimationId));
@@ -5649,7 +5795,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     q = mannerEstimationViewModel.EncryptedMannerEstimationId
                 });
             }
-
+            RemoveMannerEstimationSessionByKey(sid);
             return RedirectToResult(mannerEstimationApplication, mannerEstimationResultResponse, false);
         }
 
@@ -5765,24 +5911,27 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> RemoveEstimations(string? q)
+        [HttpGet("RemoveEstimations/{sid?}")]
+        public async Task<IActionResult> RemoveEstimations(string? sid, string? q)
         {
             MannerEstimationStep40ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep40();
             model.EncryptedMannerFarmId = q;
             _mannerEstimationLogic.SetMannerEstimationStep40(model);
             int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
-            await FetchMannerEstimationSelectList(mannerFarmId);           
+            await FetchMannerEstimationSelectList(mannerFarmId);
+            BindSessionIdInViewBeg(sid);
             return View(model);
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RemoveEstimations(MannerEstimationStep40ViewModel model)
+        [HttpPost("RemoveEstimations/{sessionId?}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveEstimations([FromRoute] string? sessionId, MannerEstimationStep40ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  RemoveEstimations() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 if (model.MannerEstimationIdList == null)
                 {
                     ModelState.AddModelError("MannerEstimationIdList", Resource.MsgSelectAtLeastOneNutrientSupplyEstimateToRemove);
@@ -5824,6 +5973,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 else
                 {
+                    RemoveMannerEstimationSessionByKey(sessionId);
                     return RedirectToAction(_mannerHubPageAction, new
                     {
                         q = mannerEstimationStep40ViewModel.EncryptedMannerFarmId,
@@ -5887,9 +6037,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 })
                 .ToList();
         }
-        public async Task<IActionResult?> RemoveMannerEstimateApplication(string? q)
+        [HttpGet("RemoveMannerEstimateApplication/{sid?}")]
+        public async Task<IActionResult?> RemoveMannerEstimateApplication(string? sid, string? q)
         {
             MannerEstimationStep41ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep41();
+            BindSessionIdInViewBeg(sid);
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int mannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
@@ -5906,18 +6058,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     });
                 }
                 ViewBag.MannerFarmName = mannerEstimationResult.MannerFarm.Name;
-                ViewBag.MannerFarmId =_mannerEstimationProtector.Protect(mannerEstimationResult.MannerFarm.ID.ToString());
+                ViewBag.MannerFarmId = _mannerEstimationProtector.Protect(mannerEstimationResult.MannerFarm.ID.ToString());
                 ViewBag.ApplicationList = BindApplicationList(mannerEstimationResult);
             }
             return View(model);
         }
-        [HttpPost]
+        [HttpPost("RemoveMannerEstimateApplication/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveMannerEstimateApplication(MannerEstimationStep41ViewModel model)
+        public async Task<IActionResult> RemoveMannerEstimateApplication([FromRoute] string? sessionId, MannerEstimationStep41ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  UpdatePotashPrice() post action called");
             MannerEstimationStep41ViewModel mannerEstimationStep41ViewModel = _mannerEstimationLogic.GetMannerEstimationStep41();
             Error? error = null;
+
+            BindSessionIdInViewBeg(sessionId);
             if (model.MannerEstimateApplicationId == null)
             {
                 ModelState.AddModelError("MannerEstimateApplicationId", Resource.MsgSelectAnOptionBeforeContinuing);
@@ -5949,6 +6103,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
+            RemoveMannerEstimationSessionByKey(sessionId);
             string successMsg = Resource.lblOrganicMaterialApplicationRemoved;
 
             return RedirectToResultWithSuccessValues(mannerApplicationId, successMsg, "Nutrients");
@@ -5974,7 +6129,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
         public async Task<IActionResult> MannerFarmList(string? q, string? r)
         {
-            RemoveMannerEstimationSession();
             ViewBag.IsNewFarm = _mannerEstimationProtector.Protect(Resource.lblFalse);
             Guid organisationId = GetOrganisationId();
             (List<MannerFarmViewModel> mannerFarmList, _) = await _mannerEstimationLogic.FetchMannerFarmListByOrgId(organisationId);
@@ -5986,7 +6140,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
-
+            ViewBag.SessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
             HttpContext.Session.Remove("current_manner_estimate_farm_name");
             HttpContext.Session.Remove("current_manner_estimate_manner_farm_id");
             ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();
@@ -6001,12 +6155,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction("Index", "DashBoard", new { area = "" });
                 }
-                return RedirectToAction("Name", new { s = _mannerEstimationProtector.Protect(Resource.lblFalse) });
+                return RedirectToAction("Name", new { s = _mannerEstimationProtector.Protect(Resource.lblFalse), sid = ViewBag.SessionId });
             }
             return View();
         }
 
-        public async Task<IActionResult> AddNewMannerEstimate()
+        public async Task<IActionResult> AddNewMannerEstimate(string? sid)
         {
             (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error)
                     = await _mannerEstimationLogic.AddNewMannerEstimation();
@@ -6016,7 +6170,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 TempData["ConditionsAffectingNutrientsError"] = error.Message;
                 return RedirectToAction(_conditionsAffectingNutrients);
             }
-
+            if (!string.IsNullOrWhiteSpace(sid))
+            {
+                RemoveMannerEstimationSession(sid);
+            }
             if (mannerEstimationApplicationResult != null && mannerEstimationApplicationResult.MannerEstimationID != null)
             {
                 return RedirectToAction(_mannerEstimationResultKey, new
@@ -6028,22 +6185,24 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return RedirectToAction(_conditionsAffectingNutrients);
         }
-        [HttpGet]
-        public async Task<IActionResult> RemoveMannerFarm(string? q)
+        [HttpGet("UpdatePotasRemoveMannerFarmhPrice/{sid?}")]
+        public async Task<IActionResult> RemoveMannerFarm(string? sid, string? q)
         {
             MannerEstimationStep42ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep42();
             await FetchRemoveMannerFarmSelectList();
+            BindSessionIdInViewBeg(sid);
             return View(model);
 
         }
 
-        [HttpPost]
+        [HttpPost("RemoveMannerFarm/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveMannerFarm(MannerEstimationStep42ViewModel model)
+        public async Task<IActionResult> RemoveMannerFarm([FromRoute] string? sessionId, MannerEstimationStep42ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  RemoveEstimations() post action called");
             try
             {
+                BindSessionIdInViewBeg(sessionId);
                 if (model.MannerFarmIdList == null)
                 {
                     ModelState.AddModelError("MannerFarmIdList", Resource.MsgSelectAtLeastOneNutrientSupplyEstimateToRemove);
@@ -6089,6 +6248,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 else
                 {
+                    RemoveMannerEstimationSessionByKey(sessionId);
                     return RedirectToAction("MannerFarmList", new
                     {
                         q = _mannerEstimationProtector.Protect(Resource.lblTrue)
@@ -6104,6 +6264,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in RemoveEstimations() post action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
+            }
+
+           
+        }
+        public void RemoveMannerEstimationSessionByKey(string? sessionId)
+        {
+            if (!string.IsNullOrWhiteSpace(sessionId))
+            {
+                RemoveMannerEstimationSession(sessionId);
             }
         }
         private async Task<List<SelectListItem>> FetchRemoveMannerFarmSelectList()
@@ -6130,13 +6299,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("UpdateNutrientValues/{sessionId?}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateNutrientValues(MannerEstimationStep25ViewModel model)
+        public async Task<IActionResult> UpdateNutrientValues([FromRoute] string? sessionId, MannerEstimationStep25ViewModel model)
         {
             MannerEstimationStep25ViewModel mannerEstimationStep25ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep25(false);
             model.ManureTypeId = mannerEstimationStep25ViewModel.ManureTypeId;
             CheckNutrientValuesIfNull(model);
+            BindSessionIdInViewBeg(sessionId);
             ValidateNutrientValues(model);
             if (!ModelState.IsValid)
             {
