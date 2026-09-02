@@ -3333,7 +3333,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 model.IncorporationDelayId = incorporationDelaysList[0].ID;
                 model = _mannerEstimationLogic.SetMannerEstimationStep30(model);
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !model.IsManureTypeChange) ? RedirectToAction(_updateApplicationDataActionName) : RedirectToAction(_conditionsAffectingNutrients);
             }
             _mannerEstimationLogic.SetMannerEstimationStep30(model);
             return View(model);
