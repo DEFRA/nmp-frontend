@@ -3140,7 +3140,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 mannerEstimationViewModel.EncryptedMannerFarmId = encryptedMannerFarmId;
                 _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
             }
-            await _mannerEstimationLogic.BindMannerEstimationDataForUpdate(mannerEstimationResultResponse.MannerEstimation.ID ?? 0);
+            await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0);
         }
 
         private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application, string manureUnit)
