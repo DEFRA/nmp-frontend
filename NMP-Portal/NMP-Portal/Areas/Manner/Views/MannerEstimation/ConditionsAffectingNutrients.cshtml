@@ -104,7 +104,7 @@
                     <govuk-summary-list-row-key>@Resource.lblRainfallWithin6HoursOfApplication</govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>@Model.RainfallWithinSixHours</govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="RainfallWithinSixHour" asp-controller="MannerEstimation">
+                        <govuk-summary-list-row-action asp-action="RainfallWithinSixHour" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">
                             @Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblRainfallWithin6HoursOfApplication</span>
                         </govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>

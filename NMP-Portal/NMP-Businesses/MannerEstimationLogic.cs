@@ -428,6 +428,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = 0;
             mannerEstimationStep13.IsApplicationDateChange = true;
+            mannerEstimationViewModel.MannerEstimationStep32.IsTotalRainfallEnteredManual = false;
         }
         mannerEstimationViewModel.MannerEstimationStep13 = mannerEstimationStep13;
         SetMannerEstimationToSession(mannerEstimationViewModel);
@@ -1940,6 +1941,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (mannerFarm != null)
         {
             MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
+            mannerEstimationViewModel = mannerEstimationViewModel ?? new MannerEstimationViewModel();
             if (mannerEstimationViewModel != null)
             {
                 mannerEstimationViewModel.SessionId = sid;

@@ -4,7 +4,7 @@
 
 @{
     var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)
-        && !Model.IsComingForAddNewApplication
+        && !Model.IsComingForAddNewApplication &&!Model.IsManureTypeChange&&!Model.IsApplicationDateChange
         ? "MannerEstimationResult"
         : "ConditionsAffectingNutrients";
 }
