@@ -110,7 +110,6 @@ namespace NMP.Application
         Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId);
         MannerEstimationViewModel? GetMannerEstimationFromSession(string? sessionId = null);
         string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
-       // void RemoveMannerEstimationSession(string? sessionId = null);
         string? GetCurrentSessionId();
         Task<(MannerEstimation?, Error?)> UpdateMannerEstimation(int MannerEstimationId);
         MannerEstimationStep36ViewModel GetMannerEstimationStep36();
@@ -133,7 +132,6 @@ namespace NMP.Application
         Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId);
         Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId, string? sid = null);
         Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId, string? sid = null);
-        //void SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
         Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationById(int mannerEstimateApplicationId);
         Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId, string? sid = null);
         Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData(string? sid = null);

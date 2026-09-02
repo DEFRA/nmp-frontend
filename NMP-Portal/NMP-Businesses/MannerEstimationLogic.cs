@@ -178,7 +178,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
 
         // Store the manner estimation data with the session ID as part of the key
-        //var sessionKey = $"{_mannerEstimationSessionName}_{mannerEstimationViewModel.SessionId}";
         session.SetObjectAsJson(mannerEstimationViewModel.SessionId, mannerEstimationViewModel);
         return mannerEstimationViewModel.SessionId;
     }
@@ -1942,8 +1941,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
             mannerEstimationViewModel = mannerEstimationViewModel ?? new MannerEstimationViewModel();
-            if (mannerEstimationViewModel != null)
-            {
+            
                 mannerEstimationViewModel.SessionId = sid;
                 mannerEstimationViewModel.FarmName=mannerFarm.Name;               
                 mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID ?? 0;
@@ -1951,7 +1949,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
                 mannerEstimationViewModel.MannerEstimationStep3.Postcode = mannerFarm.Postcode;
                 mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = mannerFarm.AverageAnuualRainfall ?? 0;
                 mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;
-            }
+            
             SetMannerEstimationToSession(mannerEstimationViewModel);
         }
     }
