@@ -8463,7 +8463,7 @@ following crop year 2</value>
     <value>If you want to plan applications of organic materials with applications of fertiliser nutrients as part of a nutrient management plan, you should use NMPT-GB.</value>
   </data>
   <data name="lblMannerNpkForHomePage" xml:space="preserve">
-    <value>Manner-NPK</value>
+    <value>MANNER-NPK</value>
   </data>
   <data name="lblkgmetercube" xml:space="preserve">
     <value>{0}kg/m³</value>
