@@ -26,7 +26,7 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchDataByFieldIdAndYearAsyncAPI, fieldId, year));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchDataByFieldIdAndYearAPI, fieldId, year));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -68,11 +68,11 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
             string url = "";
             if (year == null)
             {
-                url = string.Format(ApiurlHelper.FetchFieldDataByFieldIdAsyncAPI, fieldId);
+                url = string.Format(ApiurlHelper.FetchFieldDataByFieldIdAPI, fieldId);
             }
             else
             {
-                url = string.Format(ApiurlHelper.FetchFieldDataByFieldIdOldestHarvestYearAsyncAPI, fieldId, year);
+                url = string.Format(ApiurlHelper.FetchFieldDataByFieldIdOldestHarvestYearAPI, fieldId, year);
             }
             var response = await httpClient.GetAsync(url);
             string result = await response.Content.ReadAsStringAsync();
@@ -148,7 +148,7 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchPreviousCroppingYearByFarmIdAsyncAPI, farmId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchPreviousCroppingYearByFarmIdAPI, farmId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 

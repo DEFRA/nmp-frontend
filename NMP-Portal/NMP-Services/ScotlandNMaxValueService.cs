@@ -28,7 +28,7 @@ namespace NMP.Services
             try
             {
                 HttpClient httpClient = await GetNMPAPIClient();
-                var response = await httpClient.GetAsync(ApiurlHelper.FetchAllScotlandNMaxValuesAsyncAPI);
+                var response = await httpClient.GetAsync(ApiurlHelper.FetchAllScotlandNMaxValuesAPI);
 
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

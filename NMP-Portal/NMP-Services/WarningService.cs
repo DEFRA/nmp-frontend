@@ -18,10 +18,10 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
     {
         _logger.LogTrace("Fetching warning headers by FieldId and year");
         var warningHeaders = new List<WarningHeaderResponse>();
-        string requestUrl = string.Format(ApiurlHelper.FetchWarningCodesByFieldIdAndYearAsyncAPI, HttpUtility.UrlEncode(fieldIds), HttpUtility.UrlEncode(harvestYear.ToString()));
+        string requestUrl = string.Format(ApiurlHelper.FetchWarningCodesByFieldIdAndYearAPI, HttpUtility.UrlEncode(fieldIds), HttpUtility.UrlEncode(harvestYear.ToString()));
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
-        response.EnsureSuccessStatusCode();
+        
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -35,10 +35,10 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
     public async Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey)
     {
         _logger.LogTrace("Fetching warning by CountryId and key");
-        string requestUrl = string.Format(ApiurlHelper.FetchWarningByCountryIdAndWarningKeyAsyncAPI, HttpUtility.UrlEncode(countryId.ToString()), HttpUtility.UrlEncode(warningKey));
+        string requestUrl = string.Format(ApiurlHelper.FetchWarningByCountryIdAndWarningKeyAPI, HttpUtility.UrlEncode(countryId.ToString()), HttpUtility.UrlEncode(warningKey));
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
-        response.EnsureSuccessStatusCode();
+        
         var result = await response.Content.ReadAsStringAsync();
         var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (responseWrapper?.Data is null)
@@ -51,10 +51,10 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
     public async Task<List<WarningResponse>> FetchAllWarningAsync()
     {
         _logger.LogTrace("Fetching warning list");
-        string requestUrl = ApiurlHelper.FetchAllWarningAsyncAPI;
+        string requestUrl = ApiurlHelper.FetchAllWarningAPI;
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
-        response.EnsureSuccessStatusCode();
+        
         var result = await response.Content.ReadAsStringAsync();
         var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (responseWrapper?.Data is null&& responseWrapper?.Data?.records is null)
