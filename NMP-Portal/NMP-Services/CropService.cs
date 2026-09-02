@@ -160,62 +160,6 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return (recommendationList, error);
     }
 
-    //public async Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1IdAsync(int cropTypeId, int cropInfo1Id)
-    //{        
-    //    string? cropInfo1Name = string.Empty;
-    //    try
-    //    {
-    //        HttpClient httpClient = await GetNMPAPIClient();
-    //        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropInfo1NameByCropTypeIdAndCropInfo1IdAPI, HttpUtility.UrlEncode(cropTypeId.ToString()), HttpUtility.UrlEncode(cropInfo1Id.ToString())));
-    //        string result = await response.Content.ReadAsStringAsync();
-    //        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-    //        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-    //        {
-    //            cropInfo1Name = responseWrapper?.Data["cropInfo1Name"];
-    //        }
-    //        else
-    //        {
-    //            _logger.ExtractError(responseWrapper, null);
-    //        }
-    //    }
-    //    catch (HttpRequestException hre)
-    //    {
-    //         _logger.HandleHttpRequestException(hre, null);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.HandleException(ex, null);
-    //    }
-    //    return cropInfo1Name?? string.Empty;
-    //}
-    //public async Task<string> FetchCropInfo2NameByCropInfo2IdAsync(int cropInfo2Id)
-    //{        
-    //    string? cropInfo2Name = string.Empty;
-    //    try
-    //    {
-    //        HttpClient httpClient = await GetNMPAPIClient();
-    //        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropInfo2NameByCropInfo2IdAPI, HttpUtility.UrlEncode(cropInfo2Id.ToString())));
-    //        string result = await response.Content.ReadAsStringAsync();
-    //        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-    //        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-    //        {
-    //            cropInfo2Name = responseWrapper?.Data["cropInfo2Name"];
-    //        }
-    //        else
-    //        {
-    //            _logger.ExtractError(responseWrapper, null);
-    //        }
-    //    }
-    //    catch (HttpRequestException hre)
-    //    {
-    //        _logger.HandleHttpRequestException(hre, null);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.HandleException(ex, null);
-    //    }
-    //    return cropInfo2Name?? string.Empty;
-    //}
     public async Task<List<Crop>> FetchCropsByFieldIdAsync(int fieldId)
     {
         List<Crop> cropList = new List<Crop>();

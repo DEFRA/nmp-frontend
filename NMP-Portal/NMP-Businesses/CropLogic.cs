@@ -22,13 +22,13 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, ISnsAnalysisService snsAnalysisService, IRecommendationService recommendationService, IPreviousCroppingLogic previousCroppingLogic, IRb209Service rb209Service) : ICropLogic
+public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, ICropServiceDependencies dependencies) : ICropLogic
 {
     private readonly ILogger<CropLogic> _logger = logger;
-    private readonly ICropService _cropService = cropService;
-    private readonly ISnsAnalysisService _snsAnalysisService = snsAnalysisService;
-    private readonly IRecommendationService _recommendationService = recommendationService;
-    private readonly IRb209Service _rb209Service = rb209Service;
+    private readonly ICropService _cropService = dependencies.CropService;
+    private readonly ISnsAnalysisService _snsAnalysisService = dependencies.SnsAnalysisService;
+    private readonly IRecommendationService _recommendationService = dependencies.RecommendationService;
+    private readonly IRb209Service _rb209Service = dependencies.Rb209Service;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
