@@ -2765,6 +2765,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
+
         [HttpPost("AreaQuantity/{sessionId?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AreaQuantity([FromRoute] string? sessionId, MannerEstimationStep28ViewModel formData)
@@ -4205,7 +4206,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             try
             {
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-                (bool isSuccess, IActionResult? action) = await RedirectForConditionPage(sessionId, model, mannerEstimationViewModel);
+                (bool isSuccess, IActionResult? action) = await RedirectForConditionPage(sessionId,  mannerEstimationViewModel);
                 if (!isSuccess && action != null)
                 {
                     return action;
@@ -4252,7 +4253,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        private async Task<(bool flowControl, IActionResult? value)> RedirectForConditionPage(string? sessionId, MannerEstimationStep32ViewModel model, MannerEstimationViewModel? mannerEstimationViewModel)
+        private async Task<(bool flowControl, IActionResult? value)> RedirectForConditionPage(string? sessionId,  MannerEstimationViewModel? mannerEstimationViewModel)
         {
             if (mannerEstimationViewModel != null && (mannerEstimationViewModel.IsNewEstimate && mannerEstimationViewModel.MannerFarmId != null))
             {
