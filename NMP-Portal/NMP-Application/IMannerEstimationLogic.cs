@@ -4,6 +4,7 @@ using NMP.Commons.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,7 +69,7 @@ namespace NMP.Application
         Task<MannerEstimationStep27ViewModel> SetMannerEstimationStep27(MannerEstimationStep27ViewModel mannerEstimationStep27);
         Task<MannerEstimationStep28ViewModel> GetMannerEstimationStep28();
         Task<MannerEstimationStep28ViewModel> SetMannerEstimationStep28(MannerEstimationStep28ViewModel mannerEstimationStep28);
-        Task<Error?> CopiedFarmAndFieldData(int farmId, int fieldId);
+        Task<Error?> CopiedFarmAndFieldData(int farmId, int fieldId, string? sid = null);
 
 
         MannerEstimationStep21ViewModel GetMannerEstimationStep21();
@@ -130,12 +131,12 @@ namespace NMP.Application
         Task<(decimal, Error)> FetchTotalNByMannerEstimationIdAppDate(int mannerEstimationId, DateTime startDate, DateTime endDate, int? mannerApplicationId);
 
         Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId);
-        Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId);
-        Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId);
+        Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId, string? sid = null);
+        Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId, string? sid = null);
         //void SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
         Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationById(int mannerEstimateApplicationId);
-        Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId);
-        Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData();
+        Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId, string? sid = null);
+        Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData(string? sid = null);
         Task<int?> GetCropGroupByCropTypeId(int? cropTypeId);
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplication();
 

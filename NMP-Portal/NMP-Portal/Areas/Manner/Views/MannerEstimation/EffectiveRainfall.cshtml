@@ -28,7 +28,7 @@
                 <h3 class="govuk-heading-s">@Resource.lblTotalRainfall</h3>
                 <p class="govuk-body">@string.Concat(Model.TotalRainfall, Resource.lblmm)</p>
                 <p class="govuk-body margin-bottom-forty">
-                    <a class="govuk-link" asp-action="EffectiveRainfallManual" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblTotalRainfallSinceApplication</span></a>
+                    <a class="govuk-link" asp-action="EffectiveRainfallManual" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblTotalRainfallSinceApplication</span></a>
                 </p>
 
             </div>

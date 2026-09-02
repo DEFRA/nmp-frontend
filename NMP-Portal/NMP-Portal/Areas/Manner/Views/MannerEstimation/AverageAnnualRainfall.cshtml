@@ -28,7 +28,7 @@
                 <p class="govuk-body">
                     @(string.Format("{0:N0}{1}", Model.AverageAnnualRainfall, Resource.lblmm))
                 <p class="govuk-body margin-bottom-forty">
-                    <a class="govuk-link" asp-action="AverageAnnualRainfallManual" asp-controller="MannerEstimation" aria-label="@Resource.lblChangeRainfallAmount">@Resource.lblChange<span class="govuk-visually-hidden"> @string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</span></a>
+                        <a class="govuk-link" asp-action="AverageAnnualRainfallManual" asp-controller="MannerEstimation" aria-label="@Resource.lblChangeRainfallAmount" asp-route-sid="@ViewBag.SessionId">@Resource.lblChange<span class="govuk-visually-hidden"> @string.Format(Resource.lblAverageAnnualRainfallFor, Model.Postcode)</span></a>
                 </p>
             </div>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">

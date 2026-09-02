@@ -807,7 +807,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return await GetMannerEstimationStep28();
     }
-    public async Task<Error?> CopiedFarmAndFieldData(int farmId, int fieldId)
+    public async Task<Error?> CopiedFarmAndFieldData(int farmId, int fieldId,string? sid=null)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         (FarmResponse? farm, Error? error) = await _farmService.FetchFarmByIdAsync(farmId);
@@ -1070,9 +1070,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
     }
 
-    private async Task<(MannerEstimationViewModel, MannerEstimation, MannerFarm)> BindMannerEstimationDataForAdd(Guid? organisationId, int? mannerEstimationId)
+    private async Task<(MannerEstimationViewModel, MannerEstimation, MannerFarm)> BindMannerEstimationDataForAdd(Guid? organisationId, int? mannerEstimationId,string? sid=null)
     {
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession();
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
         MannerFarm mannerFarm = new MannerFarm();
         MannerEstimation mannerEstimate = new MannerEstimation
         {
@@ -1554,10 +1554,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return await _mannerEstimationService.CheckMannerGreenCompostExistanceByDateRange(mannerEstimationId, dateFrom, dateTo, mannerApplicationId);
     }
 
-    public async Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId)
+    public async Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId, string? sid = null)
     {
         List<CropTypeResponse> cropTypes = await _fieldService.FetchAllCropTypesServiceAsync();
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
         (MannerEstimation? mannerEstimate, Error? error) = await FetchMannerEstimateById(mannerEstimateId);
         if (mannerEstimate != null && string.IsNullOrWhiteSpace(error?.Message))
         {
@@ -1595,9 +1595,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     }
 
-    public async Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId)
+    public async Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId, string? sid = null)
     {
-        (_, MannerEstimation mannerEstimation, _) = await BindMannerEstimationDataForAdd(null, mannerEstimationId);
+        (_, MannerEstimation mannerEstimation, _) = await BindMannerEstimationDataForAdd(null, mannerEstimationId, sid);
         string jsonData = JsonConvert.SerializeObject(new
         {
             MannerEstimation = mannerEstimation
@@ -1612,9 +1612,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         _logger.LogTrace("MannerEstimationLogic : FetchMannerEstimateApplicationById() called");
         return await _mannerEstimationService.FetchMannerEstimateApplicationByIdAsync(mannerEstimateApplicationId);
     }
-    public async Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId)
+    public async Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId, string? sid = null)
     {
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
         (MannerEstimationApplication? mannerEstimateApplication, Error? error) = await FetchMannerEstimateApplicationById(mannerEstimateApplicationId);
 
         if (mannerEstimateApplication == null || !string.IsNullOrWhiteSpace(error?.Message))
@@ -1779,9 +1779,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
     }
 
-    public async Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData()
+    public async Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData(string? sid = null)
     {
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
 
         MannerEstimationApplication? mannerEstimationApplication = await BindMannerEstinationApplicationData(mannerEstimationViewModel, true);
 

@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -10548,6 +10548,15 @@ namespace NMP.Commons.Resources {
         public static string lblMaximumNitrogenLimitsYear {
             get {
                 return ResourceManager.GetString("lblMaximumNitrogenLimitsYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The maximum number of applications has been reached..
+        /// </summary>
+        public static string lblMaximumNoOfApplicationIsReached {
+            get {
+                return ResourceManager.GetString("lblMaximumNoOfApplicationIsReached", resourceCulture);
             }
         }
         

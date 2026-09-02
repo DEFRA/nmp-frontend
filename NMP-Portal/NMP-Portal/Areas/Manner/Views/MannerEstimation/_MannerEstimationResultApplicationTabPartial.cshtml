@@ -36,7 +36,7 @@
             <td class="govuk-table__cell">
                 <a class="govuk-link"
                    asp-action="ManureGroup"
-                   asp-controller="MannerEstimation"
+                   asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId"
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lbOrganicMaterialType, Resource.lblChange))</span>
@@ -50,7 +50,7 @@
             <td class="govuk-table__cell">
                 <a class="govuk-link"
                    asp-action="ApplicationDate"
-                   asp-controller="MannerEstimation"
+                   asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId"
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblApplicationDate, Resource.lblChange))</span>
@@ -68,7 +68,7 @@
                 {
                     <a class="govuk-link"
                        asp-action="ApplicationMethod"
-                       asp-controller="MannerEstimation"
+                       asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId"
                        asp-route-q="@Model.EncryptedApplicationId">
                         @Resource.lblChange
                         <span class="govuk-visually-hidden">@(string.Format("{0} {1}", string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureType), Resource.lblChange))</span>
@@ -86,7 +86,7 @@
             <td class="govuk-table__cell">
                 <a class="govuk-link"
                    asp-action="DefaultNutrientValues"
-                   asp-controller="MannerEstimation"
+                   asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId"
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureType), Resource.lblChange))</span>
@@ -140,6 +140,7 @@
                     <a class="govuk-link"
                        asp-action="ManualNutrientValues"
                        asp-controller="MannerEstimation"
+                       asp-route-sid="@ViewBag.SessionId"
                        asp-route-q="@Model.EncryptedApplicationId" asp-route-r="@ViewBag.IsDefault">
                         @Resource.lblChange
                         <span class="govuk-visually-hidden">
@@ -159,6 +160,7 @@
                 <a class="govuk-link"
                    asp-action="ApplicationRateMethod"
                    asp-controller="MannerEstimation"
+                   asp-route-sid="@ViewBag.SessionId"
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblHowToEnterTheApplicationRate, Resource.lblChange))</span>
@@ -179,7 +181,7 @@
 
                     <a class="govuk-link"
                        asp-action="AreaQuantity"
-                       asp-controller="MannerEstimation"
+                       asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                        asp-route-q="@Model.EncryptedApplicationId">
                         @Resource.lblChange
                         <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblAreaSpread, Resource.lblChange))</span>
@@ -206,7 +208,7 @@
 
                     <a class="govuk-link"
                        asp-action="AreaQuantity"
-                       asp-controller="MannerEstimation"
+                       asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                        asp-route-q="@Model.EncryptedApplicationId">
                         @Resource.lblChange
                         <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblQuantityApplied, Resource.lblChange))</span>
@@ -227,7 +229,7 @@
                 {
                     <a class="govuk-link"
                        asp-action="ManualApplicationRate"
-                       asp-controller="MannerEstimation"
+                       asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                        asp-route-q="@Model.EncryptedApplicationId">
                         @Resource.lblChange
                         <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblApplicationRate, Resource.lblChange))</span>
@@ -246,7 +248,7 @@
                 {
                     <a class="govuk-link"
                        asp-action="IncorporationMethod"
-                       asp-controller="MannerEstimation"
+                       asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                        asp-route-q="@Model.EncryptedApplicationId">
                         @Resource.lblChange
                         <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblIncorporationMethod, Resource.lblChange))</span>
@@ -266,7 +268,7 @@
                     {
                         <a class="govuk-link"
                            asp-action="IncorporationDelay"
-                           asp-controller="MannerEstimation"
+                           asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                            asp-route-q="@Model.EncryptedApplicationId">
                             @Resource.lblChange
                             <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblIncorporationDelay, Resource.lblChange))</span>
@@ -286,7 +288,7 @@
                 <td class="govuk-table__cell">
                     <a class="govuk-link"
                        asp-action="AutumnCropNitrogenUptake"
-                       asp-controller="MannerEstimation"
+                       asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                        asp-route-q="@Model.EncryptedApplicationId">
                         @Resource.lblChange
                         <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblAutumnCropNitrogenNUptake, Resource.lblChange))</span>
@@ -302,7 +304,7 @@
             <td class="govuk-table__cell">
                 <a class="govuk-link"
                    asp-action="SoilDrainageEndDate"
-                   asp-controller="MannerEstimation"
+                   asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblEndOfSoilDrainage, Resource.lblChange))</span>
@@ -318,7 +320,7 @@
             <td class="govuk-table__cell">
                 <a class="govuk-link"
                    asp-action="RainfallWithinSixHour"
-                   asp-controller="MannerEstimation"
+                   asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblRainfallWithin6HoursOfApplication, Resource.lblChange))</span>
@@ -334,7 +336,7 @@
             <td class="govuk-table__cell">
                 <a class="govuk-link"
                    asp-action="EffectiveRainfall"
-                   asp-controller="MannerEstimation"
+                   asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblEffectiveRainfallAfterApplication, Resource.lblChange))</span>
@@ -350,7 +352,7 @@
             <td class="govuk-table__cell">
                 <a class="govuk-link"
                    asp-action="Windspeed"
-                   asp-controller="MannerEstimation"
+                   asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblWindspeedAtApplication, Resource.lblChange))</span>
@@ -366,7 +368,7 @@
             <td class="govuk-table__cell">
                 <a class="govuk-link"
                    asp-action="TopsoilMoisture"
-                   asp-controller="MannerEstimation"
+                   asp-controller="MannerEstimation"  asp-route-sid="@ViewBag.SessionId" 
                    asp-route-q="@Model.EncryptedApplicationId">
                     @Resource.lblChange
                     <span class="govuk-visually-hidden">@(string.Format("{0} {1}", Resource.lblTopsoilMoisture, Resource.lblChange))</span>

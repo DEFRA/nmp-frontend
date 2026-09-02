@@ -42,7 +42,7 @@ else
 
             <h1 class="govuk-heading-l">@string.Format(Resource.lblNutrientSupplyEstimatesForFarmName, ViewBag.MannerFarmName) </h1>
 
-            <form asp-action="Name" method="get" asp-controller="MannerEstimation" autocomplete="off">
+            <form asp-action="Name" method="get" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" autocomplete="off">
                 <govuk-button type="submit">
                     @Resource.lblCreateANewSupplyEstimateForThisFarm
                 </govuk-button>
@@ -50,7 +50,7 @@ else
 
              @if (ViewBag.MannerEstimations != null && ViewBag.MannerEstimations.Count > 0)
             { 
-                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveEstimations" asp-route-q="@ViewBag.EncryptedMannerFarmId">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
+                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveEstimations" asp-route-sid="@ViewBag.SessionId" asp-route-q="@ViewBag.EncryptedMannerFarmId">@Resource.lblRemoveANutrientSupplyEstimate</a></p>
              } 
 
             <h2 class="govuk-heading-m">@Resource.lblNutrientSupplyEstimates</h2>
