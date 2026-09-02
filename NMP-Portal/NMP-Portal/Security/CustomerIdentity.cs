@@ -211,7 +211,6 @@ namespace NMP.Portal.Security
                 httpClient.BaseAddress = new Uri(configuration["NMPApiUrl"] ?? dafaultlocalUrl);
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
                 var response = await httpClient.PostAsync("users", new StringContent(jsonData, Encoding.UTF8, "application/json"));
-                response.EnsureSuccessStatusCode();
                 if (response.IsSuccessStatusCode)
                 {
                     string result = await response.Content.ReadAsStringAsync();

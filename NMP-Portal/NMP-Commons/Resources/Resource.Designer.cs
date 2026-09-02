@@ -10255,7 +10255,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manner-NPK.
+        ///   Looks up a localized string similar to MANNER-NPK.
         /// </summary>
         public static string lblMannerNpkForHomePage {
             get {

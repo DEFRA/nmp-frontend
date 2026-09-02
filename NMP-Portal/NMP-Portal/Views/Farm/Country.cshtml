@@ -17,7 +17,7 @@
         <form asp-action="Country" method="post" asp-controller="Farm" autocomplete="off">
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)            
-            <govuk-radios asp-for="@Model.CountryID">
+            <govuk-radios for="@Model.CountryID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l text-wrap-anywhere">
                         @string.Format(Resource.lblWhichCountryIsIn, Model.Name)
@@ -26,7 +26,7 @@
                     {
                         @foreach (var item in ViewBag.CountryList)
                         {
-                            <govuk-radios-item disabled="@item.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland" value="@item.ID">@item.Name</govuk-radios-item>
+                            <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
                         }
                     }
                 </govuk-radios-fieldset>

@@ -23,7 +23,7 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
             HttpClient httpClient = await GetNMPAPIClient();
             var requisteUrl = string.Format(ApiurlHelper.AddressLookupAPI, HttpUtility.UrlEncode(postcode), HttpUtility.UrlEncode(offset.ToString()));
             var response = await httpClient.GetAsync(requisteUrl);
-            response.EnsureSuccessStatusCode();
+            
             if (response.IsSuccessStatusCode)
             {
                 string result = await response.Content.ReadAsStringAsync();

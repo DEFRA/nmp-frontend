@@ -175,10 +175,10 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
     public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
     {
         decimal rainfallAverage = 0;
-        string url = string.Format(ApiurlHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
+        string url = string.Format(ApiurlHelper.FetchMannerRainfallAverageAPI, firstHalfPostcode);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
-        response.EnsureSuccessStatusCode();
+        
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
@@ -189,31 +189,12 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
         return rainfallAverage;
     }
 
-    public async Task<List<SoilTypesResponse>> FetchSoilTypes()
-    {
-        List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
-        HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(ApiurlHelper.FetchSoilTypesAsyncAPI);
-        response.EnsureSuccessStatusCode();
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
-        if (response.IsSuccessStatusCode &&
-responseWrapper?.Data is not null)
-        {
-            var soiltypeslist = responseWrapper.Data
-                .ToObject<List<SoilTypesResponse>>();
-
-            soilTypes.AddRange(soiltypeslist);
-        }
-
-        return soilTypes;
-    }
 
     public async Task<Country?> FetchCountryById(int id)
     {
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCountryByIdAsyncAPI, id));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCountryByIdAPI, id));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper =
             JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -233,7 +214,7 @@ responseWrapper?.Data is not null)
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerManureGroupListAsyncAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerManureGroupListAPI);
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -255,7 +236,7 @@ responseWrapper?.Data is not null)
         List<ManureType> manureTypeList = new List<ManureType>();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerManureTypesAsyncAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerManureTypesAPI);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -283,7 +264,7 @@ responseWrapper?.Data is not null)
         CommonResponse? manureGroup = new CommonResponse();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureGroupByIdAsyncAPI, HttpUtility.UrlEncode(manureGroupId.ToString())));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureGroupByIdAPI, HttpUtility.UrlEncode(manureGroupId.ToString())));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -317,7 +298,7 @@ responseWrapper?.Data is not null)
         List<ApplicationMethodResponse> applicationMethodList = new List<ApplicationMethodResponse>();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerApplicationMethodsByApplicableForAsyncAPI, HttpUtility.UrlEncode(isLiquid.ToString()), HttpUtility.UrlEncode(fieldType.ToString())));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerApplicationMethodsByApplicableForAPI, HttpUtility.UrlEncode(isLiquid.ToString()), HttpUtility.UrlEncode(fieldType.ToString())));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
@@ -343,7 +324,7 @@ responseWrapper?.Data is not null)
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerIncorporationMethodsByApplicationIdAsyncAPI, HttpUtility.UrlEncode(appId.ToString()), applicableFor));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerIncorporationMethodsByApplicationIdAPI, HttpUtility.UrlEncode(appId.ToString()), applicableFor));
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
@@ -369,7 +350,7 @@ responseWrapper?.Data is not null)
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerIncorporationDelaysByMethodIdAndApplicableForAsyncAPI, HttpUtility.UrlEncode(methodId.ToString()), HttpUtility.UrlEncode(applicableFor)));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerIncorporationDelaysByMethodIdAndApplicableForAPI, HttpUtility.UrlEncode(methodId.ToString()), HttpUtility.UrlEncode(applicableFor)));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -408,7 +389,7 @@ responseWrapper?.Data is not null)
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerApplicationMethodByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerApplicationMethodByIdAPI, HttpUtility.UrlEncode(Id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -447,7 +428,7 @@ responseWrapper?.Data is not null)
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerIncorporationMethodByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerIncorporationMethodByIdAPI, HttpUtility.UrlEncode(Id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -486,7 +467,7 @@ responseWrapper?.Data is not null)
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerIncorporationDelaysByIdAsyncAPI, HttpUtility.UrlEncode(Id.ToString())));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerIncorporationDelaysByIdAPI, HttpUtility.UrlEncode(Id.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -523,9 +504,9 @@ responseWrapper?.Data is not null)
         Error? error = null;
         List<CommonResponse>? topSoilList = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = ApiurlHelper.FetchAllMannerTopSoilListAsyncAPI;
+        var requestUrl = ApiurlHelper.FetchAllMannerTopSoilListAPI;
         var response = await httpClient.GetAsync(requestUrl);
-        response.EnsureSuccessStatusCode();
+        
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
@@ -549,9 +530,9 @@ responseWrapper?.Data is not null)
         Error? error = null;
         List<CommonResponse>? subSoilList = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = ApiurlHelper.FetchAllMannerSubSoilListAsyncAPI;
+        var requestUrl = ApiurlHelper.FetchAllMannerSubSoilListAPI;
         var response = await httpClient.GetAsync(requestUrl);
-        response.EnsureSuccessStatusCode();
+        
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
@@ -576,9 +557,9 @@ responseWrapper?.Data is not null)
         ManureNutrientResponse? manureNutrientResponseResult = null;
         HttpClient httpClient = await GetNMPAPIClient();
         string jsonData = JsonConvert.SerializeObject(manureNutrientResponse);
-        var requestUrl = ApiurlHelper.CalculateNutrientValueBasedOnDryMatterAsyncAPI;
+        var requestUrl = ApiurlHelper.CalculateNutrientValueBasedOnDryMatterAPI;
         var response = await httpClient.PostAsync(requestUrl, new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json"));
-        response.EnsureSuccessStatusCode();
+        
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
