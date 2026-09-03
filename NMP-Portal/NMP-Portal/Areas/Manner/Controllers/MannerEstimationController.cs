@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -29,6 +30,7 @@ using System.Threading.Tasks;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Net.Mime.MediaTypeNames;
+using MvcRoute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace NMP.Portal.Areas.Manner.Controllers
 {
@@ -196,8 +198,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 BindFarmNameAndId(mannerEstimationViewModel);
             }
         }
-
-        [HttpGet("FarmName/{sid?}")]
+        [MvcRoute("FarmName/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> FarmName(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() action called");
@@ -214,8 +216,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-
-        [HttpPost("FarmName/{sessionId?}")]
+        [MvcRoute("FarmName/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FarmName([FromRoute] string? sessionId, MannerEstimationStep1ViewModel model)
         {
@@ -255,8 +257,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError(_farmNameKey, Resource.MsgFarmNameAlreadyExist);
             }
         }
-
-        [HttpGet("Country/{sid?}")]
+        [MvcRoute("Country/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> Country(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  Country() action called");
@@ -293,8 +295,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-
-        [HttpPost("Country/{sessionId?}")]
+        [MvcRoute("Country/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Country([FromRoute] string? sessionId, MannerEstimationStep2ViewModel model)
         {
@@ -331,8 +333,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-
-        [HttpGet("PostCode/{sid?}")]
+        [MvcRoute("PostCode/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> PostCode(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  PostCode() action called");
@@ -352,7 +354,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-        [HttpPost("PostCode/{sessionId?}")]
+        [MvcRoute("PostCode/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostCode([FromRoute] string? sessionId, MannerEstimationStep3ViewModel model)
         {
@@ -387,8 +390,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-
-        [HttpGet("AverageAnnualRainfall/{sid?}")]
+        [MvcRoute("AverageAnnualRainfall/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> AverageAnnualRainfall(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfall() action called");
@@ -423,8 +426,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-
-        [HttpPost("AverageAnnualRainfall/{sessionId?}")]
+        [MvcRoute("AverageAnnualRainfall/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AverageAnnualRainfall([FromRoute] string? sessionId, MannerEstimationStep4ViewModel model)
         {
@@ -440,8 +443,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return RedirectToAction("IsFarmOrganic", new { sid = sessionId });
         }
-
-        [HttpGet("AverageAnnualRainfallManual/{sid?}")]
+        [MvcRoute("AverageAnnualRainfallManual/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> AverageAnnualRainfallManual(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AverageAnnualRainfallManual() action called");
@@ -457,8 +460,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-
-        [HttpPost("AverageAnnualRainfallManual/{sessionId?}")]
+        [MvcRoute("AverageAnnualRainfallManual/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AverageAnnualRainfallManual([FromRoute] string? sessionId, MannerEstimationStep4ViewModel model)
         {
@@ -504,8 +507,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError(key, Resource.MsgEnterRainfallBetween1And3000);
             }
         }
-
-        [HttpGet("FieldName/{sid?}")]
+        [MvcRoute("FieldName/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> FieldName(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FieldName() action called");
@@ -526,7 +529,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost("FieldName/{sessionId?}")]
+        [MvcRoute("FieldName/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult FieldName([FromRoute] string? sessionId, MannerEstimationStep5ViewModel model)
         {
@@ -550,8 +554,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("NVZField", new { sid = sessionId });
         }
-
-        [HttpGet("NVZField/{sid?}")]
+        [MvcRoute("NVZField/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> NVZField(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} NVZField() action called");
@@ -571,7 +575,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-        [HttpPost("NVZField/{sessionId?}")]
+        [MvcRoute("NVZField/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NVZField([FromRoute] string? sessionId, MannerEstimationStep6ViewModel model)
         {
@@ -595,8 +600,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("TopSoil", new { sid = sessionId });
         }
-
-        [HttpGet("SoilType/{sid?}")]
+        [MvcRoute("SoilType/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> SoilType(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilType() action called");
@@ -616,8 +621,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-
-        [HttpPost("SoilType/{sessionId?}")]
+        [MvcRoute("SoilType/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilType([FromRoute] string? sessionId, MannerEstimationStep7ViewModel model)
         {
@@ -640,7 +645,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("CropGroup", new { sid = sessionId });
         }
-        [HttpGet("CropGroup/{sid?}")]
+        [MvcRoute("CropGroup/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> CropGroup(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropGroup() action called");
@@ -660,8 +666,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-
-        [HttpPost("CropGroup/{sessionId?}")]
+        [MvcRoute("CropGroup/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropGroup([FromRoute] string? sessionId, MannerEstimationStep8ViewModel model)
         {
@@ -687,8 +693,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !model.IsCropGroupChange) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("CropType", new { sid = sessionId });
         }
-
-        [HttpGet("CropType/{sid?}")]
+        [MvcRoute("CropType/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> CropType(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} CropType() action called");
@@ -707,8 +713,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-
-        [HttpPost("CropType/{sessionId?}")]
+        [MvcRoute("CropType/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CropType([FromRoute] string? sessionId, MannerEstimationStep9ViewModel model)
         {
@@ -776,7 +782,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("ManureGroup");
         }
-        [HttpGet("ManureGroup/{sid?}")]
+        [MvcRoute("ManureGroup/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> ManureGroup(string? sid, string? q, string? r, string? s)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureGroup() action called");
@@ -830,7 +837,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost("ManureGroup/{sessionId?}")]
+        [MvcRoute("ManureGroup/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManureGroup([FromRoute] string? sessionId, MannerEstimationStep11ViewModel model)
         {
@@ -900,7 +908,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return (selectListItems, error);
         }
-        [HttpGet("ManureType/{sid?}")]
+        [MvcRoute("ManureType/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> ManureType(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManureType() action called");
@@ -923,8 +932,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-
-        [HttpPost("ManureType/{sessionId?}")]
+        [MvcRoute("ManureType/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManureType([FromRoute] string? sessionId, MannerEstimationStep12ViewModel model)
         {
@@ -999,7 +1008,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return (true, null, null);
         }
-        [HttpGet("ApplicationDate/{sid?}")]
+        [MvcRoute("ApplicationDate/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> ApplicationDate(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationDate() action called");
@@ -1044,7 +1054,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-        [HttpPost("ApplicationDate/{sessionId?}")]
+        [MvcRoute("ApplicationDate/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApplicationDate([FromRoute] string? sessionId, MannerEstimationStep13ViewModel formData)
         {
@@ -1517,7 +1528,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ModelState.AddModelError(key, errorMessage);
             }
         }
-        [HttpGet("CopyExistingFarmAndFieldDetails/{sid?}")]
+        [MvcRoute("CopyExistingFarmAndFieldDetails/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> CopyExistingFarmAndFieldDetails(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyExistingFarmAndFieldDetails() action called");
@@ -1555,7 +1567,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost("CopyExistingFarmAndFieldDetails/{sessionId?}")]
+        [MvcRoute("CopyExistingFarmAndFieldDetails/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CopyExistingFarmAndFieldDetails([FromRoute] string? sessionId, MannerEstimationStep14ViewModel model)
         {
@@ -1625,7 +1638,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (farmsWithFields, isAnyFarmExists);
         }
 
-        [HttpGet("FarmToCopy/{sid?}")]
+        [MvcRoute("FarmToCopy/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> FarmToCopy(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FarmToCopy() action called");
@@ -1652,7 +1666,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost("FarmToCopy/{sessionId?}")]
+        [MvcRoute("FarmToCopy/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FarmToCopy([FromRoute] string? sessionId, MannerEstimationStep15ViewModel model)
         {
@@ -1720,7 +1735,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return fieldList;
         }
-        [HttpGet("FieldToCopy/{sid?}")]
+        [MvcRoute("FieldToCopy/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> FieldToCopy(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  FieldToCopy() action called");
@@ -1746,7 +1762,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
-        [HttpPost("FieldToCopy/{sessionId?}")]
+        [MvcRoute("FieldToCopy/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FieldToCopy([FromRoute] string? sessionId, MannerEstimationStep16ViewModel model)
         {
@@ -1790,7 +1807,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
-        [HttpGet("IsFarmOrganic/{sid?}")]
+        [MvcRoute("IsFarmOrganic/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> IsFarmOrganic(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  IsFarmOrganic() action called");
@@ -1811,7 +1829,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("IsFarmOrganic/{sessionId?}")]
+        [MvcRoute("IsFarmOrganic/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IsFarmOrganic([FromRoute] string? sessionId, MannerEstimationStep17ViewModel model)
         {
@@ -1859,7 +1878,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }).ToList();
 
         }
-        [HttpGet("TopSoil/{sid?}")]
+
+        [MvcRoute("TopSoil/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> TopSoil(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  TopSoil() action called");
@@ -1887,7 +1908,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost("TopSoil/{sessionId?}")]
+        [MvcRoute("TopSoil/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> TopSoil([FromRoute] string? sessionId, MannerEstimationStep18ViewModel model)
         {
@@ -1954,7 +1976,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }).ToList();
 
         }
-        [HttpGet("SubSoil/{sid?}")]
+        [MvcRoute("SubSoil/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> SubSoil(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  SubSoil() action called");
@@ -1981,7 +2004,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
-        [HttpPost("SubSoil/{sessionId?}")]
+        [MvcRoute("SubSoil/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SubSoil([FromRoute] string? sessionId, MannerEstimationStep19ViewModel model)
         {
@@ -2012,7 +2036,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
-        [HttpGet("SowingDate/{sid?}")]
+        
+        [MvcRoute("SowingDate/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> SowingDate(string? sid, string? q)
         {
             _logger.LogTrace("Crop Controller : SowingDate action called");
@@ -2039,7 +2065,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost("SowingDate/{sessionId?}")]
+        [MvcRoute("SowingDate/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SowingDate([FromRoute] string? sessionId, MannerEstimationStep20ViewModel model)
         {
@@ -2134,7 +2161,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return applicationMethodList;
         }
-        [HttpGet("ApplicationMethod/{sid?}")]
+
+        [MvcRoute("ApplicationMethod/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> ApplicationMethod(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationMethod() action called");
@@ -2165,7 +2194,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost("ApplicationMethod/{sessionId?}")]
+        [MvcRoute("ApplicationMethod/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApplicationMethod([FromRoute] string? sessionId, MannerEstimationStep23ViewModel model)
         {
@@ -2206,7 +2236,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
         }
-        [HttpGet("DefaultNutrientValues/{sid?}")]
+
+        [MvcRoute("DefaultNutrientValues/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> DefaultNutrientValues(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} DefaultNutrientValues() action called");
@@ -2226,7 +2258,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-        [HttpPost("DefaultNutrientValues/{sessionId?}")]
+
+        [MvcRoute("DefaultNutrientValues/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DefaultNutrientValues([FromRoute] string? sessionId, MannerEstimationStep24ViewModel model)
         {
@@ -2408,7 +2442,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     string.Format(Resource.MsgMinMaxValidation, displayName, max));
             }
         }
-        [HttpGet("ManualNutrientValues/{sid?}")]
+        [MvcRoute("ManualNutrientValues/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> ManualNutrientValues(string? sid, string? q, string? r)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManualNutrientValues() action called");
@@ -2431,7 +2466,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-        [HttpPost("ManualNutrientValues/{sessionId?}")]
+
+        [MvcRoute("ManualNutrientValues/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualNutrientValues([FromRoute] string? sessionId, MannerEstimationStep25ViewModel model)
         {
@@ -2503,7 +2540,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ReplaceNumericError(_mgOKey, Resource.lblMgO, Resource.lblMagnesiumMgO);
         }
 
-        [HttpGet("ApplicationRateMethod/{sid?}")]
+        [MvcRoute("ApplicationRateMethod/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> ApplicationRateMethod(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ApplicationRateMethod() action called");
@@ -2526,7 +2564,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost("ApplicationRateMethod/{sessionId?}")]
+        [MvcRoute("ApplicationRateMethod/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApplicationRateMethod([FromRoute] string? sessionId, MannerEstimationStep26ViewModel formData)
         {
@@ -2633,7 +2672,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return manureId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
                 || manureId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
         }
-        [HttpGet("ManualApplicationRate/{sid?}")]
+
+        [MvcRoute("ManualApplicationRate/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> ManualApplicationRate(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ManualApplicationRate() action called");
@@ -2654,7 +2695,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
         }
-        [HttpPost("ManualApplicationRate/{sessionId?}")]
+
+        [MvcRoute("ManualApplicationRate/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManualApplicationRate([FromRoute] string? sessionId, MannerEstimationStep27ViewModel formData)
         {
@@ -2744,7 +2787,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model.IsEndClosedPeriodFebruaryWarning = false;
             model.IsStartClosedPeriodEndFebWarning = false;
         }
-        [HttpGet("AreaQuantity/{sid?}")]
+
+        [MvcRoute("AreaQuantity/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> AreaQuantity(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AreaQuantity() action called");
@@ -2766,7 +2811,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost("AreaQuantity/{sessionId?}")]
+
+        [MvcRoute("AreaQuantity/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AreaQuantity([FromRoute] string? sessionId, MannerEstimationStep28ViewModel formData)
         {
@@ -2958,7 +3005,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpGet("CopyEstimate/{sid?}")]
+
+        [MvcRoute("CopyEstimate/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> CopyEstimate(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyEstimate() action called");
@@ -3005,7 +3054,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpPost("CopyEstimate/{sessionId?}")]
+
+        [MvcRoute("CopyEstimate/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CopyEstimate([FromRoute] string? sessionId, MannerEstimationStep21ViewModel model)
         {
@@ -3046,7 +3097,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpGet("CopyFromEstimates/{sid?}")]
+
+        [MvcRoute("CopyFromEstimates/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> CopyFromEstimates(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  CopyFromEstimates() action called");
@@ -3076,7 +3129,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpPost("CopyFromEstimates/{sessionId?}")]
+        [MvcRoute("CopyFromEstimates/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CopyFromEstimates([FromRoute] string? sessionId, MannerEstimationStep22ViewModel model)
         {
@@ -3267,7 +3321,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return (incorporationMethods, error);
         }
-        [HttpGet("IncorporationMethod/{sid?}")]
+
+        [MvcRoute("IncorporationMethod/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> IncorporationMethod(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} IncorporationMethod() action called");
@@ -3302,7 +3358,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost("IncorporationMethod/{sessionId?}")]
+
+        [MvcRoute("IncorporationMethod/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IncorporationMethod([FromRoute] string? sessionId, MannerEstimationStep29ViewModel model)
         {
@@ -3379,7 +3437,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return (incorporationDelaysList, error);
         }
-        [HttpGet("IncorporationDelay/{sid?}")]
+
+        [MvcRoute("IncorporationDelay/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> IncorporationDelay(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} IncorporationDelay() action called");
@@ -3414,7 +3474,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost("IncorporationDelay/{sessionId?}")]
+        [MvcRoute("IncorporationDelay/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> IncorporationDelay([FromRoute] string? sessionId, MannerEstimationStep30ViewModel model)
         {
@@ -3465,7 +3526,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ViewBag.SessionId = sid;
             }
         }
-        [HttpGet("Name/{sid?}")]
+
+        [MvcRoute("Name/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> Name(string? sid, string? q, string? r, string? s)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} Name() action called");
@@ -3494,7 +3557,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpPost("Name/{sessionId?}")]
+        [MvcRoute("Name/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Name([FromRoute] string? sessionId, MannerEstimationStep31ViewModel model)
         {
@@ -3622,7 +3686,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return null;
         }
 
-        [HttpGet("AutumnCropNitrogenUptake/{sid?}")]
+        [MvcRoute("AutumnCropNitrogenUptake/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> AutumnCropNitrogenUptake(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} AutumnCropNitrogenUptake() action called");
@@ -3637,7 +3702,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("AutumnCropNitrogenUptake/{sessionId?}")]
+        [MvcRoute("AutumnCropNitrogenUptake/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AutumnCropNitrogenUptake([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
@@ -3683,7 +3749,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpGet("SoilDrainageEndDate/{sid?}")]
+        [MvcRoute("SoilDrainageEndDate/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> SoilDrainageEndDate(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} SoilDrainageEndDate() action called");
@@ -3699,7 +3766,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
         }
 
-        [HttpPost("SoilDrainageEndDate/{sessionId?}")]
+        [MvcRoute("SoilDrainageEndDate/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SoilDrainageEndDate([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
@@ -3793,7 +3861,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet("RainfallWithinSixHour/{sid?}")]
+        [MvcRoute("RainfallWithinSixHour/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> RainfallWithinSixHour(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} RainfallWithinSixHour() action called");
@@ -3819,7 +3888,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("RainfallWithinSixHour/{sessionId?}")]
+        [MvcRoute("RainfallWithinSixHour/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RainfallWithinSixHour([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
@@ -3858,7 +3928,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         JsonConvert.SerializeObject(rainfallPostCodeApplication));
             }
         }
-        [HttpGet("EffectiveRainfall/{sid?}")]
+
+        [MvcRoute("EffectiveRainfall/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> EffectiveRainfall(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  EffectiveRainfall() action called");
@@ -3881,7 +3953,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpPost("EffectiveRainfall/{sessionId?}")]
+        [MvcRoute("EffectiveRainfall/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EffectiveRainfall([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
@@ -3899,7 +3972,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange && !mannerEstimationStep32ViewModel.IsApplicationDateChange) ? RedirectToAction(_updateApplicationDataActionName, new { sid = sessionId }) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
         }
 
-        [HttpGet("EffectiveRainfallManual/{sid?}")]
+        [MvcRoute("EffectiveRainfallManual/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> EffectiveRainfallManual(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} EffectiveRainfallManual() action called");
@@ -3910,7 +3984,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("EffectiveRainfallManual/{sessionId?}")]
+        [MvcRoute("EffectiveRainfallManual/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EffectiveRainfallManual([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
@@ -3959,7 +4034,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet("Windspeed/{sid?}")]
+        [MvcRoute("Windspeed/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> Windspeed(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} Windspeed() action called");
@@ -3985,7 +4061,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("Windspeed/{sessionId?}")]
+        [MvcRoute("Windspeed/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Windspeed([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
@@ -4006,7 +4083,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationStep32ViewModel.IsManureTypeChange && !mannerEstimationStep32ViewModel.IsApplicationDateChange) ? RedirectToAction(_updateApplicationDataActionName, new { sid = sessionId }) : RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId });
         }
 
-        [HttpGet("TopsoilMoisture/{sid?}")]
+        [MvcRoute("TopsoilMoisture/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> TopsoilMoisture(string? sid, string? q)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} TopsoilMoisture() action called");
@@ -4032,7 +4110,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("TopsoilMoisture/{sessionId?}")]
+        [MvcRoute("TopsoilMoisture/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> TopsoilMoisture([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
@@ -4090,7 +4169,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet("ConditionsAffectingNutrients/{sid?}")]
+        [MvcRoute("ConditionsAffectingNutrients/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> ConditionsAffectingNutrients(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} ConditionsAffectingNutrients() action called");
@@ -4192,7 +4272,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             return View(model);
         }
-        [HttpPost("ConditionsAffectingNutrients/{sessionId?}")]
+
+        [MvcRoute("ConditionsAffectingNutrients/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConditionsAffectingNutrients([FromRoute] string? sessionId, MannerEstimationStep32ViewModel model)
         {
@@ -4335,7 +4417,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             );
 
         }
-        [HttpGet("UpdateNitrogenPriceQuestion/{sid?}")]
+
+        [MvcRoute("UpdateNitrogenPriceQuestion/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> UpdateNitrogenPriceQuestion(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdateNitrogenPriceQuestion() action called");
@@ -4358,7 +4442,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("UpdateNitrogenPriceQuestion/{sessionId?}")]
+
+        [MvcRoute("UpdateNitrogenPriceQuestion/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateNitrogenPriceQuestion([FromRoute] string? sessionId, MannerEstimationStep33ViewModel model)
         {
@@ -4377,7 +4463,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return RedirectToAction("UpdateNitrogenPrice", new { sid = sessionId });
         }
 
-        [HttpGet("NutrientProduct/{sid?}")]
+
+        [MvcRoute("NutrientProduct/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> NutrientProduct(string? sid, string q, string r)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} NutrientProduct() action called");
@@ -4447,7 +4535,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
 
         }
-        [HttpPost("NutrientProduct/{sessionId?}")]
+
+        [MvcRoute("NutrientProduct/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NutrientProduct([FromRoute] string? sessionId, MannerEstimationStep35ViewModel model)
         {
@@ -4548,7 +4638,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet("UpdateNitrogenPrice/{sid?}")]
+
+        [MvcRoute("UpdateNitrogenPrice/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> UpdateNitrogenPrice(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdateNutrientPrice() action called");
@@ -4559,7 +4651,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("UpdateNitrogenPrice/{sessionId?}")]
+
+        [MvcRoute("UpdateNitrogenPrice/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateNitrogenPrice([FromRoute] string? sessionId, MannerEstimationStep34ViewModel model)
         {
@@ -4626,7 +4720,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet("UpdatePhosphorusPriceQuestion/{sid?}")]
+
+        [MvcRoute("UpdatePhosphorusPriceQuestion/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> UpdatePhosphorusPriceQuestion(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPriceQuestion() action called");
@@ -4650,7 +4746,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("UpdatePhosphorusPriceQuestion/{sessionId?}")]
+        [MvcRoute("UpdatePhosphorusPriceQuestion/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePhosphorusPriceQuestion([FromRoute] string? sessionId, MannerEstimationStep36ViewModel model)
         {
@@ -4669,7 +4766,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _mannerEstimationLogic.SetMannerEstimationStep36(model);
             return RedirectToAction("UpdatePhosphorusPrice", new { sid = sessionId });
         }
-        [HttpGet("UpdatePhosphorusPrice/{sid?}")]
+
+        [MvcRoute("UpdatePhosphorusPrice/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> UpdatePhosphorusPrice(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPrice() action called");
@@ -4680,7 +4779,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("UpdatePhosphorusPrice/{sessionId?}")]
+        [MvcRoute("UpdatePhosphorusPrice/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePhosphorusPrice([FromRoute] string? sessionId, MannerEstimationStep37ViewModel model)
         {
@@ -4748,7 +4848,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        [HttpGet("UpdatePotashPriceQuestion/{sid?}")]
+        [MvcRoute("UpdatePotashPriceQuestion/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> UpdatePotashPriceQuestion(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPriceQuestion() action called");
@@ -4771,7 +4872,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("UpdatePotashPriceQuestion/{sessionId?}")]
+        [MvcRoute("UpdatePotashPriceQuestion/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePotashPriceQuestion([FromRoute] string? sessionId, MannerEstimationStep38ViewModel model)
         {
@@ -4789,7 +4891,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _mannerEstimationLogic.SetMannerEstimationStep38(model);
             return RedirectToAction("UpdatePotashPrice", new { sid = sessionId });
         }
-        [HttpGet("UpdatePotashPrice/{sid?}")]
+
+        [MvcRoute("UpdatePotashPrice/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> UpdatePotashPrice(string? sid)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} UpdatePhosphorusPrice() action called");
@@ -4799,8 +4903,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View(model);
 
         }
-
-        [HttpPost("UpdatePotashPrice/{sessionId?}")]
+        [HttpPost]
+        [MvcRoute("UpdatePotashPrice/{sessionId?}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePotashPrice([FromRoute] string? sessionId, MannerEstimationStep39ViewModel model)
         {
@@ -5963,7 +6067,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpGet("RemoveEstimations/{sid?}")]
+        [MvcRoute("RemoveEstimations/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> RemoveEstimations(string? sid, string? q)
         {
             MannerEstimationStep40ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep40();
@@ -5976,7 +6081,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("RemoveEstimations/{sessionId?}")]
+        [MvcRoute("RemoveEstimations/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveEstimations([FromRoute] string? sessionId, MannerEstimationStep40ViewModel model)
         {
@@ -6091,7 +6197,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 })
                 .ToList();
         }
-        [HttpGet("RemoveMannerEstimateApplication/{sid?}")]
+
+        [MvcRoute("RemoveMannerEstimateApplication/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult?> RemoveMannerEstimateApplication(string? sid, string? q)
         {
             MannerEstimationStep41ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep41();
@@ -6118,7 +6226,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return View(model);
         }
-        [HttpPost("RemoveMannerEstimateApplication/{sessionId?}")]
+
+        [MvcRoute("RemoveMannerEstimateApplication/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveMannerEstimateApplication([FromRoute] string? sessionId, MannerEstimationStep41ViewModel model)
         {
@@ -6243,7 +6353,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return RedirectToAction(_conditionsAffectingNutrients, new { sid = sid });
         }
-        [HttpGet("RemoveMannerFarm/{sid?}")]
+
+        [MvcRoute("RemoveMannerFarm/{sid?}")]
+        [HttpGet]
         public async Task<IActionResult> RemoveMannerFarm(string? sid, string? q)
         {
             MannerEstimationStep42ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep42();
@@ -6253,7 +6365,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        [HttpPost("RemoveMannerFarm/{sessionId?}")]
+
+        [MvcRoute("RemoveMannerFarm/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveMannerFarm([FromRoute] string? sessionId, MannerEstimationStep42ViewModel model)
         {
@@ -6357,7 +6471,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
 
-        [HttpPost("UpdateNutrientValues/{sessionId?}")]
+        [MvcRoute("UpdateNutrientValues/{sessionId?}")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateNutrientValues([FromRoute] string? sessionId, MannerEstimationStep25ViewModel model)
         {
