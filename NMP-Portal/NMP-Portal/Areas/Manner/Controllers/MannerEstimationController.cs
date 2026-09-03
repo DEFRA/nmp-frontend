@@ -34,6 +34,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 {
 
     [Area("Manner")]
+    [Route("[area]/[controller]")]
     [Authorize]
     public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IDataProtectionProvider dataProtectionProvider, IMannerEstimationLogicDependencies dependencies) : Controller
     {
@@ -6189,6 +6190,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return selectListItem;
 
         }
+        [HttpGet("MannerFarmList")]
         public async Task<IActionResult> MannerFarmList(string? q, string? r)
         {
             ViewBag.IsNewFarm = _mannerEstimationProtector.Protect(Resource.lblFalse);
@@ -6221,7 +6223,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return View();
         }
-
+        [HttpGet("AddNewMannerEstimate")]
         public async Task<IActionResult> AddNewMannerEstimate(string? sid)
         {
             (MannerEstimationApplication? mannerEstimationApplicationResult, Error? error)
@@ -6332,6 +6334,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
 
         }
+        [HttpGet("RemoveMannerEstimationSessionByKey")]
         public void RemoveMannerEstimationSessionByKey(string? sessionId)
         {
             if (!string.IsNullOrWhiteSpace(sessionId))
