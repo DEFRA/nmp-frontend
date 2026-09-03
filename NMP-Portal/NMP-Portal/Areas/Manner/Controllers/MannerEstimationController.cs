@@ -83,6 +83,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _dateFormat = "d MMMM yyyy";
         private const string _manualNutrientValuesKey = "ManualNutrientValues";
         private const string _conditionsAffectingNutrientsErrorKey = "ConditionsAffectingNutrientsError";
+        private const string _fieldNameKey = "FieldName"; 
+        private const string _topSoilKey = "TopSoil";
 
         [HttpGet("Index")]
         public IActionResult Index()
@@ -539,7 +541,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             if (string.IsNullOrWhiteSpace(model.FieldName))
             {
-                ModelState.AddModelError("FieldName", Resource.MsgEnterTheFieldName);
+                ModelState.AddModelError(_fieldNameKey, Resource.MsgEnterTheFieldName);
             }
 
             if (!ModelState.IsValid)
@@ -570,7 +572,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.IsWithinNVZ = true;
                 _mannerEstimationLogic.SetMannerEstimationStep6(model);
-                return RedirectToAction("TopSoil", new { sid = sid });
+                return RedirectToAction(_topSoilKey, new { sid = sid });
             }
             if (model == null)
             {
@@ -603,7 +605,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             _mannerEstimationLogic.SetMannerEstimationStep6(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("TopSoil", new { sid = sessionId });
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction(_topSoilKey, new { sid = sessionId });
         }
 
         [HttpGet("SoilType/{sid?}")]
@@ -1815,7 +1817,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.IsFarmOrganic = false;
                 _mannerEstimationLogic.SetMannerEstimationStep17(model);
-                return RedirectToAction("FieldName", new { sid = sid });
+                return RedirectToAction(_fieldNameKey, new { sid = sid });
             }
             if (model == null)
             {
@@ -1850,7 +1852,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 _mannerEstimationLogic.SetMannerEstimationStep17(model);
 
-                return RedirectToAction("FieldName", new { sid = sessionId });
+                return RedirectToAction(_fieldNameKey, new { sid = sessionId });
             }
             catch (HttpRequestException hre)
             {
@@ -1932,7 +1934,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (Exception ex)
             {
-                return HandleException(ex, "TopSoil");
+                return HandleException(ex, _topSoilKey);
             }
 
         }
@@ -2025,7 +2027,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (Exception ex)
             {
-                return HandleException(ex, "TopSoil");
+                return HandleException(ex, _topSoilKey);
             }
 
         }
@@ -3584,7 +3586,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             MannerEstimationViewModel? mannerEstimation = _mannerEstimationLogic.GetMannerEstimationFromSession();
             if (mannerEstimation != null && mannerEstimation.MannerFarmId != null && string.IsNullOrWhiteSpace(mannerEstimation.EncryptedMannerEstimationId))
             {
-                return (flowControl: false, value: RedirectToAction("FieldName", new { sid = sessionId }));
+                return (flowControl: false, value: RedirectToAction(_fieldNameKey, new { sid = sessionId }));
             }
 
             return (flowControl: true, value: null);
