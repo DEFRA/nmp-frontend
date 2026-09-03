@@ -4,13 +4,13 @@
 
 @{
     var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)
-        && !Model.IsComingForAddNewApplication
+        && !Model.IsComingForAddNewApplication &&!Model.IsManureTypeChange&&!Model.IsApplicationDateChange
         ? "MannerEstimationResult"
         : "ConditionsAffectingNutrients";
 }
 
 <govuk-back-link asp-action="@backAction"
-                 asp-controller="MannerEstimation"
+                 asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId"
                  asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">
     @Resource.lblBack
 </govuk-back-link>

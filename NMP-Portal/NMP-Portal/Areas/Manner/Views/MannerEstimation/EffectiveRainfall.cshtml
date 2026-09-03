@@ -10,14 +10,14 @@
 @section BeforeContent {
     @if(Model.IsSoilDrainageEndDateChange)
     {
-        <govuk-back-link asp-action="SoilDrainageEndDate" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="SoilDrainageEndDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else{
     <partial name="_BackLinkForConditionPages" model="Model" />
     }
 }
 
-<form asp-action="EffectiveRainfall" asp-controller="MannerEstimation" method="post" autocomplete="off">
+<form asp-action="EffectiveRainfall" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
 
@@ -28,7 +28,7 @@
                 <h3 class="govuk-heading-s">@Resource.lblTotalRainfall</h3>
                 <p class="govuk-body">@string.Concat(Model.TotalRainfall, Resource.lblmm)</p>
                 <p class="govuk-body margin-bottom-forty">
-                    <a class="govuk-link" asp-action="EffectiveRainfallManual" asp-controller="MannerEstimation">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblTotalRainfallSinceApplication</span></a>
+                    <a class="govuk-link" asp-action="EffectiveRainfallManual" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblTotalRainfallSinceApplication</span></a>
                 </p>
 
             </div>

@@ -10552,6 +10552,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The maximum number of applications has been reached..
+        /// </summary>
+        public static string lblMaximumNoOfApplicationIsReached {
+            get {
+                return ResourceManager.GetString("lblMaximumNoOfApplicationIsReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to May.
         /// </summary>
         public static string lblMay {

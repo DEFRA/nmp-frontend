@@ -10,7 +10,7 @@
     <partial name="_BackLinkForConditionPages" model="Model" />
 }
 
-<form asp-action="AutumnCropNitrogenUptake" asp-controller="MannerEstimation" method="post" autocomplete="off">
+<form asp-action="AutumnCropNitrogenUptake" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
     @Html.AntiForgeryToken()
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

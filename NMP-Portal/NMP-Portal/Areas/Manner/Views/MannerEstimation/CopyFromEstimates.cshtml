@@ -8,7 +8,7 @@
     ViewData["Title"] = $"{Resource.lblDoYouWantToStartWithACopyOn} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "CopyEstimate")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@( Model.IsCheckAnswer ? "CheckAnswer" : "CopyEstimate")" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -19,7 +19,7 @@
                 <govuk-error-summary-item href="#">@TempData["CopyFromEstimates"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="CopyFromEstimates" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="CopyFromEstimates" method="post" asp-controller="MannerEstimation" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <govuk-radios for="@Model.MannerEstimationId">
                 <govuk-radios-fieldset>

@@ -9,7 +9,7 @@
 }
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBackToResults</govuk-back-link>
+        <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBackToResults</govuk-back-link>
     </div>
 }
 
