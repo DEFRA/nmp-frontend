@@ -12,6 +12,10 @@
     {
         backAction = "Name";
     }
+    if (Model.CountryId.HasValue && Model.CountryId.Value == (int)FarmCountry.Scotland)
+    {
+        backAction = "AverageAnnualRainfall";
+    }
 }
 
 @section BeforeContent {
@@ -27,7 +31,7 @@
                     @Resource.AddFieldNameQuestion
                 </govuk-input-label>
             </govuk-input>
-            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button> 
         </form>

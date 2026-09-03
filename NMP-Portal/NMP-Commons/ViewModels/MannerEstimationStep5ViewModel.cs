@@ -15,5 +15,6 @@ namespace NMP.Commons.ViewModels
         public string FieldName { get; set; } = string.Empty;
         public string? EncryptedMannerEstimateId { get; set; } = string.Empty;
         public int? MannerFarmId { get; set; }
+        public int? CountryId { get; set; }
     }
 }
