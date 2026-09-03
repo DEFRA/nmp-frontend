@@ -2179,6 +2179,16 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             BindMannerFarmNameAndIdOnNavigation();
+
+            if (Functions.IsOtherManureType(model.ManureType.Id))
+            {
+                
+                model.DefaultNutrientValue = false;
+                await _mannerEstimationLogic.SetMannerEstimationStep24(model);
+                return RedirectToAction("ManualNutrientValues");
+
+                
+            }
             return View(model);
         }
         [HttpPost]
@@ -2561,7 +2571,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         private async Task<Error?> GetDefaultNitrogenRate(MannerEstimationStep26ViewModel model, Error? error)
         {
-            if (!IsOtherManureType(model.ManureTypeId))
+            if (!Functions.IsOtherManureType(model.ManureTypeId))
             {
                 (ManureType? manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
 
@@ -2578,11 +2588,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return error;
         }
 
-        private static bool IsOtherManureType(int? manureId)
-        {
-            return manureId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
-                || manureId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
-        }
+        
         [HttpGet]
         public async Task<IActionResult> ManualApplicationRate(string? q)
         {
@@ -4792,12 +4798,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
     where TModel : MannerEstimationNWarningViewModel
         {
             Error? error = null;
-            if (!(IsOtherManureType(model.ManureTypeId)))
+            if (!(Functions.IsOtherManureType(model.ManureTypeId)))
             {
                 (model, error) = await IsEndClosedPeriodFebruaryWarningMessage(model, mannerEstimationId, mannerAppId);
 
             }
-            if (!(IsOtherManureType(model.ManureTypeId)))
+            if (!(Functions.IsOtherManureType(model.ManureTypeId)))
             {
                 (model, error) = await IsClosedPeriodStartAndEndFebExceedNRateException(model, mannerEstimationId, mannerAppId);
 

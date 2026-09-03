@@ -617,15 +617,19 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeLiquid = manureType.IsLiquid;
             if (!isDefault)
             {
-                mannerEstimationViewModel.MannerEstimationStep25.MgO = manureType.MgO;
-                mannerEstimationViewModel.MannerEstimationStep25.N = manureType.TotalN;
-                mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent = manureType.DryMatter;
-                mannerEstimationViewModel.MannerEstimationStep25.P2O5 = manureType.P2O5;
-                mannerEstimationViewModel.MannerEstimationStep25.SO3 = manureType.SO3;
-                mannerEstimationViewModel.MannerEstimationStep25.K2O = manureType.K2O;
-                mannerEstimationViewModel.MannerEstimationStep25.NH4N = manureType.NH4N;
-                mannerEstimationViewModel.MannerEstimationStep25.NO3N = manureType.NO3N;
-                mannerEstimationViewModel.MannerEstimationStep25.UricAcid = manureType.Uric;
+                if(!Functions.IsOtherManureType(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value))
+                {
+                    mannerEstimationViewModel.MannerEstimationStep25.MgO = manureType.MgO;
+                    mannerEstimationViewModel.MannerEstimationStep25.N = manureType.TotalN;
+                    mannerEstimationViewModel.MannerEstimationStep25.DryMatterPercent = manureType.DryMatter;
+                    mannerEstimationViewModel.MannerEstimationStep25.P2O5 = manureType.P2O5;
+                    mannerEstimationViewModel.MannerEstimationStep25.SO3 = manureType.SO3;
+                    mannerEstimationViewModel.MannerEstimationStep25.K2O = manureType.K2O;
+                    mannerEstimationViewModel.MannerEstimationStep25.NH4N = manureType.NH4N;
+                    mannerEstimationViewModel.MannerEstimationStep25.NO3N = manureType.NO3N;
+                    mannerEstimationViewModel.MannerEstimationStep25.UricAcid = manureType.Uric;
+                }
+               
             }
         }
         return mannerEstimationViewModel.MannerEstimationStep25;
