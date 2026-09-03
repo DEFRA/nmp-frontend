@@ -22,12 +22,13 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, ISnsAnalysisService snsAnalysisService, IRecommendationService recommendationService, IPreviousCroppingLogic previousCroppingLogic) : ICropLogic
+public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, ICropServiceDependencies dependencies) : ICropLogic
 {
     private readonly ILogger<CropLogic> _logger = logger;
-    private readonly ICropService _cropService = cropService;
-    private readonly ISnsAnalysisService _snsAnalysisService = snsAnalysisService;
-    private readonly IRecommendationService _recommendationService = recommendationService;
+    private readonly ICropService _cropService = dependencies.CropService;
+    private readonly ISnsAnalysisService _snsAnalysisService = dependencies.SnsAnalysisService;
+    private readonly IRecommendationService _recommendationService = dependencies.RecommendationService;
+    private readonly IRb209Service _rb209Service = dependencies.Rb209Service;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -36,37 +37,37 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
     public async Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
     {
         _logger.LogTrace("Adding crop nutrient management plan");
-        return await _cropService.AddCropNutrientManagementPlanServiceAsync(cropData);
+        return await _cropService.AddCropNutrientManagementPlanAsync(cropData);
     }
 
     public async Task<(bool, Error)> CopyCropNutrientManagementPlan(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser)
     {
         _logger.LogTrace("Copying crop nutrient management plan for FarmID: {FarmID}, HarvestYear: {HarvestYear}, CopyYear: {CopyYear}", farmID, harvestYear, copyYear);
-        return await _cropService.CopyCropNutrientManagementPlanServiceAsync(farmID, harvestYear, copyYear, isOrganic, isFertiliser);
+        return await _cropService.CopyCropNutrientManagementPlanAsync(farmID, harvestYear, copyYear, isOrganic, isFertiliser);
     }
 
     public async Task<(Crop?, Error?)> FetchCropById(int id)
     {
         _logger.LogTrace("Fetching crop by ID: {CropId}", id);
-        return await _cropService.FetchCropByIdServiceAsync(id);
+        return await _cropService.FetchCropByIdAsync(id);
     }
 
     public async Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1Id(int cropTypeId, int cropInfo1Id)
     {
         _logger.LogTrace("Fetching CropInfo1 name for CropTypeId: {CropTypeId}, CropInfo1Id: {CropInfo1Id}", cropTypeId, cropInfo1Id);
-        return await _cropService.FetchCropInfo1NameByCropTypeIdAndCropInfo1IdServiceAsync(cropTypeId, cropInfo1Id);
+        return await _rb209Service.FetchCropInfo1NameByCropTypeIdAndCropInfo1IdAsync(cropTypeId, cropInfo1Id);
     }
 
     public async Task<string> FetchCropInfo2NameByCropInfo2Id(int cropInfo2Id)
     {
         _logger.LogTrace("Fetching CropInfo2 name for CropInfo2Id: {CropInfo2Id}", cropInfo2Id);
-        return await _cropService.FetchCropInfo2NameByCropInfo2IdServiceAsync(cropInfo2Id);
+        return await _rb209Service.FetchCropInfo2NameByCropInfo2IdAsync(cropInfo2Id);
     }
 
     public async Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId, int? farmRB209CountryID)
     {
         _logger.LogTrace("Fetching CropInfoOne for CropTypeId: {CropTypeId}", cropTypeId);
-        List<CropInfoOneResponse> cropInfoOneResponse = await _cropService.FetchCropInfoOneByCropTypeIdServiceAsync(cropTypeId);
+        List<CropInfoOneResponse> cropInfoOneResponse = await _rb209Service.FetchCropInfoOneByCropTypeIdAsync(cropTypeId);
         if (farmRB209CountryID.HasValue)
         {
             cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == farmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
@@ -77,181 +78,186 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
     public async Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId, int countryId)
     {
         _logger.LogTrace("Fetching CropInfoOne question for CropTypeId: {CropTypeId}", cropTypeId);
-        return await _cropService.FetchCropInfoOneQuestionByCropTypeIdServiceAsync(cropTypeId, countryId);
+        return await _cropService.FetchCropInfoOneQuestionByCropTypeIdAsync(cropTypeId, countryId);
     }
 
     public async Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeId()
     {
         _logger.LogTrace("Fetching CropInfoTwo");
-        return await _cropService.FetchCropInfoTwoByCropTypeIdServiceAsync();
+        return await _rb209Service.FetchCropInfoTwoByCropTypeIdAsync();
     }
 
     public async Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYear(int fieldId, int year)
     {
         _logger.LogTrace("Fetching crop plan for FieldId: {FieldId}, Year: {Year}", fieldId, year);
-        return await _cropService.FetchCropPlanByFieldIdAndYearServiceAsync(fieldId, year);
+        return await _cropService.FetchCropPlanByFieldIdAndYearAsync(fieldId, year);
     }
 
     public async Task<List<Crop>> FetchCropsByFieldId(int fieldId)
     {
         _logger.LogTrace("Fetching crops for FieldId: {FieldId}", fieldId);
-        return await _cropService.FetchCropsByFieldIdServiceAsync(fieldId);
+        return await _cropService.FetchCropsByFieldIdAsync(fieldId);
     }
 
     public async Task<int> FetchCropTypeByGroupId(int cropGroupId)
     {
         _logger.LogTrace("Fetching crop type by CropGroupId: {CropGroupId}", cropGroupId);
-        return await _cropService.FetchCropTypeByGroupIdServiceAsync(cropGroupId);
+        var cropTypeList = await _rb209Service.FetchCropTypesAsync(cropGroupId);
+        if (cropTypeList != null && cropTypeList.Count > 0)
+        {
+            return cropTypeList[0].CropTypeId;
+        }
+        return 0;
     }
 
     public async Task<decimal> FetchCropTypeDefaultYieldByCropTypeId(int cropTypeId, bool isScotland)
     {
         _logger.LogTrace("Fetching default yield for CropTypeId: {CropTypeId}", cropTypeId);
-        return await _cropService.FetchCropTypeDefaultYieldByCropTypeIdServiceAsync(cropTypeId, isScotland);
+        return await _cropService.FetchCropTypeDefaultYieldByCropTypeIdAsync(cropTypeId, isScotland);
     }
 
     public async Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking()
     {
         _logger.LogTrace("Fetching crop type linking");
-        return await _cropService.FetchCropTypeLinkingServiceAsync();
+        return await _cropService.FetchCropTypeLinkingAsync();
     }
 
     public async Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesById(int defoliationId)
     {
         _logger.LogTrace("Fetching defoliation sequence by ID: {DefoliationId}", defoliationId);
-        return await _cropService.FetchDefoliationSequencesByIdServiceAsync(defoliationId);
+        return await _rb209Service.FetchDefoliationSequencesByIdAsync(defoliationId);
     }
 
     public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward, int countryId)
     {
         _logger.LogTrace("Fetching defoliation sequences for SwardTypeId: {SwardTypeId}, SwardManagementId: {SwardManagementId}, NumberOfCut: {NumberOfCut}, IsNewSward: {IsNewSward},CountryId: {CountryId}", swardTypeId, swardManagementId, numberOfCut, isNewSward, countryId);
-        return await _cropService.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutServiceAsync(swardTypeId, swardManagementId, numberOfCut, isNewSward,countryId);
+        return await _rb209Service.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutAsync(swardTypeId, swardManagementId, numberOfCut, isNewSward,countryId);
     }
 
     public async Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds)
     {
         _logger.LogTrace("Fetching grass growth class for FieldIds: {FieldIds}", string.Join(", ", fieldIds));
-        return await _cropService.FetchGrassGrowthClassServiceAsync(fieldIds);
+        return await _cropService.FetchGrassGrowthClassAsync(fieldIds);
     }
 
     public async Task<List<GrassSeasonResponse>> FetchGrassSeasons()
     {
         _logger.LogTrace("Fetching grass seasons");
-        return await _cropService.FetchGrassSeasonsServiceAsync();
+        return await _rb209Service.FetchGrassSeasonsAsync();
     }
 
     public async Task<(List<HarvestYearPlanResponse>, Error?)> FetchHarvestYearPlansByFarmId(int harvestYear, int farmId)
     {
         _logger.LogTrace("Fetching harvest year plans for FarmId: {FarmId}, HarvestYear: {HarvestYear}", farmId, harvestYear);
-        return await _cropService.FetchHarvestYearPlansByFarmIdServiceAsync(harvestYear, farmId);
+        return await _cropService.FetchHarvestYearPlansByFarmIdAsync(harvestYear, farmId);
     }
 
     public async Task<(HarvestYearResponseHeader?, Error?)> FetchHarvestYearPlansDetailsByFarmId(int harvestYear, int farmId)
     {
         _logger.LogTrace("Fetching harvest year plan details for FarmId: {FarmId}, HarvestYear: {HarvestYear}", farmId, harvestYear);
-        return await _cropService.FetchHarvestYearPlansDetailsByFarmIdServiceAsync(harvestYear, farmId);
+        return await _cropService.FetchHarvestYearPlansDetailsByFarmIdAsync(harvestYear, farmId);
     }
 
     public async Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId, bool isShortSummary)
     {
         _logger.LogTrace("Fetching management periods for CropId: {CropId}, IsShortSummary: {IsShortSummary}", cropId, isShortSummary);
-        return await _cropService.FetchManagementperiodByCropIdServiceAsync(cropId, isShortSummary);
+        return await _cropService.FetchManagementperiodByCropIdAsync(cropId, isShortSummary);
     }
 
     public async Task<(ManagementPeriod?, Error?)> FetchManagementperiodById(int id)
     {
         _logger.LogTrace("Fetching management period by ID: {Id}", id);
-        return await _cropService.FetchManagementperiodByIdServiceAsync(id);
+        return await _cropService.FetchManagementperiodByIdAsync(id);
     }
 
     public async Task<List<PlanSummaryResponse>> FetchPlanSummaryByFarmId(int farmId, int type)
     {
         _logger.LogTrace("Fetching plan summary for FarmId: {FarmId}, Type: {Type}", farmId, type);
-        return await _cropService.FetchPlanSummaryByFarmIdServiceAsync(farmId, type);
+        return await _cropService.FetchPlanSummaryByFarmIdAsync(farmId, type);
     }
 
     public async Task<List<PotatoVarietyResponse>> FetchPotatoVarieties()
     {
         _logger.LogTrace("Fetching potato varieties");
-        return await _cropService.FetchPotatoVarietiesServiceAsync();
+        return await _rb209Service.FetchPotatoVarietiesAsync();
     }
 
     public async Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId)
     {
         _logger.LogTrace("Fetching potential cuts for SwardTypeId: {SwardTypeId}, SwardManagementId: {SwardManagementId}", swardTypeId, swardManagementId);
-        return await _cropService.FetchPotentialCutsBySwardTypeIdAndSwardManagementIdServiceAsync(swardTypeId, swardManagementId);
+        return await _rb209Service.FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsync(swardTypeId, swardManagementId);
     }
 
     public async Task<(List<RecommendationHeader>, Error?)> FetchRecommendationByFieldIdAndYear(int fieldId, int harvestYear)
     {
         _logger.LogTrace("Fetching recommendations for FieldId: {FieldId}, HarvestYear: {HarvestYear}", fieldId, harvestYear);
-        return await _cropService.FetchRecommendationByFieldIdAndYearServiceAsync(fieldId, harvestYear);
+        return await _cropService.FetchRecommendationByFieldIdAndYearAsync(fieldId, harvestYear);
     }
 
     public async Task<List<int>> FetchSecondCropListByFirstCropId(int firstCropTypeId, int rb209CountryId)
     {
         _logger.LogTrace("Fetching second crop list for FirstCropTypeId: {0},Rb209CountryId: {1}", firstCropTypeId, rb209CountryId);
-        return await _cropService.FetchSecondCropListByFirstCropIdServiceAsync(firstCropTypeId, rb209CountryId);
+        return await _cropService.FetchSecondCropListByFirstCropIdAsync(firstCropTypeId, rb209CountryId);
     }
 
     public async Task<(SwardManagementResponse, Error)> FetchSwardManagementBySwardManagementId(int swardManagementId)
     {
         _logger.LogTrace("Fetching sward management by ID: {SwardManagementId}", swardManagementId);
-        return await _cropService.FetchSwardManagementBySwardManagementIdServiceAsync(swardManagementId);
+        return await _rb209Service.FetchSwardManagementBySwardManagementIdAsync(swardManagementId);
     }
 
     public async Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementBySwardTypeId(int swardTypeId)
     {
         _logger.LogTrace("Fetching sward managements for SwardTypeId: {SwardTypeId}", swardTypeId);
-        return await _cropService.FetchSwardManagementBySwardTypeIdServiceAsync(swardTypeId);
+        return await _rb209Service.FetchSwardManagementBySwardTypeIdAsync(swardTypeId);
     }
 
     public async Task<(List<SwardManagementResponse>, Error)> FetchSwardManagements()
     {
         _logger.LogTrace("Fetching sward managements");
-        return await _cropService.FetchSwardManagementsServiceAsync();
+        return await _rb209Service.FetchSwardManagementsAsync();
     }
 
     public async Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeId(int swardTypeId)
     {
         _logger.LogTrace("Fetching sward type by ID: {SwardTypeId}", swardTypeId);
-        return await _cropService.FetchSwardTypeBySwardTypeIdServiceAsync(swardTypeId);
+        return await _rb209Service.FetchSwardTypeBySwardTypeIdAsync(swardTypeId);
     }
 
     public async Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesByCountry(int countryId)
     {
         _logger.LogTrace("Fetching sward types by CountryId:{CountryId}", countryId);
-        return await _cropService.FetchSwardTypesServiceByCountryAsync(countryId);
+        return await _rb209Service.FetchSwardTypesServiceByCountryAsync(countryId);
     }
 
     public async Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId)
     {
         _logger.LogTrace("Fetching yield ranges for SequenceId: {SequenceId}, GrassGrowthClassId: {GrassGrowthClassId}", sequenceId, grassGrowthClassId);
-        return await _cropService.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassIdServiceAsync(sequenceId, grassGrowthClassId);
+        return await _rb209Service.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassIdAsync(sequenceId, grassGrowthClassId);
     }
 
     public async Task<(bool, Error?)> IsCropsGroupNameExistForUpdate(string cropIds, string cropGroupName, int year, int farmId)
     {
         _logger.LogTrace("Checking if crop group name exists for update: {CropGroupName} in FarmId: {FarmId}, Year: {Year}", cropGroupName, farmId, year);
-        return await _cropService.IsCropsGroupNameExistForUpdateServiceAsync(cropIds, cropGroupName, year, farmId);
+        return await _cropService.IsCropsGroupNameExistForUpdateAsync(cropIds, cropGroupName, year, farmId);
     }
 
     public async Task<(bool, Error)> MergeCrop(string cropData)
     {
         _logger.LogTrace("Merging crop data");
-        return await _cropService.MergeCropServiceAsync(cropData);
+        return await _cropService.MergeCropAsync(cropData);
     }
 
     public async Task<(string, Error?)> RemoveCropPlan(List<int> cropIds)
     {
         _logger.LogTrace("Removing crop plans for CropIds: {CropIds}", string.Join(", ", cropIds));
-        return await _cropService.RemoveCropPlanServiceAsync(cropIds);
+        return await _cropService.RemoveCropPlanAsync(cropIds);
     }
 
     public async Task<(List<Crop>, Error)> UpdateCrop(string cropData)
     {
         _logger.LogTrace("Updating crop data");
-        return await _cropService.UpdateCropServiceAsync(cropData);
+        return await _cropService.UpdateCropAsync(cropData);
     }
 
     public async Task<SnsAnalysis> FetchSnsAnalysisByCropIdAsync(int cropId)
@@ -262,7 +268,7 @@ public class CropLogic(ILogger<CropLogic> logger, ICropService cropService, IDat
     public async Task<bool> FetchIsPerennialByCropTypeId(int cropTypeId)
     {
         _logger.LogTrace("CropLogic : FetchIsPerennialByCropTypeId() called");
-        return await _cropService.FetchIsPerennialByCropTypeIdServiceAsync(cropTypeId);
+        return await _cropService.FetchIsPerennialByCropTypeIdAsync(cropTypeId);
     }
     public async Task<(Recommendation?, Error?)> FetchRecommendationByManagementPeriodId(int managementPeriodID)
     {

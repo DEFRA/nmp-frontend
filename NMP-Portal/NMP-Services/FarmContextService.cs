@@ -21,7 +21,7 @@ public class FarmContextService(ILogger<FarmContextService> logger, IHttpContext
         string url = string.Format(ApiurlHelper.FetchFarmByIdAPI, farmId);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
-        response.EnsureSuccessStatusCode();        
+                
         if (response.IsSuccessStatusCode)
         {
             string result = await response.Content.ReadAsStringAsync();

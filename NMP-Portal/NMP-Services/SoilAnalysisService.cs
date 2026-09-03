@@ -25,7 +25,7 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
 
         return await SendSoilAnalysisRequest(
             client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchSoilAnalysisByIdAsyncAPI, HttpUtility.UrlEncode(id.ToString()))
+                string.Format(ApiurlHelper.FetchSoilAnalysisByIdAPI, HttpUtility.UrlEncode(id.ToString()))
             ));
     }
 
@@ -35,7 +35,7 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
 
         return await SendSoilAnalysisRequest(
             client => client.PutAsync(
-                string.Format(ApiurlHelper.UpdateSoilAnalysisAsyncAPI, id),
+                string.Format(ApiurlHelper.UpdateSoilAnalysisAPI, id),
                 new StringContent(soilData, Encoding.UTF8, _applicationJson)
             ));
     }
@@ -44,7 +44,7 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
     {
         return await SendSoilAnalysisRequest(
             client => client.PostAsync(
-                ApiurlHelper.AddSoilAnalysisAsyncAPI,
+                ApiurlHelper.AddSoilAnalysisAPI,
                 new StringContent(soilAnalysisData, Encoding.UTF8, _applicationJson)
             ),
             key: "soilAnalysis"

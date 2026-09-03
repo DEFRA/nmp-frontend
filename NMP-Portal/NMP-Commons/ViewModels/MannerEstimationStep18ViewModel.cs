@@ -8,6 +8,7 @@ namespace NMP.Commons.ViewModels
 {
     public class MannerEstimationStep18ViewModel
     {
+        public int? CountryId { get; set; }
         public int? TopSoilId { get; set; }
         public string? FieldName { get; set; }
         public string? EncryptedMannerEstimateId { get; set; } = string.Empty;

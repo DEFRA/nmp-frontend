@@ -9,12 +9,12 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="AverageAnnualRainfall" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="AverageAnnualRainfall" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="AverageAnnualRainfallManual" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="AverageAnnualRainfallManual" method="post" asp-controller="MannerEstimation" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <govuk-input for=@Model.AverageAnnualRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
