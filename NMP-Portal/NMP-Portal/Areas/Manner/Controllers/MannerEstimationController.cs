@@ -2247,7 +2247,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.DefaultNutrientValue = false;
                 await _mannerEstimationLogic.SetMannerEstimationStep24(model);
-                return RedirectToAction("ManualNutrientValues", new {sid=sid});
+                return RedirectToAction("ManualNutrientValues");
             }
             return View(model);
         }
