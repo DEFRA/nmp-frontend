@@ -7,11 +7,11 @@
     var oneToTwoYears = (int)NMP.Commons.Enums.LayDuration.OneToTwoYears;
     var threeYearsOrMore = (int)NMP.Commons.Enums.LayDuration.ThreeYearsOrMore;
     var backAction = "";
-    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
+    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange) && (!Model.IsGrassLastThreeHarvestYearChange))
     {
         backAction = "CheckAnswer";
     }
-    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate) && (!Model.IsHasGrassInLastThreeYearChange) && (!Model.IsGrassLastThreeHarvestYearChange))
     {
         backAction = "UpdateField";
     }

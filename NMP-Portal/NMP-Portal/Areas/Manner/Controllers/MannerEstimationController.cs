@@ -371,11 +371,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
                 }
                 BindSessionIdInViewBeg(sessionId);
+                BindMannerFarmNameAndIdOnNavigation(sessionId);
                 if (!ModelState.IsValid)
                 {
-                    model = _mannerEstimationLogic.GetMannerEstimationStep3();
-                    BindMannerFarmNameAndIdOnNavigation(sessionId);
-                    return View(model);
+                   MannerEstimationStep3ViewModel mannerEstimationStep3 = _mannerEstimationLogic.GetMannerEstimationStep3();
+                    mannerEstimationStep3.Postcode = model.Postcode;
+                    return View(mannerEstimationStep3);
                 }
 
                 await _mannerEstimationLogic.SetMannerEstimationStep3(model);
