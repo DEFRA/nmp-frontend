@@ -9,12 +9,12 @@
     
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CopyExistingFarmAndFieldDetails")" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CopyExistingFarmAndFieldDetails")" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="FarmToCopy" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="FarmToCopy" method="post" asp-controller="MannerEstimation" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <govuk-radios for="@Model.FarmId">
                 <govuk-radios-fieldset>

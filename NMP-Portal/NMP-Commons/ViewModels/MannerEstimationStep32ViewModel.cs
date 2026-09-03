@@ -37,5 +37,6 @@ namespace NMP.Commons.ViewModels
         public bool IsManureTypeChange { get; set; } = false;
         public bool IsComingForAddNewApplication { get; set; } = false;
         public bool IsSoilDrainageEndDateChange { get; set; } = false;
+        public bool IsTotalRainfallEnteredManual { get; set; } = false;
     }
 }

@@ -8495,4 +8495,7 @@ following crop year 2</value>
   <data name="lblOrganicMatterPercentage" xml:space="preserve">
     <value>Organic matter (%)</value>
   </data>
+  <data name="lblMaximumNoOfApplicationIsReached" xml:space="preserve">
+    <value>The maximum number of applications has been reached.</value>
+  </data>
 </root>

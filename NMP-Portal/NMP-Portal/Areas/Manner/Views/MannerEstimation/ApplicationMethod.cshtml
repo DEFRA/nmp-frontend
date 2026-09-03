@@ -11,7 +11,7 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 
 }
 
@@ -25,7 +25,7 @@
                 <govuk-error-summary-item href="#">@TempData["ApplicationMethodError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="ApplicationMethod" asp-controller="MannerEstimation" method="post" autocomplete="off">
+        <form asp-action="ApplicationMethod" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
            
             <govuk-radios for="@Model.ApplicationMethodId">
