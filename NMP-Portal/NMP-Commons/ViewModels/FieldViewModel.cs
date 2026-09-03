@@ -57,4 +57,5 @@ public class FieldViewModel : Field
     public bool IsLastHarvestYearChange { get; set; } = false;
     public bool IsNVZProgrammeNeedToShow { get; set; } = false;
     public string? SoilNutrientValueTypeName { get; set; } = string.Empty;
+    public bool IsGrassLastThreeHarvestYearChange { get; set; } = false;
 }

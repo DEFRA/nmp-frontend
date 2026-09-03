@@ -38,7 +38,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     private readonly ICropService _cropService = dependencies.CropService;
     private readonly IRb209Service _rb209Service = rb209Service;
 
-    private const string _mannerEstimationSessionName = "MannerEstimation";
 
     public MannerEstimationStep1ViewModel SetMannerEstimationStep1(MannerEstimationStep1ViewModel mannerEstimationStep1)
     {
