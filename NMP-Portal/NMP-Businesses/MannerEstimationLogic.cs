@@ -662,7 +662,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep25.ManureTypeId = manureType.Id;
             mannerEstimationViewModel.MannerEstimationStep25.IsManureTypeLiquid = manureType.IsLiquid;
-            if (!isDefault)
+            if (!isDefault && !Functions.IsOtherManureType(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value))
             {
                 mannerEstimationViewModel.MannerEstimationStep25.MgO = manureType.MgO;
                 mannerEstimationViewModel.MannerEstimationStep25.N = manureType.TotalN;
@@ -673,6 +673,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
                 mannerEstimationViewModel.MannerEstimationStep25.NH4N = manureType.NH4N;
                 mannerEstimationViewModel.MannerEstimationStep25.NO3N = manureType.NO3N;
                 mannerEstimationViewModel.MannerEstimationStep25.UricAcid = manureType.Uric;
+               
             }
         }
         return mannerEstimationViewModel.MannerEstimationStep25;

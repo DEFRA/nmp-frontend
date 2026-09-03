@@ -10,6 +10,10 @@
     }
 
     var backAction = "DefaultNutrientValues";
+    if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
+    {
+        backAction = "ApplicationMethod";
+    }
     if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";
