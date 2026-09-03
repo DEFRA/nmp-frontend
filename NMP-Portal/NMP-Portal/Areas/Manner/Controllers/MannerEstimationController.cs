@@ -164,7 +164,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
         }
 
-        
+
         [HttpGet("MannerEstimationCancel")]
         public async Task<IActionResult> MannerEstimationCancel()
         {
@@ -565,7 +565,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 await BindFarmFieldOrCropDataUpdate(q);
             }
             MannerEstimationStep6ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep6();
-
+            MannerEstimationViewModel mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+            if (mannerEstimationViewModel != null && mannerEstimationViewModel.MannerEstimationStep2 != null && mannerEstimationViewModel.MannerEstimationStep2.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
+            {
+                model.IsWithinNVZ = true;
+                _mannerEstimationLogic.SetMannerEstimationStep6(model);
+                return RedirectToAction("TopSoil", new { sid = sid });
+            }
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in NVZField() action");
@@ -1804,6 +1810,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             BindSessionIdInViewBeg(sid);
             MannerEstimationStep17ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep17();
+            MannerEstimationViewModel mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+            if (mannerEstimationViewModel != null && mannerEstimationViewModel.MannerEstimationStep2 != null && mannerEstimationViewModel.MannerEstimationStep2.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                model.IsFarmOrganic = false;
+                _mannerEstimationLogic.SetMannerEstimationStep17(model);
+                return RedirectToAction("FieldName", new { sid = sid });
+            }
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IsFarmOrganic() action");
@@ -4275,11 +4288,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (mannerEstimationViewModel?.IsComingForAddNewApplication == true)
             {
-                (List<MannerEstimationSummaryViewModel> mannerEstimationSummaryViews, _) = await _mannerEstimationLogic.FetchMannerEstimateByFarmId(mannerEstimationViewModel.MannerFarmId ?? 0);
-                if (mannerEstimationSummaryViews.Count == 3)
+                mannerEstimationViewModel.MannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationViewModel.EncryptedMannerEstimationId));
+                (List<MannerEstimationApplication> mannerEstimationApplication, _) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationViewModel.MannerEstimationId??0);
+                if (mannerEstimationApplication.Count == 3)
                 {
                     TempData[_conditionsAffectingNutrientsErrorKey] = Resource.lblMaximumNoOfApplicationIsReached;
-                    return (flowControl: false, value: RedirectToAction(_conditionsAffectingNutrients, new { sid = sessionId }));
+                    return (flowControl: false, value:View(_conditionsAffectingNutrients, mannerEstimationViewModel.MannerEstimationStep32));
 
                 }
                 return (flowControl: false, value: RedirectToAction("AddApplicationData", new { sid = sessionId }));

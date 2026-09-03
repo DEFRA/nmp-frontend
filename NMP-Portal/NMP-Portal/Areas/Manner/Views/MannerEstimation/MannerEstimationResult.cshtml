@@ -453,6 +453,8 @@
                         </td>
                     </tr>
 
+                    @if (mannerFarm.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    {
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblRegisteredOrganicProducerOnly</th>
                         <td class="govuk-table__cell">
@@ -464,7 +466,7 @@
                             </a>
                         </td>
                     </tr>
-
+                    }
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@string.Format(Resource.lblAverageAnnualRainfallFor, mannerFarm.Postcode)</th>
                         <td class="govuk-table__cell">
@@ -490,6 +492,8 @@
                         </td>
                     </tr>
 
+                     @if (mannerFarm.CountryID != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                    {
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblIsInsideANitrateVulnerableZone</th>
                         <td class="govuk-table__cell">
@@ -502,6 +506,7 @@
                             </a>
                         </td>
                     </tr>
+                    }
 
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">@Resource.lblTopsoil</th>
