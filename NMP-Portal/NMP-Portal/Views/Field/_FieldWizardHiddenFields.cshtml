@@ -93,7 +93,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumStatus" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PhosphorusStatus" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.PotassiumMethodologyID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumMethodologyID" />        
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.MagnesiumMethodologyID" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PotassiumIndexValue" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalyses.OrganicMatterPercentage" />
     }
@@ -139,7 +139,7 @@
     @if (currentStep != (int)FieldWizardSteps.FieldRemove)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldRemove" />
-    }    
+    }
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueTypeName" value="@Model.SoilNutrientValueTypeName" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNVZProgrammeNeedToShow" value="@Model.IsNVZProgrammeNeedToShow.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup" value="@Model.CropGroup" />
@@ -164,6 +164,7 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsWithinNVZForFarm" value="@Model.IsWithinNVZForFarm?.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilType" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsGrassLastThreeHarvestYearChange" value="@Model.IsGrassLastThreeHarvestYearChange.ToString().ToLower()" />
     @if (Model.PreviousCroppingsList != null && Model.PreviousCroppingsList.Count > 0)
     {
         @for (int i = 0; i < Model.PreviousCroppingsList.Count; i++)

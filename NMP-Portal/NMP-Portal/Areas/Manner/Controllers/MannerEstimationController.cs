@@ -371,11 +371,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ModelState.AddModelError("Postcode", Resource.MsgEnterTheFarmPostcode);
                 }
                 BindSessionIdInViewBeg(sessionId);
+                BindMannerFarmNameAndIdOnNavigation(sessionId);
                 if (!ModelState.IsValid)
                 {
-                    model = _mannerEstimationLogic.GetMannerEstimationStep3();
-                    BindMannerFarmNameAndIdOnNavigation(sessionId);
-                    return View(model);
+                   MannerEstimationStep3ViewModel mannerEstimationStep3 = _mannerEstimationLogic.GetMannerEstimationStep3();
+                    mannerEstimationStep3.Postcode = model.Postcode;
+                    return View(mannerEstimationStep3);
                 }
 
                 await _mannerEstimationLogic.SetMannerEstimationStep3(model);
@@ -2247,7 +2248,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.DefaultNutrientValue = false;
                 await _mannerEstimationLogic.SetMannerEstimationStep24(model);
-                return RedirectToAction("ManualNutrientValues");
+                return RedirectToAction("ManualNutrientValues", new { sid =sid});
             }
             return View(model);
         }
