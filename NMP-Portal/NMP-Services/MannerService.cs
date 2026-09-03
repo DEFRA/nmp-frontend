@@ -183,7 +183,7 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
         if (response.IsSuccessStatusCode)
         {
-            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall?.value ?? 0;
+            rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall == null ? 0 : responseWrapper?.Data?.avarageAnnualRainfall;
         }
 
         return rainfallAverage;
