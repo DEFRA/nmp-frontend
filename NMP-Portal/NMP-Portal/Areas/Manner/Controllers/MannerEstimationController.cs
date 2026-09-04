@@ -83,7 +83,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _dateFormat = "d MMMM yyyy";
         private const string _manualNutrientValuesKey = "ManualNutrientValues";
         private const string _conditionsAffectingNutrientsErrorKey = "ConditionsAffectingNutrientsError";
-        private const string _fieldNameKey = "FieldName"; 
+        private const string _fieldNameKey = "FieldName";
         private const string _topSoilKey = "TopSoil";
 
         [HttpGet("Index")]
@@ -374,7 +374,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 BindMannerFarmNameAndIdOnNavigation(sessionId);
                 if (!ModelState.IsValid)
                 {
-                   MannerEstimationStep3ViewModel mannerEstimationStep3 = _mannerEstimationLogic.GetMannerEstimationStep3();
+                    MannerEstimationStep3ViewModel mannerEstimationStep3 = _mannerEstimationLogic.GetMannerEstimationStep3();
                     mannerEstimationStep3.Postcode = model.Postcode;
                     return View(mannerEstimationStep3);
                 }
@@ -876,11 +876,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
-            model = await _mannerEstimationLogic.SetMannerEstimationStep11(model);
-            if (!string.IsNullOrWhiteSpace(model.EncryptedMannerEstimationId) && !model.IsComingForAddNewApplication && !model.IsManureGroupIdChange)
-            {
-                return RedirectToAction(_updateApplicationDataActionName, new { sid = sessionId });
-            }
+            await _mannerEstimationLogic.SetMannerEstimationStep11(model);
+
             return RedirectToAction("ManureType", new { sid = sessionId });
         }
         private async Task<(List<SelectListItem>, Error?)> FetchManureGroup()
@@ -2248,7 +2245,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 model.DefaultNutrientValue = false;
                 await _mannerEstimationLogic.SetMannerEstimationStep24(model);
-                return RedirectToAction("ManualNutrientValues", new {sid=sid});
+                return RedirectToAction("ManualNutrientValues", new { sid = sid });
             }
             return View(model);
         }
@@ -2400,25 +2397,25 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             if (!IsValidDecimal(model.NH4N))
                 ModelState.AddModelError("NH4N",
-                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblAmmonium.ToLower()));
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblAmmoniumNForErrorMsg));
             if (!IsValidDecimal(model.UricAcid))
                 ModelState.AddModelError(_uricAcidKey,
-                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblUricAcid.ToLower()));
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblUricAcidForError));
             if (!IsValidDecimal(model.NO3N))
                 ModelState.AddModelError("NO3N",
-                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblNitrate.ToLower()));
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblNitrateForErrorMsg));
             if (!IsValidDecimal(model.P2O5))
                 ModelState.AddModelError("P2O5",
-                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblPhosphateP2O5.ToLower()));
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblPhosphateP2O5Lowercase));
             if (!IsValidDecimal(model.K2O))
                 ModelState.AddModelError("K2O",
-                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblPotashK2O.ToLower()));
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblPotashK2OLowecase));
             if (!IsValidDecimal(model.MgO))
                 ModelState.AddModelError("MgO",
-                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblMagnesiumMgO.ToLower()));
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblMagnesiumForErrorMsg));
             if (!IsValidDecimal(model.SO3))
                 ModelState.AddModelError("SO3",
-                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblSulphurSO3.ToLower()));
+                    string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblSulphurSO3Lowercase));
         }
 
         private void ValidateMaxValue(
@@ -2569,6 +2566,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     formData = await _mannerEstimationLogic.GetMannerEstimationStep26();
                     return View(_applicationRateMethodAction, formData);
                 }
+
                 (bool flowControl, IActionResult value) = RedirectForApplicationRateMethod(formData, sessionId);
                 if (!flowControl)
                 {
@@ -2579,6 +2577,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 if (formData.ApplicationRateMethod == (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate)
                 {
+                    MannerEstimationStep28ViewModel mannerEstimationStep28ViewModel = await _mannerEstimationLogic.GetMannerEstimationStep28();
+                    mannerEstimationStep28ViewModel.AreaSpread = null;
+                    mannerEstimationStep28ViewModel.ManureQuantity = null;
+                    await _mannerEstimationLogic.SetMannerEstimationStep28(mannerEstimationStep28ViewModel);
                     model = await _mannerEstimationLogic.GetMannerEstimationStep26();
                     model.ApplicationRateMethod = formData.ApplicationRateMethod;
                     error = await GetDefaultNitrogenRate(model, error);
@@ -4129,7 +4131,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 BindMannerFarmNameAndIdOnNavigation(sid);
                 await BindPostCodeAndCropTypeDataForAddNewApplication(model, sid);
                 //Autumn crop Nitrogen uptake
-                if (model.AutumnCropNitrogenUptake == null && model.IsApplicationDateChange)
+                if (model.AutumnCropNitrogenUptake == null || model.IsApplicationDateChange)
                 {
                     model.AutumnCropNitrogenUptake = await BuildAutumnCropNitrogenUptakeAsync(model);
                 }
@@ -4298,11 +4300,11 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (mannerEstimationViewModel?.IsComingForAddNewApplication == true)
             {
                 mannerEstimationViewModel.MannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(mannerEstimationViewModel.EncryptedMannerEstimationId));
-                (List<MannerEstimationApplication> mannerEstimationApplication, _) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationViewModel.MannerEstimationId??0);
+                (List<MannerEstimationApplication> mannerEstimationApplication, _) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationViewModel.MannerEstimationId ?? 0);
                 if (mannerEstimationApplication.Count == 3)
                 {
                     TempData[_conditionsAffectingNutrientsErrorKey] = Resource.lblMaximumNoOfApplicationIsReached;
-                    return (flowControl: false, value:View(_conditionsAffectingNutrients, mannerEstimationViewModel.MannerEstimationStep32));
+                    return (flowControl: false, value: View(_conditionsAffectingNutrients, mannerEstimationViewModel.MannerEstimationStep32));
 
                 }
                 return (flowControl: false, value: RedirectToAction("AddApplicationData", new { sid = sessionId }));
