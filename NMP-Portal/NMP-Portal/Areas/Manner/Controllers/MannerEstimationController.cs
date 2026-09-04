@@ -97,7 +97,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
-                HttpContext.Session.SetString("current_manner_estimate_manner_farm_id", q);
                 (MannerFarmViewModel? mannerFarm, _) = await _mannerEstimationLogic.FetchMannerFarmById(mannerFarmId);
                 if (mannerFarm != null)
                 {
@@ -6230,8 +6229,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             ViewBag.SessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
-            HttpContext.Session.Remove("current_manner_estimate_farm_name");
-            HttpContext.Session.Remove("current_manner_estimate_manner_farm_id");
+        
             ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();
 
             if (!string.IsNullOrWhiteSpace(q))

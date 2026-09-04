@@ -43,14 +43,14 @@ namespace NMP.Portal.Controllers
         public IActionResult Index()
         {
             _logger.LogTrace("Farm Controller : Index() action called");
-            HttpContext.Session.Clear();
+            RemoveAllNmptSession();
             return RedirectToAction(_farmListActionName);
         }
 
         public async Task<IActionResult> FarmList(string? q)
         {
             _logger.LogTrace("Farm Controller : FarmList({0}) action called", q);
-            HttpContext.Session.Clear();
+            RemoveAllNmptSession();
 
             FarmsViewModel model = new FarmsViewModel();
             Error? error = null;
@@ -87,8 +87,8 @@ namespace NMP.Portal.Controllers
                     ViewBag.Success = "false";
                 }
                 ViewBag.IsAnyRecordInMannerEstimate = false;
-                ViewBag.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService(); 
-                
+                ViewBag.DoNotShowAboutThisService = await _aboutServiceLogic.CheckDoNotShowAboutThisService();
+
             }
             catch (HttpRequestException hre)
             {
@@ -1258,7 +1258,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r)
         {
             _logger.LogTrace("Farm Controller : FarmSummary() action called");
-            HttpContext.Session.Clear();
+            RemoveAllNmptSession();
             string farmId = string.Empty;
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -1287,7 +1287,7 @@ namespace NMP.Portal.Controllers
                         TempData[_tempDataKey] = error.Message;
                         return RedirectToAction(_farmListActionName);
                     }
-                    
+
                     HttpContext.Session.SetString("current_farm_name", farm?.Name ?? "");
                     HttpContext.Session.SetString("current_farm_id", id);
 
@@ -1762,6 +1762,174 @@ namespace NMP.Portal.Controllers
                     Value = f.NvzId.ToString(),
                     Text = f.NvzName
                 }).OrderBy(x => x.Text).ToList();
+        }
+
+
+        private void RemoveAllNmptSession()
+        {
+            //crop session
+            CropSessionRemoved();
+
+            //Farm session
+            FarmSessionRemoved();
+
+            //Fertiliser session
+            FertiliserSessionRemoved();
+
+            //Field session
+            FieldSessionRemoved();
+
+            //OrganicManure session
+            OrganicManureSessionRemoved();
+
+            //PreviousCroppingData session
+            PreviousCroppingDataSessionRemoved();
+
+            //ReportData session
+            ReportDataSessionRemoved();
+
+            //SnsData session
+            SnsDataSessionRemoved();
+
+            //SoilAnalysisData session
+            SoilAnalysisDataSessionRemoved();
+
+            //StorageCapacityData session
+            StorageCapacityDataSessionRemoved();
+
+            //WarningList session
+            WarningListSessionRemoved();
+        }
+
+        private void StorageCapacityDataSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("StorageCapacityData"))
+            {
+                HttpContext.Session.Remove("StorageCapacityData");
+            }
+
+        }
+        private void WarningListSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("WarningList"))
+            {
+                HttpContext.Session.Remove("WarningList");
+            }
+        }
+
+        private void SoilAnalysisDataSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("SoilAnalysisData"))
+            {
+                HttpContext.Session.Remove("SoilAnalysisData");
+            }
+            if (HttpContext.Session.Exists("SoilAnalysisDataBeforeUpdate"))
+            {
+                HttpContext.Session.Remove("SoilAnalysisDataBeforeUpdate");
+            }
+        }
+
+        private void SnsDataSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("SnsData"))
+            {
+                HttpContext.Session.Remove("SnsData");
+            }
+        }
+
+        private void ReportDataSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("ReportData"))
+            {
+                HttpContext.Session.Remove("ReportData");
+            }
+
+            if (HttpContext.Session.Exists("LivestockDataBeforeUpdate"))
+            {
+                HttpContext.Session.Remove("LivestockDataBeforeUpdate");
+            }
+            if (HttpContext.Session.Exists("LivestockImportExportDataBeforeUpdate"))
+            {
+                HttpContext.Session.Remove("LivestockImportExportDataBeforeUpdate");
+            }
+        }
+
+        private void PreviousCroppingDataSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("PreviousCroppingData"))
+            {
+                HttpContext.Session.Remove("PreviousCroppingData");
+            }
+        }
+
+        private void OrganicManureSessionRemoved()
+        {
+            //OrganicManure session
+            if (HttpContext.Session.Exists("OrganicManure"))
+            {
+                HttpContext.Session.Remove("OrganicManure");
+            }
+
+            if (HttpContext.Session.Exists("OrganicDataBeforeUpdate"))
+            {
+                HttpContext.Session.Remove("OrganicDataBeforeUpdate");
+            }
+        }
+
+        private void FieldSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("FieldDataBeforeUpdate"))
+            {
+                HttpContext.Session.Remove("FieldDataBeforeUpdate");
+            }
+            if (HttpContext.Session.Exists("FieldData"))
+            {
+                HttpContext.Session.Remove("FieldData");
+            }
+        }
+
+        private void FertiliserSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("FertiliserManure"))
+            {
+                HttpContext.Session.Remove("FertiliserManure");
+            }
+            if (HttpContext.Session.Exists("FertiliserManureBeforeUpdate"))
+            {
+                HttpContext.Session.Remove("FertiliserManureBeforeUpdate");
+            }
+        }
+
+        private void FarmSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("FarmData"))
+            {
+                HttpContext.Session.Remove("FarmData");
+            }
+            if (HttpContext.Session.Exists("FarmDataBeforeUpdate"))
+            {
+                HttpContext.Session.Remove("FarmDataBeforeUpdate");
+            }
+            if (HttpContext.Session.Exists("AddressList"))
+            {
+                HttpContext.Session.Remove("AddressList");
+            }
+        }
+
+        private void CropSessionRemoved()
+        {
+            if (HttpContext.Session.Exists("CropData"))
+            {
+                HttpContext.Session.Remove("CropData");
+            }
+            if (HttpContext.Session.Exists("CropDataBeforeUpdate"))
+            {
+                HttpContext.Session.Remove("CropDataBeforeUpdate");
+            }
+            if (HttpContext.Session.Exists("HarvestYearPlan"))
+            {
+                HttpContext.Session.Remove("HarvestYearPlan");
+            }
         }
     }
 }
