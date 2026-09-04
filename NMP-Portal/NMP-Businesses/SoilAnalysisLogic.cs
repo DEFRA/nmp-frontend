@@ -27,7 +27,9 @@ public class SoilAnalysisLogic(ILogger<SoilAnalysisLogic> logger, ISoilAnalysisS
     public async Task<(SoilAnalysis?, Error?)> FetchSoilAnalysisById(int id)
     {
         _logger.LogTrace("Fetching soil analysis by Id");
-        return await _soilAnalysisService.FetchSoilAnalysisById(id);
+        (SoilAnalysis soilAnalysis, Error error) = await _soilAnalysisService.FetchSoilAnalysisById(id);
+        soilAnalysis.Date = soilAnalysis.Date.Value.ToLocalTime();
+        return (soilAnalysis,error);
     }
 
     public async Task<(SoilAnalysis?, Error?)> UpdateSoilAnalysisAsync(int id, string soilData)
