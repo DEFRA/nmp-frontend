@@ -4,6 +4,7 @@ using NMP.Commons.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,7 +69,7 @@ namespace NMP.Application
         Task<MannerEstimationStep27ViewModel> SetMannerEstimationStep27(MannerEstimationStep27ViewModel mannerEstimationStep27);
         Task<MannerEstimationStep28ViewModel> GetMannerEstimationStep28();
         Task<MannerEstimationStep28ViewModel> SetMannerEstimationStep28(MannerEstimationStep28ViewModel mannerEstimationStep28);
-        Task<Error?> CopiedFarmAndFieldData(int farmId, int fieldId);
+        Task<Error?> CopiedFarmAndFieldData(int farmId, int fieldId, string? sid = null);
 
 
         MannerEstimationStep21ViewModel GetMannerEstimationStep21();
@@ -107,7 +108,9 @@ namespace NMP.Application
 
         Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId);
         Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId);
-        public MannerEstimationViewModel? GetMannerEstimationFromSession();
+        MannerEstimationViewModel? GetMannerEstimationFromSession(string? sessionId = null);
+        string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
+        string? GetCurrentSessionId();
         Task<(MannerEstimation?, Error?)> UpdateMannerEstimation(int MannerEstimationId);
         MannerEstimationStep36ViewModel GetMannerEstimationStep36();
         MannerEstimationStep36ViewModel SetMannerEstimationStep36(MannerEstimationStep36ViewModel mannerEstimationStep36);
@@ -127,12 +130,11 @@ namespace NMP.Application
         Task<(decimal, Error)> FetchTotalNByMannerEstimationIdAppDate(int mannerEstimationId, DateTime startDate, DateTime endDate, int? mannerApplicationId);
 
         Task<(bool, Error)> CheckMannerGreenCompostExistanceByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId);
-        Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId);
-        Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId);
-        void SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
+        Task<Error?> BindMannerEstimationDataForUpdate(int mannerEstimateId, string? sid = null);
+        Task<(MannerEstimation?, Error?)> UpdateFarmFieldAndCropData(int mannerEstimationId, string? sid = null);
         Task<(MannerEstimationApplication?, Error?)> FetchMannerEstimateApplicationById(int mannerEstimateApplicationId);
-        Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId);
-        Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData();
+        Task<Error?> BindApplicationDetailForUpdate(int mannerEstimateApplicationId, string? sid = null);
+        Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData(string? sid = null);
         Task<int?> GetCropGroupByCropTypeId(int? cropTypeId);
         Task<(MannerEstimationApplication?, Error?)> AddMannerEstimationApplication();
 
@@ -146,7 +148,7 @@ namespace NMP.Application
         Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int mannerFarmId);
         Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation();
         bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId, int countryId);  
-        Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId);
+        Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId,string sid);
         MannerEstimationStep42ViewModel GetMannerEstimationStep42();
         MannerEstimationStep42ViewModel SetMannerEstimationStep42(MannerEstimationStep42ViewModel mannerEstimationStep42);
         Task<Error?> RemoveMannerFarms(string mannerFarmIds);

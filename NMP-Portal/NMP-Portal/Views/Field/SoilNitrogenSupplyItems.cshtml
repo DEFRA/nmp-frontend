@@ -5,11 +5,11 @@
     string title = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
     ViewData["Title"] = $"{string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.Name)} {Resource.lblHyphen} {title}";
     var backAction = "";
-    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
+    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange) && !Model.IsGrassLastThreeHarvestYearChange)
     {
         backAction = "CheckAnswer";
     }
-    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate) && !Model.IsHasGrassInLastThreeYearChange && !Model.IsGrassLastThreeHarvestYearChange)
     {
         backAction = "UpdateField";
     }

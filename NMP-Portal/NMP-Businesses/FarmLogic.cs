@@ -10,12 +10,13 @@ using NMP.Core.Interfaces;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFieldService fieldService, IFarmAverageYieldLogic farmAverageYieldLogic) : IFarmLogic
+public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFieldService fieldService, IFarmAverageYieldLogic farmAverageYieldLogic, IRb209Service rb209Service) : IFarmLogic
 {
     private readonly ILogger<FarmLogic> _logger = logger;
     private readonly IFarmService _farmService = farmService;
     private readonly IFieldService _fieldService = fieldService;
     private readonly IFarmAverageYieldLogic _farmAverageYieldLogic = farmAverageYieldLogic;
+    private readonly IRb209Service _rb209Service = rb209Service;
 
     public async Task<(ExcessRainfalls?, Error?)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
     {
@@ -93,12 +94,12 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     public async Task<int> FetchFieldCountByFarmIdAsync(int farmId)
     {
         _logger.LogTrace("Fetching field count for FarmId: {FarmId}", farmId);
-        return await _fieldService.FetchFieldCountByFarmIdServiceAsync(farmId);
+        return await _fieldService.FetchFieldCountByFarmIdAsync(farmId);
     }
     public async Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId)
     {
         _logger.LogTrace("Fetching Nvz action programs for CountryId: {CountryId}", countryId);
-        return await _farmService.FetchNvzActionProgramsByCountryIdAsync(countryId);
+        return await _rb209Service.FetchNvzActionProgramsByCountryIdAsync(countryId);
     }
     public async Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId)
     {

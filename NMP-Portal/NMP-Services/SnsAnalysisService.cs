@@ -24,7 +24,7 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSnsAnalysisByCropIdAsyncAPI, cropId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSnsAnalysisByCropIdAPI, cropId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -60,7 +60,7 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            var response = await httpClient.PostAsync(ApiurlHelper.AddSnsAnalysisAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddSnsAnalysisAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)

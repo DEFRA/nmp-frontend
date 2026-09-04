@@ -4,11 +4,11 @@
 <p class="govuk-body cancel-link">
     @if (!string.IsNullOrWhiteSpace(Model))
     {
-        <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-q="@Model">@Resource.lblCancel</a>
+        <a class="govuk-link" asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@Model">@Resource.lblCancel</a>
     }
     else
     {
 
-        <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation">@Resource.lblCancel</a>
+        <a class="govuk-link" asp-action="MannerEstimationCancel" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblCancel</a>
     }
 </p>

@@ -18,10 +18,11 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerService) : IMannerLogic
+public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerService, IRb209Service rb209Service) : IMannerLogic
 {
     private readonly ILogger<MannerLogic> _logger = logger;
     private readonly IMannerService _mannerService = mannerService;
+    private readonly IRb209Service _rb209Service = rb209Service;
     public async Task<int> FetchCategoryIdByCropTypeIdAsync(int cropTypeId)
     {
         _logger.LogTrace("Fetching category Id by crop type Id");
@@ -44,7 +45,7 @@ public class MannerLogic(ILogger<MannerLogic> logger, IMannerService mannerServi
     public async Task<List<SoilTypesResponse>> FetchSoilTypes()
     {
         _logger.LogTrace("Fetching soil types");
-        return await _mannerService.FetchSoilTypes();
+        return await _rb209Service.FetchSoilTypesAsync();
     }
 
     public async Task<List<SoilTypesResponse>> FetchSoilTypesByRB209CountryId(int rb209CountryId)

@@ -19,7 +19,7 @@
                 <govuk-error-summary-item href="#">@ViewBag.Error</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form class="form" asp-action="SoilDrainageEndDate" asp-controller="MannerEstimation" method="post" autocomplete="off">
+        <form class="form" asp-action="SoilDrainageEndDate" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <govuk-date-input for="@Model.SoilDrainageEndDate">
                 <govuk-date-input-fieldset>
