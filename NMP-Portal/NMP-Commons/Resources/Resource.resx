@@ -1444,7 +1444,7 @@
     <value>SO3</value>
   </data>
   <data name="lblUricAcidForError" xml:space="preserve">
-    <value>Uric acid</value>
+    <value>uric acid (N)</value>
   </data>
   <data name="lbl15Octto31Jan" xml:space="preserve">
     <value>15 {0} to 31 {1}</value>
@@ -1637,7 +1637,7 @@
 kg per cubic metre</value>
   </data>
   <data name="lblNitrateForErrorMsg" xml:space="preserve">
-    <value>nitrate</value>
+    <value>nitrate-N</value>
   </data>
   <data name="lblPercentage" xml:space="preserve">
     <value>%</value>
@@ -8497,5 +8497,11 @@ following crop year 2</value>
   </data>
   <data name="lblMaximumNoOfApplicationIsReached" xml:space="preserve">
     <value>The maximum number of applications has been reached.</value>
+  </data>
+  <data name="lblAmmoniumNForErrorMsg" xml:space="preserve">
+    <value>ammonium-N</value>
+  </data>
+  <data name="lblMagnesiumForErrorMsg" xml:space="preserve">
+    <value>magnesium (MgO)</value>
   </data>
 </root>

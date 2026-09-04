@@ -100,19 +100,19 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationStep3ViewModel previousMannerEstimationStep3ViewModel = GetMannerEstimationStep3();
         string? oldPostcode = previousMannerEstimationStep3ViewModel?.Postcode?.Trim();
         string? newPostcode = mannerEstimationStep3.Postcode?.Trim();
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         if (!string.IsNullOrWhiteSpace(oldPostcode) && !string.IsNullOrWhiteSpace(newPostcode))
         {
             mannerEstimationStep3.IsPostCodeChange =
                 !string.Equals(oldPostcode, newPostcode, StringComparison.OrdinalIgnoreCase);
             if (mannerEstimationStep3.IsPostCodeChange)
             {
-                MannerEstimationStep4ViewModel mannerEstimationStep4ViewModel = await GetMannerEstimationStep4();
-                mannerEstimationStep4ViewModel.AverageAnnualRainfall = 0;
-                mannerEstimationStep4ViewModel.IsPostCodeChange = mannerEstimationStep3.IsPostCodeChange;
-                await SetMannerEstimationStep4(mannerEstimationStep4ViewModel);
+                mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = 0;
+                mannerEstimationViewModel.MannerEstimationStep4.Postcode = mannerEstimationStep3.Postcode?.Trim();
+                mannerEstimationViewModel.MannerEstimationStep4.IsPostCodeChange = mannerEstimationStep3.IsPostCodeChange;
+                await SetMannerEstimationStep4(mannerEstimationViewModel.MannerEstimationStep4);
             }
         }
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep3 = mannerEstimationStep3;
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep3();
@@ -186,8 +186,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep4.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep4.Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
-        if (mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall == 0)
+        if (mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall == 0|| mannerEstimationViewModel.MannerEstimationStep3.IsPostCodeChange)
         {
+            mannerEstimationViewModel.MannerEstimationStep4.IsPostCodeChange = false;
             mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = await FetchAnnualRainfallAverageAsync(mannerEstimationViewModel.MannerEstimationStep4);
             SetMannerEstimationToSession(mannerEstimationViewModel);
         }
@@ -1570,7 +1571,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             (MannerFarmViewModel? mannerFarm, error) = await FetchMannerFarmById(mannerEstimate.MannerFarmID.Value);
             mannerEstimationViewModel.MannerEstimationId = mannerEstimate.ID;
             mannerEstimationViewModel.MannerFarmId = mannerEstimate.MannerFarmID;
-            mannerEstimationViewModel.FarmName = mannerEstimate.Name;
+            mannerEstimationViewModel.FarmName = mannerFarm.Name;
             mannerEstimationViewModel.IsWithinNVZ = mannerEstimate.IsWithinNVZ;
             mannerEstimationViewModel.CountryId = mannerFarm.CountryID;
             mannerEstimationViewModel.CropTypeId = mannerEstimate.CropTypeID;
