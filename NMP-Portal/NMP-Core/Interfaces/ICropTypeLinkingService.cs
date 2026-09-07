@@ -10,5 +10,6 @@ namespace NMP.Core.Interfaces
     public interface ICropTypeLinkingService
     {
         Task<(List<CropTypeLinkingResponse>?, Error?)> FetchCropTypeLinkingAsync();
+        Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeIdAsync(int cropTypeId);
     }
 }

@@ -57,6 +57,16 @@ namespace NMP.Services
             }
             return (cropTypeLinkingResponse, error);
         }
-        
+
+        public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeIdAsync(int cropTypeId)
+        {
+            (List<CropTypeLinkingResponse> allCropTypeLinkings, Error? error) = await FetchCropTypeLinkingAsync();
+            if (allCropTypeLinkings != null && allCropTypeLinkings.Count > 0 && error == null)
+            {
+                return (allCropTypeLinkings.FirstOrDefault(c => c.CropTypeId == cropTypeId), null);
+            }
+            return (new CropTypeLinkingResponse(), error);
+        }
+
     }
 }

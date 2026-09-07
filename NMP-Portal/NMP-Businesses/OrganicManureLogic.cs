@@ -55,7 +55,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
     public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeId(int cropTypeId)
     {
         _logger.LogTrace("OrganicManureLogic : FetchCropTypeLinkingByCropTypeId() called");
-        return await _organicManureService.FetchCropTypeLinkingByCropTypeIdAsync(cropTypeId);
+        return await _cropTypeLinkingService.FetchCropTypeLinkingByCropTypeIdAsync(cropTypeId);
     }
 
     public async Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmId(int farmId)

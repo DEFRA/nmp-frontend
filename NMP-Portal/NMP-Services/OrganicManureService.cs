@@ -555,15 +555,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (cropType, error);
     }
-    public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeIdAsync(int cropTypeId)
-    {
-        (List<CropTypeLinkingResponse> allCropTypeLinkings, Error? error) = await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
-        if (allCropTypeLinkings != null && allCropTypeLinkings.Count > 0 && error == null)
-        {
-            return (allCropTypeLinkings.FirstOrDefault(c => c.CropTypeId == cropTypeId), null);
-        }
-        return (new CropTypeLinkingResponse(),error);
-    }
+    
     public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsync(int fieldId, int year, bool confirm)
     {
         List<int> manureTypeIds = new List<int>();
