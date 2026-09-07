@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -15,9 +16,10 @@ using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ICropService
+public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService, ICropTypeLinkingService cropTypeLinkingService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), ICropService
 {
     private readonly ILogger<CropService> _logger = logger;
+    private readonly ICropTypeLinkingService _cropTypeLinkingService = cropTypeLinkingService;
     private const string _applicationJson = "application/json";
     private const string _string = "string";
     public async Task<(bool, Error?)> AddCropNutrientManagementPlanAsync(CropDataWrapper cropData)
@@ -196,72 +198,32 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
 
     public async Task<decimal> FetchCropTypeDefaultYieldByCropTypeIdAsync(int cropTypeId, bool isScotland)
     {
-        decimal? defaultYield = 0;
-        Error? error = null;
-        try
+      
+        (List<CropTypeLinkingResponse> allCropTypes, Error? error) = await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
+        if (allCropTypes != null && allCropTypes.Count > 0 && error == null)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var data = responseWrapper?.Data;
-                if (data?.CropTypeLinking != null)
-                {
-                    var cropTypeLinkingResponse = data.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                    defaultYield = isScotland ? cropTypeLinkingResponse.DefaultYieldScotland : cropTypeLinkingResponse.DefaultYield;
-                }
-            }
-            else
-            {
-                _logger.ExtractError(responseWrapper, error);
-            }
+            return allCropTypes.FirstOrDefault(c => c.CropTypeId == cropTypeId).DefaultYield??0;
         }
-        catch (HttpRequestException hre)
-        {
-            _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            _logger.HandleException(ex, error);
-        }
-        return defaultYield ?? 0;
+        return new decimal();
+        
     }
 
     public async Task<List<int>> FetchSecondCropListByFirstCropIdAsync(int firstCropTypeId, int rb209CountryId)
     {
-        List<int> secondCropList = new List<int>();
-        Error? error = null;
-        try
+
+        (List<SecondCropLinkingResponse> secondCropLinkingList, Error? error) = await FetchSecondCropListAsync();
+
+        if (secondCropLinkingList != null && secondCropLinkingList.Count > 0 && error == null)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSecondCropListByFirstCropIdAPI, HttpUtility.UrlEncode(firstCropTypeId.ToString()), rb209CountryId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    var secondCrops = responseWrapper?.Data?.SecondCropID.ToObject<List<int>>();
-                    secondCropList.AddRange(secondCrops);
-                }
-            }
-            else
-            {
-                _logger.ExtractError(responseWrapper, error);
-            }
+            return secondCropLinkingList
+                .Where(c =>
+                    c.FirstCropID == firstCropTypeId &&
+                    c.RB209CountryID == rb209CountryId)
+                .Select(c => c.SecondCropID)
+                .ToList();
         }
-        catch (HttpRequestException hre)
-        {
-            _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            _logger.HandleException(ex, error);
-        }
-        return secondCropList;
+
+        return new List<int>();
     }
     public async Task<(HarvestYearResponseHeader?, Error?)> FetchHarvestYearPlansDetailsByFarmIdAsync(int harvestYear, int farmId)
     {
@@ -577,36 +539,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return (managementPeriodList, error);
     }
 
-    public async Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinkingAsync()
-    {
-        Error? error = null;
-        List<CropTypeLinkingResponse>? cropTypeLinkingResponse = new List<CropTypeLinkingResponse>();
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchCropTypeLinkingsAPI);
-            
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
-            {
-                cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.records.ToObject<List<CropTypeLinkingResponse>>();
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (cropTypeLinkingResponse, error);
-    }
+    
 
     public async Task<(bool, Error)> CopyCropNutrientManagementPlanAsync(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser)
     {
@@ -720,36 +653,50 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
     }
     public async Task<bool> FetchIsPerennialByCropTypeIdAsync(int cropTypeId)
     {
+        (List<CropTypeLinkingResponse> allCropTypes, Error? error) = await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
+        if (allCropTypes != null && allCropTypes.Count > 0 && error == null)
+        {
+            return allCropTypes.FirstOrDefault(c => c.CropTypeId == cropTypeId).IsPerennial ?? false;
+        }
+        return new bool();
+    }
+    public async Task<(List<SecondCropLinkingResponse>, Error?)> FetchSecondCropListAsync()
+    {
+        string cacheKey = "FetchSecondCropListAsync";
+        var cached = await GetFromCacheAsync<List<SecondCropLinkingResponse>>(cacheKey);
+        if (cached != null)
+        {
+            return (cached, null);
+        }
+
         Error? error = null;
-        bool isPerennial = false;
+        List<SecondCropLinkingResponse>? secondCropLinkingResponse = new List<SecondCropLinkingResponse>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAPI, HttpUtility.UrlEncode(cropTypeId.ToString())));
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchSecondCropLinkingsAPI);
+
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    CropTypeLinkingResponse? cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                    isPerennial = cropTypeLinkingResponse?.IsPerennial ?? false;
-                }
+                secondCropLinkingResponse = responseWrapper?.Data?.SecondCropLinkings.ToObject<List<SecondCropLinkingResponse>>();
+                await SetCacheAsync(cacheKey, secondCropLinkingResponse);
+
             }
             else
             {
-                _logger.ExtractError(responseWrapper, error);
+                error = _logger.ExtractError(responseWrapper, error);
             }
         }
         catch (HttpRequestException hre)
         {
-            _logger.HandleHttpRequestException(hre, error);
+            error = _logger.HandleHttpRequestException(hre, error);
         }
         catch (Exception ex)
         {
-            _logger.HandleException(ex, error);
+            error = _logger.HandleException(ex, error);
         }
-        return isPerennial;
+        return (secondCropLinkingResponse, error);
     }
-
 }

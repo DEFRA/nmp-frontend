@@ -10,10 +10,11 @@ using System.Collections.Generic;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManureService organicManureService) : IOrganicManureLogic
+public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManureService organicManureService, ICropTypeLinkingService cropTypeLinkingService) : IOrganicManureLogic
 {
     private readonly ILogger<OrganicManureLogic> _logger = logger;
     private readonly IOrganicManureService _organicManureService = organicManureService;
+    private readonly ICropTypeLinkingService _cropTypeLinkingService = cropTypeLinkingService;
     public async Task<(bool, Error?)> AddOrganicManuresAsync(string organicManureData)
     {
         _logger.LogTrace("OrganicManureLogic : AddOrganicManuresAsync() called");
@@ -271,6 +272,6 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
     public async Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinking()
     {
         _logger.LogTrace("OrganicManureLogic : FetchAllCropTypeLinking() called");
-        return await _organicManureService.FetchAllCropTypeLinkingAsync();
+        return await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
     }
 }

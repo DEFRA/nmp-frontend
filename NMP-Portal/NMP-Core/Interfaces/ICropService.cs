@@ -27,8 +27,6 @@ public interface ICropService
     
     Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropIdAsync(int cropId,bool isShortSummary);
     
-    Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinkingAsync();
-
     Task<(bool, Error)> CopyCropNutrientManagementPlanAsync(int farmID, int harvestYear, int copyYear, bool isOrganic, bool isFertiliser);
     Task<(bool, Error)> MergeCropAsync(string cropData);
     Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYearAsync(int fieldId,int year);

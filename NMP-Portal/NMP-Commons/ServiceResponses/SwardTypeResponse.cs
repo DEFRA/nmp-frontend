@@ -7,4 +7,7 @@ public class SwardTypeResponse
 
     [JsonProperty("swardType")]
     public string SwardType { get; set; }
+
+    [JsonProperty("countryId")]
+    public int CountryId { get; set; }
 }

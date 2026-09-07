@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NMP.Commons.Enums;
+using NMP.Commons.Helpers;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Core.Attributes;
@@ -10,7 +12,7 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IWarningService
+public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IWarningService
 {
     private readonly ILogger<WarningService> _logger = logger;
 
@@ -35,22 +37,23 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
     public async Task<WarningResponse> FetchWarningByCountryIdAndWarningKeyAsync(int countryId, string warningKey)
     {
         _logger.LogTrace("Fetching warning by CountryId and key");
-        string requestUrl = string.Format(ApiurlHelper.FetchWarningByCountryIdAndWarningKeyAPI, HttpUtility.UrlEncode(countryId.ToString()), HttpUtility.UrlEncode(warningKey));
-        HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(requestUrl);
-        
-        var result = await response.Content.ReadAsStringAsync();
-        var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (responseWrapper?.Data is null)
+        List<WarningResponse> allWarnings = await FetchAllWarningAsync();
+        if (allWarnings != null && allWarnings.Count > 0)
         {
-            return new WarningResponse();
+            return allWarnings.Where(c => c.CountryID == countryId && c.WarningKey == warningKey).FirstOrDefault();
         }
-        return responseWrapper.Data.ToObject<WarningResponse>();
+        return new WarningResponse();
     }
 
     public async Task<List<WarningResponse>> FetchAllWarningAsync()
     {
         _logger.LogTrace("Fetching warning list");
+        string cacheKey = "FetchAllWarningAsync";
+        var cached = await GetFromCacheAsync<List<WarningResponse>>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
         string requestUrl = ApiurlHelper.FetchAllWarningAPI;
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(requestUrl);
@@ -61,7 +64,9 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
         {
             return new List<WarningResponse>();
         }
-        return responseWrapper.Data.records.ToObject<List<WarningResponse>>();
+        var warnings= responseWrapper.Data.records.ToObject<List<WarningResponse>>();
+        await SetCacheAsync(cacheKey, warnings);
+        return warnings;
     }
 
 
