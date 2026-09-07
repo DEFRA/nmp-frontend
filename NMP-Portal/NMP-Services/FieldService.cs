@@ -15,7 +15,7 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, ICropService cropService, ICropTypeLinkingService cropTypeLinkingService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFieldService
+public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, ICropTypeLinkingService cropTypeLinkingService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFieldService
 {
     private readonly ILogger<FieldService> _logger = logger;
     private const string _applicationJson = "application/json";
@@ -254,10 +254,10 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
 
     public async Task<int> FetchSNSCategoryIdByCropTypeIdAsync(int cropTypeId)
     {
-        (List<CropTypeLinkingResponse> allCropTypes, _) = await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
+        (List<CropTypeLinkingResponse>? allCropTypes, _) = await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
         if (allCropTypes != null && allCropTypes.Count > 0)
         {
-            return allCropTypes.FirstOrDefault(c => c.CropTypeId == cropTypeId).SNSCategoryID ?? 0;
+            return allCropTypes.FirstOrDefault(c => c.CropTypeId == cropTypeId)?.SNSCategoryID ?? 0;
         }
         return new int();
     }

@@ -40,7 +40,7 @@ public class WarningService(ILogger<WarningService> logger, IHttpContextAccessor
         List<WarningResponse> allWarnings = await FetchAllWarningAsync();
         if (allWarnings != null && allWarnings.Count > 0)
         {
-            return allWarnings.Where(c => c.CountryID == countryId && c.WarningKey == warningKey).FirstOrDefault();
+            return allWarnings.FirstOrDefault(c => c.CountryID == countryId && c.WarningKey == warningKey) ?? new WarningResponse();
         }
         return new WarningResponse();
     }
