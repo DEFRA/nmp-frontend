@@ -8,13 +8,16 @@
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.FarmName;
     var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "IsFarmOrganic";
-    @if(Model.MannerFarmId!=null)
+    @if (string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId))
     {
-        backAction = "Name";
-    }
-    if (Model.CountryId.HasValue && Model.CountryId.Value == (int)FarmCountry.Scotland)
-    {
-        backAction = "AverageAnnualRainfall";
+        @if (Model.MannerFarmId != null)
+        {
+            backAction = "Name";
+        }
+        if (Model.CountryId.HasValue && Model.CountryId.Value == (int)FarmCountry.Scotland)
+        {
+            backAction = "AverageAnnualRainfall";
+        }
     }
 }
 

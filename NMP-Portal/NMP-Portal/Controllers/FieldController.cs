@@ -1634,6 +1634,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogTrace("Field Controller : CheckAnswer() Field Data session not found");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            model.IsGrassLastThreeHarvestYearChange = false;
             ViewBag.IsAdding = true;
             model.IsRecentSoilAnalysisQuestionChange = false;
             model.IsCheckAnswer = true;
@@ -2802,7 +2803,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
 
             List<Crop> cropPlans = new List<Crop>();
-
+            model.IsGrassLastThreeHarvestYearChange = false;
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
                 (cropPlans, Error error, int decrptedFieldId, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired) = await PreviousCroppingsByFieldId(fieldId, farmId, model);
@@ -2834,7 +2835,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 }
                 BindPreviousGrassesData(model);
                 ResetSoilOverChalkAndReleasingClay(model);
-
                 SetFieldDataToSession(model);//get plans of field
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
 
@@ -3487,7 +3487,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         FieldViewModel? fieldData = LoadFieldDataFromSession();
 
         bool hasGrassChanged = HasGrassFlagChanged(model, fieldData);
-
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && hasGrassChanged)
+        {
+            model.IsHasGrassInLastThreeYearChange = true;
+        }
         if (model.IsCheckAnswer)
         {
             IActionResult? checkAnswerResult = HandleCheckAnswer(model, hasGrassChanged, fieldData);
@@ -3553,6 +3556,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         model.IsHasGrassInLastThreeYearChange = true;
+        SetFieldDataToSession(model);
 
         if (model.PreviousCroppings.HasGrassInLastThreeYear == false)
         {
@@ -3656,8 +3660,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         model.IsPreviousYearGrass = model.PreviousGrassYears?.Contains(lastHarvestYear) == true;
-
+        BindIsGrassLastThreeHarvestYearChange(model);
         ResetCropIfPreviousYearGrassChanged(model);
+        SetFieldDataToSession(model);
 
         if (model.PreviousGrassYears?.Count == 3)
         {
@@ -3674,12 +3679,23 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         SetFieldDataToSession(model);
 
-        if (model.IsCheckAnswer && !model.IsHasGrassInLastThreeYearChange && !model.IsLastHarvestYearChange)
+        if (model.IsCheckAnswer && !model.IsHasGrassInLastThreeYearChange && !model.IsGrassLastThreeHarvestYearChange && !model.IsLastHarvestYearChange)
         {
             return RedirectToAction(_checkAnswerActionName);
         }
 
         return RedirectToAction("GrassManagementOptions");
+    }
+
+    private void BindIsGrassLastThreeHarvestYearChange(FieldViewModel model)
+    {
+        FieldViewModel? fieldData = LoadFieldDataFromSession();
+        var current = model.PreviousGrassYears ?? new List<int>();
+        var previous = fieldData?.PreviousGrassYears ?? new List<int>();
+
+        model.IsGrassLastThreeHarvestYearChange =
+            !previous.ToHashSet().SetEquals(current);
+
     }
 
     private void ResetCropIfPreviousYearGrassChanged(FieldViewModel model)
@@ -3741,12 +3757,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction("HasGreaterThan30PercentClover");
         }
 
-        if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
+        if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange) && (!model.IsLastHarvestYearChange))
         {
             return RedirectToAction(_checkAnswerActionName);
         }
 
-        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsGrassLastThreeHarvestYearChange) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
         {
             return RedirectToAction(_updateFieldActionName);
         }
@@ -3788,7 +3804,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         SetFieldDataToSession(model);
 
-        if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
+        if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange) && (!model.IsLastHarvestYearChange))
         {
             return RedirectToAction(_checkAnswerActionName);
         }
@@ -3802,7 +3818,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return RedirectToAction(_cropGroupsActionName);
             }
 
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange))
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
             {
                 return RedirectToAction(_updateFieldActionName);
             }
@@ -3863,7 +3879,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_cropGroupsActionName);
         }
 
-        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange))
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
         {
             return RedirectToAction(_updateFieldActionName);
         }
@@ -3905,12 +3921,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         SetFieldDataToSession(model);
 
-        if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
+        if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange)&&(!model.IsGrassLastThreeHarvestYearChange))
         {
             return Task.FromResult<IActionResult>(RedirectToAction(_checkAnswerActionName));
         }
 
-        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true)
+        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && (!model.IsHasGrassInLastThreeYearChange) && model.IsPreviousYearGrass == true && (!model.IsGrassLastThreeHarvestYearChange))
         {
             return Task.FromResult<IActionResult>(RedirectToAction(_updateFieldActionName));
         }

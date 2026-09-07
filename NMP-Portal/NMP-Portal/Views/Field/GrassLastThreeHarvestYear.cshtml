@@ -6,11 +6,11 @@
     ViewData["Title"] = $"{string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.Name)} {Resource.lblHyphen} {title}";
     
     var backAction = "";
-    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
+    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange) && !Model.IsGrassLastThreeHarvestYearChange)
     {
         backAction = "CheckAnswer";
     }
-    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate) && !Model.IsHasGrassInLastThreeYearChange&&!Model.IsGrassLastThreeHarvestYearChange)
     {
         backAction = "UpdateField";
     }

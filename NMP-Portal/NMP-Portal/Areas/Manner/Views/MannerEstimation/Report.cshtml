@@ -195,15 +195,15 @@
                             {
                                 <td class="govuk-table__cell">@manureAnalysisCount</td>
                             }
-                            <td class="govuk-table__cell">@(manureAnalysis.DryMatterContent != 0 ? string.Format("{0:N0}{1}", manureAnalysis.DryMatterContent, Resource.lblPercentage) : "0")</td>
-                            <td class="govuk-table__cell">@(manureAnalysis.TotalNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalNitrogen, Resource.lblkg) : "0")</td>
-                            <td class="govuk-table__cell">@(manureAnalysis.AmmoniumNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.AmmoniumNitrogen, Resource.lblkg) : "0")</td>
-                            <td class="govuk-table__cell">@(manureAnalysis.UricAcidNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.UricAcidNitrogen, Resource.lblkg) : "0")</td>
-                            <td class="govuk-table__cell">@(manureAnalysis.NitrateNitrogen != 0 ? string.Format("{0:N0}{1}", manureAnalysis.NitrateNitrogen, Resource.lblkg) : "0")</td>
-                            <td class="govuk-table__cell">@(manureAnalysis.TotalPhosphate != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalPhosphate, Resource.lblkg) : "0")</td>
-                            <td class="govuk-table__cell">@(manureAnalysis.TotalPotash != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalPotash, Resource.lblkg) : "0")</td>
-                            <td class="govuk-table__cell">@(manureAnalysis.TotalSulphur != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalSulphur, Resource.lblkg) : "0")</td>
-                            <td class="govuk-table__cell">@(manureAnalysis.TotalMagnesium != 0 ? string.Format("{0:N0}{1}", manureAnalysis.TotalMagnesium, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.DryMatterContent != 0 ? string.Format("{0:N2}{1}", manureAnalysis.DryMatterContent, Resource.lblPercentage) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalNitrogen != 0 ? string.Format("{0:N2}{1}", manureAnalysis.TotalNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.AmmoniumNitrogen != 0 ? string.Format("{0:N2}{1}", manureAnalysis.AmmoniumNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.UricAcidNitrogen != 0 ? string.Format("{0:N2}{1}", manureAnalysis.UricAcidNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.NitrateNitrogen != 0 ? string.Format("{0:N2}{1}", manureAnalysis.NitrateNitrogen, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalPhosphate != 0 ? string.Format("{0:N2}{1}", manureAnalysis.TotalPhosphate, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalPotash != 0 ? string.Format("{0:N2}{1}", manureAnalysis.TotalPotash, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalSulphur != 0 ? string.Format("{0:N2}{1}", manureAnalysis.TotalSulphur, Resource.lblkg) : "0")</td>
+                            <td class="govuk-table__cell">@(manureAnalysis.TotalMagnesium != 0 ? string.Format("{0:N2}{1}", manureAnalysis.TotalMagnesium, Resource.lblkg) : "0")</td>
                         </tr>
                     }
 
