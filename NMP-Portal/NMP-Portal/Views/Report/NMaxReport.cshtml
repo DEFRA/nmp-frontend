@@ -348,7 +348,7 @@
                                     else
                                     {
                                         <td class="govuk-table__cell">
-                                            @((nmaxLimitReportResponse.StandardRate != null && nmaxLimitReportResponse.StandardRate > 0) ? string.Format("{0:N0}{1}", nmaxLimitReportResponse.StandardRate, Resource.lblkg) : Resource.lblHyphen)
+                                            @((nmaxLimitReportResponse.StandardRate != null && nmaxLimitReportResponse.StandardRate > 0) ? string.Format("{0:N0}{1}", nmaxLimitReportResponse.StandardRate, Resource.lblkg) : 0)
                                         </td>
                                         <td class="govuk-table__cell">
                                             @((nmaxLimitReportResponse.YieldAdjustment != null && nmaxLimitReportResponse.YieldAdjustment > 0) ? string.Format("{0:N0}{1}", nmaxLimitReportResponse.YieldAdjustment, Resource.lblkg) : Resource.lblHyphen)
