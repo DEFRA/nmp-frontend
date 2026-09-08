@@ -7392,7 +7392,7 @@ Regulations</value>
     <value>What is the business reference number (optional)?</value>
   </data>
   <data name="lblForExample123456" xml:space="preserve">
-    <value>For example, AB123456</value>
+    <value>For example, 123456</value>
   </data>
   <data name="lblWhatIsTheMainLocationCode" xml:space="preserve">
     <value>What is the main location code (MLC) (optional)?</value>
@@ -8346,7 +8346,7 @@ following crop year 2</value>
     <value>Nutrient management planning (NMPT-GB)</value>
   </data>
   <data name="lblValidBusinessReferenceNumberFormat" xml:space="preserve">
-    <value>Enter a valid business reference number in the format AB123456.</value>
+    <value>Enter a valid business reference number in the format 123456.</value>
   </data>
   <data name="lblValidMLCNumberFormat" xml:space="preserve">
     <value>Enter a valid main location code in the format 22/333/4444.</value>

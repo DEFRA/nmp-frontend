@@ -6969,7 +6969,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, AB123456.
+        ///   Looks up a localized string similar to For example, 123456.
         /// </summary>
         public static string lblForExample123456 {
             get {
@@ -18134,7 +18134,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a valid business reference number in the format AB123456..
+        ///   Looks up a localized string similar to Enter a valid business reference number in the format 123456..
         /// </summary>
         public static string lblValidBusinessReferenceNumberFormat {
             get {

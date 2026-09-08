@@ -43,7 +43,10 @@ public class Farm
     public string? BusinessName { get; set; }
 
     //[StringLength(20, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgSBIMinMaxValidation))]
-    [RegularExpression(@"^[A-Za-z]{2}\d{6}$", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.lblValidBusinessReferenceNumberFormat))]
+    [RegularExpression(@"^\d{6}$",
+    ErrorMessageResourceType = typeof(Resource),
+    ErrorMessageResourceName = nameof(Resource.lblValidBusinessReferenceNumberFormat))]
+
     public string? SBI { get; set; }
     public string? STD { get; set; }
     public string? Telephone { get; set; }
