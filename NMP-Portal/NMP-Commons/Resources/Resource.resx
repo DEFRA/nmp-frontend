@@ -8504,4 +8504,16 @@ following crop year 2</value>
   <data name="lblMagnesiumForErrorMsg" xml:space="preserve">
     <value>magnesium (MgO)</value>
   </data>
+  <data name="lblCacheRedis" xml:space="preserve">
+    <value>[Cache] REDIS HIT  key={0}</value>
+  </data>
+  <data name="lblCacheMemory" xml:space="preserve">
+    <value>[Cache] MEMORY HIT key={0}</value>
+  </data>
+  <data name="lblCacheSet" xml:space="preserve">
+    <value>[Cache] SET key={0}</value>
+  </data>
+  <data name="lblCacheRemoved" xml:space="preserve">
+    <value>[Cache] REMOVED key={0}</value>
+  </data>
 </root>

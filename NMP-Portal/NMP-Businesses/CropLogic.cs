@@ -22,12 +22,13 @@ using System.Threading.Tasks;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, ICropServiceDependencies dependencies) : ICropLogic
+public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, ICropTypeLinkingService cropTypeLinkingService, ICropServiceDependencies dependencies) : ICropLogic
 {
     private readonly ILogger<CropLogic> _logger = logger;
     private readonly ICropService _cropService = dependencies.CropService;
     private readonly ISnsAnalysisService _snsAnalysisService = dependencies.SnsAnalysisService;
     private readonly IRecommendationService _recommendationService = dependencies.RecommendationService;
+    private readonly ICropTypeLinkingService _cropTypeLinkingService = cropTypeLinkingService;
     private readonly IRb209Service _rb209Service = dependencies.Rb209Service;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
@@ -84,7 +85,7 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
     public async Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeId()
     {
         _logger.LogTrace("Fetching CropInfoTwo");
-        return await _rb209Service.FetchCropInfoTwoByCropTypeIdAsync();
+        return await _rb209Service.FetchCropInfoTwoListAsync();
     }
 
     public async Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYear(int fieldId, int year)
@@ -119,7 +120,7 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
     public async Task<(List<CropTypeLinkingResponse>, Error)> FetchCropTypeLinking()
     {
         _logger.LogTrace("Fetching crop type linking");
-        return await _cropService.FetchCropTypeLinkingAsync();
+        return await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
     }
 
     public async Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesById(int defoliationId)

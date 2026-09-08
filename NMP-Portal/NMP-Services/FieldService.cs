@@ -15,10 +15,11 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFieldService
+public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, ICropTypeLinkingService cropTypeLinkingService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFieldService
 {
     private readonly ILogger<FieldService> _logger = logger;
     private const string _applicationJson = "application/json";
+    private readonly ICropTypeLinkingService _cropTypeLinkingService = cropTypeLinkingService;
 
     public async Task<int> FetchFieldCountByFarmIdAsync(int farmId)
     {
@@ -253,41 +254,12 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
 
     public async Task<int> FetchSNSCategoryIdByCropTypeIdAsync(int cropTypeId)
     {
-        int? snsCategoryID = null;
-        Error? error = new Error();
-        try
+        (List<CropTypeLinkingResponse>? allCropTypes, _) = await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
+        if (allCropTypes != null && allCropTypes.Count > 0)
         {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingsByCropTypeIdAPI, cropTypeId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper != null && responseWrapper.Data != null)
-                {
-                    CropTypeLinkingResponse? cropTypeLinkingResponse = responseWrapper?.Data?.CropTypeLinking.ToObject<CropTypeLinkingResponse>();
-                    if (cropTypeLinkingResponse != null)
-                    {
-                        snsCategoryID = cropTypeLinkingResponse.SNSCategoryID;
-                    }
-                }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
+            return allCropTypes.FirstOrDefault(c => c.CropTypeId == cropTypeId)?.SNSCategoryID ?? 0;
         }
-        catch (HttpRequestException hre)
-        {
-            error.Message = Resource.MsgServiceNotAvailable;
-            _logger.LogError(hre, hre.Message);
-        }
-        catch (Exception ex)
-        {
-            error.Message = ex.Message;
-            _logger.LogError(ex, ex.Message);
-        }
-        return snsCategoryID ?? 0;
+        return new int();
     }
 
    

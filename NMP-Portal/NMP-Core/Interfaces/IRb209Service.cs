@@ -20,7 +20,7 @@ namespace NMP.Core.Interfaces
         Task<string> FetchCropTypeByIdAsync(int cropTypeId);
         Task<List<PotatoVarietyResponse>> FetchPotatoVarietiesAsync();
         Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeIdAsync(int cropTypeId);
-        Task<List<CropInfoTwoResponse>> FetchCropInfoTwoByCropTypeIdAsync();
+        Task<List<CropInfoTwoResponse>> FetchCropInfoTwoListAsync();
         Task<string> FetchCropInfo1NameByCropTypeIdAndCropInfo1IdAsync(int cropTypeId, int cropInfo1Id);
         Task<string> FetchCropInfo2NameByCropInfo2IdAsync(int cropInfo2Id);
         Task<List<CropTypeResponse>> FetchAllCropTypesAsync();
