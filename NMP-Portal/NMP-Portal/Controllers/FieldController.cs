@@ -22,17 +22,17 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
-     IFarmLogic farmLogic, ISoilLogic soilLogic, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmsNvzLogic farmsNvzLogic, ICropLogic cropLogic) : Controller
+     IFieldLogicDependencies logicDependencies) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
     private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
     private readonly IDataProtector _soilAnalysisDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.SoilAnalysisController");
-    private readonly IFarmLogic _farmLogic = farmLogic;
-    private readonly IFieldLogic _fieldLogic = fieldLogic ?? throw new ArgumentNullException(nameof(fieldLogic));
-    private readonly ISoilLogic _soilService = soilLogic;
-    private readonly ICropLogic _cropLogic = cropLogic;
-    private readonly IPreviousCroppingLogic _previousCroppingLogic = previousCroppingLogic;
+    private readonly IFarmLogic _farmLogic = logicDependencies.FarmLogic;
+    private readonly IFieldLogic _fieldLogic = logicDependencies.FieldLogic ?? throw new ArgumentNullException(nameof(logicDependencies.FieldLogic));
+    private readonly ISoilLogic _soilService = logicDependencies.SoilLogic;
+    private readonly ICropLogic _cropLogic = logicDependencies.CropLogic;
+    private readonly IPreviousCroppingLogic _previousCroppingLogic = logicDependencies.PreviousCroppingLogic;
     private const string _checkAnswerActionName = "CheckAnswer";
     private const string _updateFieldActionName = "UpdateField";
     private const string _farmSummaryActionName = "FarmSummary";
@@ -48,7 +48,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private const string _cropTypesActionName = "CropTypes";
     private const string _lastHarvestYearActionName = "LastHarvestYear";
     private const string _stringFormat = "{0} {1}";
-    private readonly IFarmsNvzLogic _farmsNvzLogic = farmsNvzLogic;
+    private readonly IFarmsNvzLogic _farmsNvzLogic = logicDependencies.FarmsNvzLogic;
     private const string _potassiumIndexValue = "PotassiumIndexValue";
     private const string _magnesiumIndexValue = "SoilAnalyses.MagnesiumIndex";
     private const string _phosphorusIndexValue = "SoilAnalyses.PhosphorusIndex"; //FieldData
