@@ -1608,12 +1608,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogError("Field Controller : Session not found in CropInfoOne() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-
-            List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
-
-            ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CountryId);
-
-            ViewBag.CropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
+            await BindCropInfoViewBag(model);
 
         }
         catch (Exception ex)
@@ -1641,9 +1636,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (!ModelState.IsValid)
             {
-                List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
-                ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CountryId);
-                ViewBag.CropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
+                await BindCropInfoViewBag(model);
                 return View(model);
             }
 
@@ -1735,12 +1728,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilReleasingClay = null;
                 model.IsSoilReleasingClay = false;
             }
-            if(model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
-            {
-                List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
-                ViewBag.CropInfo1Name = cropInfoOneList.Where(x=>x.CropInfo1Id==model.CropInfo1).Select(x=>x.CropInfo1Name).FirstOrDefault();
-                ViewBag.CropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
-            }
+            await BindCropInfoViewBag(model);
             List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
             ViewBag.GrassManagementOption = grassManagements?.FirstOrDefault(x => x.Id == model.PreviousCroppings.GrassManagementOptionID)?.Name;
 
@@ -2645,6 +2633,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
         {
             List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
+            ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CountryId);
             ViewBag.CropInfo1Name = cropInfoOneList.Where(x => x.CropInfo1Id == model.CropInfo1).Select(x => x.CropInfo1Name).FirstOrDefault();
             ViewBag.CropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
         }
@@ -2947,12 +2936,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
 
             }
-            if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
-            {
-                List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
-                ViewBag.CropInfo1Name = cropInfoOneList.Where(x => x.CropInfo1Id == model.CropInfo1).Select(x => x.CropInfo1Name).FirstOrDefault();
-                ViewBag.CropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
-            }
+            await BindCropInfoViewBag(model);
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
                 HttpContext.Session.SetObjectAsJson(_fieldDataBeforeUpdateKey, model);
