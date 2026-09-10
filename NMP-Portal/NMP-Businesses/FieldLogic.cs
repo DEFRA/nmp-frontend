@@ -221,19 +221,5 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService,I
         _logger.LogTrace("Fetch Soil nutrient status list by methodologyId");
         return await _rb209Service.FetchSoilNutrientStatusList(methodologyId);
     }
-    public async Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId, int? farmRB209CountryID)
-    {
-        _logger.LogTrace("Fetching CropInfoOne for CropTypeId: {CropTypeId}", cropTypeId);
-        List<CropInfoOneResponse> cropInfoOneResponse = await _rb209Service.FetchCropInfoOneByCropTypeIdAsync(cropTypeId);
-        if (farmRB209CountryID.HasValue)
-        {
-            cropInfoOneResponse = cropInfoOneResponse.Where(x => x.CountryId == farmRB209CountryID || x.CountryId == (int)NMP.Commons.Enums.RB209Country.All).ToList();
-        }
-        return cropInfoOneResponse;
-    }
-    public async Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId, int countryId)
-    {
-        _logger.LogTrace("Fetching CropInfoOne question for CropTypeId: {CropTypeId}", cropTypeId);
-        return await _cropService.FetchCropInfoOneQuestionByCropTypeIdAsync(cropTypeId, countryId);
-    }
+    
 }
