@@ -41,4 +41,6 @@ public interface IFieldLogic
     Task<List<CommonResponse>> FetchPscIndex();
     Task<CommonResponse?> FetchPscIndexById(int id);
     Task<(List<SoilNutrientStatusResponse>?, Error?)> FetchSoilNutrientStatusList(int methodologyId);
+    Task<List<CropInfoOneResponse>> FetchCropInfoOneByCropTypeId(int cropTypeId, int? farmRB209CountryID);
+    Task<string?> FetchCropInfoOneQuestionByCropTypeId(int cropTypeId, int countryId);
 }
