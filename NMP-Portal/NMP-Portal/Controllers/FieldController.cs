@@ -29,7 +29,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
     private readonly IDataProtector _soilAnalysisDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.SoilAnalysisController");
     private readonly IFarmLogic _farmLogic = logicDependencies.FarmLogic;
-    private readonly IFieldLogic _fieldLogic = logicDependencies.FieldLogic ?? throw new ArgumentNullException(nameof(logicDependencies.FieldLogic));
+    private readonly IFieldLogic _fieldLogic = logicDependencies.FieldLogic;
     private readonly ISoilLogic _soilService = logicDependencies.SoilLogic;
     private readonly ICropLogic _cropLogic = logicDependencies.CropLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = logicDependencies.PreviousCroppingLogic;
