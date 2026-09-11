@@ -7,7 +7,6 @@
     var isWithinNVZ = "";
     var isAbove300SeaLevel = "";
     var addRecentSoilAnalysis = "";
-
     switch (Model.IsWithinNVZ)
     {
         case true:
@@ -670,7 +669,7 @@
             });
         }
     }
-    if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && (Model.IsPreviousYearGrass == null || Model.IsPreviousYearGrass == false))
+    if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && (Model.IsPreviousYearGrass == null || Model.IsPreviousYearGrass == false))
     {
         summaryRows.Add(new SummaryListRowViewModel
         {
@@ -679,14 +678,48 @@
             ActionName = "CropGroups",
             ControllerName = "Field"
         });
+        if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
+        {
+            summaryRows.Add(new SummaryListRowViewModel
+            {
+                Key = string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear),
+                Value = ((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType),
+                ActionName = "CropTypes",
+                ControllerName = "Field",
+                ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+            });
+        }
+    }
+    if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+    {
         summaryRows.Add(new SummaryListRowViewModel
         {
-            Key = string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear),
-            Value = ((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType),
-            ActionName = "CropTypes",
-            ControllerName = "Field",
-            ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+            Key = string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear),
+            Value = ((string.IsNullOrWhiteSpace(Model.CropGroup)) ? Resource.lblNotSet : Model.CropGroup),
+            ActionName = "CropGroups",
+            ControllerName = "Field"
         });
+        if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
+        {
+            summaryRows.Add(new SummaryListRowViewModel
+            {
+                Key = Resource.lblWhatWasThePreviousGrassManagement,
+                Value = ((string.IsNullOrWhiteSpace(Model.PreviousGrassName)) ? Resource.lblNotSet : Model.PreviousGrassName),
+                ActionName = "PreviousGrass",
+                ControllerName = "Field"
+            });
+        }
+        else
+        {
+            summaryRows.Add(new SummaryListRowViewModel
+            {
+                Key = string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear),
+                Value = ((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType),
+                ActionName = "CropTypes",
+                ControllerName = "Field",
+                ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+            });
+        }
     }
 
 

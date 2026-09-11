@@ -13414,6 +13414,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previous grass.
+        /// </summary>
+        public static string lblPreviousGrass {
+            get {
+                return ResourceManager.GetString("lblPreviousGrass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Price of nutrient.
         /// </summary>
         public static string lblPriceOfNutrient {
@@ -19751,6 +19760,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatWasThePreviousCropTypeForCheckAnswere {
             get {
                 return ResourceManager.GetString("lblWhatWasThePreviousCropTypeForCheckAnswere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the previous grass management?.
+        /// </summary>
+        public static string lblWhatWasThePreviousGrassManagement {
+            get {
+                return ResourceManager.GetString("lblWhatWasThePreviousGrassManagement", resourceCulture);
             }
         }
         

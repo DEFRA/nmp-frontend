@@ -38,7 +38,7 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService,I
     {
         _logger.LogTrace("Fetching arable crop groups");
         var cropGroups = await _rb209Service.FetchCropGroupsAsync();
-        return [.. cropGroups.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass).OrderBy(x => x.CropGroupName)];
+        return [.. cropGroups.OrderBy(x => x.CropGroupName)];
     }
 
     public async Task<(CropAndFieldReportResponse?, Error?)> FetchCropAndFieldReportById(string fieldId, int year)

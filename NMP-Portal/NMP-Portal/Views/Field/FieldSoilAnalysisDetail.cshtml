@@ -32,6 +32,8 @@
         manureNonSpreadingAreaText = ((int)Model.ManureNonSpreadingArea).ToString();
     else
         manureNonSpreadingAreaText = string.Format("{0:N2} {1}", Model.ManureNonSpreadingArea, Resource.lblhectar);
+   
+
 
 }
 
@@ -173,7 +175,23 @@
 
                     @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null)
                     {
-                        @if (ViewBag.PreviousCroppingsList != null && ViewBag.PreviousCroppingsList.Count > 0)
+
+                        @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@string.Format(Resource.lblCropInYear, Model.LastHarvestYear)</td>
+                                <td class="govuk-table__cell">@Model.CropType</td>
+                            </tr>
+                            @if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
+                            {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@Resource.lblPreviousGrass</td>
+                                <td class="govuk-table__cell">@Model.PreviousGrassName</td>
+                            </tr>
+                            }
+                        }
+                        else{
+                        if (ViewBag.PreviousCroppingsList != null && ViewBag.PreviousCroppingsList.Count > 0)
                         {
                             @foreach (var previousCrop in ViewBag.PreviousCroppingsList)
                             {
@@ -191,6 +209,7 @@
                                     <td class="govuk-table__cell">@Resource.lblLengthOfTheLay</td>
                                     <td class="govuk-table__cell">@(Model.PreviousCroppings?.LayDuration == (int)NMP.Commons.Enums.LayDuration.OneToTwoYears ? Resource.lbl1To2Years : Resource.lbl3YearsOrMore)</td>
                                 </tr>
+                               
                             }
 
                             @if (ViewBag.GrassManagementOption != null)
@@ -216,6 +235,8 @@
                                     <td class="govuk-table__cell">@ViewBag.SoilNitrogenSupplyItem</td>
                                 </tr>
                             }
+                         
+                        }
                         }
                     }
                 </tbody>
