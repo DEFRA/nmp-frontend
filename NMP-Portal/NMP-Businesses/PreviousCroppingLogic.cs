@@ -33,7 +33,17 @@ public class PreviousCroppingLogic(ILogger<PreviousCroppingLogic> logger, IPrevi
 
     public async Task<(bool, Error)> MergePreviousCropping(string jsonData)
     {
-       _logger.LogTrace("Merging previous cropping data");
+        _logger.LogTrace("Merging previous cropping data");
         return await _previousCroppingService.MergePreviousCropping(jsonData);
+    }
+    public async Task<(List<PreviousGrassResponse>?, Error?)> FetchPreviousGrassList()
+    {
+        _logger.LogTrace("Fetching previous grass list");
+        return await _previousCroppingService.FetchPreviousGrassListAsync();
+    }
+    public async Task<(PreviousGrassResponse?, Error?)> FetchPreviousGrassById(int id)
+    {
+        _logger.LogTrace("Fetching previous grass list by Id: {Id}", id);
+        return await _previousCroppingService.FetchPreviousGrassByIdAsync(id);
     }
 }

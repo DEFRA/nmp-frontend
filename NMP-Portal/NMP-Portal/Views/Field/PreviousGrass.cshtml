@@ -1,0 +1,67 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.FieldViewModel
+@{
+    string heading = Resource.lblWhatWasThePreviousGrassManagement;
+    ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{heading} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{heading} {Resource.lblHyphen} {Resource.lblAddField}";
+
+
+    ViewBag.CurrentStep = (int)FieldWizardSteps.PreviousGrass;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CropGroup")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="PreviousGrass" asp-controller="Field" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (TempData["Error"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+
+            <govuk-radios for="@Model.PreviousCroppings.PreviousGrassID">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @heading
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint> 
+                        <br />
+                        @Resource.lblSelectTheOptionThatBestMatchedThePreviousGrassManagement
+                        <br />  <br />
+                        <p class="govuk-body">
+                            @Resource.lblPreviousGrassManagementHint
+                        </p>
+                    </govuk-radios-hint>
+                    @if (ViewBag.PreviousGrassManagementList != null)
+                    {
+                        @foreach (var item in ViewBag.PreviousGrassManagementList)
+                        {
+                            <govuk-radios-item value="@item.PreviousGrassId">@item.PreviousGrassName</govuk-radios-item>
+                        }
+                    }
+
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
+                }
+            </p>
+
+        </div>
+
+    </div>
+</form>
