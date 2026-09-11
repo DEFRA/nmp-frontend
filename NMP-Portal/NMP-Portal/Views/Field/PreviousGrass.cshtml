@@ -29,10 +29,14 @@
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @heading
                     </govuk-radios-fieldset-legend>
-                    <govuk-radios-hint>                        
-                        @Resource.lblThereOptionComeFromFasSrucTechnicalNotes ddddd
+                    <govuk-radios-hint> 
+                        <br />
+                        @Resource.lblSelectTheOptionThatBestMatchedThePreviousGrassManagement
+                        <br />  <br />
+                        <p class="govuk-body">
+                            @Resource.lblPreviousGrassManagementHint
+                        </p>
                     </govuk-radios-hint>
-
                     @if (ViewBag.PreviousGrassManagementList != null)
                     {
                         @foreach (var item in ViewBag.PreviousGrassManagementList)

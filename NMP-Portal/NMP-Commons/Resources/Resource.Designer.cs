@@ -13423,6 +13423,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Low nitrogen (N) means less than 150 kg/ha per year fertiliser N used on average. High N means more than 150 kg/ha per year fertiliser N used on average, or a high clover swards.
+        /// </summary>
+        public static string lblPreviousGrassManagementHint {
+            get {
+                return ResourceManager.GetString("lblPreviousGrassManagementHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Price of nutrient.
         /// </summary>
         public static string lblPriceOfNutrient {
@@ -14789,6 +14798,15 @@ namespace NMP.Commons.Resources {
         public static string lblSelectTheFarmFieldAndCropTabOrAnApplication {
             get {
                 return ResourceManager.GetString("lblSelectTheFarmFieldAndCropTabOrAnApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the option that best matched the previous grass management..
+        /// </summary>
+        public static string lblSelectTheOptionThatBestMatchedThePreviousGrassManagement {
+            get {
+                return ResourceManager.GetString("lblSelectTheOptionThatBestMatchedThePreviousGrassManagement", resourceCulture);
             }
         }
         
