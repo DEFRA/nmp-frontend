@@ -690,35 +690,38 @@
             });
         }
     }
-    if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+    @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null)
     {
-        summaryRows.Add(new SummaryListRowViewModel
-        {
-            Key = string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear),
-            Value = ((string.IsNullOrWhiteSpace(Model.CropGroup)) ? Resource.lblNotSet : Model.CropGroup),
-            ActionName = "CropGroups",
-            ControllerName = "Field"
-        });
-        if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
+        if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
             summaryRows.Add(new SummaryListRowViewModel
+                    {
+                        Key = string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear),
+                        Value = ((string.IsNullOrWhiteSpace(Model.CropGroup)) ? Resource.lblNotSet : Model.CropGroup),
+                        ActionName = "CropGroups",
+                        ControllerName = "Field"
+                    });
+            if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
             {
-                Key = Resource.lblWhatWasThePreviousGrassManagement,
-                Value = ((string.IsNullOrWhiteSpace(Model.PreviousGrassName)) ? Resource.lblNotSet : Model.PreviousGrassName),
-                ActionName = "PreviousGrass",
-                ControllerName = "Field"
-            });
-        }
-        else
-        {
-            summaryRows.Add(new SummaryListRowViewModel
+                summaryRows.Add(new SummaryListRowViewModel
+                        {
+                            Key = Resource.lblWhatWasThePreviousGrassManagement,
+                            Value = ((string.IsNullOrWhiteSpace(Model.PreviousGrassName)) ? Resource.lblNotSet : Model.PreviousGrassName),
+                            ActionName = "PreviousGrass",
+                            ControllerName = "Field"
+                        });
+            }
+            else
             {
-                Key = string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear),
-                Value = ((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType),
-                ActionName = "CropTypes",
-                ControllerName = "Field",
-                ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
-            });
+                summaryRows.Add(new SummaryListRowViewModel
+                        {
+                            Key = string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear),
+                            Value = ((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType),
+                            ActionName = "CropTypes",
+                            ControllerName = "Field",
+                            ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+                        });
+            }
         }
     }
 

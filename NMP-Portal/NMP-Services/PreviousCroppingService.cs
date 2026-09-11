@@ -33,7 +33,7 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
             {
                 if (responseWrapper?.Data?.PreviousCropping is JToken previousCroppingToken)
                 {
-                    previousCropping = previousCroppingToken.ToObject<PreviousCropping>() ?? new PreviousCropping();
+                    previousCropping = previousCroppingToken.ToObject<PreviousCropping>();
                 }
             }
             else
