@@ -2988,6 +2988,42 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Cache] MEMORY HIT key={0}.
+        /// </summary>
+        public static string lblCacheMemory {
+            get {
+                return ResourceManager.GetString("lblCacheMemory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Cache] REDIS HIT  key={0}.
+        /// </summary>
+        public static string lblCacheRedis {
+            get {
+                return ResourceManager.GetString("lblCacheRedis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Cache] REMOVED key={0}.
+        /// </summary>
+        public static string lblCacheRemoved {
+            get {
+                return ResourceManager.GetString("lblCacheRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Cache] SET key={0}.
+        /// </summary>
+        public static string lblCacheSet {
+            get {
+                return ResourceManager.GetString("lblCacheSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculate based on a recent soil mineral nitrogen (N) analysis result.
         /// </summary>
         public static string lblCalculateBasedOnRecentSoilMineralNitrogenAnalysisResult {
@@ -6933,7 +6969,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For example, AB123456.
+        ///   Looks up a localized string similar to For example, 123456.
         /// </summary>
         public static string lblForExample123456 {
             get {
@@ -18098,7 +18134,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter a valid business reference number in the format AB123456..
+        ///   Looks up a localized string similar to Enter a valid business reference number in the format 123456..
         /// </summary>
         public static string lblValidBusinessReferenceNumberFormat {
             get {

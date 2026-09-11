@@ -293,4 +293,7 @@ internal static class ApiurlHelper
     public const string CalculateNutrientValueBasedOnDryMatterAPI = "vendors/manner/calculate-nutrients-by-dry-matter-percentage";
 
     public const string FetchMannerTotalApplicationRateByDateRangeAPI = "manner-estimations/total-application-rate/{0}?fromDate={1}&toDate={2}";
+    public const string FetchCropInfoOneListAPI = "vendors/rb209/Arable/CropInfo1s";
+    public const string FetchSwardTypesListAPI = "vendors/rb209/Grass/SwardTypes";
+    public const string FetchSecondCropLinkingsAPI = "second-crop-linkings";
 }

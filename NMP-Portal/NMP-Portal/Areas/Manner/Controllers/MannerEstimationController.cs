@@ -279,8 +279,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
 
-                var mannerEstimation = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
-                ViewBag.SessionId = mannerEstimation?.SessionId ?? sid;
                 ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
 
                 BindMannerFarmNameAndIdOnNavigation(sid);
@@ -3087,7 +3085,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyFromEstimates() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
-                BindSessionIdInViewBeg(ViewBag.SessionId);
+                BindSessionIdInViewBeg(sid);
                 await LoadMannerEstimations();
                 return View(model);
             }
@@ -3111,7 +3109,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             try
             {
-                BindSessionIdInViewBeg(ViewBag.SessionId);
+                BindSessionIdInViewBeg(sessionId);
                 if (model.MannerEstimationId == null)
                 {
                     ModelState.AddModelError("MannerEstimationId", Resource.MsgSelectAnEstimateToContinue);
@@ -3226,8 +3224,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 mannerEstimationViewModel = new MannerEstimationViewModel();
                 sid = _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
                 mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
-
-
             }
             else
             {
@@ -3966,7 +3962,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         private void ValidationEffectiveRainfall()
-        {
+        { 
             if ((!ModelState.IsValid) && ModelState.ContainsKey(_totalRainfallKey))
             {
                 var RainfallError = ModelState[_totalRainfallKey]?.Errors.Count > 0 ?

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Commons.Enums;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -17,9 +18,10 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IOrganicManureService
+public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService, ICropTypeLinkingService cropTypeLinkingService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IOrganicManureService
 {
     private readonly ILogger<OrganicManureService> _logger = logger;
+    private readonly ICropTypeLinkingService _cropTypeLinkingService = cropTypeLinkingService;
     private const string _applicationJson = "application/json";
     private const string _dateFormat = "yyyy-MM-dd";
     public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYearAsync(int farmId, int harvestYear)
@@ -553,38 +555,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (cropType, error);
     }
-    public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeIdAsync(int cropTypeId)
-    {
-        CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingByCropTypeIdAPI, cropTypeId));
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper?.Data?.CropTypeLinking is JToken cropTypeLinkingToken)
-                {
-                    cropTypeLinking = cropTypeLinkingToken.ToObject<CropTypeLinkingResponse>() ?? new CropTypeLinkingResponse();
-                }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (cropTypeLinking, error);
-    }
+    
     public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsync(int fieldId, int year, bool confirm)
     {
         List<int> manureTypeIds = new List<int>();
@@ -1400,40 +1371,6 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             error = _logger.HandleException(ex, error);
         }
         return (scotlandNmax, error);
-    }
-    public async Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinkingAsync()
-    {
-        List<CropTypeLinkingResponse> cropTypeLinkingList = new List<CropTypeLinkingResponse>();
-        Error? error = null;
-        try
-        {
-            HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchCropTypeLinkingsAPI);
-            string result = await response.Content.ReadAsStringAsync();
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-            if (response.IsSuccessStatusCode)
-            {
-                if (responseWrapper?.Data?.CropTypeLinking is JToken cropTypeLinkingToken)
-                {
-                    cropTypeLinkingList =
-                        cropTypeLinkingToken["records"]?.ToObject<List<CropTypeLinkingResponse>>()
-                        ?? new List<CropTypeLinkingResponse>();
-                }
-            }
-            else
-            {
-                error = _logger.ExtractError(responseWrapper, error);
-            }
-        }
-        catch (HttpRequestException hre)
-        {
-            error = _logger.HandleHttpRequestException(hre, error);
-        }
-        catch (Exception ex)
-        {
-            error = _logger.HandleException(ex, error);
-        }
-        return (cropTypeLinkingList, error);
     }
 
 

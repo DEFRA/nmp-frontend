@@ -687,6 +687,17 @@
             ControllerName = "Field",
             ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
         });
+        if (Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        {
+            summaryRows.Add(new SummaryListRowViewModel
+            {
+                Key = ViewBag.CropInfoOneQuestion,
+                Value = (Model.CropInfo1 == null ? Resource.lblNotSet : ViewBag.CropInfo1Name),
+                ActionName = "CropInfoOne",
+                ControllerName = "Field"
+            });
+        }
+        
     }
 
 

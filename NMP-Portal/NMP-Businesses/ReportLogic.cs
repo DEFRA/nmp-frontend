@@ -327,7 +327,11 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
     }
     private static int CalculateScotlandYieldAdjustment(decimal yield, decimal baseVal, decimal multiplier)
     {
-        return (int)Math.Round(((yield - baseVal) / 0.1m) * multiplier);
+        if(yield > baseVal)
+        {
+            return (int)Math.Round(((yield - baseVal) / 0.1m) * multiplier);
+        }
+        return 0;
     }
     // ===============================
     // SCOTLAND NMAX LOGIC (REFRACTORED)

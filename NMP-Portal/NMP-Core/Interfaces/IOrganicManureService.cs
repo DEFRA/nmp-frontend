@@ -21,7 +21,6 @@ public interface IOrganicManureService
     Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDateAsync(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId);
     Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDateAsync(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId);
     Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYearAsync(int fieldId, int year,bool confirm);
-    Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeIdAsync(int cropTypeId);
     Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsync(int fieldId, int year,bool confirm);
     Task<(List<int>, Error)> FetchManureTypsIdsByManIdFromOrgManureAsync(int managementId);
     Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsync(int managementId, bool confirm, int? fertiliserId, int? organicManureId);
@@ -50,5 +49,4 @@ public interface IOrganicManureService
     Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeAsync(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry);
     Task<(bool, Error)> CheckGreenCompostExistanceByDateRangeAsync(int fieldId, string dateFrom, string dateTo, int? organicManureId);
     Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroupAsync(int cropTypeId, int soilTypeId, int residueGroup);
-    Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinkingAsync();
 }
