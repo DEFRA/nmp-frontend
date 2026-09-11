@@ -3025,6 +3025,28 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return (error, prevCroppingDataForScotland);
     }
 
+
+
+    private async Task<(Error error, bool? hasGrassInLastThreeYear,int?, List<PreviousCroppingData> prevCroppings, PreviousCropping? prevCroppingDataForScotland)> BindPreviousCroppingDataForUpdateField(FieldViewModel model, List<Crop> cropPlans, Error error,  bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired, PreviousCropping? prevCroppingDataForScotland)
+    {
+        int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
+        if (isPreviousCroppingBindRequired)
+        {
+            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (error, hasGrassInLastThreeYear, prevCroppings) = await YearsForGrassAndArablePrevCrop(model, cropPlans, error, decryptedFieldId, prevCroppings);
+            }
+            else
+            {
+                int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) - 1 : (model.LastHarvestYear ?? 0);// farm.LastHarvestYear to model.LastHarvestYear
+
+                model.LastHarvestYear = oldestYearWithPlan;
+                (error, prevCroppingDataForScotland) = await BindingPreviousCropDataForUpdateFieldScotland(model, error, decryptedFieldId, prevCroppingDataForScotland);
+            }
+        }
+
+        return (error, hasGrassInLastThreeYear, model.LastHarvestYear, prevCroppings, prevCroppingDataForScotland);
+    }
     [HttpGet]
     public async Task<IActionResult> UpdateField(string? fieldId, string? farmId)
     {
@@ -3039,9 +3061,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
                 model.EncryptedFieldId = fieldId;
-                (cropPlans, Error error, int decryptedFieldId, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired) = await PreviousCroppingsByFieldId(fieldId, farmId, model);
+                (cropPlans, Error error,  bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired) = await PreviousCroppingsByFieldId(fieldId, farmId, model);
                 PreviousCropping? prevCroppingDataForScotland = null;
-                (error, hasGrassInLastThreeYear,model.LastHarvestYear, prevCroppings, prevCroppingDataForScotland) = await BindPreviousCroppingDataForUpdateField(model, cropPlans, error, hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired, prevCroppingDataForScotland);
+                (error, hasGrassInLastThreeYear, model.LastHarvestYear, prevCroppings, prevCroppingDataForScotland) = await BindPreviousCroppingDataForUpdateField(model, cropPlans, error, hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired, prevCroppingDataForScotland);
 
                 await ModelInitialisationByFieldId(fieldId, farmId, model, cropPlans, hasGrassInLastThreeYear, prevCroppings, prevCroppingDataForScotland);
 
@@ -3090,28 +3112,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return View(model);
 
     }
-
-    private async Task<(Error error, bool? hasGrassInLastThreeYear,int?, List<PreviousCroppingData> prevCroppings, PreviousCropping? prevCroppingDataForScotland)> BindPreviousCroppingDataForUpdateField(FieldViewModel model, List<Crop> cropPlans, Error error,  bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired, PreviousCropping? prevCroppingDataForScotland)
-    {
-        int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
-        if (isPreviousCroppingBindRequired)
-        {
-            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
-            {
-                (error, hasGrassInLastThreeYear, prevCroppings) = await YearsForGrassAndArablePrevCrop(model, cropPlans, error, decryptedFieldId, prevCroppings);
-            }
-            else
-            {
-                int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) - 1 : (model.LastHarvestYear ?? 0);// farm.LastHarvestYear to model.LastHarvestYear
-
-                model.LastHarvestYear = oldestYearWithPlan;
-                (error, prevCroppingDataForScotland) = await BindingPreviousCropDataForUpdateFieldScotland(model, error, decryptedFieldId, prevCroppingDataForScotland);
-            }
-        }
-
-        return (error, hasGrassInLastThreeYear, model.LastHarvestYear, prevCroppings, prevCroppingDataForScotland);
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
 
@@ -3261,7 +3261,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return cropPlans;
     }
-    async Task<(List<Crop> cropPlans, Error error, int decrptedFieldId, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired)> PreviousCroppingsByFieldId(string? fieldId, string farmId, FieldViewModel model)
+    async Task<(List<Crop> cropPlans, Error error,  bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired)> PreviousCroppingsByFieldId(string? fieldId, string farmId, FieldViewModel model)
     {
         (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
         int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
@@ -3287,7 +3287,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             isPreviousCroppingBindRequired = CheckPreviousCroppingNeedToShow(cropPlans, isPreviousCroppingBindRequired, model.FarmRB209CountryID.Value);
         }
 
-        return (cropPlans, error, decrptedFieldId, hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired);
+        return (cropPlans, error,  hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired);
     }
 
     private static List<int> YearsToCheck(List<Crop> cropPlans)
