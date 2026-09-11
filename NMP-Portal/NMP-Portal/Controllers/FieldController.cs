@@ -1852,6 +1852,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 GrassManagementOptionID = null,
                 HasGreaterThan30PercentClover = null,
                 SoilNitrogenSupplyItemID = null,
+                CropInfo1=model.CropInfo1,
                 PreviousGrassID = model.PreviousCroppings.PreviousGrassID
             };
             previousCropping.Add(newPreviousCropping);
@@ -3156,6 +3157,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     GrassManagementOptionID = null,
                     HasGreaterThan30PercentClover = null,
                     SoilNitrogenSupplyItemID = null,
+                    CropInfo1=model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet?model.CropInfo1:null,
                     PreviousGrassID = model.PreviousCroppings.PreviousGrassID,
                     Action = preCropping != null ? (int)NMP.Commons.Enums.Action.Update : (int)NMP.Commons.Enums.Action.Insert
                 };
