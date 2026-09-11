@@ -178,9 +178,9 @@ namespace NMP.Commons.Resources {
                 return ResourceManager.GetString("ContentGettingHelp2", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to telephone 0845 646 2469.
+        ///   Looks up a localized string similar to telephone 0333 240 8058.
         /// </summary>
         public static string ContentGettingHelp3 {
             get {
