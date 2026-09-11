@@ -221,4 +221,5 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService,I
         _logger.LogTrace("Fetch Soil nutrient status list by methodologyId");
         return await _rb209Service.FetchSoilNutrientStatusList(methodologyId);
     }
+    
 }

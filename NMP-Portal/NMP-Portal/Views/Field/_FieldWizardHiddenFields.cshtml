@@ -136,6 +136,10 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" />
     }
+    @if (currentStep != (int)FieldWizardSteps.CropInfoOne)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1" />
+    }
     @if (currentStep != (int)FieldWizardSteps.FieldRemove)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldRemove" />
@@ -179,6 +183,7 @@
             @Html.HiddenFor(m => m.PreviousCroppingsList[i].GrassManagementOptionID)
             @Html.HiddenFor(m => m.PreviousCroppingsList[i].HasGreaterThan30PercentClover)
             @Html.HiddenFor(m => m.PreviousCroppingsList[i].SoilNitrogenSupplyItemID)
+            @Html.HiddenFor(m => m.PreviousCroppingsList[i].CropInfo1)
             @Html.HiddenFor(m => m.PreviousCroppingsList[i].CreatedOn)
             @Html.HiddenFor(m => m.PreviousCroppingsList[i].CreatedByID)
             @Html.HiddenFor(m => m.PreviousCroppingsList[i].ModifiedOn)

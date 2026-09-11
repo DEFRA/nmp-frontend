@@ -35,7 +35,8 @@ namespace NMP.Commons.Enums
         SoilNitrogenSupplyItem = 25,
         CropGroup = 26,
         CropType = 27,
-        FieldRemove = 28
+        FieldRemove = 28,
+        CropInfoOne = 29,
 
     }
 }

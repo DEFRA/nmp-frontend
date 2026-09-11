@@ -181,6 +181,15 @@
                                     <td class="govuk-table__cell">@string.Format(Resource.lblCropInYear, previousCrop.HarvestYear)</td>
                                     <td class="govuk-table__cell">@previousCrop.CropTypeName</td>
                                 </tr>
+
+                                @if (Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                                {
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@ViewBag.CropInfoOneQuestion</td>
+                                        <td class="govuk-table__cell">@ViewBag.CropInfo1Name</td>
+                                    </tr>
+                                }
+                                
                             }
                         }
                         @if (ViewBag.HasGrassInLastThreeYear != null && (bool)ViewBag.HasGrassInLastThreeYear)
