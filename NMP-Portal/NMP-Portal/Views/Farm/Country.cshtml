@@ -26,7 +26,7 @@
                     {
                         @foreach (var item in ViewBag.CountryList)
                         {
-                            <govuk-radios-item value="@item.ID">@item.Name</govuk-radios-item>
+                            <govuk-radios-item disabled="@item.ID == (int)NMP.Commons.Enums.FarmCountry.Scotland" value="@item.ID">@item.Name</govuk-radios-item>
                         }
                     }
                 </govuk-radios-fieldset>
