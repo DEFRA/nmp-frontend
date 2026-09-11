@@ -3,7 +3,7 @@
 @model NMP.Commons.ViewModels.FieldViewModel
 @{
     ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.LastHarvestYear)} {Resource.lblHyphen} {Resource.lblAddField}";
-    int grassGroupId = (int)NMP.Commons.Enums.CropGroup.Grass;
+
 
     var backAction = "";
     if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue)

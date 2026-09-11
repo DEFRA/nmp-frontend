@@ -691,10 +691,8 @@
         }
     }
     
-    @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null)
+    @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null&&Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
     {
-        if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-        {
             summaryRows.Add(new SummaryListRowViewModel
                     {
                         Key = string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear),
@@ -733,7 +731,7 @@
             });
         }
             }
-        }
+        
     }
 
 
