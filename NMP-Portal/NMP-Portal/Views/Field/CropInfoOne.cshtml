@@ -1,0 +1,85 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.FieldViewModel
+@{
+    var heading = "";
+    if (ViewBag.CropInfoOneQuestion != null)
+    {
+        heading = ViewBag.CropInfoOneQuestion;
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsUpdate)) ? Resource.lblUpdateField : Resource.lblAddField;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+
+    ViewBag.CurrentStep = (int)FieldWizardSteps.CropInfoOne;
+
+    var backAction = "";
+    if (Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange))
+    {
+        backAction = "CheckAnswer";
+    }
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+    {
+        backAction = "UpdateField";
+    }
+    else
+    {
+        backAction = "CropInfoOne";
+    }
+    ViewBag.CurrentStep = (int)FieldWizardSteps.CropInfoOne;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="CropInfoOne" asp-controller="Field" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            @if (TempData["Error"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+
+            <govuk-radios for="@Model.CropInfo1">
+                <govuk-radios-fieldset>
+
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @if (ViewBag.CropInfoOneQuestion != null)
+                        {
+                            @ViewBag.CropInfoOneQuestion
+                        }
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+
+                    @if (ViewBag.CropInfoOneList != null)
+                    {
+                        @foreach (var item in ViewBag.CropInfoOneList)
+                        {
+                            <govuk-radios-item value="@item.CropInfo1Id">@item.CropInfo1Name</govuk-radios-item>
+                        }
+                    }
+
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
+                }
+            </p>
+
+        </div>
+
+    </div>
+</form>

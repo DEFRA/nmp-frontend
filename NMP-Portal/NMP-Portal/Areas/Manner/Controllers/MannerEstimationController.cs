@@ -4126,7 +4126,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 BindMannerFarmNameAndIdOnNavigation(sid);
                 await BindPostCodeAndCropTypeDataForAddNewApplication(model, sid);
                 //Autumn crop Nitrogen uptake
-                if (model.AutumnCropNitrogenUptake == null || model.IsApplicationDateChange)
+                if (model.AutumnCropNitrogenUptake == null)
                 {
                     model.AutumnCropNitrogenUptake = await BuildAutumnCropNitrogenUptakeAsync(model);
                 }

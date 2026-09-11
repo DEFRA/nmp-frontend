@@ -690,6 +690,35 @@
             });
         }
     }
+    if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue && (Model.IsPreviousYearGrass == null || Model.IsPreviousYearGrass == false))
+    {
+        summaryRows.Add(new SummaryListRowViewModel
+        {
+            Key = string.Format(Resource.lblWhatWasThePreviousCropGroupForCheckAnswere, Model.LastHarvestYear),
+            Value = ((string.IsNullOrWhiteSpace(Model.CropGroup)) ? Resource.lblNotSet : Model.CropGroup),
+            ActionName = "CropGroups",
+            ControllerName = "Field"
+        });
+        summaryRows.Add(new SummaryListRowViewModel
+        {
+            Key = string.Format(Resource.lblWhatWasThePreviousCropTypeForCheckAnswere, Model.LastHarvestYear),
+            Value = ((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType),
+            ActionName = "CropTypes",
+            ControllerName = "Field",
+            ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+        });
+        if (Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        {
+            summaryRows.Add(new SummaryListRowViewModel
+            {
+                Key = ViewBag.CropInfoOneQuestion,
+                Value = (Model.CropInfo1 == null ? Resource.lblNotSet : ViewBag.CropInfo1Name),
+                ActionName = "CropInfoOne",
+                ControllerName = "Field"
+            });
+        }
+        
+    }
     @if (ViewBag.NoNeedToShowPreviousCroppingDetail == null)
     {
         if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
