@@ -426,7 +426,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         if (mannerEstimationStep13.ApplicationDate != mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate)
         {
-            mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = 0;
+            mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = null;
             mannerEstimationStep13.IsApplicationDateChange = true;
             mannerEstimationViewModel.MannerEstimationStep32.IsTotalRainfallEnteredManual = false;
         }
