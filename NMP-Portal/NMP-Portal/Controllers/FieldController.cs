@@ -3038,24 +3038,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.IsGrassLastThreeHarvestYearChange = false;
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
-                (cropPlans, Error error, int decrptedFieldId, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired) = await PreviousCroppingsByFieldId(fieldId, farmId, model);
+                model.EncryptedFieldId = fieldId;
+                (cropPlans, Error error, int decryptedFieldId, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired) = await PreviousCroppingsByFieldId(fieldId, farmId, model);
                 PreviousCropping? prevCroppingDataForScotland = null;
-                if (isPreviousCroppingBindRequired)
-                {
-                    if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
-                    {
-                        (error, hasGrassInLastThreeYear, prevCroppings) = await YearsForGrassAndArablePrevCrop(model, cropPlans, error, decrptedFieldId, prevCroppings);
-                    }
-                    else
-                    {
-                        int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) - 1 : (model.LastHarvestYear ?? 0);// farm.LastHarvestYear to model.LastHarvestYear
+                (error, hasGrassInLastThreeYear,model.LastHarvestYear, prevCroppings, prevCroppingDataForScotland) = await BindPreviousCroppingDataForUpdateField(model, cropPlans, error, hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired, prevCroppingDataForScotland);
 
-                        model.LastHarvestYear = oldestYearWithPlan;
-                        (error, prevCroppingDataForScotland) = await BindingPreviousCropDataForUpdateFieldScotland(model, error, decrptedFieldId, prevCroppingDataForScotland);
-                    }
-                }
-
-                await ModelInitialisationByFieldId(fieldId, farmId, model, cropPlans,  hasGrassInLastThreeYear, prevCroppings, prevCroppingDataForScotland);
+                await ModelInitialisationByFieldId(fieldId, farmId, model, cropPlans, hasGrassInLastThreeYear, prevCroppings, prevCroppingDataForScotland);
 
                 SetFieldDataToSession(model);
             }
@@ -3101,6 +3089,27 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
         return View(model);
 
+    }
+
+    private async Task<(Error error, bool? hasGrassInLastThreeYear,int?, List<PreviousCroppingData> prevCroppings, PreviousCropping? prevCroppingDataForScotland)> BindPreviousCroppingDataForUpdateField(FieldViewModel model, List<Crop> cropPlans, Error error,  bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired, PreviousCropping? prevCroppingDataForScotland)
+    {
+        int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
+        if (isPreviousCroppingBindRequired)
+        {
+            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (error, hasGrassInLastThreeYear, prevCroppings) = await YearsForGrassAndArablePrevCrop(model, cropPlans, error, decryptedFieldId, prevCroppings);
+            }
+            else
+            {
+                int oldestYearWithPlan = cropPlans.Any() ? cropPlans.Min(cp => cp.Year) - 1 : (model.LastHarvestYear ?? 0);// farm.LastHarvestYear to model.LastHarvestYear
+
+                model.LastHarvestYear = oldestYearWithPlan;
+                (error, prevCroppingDataForScotland) = await BindingPreviousCropDataForUpdateFieldScotland(model, error, decryptedFieldId, prevCroppingDataForScotland);
+            }
+        }
+
+        return (error, hasGrassInLastThreeYear, model.LastHarvestYear, prevCroppings, prevCroppingDataForScotland);
     }
 
     [HttpPost]
