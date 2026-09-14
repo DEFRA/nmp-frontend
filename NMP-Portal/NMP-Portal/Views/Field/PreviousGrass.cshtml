@@ -10,7 +10,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CropGroup")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "CropGroups")" asp-controller="Field">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="PreviousGrass" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
