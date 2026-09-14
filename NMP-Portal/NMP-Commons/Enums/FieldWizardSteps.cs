@@ -37,6 +37,7 @@ namespace NMP.Commons.Enums
         CropType = 27,
         FieldRemove = 28,
         CropInfoOne = 29,
+        PreviousGrass = 30
 
     }
 }

@@ -33,7 +33,7 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
             {
                 if (responseWrapper?.Data?.PreviousCropping is JToken previousCroppingToken)
                 {
-                    previousCropping = previousCroppingToken.ToObject<PreviousCropping>() ?? new PreviousCropping();
+                    previousCropping = previousCroppingToken.ToObject<PreviousCropping>();
                 }
             }
             else
@@ -174,5 +174,77 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         }
 
         return (oldestYear, error);
+    }
+    public async Task<(List<PreviousGrassResponse>?, Error?)> FetchPreviousGrassListAsync()
+    {
+        List<PreviousGrassResponse>? previousGrasses = null;
+        Error? error = null;
+
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchPreviousGrassListAPI);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            {
+                previousGrasses= responseWrapper?.Data?.ToObject<List<PreviousGrassResponse>>();
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    error = new Error();
+                    error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, error);
+        }
+
+        return (previousGrasses, error);
+    }
+    public async Task<(PreviousGrassResponse?, Error?)> FetchPreviousGrassByIdAsync(int id)
+    {
+        PreviousGrassResponse? previousGrass = null;
+        Error? error = null;
+
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchPreviousGrassByIdAPI, id));
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            {
+                previousGrass = responseWrapper?.Data?.ToObject<PreviousGrassResponse>();
+            }
+            else
+            {
+                if (responseWrapper != null && responseWrapper.Error != null)
+                {
+                    error = new Error();
+                    error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+                }
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, error);
+        }
+
+        return (previousGrass, error);
     }
 }

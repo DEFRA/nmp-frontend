@@ -144,6 +144,10 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldRemove" />
     }
+    @if (currentStep != (int)FieldWizardSteps.PreviousGrass)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousCroppings.PreviousGrassID" />
+    }
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueTypeName" value="@Model.SoilNutrientValueTypeName" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsNVZProgrammeNeedToShow" value="@Model.IsNVZProgrammeNeedToShow.ToString().ToLower()" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroup" value="@Model.CropGroup" />

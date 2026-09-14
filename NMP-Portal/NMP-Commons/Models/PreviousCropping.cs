@@ -12,6 +12,7 @@ public class PreviousCropping
     public bool? HasGreaterThan30PercentClover { get; set; }
     public int? SoilNitrogenSupplyItemID { get; set; }
     public int? CropInfo1 { get; set; }
+    public int? PreviousGrassID { get; set; }
     public DateTime? CreatedOn { get; set; }
     public int? CreatedByID { get; set; }
     public DateTime? ModifiedOn { get; set; }

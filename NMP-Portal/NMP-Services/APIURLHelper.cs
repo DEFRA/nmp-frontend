@@ -296,4 +296,6 @@ internal static class ApiurlHelper
     public const string FetchCropInfoOneListAPI = "vendors/rb209/Arable/CropInfo1s";
     public const string FetchSwardTypesListAPI = "vendors/rb209/Grass/SwardTypes";
     public const string FetchSecondCropLinkingsAPI = "second-crop-linkings";
+    public const string FetchPreviousGrassListAPI = "vendors/rb209/PreviousCropping/PreviousGrasses";
+    public const string FetchPreviousGrassByIdAPI = "vendors/rb209/PreviousCropping/PreviousGrass/{0}";
 }

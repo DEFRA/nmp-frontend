@@ -8,4 +8,6 @@ public interface IPreviousCroppingLogic
     Task<(bool, Error)> MergePreviousCropping(string jsonData);
 
     Task<(int?, Error)> FetchPreviousCroppingYearByFarmdId(int farmId);
+    Task<(List<PreviousGrassResponse>?, Error?)> FetchPreviousGrassList();
+    Task<(PreviousGrassResponse?, Error?)> FetchPreviousGrassById(int id);
 }
