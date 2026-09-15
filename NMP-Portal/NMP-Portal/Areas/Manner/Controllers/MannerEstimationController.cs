@@ -3230,7 +3230,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             }
             mannerEstimationViewModel = mannerEstimationViewModel ?? new MannerEstimationViewModel();
-
+            if (mannerEstimationViewModel.MannerEstimationStep31 != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep31.Name = string.Empty;
+            }
             ViewBag.SessionId = sid;
             mannerEstimationViewModel.IsNewEstimate = false;
             mannerEstimationViewModel.EncryptedMannerFarmId = encryptedMannerFarmId;
