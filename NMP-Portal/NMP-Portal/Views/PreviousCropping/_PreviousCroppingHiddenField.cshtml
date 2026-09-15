@@ -43,6 +43,10 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" />
     }
+    @if (currentStep != (int)PreviousCroppingWizardSteps.CropInfoOne)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1" />
+    }
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldID" />

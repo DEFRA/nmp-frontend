@@ -16,5 +16,6 @@ namespace NMP.Commons.Enums
         SoilNitrogenSupplyItem = 6,
         CropGroup = 7,
         CropType = 8,
+        CropInfoOne = 9,
     }
 }
