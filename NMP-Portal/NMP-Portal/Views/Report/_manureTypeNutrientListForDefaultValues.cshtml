@@ -1,0 +1,84 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
+
+@{
+    string manuerDefaultNutrientUnit = "";
+    if (Model.IsManureTypeLiquid != null)
+    {
+        manuerDefaultNutrientUnit = Model.IsManureTypeLiquid.Value ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
+    }
+}
+
+if (Model.ManureType.DryMatter.HasValue && Model.ManureType.DryMatter.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblDryMatterContent</span>
+    <span>@($"{Model.ManureType.DryMatter.Value}%")</span>
+</span>
+}
+
+if (Model.ManureType.TotalN.HasValue && Model.ManureType.TotalN.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblNitrogen</span>
+    <span>@string.Format(manuerDefaultNutrientUnit, Model.ManureType.TotalN.Value)</span>
+</span>
+}
+
+if (Model.ManureType.NH4N.HasValue && Model.ManureType.NH4N.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblAmmoniumHypenN</span>
+    <span>@string.Format(manuerDefaultNutrientUnit, Model.ManureType.NH4N.Value)</span>
+</span>
+}
+
+if (Model.ManureType.Uric.HasValue && Model.ManureType.Uric.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblUricAcid</span>
+    <span>@string.Format(manuerDefaultNutrientUnit, Model.ManureType.Uric.Value)</span>
+</span>
+}
+
+if (Model.ManureType.NO3N.HasValue && Model.ManureType.NO3N.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblNitrate</span>
+    <span>@string.Format(manuerDefaultNutrientUnit, Model.ManureType.NO3N.Value)</span>
+</span>
+}
+
+if (Model.ManureType.P2O5.HasValue && Model.ManureType.P2O5.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblPhosphateP2O5</span>
+    <span>@string.Format(manuerDefaultNutrientUnit, Model.ManureType.P2O5.Value)</span>
+</span>
+}
+
+if (Model.ManureType.K2O.HasValue && Model.ManureType.K2O.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblPotashK2O</span>
+    <span>@string.Format(manuerDefaultNutrientUnit, Model.ManureType.K2O.Value)</span>
+</span>
+}
+
+if (Model.ManureType.SO3.HasValue && Model.ManureType.SO3.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblSulphurSO3</span>
+    <span>@string.Format(manuerDefaultNutrientUnit, Model.ManureType.SO3.Value)</span>
+</span>
+}
+
+if (Model.ManureType.MgO.HasValue && Model.ManureType.MgO.Value > 0)
+{
+<span class="nutrient_row organic_nutrients">
+    <span>@Resource.lblMagnesiumMgO</span>
+    <span>@string.Format(manuerDefaultNutrientUnit, Model.ManureType.MgO.Value)</span>
+</span>
+}
+
+     
