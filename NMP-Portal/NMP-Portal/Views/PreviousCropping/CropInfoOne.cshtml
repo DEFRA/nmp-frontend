@@ -2,11 +2,7 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
-    var heading = "";
-    if (ViewBag.CropInfoOneQuestion != null)
-    {
-        heading = ViewBag.CropInfoOneQuestion;
-    }
+    
     ViewData["Title"] = $"{ViewBag.CropInfoOneQuestion} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
 
     ViewBag.CurrentStep = (int)PreviousCroppingWizardSteps.CropInfoOne;

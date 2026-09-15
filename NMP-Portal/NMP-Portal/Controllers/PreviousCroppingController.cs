@@ -32,6 +32,7 @@ namespace NMP.Portal.Controllers
         private const string _hasGrassInLastThreeYearText = "HasGrassInLastThreeYear";
         private const string _cropGroupsActionName = "CropGroups";
         private const string _sasGreaterThan30PercentCloverActionName = "HasGreaterThan30PercentClover";
+        private const string _errorTempData = "Error";
         private PreviousCroppingViewModel? GetPreviousCroppingFromSession()
         {
             if (HttpContext.Session.Exists(_previousCroppingSessionKey))
@@ -299,7 +300,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["Error"] = ex.Message;
+                TempData[_errorTempData] = ex.Message;
                 return RedirectToAction(_cropGroupsActionName);
             }
 
@@ -359,7 +360,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["Error"] = ex.Message;
+                TempData[_errorTempData] = ex.Message;
                 return RedirectToAction(_cropGroupsActionName);
             }
 
@@ -1050,7 +1051,7 @@ namespace NMP.Portal.Controllers
                 });
             }
 
-            TempData["Error"] = error?.Message;
+            TempData[_errorTempData] = error?.Message;
             await PopulatePreviousCroppingViewBagsAsync(model);
             await BindCropInfoViewBag(model);
             return View(model);
@@ -1111,7 +1112,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Previous cropping  Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["Error"] = ex.Message;
+                TempData[_errorTempData] = ex.Message;
                 return RedirectToAction(_checkAnswerActionName);
             }
 
