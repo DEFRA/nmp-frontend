@@ -1,0 +1,66 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.PreviousCroppingViewModel
+@{
+    
+    ViewData["Title"] = $"{ViewBag.CropInfoOneQuestion} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
+
+    ViewBag.CurrentStep = (int)PreviousCroppingWizardSteps.CropInfoOne;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer) ? "CheckAnswer" : "CropTypes")" asp-controller="PreviousCropping">@Resource.lblBack</govuk-back-link>
+
+}
+<form asp-action="CropInfoOne" asp-controller="PreviousCropping" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("~/Views/PreviousCropping/_PreviousCroppingHiddenField.cshtml", Model)
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            @if (TempData["Error"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+
+            <govuk-radios for="@Model.CropInfo1">
+                <govuk-radios-fieldset>
+
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @if (ViewBag.CropInfoOneQuestion != null)
+                        {
+                            @ViewBag.CropInfoOneQuestion
+                        }
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
+
+                    @if (ViewBag.CropInfoOneList != null)
+                    {
+                        @foreach (var item in ViewBag.CropInfoOneList)
+                        {
+                            <govuk-radios-item value="@item.CropInfo1Id">@item.CropInfo1Name</govuk-radios-item>
+                        }
+                    }
+
+                </govuk-radios-fieldset>
+            </govuk-radios>
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="PreviousCropping">@Resource.lblCancel</a>
+                }
+            </p>
+
+        </div>
+
+    </div>
+</form>
