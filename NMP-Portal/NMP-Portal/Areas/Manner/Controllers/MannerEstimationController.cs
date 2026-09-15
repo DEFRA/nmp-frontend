@@ -3233,7 +3233,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (mannerEstimationViewModel.MannerEstimationStep31 != null)
             {
                 mannerEstimationViewModel.MannerEstimationStep31.Name = string.Empty;
+                mannerEstimationViewModel.MannerEstimationStep31.IsCopyEstimate = null;
             }
+            mannerEstimationViewModel.IsCopyEstimate = null;
             ViewBag.SessionId = sid;
             mannerEstimationViewModel.IsNewEstimate = false;
             mannerEstimationViewModel.EncryptedMannerFarmId = encryptedMannerFarmId;
