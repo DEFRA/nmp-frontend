@@ -13,6 +13,6 @@ namespace NMP.Commons.ViewModels
         public string CropGroupName { get; set; } = string.Empty;
         public bool IsFarmCopied { get; set; } = false;
         public bool IsCropGroupChange { get; set; } = false;
-        public int? CountryId { get; set; }
+        public int FarmRB209CountryId { get; set; }
     }
 }

@@ -17,6 +17,5 @@ namespace NMP.Commons.ViewModels
         public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public bool IsCropGroupChange { get; set; } = false;
         public bool IsCropTypeChange { get; set; } = false;
-        public int? CountryId { get; set; }
     }
 }
