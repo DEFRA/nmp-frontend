@@ -7031,7 +7031,7 @@ Regulations warnings for {0}</value>
     <value>What is the occupancy for this {0} type in {1}</value>
   </data>
   <data name="lblWhatIsTheNitrogenNStandardForThis" xml:space="preserve">
-    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
+    <value>What is the nitrogen (N) standard for this {0} type in {1}?</value>
   </data>
   <data name="lblNitrogenNStandardForThistype" xml:space="preserve">
     <value>Nitrogen (N) standard for this {0} type</value>

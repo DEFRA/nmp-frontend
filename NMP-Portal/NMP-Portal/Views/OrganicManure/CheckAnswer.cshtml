@@ -282,7 +282,8 @@
 
             </h1>
             @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
-           
+           </div>
+        <div class="govuk-grid-column-full">
                 <govuk-summary-list>
                     @if (!Model.IsComingFromRecommendation && ViewBag.SelectedFields == null)
                     {
