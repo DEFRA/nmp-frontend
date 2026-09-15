@@ -235,49 +235,7 @@
                             @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
-                            @if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.ManureType.DryMatter.Value)</span></span>
-
-                            }
-                            @if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
-                            {
-                                totalN = Model.ManureType.TotalN.Value;
-                                <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.TotalN.Value)</span></span>
-                            }
-                            @if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblAmmoniumHypenN <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.NH4N.Value)</span></span>
-                            }
-                            @if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblUricAcid <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.Uric.Value)</span></span>
-                            }
-                            @if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblNitrate <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.NO3N.Value)</span></span>
-                            }
-                            @if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
-                            {
-                                totalP2O5 = Model.ManureType.P2O5.Value;
-                                <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.P2O5.Value)</span></span>
-
-                            }
-                            @if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.K2O.Value)</span></span>
-
-                            }
-                            @if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.SO3.Value)</span></span>
-
-                            }
-                            @if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.MgO.Value)</span></span>
-
-                            }
+                            @await Html.PartialAsync("_manureTypeNutrientListForDefaultValues", Model)
 
 
                         </govuk-summary-list-row-value>
@@ -292,54 +250,7 @@
                             @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
-                            @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
-
-                            }
-                            @if ((Model.N.HasValue) && Model.N.Value > 0)
-                            {
-                                totalN = Model.N.Value;
-                                <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.N.Value)</span></span>
-
-                            }
-                            @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblAmmoniumHypenN <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.NH4N.Value)</span></span>
-
-                            }
-                            @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblUricAcid <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.UricAcid.Value)</span></span>
-
-                            }
-                            @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblNitrate <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.NO3N.Value)</span></span>
-
-                            }
-                            @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
-                            {
-                                totalP2O5 = Model.P2O5.Value;
-                                <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.P2O5.Value)</span></span>
-
-                            }
-                            @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.K2O.Value)</span></span>
-
-                            }
-                            @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.SO3.Value)</span></span>
-
-                            }
-                            @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
-                            {
-                                <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.MgO.Value)</span></span>
-
-                            }
-
+                            @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
 
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
@@ -355,55 +266,7 @@
                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
-                        @if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
-
-                        }
-                        @if ((Model.N.HasValue) && Model.N.Value > 0)
-                        {
-                            totalN = Model.N.Value;
-                            <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.N.Value)</span></span>
-
-                        }
-                        @if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblAmmoniumHypenN <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.NH4N.Value)</span></span>
-
-                        }
-                        @if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblUricAcid <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.UricAcid.Value)</span></span>
-
-                        }
-                        @if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblNitrate <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.NO3N.Value)</span></span>
-
-                        }
-                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
-                        {
-                            totalP2O5 = Model.P2O5.Value;
-                            <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.P2O5.Value)</span></span>
-
-                        }
-                        @if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.K2O.Value)</span></span>
-
-                        }
-                        @if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.SO3.Value)</span></span>
-
-                        }
-                        @if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.MgO.Value)</span></span>
-
-                        }
-
-
+                        @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
                         <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)</span></govuk-summary-list-row-action>
@@ -423,103 +286,11 @@
                 <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
                     @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
                     {
-                        if ((Model.DryMatterPercent.HasValue) && Model.DryMatterPercent.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.DryMatterPercent.Value)</span></span>
-
-                        }
-                        if ((Model.N.HasValue) && Model.N.Value > 0)
-                        {
-                            totalN = Model.N.Value;
-                            <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.N.Value)</span></span>
-
-                        }
-                        if ((Model.NH4N.HasValue) && Model.NH4N.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblAmmoniumHypenN <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.NH4N.Value)</span></span>
-
-                        }
-                        if ((Model.UricAcid.HasValue) && Model.UricAcid.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblUricAcid <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.UricAcid.Value)</span></span>
-
-                        }
-                        if ((Model.NO3N.HasValue) && Model.NO3N.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblNitrate <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.NO3N.Value)</span></span>
-
-                        }
-                        if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
-                        {
-                            totalP2O5 = Model.P2O5.Value;
-                            <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.P2O5.Value)</span></span>
-
-                        }
-                        if ((Model.K2O.HasValue) && Model.K2O.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.K2O.Value)</span></span>
-
-                        }
-                        if ((Model.SO3.HasValue) && Model.SO3.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.SO3.Value)</span></span>
-
-                        }
-                        if ((Model.MgO.HasValue) && Model.MgO.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.MgO.Value)</span></span>
-
-                        }
+                        @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
                     }
                     else
                     {
-                        if ((Model.ManureType.DryMatter.HasValue) && Model.ManureType.DryMatter.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblDryMatterContent <span class="figure w31">@string.Format("{0}%", Model.ManureType.DryMatter.Value)</span></span>
-
-                        }
-                        if ((Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
-                        {
-                            totalN = Model.ManureType.TotalN.Value;
-                            <span class="nutrient_row">@Resource.lblNitrogen <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.TotalN.Value)</span></span>
-
-                        }
-                        if ((Model.ManureType.NH4N.HasValue) && Model.ManureType.NH4N.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblAmmoniumHypenN <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.NH4N.Value)</span></span>
-
-                        }
-                        if ((Model.ManureType.Uric.HasValue) && Model.ManureType.Uric.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblUricAcid <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.Uric.Value)</span></span>
-
-                        }
-                        if ((Model.ManureType.NO3N.HasValue) && Model.ManureType.NO3N.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblNitrate <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.NO3N.Value)</span></span>
-
-                        }
-                        if ((Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
-                        {
-                            totalP2O5 = Model.ManureType.P2O5.Value;
-                            <span class="nutrient_row">@Resource.lblPhosphateP2O5 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.P2O5.Value)</span></span>
-
-                        }
-                        if ((Model.ManureType.K2O.HasValue) && Model.ManureType.K2O.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblPotashK2O <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.K2O.Value)</span></span>
-
-                        }
-                        if ((Model.ManureType.SO3.HasValue) && Model.ManureType.SO3.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblSulphurSO3 <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.SO3.Value)</span></span>
-
-                        }
-                        if ((Model.ManureType.MgO.HasValue) && Model.ManureType.MgO.Value > 0)
-                        {
-                            <span class="nutrient_row">@Resource.lblMagnesiumMgO <span class="figure w31">@string.Format(Resource.lblValueKgPerTonne, Model.ManureType.MgO.Value)</span></span>
-
-                        }
+                        @await Html.PartialAsync("_manureTypeNutrientListForDefaultValues", Model)
                     }
 
                 </govuk-summary-list-row-value>
@@ -609,7 +380,7 @@
     </govuk-summary-list-row>
 }
 </govuk-summary-list>
-</div>
+
                 @if (!string.IsNullOrWhiteSpace(Model.EncryptedId))
 {
     <p class="govuk-body margin-bottom-forty">
@@ -648,6 +419,7 @@
         @Resource.lblUpdate
     }
 </govuk-button>
+
 <p class="govuk-body cancel-link">
 
     @if (string.IsNullOrWhiteSpace(Model.EncryptedId))
@@ -666,6 +438,7 @@
         }
     }
 </p>
+</div>
 </div>
 </form>
 }
