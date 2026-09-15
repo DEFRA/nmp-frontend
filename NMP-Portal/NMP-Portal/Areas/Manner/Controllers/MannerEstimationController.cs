@@ -2298,12 +2298,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             if (ModelState.ContainsKey(key))
             {
-                var errorMessage = ModelState[key].Errors[0].ErrorMessage;
-                string expectedMessage = string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, validationLabel);
-                if (string.Equals(errorMessage, expectedMessage))
+                if(ModelState[key].Errors.Count > 0)
                 {
-                    ModelState[key].Errors.Clear();
-                    ModelState[key].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, displayLabel));
+                    var errorMessage = ModelState[key].Errors[0].ErrorMessage;
+                    string expectedMessage = string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, validationLabel);
+                    if (string.Equals(errorMessage, expectedMessage))
+                    {
+                        ModelState[key].Errors.Clear();
+                        ModelState[key].Errors.Add(string.Format(Resource.MsgEnterDataOnlyInNumber, displayLabel));
+                    }
                 }
             }
         }
