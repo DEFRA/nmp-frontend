@@ -265,6 +265,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep8.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep8.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
+        mannerEstimationViewModel.MannerEstimationStep8.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         return mannerEstimationViewModel.MannerEstimationStep8;
     }
 
@@ -292,6 +293,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep9.IsCropGroupChange = mannerEstimationViewModel.MannerEstimationStep8.IsCropGroupChange;
         mannerEstimationViewModel.MannerEstimationStep9.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
         mannerEstimationViewModel.MannerEstimationStep9.CropGroupName = mannerEstimationViewModel.MannerEstimationStep8.CropGroupName;
+        mannerEstimationViewModel.MannerEstimationStep9.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
         return mannerEstimationViewModel.MannerEstimationStep9;
     }
 
