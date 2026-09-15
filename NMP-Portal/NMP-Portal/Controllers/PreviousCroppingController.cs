@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using NMP.Application;
+using NMP.Businesses;
 using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
@@ -16,11 +17,12 @@ using System.Net;
 namespace NMP.Portal.Controllers
 {
     [Authorize]
-    public class PreviousCroppingController(ILogger<PreviousCroppingController> logger, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmLogic farmLogic) : Controller
+    public class PreviousCroppingController(ILogger<PreviousCroppingController> logger, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmLogic farmLogic, ICropLogic cropLogic) : Controller
     {
         private readonly ILogger<PreviousCroppingController> _logger = logger;
         private readonly IFieldLogic _fieldLogic = fieldLogic;
         private readonly IFarmLogic _farmLogic = farmLogic;
+        private readonly ICropLogic _cropLogic = cropLogic;
         private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
         private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
         private readonly IDataProtector _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
@@ -30,6 +32,7 @@ namespace NMP.Portal.Controllers
         private const string _hasGrassInLastThreeYearText = "HasGrassInLastThreeYear";
         private const string _cropGroupsActionName = "CropGroups";
         private const string _sasGreaterThan30PercentCloverActionName = "HasGreaterThan30PercentClover";
+        private const string _errorTempData = "Error";
         private PreviousCroppingViewModel? GetPreviousCroppingFromSession()
         {
             if (HttpContext.Session.Exists(_previousCroppingSessionKey))
@@ -297,7 +300,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["Error"] = ex.Message;
+                TempData[_errorTempData] = ex.Message;
                 return RedirectToAction(_cropGroupsActionName);
             }
 
@@ -326,10 +329,86 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer)
             {
+                if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    return RedirectToAction("CropInfoOne");
+                }
                 return RedirectToAction(_checkAnswerActionName);
+            }
+            if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                return RedirectToAction("CropInfoOne");
             }
             return RedirectToAction(_checkAnswerActionName);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CropInfoOne()
+        {
+            _logger.LogTrace($"Previous Croppping Controller : CropTypes() action called");
+            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            try
+            {
+                if (model == null)
+                {
+                    _logger.LogError("Previous Croppping Controller : Session not found in CropInfoOne() action");
+                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                }
+                await BindCropInfoViewBag(model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                TempData[_errorTempData] = ex.Message;
+                return RedirectToAction(_cropGroupsActionName);
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CropInfoOne(PreviousCroppingViewModel model)
+        {
+            _logger.LogTrace("Previous Croppping Controller : CropInfoOne() post action called");
+
+            try
+            {
+                if (model.CropInfo1 == null)
+                {
+                    ModelState.AddModelError("CropInfo1", Resource.MsgSelectAnOptionBeforeContinuing);
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    await BindCropInfoViewBag(model);
+                    return View(model);
+                }
+
+                SetPreviousCroppingToSession(model);
+                return RedirectToAction(_checkAnswerActionName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropInfoOne() post action : {Message}, {StackTrace}",
+                    ex.Message, ex.StackTrace);
+                TempData["CropInfoOneError"] = ex.Message;
+                return RedirectToAction("CropInfo1");
+            }
+
+        }
+        private async Task BindCropInfoViewBag(PreviousCroppingViewModel model)
+        {
+            if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
+                ViewBag.CropInfoOneList = cropInfoOneList.OrderBy(c => c.CountryId);
+                ViewBag.CropInfo1Name = cropInfoOneList.Where(x => x.CropInfo1Id == model.CropInfo1).Select(x => x.CropInfo1Name).FirstOrDefault();
+                ViewBag.CropInfoOneQuestion = await _cropLogic.FetchCropInfoOneQuestionByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID ?? 1);
+            }
+        }
+
         private static List<int> BindViewBagForGrassLatsThreeYear(PreviousCroppingViewModel model)
         {
             int lastHarvestYear = 0;
@@ -652,7 +731,7 @@ namespace NMP.Portal.Controllers
                 {
                     ViewBag.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupID.Value);
                 }
-
+                await BindCropInfoViewBag(model);
                 SetPreviousCroppingToSession(model);
             }
             catch (Exception ex)
@@ -674,6 +753,7 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 await PopulatePreviousCroppingViewBagsAsync(model);
+                await BindCropInfoViewBag(model);
                 return View(model);
             }
 
@@ -847,7 +927,8 @@ namespace NMP.Portal.Controllers
                 LayDuration = null,
                 GrassManagementOptionID = null,
                 HasGreaterThan30PercentClover = null,
-                SoilNitrogenSupplyItemID = null
+                SoilNitrogenSupplyItemID = null,
+                CropInfo1=model.CropInfo1
             });
 
             if (model.PreviousGrassYears != null)
@@ -970,9 +1051,9 @@ namespace NMP.Portal.Controllers
                 });
             }
 
-            TempData["Error"] = error?.Message;
+            TempData[_errorTempData] = error?.Message;
             await PopulatePreviousCroppingViewBagsAsync(model);
-
+            await BindCropInfoViewBag(model);
             return View(model);
         }
 
@@ -1007,6 +1088,10 @@ namespace NMP.Portal.Controllers
                     }
                 }
             }
+            if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                return RedirectToAction("CropInfoOne");
+            }
             return RedirectToAction("CropTypes");
         }
 
@@ -1027,7 +1112,7 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Previous cropping  Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-                TempData["Error"] = ex.Message;
+                TempData[_errorTempData] = ex.Message;
                 return RedirectToAction(_checkAnswerActionName);
             }
 

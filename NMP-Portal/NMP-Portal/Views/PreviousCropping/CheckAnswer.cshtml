@@ -182,6 +182,22 @@
                                 </govuk-summary-list-row-actions>
                             }
                         </govuk-summary-list-row>
+                        @if (Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                        {
+                            <govuk-summary-list-row class=@(Model.CropInfo1 == null ?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @ViewBag.CropInfoOneQuestion
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.CropInfo1 == null ? Resource.lblNotSet : ViewBag.CropInfo1Name)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="CropInfoOne" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.CropInfo1 == null ? Resource.lblNotSet : ViewBag.CropInfo1Name)</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                                
+                            </govuk-summary-list-row>
+                        }
+                        
                     }
 
                 </govuk-summary-list>
