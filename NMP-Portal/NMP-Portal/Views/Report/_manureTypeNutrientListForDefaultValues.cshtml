@@ -9,7 +9,7 @@
     }
 }
 
-if (Model.ManureType.DryMatter.HasValue && Model.ManureType.DryMatter.Value > 0)
+@if (Model.ManureType.DryMatter.HasValue && Model.ManureType.DryMatter.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblDryMatterContent</span>
@@ -17,7 +17,7 @@ if (Model.ManureType.DryMatter.HasValue && Model.ManureType.DryMatter.Value > 0)
 </span>
 }
 
-if (Model.ManureType.TotalN.HasValue && Model.ManureType.TotalN.Value > 0)
+@if (Model.ManureType.TotalN.HasValue && Model.ManureType.TotalN.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblNitrogen</span>
@@ -25,7 +25,7 @@ if (Model.ManureType.TotalN.HasValue && Model.ManureType.TotalN.Value > 0)
 </span>
 }
 
-if (Model.ManureType.NH4N.HasValue && Model.ManureType.NH4N.Value > 0)
+@if (Model.ManureType.NH4N.HasValue && Model.ManureType.NH4N.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblAmmoniumHypenN</span>
@@ -33,7 +33,7 @@ if (Model.ManureType.NH4N.HasValue && Model.ManureType.NH4N.Value > 0)
 </span>
 }
 
-if (Model.ManureType.Uric.HasValue && Model.ManureType.Uric.Value > 0)
+@if (Model.ManureType.Uric.HasValue && Model.ManureType.Uric.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblUricAcid</span>
@@ -41,7 +41,7 @@ if (Model.ManureType.Uric.HasValue && Model.ManureType.Uric.Value > 0)
 </span>
 }
 
-if (Model.ManureType.NO3N.HasValue && Model.ManureType.NO3N.Value > 0)
+@if (Model.ManureType.NO3N.HasValue && Model.ManureType.NO3N.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblNitrate</span>
@@ -49,7 +49,7 @@ if (Model.ManureType.NO3N.HasValue && Model.ManureType.NO3N.Value > 0)
 </span>
 }
 
-if (Model.ManureType.P2O5.HasValue && Model.ManureType.P2O5.Value > 0)
+@if (Model.ManureType.P2O5.HasValue && Model.ManureType.P2O5.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblPhosphateP2O5</span>
@@ -57,7 +57,7 @@ if (Model.ManureType.P2O5.HasValue && Model.ManureType.P2O5.Value > 0)
 </span>
 }
 
-if (Model.ManureType.K2O.HasValue && Model.ManureType.K2O.Value > 0)
+@if (Model.ManureType.K2O.HasValue && Model.ManureType.K2O.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblPotashK2O</span>
@@ -65,7 +65,7 @@ if (Model.ManureType.K2O.HasValue && Model.ManureType.K2O.Value > 0)
 </span>
 }
 
-if (Model.ManureType.SO3.HasValue && Model.ManureType.SO3.Value > 0)
+@if (Model.ManureType.SO3.HasValue && Model.ManureType.SO3.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblSulphurSO3</span>
@@ -73,7 +73,7 @@ if (Model.ManureType.SO3.HasValue && Model.ManureType.SO3.Value > 0)
 </span>
 }
 
-if (Model.ManureType.MgO.HasValue && Model.ManureType.MgO.Value > 0)
+@if (Model.ManureType.MgO.HasValue && Model.ManureType.MgO.Value > 0)
 {
 <span class="nutrient_row organic_nutrients">
     <span>@Resource.lblMagnesiumMgO</span>

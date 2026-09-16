@@ -235,6 +235,14 @@
                             @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
+                            @if (Model.ManureType != null && (Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
+                            {
+                                totalN = Model.ManureType.TotalN.Value;
+                            }
+                            @if (Model.ManureType != null && (Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
+                            {
+                                totalP2O5 = Model.ManureType.P2O5.Value;
+                            }
                             @await Html.PartialAsync("_manureTypeNutrientListForDefaultValues", Model)
 
 
@@ -250,6 +258,14 @@
                             @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                         </govuk-summary-list-row-key>
                         <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
+                            @if ((Model.N.HasValue) && Model.N.Value > 0)
+                            {
+                                totalN = Model.N.Value;
+                            }
+                            @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                            {
+                                totalP2O5 = Model.P2O5.Value;
+                            }
                             @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
 
                         </govuk-summary-list-row-value>
@@ -266,6 +282,14 @@
                         @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
+                        @if ((Model.N.HasValue) && Model.N.Value > 0)
+                        {
+                            totalN = Model.N.Value;
+                        }
+                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                        {
+                            totalP2O5 = Model.P2O5.Value;
+                        }
                         @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
@@ -286,10 +310,26 @@
                 <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
                     @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) && (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
                     {
+                        @if ((Model.N.HasValue) && Model.N.Value > 0)
+                        {
+                            totalN = Model.N.Value;
+                        }
+                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                        {
+                            totalP2O5 = Model.P2O5.Value;
+                        }
                         @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
                     }
                     else
                     {
+                        @if (Model.ManureType != null && (Model.ManureType.TotalN.HasValue) && Model.ManureType.TotalN.Value > 0)
+                        {
+                            totalN = Model.ManureType.TotalN.Value;
+                        }
+                        @if (Model.ManureType != null && (Model.ManureType.P2O5.HasValue) && Model.ManureType.P2O5.Value > 0)
+                        {
+                            totalP2O5 = Model.ManureType.P2O5.Value;
+                        }
                         @await Html.PartialAsync("_manureTypeNutrientListForDefaultValues", Model)
                     }
 
