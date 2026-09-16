@@ -2925,7 +2925,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             var farmManureList = await GetFarmManureList(model.FarmId);
             var manureType = await GetManureType(model.ManureTypeId);
             var farmManure = farmManureList
-                   .FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
+                   .FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
             if (manureType != null)
                 model.ManureType = manureType;
 
@@ -3035,7 +3035,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         else
         {
 
-            if (farmManureList.Any())
+            if (farmManure!=null)
             {
                 BindDataForLivestockDefaultNutrientValue(model, farmManure);
             }
@@ -3149,29 +3149,36 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             var isPreviousStandardNutrientValue =
                 reportViewModel.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues;
 
-            var reportHasChanged =
-                reportViewModel.DefaultNutrientValue != model.DefaultNutrientValue;
-
-
-            if (reportHasChanged && isCurrentStandardNutrientValue)
+            (flowControl, value) = BindViewBegRB209ApiOptionForProcessNutrient(model, reportViewModel, isCurrentStandardNutrientValue, isPreviousStandardNutrientValue);
+            if (!flowControl && value != null)
             {
-                ViewBag.RB209ApiOption = Resource.lblTrue;
-                SetReportDataToSession(model);
-
-                if (reportHasChanged && (reportViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || reportViewModel.DefaultNutrientValue != Resource.lblYesUseTheseValues)
-                       && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
-                {
-                    return (flowControl: false, value: View(model));
-                }
-            }
-
-            if (isCurrentStandardNutrientValue && isPreviousStandardNutrientValue)
-            {
-                ViewBag.RB209ApiOption = Resource.lblTrue;
+                return (flowControl: false, value: value);
             }
         }
 
         return (flowControl: true, value: null);
+    }
+
+    private (bool flowControl, IActionResult? value) BindViewBegRB209ApiOptionForProcessNutrient(ReportViewModel model, ReportViewModel reportViewModel, bool isCurrentStandardNutrientValue, bool isPreviousStandardNutrientValue)
+    {
+        if (reportViewModel.DefaultNutrientValue != model.DefaultNutrientValue && isCurrentStandardNutrientValue)
+        {
+            ViewBag.RB209ApiOption = Resource.lblTrue;
+            SetReportDataToSession(model);
+
+            if (reportViewModel.DefaultNutrientValue != model.DefaultNutrientValue && (reportViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || reportViewModel.DefaultNutrientValue != Resource.lblYesUseTheseValues)
+                   && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
+            {
+                return (flowControl: false, value: View(model));
+            }
+        }
+
+        if (isCurrentStandardNutrientValue && isPreviousStandardNutrientValue)
+        {
+            ViewBag.RB209ApiOption = Resource.lblTrue;
+        }
+
+        return (flowControl: true, value: default);
     }
 
     private async Task<(bool flowControl, IActionResult? value)> BindIsThisDefaultValueOfRB209ForDefaultNutrientValues(ReportViewModel model, FarmManureTypeResponse farmManure, ReportViewModel reportViewModel)
@@ -3248,17 +3255,23 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     }
     private void ViewBagForDefaultOrStandardValue(OrganicManureViewModel model, FarmManureTypeResponse? farmManure)
     {
-        if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
+        bool isOptionIsYesUseTheseValues = (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues);
+        bool isOptionUseTheseStandardNutrientValues = (!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues);
+        if (isOptionIsYesUseTheseValues || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
         {
-            ViewBag.FarmManureApiOption = Resource.lblTrue;
-
-            ApplyFarmManureValues(model, farmManure);
+            BindFarmManureValuesForPost(model, farmManure);
         }
-        else if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) || (model.IsThisDefaultValueOfRB209 != null && (model.IsThisDefaultValueOfRB209.Value)))
+        else if (isOptionUseTheseStandardNutrientValues || (model.IsThisDefaultValueOfRB209 != null && (model.IsThisDefaultValueOfRB209.Value)))
         {
             ViewBag.FarmManureApiOption = null;
             ViewBag.RB209ApiOption = Resource.lblTrue;
         }
+    }
+
+    private void BindFarmManureValuesForPost(OrganicManureViewModel model, FarmManureTypeResponse? farmManure)
+    {
+        ViewBag.FarmManureApiOption = Resource.lblTrue;
+        ApplyFarmManureValues(model, farmManure);
     }
     private static (bool flowControl, IActionResult value) BindDefaultNutrientValuesIfOther(ReportViewModel model, List<FarmManureTypeResponse> farmManureList)
     {
