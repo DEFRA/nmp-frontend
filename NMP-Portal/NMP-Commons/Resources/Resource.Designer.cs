@@ -178,7 +178,7 @@ namespace NMP.Commons.Resources {
                 return ResourceManager.GetString("ContentGettingHelp2", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to telephone 0333 240 8058.
         /// </summary>
@@ -19206,7 +19206,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}.
+        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}?.
         /// </summary>
         public static string lblWhatIsTheOccupancyForThis {
             get {
