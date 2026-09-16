@@ -6413,9 +6413,6 @@ livestock manure.</value>
   <data name="lblWhatIsTheAverageTotalNumberOfThisSuffix" xml:space="preserve">
     <value>What is the average total number of this {0} type in {1}</value>
   </data>
-  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
-    <value>What is the occupancy for this livestock type in {0}</value>
-  </data>
   <data name="lblWhatIsTheAdjustmentValuePerPectareSuffix" xml:space="preserve">
     <value>What is the adjustment value per hectare</value>
   </data>
@@ -7028,7 +7025,7 @@ Regulations warnings for {0}</value>
     <value>Typical values for this livestock type</value>
   </data>
   <data name="lblWhatIsTheOccupancyForThis" xml:space="preserve">
-    <value>What is the occupancy for this {0} type in {1}</value>
+    <value>What is the occupancy for this {0} type in {1}?</value>
   </data>
   <data name="lblWhatIsTheNitrogenNStandardForThis" xml:space="preserve">
     <value>What is the nitrogen (N) standard for this {0} type in {1}?</value>
@@ -8527,5 +8524,8 @@ following crop year 2</value>
   </data>
   <data name="lblPreviousGrassManagementHint" xml:space="preserve">
     <value>Low nitrogen (N) means less than 150 kg/ha per year fertiliser N used on average. High N means more than 150 kg/ha per year fertiliser N used on average, or a high clover swards</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}</value>
   </data>
 </root>
