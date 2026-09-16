@@ -15,7 +15,7 @@
         return new HtmlString($@"
             <span class='nutrient_row'>
                 {label}
-                <span class='figure w31'>{strValue}{suffix}</span>
+                <span class='figure w35'>{strValue}{suffix}</span>
             </span>");
     }
 
@@ -26,7 +26,7 @@
         return new HtmlString($@"
             <span class='nutrient_row'>
                 {label}
-                <span class='figure w31'>{string.Format(suffix,value)}</span>
+                <span class='figure w35'>{string.Format(suffix,value)}</span>
             </span>");
     }
 
@@ -342,7 +342,7 @@
                             
                             @if ((Model.Lime.HasValue))
                             {
-                                <span class="nutrient_row">@Resource.lblLime <span class="figure w31">@($"{Model.Lime.Value}{Resource.lblTonnesForReport}")</span></span>
+                                <span class="nutrient_row">@Resource.lblLime <span class="figure w35">@($"{Model.Lime.Value}{Resource.lblTonnesForReport}")</span></span>
                             }
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
