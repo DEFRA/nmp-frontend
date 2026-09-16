@@ -2924,7 +2924,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             var farmManureList = await GetFarmManureList(model.FarmId);
             var manureType = await GetManureType(model.ManureTypeId);
             var farmManure = farmManureList
-                   .FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
+                   .FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
             if (manureType != null)
                 model.ManureType = manureType;
 
