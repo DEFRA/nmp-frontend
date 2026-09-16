@@ -19242,7 +19242,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}.
+        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}?.
         /// </summary>
         public static string lblWhatIsTheOccupancyForThis {
             get {

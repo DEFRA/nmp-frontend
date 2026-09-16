@@ -2873,6 +2873,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             (model.IsThisDefaultValueOfRB209 != null && !model.IsThisDefaultValueOfRB209.Value))
         {
             ViewBag.FarmManureApiOption = Resource.lblTrue;
+            ApplyFarmManure(model, farmManure, true);
         }
         else if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) &&
                   model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) ||
@@ -2887,6 +2888,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
         }
     }
+
+
     private void BindDataForLivestockDefaultNutrientValue(ReportViewModel model, FarmManureTypeResponse? farmManure)
     {
         if (model.IsDefaultValueChange)
@@ -2901,7 +2904,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         else if (farmManure != null)
         {
-            ApplyFarmManure(model, farmManure, true);
+            model.DefaultFarmManureValueDate = farmManure.ModifiedOn ?? farmManure.CreatedOn;
+            ViewBag.FarmManureApiOption = Resource.lblTrue;
             HandleViewBagOptions(model, farmManure);
         }
     }
@@ -2917,44 +2921,21 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         try
         {
+
             var farmManureList = await GetFarmManureList(model.FarmId);
             var manureType = await GetManureType(model.ManureTypeId);
-
+            var farmManure = farmManureList
+                   .FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
             if (manureType != null)
                 model.ManureType = manureType;
 
             bool isOther = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
                         || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
 
-            if (isOther)
+            (bool flowControl, IActionResult value) = BindDefaultNutrientValuesForGetMethod(model, farmManureList, farmManure, isOther);
+            if (!flowControl)
             {
-                bool isOtherGroup = model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
-                                 || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
-
-                if (!isOtherGroup)
-                {
-                    model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
-                    SetReportDataToSession(model);
-                    return RedirectToAction("LivestockManualNutrientValue");
-                }
-
-                var farmManure = farmManureList
-                    .FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
-
-                if (farmManure != null)
-                    ApplyFarmManure(model, farmManure);
-                else
-                    model.DefaultFarmManureValueDate = null;
-            }
-            else
-            {
-                if (farmManureList.Any())
-                {
-                    var farmManure = farmManureList
-                        .FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
-
-                    BindDataForLivestockDefaultNutrientValue(model, farmManure);
-                }
+                return value;
             }
 
             model.IsDefaultNutrient = true;
@@ -2970,7 +2951,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> LivestockDefaultNutrientValue(ReportViewModel model)
@@ -2983,7 +2963,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
 
         var farmManureList = await GetFarmManureList(model.FarmId);
-
+        bool flowControl = false;
+        IActionResult? value = null;
         if (!ModelState.IsValid)
         {
             var manureType = await GetManureType(model.ManureTypeId);
@@ -2993,7 +2974,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             bool isOther = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
                         || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
 
-            (bool flowControl, IActionResult value) = BindViewBegForLivestockDefaultNutrient(model, farmManureList, isOther);
+            (flowControl, value) = BindViewBegForLivestockDefaultNutrient(model, farmManureList, isOther);
             if (!flowControl)
             {
                 return value;
@@ -3016,9 +2997,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         // ✅ Reset nutrients
         ResetNutrients(model);
 
-        GetReportDataFromSession();
-
-        await BindIsThisDefaultValueOfRB209ForDefaultNutrientValues(model, farmManureList);
+        ReportViewModel? reportViewModel = GetReportDataFromSession();
+        var farmManure = farmManureList
+                   .FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
+        (flowControl, value) = await BindIsThisDefaultValueOfRB209ForDefaultNutrientValues(model, farmManure, reportViewModel);
+        if (!flowControl && value != null)
+        {
+            return value;
+        }
 
         SetReportDataToSession(model);
 
@@ -3026,6 +3012,36 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction(_livestockImportExportCheckAnswerAction);
 
         return RedirectToAction("LivestockReceiver");
+    }
+    private (bool flowControl, IActionResult value) BindDefaultNutrientValuesForGetMethod(ReportViewModel model, List<FarmManureTypeResponse> farmManureList, FarmManureTypeResponse? farmManure, bool isOther)
+    {
+        if (isOther)
+        {
+            bool isOtherGroup = model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
+                             || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
+
+            if (!isOtherGroup)
+            {
+                model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
+                SetReportDataToSession(model);
+                return (flowControl: false, value: RedirectToAction("LivestockManualNutrientValue"));
+            }
+
+            if (farmManure != null)
+                ApplyFarmManure(model, farmManure);
+            else
+                model.DefaultFarmManureValueDate = null;
+        }
+        else
+        {
+
+            if (farmManureList.Any())
+            {
+                BindDataForLivestockDefaultNutrientValue(model, farmManure);
+            }
+        }
+
+        return (flowControl: true, value: null);
     }
 
     private (bool flowControl, IActionResult value) BindViewBegForLivestockDefaultNutrient(ReportViewModel model, List<FarmManureTypeResponse> farmManureList, bool isOther)
@@ -3060,31 +3076,190 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return (flowControl: true, value: null);
     }
-
-    private async Task BindIsThisDefaultValueOfRB209ForDefaultNutrientValues(ReportViewModel model, List<FarmManureTypeResponse> farmManureList)
+    private (bool flowControl, IActionResult? value) BindDataIfWeSelectDefaultValueOption(ReportViewModel model, FarmManureTypeResponse? farmManure, ReportViewModel reportViewModel)
     {
-        if (model.DefaultNutrientValue == Resource.lblYesUseTheseValues ||
-            model.DefaultNutrientValue == Resource.lblYes)
+        if (farmManure != null)
         {
-            var farmManure = farmManureList
-                .FirstOrDefault(x => x.ManureTypeID == model.ManureTypeId);
+            model.ManureType.DryMatter = farmManure.DryMatter;
+            model.ManureType.TotalN = farmManure.TotalN;
+            model.ManureType.NH4N = farmManure.NH4N;
+            model.ManureType.Uric = farmManure.Uric;
+            model.ManureType.NO3N = farmManure.NO3N;
+            model.ManureType.P2O5 = farmManure.P2O5;
+            model.ManureType.K2O = farmManure.K2O;
+            model.ManureType.SO3 = farmManure.SO3;
+            model.ManureType.MgO = farmManure.MgO;
+        }
 
+        model.IsThisDefaultValueOfRB209 = false;
+        var isFarmManureValue =
+    model.DefaultNutrientValue == Resource.lblYesUseTheseValues;
+
+        var hasDefaultValueChanged =
+            reportViewModel.DefaultNutrientValue != model.DefaultNutrientValue;
+        if (hasDefaultValueChanged && isFarmManureValue)
+        {
             if (farmManure != null)
-                ApplyFarmManure(model, farmManure);
+            {
+                ViewBag.FarmManureApiOption = Resource.lblTrue;
+            }
 
-            model.IsThisDefaultValueOfRB209 = false;
+            SetReportDataToSession(model);
+            var isAllowedValue =
+        reportViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || reportViewModel.DefaultNutrientValue != Resource.lblYesUseTheseStandardNutrientValues;
+
+            if (isAllowedValue && model.DefaultNutrientValue == Resource.lblYesUseTheseValues)
+            {
+                return (flowControl: false, value: View(model));
+            }
+
+            return (flowControl: true, value: null);
+        }
+
+        return (flowControl: true, value: null);
+    }
+    private async Task<(bool flowControl, IActionResult? value)> ProcessNutrientValueOptionAsync(ReportViewModel model, FarmManureTypeResponse? farmManure, ReportViewModel reportViewModel)
+    {
+        bool flowControl = false; IActionResult? value = null;
+        bool isValueDefault = model.DefaultNutrientValue == Resource.lblYesUseTheseValues || model.DefaultNutrientValue == Resource.lblYes;
+        if (isValueDefault)
+        {
+            (flowControl, value) = BindDataIfWeSelectDefaultValueOption(model, farmManure, reportViewModel);
+            if (!flowControl && value != null)
+            {
+                return (flowControl: false, value: value);
+            }
         }
         else
         {
-            var manureType = await GetManureType(model.ManureTypeId);
-            if (manureType != null)
+
+            var (manureType, error) = await _mannerLogic.FetchManureTypeByManureTypeId(
+            model.ManureTypeId.Value);
+
+            if (error == null && manureType != null)
+            {
                 model.ManureType = manureType;
+            }
 
             model.IsThisDefaultValueOfRB209 = true;
-            ViewBag.RB209ApiOption = Resource.lblTrue;
+
+            var isCurrentStandardNutrientValue =
+                model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues;
+
+            var isPreviousStandardNutrientValue =
+                reportViewModel.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues;
+
+            var reportHasChanged =
+                reportViewModel.DefaultNutrientValue != model.DefaultNutrientValue;
+
+
+            if (reportHasChanged && isCurrentStandardNutrientValue)
+            {
+                ViewBag.RB209ApiOption = Resource.lblTrue;
+                SetReportDataToSession(model);
+
+                if (reportHasChanged && (reportViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || reportViewModel.DefaultNutrientValue != Resource.lblYesUseTheseValues)
+                       && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
+                {
+                    return (flowControl: false, value: View(model));
+                }
+            }
+
+            if (isCurrentStandardNutrientValue && isPreviousStandardNutrientValue)
+            {
+                ViewBag.RB209ApiOption = Resource.lblTrue;
+            }
+        }
+
+        return (flowControl: true, value: null);
+    }
+
+    private async Task<(bool flowControl, IActionResult? value)> BindIsThisDefaultValueOfRB209ForDefaultNutrientValues(ReportViewModel model, FarmManureTypeResponse farmManure, ReportViewModel reportViewModel)
+    {
+        bool flowControl = false;
+        IActionResult? value = null;
+        if (!string.IsNullOrWhiteSpace(reportViewModel?.DefaultNutrientValue))
+        {
+            (flowControl, value) = await ProcessNutrientValueOptionAsync(model, farmManure, reportViewModel);
+            if (!flowControl && value != null)
+            {
+                return (flowControl: false, value: value);
+            }
+        }
+        else
+        {
+            return await RedirectForDefaultNutrientValueForIstTime(model, farmManure, value);
+        }
+
+        return (flowControl: true, value: null);
+    }
+
+    private async Task<(bool flowControl, IActionResult? value)> RedirectForDefaultNutrientValueForIstTime(ReportViewModel model, FarmManureTypeResponse farmManure, IActionResult? value)
+    {
+        bool isValueDefault = model.DefaultNutrientValue == Resource.lblYesUseTheseValues || model.DefaultNutrientValue == Resource.lblYes;
+        if (isValueDefault)
+        {
+            return RedirectIfValuesAreRb209(model, farmManure, value);
+        }
+        else
+        {
+            await BindDataIfUserSelectFarmManureValues(model);
+            return (flowControl: false, value: View(model));
         }
     }
 
+    private async Task BindDataIfUserSelectFarmManureValues(ReportViewModel model)
+    {
+        var manureType = await GetManureType(model.ManureTypeId);
+        if (manureType != null)
+            model.ManureType = manureType;
+
+        model.IsThisDefaultValueOfRB209 = true;
+        ViewBag.RB209ApiOption = Resource.lblTrue;
+        SetReportDataToSession(model);
+    }
+
+    private (bool flowControl, IActionResult? value) RedirectIfValuesAreRb209(ReportViewModel model, FarmManureTypeResponse farmManure, IActionResult? value)
+    {
+        if (farmManure != null)
+            ApplyFarmManure(model, farmManure);
+
+        model.IsThisDefaultValueOfRB209 = false;
+        ViewBag.FarmManureApiOption = Resource.lblTrue;
+        return (flowControl: false, value: value);
+    }
+
+    private static void ApplyFarmManureValues(OrganicManureViewModel model, FarmManureTypeResponse farmManure)
+    {
+        if (model.ManureType == null || farmManure == null)
+        {
+            return;
+        }
+        model.ManureType.DryMatter = farmManure.DryMatter;
+        model.ManureType.TotalN = farmManure.TotalN;
+        model.ManureType.NH4N = farmManure.NH4N;
+        model.ManureType.Uric = farmManure.Uric;
+        model.ManureType.NO3N = farmManure.NO3N;
+        model.ManureType.P2O5 = farmManure.P2O5;
+        model.ManureType.K2O = farmManure.K2O;
+        model.ManureType.SO3 = farmManure.SO3;
+        model.ManureType.MgO = farmManure.MgO;
+        model.DefaultFarmManureValueDate = farmManure.ModifiedOn ?? farmManure.CreatedOn;
+    }
+    private void ViewBagForDefaultOrStandardValue(OrganicManureViewModel model, FarmManureTypeResponse? farmManure)
+    {
+        if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseValues) || (model.IsThisDefaultValueOfRB209 != null && (!model.IsThisDefaultValueOfRB209.Value)))
+        {
+            ViewBag.FarmManureApiOption = Resource.lblTrue;
+
+            ApplyFarmManureValues(model, farmManure);
+        }
+        else if ((!string.IsNullOrWhiteSpace(model.DefaultNutrientValue) && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues) || (model.IsThisDefaultValueOfRB209 != null && (model.IsThisDefaultValueOfRB209.Value)))
+        {
+            ViewBag.FarmManureApiOption = null;
+            ViewBag.RB209ApiOption = Resource.lblTrue;
+        }
+    }
     private static (bool flowControl, IActionResult value) BindDefaultNutrientValuesIfOther(ReportViewModel model, List<FarmManureTypeResponse> farmManureList)
     {
         bool isOtherGroup = model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials

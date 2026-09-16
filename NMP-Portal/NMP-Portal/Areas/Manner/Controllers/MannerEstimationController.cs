@@ -2195,6 +2195,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    await BindViewBegForApplicationMethod(model);
                     model = _mannerEstimationLogic.GetMannerEstimationStep23();
                     return View(model);
                 }
