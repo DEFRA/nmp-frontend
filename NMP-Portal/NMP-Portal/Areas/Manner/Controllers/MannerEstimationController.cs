@@ -2296,7 +2296,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
         private void ReplaceNumericError(string key, string validationLabel, string displayLabel)
         {
-            if (ModelState.ContainsKey(key))
+            if (ModelState.ContainsKey(key) && ModelState[key].Errors.Count > 0)
             {
                 var errorMessage = ModelState[key].Errors[0].ErrorMessage;
                 string expectedMessage = string.Format(Resource.lblEnterNumericValue, ModelState[key].RawValue, validationLabel);
@@ -3962,7 +3962,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         }
 
         private void ValidationEffectiveRainfall()
-        { 
+        {
             if ((!ModelState.IsValid) && ModelState.ContainsKey(_totalRainfallKey))
             {
                 var RainfallError = ModelState[_totalRainfallKey]?.Errors.Count > 0 ?
@@ -6225,7 +6225,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             ViewBag.SessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
-        
+
             ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();
 
             if (!string.IsNullOrWhiteSpace(q))
