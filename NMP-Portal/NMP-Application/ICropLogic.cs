@@ -59,4 +59,5 @@ public interface ICropLogic
     string BindDefoliationSequenceNameForRecommendation(string[]? defolicationParts, int defIndex);
     Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop);
     PlanViewModel FilterOrganicAndInorganicListForHarvestYearOverview(PlanViewModel model, string? s, string? u, string? t);
+    Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClass(List<int> fieldIds);
 }

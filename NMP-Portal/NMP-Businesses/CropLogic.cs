@@ -677,5 +677,10 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
             }
         }
     }
+    public async Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClass(List<int> fieldIds)
+    {
+        _logger.LogTrace("Fetching grass site class for FieldIds: {FieldIds}", string.Join(", ", fieldIds));
+        return await _cropService.FetchGrassSiteClassAsync(fieldIds);
+    }
 
 }

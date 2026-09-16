@@ -8528,4 +8528,16 @@ following crop year 2</value>
   <data name="lblPreviousGrassManagementHint" xml:space="preserve">
     <value>Low nitrogen (N) means less than 150 kg/ha per year fertiliser N used on average. High N means more than 150 kg/ha per year fertiliser N used on average, or a high clover swards</value>
   </data>
+  <data name="lblUndersownSwardsShouldBeTreated" xml:space="preserve">
+    <value>Undersown swards should be treated as an existing sward.</value>
+  </data>
+  <data name="lblLowNMoreThan150KgFertiliserN" xml:space="preserve">
+    <value>Low N : More than 150kg/ha/year fertiliser N user on average in last 2 years.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblHighNMoreThan150KgFertiliserN" xml:space="preserve">
+    <value>High N : More than 150kg/ha/year fertiliser N user on average in last 2 years, or High Clover.</value>
+  </data>
 </root>

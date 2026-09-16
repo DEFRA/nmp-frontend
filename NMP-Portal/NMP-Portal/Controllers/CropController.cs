@@ -5971,7 +5971,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.Crops.ForEach(x => x.Yield = null);
             }
             SetCropToSession(model);
-            if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndSilage || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay)
+            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndSilage || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay))
             {
                 if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
                 {
@@ -5982,8 +5982,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     return RedirectToAction(_checkAnswerActionName);
                 }
             }
+            else if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                if(model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithLowClover)
+                {
+                    return RedirectToAction(_grassGrowthClassActionName);
+                }
+                else
+                {
+                    //return RedirectToAction(_grassGrowthClassActionName);
+                }
+            }
 
-            return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName);
         }
         catch (Exception ex)
         {
@@ -6064,7 +6075,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> GrassGrowthClass(string? q)
     {
         _logger.LogTrace("Crop Controller : GrassGrowthClass() action called");
-        Error error = new Error();
+        Error? error = new Error();
         PlanViewModel model = GetCropFromSession();
         try
         {
@@ -6081,8 +6092,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 fieldIds.Add(crop.FieldID ?? 0);
             }
-
-            (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
+            List<GrassGrowthClassResponse>? grassGrowthClasses = null;
+            List<GrassSiteClassResponse>? grassSiteClasses = null;
+            if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (grassSiteClasses, error) = await _cropLogic.FetchGrassSiteClass(fieldIds);
+            }
+            else
+            {
+                (grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
+            }
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_grassGrowthClassError] = error.Message;

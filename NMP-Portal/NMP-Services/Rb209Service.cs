@@ -690,7 +690,7 @@ public class Rb209Service(ILogger<Rb209Service> logger, IHttpContextAccessor htt
 
         if(swardTypesList.Count > 0)
         {
-            return (swardTypesList.Where(c => c.CountryId == countryId).ToList(), null);
+            return (swardTypesList.Where(c => c.CountryId == countryId || c.CountryId==(int)NMP.Commons.Enums.RB209Country.All).OrderBy(x=>x.SwardType).ToList(), null);
         }
         return (new List<SwardTypeResponse>(), new Error());
 
