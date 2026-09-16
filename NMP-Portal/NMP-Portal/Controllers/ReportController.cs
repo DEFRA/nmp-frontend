@@ -2932,7 +2932,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             bool isOther = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
                         || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
 
-            (bool flowControl, IActionResult value) = BindDefaultNutrientValuesForGetMethod(model, farmManureList, farmManure, isOther);
+            (bool flowControl, IActionResult value) = BindDefaultNutrientValuesForGetMethod(model,  farmManure, isOther);
             if (!flowControl)
             {
                 return value;
@@ -3013,7 +3013,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return RedirectToAction("LivestockReceiver");
     }
-    private (bool flowControl, IActionResult value) BindDefaultNutrientValuesForGetMethod(ReportViewModel model, List<FarmManureTypeResponse> farmManureList, FarmManureTypeResponse? farmManure, bool isOther)
+    private (bool flowControl, IActionResult value) BindDefaultNutrientValuesForGetMethod(ReportViewModel model, FarmManureTypeResponse? farmManure, bool isOther)
     {
         if (isOther)
         {
