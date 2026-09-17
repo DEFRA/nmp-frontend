@@ -51,42 +51,6 @@
     if (!string.IsNullOrWhiteSpace(Model.Postcode)) allAddress.Add(Model.Postcode);
 }
 
-@using Microsoft.AspNetCore.Html
-
-@{
-    Func<Task<IHtmlContent>> nutrientSummaryRow = async () =>
-    {
-        if (Model.N.HasValue && Model.N.Value > 0)
-        {
-            totalN = Model.N.Value;
-        }
-
-        if (Model.P2O5.HasValue && Model.P2O5.Value > 0)
-        {
-            totalP2O5 = Model.P2O5.Value;
-        }
-
-        var partialContent = await Html.PartialAsync("_nutrientListForDefaultValues", Model);
-
-        return new HtmlString($@"
-            <govuk-summary-list-row>
-                <govuk-summary-list-row-key>
-                    {string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)}
-                </govuk-summary-list-row-key>
-                <govuk-summary-list-row-value class='margin-bottom-thirty nutrient_list'>
-                    {partialContent}
-                </govuk-summary-list-row-value>
-                <govuk-summary-list-row-actions>
-                    <govuk-summary-list-row-action asp-action='LivestockManualNutrientValue' asp-controller='Report'>
-                        {Resource.lblChange}
-                        <span class='govuk-visually-hidden'>
-                            {string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)}
-                        </span>
-                    </govuk-summary-list-row-action>
-                </govuk-summary-list-row-actions>
-            </govuk-summary-list-row>");
-    };
-}
 @section BeforeContent {
     <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackLivestockImportExportCheckAnswer") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
@@ -112,8 +76,8 @@
                         @heading
                     </govuk-fieldset-legend>
                 </govuk-fieldset>
-         
 
+         
                 <govuk-summary-list>
                     @if (!Model.IsManageImportExport && string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                     {
@@ -288,12 +252,50 @@
                 }
                 else
                 {
-                    @(await nutrientSummaryRow())                          
+
+                    <govuk-summary-list-row>
+                        <govuk-summary-list-row-key>
+                            @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
+                        </govuk-summary-list-row-key>
+                        <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
+                            @if ((Model.N.HasValue) && Model.N.Value > 0)
+                            {
+                                totalN = Model.N.Value;
+                            }
+                            @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                            {
+                                totalP2O5 = Model.P2O5.Value;
+                            }
+                            @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
+
+                        </govuk-summary-list-row-value>
+                        <govuk-summary-list-row-actions>
+                            <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)</span></govuk-summary-list-row-action>
+                        </govuk-summary-list-row-actions>
+                    </govuk-summary-list-row>
                 }
             }
             else
             {
-              @(await nutrientSummaryRow())
+                <govuk-summary-list-row>
+                    <govuk-summary-list-row-key>
+                        @string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)
+                    </govuk-summary-list-row-key>
+                    <govuk-summary-list-row-value class="margin-bottom-thirty nutrient_list">
+                        @if ((Model.N.HasValue) && Model.N.Value > 0)
+                        {
+                            totalN = Model.N.Value;
+                        }
+                        @if ((Model.P2O5.HasValue) && Model.P2O5.Value > 0)
+                        {
+                            totalP2O5 = Model.P2O5.Value;
+                        }
+                        @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
+                    </govuk-summary-list-row-value>
+                    <govuk-summary-list-row-actions>
+                        <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)</span></govuk-summary-list-row-action>
+                    </govuk-summary-list-row-actions>
+                </govuk-summary-list-row>
             }
         }
         else
