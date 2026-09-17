@@ -130,7 +130,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <govuk-radios asp-for="@Model.DefaultNutrientValue">
+                <govuk-radios for="@Model.DefaultNutrientValue">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false">
                             @if ((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials)
