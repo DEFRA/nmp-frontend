@@ -52,7 +52,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _cropTypeTempErrorName = "CropTypeError";
     private const string _cropPrefix = "Crops[";
     private const string _yieldPrefix = "].Yield";
-    private const string _grassGrowthClassActionName = "GrassGrowthClass";
+    private const string _grassGrowthClassActionName = "GrassClass";
     private const string _copyCheckAnswerActionName = "CopyCheckAnswer";
     private const string _cropGroupName = "CropGroupName";
     private const string _cropFields = "CropFields";
@@ -67,7 +67,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _yield = "Yield";
     private const string _errorCreatePlan = "ErrorCreatePlan";
     private const string _errorOnHarvestYearOverview = "ErrorOnHarvestYearOverview";
-    private const string _recommendationsActionName = "Recommendations"; 
+    private const string _recommendationsActionName = "Recommendations";
     private const string _defoliationSequenceActionName = "DefoliationSequence";  //_twoParamStringFormat
     private const string _harvestYearPlanActionName = "HarvestYearPlan";
     private const string _organicManureKey = "OrganicManure";
@@ -468,9 +468,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             model.CurrentSward = null;
             model.GrassSeason = null;
-            model.GrassGrowthClassCounter = 0;
-            model.GrassGrowthClassEncryptedCounter = null;
-            model.GrassGrowthClassQuestion = null;
+            model.GrassClassCounter = 0;
+            model.GrassClassEncryptedCounter = null;
+            model.GrassClassQuestion = null;
             model.DryMatterYieldCounter = 0;
             model.DryMatterYieldEncryptedCounter = null;
             model.SwardTypeId = null;
@@ -2609,7 +2609,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                          .OfType<int>()
                          .Where(id => cropFieldIds.Contains(id)))
             {
-                
+
                 // If a match is found, remove the corresponding row from model.Crops
                 var cropToDelete = model.Crops.First(c => c.FieldID == fieldId);
                 model.Crops.Remove(cropToDelete);
@@ -2641,7 +2641,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             .Select(c => c.Yield.Value)
             .Distinct()
             .Count() == 1;
-            model.GrassGrowthClassQuestion = allYieldsSame ? (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields : (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
+            model.GrassClassQuestion = allYieldsSame ? (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields : (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
         }
         else
         {
@@ -3113,13 +3113,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         string encryptedCounter = string.Empty;
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
-            if (model.GrassGrowthClassQuestion != null)
+            if (model.GrassClassQuestion != null)
             {
                 encryptedCounter = model.DryMatterYieldEncryptedCounter;
             }
             else
             {
-                encryptedCounter = model.GrassGrowthClassEncryptedCounter;
+                encryptedCounter = model.GrassClassEncryptedCounter;
             }
         }
         else
@@ -3152,7 +3152,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
             {
-                bool isDryMatterAction = (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1);
+                bool isDryMatterAction = (model.Crops.Count > 1 && model.GrassClassDistinctCount == 1);
                 action = isDryMatterAction ? "DryMatterYield" : _grassGrowthClassActionName;
             }
             else
@@ -3660,7 +3660,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    
+
     private void RemoveInoganicAndOrganicSession()
     {
         if (HttpContext.Session.Exists(_fertiliserManureKey))
@@ -5324,13 +5324,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (crop.Yield == null)
                 {
-                    if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+                    if (model.GrassClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                     {
                         ModelState.AddModelError(string.Concat(_cropPrefix, i, _yieldPrefix), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, crop.Year));
 
                         break;
                     }
-                    else if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
+                    else if (model.GrassClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                     {
                         ModelState.AddModelError(string.Concat(_cropPrefix, i, _yieldPrefix), string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, crop.Year));
 
@@ -5558,7 +5558,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<PlanViewModel> BindDefoliationSequenceForCurrentSward(PlanViewModel model)
     {
-        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
+        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward, model.FarmRB209CountryID.Value);
         if (defoliationSequenceResponses != null && defoliationSequenceResponses.Count > 0)
         {
             model.DefoliationSequenceId = defoliationSequenceResponses[0].DefoliationSequenceId;
@@ -5566,11 +5566,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             bool isGrazedOnlyOrCutSilage = (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly);
             if (isGrazedOnlyOrCutSilage && model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass && model.IsCheckAnswer)
             {
-                model.GrassGrowthClassCounter = 0;
+                model.GrassClassCounter = 0;
             }
             else if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly && model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass && model.IsCheckAnswer)
             {
-                model.GrassGrowthClassCounter = 0;
+                model.GrassClassCounter = 0;
 
             }
             else
@@ -5714,7 +5714,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.SwardManagementId = null;
             model.PotentialCut = null;
             model.DefoliationSequenceId = null;
-            model.GrassGrowthClassQuestion = null;
+            model.GrassClassQuestion = null;
             model.Yield = null;
             model.Crops.ForEach(x => x.Yield = null);
         }
@@ -5784,7 +5784,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 model.PotentialCut = null;
                 model.DefoliationSequenceId = null;
-                model.GrassGrowthClassQuestion = null;
+                model.GrassClassQuestion = null;
                 model.Yield = null;
                 model.Crops.ForEach(x => x.Yield = null);
             }
@@ -5861,7 +5861,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else if (!model.IsAnyChangeInField)
             {
                 model.DefoliationSequenceId = null;
-                model.GrassGrowthClassQuestion = null;
+                model.GrassClassQuestion = null;
                 model.Yield = null;
                 model.Crops.ForEach(x => x.Yield = null);
             }
@@ -5887,7 +5887,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.IsCheckAnswer)
             {
-                model.GrassGrowthClassCounter = 0;
+                model.GrassClassCounter = 0;
                 SetCropToSession(model);
             }
             return RedirectToAction(_grassGrowthClassActionName);
@@ -5912,7 +5912,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
-            (defoliationSequenceResponses, Error error) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
+            (defoliationSequenceResponses, Error error) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward, model.FarmRB209CountryID.Value);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_defoliationError] = error.Message;
@@ -5945,7 +5945,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> DefoliationSequence(PlanViewModel model)
     {
         _logger.LogTrace("Crop Controller : DefoliationSequence() post action called");
-        model.GrassGrowthClassCounter = 0;
+        model.GrassClassCounter = 0;
         try
         {
             if (model.DefoliationSequenceId == null)
@@ -5954,7 +5954,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             if (!ModelState.IsValid)
             {
-                (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward, model.FarmRB209CountryID.Value);
                 ViewBag.DefoliationSequenceResponses = defoliationSequenceResponses;
                 return View(model);
             }
@@ -5966,7 +5966,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else if (!model.IsAnyChangeInField)
             {
-                model.GrassGrowthClassQuestion = null;
+                model.GrassClassQuestion = null;
                 model.Yield = null;
                 model.Crops.ForEach(x => x.Yield = null);
             }
@@ -5982,9 +5982,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     return RedirectToAction(_checkAnswerActionName);
                 }
             }
-            else if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            else if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
-                if(model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithLowClover)
+                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithLowClover)
                 {
                     return RedirectToAction(_grassGrowthClassActionName);
                 }
@@ -5994,7 +5994,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
 
-                return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName);
         }
         catch (Exception ex)
         {
@@ -6004,56 +6004,95 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
 
-    private async Task<(bool flowControl, IActionResult? value)> BindCrassGrowthClassData(string? q, PlanViewModel model, List<GrassGrowthClassResponse> grassGrowthClasses)
+    private async Task<(bool flowControl, IActionResult? value)> BindGrassClassData(string? q, PlanViewModel model, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses)
     {
+        bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
+
         if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
         {
-            model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
-            if (model.GrassGrowthClassCounter == 0)
+            model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
+
+            if (model.GrassClassCounter == 0)
             {
                 model.FieldID = model.Crops[0].FieldID.Value;
-                model.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
-                ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
-                ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
 
-                await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
+                model.FieldName = model.Crops[model.GrassClassCounter].FieldName;
+
+                ViewBag.FieldName = model.Crops[model.GrassClassCounter].FieldName;
+
+                if (isScotland)
+                {
+                    var grassSiteClass = grassSiteClasses![model.GrassClassCounter];
+
+                    ViewBag.GrassClass = grassSiteClass.SiteClass;
+
+                    await FetchYieldRangeForScotland(model, grassSiteClass.SiteClassId);
+                }
+                else
+                {
+                    var grassGrowthClass = grassGrowthClasses![model.GrassClassCounter];
+
+                    ViewBag.GrassClass = grassGrowthClass.GrassGrowthClassName;
+
+                    await FetchYieldRangeForEngAndWales(model, grassGrowthClass.GrassGrowthClassId);
+                }
             }
 
             SetCropToSession(model);
         }
-        else if (!string.IsNullOrWhiteSpace(q) && (model.Crops != null && model.Crops.Count > 0))
+        else if (!string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
         {
             int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
-            int index = itemCount - 1;//index of list
+            int index = itemCount - 1;//index 
             if (itemCount == 0)
             {
-                return (flowControl: false, value: RedirectForGrassGrowthClassGet(model));
+                return (false, RedirectForGrassGrowthClassGet(model));
             }
+
 
             model.FieldID = model.Crops[index].FieldID.Value;
+
             model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
-            model.GrassGrowthClassCounter = index;
 
-            model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
-            model.FieldID = model.Crops[model.GrassGrowthClassCounter].FieldID;
-            ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
-            ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
+            model.GrassClassCounter = index;
 
-            await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
-            SetCropToSession(model);
-            if (model.GrassGrowthClassQuestion != null)
+            model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
+            model.FieldID = model.Crops[model.GrassClassCounter].FieldID;
+            ViewBag.FieldName = model.Crops[model.GrassClassCounter].FieldName;
+            if (isScotland)
             {
-                return (flowControl: false, value: RedirectToAction(_defoliationSequenceActionName));
+                var grassSiteClass = grassSiteClasses![model.GrassClassCounter];
+
+                ViewBag.GrassClass = grassSiteClass.SiteClass;
+
+                await FetchYieldRangeForScotland(model, grassSiteClass.SiteClassId);
+            }
+            else
+            {
+                var grassGrowthClass = grassGrowthClasses![model.GrassClassCounter];
+
+                ViewBag.GrassClass = grassGrowthClass.GrassGrowthClassName;
+
+                await FetchYieldRangeForEngAndWales(model, grassGrowthClass.GrassGrowthClassId);
+            }
+
+            SetCropToSession(model);
+
+            if (model.GrassClassQuestion != null)
+            {
+                return (false, RedirectToAction(_defoliationSequenceActionName));
             }
         }
+
         SetCropToSession(model);
-        return (flowControl: true, value: null);
+
+        return (true, null);
     }
 
     private IActionResult RedirectForGrassGrowthClassGet(PlanViewModel model)
     {
-        model.GrassGrowthClassCounter = 0;
-        model.GrassGrowthClassEncryptedCounter = string.Empty;
+        model.GrassClassCounter = 0;
+        model.GrassClassEncryptedCounter = string.Empty;
         SetCropToSession(model);
 
         //back button logic start
@@ -6072,56 +6111,41 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> GrassGrowthClass(string? q)
+    public async Task<IActionResult> GrassClass(string? q)
     {
-        _logger.LogTrace("Crop Controller : GrassGrowthClass() action called");
-        Error? error = new Error();
+        _logger.LogTrace("Crop Controller : GrassClass() action called");
+
         PlanViewModel model = GetCropFromSession();
         try
         {
             if (model == null)
             {
-                _logger.LogTrace("Crop Controller : GrassGrowthClass() action called - CropData session is null");
+                _logger.LogTrace("Crop Controller : GrassClass() action called - CropData session is null");
+
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
-            List<int> fieldIds = new List<int>();
-            List<int> grassGrowthClassIds = new List<int>();
+            List<int> fieldIds = model.Crops.Select(crop => crop.FieldID ?? 0).ToList();
 
-            foreach (var crop in model.Crops)
+            bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
+
+            (bool fetchFlowControl, IActionResult? fetchValue, List<int> grassClassIds, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses) =
+                await FetchGrassClasses(fieldIds, isScotland);
+
+            if (!fetchFlowControl && fetchValue != null)
             {
-                fieldIds.Add(crop.FieldID ?? 0);
-            }
-            List<GrassGrowthClassResponse>? grassGrowthClasses = null;
-            List<GrassSiteClassResponse>? grassSiteClasses = null;
-            if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-            {
-                (grassSiteClasses, error) = await _cropLogic.FetchGrassSiteClass(fieldIds);
-            }
-            else
-            {
-                (grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
-            }
-            if (error != null && !string.IsNullOrWhiteSpace(error.Message))
-            {
-                TempData[_grassGrowthClassError] = error.Message;
-                return RedirectToAction(_defoliationSequenceActionName);
-            }
-            else
-            {
-                foreach (var grassGrowthClass in grassGrowthClasses)
-                {
-                    grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
-                }
+                return fetchValue;
             }
 
-            model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Distinct().Count();
-            if (model.GrassGrowthClassDistinctCount > 1)
+            model.GrassClassDistinctCount = grassClassIds.Distinct().Count();
+
+            if (model.GrassClassDistinctCount > 1)
             {
-                model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Count;
+                model.GrassClassDistinctCount = grassClassIds.Count;
             }
+
             SetCropToSession(model);
-            (bool flowControl, IActionResult? value) = await BindCrassGrowthClassData(q, model, grassGrowthClasses);
+            (bool flowControl, IActionResult? value) = await BindGrassClassData(q, model, grassGrowthClasses, grassSiteClasses);
             if (!flowControl && value != null)
             {
                 return value;
@@ -6129,7 +6153,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex, "Crop Controller : Exception in GrassGrowthClass() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in GrassClass() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_grassGrowthClassError] = ex.Message;
             return RedirectToAction(_defoliationSequenceActionName);
         }
@@ -6139,31 +6163,31 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> GrassGrowthClass(PlanViewModel model)
+    public async Task<IActionResult> GrassClass(PlanViewModel model)
     {
-        _logger.LogTrace("Crop Controller : GrassGrowthClass() post action called");
+        _logger.LogTrace("Crop Controller : GrassClass() post action called");
 
         List<int> fieldIds = new List<int>();
-        Error? error = null;
+        bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
 
         PlanViewModel planViewModelBeforeUpdate = GetCropFromSession() ?? new PlanViewModel();
         ValidateGrassGrowthClassProperties(model);
         if (!ModelState.IsValid)
         {
-            model = await BindViewBegForGrassGrowthClass(model, fieldIds);
+            model = await BindViewBegForGrassGrowthClass(model, fieldIds, isScotland);
             return View(model);
         }
 
-        if (model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1 && (model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassGrowthClassCounter].Yield == model.Crops[model.GrassGrowthClassCounter].Yield && !model.IsAnyChangeInField && !model.IsCurrentSwardChange))
+        if (model.Crops.Count == 1 || model.GrassClassDistinctCount > 1 && (model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassClassCounter].Yield == model.Crops[model.GrassClassCounter].Yield && !model.IsAnyChangeInField && !model.IsCurrentSwardChange))
         {
-            model.GrassGrowthClassCounter = 1;
-            model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
+            model.GrassClassCounter = 1;
+            model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
             SetCropToSession(model);
             return RedirectToAction(_checkAnswerActionName);
         }
-        if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
+        if (model.Crops.Count > 1 && model.GrassClassDistinctCount == 1)
         {
-            if (model.IsCheckAnswer && planViewModelBeforeUpdate.GrassGrowthClassQuestion == model.GrassGrowthClassQuestion && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
+            if (model.IsCheckAnswer && planViewModelBeforeUpdate.GrassClassQuestion == model.GrassClassQuestion && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
             {
                 SetCropToSession(model);
                 return RedirectToAction(_checkAnswerActionName);
@@ -6181,14 +6205,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
 
-        (bool flowControl, IActionResult? value, List<int> grassGrowthClassIds, List<GrassGrowthClassResponse> grassGrowthClasses) = await FetchGrassGrowthClasses(fieldIds, error);
+        (bool flowControl, IActionResult? value, List<int> classIds, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses) = await FetchGrassClasses(fieldIds, isScotland);
         if (!flowControl && value != null)
         {
             return value;
         }
 
 
-        model = await BindPropertiesForGrassGrowthClass(model, grassGrowthClasses, grassGrowthClassIds);
+        model = await BindPropertiesForGrassGrowthClass(model, grassGrowthClasses, grassSiteClasses, classIds, isScotland);
 
         SetCropToSession(model);
         return RedirectForGrassGrowthClass(model);
@@ -6196,23 +6220,23 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private IActionResult RedirectForGrassGrowthClass(PlanViewModel model)
     {
-        if (model.GrassGrowthClassDistinctCount == 1 && model.Crops.Count > 1)
+        if (model.GrassClassDistinctCount == 1 && model.Crops.Count > 1)
         {
             return RedirectToAction("DryMatterYield");
         }
-        if (model.GrassGrowthClassCounter == model.Crops.Count)
+        if (model.GrassClassCounter == model.Crops.Count)
         {
             return RedirectToAction(_checkAnswerActionName);
         }
         else
         {
-            if (model.IsCheckAnswer && model.GrassGrowthClassQuestion == null && !model.IsAnyChangeInField && model.GrassGrowthClassCounter == model.Crops.Count)
+            if (model.IsCheckAnswer && model.GrassClassQuestion == null && !model.IsAnyChangeInField && model.GrassClassCounter == model.Crops.Count)
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-            if (model.IsCheckAnswer && !model.IsAnyChangeInField && model.GrassGrowthClassCounter < model.Crops.Count)
+            if (model.IsCheckAnswer && !model.IsAnyChangeInField && model.GrassClassCounter < model.Crops.Count)
             {
-                if (model.Crops[model.GrassGrowthClassCounter].Yield == null)
+                if (model.Crops[model.GrassClassCounter].Yield == null)
                 {
                     return View(model);
                 }
@@ -6225,35 +6249,50 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    private async Task<PlanViewModel> BindPropertiesForGrassGrowthClass(PlanViewModel model, List<GrassGrowthClassResponse> grassGrowthClasses, List<int> grassGrowthClassIds)
+
+
+    private async Task<PlanViewModel> BindPropertiesForGrassGrowthClass(
+        PlanViewModel model,
+        List<GrassGrowthClassResponse>? grassGrowthClasses,
+        List<GrassSiteClassResponse>? grassSiteClasses,
+        List<int> classIds,
+        bool isScotland)
     {
-        model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Distinct().Count();
-        if (model.GrassGrowthClassDistinctCount > 1)
+        model.GrassClassDistinctCount = classIds.Distinct().Count();
+        if (model.GrassClassDistinctCount > 1)
         {
-            model.GrassGrowthClassDistinctCount = grassGrowthClassIds.Count;
+            model.GrassClassDistinctCount = classIds.Count;
         }
 
         for (int i = 0; i < model.Crops.Count; i++)
         {
             if (model.FieldID == model.Crops[i].FieldID.Value)
             {
-                model.GrassGrowthClassCounter++;
+                model.GrassClassCounter++;
                 if (i + 1 < model.Crops.Count)
                 {
                     model.FieldID = model.Crops[i + 1].FieldID.Value;
                     model.FieldName = model.Crops[i + 1].FieldName;
                     ViewBag.FieldName = model.Crops[i + 1].FieldName;
-                    ViewBag.GrassGrowthClass = grassGrowthClasses[i + 1].GrassGrowthClassName;
 
-                    await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[i + 1].GrassGrowthClassId);
+                    if (isScotland)
+                    {
+                        ViewBag.GrassClass = grassSiteClasses![i + 1].SiteClass;
+                        await FetchYieldRangeForScotland(model, grassSiteClasses[i + 1].SiteClassId);
+                    }
+                    else
+                    {
+                        ViewBag.GrassClass = grassGrowthClasses![i + 1].GrassGrowthClassName;
+                        await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[i + 1].GrassGrowthClassId);
+                    }
                 }
                 break;
             }
         }
-        model.GrassGrowthClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassGrowthClassCounter.ToString());
+        model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
 
         PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
-        if (model.GrassGrowthClassQuestion != planViewModel.GrassGrowthClassQuestion)
+        if (model.GrassClassQuestion != planViewModel.GrassClassQuestion)
         {
             model.DryMatterYieldCounter = 0;
             model.DryMatterYieldEncryptedCounter = _cropDataProtector.Protect(model.DryMatterYieldCounter.ToString());
@@ -6262,56 +6301,83 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return model;
     }
 
-    private async Task<(bool flowControl, IActionResult? value, List<int>, List<GrassGrowthClassResponse>)> FetchGrassGrowthClasses(List<int> fieldIds, Error? error)
+    // Scotland-aware fetch shared by GET and POST: Scotland uses Grass Site Class, England/Wales uses Grass Growth Class.
+    private async Task<(bool flowControl, IActionResult? value, List<int> classIds, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses)> FetchGrassClasses(List<int> fieldIds, bool isScotland)
     {
-        (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
-        List<int> grassGrowthClassIds = new List<int>();
-        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+        Error? error;
+        List<int> classIds = new List<int>();
+        List<GrassGrowthClassResponse>? grassGrowthClasses = null;
+        List<GrassSiteClassResponse>? grassSiteClasses = null;
+
+        if (isScotland)
         {
-            TempData[_grassGrowthClassError] = error.Message;
-            return (flowControl: false, value: RedirectToAction(_defoliationSequenceActionName), grassGrowthClassIds, grassGrowthClasses);
+            (grassSiteClasses, error) = await _cropLogic.FetchGrassSiteClass(fieldIds);
+            if (grassSiteClasses != null && grassSiteClasses.Count > 0)
+            {
+                classIds = grassSiteClasses.Select(x => x.SiteClassId).ToList();
+            }
         }
         else
         {
-            foreach (var grassGrowthClass in grassGrowthClasses)
+            (grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
+            if (grassGrowthClasses != null && grassGrowthClasses.Count >0)
             {
-                grassGrowthClassIds.Add(grassGrowthClass.GrassGrowthClassId);
+                classIds = grassGrowthClasses.Select(x => x.GrassGrowthClassId).ToList();
             }
         }
 
-        return (flowControl: true, value: null, grassGrowthClassIds, grassGrowthClasses);
+        if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+        {
+            TempData[_grassGrowthClassError] = error.Message;
+            return (flowControl: false, value: RedirectToAction(_defoliationSequenceActionName), classIds, grassGrowthClasses, grassSiteClasses);
+        }
+
+        return (flowControl: true, value: null, classIds, grassGrowthClasses, grassSiteClasses);
     }
 
-    private async Task<PlanViewModel> BindViewBegForGrassGrowthClass(PlanViewModel model, List<int> fieldIds)
+    private async Task<PlanViewModel> BindViewBegForGrassGrowthClass(PlanViewModel model, List<int> fieldIds, bool isScotland)
     {
         foreach (var crop in model.Crops)
         {
             fieldIds.Add(crop.FieldID ?? 0);
         }
 
-        (List<GrassGrowthClassResponse> grassGrowthClasses, _) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
         model.FieldID = model.Crops[0].FieldID.Value;
-        model.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
-        ViewBag.FieldName = model.Crops[model.GrassGrowthClassCounter].FieldName;
-        if (grassGrowthClasses != null)
+        model.FieldName = model.Crops[model.GrassClassCounter].FieldName;
+        ViewBag.FieldName = model.Crops[model.GrassClassCounter].FieldName;
+
+        if (isScotland)
         {
-            ViewBag.GrassGrowthClass = grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassName;
-            await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
+            (List<GrassSiteClassResponse> grassSiteClasses, _) = await _cropLogic.FetchGrassSiteClass(fieldIds);
+            if (grassSiteClasses != null)
+            {
+                ViewBag.GrassClass = grassSiteClasses[model.GrassClassCounter].SiteClass;
+                await FetchYieldRangeForScotland(model, grassSiteClasses[model.GrassClassCounter].SiteClassId);
+            }
+        }
+        else
+        {
+            (List<GrassGrowthClassResponse> grassGrowthClasses, _) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
+            if (grassGrowthClasses != null)
+            {
+                ViewBag.GrassClass = grassGrowthClasses[model.GrassClassCounter].GrassGrowthClassName;
+                await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassClassCounter].GrassGrowthClassId);
+            }
         }
         return model;
     }
 
     private void ValidateGrassGrowthClassProperties(PlanViewModel model)
     {
-        if ((model.Crops.Count == 1 || model.GrassGrowthClassDistinctCount > 1) && model.Crops[model.GrassGrowthClassCounter].Yield == null)
+        if ((model.Crops.Count == 1 || model.GrassClassDistinctCount > 1) && model.Crops[model.GrassClassCounter].Yield == null)
         {
 
-            ModelState.AddModelError(_cropPrefix + model.GrassGrowthClassCounter + _yieldPrefix, Resource.MsgSelectAnOptionBeforeContinuing);
+            ModelState.AddModelError(_cropPrefix + model.GrassClassCounter + _yieldPrefix, Resource.MsgSelectAnOptionBeforeContinuing);
         }
-        if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1 && model.GrassGrowthClassQuestion == null)
+        if (model.Crops.Count > 1 && model.GrassClassDistinctCount == 1 && model.GrassClassQuestion == null)
         {
 
-            ModelState.AddModelError("GrassGrowthClassQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
+            ModelState.AddModelError("GrassClassQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
         }
     }
 
@@ -6326,6 +6392,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
 
+    }
+    private async Task FetchYieldRangeForScotland(PlanViewModel model, int grassSiteClassesId)
+    {
+        (List<YieldRangesEnglandAndWalesResponse> yieldRangesResponses, _) = await _cropLogic.FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassId(model.DefoliationSequenceId ?? 0, grassSiteClassesId);
+        if (yieldRangesResponses != null && yieldRangesResponses.Count > 0)
+        {
+            ViewBag.YieldMin = yieldRangesResponses[0];
+            ViewBag.YieldMax = yieldRangesResponses[yieldRangesResponses.Count - 1];
+            ViewBag.YieldRanges = yieldRangesResponses.OrderByDescending(x => x.YieldId);
+        }
     }
 
 
@@ -6419,8 +6495,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return View(model);
         }
 
-        model.GrassGrowthClassCounter = 0;
-        if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
+        model.GrassClassCounter = 0;
+        if (model.GrassClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
         {
             (bool flowControl, IActionResult? value) = await RedirectForDryMatterIfDifferentFigure(model, grassGrowthClasses);
             if (!flowControl && value != null)
@@ -6428,7 +6504,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return value;
             }
         }
-        else if (model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+        else if (model.GrassClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
         {
             return RedirectForDryMatterIfSingleFigure(model);
         }
@@ -6505,7 +6581,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<List<int>> ValidateDryMatterYield(PlanViewModel model)
     {
         List<int> fieldIds = new List<int>();
-        if (model.Crops.Count > 1 && model.GrassGrowthClassDistinctCount == 1)
+        if (model.Crops.Count > 1 && model.GrassClassDistinctCount == 1)
         {
             if (model.Crops[model.DryMatterYieldCounter].Yield == null)
             {
@@ -6519,7 +6595,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             (List<GrassGrowthClassResponse> grassGrowthClasses, _) = await _cropLogic.FetchGrassGrowthClass(fieldIds);
 
 
-            await BindYieldRange(model, grassGrowthClasses[model.GrassGrowthClassCounter].GrassGrowthClassId);
+            await BindYieldRange(model, grassGrowthClasses[model.GrassClassCounter].GrassGrowthClassId);
         }
         return fieldIds;
     }
@@ -7151,8 +7227,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         ApplyHarvestFieldFiltering(selectList, plans, allowedFields);
     }
 
-    private static void RemoveFields(
-    List<SelectListItem> selectList,
+    private static void RemoveFields(List<SelectListItem> selectList,
     List<int> removeFieldIds)
     {
         foreach (var id in removeFieldIds)

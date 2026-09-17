@@ -299,4 +299,5 @@ internal static class ApiurlHelper
     public const string FetchPreviousGrassListAPI = "vendors/rb209/PreviousCropping/PreviousGrasses";
     public const string FetchPreviousGrassByIdAPI = "vendors/rb209/PreviousCropping/PreviousGrass/{0}";
     public const string FetchGrassSiteClassesAPI = "site-class/byFieldIds";
+    public const string FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassIdAPI = "vendors/rb209/Grass/YieldRangesScotland/{0}/{1}";
 }

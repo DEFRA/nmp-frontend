@@ -722,7 +722,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             {
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
-                    var grassGrowthClassList = responseWrapper?.Data?.ToObject<List<GrassGrowthClassResponse>>();
+                    var grassGrowthClassList = responseWrapper?.Data?.ToObject<List<GrassSiteClassResponse>>();
                     grassGrowthClasses.AddRange(grassGrowthClassList);
                 }
             }

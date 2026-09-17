@@ -922,7 +922,7 @@ public class Rb209Service(ILogger<Rb209Service> logger, IHttpContextAccessor htt
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchSwardTypesListAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchSwardManagementsAPI);
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -952,6 +952,29 @@ public class Rb209Service(ILogger<Rb209Service> logger, IHttpContextAccessor htt
             _logger.LogError(ex, ex.Message);
         }
         return swardManagementList;
+    }
+
+    public async Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassId(int sequenceId, int grassSiteClassId)
+    {
+        Error? error = null;
+        List<YieldRangesEnglandAndWalesResponse> yieldRanges = new List<YieldRangesEnglandAndWalesResponse>();
+        HttpClient httpClient = await GetNMPAPIClient();
+        var requestUrl = string.Format(ApiurlHelper.FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassIdAPI, HttpUtility.UrlEncode(sequenceId.ToString()), HttpUtility.UrlEncode(grassSiteClassId.ToString()));
+        var response = await httpClient.GetAsync(requestUrl);
+
+        string result = await response.Content.ReadAsStringAsync();
+        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+        if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+        {
+            var yieldRangesList = responseWrapper?.Data?.ToObject<List<YieldRangesEnglandAndWalesResponse>>();
+            yieldRanges.AddRange(yieldRangesList);
+        }
+        else
+        {
+            error = _logger.ExtractError(responseWrapper, error);
+        }
+
+        return (yieldRanges, error);
     }
 }
 

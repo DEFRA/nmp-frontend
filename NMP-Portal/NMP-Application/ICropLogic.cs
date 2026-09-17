@@ -60,4 +60,5 @@ public interface ICropLogic
     Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop);
     PlanViewModel FilterOrganicAndInorganicListForHarvestYearOverview(PlanViewModel model, string? s, string? u, string? t);
     Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClass(List<int> fieldIds);
+    Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassId(int sequenceId, int grassSiteClassId);
 }

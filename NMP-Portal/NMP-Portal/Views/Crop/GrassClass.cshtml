@@ -6,23 +6,23 @@
     var EnterDifferentFiguresForEachField = (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
     var EnterASingleFigureForAllTheseFields = (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     var pageHeading = "";
-    if (Model.Crops != null && Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+    if (Model.Crops != null && Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1)
     {
         pageHeading = Resource.lblAnnualDryMatterYield;
     }
-    @if (Model.Crops != null && Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
+    @if (Model.Crops != null && Model.Crops.Count == 1 || Model.GrassClassDistinctCount > 1)
     {
         pageHeading = string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName);
     }
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
-    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassGrowthClass;
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassClass;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "GrassGrowthClass") asp-controller="Crop" asp-route-q="@Model.GrassGrowthClassEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "GrassClass") asp-controller="Crop" asp-route-q="@Model.GrassClassEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
-<form asp-action="GrassGrowthClass" asp-controller="Crop" method="post" autocomplete="off">
+<form asp-action="GrassClass" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     @if (TempData["GrassGrowthClassError"] != null)
     {
@@ -39,18 +39,18 @@
     {
         @for (int i = 0; i < Model.Crops.Count; i++)
         {
-            @if (i == Model.GrassGrowthClassCounter)
+            @if (i == Model.GrassClassCounter)
             {
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
                         
-                            @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+                            @if (Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1)
                             {
                                 <h1 class="govuk-heading-l">
                                     @Resource.lblAnnualDryMatterYield
                                 </h1>                               
                             }
-                            @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
+                            @if (Model.Crops.Count == 1 || Model.GrassClassDistinctCount > 1)
                             {
                                 <h1 class="govuk-heading-l">
                                     @string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName)
@@ -58,22 +58,22 @@
                             }
                         <p class="govuk-body">@Resource.lblWeUseTheTargetAnnaulDryMatterYieldToGiveNitrogenRecommendationsForGrass <a class="govuk-link" target="_blank"  href="https://ahdb.org.uk/knowledge-library/methods-for-measuring-forage-yield">@Resource.msgViewAhdbGuidence</a>.</p>
 
-                            <h2 class="govuk-heading-m">@Resource.lblGrassGrowthClass</h2>
+                        <h2 class="govuk-heading-m">@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblSiteClass : Resource.lblGrassGrowthClass)</h2>
                             <div class="text_group">
-                                @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+                                @if (Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1)
                                 {
                                     <p class="govuk-body">@Resource.lblBasedOnYourDataTheGrassGrowthClassForTheseField</p>
                                 }
-                                @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
+                                @if (Model.Crops.Count == 1 || Model.GrassClassDistinctCount > 1)
                                 {
                                     <p class="govuk-body">@string.Format(Resource.lblBasedOnYourDataTheGrassGrowthClassForXField, Model.FieldName)</p>
                                 }
-                                @if (ViewBag.GrassGrowthClass != null)
+                                @if (ViewBag.GrassClass != null)
                                 {
-                                    <p class="govuk-body strong"><b>@ViewBag.GrassGrowthClass</b></p>
+                                    <p class="govuk-body strong"><b>@ViewBag.GrassClass</b></p>
                                 }
                             </div>
-                            @if (Model.Crops.Count == 1 || Model.GrassGrowthClassDistinctCount > 1)
+                            @if (Model.Crops.Count == 1 || Model.GrassClassDistinctCount > 1)
                             {
                                 <p class="govuk-body">@Resource.lblThisGivesTheFollowingRangeForAnnualDryMatterYield</p>                                                            
                                 <govuk-radios for="@Model.Crops[i].Yield">
@@ -97,7 +97,7 @@
                                     </govuk-radios-fieldset>
                                 </govuk-radios>
                             }
-                            @if (Model.Crops.Count > 1 && Model.GrassGrowthClassDistinctCount == 1)
+                            @if (Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1)
                             {
                                 <p class="govuk-body">@Resource.lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf</p>
                                 @if (ViewBag.YieldMin != null && ViewBag.YieldMax != null)
@@ -105,7 +105,7 @@
                                     <p class="govuk-body"><strong>@string.Format(Resource.lblDryMatterYieldRangeTonnesPerHectare, ViewBag.YieldMin.YieldId, ViewBag.YieldMax.YieldId)</strong></p>
                                 }
 
-                                <govuk-radios for="@Model.GrassGrowthClassQuestion">
+                                <govuk-radios for="@Model.GrassClassQuestion">
                                     <govuk-radios-fieldset>
                                         <govuk-radios-fieldset-legend is-page-heading="false">
                                             @Resource.lblDoYouWantToEnterTheSameTargetYieldForTheseFields

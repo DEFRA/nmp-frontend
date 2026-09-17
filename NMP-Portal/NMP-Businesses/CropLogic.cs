@@ -682,5 +682,9 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
         _logger.LogTrace("Fetching grass site class for FieldIds: {FieldIds}", string.Join(", ", fieldIds));
         return await _cropService.FetchGrassSiteClassAsync(fieldIds);
     }
-
+    public async Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassId(int sequenceId, int grassSiteClassId)
+    {
+        _logger.LogTrace("Fetching yield ranges for SequenceId: {SequenceId}, GrassSiteClassId: {GrassSiteClassId}", sequenceId, grassSiteClassId);
+        return await _rb209Service.FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassId(sequenceId, grassSiteClassId);
+    }
 }

@@ -14982,6 +14982,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Site class.
+        /// </summary>
+        public static string lblSiteClass {
+            get {
+                return ResourceManager.GetString("lblSiteClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NMPT service under maintenance.
         /// </summary>
         public static string lblSiteUnderMaintenance {

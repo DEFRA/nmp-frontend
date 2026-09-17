@@ -42,6 +42,7 @@ namespace NMP.Core.Interfaces
         Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeIdAsync(int swardTypeId);
         Task<(SwardManagementResponse, Error)> FetchSwardManagementBySwardManagementIdAsync(int swardManagementId);
         Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId);
+        Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassId(int sequenceId, int grassSiteClassId);
 
     }
 }

@@ -8540,4 +8540,7 @@ following crop year 2</value>
   <data name="lblHighNMoreThan150KgFertiliserN" xml:space="preserve">
     <value>High N : More than 150kg/ha/year fertiliser N user on average in last 2 years, or High Clover.</value>
   </data>
+  <data name="lblSiteClass" xml:space="preserve">
+    <value>Site class</value>
+  </data>
 </root>
