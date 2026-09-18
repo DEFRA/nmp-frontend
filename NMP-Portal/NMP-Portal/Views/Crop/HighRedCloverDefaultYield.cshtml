@@ -3,8 +3,6 @@
 @model NMP.Commons.ViewModels.PlanViewModel
 @{
 
-    var EnterDifferentFiguresForEachField = (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
-    var EnterASingleFigureForAllTheseFields = (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
     var pageHeading = "";
     if (Model.Crops != null && Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1)
     {
