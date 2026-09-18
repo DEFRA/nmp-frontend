@@ -6072,13 +6072,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             var grassSiteClass = grassSiteClasses![model.GrassClassCounter];
             ViewBag.GrassClass = grassSiteClass.SiteClass;
-            await FetchYieldRangeForScotland(model, grassSiteClass.SiteClassId);
+            await FetchYieldRanges(model, grassSiteClass.SiteClassId);
         }
         else
         {
             var grassGrowthClass = grassGrowthClasses![model.GrassClassCounter];
             ViewBag.GrassClass = grassGrowthClass.GrassGrowthClassName;
-            await FetchYieldRangeForEngAndWales(model, grassGrowthClass.GrassGrowthClassId);
+            await FetchYieldRanges(model, grassGrowthClass.GrassGrowthClassId);
         }
     }
 
@@ -6291,12 +6291,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (isScotland)
                     {
                         ViewBag.GrassClass = grassSiteClasses![i + 1].SiteClass;
-                        await FetchYieldRangeForScotland(model, grassSiteClasses[i + 1].SiteClassId);
+                        await FetchYieldRanges(model, grassSiteClasses[i + 1].SiteClassId);
                     }
                     else
                     {
                         ViewBag.GrassClass = grassGrowthClasses![i + 1].GrassGrowthClassName;
-                        await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[i + 1].GrassGrowthClassId);
+                        await FetchYieldRanges(model, grassGrowthClasses[i + 1].GrassGrowthClassId);
                     }
                 }
                 break;
@@ -6365,7 +6365,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (grassSiteClasses != null)
             {
                 ViewBag.GrassClass = grassSiteClasses[model.GrassClassCounter].SiteClass;
-                await FetchYieldRangeForScotland(model, grassSiteClasses[model.GrassClassCounter].SiteClassId);
+                await FetchYieldRanges(model, grassSiteClasses[model.GrassClassCounter].SiteClassId);
             }
         }
         else
@@ -6374,7 +6374,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (grassGrowthClasses != null)
             {
                 ViewBag.GrassClass = grassGrowthClasses[model.GrassClassCounter].GrassGrowthClassName;
-                await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[model.GrassClassCounter].GrassGrowthClassId);
+                await FetchYieldRanges(model, grassGrowthClasses[model.GrassClassCounter].GrassGrowthClassId);
             }
         }
         return model;
@@ -6394,9 +6394,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    private async Task FetchYieldRangeForEngAndWales(PlanViewModel model, int grassGrowthClassesId)
+    private async Task FetchYieldRanges(PlanViewModel model, int grassGrowthClassesId)
     {
-        (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, _) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClassesId);
+        (List<YieldRangesResponse> yieldRangesEnglandAndWalesResponses, _) = await _cropLogic.FetchYieldRangesBySequenceIdAndGrassGrowthClassIdAsync(model.DefoliationSequenceId ?? 0, grassGrowthClassesId, model.FarmRB209CountryID??0);
         if (yieldRangesEnglandAndWalesResponses != null && yieldRangesEnglandAndWalesResponses.Count > 0)
         {
             ViewBag.YieldMin = yieldRangesEnglandAndWalesResponses[0];
@@ -6406,17 +6406,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     }
-    private async Task FetchYieldRangeForScotland(PlanViewModel model, int grassSiteClassesId)
-    {
-        (List<YieldRangesEnglandAndWalesResponse> yieldRangesResponses, _) = await _cropLogic.FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassId(model.DefoliationSequenceId ?? 0, grassSiteClassesId);
-        if (yieldRangesResponses != null && yieldRangesResponses.Count > 0)
-        {
-            ViewBag.YieldMin = yieldRangesResponses[0];
-            ViewBag.YieldMax = yieldRangesResponses[yieldRangesResponses.Count - 1];
-            ViewBag.YieldRanges = yieldRangesResponses.OrderByDescending(x => x.YieldId);
-        }
-    }
-
+    
 
     [HttpGet]
     public async Task<IActionResult> DryMatterYield(string q)
@@ -6474,7 +6464,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
 
                 SetCropToSession(model);
-                await FetchYieldRangeForEngAndWales(model, grassGrowthClasses[index].GrassGrowthClassId);
+                await FetchYieldRanges(model, grassGrowthClasses[index].GrassGrowthClassId);
             }
 
             return View(model);
@@ -6582,7 +6572,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task BindYieldRange(PlanViewModel model, int grassGrowthClassId)
     {
-        (List<YieldRangesEnglandAndWalesResponse> yieldRangesEnglandAndWalesResponses, _) = await _cropLogic.FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(model.DefoliationSequenceId ?? 0, grassGrowthClassId);
+        (List<YieldRangesResponse> yieldRangesEnglandAndWalesResponses, _) = await _cropLogic.FetchYieldRangesBySequenceIdAndGrassGrowthClassIdAsync(model.DefoliationSequenceId ?? 0, grassGrowthClassId, model.FarmRB209CountryID ?? 0);
 
         if (yieldRangesEnglandAndWalesResponses != null)
         {

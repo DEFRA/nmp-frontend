@@ -36,13 +36,12 @@ namespace NMP.Core.Interfaces
         Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsync(int swardTypeId, int swardManagementId);
         Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementsAsync();
         Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesServiceByCountryAsync(int countryId);
-        Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassIdAsync(int sequenceId, int grassGrowthClassId);
+        Task<(List<YieldRangesResponse>, Error)> FetchYieldRangesBySequenceIdAndGrassGrowthClassIdAsync(int sequenceId, int classId, int rb209CountryId);
         Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesByIdAsync(int defoliationId);
         Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementBySwardTypeIdAsync(int swardTypeId);
         Task<(SwardTypeResponse, Error)> FetchSwardTypeBySwardTypeIdAsync(int swardTypeId);
         Task<(SwardManagementResponse, Error)> FetchSwardManagementBySwardManagementIdAsync(int swardManagementId);
         Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId);
-        Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassId(int sequenceId, int grassSiteClassId);
 
     }
 }
