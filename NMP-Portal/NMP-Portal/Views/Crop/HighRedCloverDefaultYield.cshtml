@@ -1,0 +1,29 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ServiceResponses
+@model NMP.Commons.ViewModels.PlanViewModel
+@{
+
+    ViewData["Title"] = Resource.lblAnnualDryMatterYield;
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassClass;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "DefoliationSequence") asp-controller="Crop" asp-route-q="@Model.GrassClassEncryptedCounter">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="HighRedCloverDefaultYield" asp-controller="Crop" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    
+    @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
+    <h2>This Page is under development</h2>
+
+    <p class="govuk-body cancel-link">
+        @if (!Model.IsCheckAnswer)
+        {
+            <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+        }
+        else
+        {
+            <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+        }
+    </p>
+</form>

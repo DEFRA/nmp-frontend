@@ -73,12 +73,12 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SowingDateEncryptedCounter" value="@Model.SowingDateEncryptedCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldCurrentCounter" value="@Model.YieldCurrentCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.YieldEncryptedCounter" value="@Model.YieldEncryptedCounter" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassDistinctCount" value="@Model.GrassGrowthClassDistinctCount" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassCounter" value="@Model.GrassGrowthClassCounter" />
-    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassEncryptedCounter" value="@Model.GrassGrowthClassEncryptedCounter" />
-    @if (currentStep != (int)CropWizardSteps.GrassGrowthClass)
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassDistinctCount" value="@Model.GrassClassDistinctCount" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassCounter" value="@Model.GrassClassCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassEncryptedCounter" value="@Model.GrassClassEncryptedCounter" />
+    @if (currentStep != (int)CropWizardSteps.GrassClass)
     {
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassGrowthClassQuestion" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassQuestion" />
     }
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldCounter" value="@Model.DryMatterYieldCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.DryMatterYieldEncryptedCounter" value="@Model.DryMatterYieldEncryptedCounter" />
@@ -166,7 +166,7 @@
             {
                 <govuk-date-input class="govuk-visually-hidden" type="hidden" for="@Model.Crops[i].SowingDate" value="@Model.Crops[i].SowingDate"></govuk-date-input>
             }
-            @if (currentStep != (int)CropWizardSteps.Yield && currentStep != (int)CropWizardSteps.DryMatterYield && currentStep != (int)CropWizardSteps.GrassGrowthClass)
+            @if (currentStep != (int)CropWizardSteps.Yield && currentStep != (int)CropWizardSteps.DryMatterYield && currentStep != (int)CropWizardSteps.GrassClass)
             {
                 <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].Yield" value="@Model.Crops[i].Yield" />
             }

@@ -32,4 +32,5 @@ public interface ICropService
     Task<(List<Crop>, Error)> FetchCropPlanByFieldIdAndYearAsync(int fieldId,int year);
 
     Task<bool> FetchIsPerennialByCropTypeIdAsync(int cropTypeId);
+    Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClassAsync(List<int> fieldIds);
 }
