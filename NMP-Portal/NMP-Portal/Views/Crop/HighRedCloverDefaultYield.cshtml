@@ -1,0 +1,50 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ServiceResponses
+@model NMP.Commons.ViewModels.PlanViewModel
+@{
+
+    var EnterDifferentFiguresForEachField = (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField;
+    var EnterASingleFigureForAllTheseFields = (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+    var pageHeading = "";
+    if (Model.Crops != null && Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1)
+    {
+        pageHeading = Resource.lblAnnualDryMatterYield;
+    }
+    @if (Model.Crops != null && Model.Crops.Count == 1 || Model.GrassClassDistinctCount > 1)
+    {
+        pageHeading = string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName);
+    }
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{pageHeading} {Resource.lblHyphen} {title}";
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassClass;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "DefoliationSequence") asp-controller="Crop" asp-route-q="@Model.GrassClassEncryptedCounter">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="HighRedCloverDefaultYield" asp-controller="Crop" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @if (TempData["GrassGrowthClassError"] != null)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["GrassGrowthClassError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            </div>
+        </div>
+    }
+    @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
+    <h2>This Page is under development</h2>
+
+    <p class="govuk-body cancel-link">
+        @if (!Model.IsCheckAnswer)
+        {
+            <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+        }
+        else
+        {
+            <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+        }
+    </p>
+</form>

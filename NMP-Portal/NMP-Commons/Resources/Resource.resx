@@ -8532,7 +8532,7 @@ following crop year 2</value>
     <value>Undersown swards should be treated as an existing sward.</value>
   </data>
   <data name="lblLowNMoreThan150KgFertiliserN" xml:space="preserve">
-    <value>Low N : More than 150kg/ha/year fertiliser N user on average in last 2 years.</value>
+    <value>Low N : Less than 150kg/ha/year fertiliser N user on average in last 2 years.</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value />

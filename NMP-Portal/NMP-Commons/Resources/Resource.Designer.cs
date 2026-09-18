@@ -9904,7 +9904,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Low N : More than 150kg/ha/year fertiliser N user on average in last 2 years..
+        ///   Looks up a localized string similar to Low N : Less than 150kg/ha/year fertiliser N user on average in last 2 years..
         /// </summary>
         public static string lblLowNMoreThan150KgFertiliserN {
             get {

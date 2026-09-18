@@ -5990,7 +5990,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 else
                 {
-                    //return RedirectToAction(_grassGrowthClassActionName);
+                    return RedirectToAction("HighRedCloverDefaultYield");
                 }
             }
 
@@ -6216,6 +6216,26 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         SetCropToSession(model);
         return RedirectForGrassGrowthClass(model);
+    }
+
+    [HttpGet]
+    public IActionResult HighRedCloverDefaultYield(string? q)
+    {
+        _logger.LogTrace("Crop Controller : HighRedCloverDefaultYield() action called");
+
+        PlanViewModel model = GetCropFromSession();
+        try
+        {
+           SetCropToSession(model);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace(ex, "Crop Controller : Exception in GrassClass() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            TempData[_grassGrowthClassError] = ex.Message;
+            return RedirectToAction(_defoliationSequenceActionName);
+        }
+
+        return View(model);
     }
 
     private IActionResult RedirectForGrassGrowthClass(PlanViewModel model)
