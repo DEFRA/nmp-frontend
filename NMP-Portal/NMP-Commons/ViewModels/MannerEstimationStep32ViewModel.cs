@@ -38,5 +38,7 @@ namespace NMP.Commons.ViewModels
         public bool IsComingForAddNewApplication { get; set; } = false;
         public bool IsSoilDrainageEndDateChange { get; set; } = false;
         public bool IsTotalRainfallEnteredManual { get; set; } = false;
+        public string? EncryptedSoilTypeChangeCounter { get; set; }
+        public int? ApplicationNo { get; set; }
     }
 }

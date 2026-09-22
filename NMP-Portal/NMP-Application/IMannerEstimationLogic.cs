@@ -154,5 +154,9 @@ namespace NMP.Application
         Task<Error?> RemoveMannerFarms(string mannerFarmIds);
         Task<bool> FetchIsExistMannerFarmByOrgIdAndName(Guid organisationId, string farmName);
         Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry);
+        Task<(MannerEstimation?, Error?)> UpdateMannerEstimationByIdWithApplication(string sid);
+        Task<MannerEstimationViewModel> MapApplicationDetailToViewModel(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication);
+        Task BindConditionAffectingNutrientValues(MannerEstimationViewModel mannerEstimationViewModel);
+        void BindApplicationRateMethodIfSoilTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType);
     }
 }

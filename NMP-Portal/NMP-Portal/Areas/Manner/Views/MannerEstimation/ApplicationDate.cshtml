@@ -5,13 +5,21 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string pageHeader = string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName);
-    ViewData["Title"] = $"{pageHeader} {Resource.lblHyphen} {title}";
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication) ? "MannerEstimationResult" : "ManureType";
+    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber, Model.ManureTypeName, Model.FieldName, Model.ApplicationNo) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName);
+
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 
-@section BeforeContent {    
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
+@section BeforeContent {
+@if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) && Model.ApplicationNo == 1)
+    {
+        <govuk-back-link asp-action="SubSoil" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="BackRedirectActionForApplicationDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+     
+    }
 }
 
 <div class="govuk-grid-row">
@@ -29,7 +37,7 @@
             <govuk-date-input for="ApplicationDate">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @pageHeader
+                        @heading
                     </govuk-date-input-fieldset-legend>
                     <govuk-date-input-hint>
 

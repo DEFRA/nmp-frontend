@@ -2,7 +2,8 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep27ViewModel
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblWhatIsTheApplicationRate} {Resource.lblHyphen} {title}";
+    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblWhatIsTheApplicationRateForApplicationNumber, Model.ApplicationNo) : Resource.lblWhatIsTheApplicationRate;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
     {
@@ -15,8 +16,14 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
-
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    {
+        <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
+    }
 }
 
 <form asp-action="ManualApplicationRate" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
@@ -34,7 +41,7 @@
             <govuk-input for="@Model.ApplicationRate" type="number" inputmode="decimal"
                          pattern="^\d{1,10}(\.\d{1,2})?$" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                    @Resource.lblWhatIsTheApplicationRate
+                    @heading
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
