@@ -2235,12 +2235,12 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
                 MannerEstimationApplication mannerEstimationApplication =
          JsonConvert.DeserializeObject<MannerEstimationApplication>(
              JsonConvert.SerializeObject(mannerEstimationApplicationDetailsViewModel));
-                BindApplicationRateMethod(mannerEstimationViewModel, manureType, mannerEstimationApplication);
+                BindApplicationRateMethodValue(mannerEstimationViewModel, manureType, mannerEstimationApplication);
             }
         }
     }
 
-    private static void BindApplicationRateMethod(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType, MannerEstimationApplication mannerEstimationApplication)
+    private static void BindApplicationRateMethodValue(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType, MannerEstimationApplication mannerEstimationApplication)
     {
         if (mannerEstimationApplication.AreaSpread != null && mannerEstimationApplication.ManureQuantity != null)
         {

@@ -1779,12 +1779,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy() action");
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy({sid}) action");
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FieldToCopy() action");
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FieldToCopy({sid}) action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
@@ -1822,12 +1822,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy() action");
+                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy({model}) action");
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FieldToCopy() post action");
+                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FieldToCopy({model}) post action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
@@ -2797,7 +2797,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MannerEstimation  Controller : Exception in ApplicationRateMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogError(
+    ex,
+    "MannerEstimation Controller : Exception in ApplicationRateMethod({SessionId}) post action : {Message}, {StackTrace}",
+    sessionId,
+    ex.Message,
+ ex.StackTrace);
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
@@ -2921,7 +2926,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MannerEstimation  Controller : Exception in AreaQuantity() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogError(
+    ex,
+    "MannerEstimation Controller : Exception in AreaQuantity({SessionId}) post action : {Message}, {StackTrace}",
+    sessionId,
+    ex.Message,
+ ex.StackTrace);
                 ViewBag.Error = ex.Message;
                 return View(model);
             }
