@@ -23,7 +23,7 @@ public class PKBalanceService(ILogger<PKBalanceService> logger, IHttpContextAcce
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchPKBalanceByYearAndFieldIdAsyncAPI, year, fieldId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchPKBalanceByYearAndFieldIdAPI, year, fieldId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)

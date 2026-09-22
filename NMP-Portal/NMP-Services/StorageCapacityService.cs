@@ -21,7 +21,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(List<StorageTypeResponse>, Error)> FetchStorageTypes()
     {
         var (data, error) = await SendRequestAsync<List<StorageTypeResponse>>(
-            client => client.GetAsync(ApiurlHelper.FetchStorageTypesAsyncAPI),
+            client => client.GetAsync(ApiurlHelper.FetchStorageTypesAPI),
             wrapper =>
             ExtractList<StorageTypeResponse>(wrapper), _logger);
 
@@ -30,7 +30,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(List<StoreCapacityResponse>, Error)> FetchStoreCapacityByFarmId(int farmId)
     {
         var (data, error) = await SendRequestAsync(
-            client => client.GetAsync(string.Format(ApiurlHelper.FetchStoreCapacityAsyncAPI, farmId)),
+            client => client.GetAsync(string.Format(ApiurlHelper.FetchStoreCapacityAPI, farmId)),
             wrapper =>
             {
                 if (wrapper?.Data is JToken token)
@@ -44,7 +44,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(List<CommonResponse>, Error)> FetchMaterialStates()
     {
         var (data, error) = await SendRequestAsync<List<CommonResponse>>(
-            client => client.GetAsync(ApiurlHelper.FetchMaterialStatesListAsyncAPI),
+            client => client.GetAsync(ApiurlHelper.FetchMaterialStatesListAPI),
             wrapper =>
             {
                 if (wrapper?.Data?[_recordsKey] is JToken token)
@@ -61,7 +61,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(CommonResponse, Error)> FetchMaterialStateById(int id)
     {
         var (data, error) = await SendRequestAsync(
-            client => client.GetAsync(string.Format(ApiurlHelper.FetchMaterialStatesListByIDAsyncAPI, id)),
+            client => client.GetAsync(string.Format(ApiurlHelper.FetchMaterialStatesListByIDAPI, id)),
             wrapper => ExtractSingle<CommonResponse>(wrapper)
         , _logger);
 
@@ -71,7 +71,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(StorageTypeResponse, Error)> FetchStorageTypeById(int id)
     {
         var (data, error) = await SendRequestAsync(
-            client => client.GetAsync(string.Format(ApiurlHelper.FetchStorageTypeByIdAsyncAPI, id)),
+            client => client.GetAsync(string.Format(ApiurlHelper.FetchStorageTypeByIdAPI, id)),
             wrapper => ExtractSingle<StorageTypeResponse>(wrapper)
         , _logger);
 
@@ -81,7 +81,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(List<SolidManureTypeResponse>, Error)> FetchSolidManureType()
     {
         var (data, error) = await SendRequestAsync<List<SolidManureTypeResponse>>(
-            client => client.GetAsync(ApiurlHelper.FetchSolidManureTypeAsyncAPI),
+            client => client.GetAsync(ApiurlHelper.FetchSolidManureTypeAPI),
             wrapper =>
             {
                 if (wrapper?.Data?[_recordsKey] is JToken token)
@@ -99,7 +99,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     {
         var (data, error) = await SendRequestAsync<SolidManureTypeResponse>(
             client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchSolidManureTypeByIdAsyncAPI, id)
+                string.Format(ApiurlHelper.FetchSolidManureTypeByIdAPI, id)
             ),
             wrapper =>
             {
@@ -118,7 +118,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     public async Task<(List<BankSlopeAnglesResponse>, Error)> FetchBankSlopeAngles()
     {
         var (data, error) = await SendRequestAsync<List<BankSlopeAnglesResponse>>(
-            client => client.GetAsync(ApiurlHelper.FetchBankSlopeAnglesAsyncAPI),
+            client => client.GetAsync(ApiurlHelper.FetchBankSlopeAnglesAPI),
             wrapper =>
             {
                 if (wrapper?.Data?[_recordsKey] is JToken token)
@@ -137,7 +137,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     {
         var (data, error) = await SendRequestAsync<BankSlopeAnglesResponse>(
             client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchBankSlopeAngleByIdAsyncAPI, id)
+                string.Format(ApiurlHelper.FetchBankSlopeAngleByIdAPI, id)
             ),
             wrapper =>
             {
@@ -159,7 +159,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
 
         var (data, error) = await SendRequestAsync(
             client => client.PostAsync(
-                ApiurlHelper.AddStoreCapacityAsyncAPI,
+                ApiurlHelper.AddStoreCapacityAPI,
                 new StringContent(jsonData, Encoding.UTF8, "application/json")
             ),
             wrapper => ExtractFromObject<StoreCapacity>(wrapper)
@@ -172,7 +172,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     {
         var (data, error) = await SendRequestAsync(
             client => client.GetAsync(
-                string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAsyncAPI, farmId, storeName, ID ?? 0)
+                string.Format(ApiurlHelper.IsStoreNameExistByFarmIdYearAndNameAPI, farmId, storeName, ID ?? 0)
             ),
             wrapper => ExtractBoolean(wrapper, "exists")
         , _logger);
@@ -185,7 +185,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     {
         var (data, error) = await SendRequestAsync<StoreCapacity>(
             client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchStoreCapacityByIdAsyncAPI, id)
+                string.Format(ApiurlHelper.FetchStoreCapacityByIdAPI, id)
             ),
             wrapper =>
             {
@@ -205,7 +205,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
     {
         var (data, error) = await SendRequestAsync<List<StoreCapacityResponse>>(
             client => client.PostAsync(
-                ApiurlHelper.CopyStoreManureCapacityAsyncAPI,
+                ApiurlHelper.CopyStoreManureCapacityAPI,
                 new StringContent(copyStorageManureCapacityData, Encoding.UTF8, "application/json")
             ),
             wrapper =>
@@ -240,7 +240,7 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
 
         var (data, error) = await SendRequestAsync(
             client => client.PutAsync(
-                ApiurlHelper.UpdateStoreCapacityAsyncAPI,
+                ApiurlHelper.UpdateStoreCapacityAPI,
                 new StringContent(jsonData, Encoding.UTF8, "application/json")
             ),
             wrapper => ExtractFromObject<StoreCapacity>(wrapper)

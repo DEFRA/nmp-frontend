@@ -180,7 +180,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to telephone 0845 646 2469.
+        ///   Looks up a localized string similar to telephone 0333 240 8058.
         /// </summary>
         public static string ContentGettingHelp3 {
             get {
@@ -2147,6 +2147,15 @@ namespace NMP.Commons.Resources {
         public static string lblAmmoniumN {
             get {
                 return ResourceManager.GetString("lblAmmoniumN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ammonium-N.
+        /// </summary>
+        public static string lblAmmoniumNForErrorMsg {
+            get {
+                return ResourceManager.GetString("lblAmmoniumNForErrorMsg", resourceCulture);
             }
         }
         
@@ -9859,6 +9868,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to magnesium (MgO).
+        /// </summary>
+        public static string lblMagnesiumForErrorMsg {
+            get {
+                return ResourceManager.GetString("lblMagnesiumForErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Magnesium (Mg) index.
         /// </summary>
         public static string lblMagnesiumIndex {
@@ -10552,6 +10570,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The maximum number of applications has been reached..
+        /// </summary>
+        public static string lblMaximumNoOfApplicationIsReached {
+            get {
+                return ResourceManager.GetString("lblMaximumNoOfApplicationIsReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to May.
         /// </summary>
         public static string lblMay {
@@ -10957,7 +10984,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to nitrate.
+        ///   Looks up a localized string similar to nitrate-N.
         /// </summary>
         public static string lblNitrateForErrorMsg {
             get {
@@ -17981,7 +18008,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uric acid.
+        ///   Looks up a localized string similar to uric acid (N).
         /// </summary>
         public static string lblUricAcidForError {
             get {
@@ -19179,7 +19206,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}.
+        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}?.
         /// </summary>
         public static string lblWhatIsTheOccupancyForThis {
             get {

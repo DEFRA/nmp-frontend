@@ -22,7 +22,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="UpdateNitrogenPriceQuestion" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="UpdateNitrogenPriceQuestion" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -33,7 +33,7 @@
                 <govuk-error-summary-item href="#">@TempData["NitrogenPriceError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="UpdateNitrogenPrice" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="UpdateNitrogenPrice" method="post" asp-controller="MannerEstimation" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <h2 class="govuk-heading-m">@string.Format(Resource.lblUpdateNutrientPrices, Resource.lblNitrogenLowercase)</h2>
             @if (isProductPrice)

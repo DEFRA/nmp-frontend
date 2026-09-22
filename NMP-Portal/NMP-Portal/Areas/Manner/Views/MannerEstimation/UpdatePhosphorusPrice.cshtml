@@ -23,7 +23,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="UpdatePhosphorusPriceQuestion" asp-controller="MannerEstimation" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="UpdatePhosphorusPriceQuestion" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -34,7 +34,7 @@
                 <govuk-error-summary-item href="#">@TempData["PhosphorusPriceError"]</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="UpdatePhosphorusPrice" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="UpdatePhosphorusPrice" method="post" asp-controller="MannerEstimation" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <h2 class="govuk-heading-m">@string.Format(Resource.lblUpdateNutrientPrices, Resource.lblPhosphateP2O5Lowercase)</h2>
             @if (Model.UpdatePhosphorusPriceQuestion == (int)NMP.Commons.Enums.UpdateNutrientPriceQuestion.UpdateByProductPrice)

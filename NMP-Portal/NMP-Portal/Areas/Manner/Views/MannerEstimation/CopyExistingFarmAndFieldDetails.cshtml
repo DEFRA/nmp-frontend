@@ -11,12 +11,12 @@
     
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="Name" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="Name" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="CopyExistingFarmAndFieldDetails" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="CopyExistingFarmAndFieldDetails" method="post" asp-controller="MannerEstimation" asp-route-sessionId="@ViewBag.SessionId" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-radios class="govuk-radios--inline" for="@Model.IsCopyExistingFarmAndFieldDetails">
                 <govuk-radios-fieldset>

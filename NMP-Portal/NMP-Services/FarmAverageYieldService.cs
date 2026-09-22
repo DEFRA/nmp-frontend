@@ -27,7 +27,7 @@ namespace NMP.Services;
             Error? error = null;
             try
             {
-                string url = string.Format(ApiurlHelper.FetchFarmAverageYieldByFarmIdAndHarvestYearAsyncAPI, farmId, harvestYear);
+                string url = string.Format(ApiurlHelper.FetchFarmAverageYieldByFarmIdAndHarvestYearAPI, farmId, harvestYear);
                 HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(url);
 
@@ -68,7 +68,7 @@ namespace NMP.Services;
         {
             string jsonData = JsonConvert.SerializeObject(farmAverageYieldData);
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.AddFarmAverageYieldsAsyncAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddFarmAverageYieldsAPI, new StringContent(jsonData, Encoding.UTF8, "application/json"));
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);

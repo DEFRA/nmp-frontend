@@ -10,12 +10,12 @@
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="CopyEstimate" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="CopyEstimate" method="post" asp-controller="MannerEstimation" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <govuk-radios for="@Model.IsCopyEstimate">
                 <govuk-radios-fieldset>

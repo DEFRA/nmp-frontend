@@ -26,7 +26,7 @@ namespace NMP.Services;
             Error? error = null;
             try
             {
-                string url = string.Format(ApiurlHelper.FetchFarmsNVZByFarmIdAsyncAPI, farmId);
+                string url = string.Format(ApiurlHelper.FetchFarmsNVZByFarmIdAPI, farmId);
                 HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(url);
 

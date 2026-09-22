@@ -31,7 +31,7 @@ namespace NMP.Portal.Controllers
             if (ModelState.IsValid && model.DoNotShowAboutThisService)
             {
                 // Save to Database
-                await _aboutServiceLogic.UpdateShowAboutServiceAsync(model.DoNotShowAboutThisService);                                                  
+                await _aboutServiceLogic.UpdateShowAboutAsync(model.DoNotShowAboutThisService);                                                  
             }
 
             return RedirectToAction("FarmList", "Farm");

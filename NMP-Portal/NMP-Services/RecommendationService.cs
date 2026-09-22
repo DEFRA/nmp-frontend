@@ -27,7 +27,7 @@ namespace NMP.Services
             Error? error = null;
             try
             {
-                string url = string.Format(ApiurlHelper.FetchRecommendationByManagementPeriodIdAsyncAPI, managementPeriodID);
+                string url = string.Format(ApiurlHelper.FetchRecommendationByManagementPeriodIdAPI, managementPeriodID);
                 HttpClient httpClient = await GetNMPAPIClient();
                 var response = await httpClient.GetAsync(url);
 

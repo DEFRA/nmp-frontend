@@ -28,11 +28,11 @@ else
                 </govuk-notification-banner>
             }
             <h1 class="govuk-heading-l">@Resource.lblNutrientSupplyEstimatesFromOrganicMaterials</h1>
-            <a class="govuk-button" asp-action="Name"  asp-controller="MannerEstimation" asp-route-s="@ViewBag.IsNewFarm"> @Resource.lblCreateANutrientSupplyEstimateForANewFarm</a>
+            <a class="govuk-button" asp-action="Name" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-s="@ViewBag.IsNewFarm"> @Resource.lblCreateANutrientSupplyEstimateForANewFarm</a>
 
             @if (ViewBag.MannerFarmList != null && ViewBag.MannerFarmList.Count > 0)
             {
-                  <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveMannerFarm" asp-controller="MannerEstimation">@Resource.lblRemoveAFarm</a></p>
+                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveMannerFarm" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblRemoveAFarm</a></p>
             }
             <h2 class="govuk-heading-m">@Resource.lblYourFarms</h2>
 
@@ -52,7 +52,7 @@ else
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@mannerFarm.Name</td>
                                 <td class="govuk-table__cell">@(mannerFarm.LastUpdatedDate != null ? mannerFarm.LastUpdatedDate.ToString("dd MMMM yyyy") : string.Empty)</td>
-                                <td class="govuk-table__cell"><a asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@mannerFarm.EncryptedId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, mannerFarm.Name)))">@Resource.lblViewChangeOrCreateNewEstimate</a></td>
+                                <td class="govuk-table__cell"><a asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@mannerFarm.EncryptedId" asp-route-sid="@ViewBag.SessionId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, mannerFarm.Name)))">@Resource.lblViewChangeOrCreateNewEstimate</a></td>
                             </tr>
                         }
                     }

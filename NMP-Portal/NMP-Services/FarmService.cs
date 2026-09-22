@@ -141,7 +141,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
     public async Task<decimal> FetchRainfallAverageAsync(string firstHalfPostcode)
     {
         decimal rainfallAverage = 0;
-        string url = string.Format(ApiurlHelper.FetchMannerRainfallAverageAsyncAPI, firstHalfPostcode);
+        string url = string.Format(ApiurlHelper.FetchMannerRainfallAverageAPI, firstHalfPostcode);
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
         string result = await response.Content.ReadAsStringAsync();
@@ -176,7 +176,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.PutAsync(ApiurlHelper.UpdateFarmAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
+        var response = await httpClient.PutAsync(ApiurlHelper.UpdateFarmAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -223,7 +223,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         Error? error = new Error();
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(ApiurlHelper.FetchCountryListAsyncAPI);
+        var response = await httpClient.GetAsync(ApiurlHelper.FetchCountryListAPI);
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -339,32 +339,14 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (excessWinterRainfallOption, error);
     }
-    public async Task<List<NvzActionProgramResponse>> FetchNvzActionProgramsByCountryIdAsync(int countryId)
-    {
-        List<NvzActionProgramResponse> nvzActionProgramResponses = new List<NvzActionProgramResponse>();
-        HttpClient httpClient = await GetNMPAPIClient();
-        var requestUrl = string.Format(ApiurlHelper.FetchNvzActionProgramsByCountryIdAsyncAPI, countryId);
-        var response = await httpClient.GetAsync(requestUrl);
-
-        string result = await response.Content.ReadAsStringAsync();
-        ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode)
-        {
-            if (responseWrapper != null && responseWrapper.Data != null)
-            {
-                nvzActionProgramResponses.AddRange(responseWrapper?.Data.ToObject<List<NvzActionProgramResponse>>());
-            }
-        }
-
-        return nvzActionProgramResponses;
-    }
+    
     public async Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId)
     {
         FarmAndFarmsNvzResponse? farmsAndNvz = null;
         Error? error = null;
         try
         {
-            string url = string.Format(ApiurlHelper.FetchFarmAndFarmsNvzByFarmIdAsyncAPI, farmId);
+            string url = string.Format(ApiurlHelper.FetchFarmAndFarmsNvzByFarmIdAPI, farmId);
             HttpClient httpClient = await GetNMPAPIClient();
             var response = await httpClient.GetAsync(url);
 

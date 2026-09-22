@@ -19,11 +19,11 @@ public class AboutServiceLogic(ILogger<AboutServiceLogic> logger, IUserExtension
         return userExtension != null && userExtension.DoNotShowAboutThisService;
     }
 
-    public async Task<bool> UpdateShowAboutServiceAsync(bool doNotShowAboutThisService)
+    public async Task<bool> UpdateShowAboutAsync(bool doNotShowAboutThisService)
     {
-        _logger.LogTrace("AboutServiceLogic : UpdateShowAboutServiceAsync() called");
+        _logger.LogTrace("AboutServiceLogic : UpdateShowAboutAsync() called");
         AboutService aboutService = new() { DoNotShowAboutThisService = doNotShowAboutThisService };
-        UserExtension? userExtension = await _userExtensionService.UpdateShowAboutServiceAsync(aboutService);
+        UserExtension? userExtension = await _userExtensionService.UpdateShowAboutAsync(aboutService);
         return userExtension != null && userExtension.DoNotShowAboutThisService;
     }
 }

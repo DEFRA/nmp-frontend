@@ -117,27 +117,6 @@
                             }
 
                             <govuk-tabs-item id=@tabId label=@tablabel>
-                                <p class="govuk-heading-m">
-                                    @tablabel
-                                </p>
-                                <p class="govuk-heading-s">
-                                    @Resource.lblPrivateBetaDisclaimer
-                                </p>
-                                <p class="govuk-body">
-                                    @Resource.lblPrivateBetaDisclaimerContentOne
-                                </p>
-                                <ul class="govuk-list govuk-list--bullet">
-                                    <li>
-                                        @Resource.lblPrivateBetaDisclaimerContentTwo
-                                    </li>
-                                    @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
-                                    {
-                                        <li>
-                                            @Resource.lblPrivateBetaDisclaimerContentThree
-                                        </li>
-                                    }
-                                    <hr class="seperator_five">
-                                </ul>
                                 @if (Model.ManagementPeriods != null && Model.Recommendations != null && Model.ManagementPeriods.Count > 0
                                                 && Model.Recommendations.Count > 0)
                                 {

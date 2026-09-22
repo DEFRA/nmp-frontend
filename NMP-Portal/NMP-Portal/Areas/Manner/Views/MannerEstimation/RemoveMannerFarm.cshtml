@@ -5,7 +5,7 @@
     ViewData["Title"] = Resource.lblWhichMannerFarmWouldYouLikeToRemove;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="MannerFarmList" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 @if (TempData["Error"] != null)
@@ -18,7 +18,7 @@ else
 {
     <div class="govuk-grid-row">
         <div id="all-plans-table" class="govuk-grid-column-full">
-            <form asp-action="RemoveMannerFarm" asp-controller="MannerEstimation" method="post" autocomplete="off">
+            <form asp-action="RemoveMannerFarm" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
                 @Html.AntiForgeryToken()
                 @if (TempData["MannerFarmRemoveError"] != null)
                 {

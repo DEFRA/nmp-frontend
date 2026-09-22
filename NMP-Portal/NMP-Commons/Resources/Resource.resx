@@ -1444,7 +1444,7 @@
     <value>SO3</value>
   </data>
   <data name="lblUricAcidForError" xml:space="preserve">
-    <value>Uric acid</value>
+    <value>uric acid (N)</value>
   </data>
   <data name="lbl15Octto31Jan" xml:space="preserve">
     <value>15 {0} to 31 {1}</value>
@@ -1637,7 +1637,7 @@
 kg per cubic metre</value>
   </data>
   <data name="lblNitrateForErrorMsg" xml:space="preserve">
-    <value>nitrate</value>
+    <value>nitrate-N</value>
   </data>
   <data name="lblPercentage" xml:space="preserve">
     <value>%</value>
@@ -7028,7 +7028,7 @@ Regulations warnings for {0}</value>
     <value>Typical values for this livestock type</value>
   </data>
   <data name="lblWhatIsTheOccupancyForThis" xml:space="preserve">
-    <value>What is the occupancy for this {0} type in {1}</value>
+    <value>What is the occupancy for this {0} type in {1}?</value>
   </data>
   <data name="lblWhatIsTheNitrogenNStandardForThis" xml:space="preserve">
     <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
@@ -7532,7 +7532,7 @@ Regulations</value>
 </value>
   </data>
   <data name="ContentGettingHelp3" xml:space="preserve">
-    <value>telephone 0845 646 2469</value>
+    <value>telephone 0333 240 8058</value>
   </data>
   <data name="lblReleaseScheduleContentTwo" xml:space="preserve">
     <value>Currently available for England and Wales only. Features for Scotland will be   
@@ -8494,5 +8494,14 @@ following crop year 2</value>
   </data>
   <data name="lblOrganicMatterPercentage" xml:space="preserve">
     <value>Organic matter (%)</value>
+  </data>
+  <data name="lblMaximumNoOfApplicationIsReached" xml:space="preserve">
+    <value>The maximum number of applications has been reached.</value>
+  </data>
+  <data name="lblAmmoniumNForErrorMsg" xml:space="preserve">
+    <value>ammonium-N</value>
+  </data>
+  <data name="lblMagnesiumForErrorMsg" xml:space="preserve">
+    <value>magnesium (MgO)</value>
   </data>
 </root>

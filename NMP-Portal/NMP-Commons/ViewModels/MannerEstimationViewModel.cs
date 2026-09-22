@@ -54,6 +54,7 @@ namespace NMP.Commons.ViewModels
             MannerEstimationStep41 = new MannerEstimationStep41ViewModel();
             MannerEstimationStep42 = new MannerEstimationStep42ViewModel();
         }
+        public string SessionId { get; set; } = Guid.NewGuid().ToString();
         public bool IsCheckAnswer { get; set; } = false;
         public bool? IsCopyEstimate { get; set; }
         public int? CountryId { get; set; }

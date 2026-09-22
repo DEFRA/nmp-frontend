@@ -31,12 +31,12 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="@controller" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimationId : Model.EncryptedMannerFarmId)" asp-route-r="@(backAction == "MannerFarmList" ? ViewBag.IsBack:"")">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="@controller" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimationId : Model.EncryptedMannerFarmId)" asp-route-r="@(backAction == "MannerFarmList" ? ViewBag.IsBack : "")">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="Name" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="Name" method="post" asp-controller="MannerEstimation" asp-route-sessionId="@ViewBag.SessionId" autocomplete="off">
             @Html.AntiForgeryToken()
             <govuk-input for="@Model.Name">
                 <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatWouldYouLikeTocallThisEstimationReference</govuk-input-label>

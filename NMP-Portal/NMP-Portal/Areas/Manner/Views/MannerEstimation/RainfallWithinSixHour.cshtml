@@ -19,7 +19,7 @@
                 <govuk-error-summary-item href="#passport-issued-day">@ViewBag.Error</govuk-error-summary-item>
             </govuk-error-summary>
         }
-        <form asp-action="RainfallWithinSixHour" asp-controller="MannerEstimation" method="post" autocomplete="off">
+        <form asp-action="RainfallWithinSixHour" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <govuk-radios for="@Model.RainfallWithinSixHoursId">
                 <govuk-radios-fieldset>

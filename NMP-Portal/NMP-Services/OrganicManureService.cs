@@ -22,12 +22,12 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
     private readonly ILogger<OrganicManureService> _logger = logger;
     private const string _applicationJson = "application/json";
     private const string _dateFormat = "yyyy-MM-dd";
-    public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYearServiceAsync(int farmId, int harvestYear)
+    public async Task<(List<ManureCropTypeResponse>, Error?)> FetchCropTypeByFarmIdAndHarvestYearAsync(int farmId, int harvestYear)
     {
         List<ManureCropTypeResponse> cropTypeList = new List<ManureCropTypeResponse>();
         Error? error = null;
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeByFarmIdAndHarvestYearAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(farmId.ToString())));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeByFarmIdAndHarvestYearAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(farmId.ToString())));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -46,7 +46,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (cropTypeList, error);
     }
-    public async Task<(List<CommonResponse>, Error?)> FetchFieldByFarmIdAndHarvestYearAndCropGroupNameServiceAsync(int harvestYear, int farmId, string? cropGroupName)
+    public async Task<(List<CommonResponse>, Error?)> FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsync(int harvestYear, int farmId, string? cropGroupName)
     {
         List<CommonResponse> fieldResponses = new List<CommonResponse>();
         Error? error = null;
@@ -54,11 +54,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string url = string.Empty;
         if (!string.IsNullOrWhiteSpace(cropGroupName))
         {
-            url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(cropGroupName), HttpUtility.UrlEncode(farmId.ToString()));
+            url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAndCropGroupNameAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(cropGroupName), HttpUtility.UrlEncode(farmId.ToString()));
         }
         else
         {
-            url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(farmId.ToString()));
+            url = string.Format(ApiurlHelper.FetchFieldByFarmIdAndHarvestYearAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(farmId.ToString()));
         }
         var response = await httpClient.GetAsync(url);
 
@@ -79,7 +79,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (fieldResponses, error);
     }
-    public async Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameServiceAsync(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
+    public async Task<(List<int>, Error?)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsync(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {
         List<int> managementIds = new List<int>();
         Error? error = null;
@@ -87,11 +87,11 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string url = string.Empty;
         if (!string.IsNullOrWhiteSpace(cropGroupName))
         {
-            url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(cropGroupName.ToString()), HttpUtility.UrlEncode(fieldIds.ToString()), HttpUtility.UrlEncode(cropOrder.ToString()));
+            url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(cropGroupName.ToString()), HttpUtility.UrlEncode(fieldIds.ToString()), HttpUtility.UrlEncode(cropOrder.ToString()));
         }
         else
         {
-            url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAsyncAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(fieldIds.ToString()));
+            url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAPI, HttpUtility.UrlEncode(harvestYear.ToString()), HttpUtility.UrlEncode(fieldIds.ToString()));
         }
         HttpClient httpClient = await GetNMPAPIClient();
         var response = await httpClient.GetAsync(url);
@@ -113,14 +113,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (managementIds, error);
     }
-    public async Task<(bool, Error?)> AddOrganicManuresServiceAsync(string organicManureData)
+    public async Task<(bool, Error?)> AddOrganicManuresAsync(string organicManureData)
     {
         bool success = false;
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.AddOrganicManuresAsyncAPI, new StringContent(organicManureData, Encoding.UTF8, _applicationJson));
+            var response = await httpClient.PostAsync(ApiurlHelper.AddOrganicManuresAPI, new StringContent(organicManureData, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
@@ -148,7 +148,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (success, error);
     }
-    public async Task<(RainTypeResponse, Error)> FetchRainTypeDefaultServiceAsync()
+    public async Task<(RainTypeResponse, Error)> FetchRainTypeDefaultAsync()
     {
         RainTypeResponse rainType = new RainTypeResponse();
         Error? error = null;
@@ -180,14 +180,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (rainType, error);
     }
-    public async Task<int> FetchRainfallByPostcodeAndDateRangeServiceAsync(string jsonString)
+    public async Task<int> FetchRainfallByPostcodeAndDateRangeAsync(string jsonString)
     {
         int totalRainfall = 0;
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerRainfallByPostcodeAndDateRangeAsyncAPI, new StringContent(jsonString, Encoding.UTF8, _applicationJson));
+            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerRainfallByPostcodeAndDateRangeAPI, new StringContent(jsonString, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -212,7 +212,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return totalRainfall;
     }
-    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedDataDefaultServiceAsync()
+    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedDataDefaultAsync()
     {
         WindspeedResponse? windSpeed = null;
         Error? error = null;
@@ -245,7 +245,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (windSpeed, error);
     }
 
-    public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDateServiceAsync(string applicationDate)
+    public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeDefaultByApplicationDateAsync(string applicationDate)
     {
         MoistureTypeResponse moisterType = new MoistureTypeResponse();
         Error? error = null;
@@ -278,14 +278,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (moisterType, error);
     }
 
-    public async Task<(List<RainTypeResponse>, Error)> FetchRainTypeListServiceAsync()
+    public async Task<(List<RainTypeResponse>, Error)> FetchRainTypeListAsync()
     {
         List<RainTypeResponse> rainType = new List<RainTypeResponse>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerRainTypesAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerRainTypesAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -312,14 +312,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (rainType, error);
     }
-    public async Task<(RainTypeResponse, Error)> FetchRainTypeByIdServiceAsync(int rainTypeId)
+    public async Task<(RainTypeResponse, Error)> FetchRainTypeByIdAsync(int rainTypeId)
     {
         RainTypeResponse rainType = new RainTypeResponse();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerRainTypeByIdAsyncAPI, HttpUtility.UrlEncode(rainTypeId.ToString())));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerRainTypeByIdAPI, HttpUtility.UrlEncode(rainTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -345,14 +345,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (rainType, error);
     }
 
-    public async Task<(List<WindspeedResponse>, Error?)> FetchWindspeedListServiceAsync()
+    public async Task<(List<WindspeedResponse>, Error?)> FetchWindspeedListAsync()
     {
         List<WindspeedResponse> windspeeds = new List<WindspeedResponse>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerWindspeedsAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerWindspeedsAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -378,14 +378,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (windspeeds, error);
     }
-    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedByIdServiceAsync(int windspeedId)
+    public async Task<(WindspeedResponse?, Error?)> FetchWindspeedByIdAsync(int windspeedId)
     {
         WindspeedResponse? windspeedResponse = null;
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerWindspeedByIdAsyncAPI, HttpUtility.UrlEncode(windspeedId.ToString())));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerWindspeedByIdAPI, HttpUtility.UrlEncode(windspeedId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -410,14 +410,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (windspeedResponse, error);
     }
-    public async Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeListServiceAsync()
+    public async Task<(List<MoistureTypeResponse>, Error)> FetchMoisterTypeListAsync()
     {
         List<MoistureTypeResponse> moisterTypes = new List<MoistureTypeResponse>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerMoistureTypesAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchMannerMoistureTypesAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -443,14 +443,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (moisterTypes, error);
     }
-    public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeByIdServiceAsync(int moisterTypeId)
+    public async Task<(MoistureTypeResponse, Error)> FetchMoisterTypeByIdAsync(int moisterTypeId)
     {
         MoistureTypeResponse moistureTypeResponse = new MoistureTypeResponse();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerMoistureTypeByIdAsyncAPI, HttpUtility.UrlEncode(moisterTypeId.ToString())));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerMoistureTypeByIdAPI, HttpUtility.UrlEncode(moisterTypeId.ToString())));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -476,14 +476,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (moistureTypeResponse, error);
     }
 
-    public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDateServiceAsync(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnManIdAndAppDateAsync(int managementId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
         string fromdate = startDate.ToString(_dateFormat);
         string toDate = endDate.ToString(_dateFormat);
 
-        string url = ApiurlHelper.FetchTotalNByManagementIdAndAppDateAsyncAPI;
+        string url = ApiurlHelper.FetchTotalNByManagementIdAndAppDateAPI;
 
         if (organicManureId.HasValue)
         {
@@ -493,7 +493,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         (totalN, error) = await GetTotalN(url);
         return (totalN, error);
     }
-    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDateServiceAsync(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdAndAppDateAsync(int cropId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -501,7 +501,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string toDate = endDate.ToString(_dateFormat);
         try
         {
-            string url = ApiurlHelper.FetchTotalNByCropIdAndAppDateAsyncAPI;
+            string url = ApiurlHelper.FetchTotalNByCropIdAndAppDateAPI;
             if (organicManureId.HasValue)
             {
                 url += $"&organicManureID={organicManureId.Value}";
@@ -521,14 +521,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYearServiceAsync(int fieldId, int year, bool confirm)
+    public async Task<(CropTypeResponse, Error)> FetchCropTypeByFieldIdAndHarvestYearAsync(int fieldId, int year, bool confirm)
     {
         CropTypeResponse cropType = new CropTypeResponse();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeByFieldIdAndHarvestYearAsyncAPI, fieldId, year, confirm));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeByFieldIdAndHarvestYearAPI, fieldId, year, confirm));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -553,14 +553,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (cropType, error);
     }
-    public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeIdServiceAsync(int cropTypeId)
+    public async Task<(CropTypeLinkingResponse, Error)> FetchCropTypeLinkingByCropTypeIdAsync(int cropTypeId)
     {
         CropTypeLinkingResponse cropTypeLinking = new CropTypeLinkingResponse();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingByCropTypeIdAsyncAPI, cropTypeId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchCropTypeLinkingByCropTypeIdAPI, cropTypeId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -585,14 +585,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (cropTypeLinking, error);
     }
-    public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureServiceAsync(int fieldId, int year, bool confirm)
+    public async Task<(List<int>, Error?)> FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsync(int fieldId, int year, bool confirm)
     {
         List<int> manureTypeIds = new List<int>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAsyncAPI, fieldId, year, confirm));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchManureTypsIdsByFieldIdYearAndConfirmFromOrgManureAPI, fieldId, year, confirm));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -622,14 +622,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (manureTypeIds, error);
     }
 
-    public async Task<(List<int>, Error)> FetchManureTypsIdsByManIdFromOrgManureServiceAsync(int managementId)
+    public async Task<(List<int>, Error)> FetchManureTypsIdsByManIdFromOrgManureAsync(int managementId)
     {
         List<int> manureTypeIds = new List<int>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchManureTypeIdsByManIdFromOrgManureAsyncAPI, managementId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchManureTypeIdsByManIdFromOrgManureAPI, managementId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -655,13 +655,13 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (manureTypeIds, error);
     }
 
-    public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliserServiceAsync(int managementId, bool confirm, int? fertiliserId, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsync(int managementId, bool confirm, int? fertiliserId, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
         try
         {
-            string url = ApiurlHelper.FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAsyncAPI;
+            string url = ApiurlHelper.FetchTotalNBasedOnManIdFromOrgManureAndFertiliserAPI;
             if (fertiliserId.HasValue)
             {
                 url += $"&fertiliserID={fertiliserId.Value}";
@@ -684,13 +684,13 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (totalN, error);
     }
-    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdFromOrgManureAndFertiliserServiceAsync(int cropId, bool confirm, int? fertiliserId, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedOnCropIdFromOrgManureAndFertiliserAsync(int cropId, bool confirm, int? fertiliserId, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
         try
         {
-            string url = string.Format(ApiurlHelper.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliserAsyncAPI, cropId, confirm);
+            string url = string.Format(ApiurlHelper.FetchTotalNBasedOnCropIdFromOrgManureAndFertiliserAPI, cropId, confirm);
             if (fertiliserId.HasValue)
                 url += $"&fertiliserID={fertiliserId.Value}";
 
@@ -710,7 +710,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRangeServiceAsync(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId, bool isSlurryOnly)
+    public async Task<(bool, Error)> FetchOrganicManureExistanceByDateRangeAsync(int managementId, string dateFrom, string dateTo, bool isConfirm, int? organicManureId, bool isSlurryOnly)
     {
         Error? error = null;
         bool isOrganicManureExist = false;
@@ -718,7 +718,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            string requestUrl = ApiurlHelper.FetchOrganicManureExistanceByDateRangeAsyncAPI;
+            string requestUrl = ApiurlHelper.FetchOrganicManureExistanceByDateRangeAPI;
 
             if (organicManureId.HasValue)
             {
@@ -753,14 +753,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (isOrganicManureExist, error);
     }
 
-    public async Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptakeServiceAsync(string jsonString)
+    public async Task<(NitrogenUptakeResponse, Error)> FetchAutumnCropNitrogenUptakeAsync(string jsonString)
     {
         Error? error = null;
         NitrogenUptakeResponse? nitrogenUptakeResponse = new NitrogenUptakeResponse();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerAutumnCropNitrogenUptakeAsyncAPI, new StringContent(jsonString, Encoding.UTF8, _applicationJson));
+            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerAutumnCropNitrogenUptakeAPI, new StringContent(jsonString, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -785,14 +785,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (nitrogenUptakeResponse, error);
     }
-    public async Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmIdServiceAsync(int farmId)
+    public async Task<(List<FarmManureTypeResponse>, Error)> FetchFarmManureTypeByFarmIdAsync(int farmId)
     {
         List<FarmManureTypeResponse> farmManureTypes = new List<FarmManureTypeResponse>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFarmManureTypesByFarmIdAsyncAPI, farmId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchFarmManureTypesByFarmIdAPI, farmId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -818,14 +818,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (farmManureTypes, error);
     }
-    public async Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrientServiceAsync(string jsonData)
+    public async Task<(MannerCalculateNutrientResponse, Error)> FetchMannerCalculateNutrientAsync(string jsonData)
     {
         MannerCalculateNutrientResponse mannerCalculateNutrientResponse = new MannerCalculateNutrientResponse();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerCalculateNutrientAsyncAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
+            var response = await httpClient.PostAsync(ApiurlHelper.FetchMannerCalculateNutrientAPI, new StringContent(jsonData, Encoding.UTF8, _applicationJson));
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -853,14 +853,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (mannerCalculateNutrientResponse, error);
     }
 
-    public async Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeIdServiceAsync(int soilTypeId)
+    public async Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeIdAsync(int soilTypeId)
     {
         SoilTypeSoilTextureResponse? soilTypeSoilTexture = new SoilTypeSoilTextureResponse();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilTypeSoilTextureBySoilTypeIdAsyncAPI, soilTypeId));
+            var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchSoilTypeSoilTextureBySoilTypeIdAPI, soilTypeId));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -886,7 +886,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (soilTypeSoilTexture, error);
     }
 
-    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAndIsGreenCompostServiceAsync(int fieldId, DateTime startDate, DateTime endDate, bool confirm, bool isGreenFoodCompost, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAndIsGreenCompostAsync(int fieldId, DateTime startDate, DateTime endDate, bool confirm, bool isGreenFoodCompost, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -894,7 +894,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string toDate = endDate.ToString(_dateFormat);
         try
         {
-            string url = ApiurlHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAsyncAPI;
+            string url = ApiurlHelper.FetchTotalNBasedByManIdAppDateAndIsGreenCompostAPI;
             if (organicManureId.HasValue)
             {
                 url += $"&organicManureID={organicManureId.Value}";
@@ -913,7 +913,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateServiceAsync(int fieldId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
+    public async Task<(decimal, Error)> FetchTotalNBasedByFieldIdAppDateAsync(int fieldId, DateTime startDate, DateTime endDate, bool confirm, int? organicManureId)
     {
         Error? error = null;
         decimal totalN = 0;
@@ -921,7 +921,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         string toDate = endDate.ToString(_dateFormat);
         try
         {
-            string url = ApiurlHelper.FetchTotalNBasedOnFieldIdAndAppDateAsyncAPI;
+            string url = ApiurlHelper.FetchTotalNBasedOnFieldIdAndAppDateAPI;
             if (organicManureId.HasValue)
             {
                 url += $"&organicManureID={organicManureId.Value}";
@@ -941,7 +941,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(OrganicManureDataViewModel, Error)> FetchOrganicManureByIdServiceAsync(int id)
+    public async Task<(OrganicManureDataViewModel, Error)> FetchOrganicManureByIdAsync(int id)
     {
         OrganicManureDataViewModel organicManure = new OrganicManureDataViewModel();
         Error? error = null;
@@ -973,7 +973,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (organicManure, error);
     }
-    public async Task<(List<OrganicManure>, Error)> FetchOrganicManureByFarmIdAndYearServiceAsync(int farmId, int year)
+    public async Task<(List<OrganicManure>, Error)> FetchOrganicManureByFarmIdAndYearAsync(int farmId, int year)
     {
         List<OrganicManure> organicManures = new List<OrganicManure>();
         Error? error = null;
@@ -1006,7 +1006,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (organicManures, error);
     }
 
-    public async Task<(string, Error)> DeleteOrganicManureByIdServiceAsync(string orgManureIds)
+    public async Task<(string, Error)> DeleteOrganicManureByIdAsync(string orgManureIds)
     {
         Error? error = null;
         string message = string.Empty;
@@ -1020,7 +1020,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
                 Content = content
             };
             var response = await httpClient.SendAsync(requestMessage);
-            response.EnsureSuccessStatusCode();
+            
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -1046,7 +1046,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (message, error);
     }
-    public async Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeIdServiceAsync(int farmId, int ManureTypeId, string ManureTypeName)
+    public async Task<(bool, Error)> FetchFarmManureTypeCheckByFarmIdAndManureTypeIdAsync(int farmId, int ManureTypeId, string ManureTypeName)
     {
         bool isFarmManureTypeExist = false;
         Error? error = new Error();
@@ -1076,7 +1076,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
 
         return (isFarmManureTypeExist, error);
     }
-    public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndManureTypeServiceAsync(int fertiliserId, int farmId, int harvestYear)
+    public async Task<(List<FertiliserAndOrganicManureUpdateResponse>, Error)> FetchFieldWithSameDateAndManureTypeAsync(int fertiliserId, int farmId, int harvestYear)
     {
         Error? error = new Error();
         List<FertiliserAndOrganicManureUpdateResponse> organicResponse = new List<FertiliserAndOrganicManureUpdateResponse>();
@@ -1107,14 +1107,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (organicResponse, error);
     }
 
-    public async Task<(List<OrganicManure>, Error)> UpdateOrganicManureServiceAsync(string organicManureData)
+    public async Task<(List<OrganicManure>, Error)> UpdateOrganicManureAsync(string organicManureData)
     {
         Error? error = null;
         List<OrganicManure> organicManures = new List<OrganicManure>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.PutAsync(ApiurlHelper.UpdateOrganicManureAsyncAPI, new StringContent(organicManureData, Encoding.UTF8, _applicationJson));
+            var response = await httpClient.PutAsync(ApiurlHelper.UpdateOrganicManureAPI, new StringContent(organicManureData, Encoding.UTF8, _applicationJson));
 
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -1142,7 +1142,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (organicManures, error);
     }
 
-    public async Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodIDServiceAsync(int managementPeriodID)
+    public async Task<(decimal?, Error?)> FetchAvailableNByManagementPeriodIDAsync(int managementPeriodID)
     {
         Error? error = null;
         decimal? totalN = null;
@@ -1163,7 +1163,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeByIdServiceAsync(int id)
+    public async Task<(FarmManureTypeResponse, Error?)> FetchFarmManureTypeByIdAsync(int id)
     {
         FarmManureTypeResponse? farmManureType = new FarmManureTypeResponse();
         Error? error = null;
@@ -1192,7 +1192,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (farmManureType, error);
     }
-    public async Task<(string?, Error?)> FetchOrganicManureClosedPeriodServiceAsync(OrganicClosedPeriodRequest organicClosedPeriodRequest)
+    public async Task<(string?, Error?)> FetchOrganicManureClosedPeriodAsync(OrganicClosedPeriodRequest organicClosedPeriodRequest)
     {
         string? closedPeriod = null;
         Error? error = null;
@@ -1202,12 +1202,12 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
             string url = string.Empty;
             if (organicClosedPeriodRequest.SowingDate != null)
             {
-                url = string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodAsyncAPI, organicClosedPeriodRequest.SoilTypeId, organicClosedPeriodRequest.FieldType, organicClosedPeriodRequest.HarvestYear, organicClosedPeriodRequest.SowingDate, organicClosedPeriodRequest.CountryId, organicClosedPeriodRequest.CropGroupId, organicClosedPeriodRequest.CropTypeId, organicClosedPeriodRequest.IsPerennial);
+                url = string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodAPI, organicClosedPeriodRequest.SoilTypeId, organicClosedPeriodRequest.FieldType, organicClosedPeriodRequest.HarvestYear, organicClosedPeriodRequest.SowingDate, organicClosedPeriodRequest.CountryId, organicClosedPeriodRequest.CropGroupId, organicClosedPeriodRequest.CropTypeId, organicClosedPeriodRequest.IsPerennial);
 
             }
             else
             {
-                url = string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodNoSowingDateAsyncAPI, organicClosedPeriodRequest.SoilTypeId, organicClosedPeriodRequest.FieldType, organicClosedPeriodRequest.HarvestYear, organicClosedPeriodRequest.CountryId, organicClosedPeriodRequest.CropGroupId, organicClosedPeriodRequest.CropTypeId, organicClosedPeriodRequest.IsPerennial);
+                url = string.Format(ApiurlHelper.FetchOrganicManureClosedPeriodNoSowingDateAPI, organicClosedPeriodRequest.SoilTypeId, organicClosedPeriodRequest.FieldType, organicClosedPeriodRequest.HarvestYear, organicClosedPeriodRequest.CountryId, organicClosedPeriodRequest.CropGroupId, organicClosedPeriodRequest.CropTypeId, organicClosedPeriodRequest.IsPerennial);
             }
                 var response = await httpClient.GetAsync(url);
 
@@ -1233,13 +1233,13 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (closedPeriod, error);
     }
 
-    public async Task<(bool, Error)> FetchLivestockManureExistanceByDateRangeServiceAsync(int cropId, string dateFrom, string dateTo, int? organicManureId)
+    public async Task<(bool, Error)> FetchLivestockManureExistanceByDateRangeAsync(int cropId, string dateFrom, string dateTo, int? organicManureId)
     {
         Error? error = null;
         bool isLivestockcManureExist = false;
         try
         {
-            string requestUrl = ApiurlHelper.FetchLivestockManureExistanceByDateRangeAsyncAPI;
+            string requestUrl = ApiurlHelper.FetchLivestockManureExistanceByDateRangeAPI;
             if (organicManureId.HasValue)
             {
                 requestUrl += $"&organicManureID={organicManureId.Value}";
@@ -1258,7 +1258,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (isLivestockcManureExist, error);
     }
 
-    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeServiceAsync(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry)
+    public async Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeAsync(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry)
     {
         Error? error = null;
         decimal? totalRate = (decimal?)null;
@@ -1266,7 +1266,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            string requestUrl = ApiurlHelper.FetchTotalApplicationRateByDateRangeAsyncAPI;
+            string requestUrl = ApiurlHelper.FetchTotalApplicationRateByDateRangeAPI;
 
             if (organicManureId.HasValue)
             {
@@ -1299,13 +1299,13 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalRate, error);
     }
 
-    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRangeServiceAsync(int fieldId, string dateFrom, string dateTo, int? organicManureId)
+    public async Task<(bool, Error)> CheckGreenCompostExistanceByDateRangeAsync(int fieldId, string dateFrom, string dateTo, int? organicManureId)
     {
         Error? error = null;
         bool isLivestockcManureExist = false;
         try
         {
-            string requestUrl = ApiurlHelper.CheckGreenCompostExistanceByDateRangeAsyncAPI;
+            string requestUrl = ApiurlHelper.CheckGreenCompostExistanceByDateRangeAPI;
             if (organicManureId.HasValue)
             {
                 requestUrl += $"&organicManureID={organicManureId.Value}";
@@ -1368,7 +1368,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (totalN, error);
     }
 
-    public async Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroupServiceAsync(int cropTypeId, int soilTypeId, int residueGroup)
+    public async Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroupAsync(int cropTypeId, int soilTypeId, int residueGroup)
     {
         Error? error = null;
         int? scotlandNmax = 0;
@@ -1376,7 +1376,7 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         {
             HttpClient httpClient = await GetNMPAPIClient();
 
-            string requestUrl = string.Format(ApiurlHelper.FetchScotlandNMaxValueByCropTypeIdSoilTypeIdResidueAsyncAPI, cropTypeId, soilTypeId, residueGroup);
+            string requestUrl = string.Format(ApiurlHelper.FetchScotlandNMaxValueByCropTypeIdSoilTypeIdResidueAPI, cropTypeId, soilTypeId, residueGroup);
 
 
             var response = await httpClient.GetAsync(requestUrl);
@@ -1401,14 +1401,14 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (scotlandNmax, error);
     }
-    public async Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinkingServiceAsync()
+    public async Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinkingAsync()
     {
         List<CropTypeLinkingResponse> cropTypeLinkingList = new List<CropTypeLinkingResponse>();
         Error? error = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var response = await httpClient.GetAsync(ApiurlHelper.FetchCropTypeLinkingsAsyncAPI);
+            var response = await httpClient.GetAsync(ApiurlHelper.FetchCropTypeLinkingsAPI);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)

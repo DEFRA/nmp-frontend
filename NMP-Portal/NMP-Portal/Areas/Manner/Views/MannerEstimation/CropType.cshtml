@@ -10,12 +10,12 @@
     var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsCropGroupChange) ? "MannerEstimationResult" : "CropGroup";
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="CropType" method="post" asp-controller="MannerEstimation" autocomplete="off">
+        <form asp-action="CropType" method="post" asp-controller="MannerEstimation" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <govuk-radios for="@Model.CropTypeId">
                 <govuk-radios-fieldset>
@@ -23,7 +23,24 @@
                         @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblSelectOneOptionTheseOptionsComeFromAHDB
+                        <govuk-radios-hint>
+                            <p>
+                                @{
+                                    string cropNameHint = "";
+                                    if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Potatoes)
+                                    {
+                                        cropNameHint = Resource.lblPotatoGroups;
+                                    }
+                                    else
+                                    {
+                                        cropNameHint = Resource.lblCroupTypes;
+                                    }
+                                }
+
+                                @(Model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland ?
+                                                                            Resource.lblSelectOneOptionTheseAreTheCropTypesFromTheSRUCTechnicalNotes : string.Format(Resource.lblTheseOptionsComeFromRB209, cropNameHint))
+                            </p>
+                        </govuk-radios-hint>
                     </govuk-radios-hint>
 
                         @foreach (var item in ViewBag.CropTypeList)

@@ -451,5 +451,10 @@ namespace NMP.Commons.Helpers
         {
             return manureTypeId == (int)NMP.Commons.Enums.ManureTypes.PoultryManure;
         }
+        public static bool IsOtherManureType(int? manureId)
+        {
+            return manureId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
+                || manureId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
+        }
     }
 }
