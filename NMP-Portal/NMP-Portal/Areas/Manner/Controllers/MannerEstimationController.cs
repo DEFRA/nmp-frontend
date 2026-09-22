@@ -4313,7 +4313,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     mannerEstimationViewModel.MannerEstimationStep32.WindspeedId = model.WindspeedId;
                     mannerEstimationViewModel.MannerEstimationStep32.MoistureTypeId = model.MoistureTypeId;
                     mannerEstimationViewModel.MannerEstimationStep32.RainfallWithinSixHoursId = model.RainfallWithinSixHoursId;
-                    return await RedirectForConditionPageIfSoilTypeChange(mannerEstimationViewModel.MannerEstimationStep32, sessionId);
+                    return await RedirectForConditionPageIfSoilTypeChange(mannerEstimationViewModel.MannerEstimationStep32.EncryptedSoilTypeChangeCounter, sessionId);
                 }
                 (bool isSuccess, IActionResult? action) = await RedirectForConditionPage(sessionId, mannerEstimationViewModel);
                 if (!isSuccess && action != null)
@@ -4393,9 +4393,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return (flowControl: true, value: null);
         }
         [HttpGet("RedirectForConditionPageIfSoilTypeChange/{sid?}")]
-        public async Task<IActionResult> RedirectForConditionPageIfSoilTypeChange(MannerEstimationStep32ViewModel? mannerEstimationStep32ViewModel, string sid)
+        public async Task<IActionResult> RedirectForConditionPageIfSoilTypeChange(string encryptedSoilTypeChangeCounter, string sid)
         {
-            if (!string.IsNullOrWhiteSpace(mannerEstimationStep32ViewModel?.EncryptedSoilTypeChangeCounter))
+            if (!string.IsNullOrWhiteSpace(encryptedSoilTypeChangeCounter))
             {
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 if (mannerEstimationViewModel != null)
