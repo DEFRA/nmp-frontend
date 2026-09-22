@@ -1244,22 +1244,7 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
         MannerFarm mannerFarm = new MannerFarm();
-        MannerEstimation mannerEstimate = new MannerEstimation
-        {
-            MannerFarmID = mannerEstimationViewModel.MannerFarmId,
-            Name = mannerEstimationViewModel.MannerEstimationStep31.Name,
-            FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName,
-            IsWithinNVZ = mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ,
-            TopSoilID = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId,
-            SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
-            CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
-            MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
-            SowingDate = Enum.IsDefined(
-                typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes),
-                mannerEstimationViewModel.MannerEstimationStep9.CropTypeId)
-                    ? mannerEstimationViewModel.MannerEstimationStep20.SowingDate
-                    : null,
-        };
+        MannerEstimation mannerEstimate =  BindMannerEstimateData(mannerEstimationViewModel);
 
         if (mannerEstimationId != null)
         {
@@ -1299,6 +1284,26 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         return (mannerEstimationViewModel, mannerEstimate, mannerFarm);
     }
 
+    private static MannerEstimation BindMannerEstimateData(MannerEstimationViewModel mannerEstimationViewModel)
+    {
+        MannerEstimation mannerEstimate = new MannerEstimation
+        {
+            MannerFarmID = mannerEstimationViewModel.MannerFarmId,
+            Name = mannerEstimationViewModel.MannerEstimationStep31.Name,
+            FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName,
+            IsWithinNVZ = mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ,
+            TopSoilID = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId,
+            SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
+            CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
+            MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
+            SowingDate = Enum.IsDefined(
+                typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes),
+                mannerEstimationViewModel.MannerEstimationStep9.CropTypeId)
+                    ? mannerEstimationViewModel.MannerEstimationStep20.SowingDate
+                    : null,
+        };
+        return mannerEstimate;
+    }
 
     private async Task<int?> BindMannerCropTypeId(MannerEstimationStep20ViewModel model, int cropTypeId)
     {
@@ -2163,28 +2168,13 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
     public async Task<(MannerEstimation?, Error?)> UpdateMannerEstimationByIdWithApplication(string sid)
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
-        MannerEstimation mannerEstimate = new MannerEstimation
-        {
-            MannerFarmID = mannerEstimationViewModel.MannerFarmId,
-            Name = mannerEstimationViewModel.MannerEstimationStep31.Name,
-            FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName,
-            IsWithinNVZ = mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ,
-            TopSoilID = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId,
-            SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
-            CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
-            MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
-            SowingDate = Enum.IsDefined(
-               typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes),
-               mannerEstimationViewModel.MannerEstimationStep9.CropTypeId)
-                   ? mannerEstimationViewModel.MannerEstimationStep20.SowingDate
-                   : null,
-        };
+
+        MannerEstimation mannerEstimate = BindMannerEstimateData(mannerEstimationViewModel);
         if (mannerEstimationViewModel.MannerEstimationId != null)
         {
             (MannerEstimation? mannerEstimateData, _) = await FetchMannerEstimateById(mannerEstimationViewModel.MannerEstimationId.Value);
             if (mannerEstimateData != null)
-            {
-                (MannerFarmViewModel? mannerFarmData, _) = await FetchMannerFarmById(mannerEstimate.MannerFarmID.Value);
+            {                
                 mannerEstimate.ID = mannerEstimationViewModel.MannerEstimationId;
 
                 mannerEstimate.NitrogenPrice = mannerEstimateData.NitrogenPrice;
@@ -2245,27 +2235,31 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
                 MannerEstimationApplication mannerEstimationApplication =
          JsonConvert.DeserializeObject<MannerEstimationApplication>(
              JsonConvert.SerializeObject(mannerEstimationApplicationDetailsViewModel));
-                if (mannerEstimationApplication.AreaSpread != null && mannerEstimationApplication.ManureQuantity != null)
-                {
-                    mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
-                }
-                else
-                {
-                    int? defaultRate = mannerEstimationViewModel.MannerEstimationStep26.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
-
-                    bool isDefaultRate = mannerEstimationApplication.ApplicationRate == defaultRate;
-                    if (isDefaultRate)
-                    {
-                        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
-                    }
-                    else
-                    {
-                        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
-                    }
-                }
+                BindApplicationRateMethod(mannerEstimationViewModel, manureType, mannerEstimationApplication);
             }
         }
     }
 
+    private static void BindApplicationRateMethod(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType, MannerEstimationApplication mannerEstimationApplication)
+    {
+        if (mannerEstimationApplication.AreaSpread != null && mannerEstimationApplication.ManureQuantity != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
+        }
+        else
+        {
+            int? defaultRate = mannerEstimationViewModel.MannerEstimationStep26.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
+
+            bool isDefaultRate = mannerEstimationApplication.ApplicationRate == defaultRate;
+            if (isDefaultRate)
+            {
+                mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
+            }
+            else
+            {
+                mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
+            }
+        }
+    }
 }
 

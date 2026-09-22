@@ -783,21 +783,17 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
                 ApiurlHelper.UpdateMannerEstimateByIdWithApplicationsAPI,
                 new StringContent(mannerEstimationData, Encoding.UTF8, _contentType));
 
-            string result = await response.Content.ReadAsStringAsync();
-
-            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            var result = await response.Content.ReadAsStringAsync();
+            var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
 
             if (response.IsSuccessStatusCode)
             {
-                if (responseWrapper?.Data is not null)
-                {
-                    mannerEstimation = responseWrapper.Data?.MannerEstimation.ToObject<MannerEstimation>();
-                }
+                mannerEstimation = responseWrapper?.Data?.MannerEstimation?
+                    .ToObject<MannerEstimation>();
             }
             else
             {
-                error = new Error();
-                error = _logger.ExtractError(responseWrapper, error) ?? new Error();
+                error = _logger.ExtractError(responseWrapper, new Error()) ?? new Error();
             }
         }
         catch (HttpRequestException hre)
