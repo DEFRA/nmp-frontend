@@ -251,7 +251,7 @@
 
     @*  @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
     { *@
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@(Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Model.GrassGrowthClassEncryptedCounter : Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@(Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Model.GrassClassEncryptedCounter : Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
     @* }
     else
     {
@@ -933,9 +933,9 @@
                     }
 
 
-                    @if (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
+                    @if ((Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass) || (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithLowClover))
                     {
-                        @if (Model.GrassGrowthClassQuestion == null)
+                        @if (Model.GrassClassQuestion == null)
                         {
                             @foreach (var crop in Model.Crops)
                             {
@@ -947,7 +947,7 @@
                                         @(crop.Yield == null ? Resource.lblNotSet : (string.Format("{0:N0} {1}", Convert.ToInt32(crop.Yield), Resource.lblTonnesPerHectare)))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="GrassClass" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -955,19 +955,19 @@
                         else
                         {
                             string ggcQuestion = "";
-                            <govuk-summary-list-row class=@((!Model.GrassGrowthClassQuestion.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row class=@((!Model.GrassClassQuestion.HasValue) ? "govuk-error-message" : "")>
                                 <govuk-summary-list-row-key>
                                     @Resource.lblDoYouWantToEnterTheSameTargetYieldForTheseFields
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
 
-                                    @if (Model.GrassGrowthClassQuestion == null)
+                                    @if (Model.GrassClassQuestion == null)
                                     {
                                         ggcQuestion = Resource.lblNotSet;
                                     }
                                     else
                                     {
-                                        if (Model.GrassGrowthClassQuestion == 1)
+                                        if (Model.GrassClassQuestion == 1)
                                         {
                                             ggcQuestion = Resource.lblYesEnterTheSameTargetYieldForTheseFields;
                                         }
@@ -979,7 +979,7 @@
                                     @ggcQuestion
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="GrassGrowthClass" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="GrassClass" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
@@ -987,7 +987,7 @@
                             {
                                 <govuk-summary-list-row class=@((!crop.Yield.HasValue) ? "govuk-error-message" : "")>
                                     <govuk-summary-list-row-key>
-                                        @(Model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, crop.FieldName, crop.Year))
+                                        @(Model.GrassClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, crop.FieldName, crop.Year))
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
                                         @(crop.Yield == null ? Resource.lblNotSet : (string.Concat(Convert.ToInt32(crop.Yield).ToString(), " ", Resource.lblTonnesPerHectare)))
@@ -997,13 +997,13 @@
                                         <govuk-summary-list-row-action asp-action="DryMatterYield" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">
                                             @Resource.lblChange
                                             <span class="govuk-visually-hidden">
-                                                @(Model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, crop.FieldName, crop.Year))
+                                                @(Model.GrassClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, crop.FieldName, crop.Year))
                                             </span>
                                         </govuk-summary-list-row-action>
 
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
-                                @if (Model.GrassGrowthClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
+                                @if (Model.GrassClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                                 {
                                     break;
                                 }

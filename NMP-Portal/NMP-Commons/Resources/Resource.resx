@@ -8528,6 +8528,21 @@ following crop year 2</value>
   <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
     <value>What is the occupancy for this livestock type in {0}</value>
   </data>
+  <data name="lblUndersownSwardsShouldBeTreated" xml:space="preserve">
+    <value>Undersown swards should be treated as an existing sward.</value>
+  </data>
+  <data name="lblLowNMoreThan150KgFertiliserN" xml:space="preserve">
+    <value>Low N : Less than 150kg/ha/year fertiliser N user on average in last 2 years.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblHighNMoreThan150KgFertiliserN" xml:space="preserve">
+    <value>High N : More than 150kg/ha/year fertiliser N user on average in last 2 years, or High Clover.</value>
+  </data>
+  <data name="lblSiteClass" xml:space="preserve">
+    <value>Site class</value>
+  </data>
   <data name="lblHowWouldYouLikeToEnterTheApplicationRateForYourManureForApplicationNumber" xml:space="preserve">
     <value>How would you like to enter the application rate for your {0} for application {1}?</value>
   </data>

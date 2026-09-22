@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -7707,6 +7707,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to High N : More than 150kg/ha/year fertiliser N user on average in last 2 years, or High Clover..
+        /// </summary>
+        public static string lblHighNMoreThan150KgFertiliserN {
+            get {
+                return ResourceManager.GetString("lblHighNMoreThan150KgFertiliserN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HighNOrganicManureMaxRate.
         /// </summary>
         public static string lblHighNOrganicManureMaxRate {
@@ -9936,6 +9945,15 @@ namespace NMP.Commons.Resources {
         public static string lblLow {
             get {
                 return ResourceManager.GetString("lblLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low N : Less than 150kg/ha/year fertiliser N user on average in last 2 years..
+        /// </summary>
+        public static string lblLowNMoreThan150KgFertiliserN {
+            get {
+                return ResourceManager.GetString("lblLowNMoreThan150KgFertiliserN", resourceCulture);
             }
         }
         
@@ -15018,6 +15036,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Site class.
+        /// </summary>
+        public static string lblSiteClass {
+            get {
+                return ResourceManager.GetString("lblSiteClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NMPT service under maintenance.
         /// </summary>
         public static string lblSiteUnderMaintenance {
@@ -17707,6 +17734,15 @@ namespace NMP.Commons.Resources {
         public static string lblTypicalValuesForThisLivestockType {
             get {
                 return ResourceManager.GetString("lblTypicalValuesForThisLivestockType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undersown swards should be treated as an existing sward..
+        /// </summary>
+        public static string lblUndersownSwardsShouldBeTreated {
+            get {
+                return ResourceManager.GetString("lblUndersownSwardsShouldBeTreated", resourceCulture);
             }
         }
         
@@ -25324,6 +25360,15 @@ namespace NMP.Commons.Resources {
         public static string SSOIdCookieName {
             get {
                 return ResourceManager.GetString("SSOIdCookieName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         

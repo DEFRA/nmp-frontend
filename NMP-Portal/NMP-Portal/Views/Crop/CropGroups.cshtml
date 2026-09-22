@@ -5,8 +5,6 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{Resource.lblCropGroupForPlan} {Resource.lblHyphen} {title}";
 
-    int grassGroupId = (int)NMP.Commons.Enums.CropGroup.Grass;
-
     int index = Model.HarvestYear.FindIndex(h => h.Year == Model.Year);
 
     var action = "";
@@ -92,14 +90,7 @@
                     {
                         @foreach (var item in ViewBag.CropGroupList)
                         {
-                            @if (item.CropGroupId == grassGroupId && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                            {
-                                <govuk-radios-item value="@item.CropGroupId" disabled="true">@item.CropGroupName</govuk-radios-item>
-                            }
-                            else
-                            {
-                                <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
-                            }
+                            <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
                         }
                     }
 
