@@ -514,7 +514,7 @@
                             @mannerEstimation.TopSoil
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="Topsoil" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@ViewBag.EncryptedEstimateId">
+                            <a class="govuk-link" asp-action="BindSoilTypeChangeData" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-IsTopSoil="@ViewBag.IsTopSoil" asp-route-q="@ViewBag.EncryptedEstimateId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblTopsoil)</span>
                             </a>
@@ -527,7 +527,7 @@
                             @mannerEstimation.SubSoil
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="Subsoil" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@ViewBag.EncryptedEstimateId">
+                            <a class="govuk-link" asp-action="BindSoilTypeChangeData" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-IsTopSoil="@ViewBag.IsSubSoil" asp-route-q="@ViewBag.EncryptedEstimateId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblSubSoil)</span>
                             </a>

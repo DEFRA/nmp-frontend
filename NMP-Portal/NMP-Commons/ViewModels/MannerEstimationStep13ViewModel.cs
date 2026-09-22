@@ -16,14 +16,14 @@ namespace NMP.Commons.ViewModels
         public int? TopSoilId { get; set; }
         public int? SubSoilId { get; set; }
         public DateTime? SowingDate { get; set; }
-        public int? ManureGroupId { get; set; }
-
-        
+        public int? ManureGroupId { get; set; }        
 
         public int? MannerEstimationApplicationsId { get; set; }
         public bool IsApplicationDateChange { get; set; } = false;
         public bool IsManureTypeChange { get; set; } = false;
         public bool IsComingForAddNewApplication { get; set; } = false;
+        public string? EncryptedSoilTypeChangeCounter { get; set; }
+        public int? ApplicationNo { get; set; }
 
     }
 }

@@ -2,9 +2,21 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep32ViewModel
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeFor, Model.CropTypeName, Model.FieldName)} {Resource.lblHyphen} {title}";
-    
- 
+    // Resource.lblWhatIsTheAutumnCropNitrogenUptakeForApplication
+    string heading = string.Empty;
+    string headingSuffix = string.Empty;
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    {
+        headingSuffix = string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication, Model.CropTypeName, Model.FieldName, Model.ApplicationNo);
+        heading = string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeForApplication, Model.CropTypeName, Model.FieldName,Model.ApplicationNo);
+    }
+    else
+    {
+        headingSuffix = string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeForSuffix, Model.CropTypeName, Model.FieldName);
+        heading = string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeFor, Model.CropTypeName, Model.FieldName);
+    }
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
+     
 }
 @section BeforeContent {
     <partial name="_BackLinkForConditionPages" model="Model" />
@@ -17,7 +29,7 @@
          
             <govuk-input for="@Model.AutumnCropNitrogenUptake" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                    @string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeForSuffix, Model.CropTypeName, Model.FieldName)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>@Resource.lblQuestionMark
+                    @headingSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>@Resource.lblQuestionMark
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
             </govuk-input>

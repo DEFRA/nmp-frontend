@@ -2,7 +2,16 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep32ViewModel
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblEnterRainfallAmount} {Resource.lblHyphen} {title}";
+    string heading = string.Empty;
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    {
+        heading = string.Format(Resource.lblEnterRainfallAmountForApplicationNo, Model.ApplicationNo);
+    }
+    else
+    {
+        heading = Resource.lblWhatWasTheTotalRainfallSinceApplicationSuffix;
+    }
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     <govuk-back-link asp-action="EffectiveRainfall" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
@@ -13,7 +22,7 @@
             @Html.AntiForgeryToken()
             <govuk-input for=@Model.TotalRainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
-                    @Resource.lblWhatWasTheTotalRainfallSinceApplicationSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblmm)</span>@Resource.lblQuestionMark
+                    @heading<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblmm)</span>@Resource.lblQuestionMark
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblmm</govuk-input-suffix>
             </govuk-input>

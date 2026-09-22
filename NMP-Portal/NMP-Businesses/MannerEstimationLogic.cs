@@ -186,7 +186,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep4.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep4.Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
-        if (mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall == 0|| mannerEstimationViewModel.MannerEstimationStep3.IsPostCodeChange)
+        if (mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall == 0 || mannerEstimationViewModel.MannerEstimationStep3.IsPostCodeChange)
         {
             mannerEstimationViewModel.MannerEstimationStep4.IsPostCodeChange = false;
             mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = await FetchAnnualRainfallAverageAsync(mannerEstimationViewModel.MannerEstimationStep4);
@@ -293,7 +293,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep9.IsCropGroupChange = mannerEstimationViewModel.MannerEstimationStep8.IsCropGroupChange;
         mannerEstimationViewModel.MannerEstimationStep9.CropGroupId = mannerEstimationViewModel.MannerEstimationStep8.CropGroupId;
         mannerEstimationViewModel.MannerEstimationStep9.CropGroupName = mannerEstimationViewModel.MannerEstimationStep8.CropGroupName;
-        
+
         return mannerEstimationViewModel.MannerEstimationStep9;
     }
 
@@ -398,7 +398,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public MannerEstimationStep13ViewModel GetMannerEstimationStep13()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-
+       
         mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerApplicationsId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep13.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
@@ -420,6 +420,18 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep13.MannerEstimationId = mannerEstimationViewModel.MannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep13.MannerEstimationApplicationsId = mannerEstimationViewModel.MannerEstimationApplicationId;
         mannerEstimationViewModel.MannerEstimationStep13.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep13.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            
+            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep13.ApplicationNo = application.ApplicationNo;
+            }
+        }
         return mannerEstimationViewModel.MannerEstimationStep13;
     }
 
@@ -431,6 +443,19 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = null;
             mannerEstimationStep13.IsApplicationDateChange = true;
             mannerEstimationViewModel.MannerEstimationStep32.IsTotalRainfallEnteredManual = false;
+            SetMannerEstimationStep32(mannerEstimationViewModel.MannerEstimationStep32);
+        }
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+
+            if (application != null&& mannerEstimationStep13.ApplicationDate.HasValue)
+            {
+                application.ApplicationDate = mannerEstimationStep13.ApplicationDate.Value;
+
+            }
         }
         mannerEstimationViewModel.MannerEstimationStep13 = mannerEstimationStep13;
         SetMannerEstimationToSession(mannerEstimationViewModel);
@@ -504,6 +529,17 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep18.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep18.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep18.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep18.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+
+            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep18.ApplicationNo = application.ApplicationNo;
+            }
+        }
         return mannerEstimationViewModel.MannerEstimationStep18;
     }
     public MannerEstimationStep18ViewModel SetMannerEstimationStep18(MannerEstimationStep18ViewModel mannerEstimationStep18)
@@ -518,6 +554,18 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep19.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep19.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep19.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            mannerEstimationViewModel.MannerEstimationStep19.IsTopSoilChange = mannerEstimationViewModel.IsTopSoilChange;
+
+            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep19.ApplicationNo = application.ApplicationNo;
+            }
+        }
         return mannerEstimationViewModel.MannerEstimationStep19;
     }
     public MannerEstimationStep19ViewModel SetMannerEstimationStep19(MannerEstimationStep19ViewModel mannerEstimationStep19)
@@ -675,7 +723,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
                 mannerEstimationViewModel.MannerEstimationStep25.NH4N = manureType.NH4N;
                 mannerEstimationViewModel.MannerEstimationStep25.NO3N = manureType.NO3N;
                 mannerEstimationViewModel.MannerEstimationStep25.UricAcid = manureType.Uric;
-               
+
             }
         }
         return mannerEstimationViewModel.MannerEstimationStep25;
@@ -695,6 +743,17 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<MannerEstimationStep26ViewModel> GetMannerEstimationStep26()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep26.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+
+            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep26.ApplicationNo = application.ApplicationNo;
+            }
+        }
         mannerEstimationViewModel.MannerEstimationStep26.ManureTypeName = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName;
         mannerEstimationViewModel.MannerEstimationStep26.ManureTypeId = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId;
 
@@ -707,6 +766,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+            BindApplicationRateMethodIfSoilTypeChange(mannerEstimationViewModel, manureType);
         }
         mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CountryId ?? 0 : mannerEstimationViewModel.MannerEstimationStep2.CountryID;
@@ -732,14 +792,48 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
         }
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
+    mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
 
+            if (application != null)
+            {
+                if (mannerEstimationStep26.ApplicationRateMethod != null)
+                {
+                    if(mannerEstimationStep26.ApplicationRateMethod != (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
+                    {
+                        application.AreaSpread = null;
+                        application.ManureQuantity = null;
+                    }
+                    application.ApplicationRateMethod = mannerEstimationStep26.ApplicationRateMethod.Value;
+                    
+                }
+                if (mannerEstimationStep26.ApplicationRate != null)
+                {
+                    application.ApplicationRate = mannerEstimationStep26.ApplicationRate.Value;
+                }
+
+            }
+        }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return await GetMannerEstimationStep26();
     }
     public async Task<MannerEstimationStep27ViewModel> GetMannerEstimationStep27()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep27.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
 
+            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep27.ApplicationNo = application.ApplicationNo;
+            }
+        }
         mannerEstimationViewModel.MannerEstimationStep27.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep27.EncryptedMannerApplicationsId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep27.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
@@ -774,6 +868,18 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep27 = mannerEstimationStep27;
         mannerEstimationViewModel.MannerEstimationStep27.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
+  mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+
+            if (application != null)
+            {
+                application.ApplicationRate = mannerEstimationStep27.ApplicationRate.Value;
+
+            }
+        }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return await GetMannerEstimationStep27();
     }
@@ -781,7 +887,17 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<MannerEstimationStep28ViewModel> GetMannerEstimationStep28()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep28.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
 
+            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep28.ApplicationNo = application.ApplicationNo;
+            }
+        }
         mannerEstimationViewModel.MannerEstimationStep28.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep28.EncryptedMannerApplicationsId = mannerEstimationViewModel.EncryptedMannerEstimationApplicationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep28.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
@@ -811,6 +927,20 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep28 = mannerEstimationStep28;
         mannerEstimationViewModel.MannerEstimationStep28.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+
+            if (application != null && mannerEstimationStep28.AreaSpread != null && mannerEstimationStep28.ManureQuantity != null && mannerEstimationStep28.ApplicationRate != null)
+            {
+                application.AreaSpread = mannerEstimationStep28.AreaSpread.Value;
+                application.ManureQuantity = mannerEstimationStep28.ManureQuantity.Value;
+                application.ApplicationRate = mannerEstimationStep28.ApplicationRate.Value;
+
+            }
+        }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return await GetMannerEstimationStep28();
     }
@@ -930,6 +1060,16 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     public async Task<MannerEstimationStep32ViewModel> GetMannerEstimationStep32()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep32.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep32.ApplicationNo = application.ApplicationNo;
+            }
+        }
         mannerEstimationViewModel.MannerEstimationStep32.ApplicationMethodId = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodId;
         mannerEstimationViewModel.MannerEstimationStep32.IncorporationMethodId = mannerEstimationViewModel.MannerEstimationStep29.IncorporationMethodId;
         mannerEstimationViewModel.MannerEstimationStep32.ApplicationRateMethod = mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod;
@@ -946,6 +1086,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         mannerEstimationViewModel.MannerEstimationStep32.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = await _rb209Service.FetchCropTypeByIdAsync(mannerEstimationViewModel.MannerEstimationStep32.CropTypeId.Value);
+
         return mannerEstimationViewModel.MannerEstimationStep32;
     }
     public async Task<MannerEstimationStep32ViewModel> SetMannerEstimationStep32(MannerEstimationStep32ViewModel mannerEstimationStep32)
@@ -957,6 +1098,22 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
         mannerEstimationViewModel.MannerEstimationStep32 = mannerEstimationStep32;
         mannerEstimationViewModel.MannerEstimationStep32.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
+     mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+
+            if (application != null)
+            {
+                application.AutumnCropNitrogenUptake = mannerEstimationStep32.AutumnCropNitrogenUptake;
+                application.WindspeedID = mannerEstimationStep32.WindspeedId;
+                application.MoistureID = mannerEstimationStep32.MoistureTypeId;
+                application.EndOfDrainageDate = mannerEstimationStep32.SoilDrainageEndDate;
+                application.RainfallPostApplication = mannerEstimationStep32.TotalRainfall;
+                application.RainfallWithinSixHoursID = mannerEstimationStep32.RainfallWithinSixHoursId;
+            }
+        }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return await GetMannerEstimationStep32();
     }
@@ -996,6 +1153,33 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     private async Task<MannerEstimationApplication?> BindMannerEstinationApplicationData(MannerEstimationViewModel mannerEstimationViewModel, bool isUpdate)
     {
+
+        BindApplicationRateForUpdate(mannerEstimationViewModel);
+        MannerEstimationApplication mannerEstimationApplication = BindApplicationData(mannerEstimationViewModel);
+
+        if (isUpdate)
+        {
+            (MannerEstimationApplication? mannerEstimateApplicationData, _) = await FetchMannerEstimateApplicationById(mannerEstimationViewModel.MannerEstimationApplicationId.Value);
+            if (mannerEstimateApplicationData != null)
+            {
+                mannerEstimationApplication.ID = mannerEstimateApplicationData.ID;
+                mannerEstimationApplication.MannerEstimationID = mannerEstimateApplicationData.MannerEstimationID;
+                mannerEstimationApplication.NitrogenValue = mannerEstimateApplicationData.NitrogenValue;
+                mannerEstimationApplication.PhosphateValue = mannerEstimateApplicationData.PhosphateValue;
+                mannerEstimationApplication.PotashValue = mannerEstimateApplicationData.PotashValue;
+            }
+        }
+
+        if (mannerEstimationViewModel.IsComingForAddNewApplication)
+        {
+            mannerEstimationApplication.MannerEstimationID = mannerEstimationViewModel.MannerEstimationId;
+        }
+
+        return mannerEstimationApplication;
+    }
+
+    private static MannerEstimationApplication BindApplicationData(MannerEstimationViewModel mannerEstimationViewModel)
+    {
         bool isDefaultnutrient = mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue ?? false;
         decimal? nitrogen = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.TotalN : mannerEstimationViewModel.MannerEstimationStep25.N;
         decimal? p2O5 = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.P2O5 : mannerEstimationViewModel.MannerEstimationStep25.P2O5;
@@ -1008,8 +1192,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         decimal? nH4N = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.NH4N : mannerEstimationViewModel.MannerEstimationStep25.NH4N;
         decimal? nO3N = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.NO3N : mannerEstimationViewModel.MannerEstimationStep25.NO3N;
 
-        BindApplicationRateForUpdate(mannerEstimationViewModel);
-        MannerEstimationApplication mannerEstimationApplication = new MannerEstimationApplication
+        return new MannerEstimationApplication
         {
             ManureTypeID = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId,
             ApplicationDate = mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate.Value,
@@ -1042,29 +1225,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             RainfallPostApplication = mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall,
 
         };
-
-
-        if (isUpdate)
-        {
-            (MannerEstimationApplication? mannerEstimateApplicationData, _) = await FetchMannerEstimateApplicationById(mannerEstimationViewModel.MannerEstimationApplicationId.Value);
-            if (mannerEstimateApplicationData != null)
-            {
-                mannerEstimationApplication.ID = mannerEstimateApplicationData.ID;
-                mannerEstimationApplication.MannerEstimationID = mannerEstimateApplicationData.MannerEstimationID;
-                mannerEstimationApplication.NitrogenValue = mannerEstimateApplicationData.NitrogenValue;
-                mannerEstimationApplication.PhosphateValue = mannerEstimateApplicationData.PhosphateValue;
-                mannerEstimationApplication.PotashValue = mannerEstimateApplicationData.PotashValue;
-            }
-        }
-
-        if (mannerEstimationViewModel.IsComingForAddNewApplication)
-        {
-            mannerEstimationApplication.MannerEstimationID = mannerEstimationViewModel.MannerEstimationId;
-        }
-
-        return mannerEstimationApplication;
     }
-
 
     private static void BindApplicationRateForUpdate(MannerEstimationViewModel mannerEstimationViewModel)
     {
@@ -1653,10 +1814,16 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return error;
     }
 
-    private void MapApplicationDetailToViewModel(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication)
+    public async Task<MannerEstimationViewModel> MapApplicationDetailToViewModel(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication)
     {
         mannerEstimationViewModel.MannerEstimationId = mannerEstimateApplication.MannerEstimationID;
         mannerEstimationViewModel.MannerEstimationApplicationId = mannerEstimateApplication.ID;
+        (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimateApplication.ManureTypeID.Value);
+        if (manureType != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId = manureType.ManureGroupId;
+        }
+            
         mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId = mannerEstimateApplication.ManureTypeID;
         mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate = mannerEstimateApplication.ApplicationDate.ToLocalTime();
 
@@ -1682,7 +1849,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             NH4N = mannerEstimateApplication.NH4N,
             NO3N = mannerEstimateApplication.NO3N
         };
-
+        mannerEstimationViewModel.MannerEstimationStep24.DefaultNutrientValue = await FetchDefaultNutrientValue(mannerEstimateApplication.ManureTypeID ?? 0, mannerEstimateApplication);
         mannerEstimationViewModel.MannerEstimationStep27.ApplicationRate = mannerEstimateApplication.ApplicationRate;
         mannerEstimationViewModel.MannerEstimationStep26.ApplicationRate = mannerEstimateApplication.ApplicationRate;
         mannerEstimationViewModel.MannerEstimationStep28.ApplicationRate = mannerEstimateApplication.ApplicationRate;
@@ -1697,6 +1864,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = mannerEstimateApplication.AutumnCropNitrogenUptake;
         mannerEstimationViewModel.MannerEstimationStep32.SoilDrainageEndDate = mannerEstimateApplication.EndOfDrainageDate.Value.ToLocalTime();
         mannerEstimationViewModel.MannerEstimationStep32.TotalRainfall = mannerEstimateApplication.RainfallPostApplication;
+
+        SetMannerEstimationToSession(mannerEstimationViewModel);
+        return mannerEstimationViewModel;
     }
 
     private async Task BindClosedPeriod(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
@@ -1759,7 +1929,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
     }
 
-    private async Task BindConditionAffectingNutrientValues(MannerEstimationViewModel mannerEstimationViewModel)
+    public async Task BindConditionAffectingNutrientValues(MannerEstimationViewModel mannerEstimationViewModel)
     {
         if (mannerEstimationViewModel.MannerEstimationStep32.MoistureTypeId != null)
         {
@@ -1989,6 +2159,112 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     {
         _logger.LogTrace("MannerEstimationLogic : FetchTotalApplicationRateByDateRange() called");
         return await _mannerEstimationService.FetchTotalApplicationRateByDateRangeAsync(mannerEstimationId, dateFrom, dateTo, mannerApplicationId, isPoultry);
+    }
+    public async Task<(MannerEstimation?, Error?)> UpdateMannerEstimationByIdWithApplication(string sid)
+    {
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
+        MannerEstimation mannerEstimate = new MannerEstimation
+        {
+            MannerFarmID = mannerEstimationViewModel.MannerFarmId,
+            Name = mannerEstimationViewModel.MannerEstimationStep31.Name,
+            FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName,
+            IsWithinNVZ = mannerEstimationViewModel.MannerEstimationStep6.IsWithinNVZ,
+            TopSoilID = mannerEstimationViewModel.MannerEstimationStep18.TopSoilId,
+            SubSoilID = mannerEstimationViewModel.MannerEstimationStep19.SubSoilId,
+            CropTypeID = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId,
+            MannerCropTypeID = mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId,
+            SowingDate = Enum.IsDefined(
+               typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes),
+               mannerEstimationViewModel.MannerEstimationStep9.CropTypeId)
+                   ? mannerEstimationViewModel.MannerEstimationStep20.SowingDate
+                   : null,
+        };
+        if (mannerEstimationViewModel.MannerEstimationId != null)
+        {
+            (MannerEstimation? mannerEstimateData, _) = await FetchMannerEstimateById(mannerEstimationViewModel.MannerEstimationId.Value);
+            if (mannerEstimateData != null)
+            {
+                (MannerFarmViewModel? mannerFarmData, _) = await FetchMannerFarmById(mannerEstimate.MannerFarmID.Value);
+                mannerEstimate.ID = mannerEstimationViewModel.MannerEstimationId;
+
+                mannerEstimate.NitrogenPrice = mannerEstimateData.NitrogenPrice;
+                mannerEstimate.NitrogenProductId = mannerEstimateData.NitrogenProductId;
+                mannerEstimate.NitrogenProductName = mannerEstimateData.NitrogenProductName;
+                mannerEstimate.NitrogenProductPrice = mannerEstimateData.NitrogenProductPrice;
+
+                mannerEstimate.PotashProductId = mannerEstimateData.PotashProductId;
+                mannerEstimate.PotashProductPrice = mannerEstimateData.PotashProductPrice;
+                mannerEstimate.PotashProductName = mannerEstimateData.PotashProductName;
+                mannerEstimate.PotashPrice = mannerEstimateData.PotashPrice;
+
+                mannerEstimate.PhosphateProductPrice = mannerEstimateData.PhosphateProductPrice;
+                mannerEstimate.PhosphateProductId = mannerEstimateData.PhosphateProductId;
+                mannerEstimate.PhosphatePrice = mannerEstimateData.PhosphatePrice;
+                mannerEstimate.PhosphateProductName = mannerEstimateData.PhosphateProductName;
+            }
+        }
+        List<MannerEstimationApplication> mannerEstimationApplications = new List<MannerEstimationApplication>();
+        Error? error = null;
+        foreach (var application in mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication)
+        {
+            (MannerEstimationApplication mannerEstimationApplicationItem, error) = await FetchMannerApplicationById(application.ID.Value);
+            if (mannerEstimationApplicationItem != null)
+            {
+                mannerEstimationApplicationItem.ApplicationDate = application.ApplicationDate;
+
+                mannerEstimationApplicationItem.ApplicationRate = application.ApplicationRate;
+                mannerEstimationApplicationItem.AreaSpread = application.AreaSpread;
+                mannerEstimationApplicationItem.ManureQuantity = application.ManureQuantity;
+
+                mannerEstimationApplicationItem.AutumnCropNitrogenUptake = application.AutumnCropNitrogenUptake;
+                mannerEstimationApplicationItem.WindspeedID = application.WindspeedID;
+                mannerEstimationApplicationItem.MoistureID = application.MoistureID;
+                mannerEstimationApplicationItem.RainfallWithinSixHoursID = application.RainfallWithinSixHoursID;
+                mannerEstimationApplicationItem.RainfallPostApplication = application.RainfallPostApplication;
+                mannerEstimationApplicationItem.EndOfDrainageDate = application.EndOfDrainageDate.Value;
+                mannerEstimationApplications.Add(mannerEstimationApplicationItem);
+            }
+        }
+
+        string jsonData = JsonConvert.SerializeObject(new
+        {
+            MannerEstimation = mannerEstimate,
+            MannerEstimationApplications = mannerEstimationApplications
+        });
+
+        (MannerEstimation? mannerEstimationResult, error) = await _mannerEstimationService.UpdateMannerEstimationByIdWithApplicationAsync(jsonData);
+        return (mannerEstimationResult, error);
+    }
+    public  void BindApplicationRateMethodIfSoilTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType)
+    {
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        {
+            MannerEstimationApplicationDetailsViewModel mannerEstimationApplicationDetailsViewModel = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+            if (mannerEstimationApplicationDetailsViewModel != null)
+            {
+                MannerEstimationApplication mannerEstimationApplication =
+         JsonConvert.DeserializeObject<MannerEstimationApplication>(
+             JsonConvert.SerializeObject(mannerEstimationApplicationDetailsViewModel));
+                if (mannerEstimationApplication.AreaSpread != null && mannerEstimationApplication.ManureQuantity != null)
+                {
+                    mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
+                }
+                else
+                {
+                    int? defaultRate = mannerEstimationViewModel.MannerEstimationStep26.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
+
+                    bool isDefaultRate = mannerEstimationApplication.ApplicationRate == defaultRate;
+                    if (isDefaultRate)
+                    {
+                        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
+                    }
+                    else
+                    {
+                        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
+                    }
+                }
+            }
+        }
     }
 
 }

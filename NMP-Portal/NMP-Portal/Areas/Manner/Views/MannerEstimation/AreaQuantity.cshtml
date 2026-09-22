@@ -1,7 +1,8 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.MannerEstimationStep28ViewModel
 @{
-    ViewData["Title"] = $"{Resource.lblEnterTheAreaAndQuantity} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblEnterTheAreAndQuantityForApplicationNumber, Model.ApplicationNo) : Resource.lblEnterTheAreaAndQuantity;
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
@@ -16,8 +17,15 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
-
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    {
+        <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack
+        </govuk-back-link>
+    }
 }
 
 <form asp-action="AreaQuantity" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
@@ -32,7 +40,7 @@
             }
             @await Html.PartialAsync("_MannerAppRateWarningPartial", Model)
 
-            <h1 class="govuk-heading-l">@Resource.lblEnterTheAreaAndQuantity</h1>
+            <h1 class="govuk-heading-l">@heading</h1>
             <govuk-input for="@Model.AreaSpread" type="number" inputmode="decimal"
                          pattern="^\d{1,10}(\.\d{1,2})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label">@Resource.lblAreaSpread
