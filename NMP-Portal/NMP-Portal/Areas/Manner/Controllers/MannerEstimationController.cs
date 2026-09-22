@@ -4440,7 +4440,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> BackRedirectForConditionPage(string sid)
         {
             MannerEstimationViewModel estimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
-            MannerEstimationStep32ViewModel? model = estimationViewModel.MannerEstimationStep32;
+            
             MannerEstimationStep26ViewModel? mannerEstimationStep26ViewModel = estimationViewModel.MannerEstimationStep26;
             
             if (mannerEstimationStep26ViewModel.ApplicationRateMethod.HasValue && (mannerEstimationStep26ViewModel.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate))
@@ -6584,10 +6584,15 @@ namespace NMP.Portal.Areas.Manner.Controllers
         [HttpGet("BindSoilTypeChangeData/{sid?}")]
         public async Task<IActionResult> BindSoilTypeChangeData(string q, string? IsTopSoil, string? sid)
         {
-            MannerEstimationViewModel? model = _mannerEstimationLogic.GetMannerEstimationFromSession(sid) ?? new MannerEstimationViewModel();
+            var model = _mannerEstimationLogic.GetMannerEstimationFromSession(sid)
+            ?? new MannerEstimationViewModel();
+
             await BindFarmFieldOrCropDataUpdate(q, sid);
-            model = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
-            
+
+            model = _mannerEstimationLogic.GetMannerEstimationFromSession(sid)
+                    ?? model;
+
+
             int mannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
             (List<MannerEstimationApplication>? mannerEstimationApplications, Error? error) = await _mannerEstimationLogic.FetchMannerApplicationsByMannerEstimationId(mannerEstimationId);
             if (!string.IsNullOrWhiteSpace(error?.Message) || mannerEstimationApplications == null)
