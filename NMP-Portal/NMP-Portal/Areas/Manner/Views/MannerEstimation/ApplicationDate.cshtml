@@ -8,7 +8,6 @@
     string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber, Model.ManureTypeName, Model.FieldName, Model.ApplicationNo) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName);
 
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    // var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication) ? "MannerEstimationResult" : "ManureType";
 }
 
 @section BeforeContent {
@@ -18,14 +17,8 @@
     }
     else
     {
-        @* if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
-        { *@
         <govuk-back-link asp-action="BackRedirectActionForApplicationDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
-        @* }
-        else
-        {
-            <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
-        } *@
+     
     }
 }
 
