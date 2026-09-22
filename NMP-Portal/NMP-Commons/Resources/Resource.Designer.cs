@@ -4475,6 +4475,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cut / grazing.
+        /// </summary>
+        public static string lblCutGrazing {
+            get {
+                return ResourceManager.GetString("lblCutGrazing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cuts and grazing order.
         /// </summary>
         public static string lblCutsAndGrazingOrder {
@@ -5650,6 +5659,15 @@ namespace NMP.Commons.Resources {
         public static string lblEnterTheValuesForYour {
             get {
                 return ResourceManager.GetString("lblEnterTheValuesForYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the values for your fresh weight yields for each cut or grazing.
+        /// </summary>
+        public static string lblEnterTheValuesForYourFreshWeightYields {
+            get {
+                return ResourceManager.GetString("lblEnterTheValuesForYourFreshWeightYields", resourceCulture);
             }
         }
         
@@ -7064,6 +7082,15 @@ namespace NMP.Commons.Resources {
         public static string lblFreeboardIsTheDistanceBetweenTheTopOfTheTank {
             get {
                 return ResourceManager.GetString("lblFreeboardIsTheDistanceBetweenTheTopOfTheTank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fresh weight yield per hectare.
+        /// </summary>
+        public static string lblFreshWeightYieldPerHectare {
+            get {
+                return ResourceManager.GetString("lblFreshWeightYieldPerHectare", resourceCulture);
             }
         }
         
@@ -17639,6 +17666,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Typical fresh weight yields.
+        /// </summary>
+        public static string lblTypicalFreshWeightYield {
+            get {
+                return ResourceManager.GetString("lblTypicalFreshWeightYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Typical grass management.
         /// </summary>
         public static string lblTypicalGrassManagement {
@@ -18662,6 +18698,15 @@ namespace NMP.Commons.Resources {
         public static string lblWeightCapacity {
             get {
                 return ResourceManager.GetString("lblWeightCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We use the fresh weight yield to give phosphate and potash recommendation. AHDB publish guidance on measuring grass yields..
+        /// </summary>
+        public static string lblWeUseTheFreshWeightYieldToGivePhosphate {
+            get {
+                return ResourceManager.GetString("lblWeUseTheFreshWeightYieldToGivePhosphate", resourceCulture);
             }
         }
         

@@ -8543,4 +8543,19 @@ following crop year 2</value>
   <data name="lblSiteClass" xml:space="preserve">
     <value>Site class</value>
   </data>
+  <data name="lblTypicalFreshWeightYield" xml:space="preserve">
+    <value>Typical fresh weight yields</value>
+  </data>
+  <data name="lblCutGrazing" xml:space="preserve">
+    <value>Cut / grazing</value>
+  </data>
+  <data name="lblFreshWeightYieldPerHectare" xml:space="preserve">
+    <value>Fresh weight yield per hectare</value>
+  </data>
+  <data name="lblEnterTheValuesForYourFreshWeightYields" xml:space="preserve">
+    <value>Enter the values for your fresh weight yields for each cut or grazing</value>
+  </data>
+  <data name="lblWeUseTheFreshWeightYieldToGivePhosphate" xml:space="preserve">
+    <value>We use the fresh weight yield to give phosphate and potash recommendation. AHDB publish guidance on measuring grass yields.</value>
+  </data>
 </root>

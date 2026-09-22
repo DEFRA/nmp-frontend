@@ -113,4 +113,7 @@ public class PlanViewModel
     public int? CountryId { get; set; }
     public string? WinterRainfallName { get; set; }
     public bool? IsWinterRainfallMoreThan450 { get; set; }
+
+    public bool? IsFreshWeightYieldsDefault { get; set; }
+    public List<FreshWeightYieldViewModel>? FreshWeightYields { get; set; }
 }
