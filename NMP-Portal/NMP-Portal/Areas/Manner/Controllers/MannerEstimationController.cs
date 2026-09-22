@@ -1779,12 +1779,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy({sid}) action");
+                
+                _logger.LogError(
+    hre,
+    "MannerEstimation Controller : Exception in FieldToCopy({SessionId}) post action : {Message}, {StackTrace}",
+    sid,
+    hre.Message,
+ hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FieldToCopy({sid}) action");
+                _logger.LogError(ex,
+    "MannerEstimation Controller : Exception in FieldToCopy({SessionId}) post action : {Message}, {StackTrace}",
+    sid,
+    ex.Message,
+ ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
         }
@@ -1822,12 +1832,22 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (HttpRequestException hre)
             {
-                _logger.LogError(hre, $"{_mannerEstimationControllerForLog}  HttpRequestException in FieldToCopy({model}) action");
+                _logger.LogError(
+    hre,
+    "MannerEstimation Controller : HttpRequestException in FieldToCopy({SessionId}) post action : {Message}, {StackTrace}",
+    sessionId,
+    hre.Message,
+    hre.StackTrace);
                 return Functions.RedirectToErrorHandler((int)(hre.StatusCode ?? HttpStatusCode.InternalServerError));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"{_mannerEstimationControllerForLog}  Exception in FieldToCopy({model}) post action");
+                _logger.LogError(
+    ex,
+    "MannerEstimation Controller : Exception in FieldToCopy({SessionId}) post action : {Message}, {StackTrace}",
+    sessionId,
+    ex.Message,
+    ex.StackTrace);
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
@@ -2926,6 +2946,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             catch (Exception ex)
             {
+                
                 _logger.LogError(
     ex,
     "MannerEstimation Controller : Exception in AreaQuantity({SessionId}) post action : {Message}, {StackTrace}",
