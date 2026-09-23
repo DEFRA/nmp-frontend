@@ -7290,7 +7290,7 @@ managementPeriod.CropID.HasValue
                 topSoilID = soilTexture.TopSoilID;
                 subSoilID = soilTexture.SubSoilID;
             }
-            
+
             var cropTypeLinkingData = cropTypeLinkingResponse
     .FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
             int mannerCropTypeID = isLateSownCropType
@@ -8725,9 +8725,17 @@ managementPeriod.CropID.HasValue
 
             try
             {
+                (List<ManureType> manureTypeList, _) = await GetManureTypeList(model);
                 if (!ModelState.IsValid)
                 {
+                    if (manureTypeList.Count > 0)
+                    {
+                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
+                        var SelectListItem = ToSelectList(manures, f => f.Id.ToString(), f => f.Name);
+                        ViewBag.ManureTypeList = SelectListItem.ToList();
+                    }
                     return View(model);
+
                 }
                 OrganicManureViewModel? orgManureViewModel = GetOrganicManureFromSession();
                 if (orgManureViewModel == null)
@@ -8735,17 +8743,15 @@ managementPeriod.CropID.HasValue
                     return RedirectToAction(_farmList, "Farm");
                 }
 
-                (List<ManureType> manureTypeList, Error? error) = await GetManureTypeList(model);
 
-                if (error == null)
-                {
+               
                     IActionResult? earlyResult;
                     (model, earlyResult) = await ProcessManureTypeSelectionAsync(model, orgManureViewModel, manureTypeList);
                     if (earlyResult != null)
                     {
                         return earlyResult;
                     }
-                }
+                
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
 
@@ -10648,7 +10654,7 @@ managementPeriod.CropID.HasValue
             if (string.IsNullOrEmpty(rawValue))
                 return;
 
-           
+
             // Max 10 digits
             if (rawValue.Length > 10)
             {
@@ -10660,7 +10666,7 @@ managementPeriod.CropID.HasValue
 
             if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
             {
-                ReplaceError(state,Resource.MsgIfUserEnterDecimalValueInRainfall);
+                ReplaceError(state, Resource.MsgIfUserEnterDecimalValueInRainfall);
             }
         }
 
