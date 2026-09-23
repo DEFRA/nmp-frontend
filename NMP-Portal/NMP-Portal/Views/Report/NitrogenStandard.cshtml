@@ -56,7 +56,7 @@
                     </govuk-details>
                     <govuk-input asp-for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
-                            @string.Format(Resource.lblWhatIsTheNitrogenNStandardForThis, Model.LivestockGroupName.ToLower(), Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ((Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich) ? Resource.lblKgOfNitrogenNPerPlace : Resource.lblKgOfNitrogenNPer1000Places))</span>@Resource.lblQuestionMark
+                            @string.Format(Resource.lblWhatIsTheNitrogenNStandardForThisSuffix, Model.LivestockGroupName.ToLower(), Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ((Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich) ? Resource.lblKgOfNitrogenNPerPlace : Resource.lblKgOfNitrogenNPer1000Places))</span>@Resource.lblQuestionMark
                         </govuk-input-label>
                         <govuk-input-hint>
                             @(string.Format(Resource.lblThisValueIsFromTheNVZRegulationAndTakesIntoAccount, Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? Resource.lblWaterResourcesRegulations : Resource.lblNVZRegulation))

@@ -19368,6 +19368,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the nitrogen (N) standard for this {0} type in {1}.
+        /// </summary>
+        public static string lblWhatIsTheNitrogenNStandardForThisSuffix {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNitrogenNStandardForThisSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the Nitrogen (N) standard per animal, per year?.
         /// </summary>
         public static string lblWhatIsTheNitrogenNStandardPerAnimalPerYear {
