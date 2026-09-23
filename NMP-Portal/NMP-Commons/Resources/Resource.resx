@@ -8582,4 +8582,7 @@ following crop year 2</value>
   <data name="lblWhatIsTheEndOfDrainageDateForApplicationNo" xml:space="preserve">
     <value>What is the date when soil drainage ends for application {0}?</value>
   </data>
+  <data name="lblWhatIsTheNitrogenNStandardForThisSuffix" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
+  </data>
 </root>
