@@ -6413,9 +6413,6 @@ livestock manure.</value>
   <data name="lblWhatIsTheAverageTotalNumberOfThisSuffix" xml:space="preserve">
     <value>What is the average total number of this {0} type in {1}</value>
   </data>
-  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
-    <value>What is the occupancy for this livestock type in {0}</value>
-  </data>
   <data name="lblWhatIsTheAdjustmentValuePerPectareSuffix" xml:space="preserve">
     <value>What is the adjustment value per hectare</value>
   </data>
@@ -7031,7 +7028,7 @@ Regulations warnings for {0}</value>
     <value>What is the occupancy for this {0} type in {1}?</value>
   </data>
   <data name="lblWhatIsTheNitrogenNStandardForThis" xml:space="preserve">
-    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
+    <value>What is the nitrogen (N) standard for this {0} type in {1}?</value>
   </data>
   <data name="lblNitrogenNStandardForThistype" xml:space="preserve">
     <value>Nitrogen (N) standard for this {0} type</value>
@@ -8503,5 +8500,11 @@ following crop year 2</value>
   </data>
   <data name="lblMagnesiumForErrorMsg" xml:space="preserve">
     <value>magnesium (MgO)</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenNStandardForThisSuffix" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
   </data>
 </root>
