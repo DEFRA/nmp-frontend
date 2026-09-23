@@ -7,7 +7,11 @@
     string title = Resource.lblMannerEstimate;
     string heading = string.Format(Resource.lblWhatIsTheSubSoilInFieldName, Model.FieldName);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "TopSoil";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter)) ? "MannerEstimationResult" : "TopSoil";
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter)&&!Model.IsTopSoilChange)
+    {
+        backAction = "MannerEstimationResult";  
+    }
 }
 
 @section BeforeContent {
@@ -36,7 +40,7 @@
                 </govuk-radios-fieldset>
             </govuk-radios>
 
-             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
+            <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>

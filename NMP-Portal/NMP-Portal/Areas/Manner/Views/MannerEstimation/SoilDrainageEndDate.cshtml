@@ -3,8 +3,17 @@
 @{
 
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblWhatIsTheEndOfDrainageDate} {Resource.lblHyphen} {title}";
-  
+    string heading = string.Empty;
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    {
+        heading = string.Format(Resource.lblWhatIsTheEndOfDrainageDateForApplicationNo, Model.ApplicationNo);
+    }
+    else
+    {
+        heading = Resource.lblWhatIsTheEndOfDrainageDate;
+    }
+
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
   
 }
 
@@ -24,7 +33,7 @@
             <govuk-date-input for="@Model.SoilDrainageEndDate">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblWhatIsTheEndOfDrainageDate
+                        @heading
                     </govuk-date-input-fieldset-legend>
                     <govuk-date-input-hint>
                         @string.Format(Resource.MsgDateExample,DateTime.Now.Year-1)

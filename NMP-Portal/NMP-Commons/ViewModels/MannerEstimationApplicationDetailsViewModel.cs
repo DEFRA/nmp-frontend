@@ -19,5 +19,8 @@ namespace NMP.Commons.ViewModels
         public string EncryptedApplicationId { get; set; } = string.Empty;
         public bool IsManureTypeLiquid { get; set; } = false;
         public string ManureGroup { get; set; } = string.Empty;
+        public int Counter { get; set; }
+        public int ApplicationNo { get; set; }
+        public int ApplicationRateMethod { get; set; }
     }
 }

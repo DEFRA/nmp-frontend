@@ -25,7 +25,7 @@
     int applicationMonth = Model?.ApplicationDate != null ? Model.ApplicationDate.Month : 0;
 
     var nutrientSuffix = Model.IsManureTypeLiquid ? Resource.lblKgPerCubicMetre : Resource.lblValueKgPerTon;
-
+    string manureUnit = Model.IsManureTypeLiquid ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare;
 }
 
 <table class="govuk-table data-table manner-answers-table margin-bottom-none">
@@ -227,7 +227,7 @@
                                 : Resource.lblTonPerHa))
             </td>
             <td class="govuk-table__cell">
-                @if (applicationRateMethod.Equals(string.Format(Resource.lblEnterAnApplicationRate, Model.ManureType)))
+                @if (applicationRateMethod.Equals(string.Format(Resource.lblEnterAnApplicationRate, manureUnit)))
                 {
                     <a class="govuk-link"
                        asp-action="ManualApplicationRate"

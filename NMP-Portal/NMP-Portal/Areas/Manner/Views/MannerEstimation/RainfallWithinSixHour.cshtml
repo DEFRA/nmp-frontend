@@ -3,8 +3,17 @@
 @{
 
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblRainfallWithin6Hours} {Resource.lblHyphen} {title}";
-  
+    string heading = string.Empty;
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    {
+        heading = string.Format(Resource.lblRainfallWithin6HoursApplicationNo, Model.ApplicationNo);
+    }
+    else
+    {
+        heading = Resource.lblRainfallWithin6Hours;
+    }
+
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {
@@ -24,7 +33,7 @@
             <govuk-radios for="@Model.RainfallWithinSixHoursId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblRainfallWithin6Hours
+                        @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption                       
