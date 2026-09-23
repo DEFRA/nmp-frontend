@@ -2155,6 +2155,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ModelState.AddModelError(totalAreaInNVZKey, Resource.MsgEnterTotalAreaInNVZ);
         }
 
+        if (model.TotalAreaInNVZ > 99999 && (model.Country != null && model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales))
+        {
+            ModelState.AddModelError(totalAreaInNVZKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblTotalAreaInAnNvz.ToLower(), 0, 99999));
+        }
+
         if (model.IsGrasslandDerogation == true && model.GrassPercentage == null)
         {
             ModelState.AddModelError("GrassPercentage", Resource.MsgEnterThePercentageOfTheLandIsFarmedAsGrass);
@@ -2163,6 +2168,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         if (model.TotalFarmArea <= 0)
         {
             ModelState.AddModelError(totalFarmAreaKey, Resource.MsgTotalFarmAreaShouldBeGreaterThanZero);
+        }
+
+        if (model.TotalFarmArea > 99999)
+        {
+            ModelState.AddModelError(totalFarmAreaKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblTotalFarmArea.ToLower(), 1, 99999));
         }
 
         if (model.TotalAreaInNVZ < 0)
