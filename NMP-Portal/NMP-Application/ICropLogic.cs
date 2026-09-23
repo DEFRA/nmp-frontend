@@ -34,7 +34,7 @@ public interface ICropLogic
     Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId);
     Task<(List<SwardManagementResponse>, Error)> FetchSwardManagements();
     Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesByCountry(int countryId);
-    Task<(List<YieldRangesEnglandAndWalesResponse>, Error)> FetchYieldRangesEnglandAndWalesBySequenceIdAndGrassGrowthClassId(int sequenceId, int grassGrowthClassId);
+    Task<(List<YieldRangesResponse>, Error)> FetchYieldRangesBySequenceIdAndGrassGrowthClassIdAsync(int sequenceId, int classId, int rb209CountryId);
 
     Task<(List<ManagementPeriod>, Error)> FetchManagementperiodByCropId(int cropId, bool isShortSummary);
     Task<(DefoliationSequenceResponse, Error)> FetchDefoliationSequencesById(int defoliationId);
@@ -59,4 +59,5 @@ public interface ICropLogic
     string BindDefoliationSequenceNameForRecommendation(string[]? defolicationParts, int defIndex);
     Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop);
     PlanViewModel FilterOrganicAndInorganicListForHarvestYearOverview(PlanViewModel model, string? s, string? u, string? t);
+    Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClass(List<int> fieldIds);
 }

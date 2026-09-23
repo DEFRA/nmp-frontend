@@ -3,8 +3,17 @@
 @{
 
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblHowWetWasTheTopsoil} {Resource.lblHyphen} {title}";
-    
+    string heading = string.Empty;
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    {
+        heading = string.Format(Resource.lblHowWetWasTheTopsoilForApplicationNo, Model.ApplicationNo);
+    }
+    else
+    {
+        heading = Resource.lblHowWetWasTheTopsoilForApplicationNo;
+    }
+
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 @section BeforeContent {
     <partial name="_BackLinkForConditionPages" model="Model" />
@@ -22,7 +31,7 @@
             <govuk-radios for="@Model.MoistureTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @Resource.lblHowWetWasTheTopsoil
+                        @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption                        

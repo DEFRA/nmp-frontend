@@ -3,14 +3,15 @@
 @{
 
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{Resource.lblEnterTheApplicationRate} {Resource.lblHyphen} {title}";
+    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRateForYourManureForApplicationNumber, Model.ManureTypeName, Model.ApplicationNo) : string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate, Model.ManureTypeName);
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 
     var enterAnApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
     var calculateBasedOnAreaAndQuantity = (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
     var useDefaultApplicationRate = (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
     bool isOtherManure = (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials);
     var backAction = "DefaultNutrientValues";
-    if(!Model.DefaultNutrientValue.Value)
+    if (Model.DefaultNutrientValue.HasValue&&!Model.DefaultNutrientValue.Value)
     {
         backAction = "ManualNutrientValues";
     }
@@ -20,8 +21,15 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)" asp-route-r="@ViewBag.IsBack">@Resource.lblBack</govuk-back-link>
-
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    {
+        <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)" asp-route-r="@ViewBag.IsBack">@Resource.lblBack
+        </govuk-back-link>
+    }
 }
 
 <form asp-action="ApplicationRateMethod" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
@@ -38,7 +46,7 @@
             <govuk-radios for="@Model.ApplicationRateMethod">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowWouldYouLikeToEnterTheApplicationRate,  Model.ManureTypeName)
+                        @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-item value="@enterAnApplicationRate">@string.Format(Resource.lblEnterAnApplicationRate, (Model.IsManureTypeLiquid.HasValue && Model.IsManureTypeLiquid == true) ? Resource.lblMeterCubePerHa : Resource.lblTonnesPerHectare)</govuk-radios-item>
                     <govuk-radios-item value="@calculateBasedOnAreaAndQuantity">@Resource.lblCalculateBasedOnTheAreaAndQuantity</govuk-radios-item>

@@ -8725,9 +8725,17 @@ managementPeriod.CropID.HasValue
 
             try
             {
+                (List<ManureType> manureTypeList, _) = await GetManureTypeList(model);
                 if (!ModelState.IsValid)
                 {
+                    if (manureTypeList.Count > 0)
+                    {
+                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
+                        var SelectListItem = ToSelectList(manures, f => f.Id.ToString(), f => f.Name);
+                        ViewBag.ManureTypeList = SelectListItem.ToList();
+                    }
                     return View(model);
+
                 }
                 OrganicManureViewModel? orgManureViewModel = GetOrganicManureFromSession();
                 if (orgManureViewModel == null)
@@ -8735,16 +8743,13 @@ managementPeriod.CropID.HasValue
                     return RedirectToAction(_farmList, "Farm");
                 }
 
-                (List<ManureType> manureTypeList, Error? error) = await GetManureTypeList(model);
 
-                if (error == null)
+
+                IActionResult? earlyResult;
+                (model, earlyResult) = await ProcessManureTypeSelectionAsync(model, orgManureViewModel, manureTypeList);
+                if (earlyResult != null)
                 {
-                    IActionResult? earlyResult;
-                    (model, earlyResult) = await ProcessManureTypeSelectionAsync(model, orgManureViewModel, manureTypeList);
-                    if (earlyResult != null)
-                    {
-                        return earlyResult;
-                    }
+                    return earlyResult;
                 }
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);

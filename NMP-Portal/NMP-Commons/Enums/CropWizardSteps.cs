@@ -24,7 +24,7 @@ namespace NMP.Commons.Enums
         Defoliation = 13,
         DefoliationSequence = 14,
         DryMatterYield=15,
-        GrassGrowthClass=16,
+        GrassClass=16,
         GrassManagement=17,
         GrassSeason=18,
         SwardType=19,

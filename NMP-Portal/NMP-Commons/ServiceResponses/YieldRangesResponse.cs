@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 namespace NMP.Commons.ServiceResponses;
-public class YieldRangesEnglandAndWalesResponse
+public class YieldRangesResponse
 {
     [JsonProperty("yieldId")]
     public int YieldId { get; set; }

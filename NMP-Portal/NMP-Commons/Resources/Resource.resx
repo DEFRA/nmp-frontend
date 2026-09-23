@@ -8528,4 +8528,58 @@ following crop year 2</value>
   <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
     <value>What is the occupancy for this livestock type in {0}</value>
   </data>
+  <data name="lblUndersownSwardsShouldBeTreated" xml:space="preserve">
+    <value>Undersown swards should be treated as an existing sward.</value>
+  </data>
+  <data name="lblLowNMoreThan150KgFertiliserN" xml:space="preserve">
+    <value>Low N : Less than 150kg/ha/year fertiliser N user on average in last 2 years.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="lblHighNMoreThan150KgFertiliserN" xml:space="preserve">
+    <value>High N : More than 150kg/ha/year fertiliser N user on average in last 2 years, or High Clover.</value>
+  </data>
+  <data name="lblSiteClass" xml:space="preserve">
+    <value>Site class</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterTheApplicationRateForYourManureForApplicationNumber" xml:space="preserve">
+    <value>How would you like to enter the application rate for your {0} for application {1}?</value>
+  </data>
+  <data name="lblWhatIsTheApplicationRateForApplicationNumber" xml:space="preserve">
+    <value>What is the application rate for application {0}?</value>
+  </data>
+  <data name="lblEnterTheAreAndQuantityForApplicationNumber" xml:space="preserve">
+    <value>What is the area and quantity you are applying for application {0}?</value>
+  </data>
+  <data name="lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber" xml:space="preserve">
+    <value>When are you applying {0} on {1} for application {2}?</value>
+  </data>
+  <data name="lblClimateConditionsAffectingNitrogenLossesFromThisAppicationNo" xml:space="preserve">
+    <value>Climate conditions affecting nitrogen losses from application {0}</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForApplication" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}?</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}</value>
+  </data>
+  <data name="lblWindAtTheTimeOfApplicationNo" xml:space="preserve">
+    <value>What was the wind speed at the time of application {0}?</value>
+  </data>
+  <data name="lblHowWetWasTheTopsoilForApplicationNo" xml:space="preserve">
+    <value>How moist was the topsoil at the time of application {0}?</value>
+  </data>
+  <data name="lblRainfallWithin6HoursApplicationNo" xml:space="preserve">
+    <value>What is the rainfall within 6 hours for application {0}?</value>
+  </data>
+  <data name="lblEnterRainfallAmountForApplicationNo" xml:space="preserve">
+    <value>What was the total rainfall since for application {0}?</value>
+  </data>
+  <data name="lblTotalRainfallSinceForApplicationNo" xml:space="preserve">
+    <value>Total rainfall since for application {0}</value>
+  </data>
+  <data name="lblWhatIsTheEndOfDrainageDateForApplicationNo" xml:space="preserve">
+    <value>What is the date when soil drainage ends for application {0}?</value>
+  </data>
 </root>
