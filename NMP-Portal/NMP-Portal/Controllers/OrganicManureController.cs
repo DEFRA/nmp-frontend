@@ -8725,14 +8725,9 @@ managementPeriod.CropID.HasValue
 
             try
             {
-                List<ManureType> manureTypeList = new List<ManureType>();
+                (List<ManureType> manureTypeList, _) = await GetManureTypeList(model);
                 if (!ModelState.IsValid)
                 {
-                    if (model.FarmRB209CountryID.HasValue && model.ManureGroupIdForFilter.HasValue)
-                    {
-                        (manureTypeList, _) = await FetchManureTypeList(model.ManureGroupIdForFilter.Value, model.FarmRB209CountryID.Value);
-                    }
-
                     if (manureTypeList.Count > 0)
                     {
                         var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
