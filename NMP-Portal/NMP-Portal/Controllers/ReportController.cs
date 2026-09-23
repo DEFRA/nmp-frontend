@@ -2931,7 +2931,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             bool isOther = model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
                         || model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
 
-            (bool flowControl, IActionResult value) = BindDefaultNutrientValuesForGetMethod(model,  farmManure, isOther);
+            (bool flowControl, IActionResult value) = BindDefaultNutrientValuesForGetMethod(model, farmManure, isOther);
             if (!flowControl)
             {
                 return value;
@@ -3012,7 +3012,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return RedirectToAction("LivestockReceiver");
     }
-    private (bool flowControl, IActionResult value) BindDefaultNutrientValuesForGetMethod(ReportViewModel model,  FarmManureTypeResponse? farmManure, bool isOther)
+    private (bool flowControl, IActionResult value) BindDefaultNutrientValuesForGetMethod(ReportViewModel model, FarmManureTypeResponse? farmManure, bool isOther)
     {
         if (isOther)
         {
@@ -3142,8 +3142,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             var isPreviousStandardNutrientValue =
                 reportViewModel.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues;
 
-           
-            ( flowControl,  value) = BindViewBegRB209ApiOptionForProcessNutrient(model, reportViewModel, isCurrentStandardNutrientValue, isPreviousStandardNutrientValue);
+
+            (flowControl, value) = BindViewBegRB209ApiOptionForProcessNutrient(model, reportViewModel, isCurrentStandardNutrientValue, isPreviousStandardNutrientValue);
             if (!flowControl && value != null)
             {
                 return (flowControl: false, value: value);
@@ -5047,10 +5047,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return RedirectToAction(_nitrogenStandard);
             }
-            else if (model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)
-            {
-                return RedirectToAction(_occupancy);
-            }
             else
             {
                 model.AverageOccupancy = defaultAverageOccupancy;
@@ -5154,14 +5150,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 decimal phosphate = (phosphateStandardFor100PercentOccupancy * model.AverageOccupancy) ?? 0;
                 model.PhosphateStandard = Math.Round(phosphate / 100, 6);
 
-                if (model.IsGrasslandDerogation == true)
-                {
-                    model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth;
-                }
-                else
-                {
-                    model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeOccupancy;
-                }
+                model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeOccupancy;
+
             }
             //Calculation end
 
@@ -5169,10 +5159,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (model.IsLivestockCheckAnswer && !model.IsLivestockGroupChange)
             {
                 return RedirectToAction(_livestockCheckAnswerAction);
-            }
-            if (model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)
-            {
-                return RedirectToAction(_nitrogenStandard);
             }
 
             return RedirectToAction(_livestockCheckAnswerAction);
@@ -5227,14 +5213,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             var defaultNitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
             if (model.NitrogenStandard != defaultNitrogenStandard)
             {
-                if (model.IsGrasslandDerogation == true)
-                {
-                    model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth;
-                }
-                else
-                {
-                    model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
-                }
+                model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
             }
             SetReportDataToSession(model);
 
@@ -5346,20 +5325,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         if (model.AverageOccupancy != defaultOccupancy || model.NitrogenStandard != defaultNitrogenStandard)
         {
-            if (model.IsGrasslandDerogation == true)
+            if (model.AverageOccupancy != defaultOccupancy)
             {
-                model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth;
+                model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeOccupancy;
             }
             else
             {
-                if (model.AverageOccupancy != defaultOccupancy)
-                {
-                    model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeOccupancy;
-                }
-                else
-                {
-                    model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
-                }
+                model.OccupancyAndNitrogenOptions = (int)NMP.Commons.Enums.OccupancyNitrogenOptions.ChangeNitrogen;
             }
         }
         else

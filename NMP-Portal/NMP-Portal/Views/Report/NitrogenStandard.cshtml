@@ -9,14 +9,7 @@
     }
     else
     {
-        if (Model.OccupancyAndNitrogenOptions == (int)NMP.Commons.Enums.OccupancyNitrogenOptions.DerogatedFarmChangeBoth)
-        {
-            backAction = "Occupancy";
-        }
-        else
-        {
-            backAction = "OccupancyAndStandard";
-        }
+        backAction = "OccupancyAndStandard";
     }
 
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.NitrogenStandard;
