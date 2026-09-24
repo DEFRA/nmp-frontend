@@ -2148,6 +2148,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 model = await _mannerEstimationLogic.SetMannerEstimationStep20(model);
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
+                if (mannerEstimationViewModel != null && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter))
+                {
+                    return RedirectToAction(_applicationDateKey, new { sid = sessionId });
+                }
                 return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("ManureGroup", new { sid = sessionId });
 
             }
@@ -3403,10 +3407,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 mannerEstimationViewModel.MannerEstimationStep31.Name = string.Empty;
                 mannerEstimationViewModel.MannerEstimationStep31.IsCopyEstimate = null;
             }
-            mannerEstimationViewModel.IsCopyEstimate = null;
             ViewBag.SessionId = sid;
+            
+            mannerEstimationViewModel=ResetViewModelProperty(sid); 
             mannerEstimationViewModel.IsNewEstimate = false;
             mannerEstimationViewModel.EncryptedMannerFarmId = encryptedMannerFarmId;
+
+            mannerEstimationViewModel.IsCopyEstimate = null;
             _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
 
             await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0, sid);
@@ -6784,6 +6791,55 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return RedirectToAction("MannerEstimationResult", new { sid = sid, q = mannerEstimationViewModel.MannerEstimationStep13.EncryptedMannerEstimateId });
             }
             return RedirectToAction("ManureType", new { sid = sid });
+        }
+
+        private MannerEstimationViewModel ResetViewModelProperty(string? sid)
+        {
+            MannerEstimationViewModel? model = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
+            if(model!=null)
+            {
+                model.EncryptedSoilOrCropTypeChangeCounter = null;
+                model.SoilOrCropTypeChangeCounter = null;
+                model.IsTopSoilChange = false;
+                model.SoilTypeOrCropTypeChangeMannerEstimationApplication = null;
+                model.IsCropTypeChange = false;
+                model.OldCropTypeId = null;
+                model.MannerEstimationStep1 = new MannerEstimationStep1ViewModel();
+                model.MannerEstimationStep2 = new MannerEstimationStep2ViewModel();
+                model.MannerEstimationStep3 = new MannerEstimationStep3ViewModel();
+                model.MannerEstimationStep4 = new MannerEstimationStep4ViewModel();
+                model.MannerEstimationStep5 = new MannerEstimationStep5ViewModel();
+                model.MannerEstimationStep6 = new MannerEstimationStep6ViewModel();
+                model.MannerEstimationStep7 = new MannerEstimationStep7ViewModel();
+                model.MannerEstimationStep8 = new MannerEstimationStep8ViewModel();
+                model.MannerEstimationStep9 = new MannerEstimationStep9ViewModel();
+                model.MannerEstimationStep10 = new MannerEstimationStep10ViewModel();
+                model.MannerEstimationStep11 = new MannerEstimationStep11ViewModel();
+                model.MannerEstimationStep12 = new MannerEstimationStep12ViewModel();
+                model.MannerEstimationStep13 = new MannerEstimationStep13ViewModel();
+                model.MannerEstimationStep14 = new MannerEstimationStep14ViewModel();
+                model.MannerEstimationStep15 = new MannerEstimationStep15ViewModel();
+                model.MannerEstimationStep16 = new MannerEstimationStep16ViewModel();
+                model.MannerEstimationStep17 = new MannerEstimationStep17ViewModel();
+                model.MannerEstimationStep18 = new MannerEstimationStep18ViewModel();
+                model.MannerEstimationStep19 = new MannerEstimationStep19ViewModel();
+                model.MannerEstimationStep20 = new MannerEstimationStep20ViewModel();
+                model.MannerEstimationStep21 = new MannerEstimationStep21ViewModel();
+                model.MannerEstimationStep22 = new MannerEstimationStep22ViewModel();
+                model.MannerEstimationStep23 = new MannerEstimationStep23ViewModel();
+                model.MannerEstimationStep24 = new MannerEstimationStep24ViewModel();
+                model.MannerEstimationStep25 = new MannerEstimationStep25ViewModel();
+                model.MannerEstimationStep26 = new MannerEstimationStep26ViewModel();
+                model.MannerEstimationStep27 = new MannerEstimationStep27ViewModel();
+                model.MannerEstimationStep28 = new MannerEstimationStep28ViewModel();
+                model.MannerEstimationStep29 = new MannerEstimationStep29ViewModel();
+                model.MannerEstimationStep30 = new MannerEstimationStep30ViewModel();
+                model.MannerEstimationStep31 = new MannerEstimationStep31ViewModel();
+                model.MannerEstimationStep32 = new MannerEstimationStep32ViewModel();
+
+
+            }
+            return model;
         }
     }
 }

@@ -5519,6 +5519,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What was the total rainfall since for application {0}.
+        /// </summary>
+        public static string lblEnterRainfallAmountForApplicationNoSuffix {
+            get {
+                return ResourceManager.GetString("lblEnterRainfallAmountForApplicationNoSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the address for {0}.
         /// </summary>
         public static string lblEnterTheAddressFor {

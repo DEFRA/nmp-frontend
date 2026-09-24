@@ -25,6 +25,7 @@ namespace NMP.Commons.ViewModels
         public string? EncryptedSoilOrCropTypeChangeCounter { get; set; }
         public int? ApplicationNo { get; set; }
         public bool IsCropTypeChange { get; set; } = false;
+        public bool IsSowingDateAction { get; set; } = false;
 
     }
 }

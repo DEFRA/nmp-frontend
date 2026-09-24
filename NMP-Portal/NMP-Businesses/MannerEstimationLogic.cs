@@ -440,6 +440,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
                 mannerEstimationViewModel.MannerEstimationStep13.ApplicationNo = application.ApplicationNo;
                 mannerEstimationViewModel.MannerEstimationStep13.IsCropTypeChange = mannerEstimationViewModel.IsCropTypeChange;
             }
+            int cropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId ?? 0;
+            mannerEstimationViewModel.MannerEstimationStep13.IsSowingDateAction =IsCropCereal(cropTypeId)|| cropTypeId==(int)CropTypes.WinterOilseedRape;
         }
         return mannerEstimationViewModel.MannerEstimationStep13;
     }
@@ -591,6 +593,18 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         mannerEstimationViewModel.MannerEstimationStep20.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep20.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep20.IsCropTypeChange = mannerEstimationViewModel.MannerEstimationStep9.IsCropTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep20.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
+            
+
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep20.ApplicationNo = application.ApplicationNo;
+            }
+        }
         return mannerEstimationViewModel.MannerEstimationStep20;
     }
     public async Task<MannerEstimationStep20ViewModel> SetMannerEstimationStep20(MannerEstimationStep20ViewModel mannerEstimationStep20)
@@ -598,6 +612,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep20 = mannerEstimationStep20;
         mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = await BindMannerCropTypeId(mannerEstimationStep20, mannerEstimationViewModel.MannerEstimationStep9.CropTypeId.Value);
+       
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep20();
     }

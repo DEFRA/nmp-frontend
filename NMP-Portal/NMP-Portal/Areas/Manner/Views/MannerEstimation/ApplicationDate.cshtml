@@ -11,20 +11,28 @@
 }
 
 @section BeforeContent {
-@if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && Model.ApplicationNo == 1)
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && Model.ApplicationNo == 1)
     {
-        @if(Model.IsCropTypeChange)
+        @if (Model.IsCropTypeChange)
         {
-            <govuk-back-link asp-action="CropType" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+            if (Model.IsSowingDateAction)
+            {
+                <govuk-back-link asp-action="SowingDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+            }
+            else
+            {
+                <govuk-back-link asp-action="CropType" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+            }
         }
-        else{
-        <govuk-back-link asp-action="SubSoil" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+        else
+        {
+            <govuk-back-link asp-action="SubSoil" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
         }
     }
     else
     {
         <govuk-back-link asp-action="BackRedirectActionForApplicationDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
-     
+
     }
 }
 
