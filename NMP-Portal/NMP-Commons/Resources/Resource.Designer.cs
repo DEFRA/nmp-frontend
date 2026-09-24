@@ -7824,6 +7824,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How are you going to apply the {0} for application {1}?.
+        /// </summary>
+        public static string lblHowAreYouGoingToApplyTheManureApplicationNo {
+            get {
+                return ResourceManager.GetString("lblHowAreYouGoingToApplyTheManureApplicationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How do you plan to use the crop?.
         /// </summary>
         public static string lblHowDoYouPlanToUseTheCrop {
@@ -7874,6 +7883,15 @@ namespace NMP.Commons.Resources {
         public static string lblHowLongIsTheGapBetweenApplicationAndIncoporation {
             get {
                 return ResourceManager.GetString("lblHowLongIsTheGapBetweenApplicationAndIncoporation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How long is there between application and incorporation of your {0} for application {1}?.
+        /// </summary>
+        public static string lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication {
+            get {
+                return ResourceManager.GetString("lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication", resourceCulture);
             }
         }
         
@@ -19274,6 +19292,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatIsTheIncorporationMethod {
             get {
                 return ResourceManager.GetString("lblWhatIsTheIncorporationMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the incorporation method for your {0} for application {1}?.
+        /// </summary>
+        public static string lblWhatIsTheIncorporationMethodForApplication {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheIncorporationMethodForApplication", resourceCulture);
             }
         }
         

@@ -50,7 +50,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public MannerEstimationStep1ViewModel GetMannerEstimationStep1()
     {
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession();
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep1.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep1.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
         return mannerEstimationViewModel.MannerEstimationStep1;
@@ -58,7 +58,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public MannerEstimationStep2ViewModel GetMannerEstimationStep2()
     {
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession();
+        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep2.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep2.FarmName = mannerEstimationViewModel.MannerEstimationStep1.FarmName;
         return mannerEstimationViewModel.MannerEstimationStep2;
@@ -275,6 +275,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationStep8.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
         if (mannerEstimationViewModel.MannerEstimationStep8.CropGroupId != mannerEstimationStep8.CropGroupId)
         {
+            mannerEstimationViewModel.OldCropTypeId = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId;   
             mannerEstimationViewModel.MannerEstimationStep9.CropTypeId = null;
             mannerEstimationViewModel.MannerEstimationStep9.MannerCropTypeId = null;
             mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = 0;
@@ -309,6 +310,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep20.SowingDate = null;
         }
+        var oldCropTypeId = mannerEstimationViewModel.CropTypeId;
+        var newCropTypeId = mannerEstimationStep9.CropTypeId;
+
+        mannerEstimationStep9.ArableGrassConversion =
+            (oldCropTypeId != (int)CropTypes.Grass && newCropTypeId == (int)CropTypes.Grass) ||
+            (oldCropTypeId == (int)CropTypes.Grass && newCropTypeId != (int)CropTypes.Grass);
+
         (CropTypeLinkingResponse cropTypeLinkingResponse, _) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(mannerEstimationStep9.CropTypeId.Value);
         mannerEstimationStep9.MannerCropTypeId = cropTypeLinkingResponse.MannerCropTypeID;
         mannerEstimationViewModel.MannerEstimationStep9 = mannerEstimationStep9;
@@ -420,16 +428,17 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         mannerEstimationViewModel.MannerEstimationStep13.MannerEstimationId = mannerEstimationViewModel.MannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep13.MannerEstimationApplicationsId = mannerEstimationViewModel.MannerEstimationApplicationId;
         mannerEstimationViewModel.MannerEstimationStep13.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep13.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            mannerEstimationViewModel.MannerEstimationStep13.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
             
-            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
 
             if (application != null)
             {
                 mannerEstimationViewModel.MannerEstimationStep13.ApplicationNo = application.ApplicationNo;
+                mannerEstimationViewModel.MannerEstimationStep13.IsCropTypeChange = mannerEstimationViewModel.IsCropTypeChange;
             }
         }
         return mannerEstimationViewModel.MannerEstimationStep13;
@@ -445,11 +454,11 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep32.IsTotalRainfallEnteredManual = false;
             SetMannerEstimationStep32(mannerEstimationViewModel.MannerEstimationStep32);
         }
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
-mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
-                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
 
             if (application != null&& mannerEstimationStep13.ApplicationDate.HasValue)
             {
@@ -529,12 +538,12 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         mannerEstimationViewModel.MannerEstimationStep18.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep18.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep18.CountryId = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep18.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            mannerEstimationViewModel.MannerEstimationStep18.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
 
-            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
             if (application != null)
             {
                 mannerEstimationViewModel.MannerEstimationStep18.ApplicationNo = application.ApplicationNo;
@@ -554,13 +563,13 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep19.FieldName = mannerEstimationViewModel.MannerEstimationStep5.FieldName;
         mannerEstimationViewModel.MannerEstimationStep19.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep19.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            mannerEstimationViewModel.MannerEstimationStep19.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
             mannerEstimationViewModel.MannerEstimationStep19.IsTopSoilChange = mannerEstimationViewModel.IsTopSoilChange;
 
-            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
             if (application != null)
             {
                 mannerEstimationViewModel.MannerEstimationStep19.ApplicationNo = application.ApplicationNo;
@@ -649,6 +658,12 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         mannerEstimationViewModel.MannerEstimationStep23.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep23.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep23.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
+        {            
+            mannerEstimationViewModel.MannerEstimationStep23.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.MannerEstimationStep13.EncryptedSoilOrCropTypeChangeCounter;
+            mannerEstimationViewModel.MannerEstimationStep23.ApplicationNo = mannerEstimationViewModel.MannerEstimationStep13.ApplicationNo;
+        }
         return mannerEstimationViewModel.MannerEstimationStep23;
     }
     public async Task<MannerEstimationStep23ViewModel> SetMannerEstimationStep23(MannerEstimationStep23ViewModel mannerEstimationStep23)
@@ -662,6 +677,18 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
 
         mannerEstimationStep23.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         mannerEstimationViewModel.MannerEstimationStep23 = mannerEstimationStep23;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
+        {
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
+
+            if (application != null && mannerEstimationStep23.ApplicationMethodId.HasValue)
+            {
+                application.ApplicationMethodID = mannerEstimationStep23.ApplicationMethodId.Value;
+
+            }
+        }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep23();
     }
@@ -743,14 +770,15 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
     public async Task<MannerEstimationStep26ViewModel> GetMannerEstimationStep26()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep26.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            mannerEstimationViewModel.MannerEstimationStep26.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
 
-            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
             if (application != null)
             {
+                mannerEstimationViewModel.MannerEstimationStep26.ArableGrassConversion = mannerEstimationViewModel.MannerEstimationStep9.ArableGrassConversion;
                 mannerEstimationViewModel.MannerEstimationStep26.ApplicationNo = application.ApplicationNo;
             }
         }
@@ -766,7 +794,7 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         {
             mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
-            BindApplicationRateMethodIfSoilTypeChange(mannerEstimationViewModel, manureType);
+            BindApplicationRateMethodIfSoilOrCropTypeChange(mannerEstimationViewModel, manureType);
         }
         mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CountryId ?? 0 : mannerEstimationViewModel.MannerEstimationStep2.CountryID;
@@ -792,11 +820,11 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         {
             mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
         }
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
-    mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+    mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
-                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
 
             if (application != null)
             {
@@ -823,14 +851,15 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
     public async Task<MannerEstimationStep27ViewModel> GetMannerEstimationStep27()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep27.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            mannerEstimationViewModel.MannerEstimationStep27.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
 
-            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
             if (application != null)
             {
+                mannerEstimationViewModel.MannerEstimationStep27.ArableGrassConversion = mannerEstimationViewModel.MannerEstimationStep9.ArableGrassConversion;
                 mannerEstimationViewModel.MannerEstimationStep27.ApplicationNo = application.ApplicationNo;
             }
         }
@@ -868,11 +897,11 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep27 = mannerEstimationStep27;
         mannerEstimationViewModel.MannerEstimationStep27.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
-  mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+  mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
-                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
 
             if (application != null)
             {
@@ -887,14 +916,15 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
     public async Task<MannerEstimationStep28ViewModel> GetMannerEstimationStep28()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep28.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
+            mannerEstimationViewModel.MannerEstimationStep28.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
 
-            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
             if (application != null)
             {
+                mannerEstimationViewModel.MannerEstimationStep28.ArableGrassConversion = mannerEstimationViewModel.MannerEstimationStep9.ArableGrassConversion;
                 mannerEstimationViewModel.MannerEstimationStep28.ApplicationNo = application.ApplicationNo;
             }
         }
@@ -927,11 +957,11 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep28 = mannerEstimationStep28;
         mannerEstimationViewModel.MannerEstimationStep28.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
-mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
-                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
 
             if (application != null && mannerEstimationStep28.AreaSpread != null && mannerEstimationStep28.ManureQuantity != null && mannerEstimationStep28.ApplicationRate != null)
             {
@@ -981,6 +1011,17 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
 
         mannerEstimationViewModel.MannerEstimationStep29.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep29.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep29.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.MannerEstimationStep13.EncryptedSoilOrCropTypeChangeCounter;
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep29.ApplicationNo = application.ApplicationNo;
+            }
+        }
         return mannerEstimationViewModel.MannerEstimationStep29;
     }
     public MannerEstimationStep29ViewModel SetMannerEstimationStep29(MannerEstimationStep29ViewModel mannerEstimationStep29)
@@ -992,6 +1033,18 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         }
         mannerEstimationViewModel.MannerEstimationStep29 = mannerEstimationStep29;
         mannerEstimationViewModel.MannerEstimationStep29.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
+        {
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
+
+            if (application != null && mannerEstimationStep29.IncorporationMethodId.HasValue)
+            {
+                application.IncorporationMethodID = mannerEstimationStep29.IncorporationMethodId.Value;
+
+            }
+        }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep29();
     }
@@ -1007,6 +1060,17 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         mannerEstimationViewModel.MannerEstimationStep30.IsIncorporationMethodChange = mannerEstimationViewModel.MannerEstimationStep29.IsIncorporationMethodChange;
 
         mannerEstimationViewModel.MannerEstimationStep30.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
+        {
+            mannerEstimationViewModel.MannerEstimationStep30.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.MannerEstimationStep13.EncryptedSoilOrCropTypeChangeCounter;
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            if (application != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep30.ApplicationNo = application.ApplicationNo;
+            }
+        }
         return mannerEstimationViewModel.MannerEstimationStep30;
     }
     public MannerEstimationStep30ViewModel SetMannerEstimationStep30(MannerEstimationStep30ViewModel mannerEstimationStep30)
@@ -1014,6 +1078,18 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep30 = mannerEstimationStep30;
         mannerEstimationViewModel.MannerEstimationStep30.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
+        {
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
+
+            if (application != null && mannerEstimationStep30.IncorporationDelayId.HasValue)
+            {
+                application.IncorporationDelayID = mannerEstimationStep30.IncorporationDelayId.Value;
+
+            }
+        }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep30();
     }
@@ -1060,13 +1136,14 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
     public async Task<MannerEstimationStep32ViewModel> GetMannerEstimationStep32()
     {
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep32.EncryptedSoilTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilTypeChangeCounter;
-            var counter = mannerEstimationViewModel.SoilTypeChangeCounter;
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
+            mannerEstimationViewModel.MannerEstimationStep32.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
+            var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
             if (application != null)
             {
+                mannerEstimationViewModel.MannerEstimationStep32.ArableGrassConversion = mannerEstimationViewModel.MannerEstimationStep9.ArableGrassConversion;
                 mannerEstimationViewModel.MannerEstimationStep32.ApplicationNo = application.ApplicationNo;
             }
         }
@@ -1098,11 +1175,11 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         }
         mannerEstimationViewModel.MannerEstimationStep32 = mannerEstimationStep32;
         mannerEstimationViewModel.MannerEstimationStep32.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) &&
-     mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
+     mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            var application = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication
-                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+            var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication
+                .FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
 
             if (application != null)
             {
@@ -1827,8 +1904,8 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         if (manureType != null)
         {
             mannerEstimationViewModel.MannerEstimationStep11.ManureGroupId = manureType.ManureGroupId;
+        mannerEstimationViewModel.MannerEstimationStep12.ManureTypeName = manureType.Name;
         }
-            
         mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId = mannerEstimateApplication.ManureTypeID;
         mannerEstimationViewModel.MannerEstimationStep13.ApplicationDate = mannerEstimateApplication.ApplicationDate.ToLocalTime();
 
@@ -2195,7 +2272,7 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         }
         List<MannerEstimationApplication> mannerEstimationApplications = new List<MannerEstimationApplication>();
         Error? error = null;
-        foreach (var application in mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication)
+        foreach (var application in mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication)
         {
             (MannerEstimationApplication mannerEstimationApplicationItem, error) = await FetchMannerApplicationById(application.ID.Value);
             if (mannerEstimationApplicationItem != null)
@@ -2225,11 +2302,11 @@ mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
         (MannerEstimation? mannerEstimationResult, error) = await _mannerEstimationService.UpdateMannerEstimationByIdWithApplicationAsync(jsonData);
         return (mannerEstimationResult, error);
     }
-    public  void BindApplicationRateMethodIfSoilTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType)
+    public  void BindApplicationRateMethodIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType)
     {
-        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilTypeChangeCounter) && mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication != null)
+        if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
-            MannerEstimationApplicationDetailsViewModel mannerEstimationApplicationDetailsViewModel = mannerEstimationViewModel.SoilTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilTypeChangeCounter);
+            MannerEstimationApplicationDetailsViewModel mannerEstimationApplicationDetailsViewModel = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == mannerEstimationViewModel.SoilOrCropTypeChangeCounter);
             if (mannerEstimationApplicationDetailsViewModel != null)
             {
                 MannerEstimationApplication mannerEstimationApplication =

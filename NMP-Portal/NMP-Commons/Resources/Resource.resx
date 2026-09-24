@@ -8585,4 +8585,13 @@ following crop year 2</value>
   <data name="lblWhatIsTheNitrogenNStandardForThisSuffix" xml:space="preserve">
     <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
   </data>
+  <data name="lblHowAreYouGoingToApplyTheManureApplicationNo" xml:space="preserve">
+    <value>How are you going to apply the {0} for application {1}?</value>
+  </data>
+  <data name="lblWhatIsTheIncorporationMethodForApplication" xml:space="preserve">
+    <value>What is the incorporation method for your {0} for application {1}?</value>
+  </data>
+  <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication" xml:space="preserve">
+    <value>How long is there between application and incorporation of your {0} for application {1}?</value>
+  </data>
 </root>
