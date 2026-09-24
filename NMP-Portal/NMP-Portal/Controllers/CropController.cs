@@ -3156,7 +3156,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
-                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || model.SwardManagementId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover)
+                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover)
                 {
                     action = model.FreshWeightYieldsPerField.Any(x => x.IsFreshWeightYieldsDefault == false) ? _freshWeightYieldsManual : _freshWeightYieldsDefault;
                 }
@@ -3182,7 +3182,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
-                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || model.SwardManagementId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover)
+                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover)
                 {
                     action = model.FreshWeightYieldsPerField.Any(x => x.IsFreshWeightYieldsDefault == false) ? _freshWeightYieldsManual : _freshWeightYieldsDefault;
                 }
@@ -3192,14 +3192,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
 
             }
-            if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
-            {
-                action = _grassGrowthClassActionName;
-            }
             else
             {
-                action = _defoliationActionName;
+                if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
+                {
+                    action = _grassGrowthClassActionName;
+                }
+                else
+                {
+                    action = _defoliationActionName;
+                }
             }
+            
         }
         return action;
     }
@@ -5922,6 +5926,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         else
         {
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                return model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithLowClover
+                    ? RedirectToAction(_grassGrowthClassActionName)
+                    : RedirectToAction("FreshWeightYieldsDefault");
+            }
             return RedirectToAction(_checkAnswerActionName);
         }
     }
@@ -7592,7 +7602,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model.FreshWeightDefaultCounter == model.Crops.Count)
         {
             // All fields answered "Yes" (or finished) - move past this whole step.
-            return RedirectToAction(model.IsCheckAnswer && !model.IsAnyChangeInField ? _checkAnswerActionName : /* TODO: replace with the real next wizard step */ _freshWeightYieldsManual);
+            return RedirectToAction(model.IsCheckAnswer && !model.IsAnyChangeInField ? _checkAnswerActionName : _checkAnswerActionName);
         }
 
         // More fields to confirm - reload Default GET, now pointing at the next field.

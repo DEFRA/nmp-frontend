@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "FreshWeightYieldsDefault") asp-controller="Crop" asp-route-q="@Model.GrassClassEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "FreshWeightYieldsDefault") asp-controller="Crop" asp-route-q="@Model.FreshWeightDefaultEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="FreshWeightYieldsManual" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()

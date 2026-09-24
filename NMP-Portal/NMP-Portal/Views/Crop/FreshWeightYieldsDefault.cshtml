@@ -6,10 +6,34 @@
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     ViewData["Title"] = Resource.lblAnnualDryMatterYield;
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassClass;
+    var backAction = "";
+    if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange))
+    {
+        backAction = "CheckAnswer";
+    }
+    else
+    {
+        if(Model.FreshWeightDefaultCounter==0)
+        {
+            if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly ||
+                Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly)
+            {
+                backAction = "Defoliation";
+            }
+            else
+            {
+                backAction = "DefoliationSequence";
+            }
+        }
+        else
+        {
+            backAction = "FreshWeightYieldsManual";
+        }
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "DefoliationSequence") asp-controller="Crop" asp-route-q="@Model.GrassClassEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Crop" asp-route-q="@Model.FreshWeightManualEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="FreshWeightYieldsDefault" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()

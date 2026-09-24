@@ -226,7 +226,7 @@
         cropName = Model.CropType;
     }
 
-    
+
     string yieldQuestionText;
 
     if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
@@ -245,13 +245,29 @@
         }
     }
 
+    var encryptedCounter = "";
+    if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
+    {
+        if(Model.FarmRB209CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        {
+            encryptedCounter = Model.GrassClassEncryptedCounter;
+        }
+        else
+        {
+            encryptedCounter = Model.FreshWeightManualEncryptedCounter;
+        }
+    }
+    else
+    {
+        encryptedCounter = Model.YieldEncryptedCounter;
+    }
 }
 
 @section BeforeContent {
 
     @*  @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
     { *@
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@(Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Model.GrassClassEncryptedCounter : Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@encryptedCounter">@Resource.lblBack</govuk-back-link>
     @* }
     else
     {
@@ -1012,7 +1028,7 @@
                     }
                     @if(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                     {
-                        @if (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || Model.SwardManagementId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover)
+                        @if (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover)
                         {
                             @foreach (var freshWeightDefault in Model.FreshWeightYieldsPerField)
                             {
