@@ -23,40 +23,59 @@
                     @Resource.lblEnterTheValuesForYourFreshWeightYields
                 </h1>
 
-                @for (int i = 0; i < Model.FreshWeightYields.Count; i++)
+                @if (Model.Crops != null && Model.Crops.Count > 0)
                 {
-                   @*  @if (ViewBag.FreshWeightYieldDetails[i].CutOrGrazing.Equals("Establishment"))
-                    { *@
-                        <govuk-input for="@Model.FreshWeightYields[i].FreshWeightYield" value="@(ViewBag.FreshWeightYieldDetails[i].CutOrGrazing.Equals("Establishment") ? Resource.lblHyphen:Model.FreshWeightYields[i].FreshWeightYield)"
-                                 disabled="@(ViewBag.FreshWeightYieldDetails[i].CutOrGrazing.Equals("Establishment"))"
-                                     input-class="govuk-input--width-5"
-                                     spellcheck="false">
-                            <govuk-input-label is-page-heading="false">
-                                @ViewBag.FreshWeightYieldDetails[i].DisplayText
-                            </govuk-input-label>
-                            <govuk-input-suffix>
-                                @Resource.lblTonnesPerHectare
-                            </govuk-input-suffix>
-                        </govuk-input>
-                    @* }
-                    else
+                    @for (int i = 0; i < Model.Crops.Count; i++)
                     {
-                        <govuk-input for="@Model.FreshWeightYields[i].FreshWeightYield"
-                                     inputmode="numeric"
-                                     input-class="govuk-input--width-5"
-                                     spellcheck="false">
-                            <govuk-input-label is-page-heading="false">
-                                @ViewBag.FreshWeightYieldDetails[i].DisplayText
-                                <span class="govuk-visually-hidden">
-                                    @string.Format(Resource.lblInUnit, Resource.lblTonnesPerHectare)
-                                </span>
-                            </govuk-input-label>
-                            <govuk-input-suffix>
-                                @Resource.lblTonnesPerHectare
-                            </govuk-input-suffix>
-                        </govuk-input>
-                    } *@
+                        @if (Model.FreshWeightManualCounter == i)
+                        {
+                            @for (int j = 0; j < Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count; j++)
+                            {
+
+                                <govuk-input for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield" value="@(ViewBag.FreshWeightYieldDetails[j].CutOrGrazing.Equals("Establishment") ? Resource.lblHyphen : Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield)"
+                                             disabled="@(ViewBag.FreshWeightYieldDetails[j].CutOrGrazing.Equals("Establishment"))"
+                                             input-class="govuk-input--width-5"
+                                             spellcheck="false">
+                                    <govuk-input-label is-page-heading="false">
+                                        @ViewBag.FreshWeightYieldDetails[j].DisplayText
+                                    </govuk-input-label>
+                                    <govuk-input-suffix>
+                                        @Resource.lblTonnesPerHectare
+                                    </govuk-input-suffix>
+                                </govuk-input>
+
+                                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position"></govuk-input>
+                                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName"></govuk-input>
+                                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName"></govuk-input>
+
+                            }
+
+                        }
+                        else
+                        {
+                            if (Model.FreshWeightYieldsPerField[i].FreshWeightYields != null && Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count > 0)
+                            {
+                                <div hidden="true">
+                                    @for (int j = 0; j < Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count; j++)
+                                    {
+                                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield"></govuk-input>
+                                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position"></govuk-input>
+                                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName"></govuk-input>
+                                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName"></govuk-input>
+
+                                    }
+
+                                </div>
+                            }
+                            
+                        }
+                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault" value="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldId" value="@Model.FreshWeightYieldsPerField[i].FieldId"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldName" value="@Model.FreshWeightYieldsPerField[i].FieldName"></govuk-input>
+
+                    }
                 }
+
 
             </div>
         </div>

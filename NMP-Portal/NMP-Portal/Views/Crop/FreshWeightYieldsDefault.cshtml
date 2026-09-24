@@ -61,15 +61,50 @@
                     </table>
                 </div>
 
-                <govuk-radios for="@Model.IsFreshWeightYieldsDefault">
-                    <govuk-radios-fieldset>
-                        <govuk-radios-fieldset-legend is-page-heading="false">
-                            @Resource.lblDoYouWantToUseTheseTypicalNutrientValues
-                        </govuk-radios-fieldset-legend>
-                        <govuk-radios-item value="@yes">@Resource.lblYesUseTheseValues</govuk-radios-item>
-                        <govuk-radios-item value="@no">@Resource.lblNoChangeTheseValues</govuk-radios-item>
-                    </govuk-radios-fieldset>
-                </govuk-radios>
+                @if (Model.Crops != null && Model.Crops.Count > 0)
+                {
+                    @for (int i = 0; i < Model.Crops.Count; i++)
+                    {
+                        @if (Model.FreshWeightDefaultCounter == i)
+                        {
+                            <govuk-radios for="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault">
+                                <govuk-radios-fieldset>
+                                    <govuk-radios-fieldset-legend is-page-heading="false">
+                                        @Resource.lblDoYouWantToUseTheseTypicalNutrientValues
+                                    </govuk-radios-fieldset-legend>
+                                    <govuk-radios-item value="@yes">@Resource.lblYesUseTheseValues</govuk-radios-item>
+                                    <govuk-radios-item value="@no">@Resource.lblNoChangeTheseValues</govuk-radios-item>
+                                </govuk-radios-fieldset>
+                            </govuk-radios>
+
+                           
+                        }
+                        else
+                        {
+                            <div hidden="true">
+                                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[Model.FreshWeightManualCounter].IsFreshWeightYieldsDefault" value="@Model.FreshWeightYieldsPerField[Model.FreshWeightManualCounter].IsFreshWeightYieldsDefault"></govuk-input>
+                            </div>
+                        }
+                        <div hidden="true">
+                            <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldId" value="@Model.FreshWeightYieldsPerField[i].FieldId"></govuk-input>
+                            <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldName" value="@Model.FreshWeightYieldsPerField[i].FieldName"></govuk-input>
+                            @if (Model.FreshWeightYieldsPerField[i].FreshWeightYields != null && Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count > 0)
+                            {
+                                @for (int j = 0; j < Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count; j++)
+                                {
+                                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield"></govuk-input>
+                                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position"></govuk-input>
+                                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName"></govuk-input>
+                                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName"></govuk-input>
+
+                                }
+                            }
+
+                        </div>
+                    }
+                }
+
+                
             </div>
         </div>
 

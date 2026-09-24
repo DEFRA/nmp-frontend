@@ -114,6 +114,10 @@ public class PlanViewModel
     public string? WinterRainfallName { get; set; }
     public bool? IsWinterRainfallMoreThan450 { get; set; }
 
-    public bool? IsFreshWeightYieldsDefault { get; set; }
-    public List<FreshWeightYieldViewModel>? FreshWeightYields { get; set; }
+    public List<FreshWeightYieldForFieldViewModel>? FreshWeightYieldsPerField { get; set; }
+
+    public int FreshWeightDefaultCounter { get; set; } = 0;
+    public string? FreshWeightDefaultEncryptedCounter { get; set; }
+    public int FreshWeightManualCounter { get; set; } = 0;
+    public string? FreshWeightManualEncryptedCounter { get; set; }
 }

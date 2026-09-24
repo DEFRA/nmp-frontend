@@ -8597,4 +8597,7 @@ following crop year 2</value>
   <data name="lblWeUseTheFreshWeightYieldToGivePhosphate" xml:space="preserve">
     <value>We use the fresh weight yield to give phosphate and potash recommendation. AHDB publish guidance on measuring grass yields.</value>
   </data>
+  <data name="lblEnterTheValuesForYourFreshWeightYieldInField" xml:space="preserve">
+    <value>Enter the values for your fresh weight yields for each cut or grazing in {0}</value>
+  </data>
 </root>
