@@ -788,7 +788,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) && mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
         {
             mannerEstimationViewModel.MannerEstimationStep26.EncryptedSoilOrCropTypeChangeCounter = mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter;
-
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationMethodCount = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodCount;
             var counter = mannerEstimationViewModel.SoilOrCropTypeChangeCounter;
             var application = mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication.FirstOrDefault(x => x.ApplicationNo == counter);
             if (application != null)

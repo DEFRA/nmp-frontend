@@ -24,6 +24,7 @@ namespace NMP.Commons.ViewModels
         public string? EncryptedSoilOrCropTypeChangeCounter { get; set; }
         public int? ApplicationNo { get; set; }
         public bool ArableGrassConversion { get; set; } = false;
+        public int? ApplicationMethodCount { get; set; }
 
     }
 }

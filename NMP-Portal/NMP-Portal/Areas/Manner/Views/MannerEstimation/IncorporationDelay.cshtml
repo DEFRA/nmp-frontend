@@ -9,7 +9,7 @@
     }
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     var backAction = "IncorporationMethod";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange&&!Model.IsComingForAddNewApplication)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)&&string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange&&!Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";
     }
