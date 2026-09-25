@@ -169,6 +169,7 @@ namespace NMP.Commons.ViewModels
         public int? FarmRB209CountryID { get; set; }
         public bool? IsFarmAverageYieldAdjustment { get; set; }
         public List<FarmAverageYieldsViewModel>? FarmAverageYields { get; set; }
+        public bool IsLivestockTypeChange { get; set; } = false;
 
     }
 }
