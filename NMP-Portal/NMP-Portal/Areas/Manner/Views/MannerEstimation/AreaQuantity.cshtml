@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.MannerEstimationStep28ViewModel
 @{
-    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblEnterTheAreAndQuantityForApplicationNumber, Model.ApplicationNo) : Resource.lblEnterTheAreaAndQuantity;
+    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) ? string.Format(Resource.lblEnterTheAreAndQuantityForApplicationNumber, Model.ApplicationNo) : Resource.lblEnterTheAreaAndQuantity;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     
     var suffixUnit = "";
@@ -17,7 +17,7 @@
     }
 }
 @section BeforeContent {
-    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter))
     {
         <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }

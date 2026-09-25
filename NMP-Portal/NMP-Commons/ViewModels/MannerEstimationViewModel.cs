@@ -115,10 +115,13 @@ namespace NMP.Commons.ViewModels
         public int? MannerFarmId { get; set; }
         public string? EncryptedMannerFarmId { get; set; }
         public string? FarmName { get; set; }
-        public string? EncryptedSoilTypeChangeCounter { get; set; }
-        public int? SoilTypeChangeCounter { get; set; }
+        public string? EncryptedSoilOrCropTypeChangeCounter { get; set; }
+        public int? SoilOrCropTypeChangeCounter { get; set; }
         public bool IsTopSoilChange { get; set; } = false;
-        public List<MannerEstimationApplicationDetailsViewModel>? SoilTypeChangeMannerEstimationApplication { get; set; }
+        public List<MannerEstimationApplicationDetailsViewModel>? SoilTypeOrCropTypeChangeMannerEstimationApplication { get; set; }
+
+        public bool IsCropTypeChange { get; set; } = false;
+        public int? OldCropTypeId { get; set; }
     }
 }
 

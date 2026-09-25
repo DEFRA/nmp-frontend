@@ -1,7 +1,7 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.MannerEstimationStep32ViewModel
 @{
-    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblClimateConditionsAffectingNitrogenLossesFromThisAppicationNo, Model.ApplicationNo) : Resource.lblConditionsAffectingTheLossOfNutrients;
+    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) ? string.Format(Resource.lblClimateConditionsAffectingNitrogenLossesFromThisAppicationNo, Model.ApplicationNo) : Resource.lblConditionsAffectingTheLossOfNutrients;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     var backAction = Model.IncorporationMethodId == (int)NMP.Commons.Enums.IncorporationMethod.NotIncorporated ? "IncorporationMethod" : "IncorporationDelay";
     
@@ -9,11 +9,11 @@
 
 }
 @section BeforeContent {
-    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter)&&!Model.ArableGrassConversion)
     {
         <govuk-back-link asp-action="BackRedirectForConditionPage" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }
-   else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationDateChange&&!Model.IsComingForAddNewApplication)
+    else if (string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter)&&!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationDateChange&&!Model.IsComingForAddNewApplication)
     {
         <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }

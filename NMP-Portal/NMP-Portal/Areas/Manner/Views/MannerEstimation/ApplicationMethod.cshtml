@@ -3,16 +3,19 @@
 @{
     string title = Resource.lblMannerEstimate;
     string heading = string.Format(Resource.lblHowAreYouGoingToApplyTheManure, Model.ManureTypeName);
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter))
+    {
+        heading = string.Format(Resource.lblHowAreYouGoingToApplyTheManureApplicationNo, Model.ManureTypeName, Model.ApplicationNo);
+    }
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var backAction = "ApplicationDate";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";
     }
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
-
 }
 
 
@@ -27,7 +30,7 @@
         }
         <form asp-action="ApplicationMethod" asp-controller="MannerEstimation" method="post" autocomplete="off" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
-           
+
             <govuk-radios for="@Model.ApplicationMethodId">
                 <govuk-radios-fieldset>
 
@@ -35,7 +38,7 @@
                         @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
-                        @Resource.lblSelectOneOption                        
+                        @Resource.lblSelectOneOption
                     </govuk-radios-hint>
                     @if (ViewBag.ApplicationMethodList != null && ViewBag.ApplicationMethodList.Count > 0)
                     {

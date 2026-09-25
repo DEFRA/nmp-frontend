@@ -1,16 +1,20 @@
 ﻿@using NMP.Commons.Resources
+
 @model NMP.Commons.ViewModels.MannerEstimationStep29ViewModel
 @{
-    
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
-
+    string heading = string.Format(Resource.lblWhatIsTheIncorporationMethod, Model.ManureTypeName);
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter))
+    {
+        heading = string.Format(Resource.lblWhatIsTheIncorporationMethodForApplication, Model.ManureTypeName, Model.ApplicationNo);
+    }
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
 }
 @section BeforeContent {
-    @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationMethodChange && !Model.IsManureTypeChange&&!Model.IsComingForAddNewApplication)
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && !Model.IsApplicationMethodChange && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication)
     {
         <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
     }
-    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && Model.IsApplicationMethodChange&&!Model.IsComingForAddNewApplication)
+    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && Model.IsApplicationMethodChange && !Model.IsComingForAddNewApplication)
     {
         <govuk-back-link asp-action="ApplicationMethod" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }
@@ -46,7 +50,7 @@
             <govuk-radios for="@Model.IncorporationMethodId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhatIsTheIncorporationMethod,  Model.ManureTypeName)
+                        @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption

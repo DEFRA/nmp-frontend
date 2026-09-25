@@ -157,6 +157,6 @@ namespace NMP.Application
         Task<(MannerEstimation?, Error?)> UpdateMannerEstimationByIdWithApplication(string sid);
         Task<MannerEstimationViewModel> MapApplicationDetailToViewModel(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication);
         Task BindConditionAffectingNutrientValues(MannerEstimationViewModel mannerEstimationViewModel);
-        void BindApplicationRateMethodIfSoilTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType);
+        void BindApplicationRateMethodIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType);
     }
 }

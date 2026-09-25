@@ -4,7 +4,7 @@
     string title = Resource.lblMannerEstimate;
     string heading = string.Empty;
     string headingSuffix = string.Empty;
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter))
     {
         headingSuffix = string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication, Model.CropTypeName, Model.FieldName, Model.ApplicationNo);
         heading = string.Format(Resource.lblWhatIsTheAutumnCropNitrogenUptakeForApplication, Model.CropTypeName, Model.FieldName,Model.ApplicationNo);
