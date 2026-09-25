@@ -2264,11 +2264,14 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
                 BindMannerFarmNameAndIdOnNavigation(sessionId);
 
+                MannerEstimationStep23ViewModel mannerEstimationStep23ViewModel = _mannerEstimationLogic.GetMannerEstimationStep23();
+                List<ApplicationMethodResponse> applicationMethodList = await BindViewBegForApplicationMethod(mannerEstimationStep23ViewModel);
+
+                model.ApplicationMethodCount = applicationMethodList.Count;
                 if (!ModelState.IsValid)
                 {
-                    model = _mannerEstimationLogic.GetMannerEstimationStep23();
-                    await BindViewBegForApplicationMethod(model);
-                    return View(model);
+                    mannerEstimationStep23ViewModel.ApplicationMethodId = model.ApplicationMethodId;
+                    return View(mannerEstimationStep23ViewModel);
                 }
 
                 model = await _mannerEstimationLogic.SetMannerEstimationStep23(model);
