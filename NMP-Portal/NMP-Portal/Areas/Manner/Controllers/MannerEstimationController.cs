@@ -2277,7 +2277,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction(_applicationRateMethodAction, new { sid = sessionId });
                 }
-                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange && model.IsApplicationMethodChange)
+                if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsComingForAddNewApplication && !mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange && model.IsApplicationMethodChange)
                 {
                     return RedirectToAction(_incorporationMethodAction, new { sid = sessionId });
                 }

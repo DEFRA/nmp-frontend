@@ -8559,10 +8559,10 @@ following crop year 2</value>
     <value>Climate conditions affecting nitrogen losses from application {0}</value>
   </data>
   <data name="lblWhatIsTheAutumnCropNitrogenUptakeForApplication" xml:space="preserve">
-    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}?</value>
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}?</value>
   </data>
   <data name="lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication" xml:space="preserve">
-    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}</value>
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}</value>
   </data>
   <data name="lblWindAtTheTimeOfApplicationNo" xml:space="preserve">
     <value>What was the wind speed at the time of application {0}?</value>

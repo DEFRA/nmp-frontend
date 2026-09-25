@@ -18900,7 +18900,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}?.
+        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}?.
         /// </summary>
         public static string lblWhatIsTheAutumnCropNitrogenUptakeForApplication {
             get {
@@ -18918,7 +18918,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}.
+        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}.
         /// </summary>
         public static string lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication {
             get {
