@@ -8559,10 +8559,10 @@ following crop year 2</value>
     <value>Climate conditions affecting nitrogen losses from application {0}</value>
   </data>
   <data name="lblWhatIsTheAutumnCropNitrogenUptakeForApplication" xml:space="preserve">
-    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}?</value>
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}?</value>
   </data>
   <data name="lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication" xml:space="preserve">
-    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}</value>
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}</value>
   </data>
   <data name="lblWindAtTheTimeOfApplicationNo" xml:space="preserve">
     <value>What was the wind speed at the time of application {0}?</value>
@@ -8581,6 +8581,21 @@ following crop year 2</value>
   </data>
   <data name="lblWhatIsTheEndOfDrainageDateForApplicationNo" xml:space="preserve">
     <value>What is the date when soil drainage ends for application {0}?</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenNStandardForThisSuffix" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
+  </data>
+  <data name="lblHowAreYouGoingToApplyTheManureApplicationNo" xml:space="preserve">
+    <value>How are you going to apply the {0} for application {1}?</value>
+  </data>
+  <data name="lblWhatIsTheIncorporationMethodForApplication" xml:space="preserve">
+    <value>What is the incorporation method for your {0} for application {1}?</value>
+  </data>
+  <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication" xml:space="preserve">
+    <value>How long is there between application and incorporation of your {0} for application {1}?</value>
+  </data>
+  <data name="lblEnterRainfallAmountForApplicationNoSuffix" xml:space="preserve">
+    <value>What was the total rainfall since for application {0}</value>
   </data>
   <data name="lblTypicalFreshWeightYield" xml:space="preserve">
     <value>Typical fresh weight yields</value>

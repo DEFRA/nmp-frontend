@@ -514,7 +514,7 @@
                             @mannerEstimation.TopSoil
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="BindSoilTypeChangeData" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-IsTopSoil="@ViewBag.IsTopSoil" asp-route-q="@ViewBag.EncryptedEstimateId">
+                            <a class="govuk-link" asp-action="BindSoilOrCropTypeChangeData" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-actionName="@ViewBag.TopSoilAction" asp-route-q="@ViewBag.EncryptedEstimateId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblTopsoil)</span>
                             </a>
@@ -527,7 +527,7 @@
                             @mannerEstimation.SubSoil
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="BindSoilTypeChangeData" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-IsTopSoil="@ViewBag.IsSubSoil" asp-route-q="@ViewBag.EncryptedEstimateId">
+                            <a class="govuk-link" asp-action="BindSoilOrCropTypeChangeData" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-actionName="@ViewBag.SubSoilAction" asp-route-q="@ViewBag.EncryptedEstimateId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblSubSoil)</span>
                             </a>
@@ -540,7 +540,7 @@
                             @ViewBag.CropGroup
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="CropGroup" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@ViewBag.EncryptedEstimateId">
+                            <a class="govuk-link" asp-action="BindSoilOrCropTypeChangeData" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-actionName="@ViewBag.CropGroupAction" asp-route-q="@ViewBag.EncryptedEstimateId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblCropGroup)</span>
                             </a>
@@ -553,7 +553,7 @@
                             @mannerEstimation.CropTypeName
                         </td>
                         <td class="govuk-table__cell">
-                            <a class="govuk-link" asp-action="CropType" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@ViewBag.EncryptedEstimateId">
+                            <a class="govuk-link" asp-action="BindSoilOrCropTypeChangeData" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-actionName="@ViewBag.CropTypeAction" asp-route-q="@ViewBag.EncryptedEstimateId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">@(Resource.lblCropType)</span>
                             </a>

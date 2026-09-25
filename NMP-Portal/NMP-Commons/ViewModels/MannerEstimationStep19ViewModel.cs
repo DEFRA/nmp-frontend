@@ -11,7 +11,7 @@ namespace NMP.Commons.ViewModels
         public int? SubSoilId { get; set; }
         public string? FieldName { get; set; }
         public string? EncryptedMannerEstimateId { get; set; } = string.Empty;
-        public string? EncryptedSoilTypeChangeCounter { get; set; }
+        public string? EncryptedSoilOrCropTypeChangeCounter { get; set; }
         public int? ApplicationNo { get; set; }
         public bool IsTopSoilChange { get; set; } = false;
     }

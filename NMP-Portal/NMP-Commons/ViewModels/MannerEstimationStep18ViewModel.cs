@@ -12,7 +12,7 @@ namespace NMP.Commons.ViewModels
         public int? TopSoilId { get; set; }
         public string? FieldName { get; set; }
         public string? EncryptedMannerEstimateId { get; set; } = string.Empty;
-        public string? EncryptedSoilTypeChangeCounter { get; set; }
+        public string? EncryptedSoilOrCropTypeChangeCounter { get; set; }
         public int? ApplicationNo { get; set; }
     }
 }
