@@ -17,5 +17,8 @@ namespace NMP.Commons.ViewModels
         public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public bool IsCropGroupChange { get; set; } = false;
         public bool IsCropTypeChange { get; set; } = false;
+        public string? EncryptedSoilOrCropTypeChangeCounter { get; set; }
+        public int? ApplicationNo { get; set; }
+        public bool ArableGrassConversion { get; set; } = false;
     }
 }

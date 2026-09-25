@@ -5519,6 +5519,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What was the total rainfall since for application {0}.
+        /// </summary>
+        public static string lblEnterRainfallAmountForApplicationNoSuffix {
+            get {
+                return ResourceManager.GetString("lblEnterRainfallAmountForApplicationNoSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the address for {0}.
         /// </summary>
         public static string lblEnterTheAddressFor {
@@ -7824,6 +7833,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How are you going to apply the {0} for application {1}?.
+        /// </summary>
+        public static string lblHowAreYouGoingToApplyTheManureApplicationNo {
+            get {
+                return ResourceManager.GetString("lblHowAreYouGoingToApplyTheManureApplicationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How do you plan to use the crop?.
         /// </summary>
         public static string lblHowDoYouPlanToUseTheCrop {
@@ -7874,6 +7892,15 @@ namespace NMP.Commons.Resources {
         public static string lblHowLongIsTheGapBetweenApplicationAndIncoporation {
             get {
                 return ResourceManager.GetString("lblHowLongIsTheGapBetweenApplicationAndIncoporation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How long is there between application and incorporation of your {0} for application {1}?.
+        /// </summary>
+        public static string lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication {
+            get {
+                return ResourceManager.GetString("lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication", resourceCulture);
             }
         }
         
@@ -18873,7 +18900,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}?.
+        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}?.
         /// </summary>
         public static string lblWhatIsTheAutumnCropNitrogenUptakeForApplication {
             get {
@@ -18891,7 +18918,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} application {2}.
+        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}.
         /// </summary>
         public static string lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication {
             get {
@@ -19274,6 +19301,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatIsTheIncorporationMethod {
             get {
                 return ResourceManager.GetString("lblWhatIsTheIncorporationMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the incorporation method for your {0} for application {1}?.
+        /// </summary>
+        public static string lblWhatIsTheIncorporationMethodForApplication {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheIncorporationMethodForApplication", resourceCulture);
             }
         }
         

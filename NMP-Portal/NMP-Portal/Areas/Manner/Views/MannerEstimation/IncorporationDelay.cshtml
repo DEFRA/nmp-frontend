@@ -1,11 +1,15 @@
 ﻿@using NMP.Commons.Resources
 @model NMP.Commons.ViewModels.MannerEstimationStep30ViewModel
 @{
+    string heading = string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, Model.ManureTypeName);
     
-    ViewData["Title"] = $"{string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
-    
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter))
+    {
+        heading = string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication, Model.ManureTypeName, Model.ApplicationNo);
+    }
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
     var backAction = "IncorporationMethod";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange&&!Model.IsComingForAddNewApplication)
+    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)&&string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange&&!Model.IsComingForAddNewApplication)
     {
         backAction = "MannerEstimationResult";
     }
@@ -28,7 +32,7 @@
             <govuk-radios for="@Model.IncorporationDelayId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, Model.ManureTypeName)
+                        @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption

@@ -7,8 +7,8 @@
     string title = Resource.lblMannerEstimate;
     string heading = string.Format(Resource.lblWhatIsTheSubSoilInFieldName, Model.FieldName);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter)) ? "MannerEstimationResult" : "TopSoil";
-    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter)&&!Model.IsTopSoilChange)
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter)) ? "MannerEstimationResult" : "TopSoil";
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter)&&!Model.IsTopSoilChange)
     {
         backAction = "MannerEstimationResult";  
     }

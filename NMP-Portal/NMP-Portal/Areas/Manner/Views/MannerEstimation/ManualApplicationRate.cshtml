@@ -2,7 +2,7 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep27ViewModel
 @{
     string title = Resource.lblMannerEstimate;
-    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblWhatIsTheApplicationRateForApplicationNumber, Model.ApplicationNo) : Resource.lblWhatIsTheApplicationRate;
+    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) ? string.Format(Resource.lblWhatIsTheApplicationRateForApplicationNumber, Model.ApplicationNo) : Resource.lblWhatIsTheApplicationRate;
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
     var suffixUnit = "";
     if (Model.IsManureTypeLiquid != null)
@@ -16,7 +16,7 @@
     }
 }
 @section BeforeContent {
-    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter))
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter))
     {
         <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }

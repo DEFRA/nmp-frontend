@@ -5,20 +5,34 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) ? string.Format(Resource.lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber, Model.ManureTypeName, Model.FieldName, Model.ApplicationNo) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName);
+    string heading = !string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) ? string.Format(Resource.lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber, Model.ManureTypeName, Model.FieldName, Model.ApplicationNo) : string.Format(Resource.lblWhenAreYouApplyingManureOnThisField, Model.ManureTypeName, Model.FieldName);
 
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {title}";
 }
 
 @section BeforeContent {
-@if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilTypeChangeCounter) && Model.ApplicationNo == 1)
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && Model.ApplicationNo == 1)
     {
-        <govuk-back-link asp-action="SubSoil" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+        @if (Model.IsCropTypeChange)
+        {
+            if (Model.IsSowingDateAction)
+            {
+                <govuk-back-link asp-action="SowingDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+            }
+            else
+            {
+                <govuk-back-link asp-action="CropType" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+            }
+        }
+        else
+        {
+            <govuk-back-link asp-action="SubSoil" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
+        }
     }
     else
     {
         <govuk-back-link asp-action="BackRedirectActionForApplicationDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
-     
+
     }
 }
 
