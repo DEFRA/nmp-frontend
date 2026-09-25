@@ -1,0 +1,97 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ServiceResponses
+@model NMP.Commons.ViewModels.PlanViewModel
+@{
+    ViewData["Title"] = Resource.lblAnnualDryMatterYield;
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassClass;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange) ? "CheckAnswer" : "FreshWeightYieldsDefault") asp-controller="Crop" asp-route-q="@Model.FreshWeightDefaultEncryptedCounter">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="FreshWeightYieldsManual" asp-controller="Crop" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+
+    @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
+    @if (Model.Crops != null && Model.Crops.Count > 0)
+    {
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+
+                <h1 class="govuk-heading-l">
+                    @Resource.lblEnterTheValuesForYourFreshWeightYields
+                </h1>
+
+                @if (Model.Crops != null && Model.Crops.Count > 0)
+                {
+                    @for (int i = 0; i < Model.Crops.Count; i++)
+                    {
+                        @if (Model.FreshWeightManualCounter == i)
+                        {
+                            @for (int j = 0; j < Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count; j++)
+                            {
+
+                                <govuk-input for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield" value="@(ViewBag.FreshWeightYieldDetails[j].CutOrGrazing.Equals("Establishment") ? Resource.lblHyphen : Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield)"
+                                             disabled="@(ViewBag.FreshWeightYieldDetails[j].CutOrGrazing.Equals("Establishment"))"
+                                             input-class="govuk-input--width-5"
+                                             spellcheck="false">
+                                    <govuk-input-label is-page-heading="false">
+                                        @ViewBag.FreshWeightYieldDetails[j].DisplayText
+                                    </govuk-input-label>
+                                    <govuk-input-suffix>
+                                        @Resource.lblTonnesPerHectare
+                                    </govuk-input-suffix>
+                                </govuk-input>
+
+                                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position"></govuk-input>
+                                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName"></govuk-input>
+                                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName"></govuk-input>
+
+                            }
+
+                        }
+                        else
+                        {
+                            if (Model.FreshWeightYieldsPerField[i].FreshWeightYields != null && Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count > 0)
+                            {
+                                <div hidden="true">
+                                    @for (int j = 0; j < Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count; j++)
+                                    {
+                                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield"></govuk-input>
+                                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position"></govuk-input>
+                                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName"></govuk-input>
+                                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName"></govuk-input>
+
+                                    }
+
+                                </div>
+                            }
+                            
+                        }
+                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault" value="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldId" value="@Model.FreshWeightYieldsPerField[i].FieldId"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldName" value="@Model.FreshWeightYieldsPerField[i].FieldName"></govuk-input>
+
+                    }
+                }
+
+
+            </div>
+        </div>
+
+    }
+    <govuk-button type="submit" class="margin-bottom-forty">
+        @Resource.lblContinue
+    </govuk-button>
+    <p class="govuk-body cancel-link">
+        @if (!Model.IsCheckAnswer)
+        {
+            <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+        }
+        else
+        {
+            <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+        }
+    </p>
+</form>

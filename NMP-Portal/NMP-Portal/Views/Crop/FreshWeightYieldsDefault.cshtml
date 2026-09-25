@@ -1,0 +1,159 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.ServiceResponses
+@model NMP.Commons.ViewModels.PlanViewModel
+@{
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewData["Title"] = Resource.lblAnnualDryMatterYield;
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassClass;
+    var backAction = "";
+    if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange))
+    {
+        backAction = "CheckAnswer";
+    }
+    else
+    {
+        if(Model.FreshWeightDefaultCounter==0)
+        {
+            if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly ||
+                Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly)
+            {
+                backAction = "Defoliation";
+            }
+            else
+            {
+                backAction = "DefoliationSequence";
+            }
+        }
+        else
+        {
+            if (Model.FreshWeightYieldsPerField[Model.FreshWeightDefaultCounter-1].IsFreshWeightYieldsDefault==false)
+            {
+                backAction = "FreshWeightYieldsManual";
+            }
+            else
+            {
+                backAction = "FreshWeightYieldsDefault";
+            }
+        }
+    }
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@backAction asp-controller="Crop" asp-route-q="@Model.FreshWeightDefaultEncryptedCounter">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="FreshWeightYieldsDefault" asp-controller="Crop" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+
+    @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
+    @if (Model.Crops != null && Model.Crops.Count > 0)
+    {
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+
+                <h1 class="govuk-heading-l">
+                    @string.Format(Resource.lblTargetDryMatterYieldForField, Model.FieldName)
+                </h1>
+                <p class="govuk-body">@Resource.lblWeUseTheFreshWeightYieldToGivePhosphate <a class="govuk-link" target="_blank" href="https://ahdb.org.uk/knowledge-library/methods-for-measuring-forage-yield">@Resource.msgViewAhdbGuidence</a>.</p>
+
+                @if (Model.SwardTypeId != (int)NMP.Commons.Enums.SwardType.RedClover)
+                {
+                    <h2 class="govuk-heading-m">@Resource.lblSiteClass</h2>
+                    <div class="text_group">
+                        <p class="govuk-body">@string.Format(Resource.lblBasedOnYourDataTheGrassGrowthClassForXField, Model.FieldName)</p>
+                        @if (ViewBag.GrassClass != null)
+                        {
+                            <p class="govuk-body strong"><b>@ViewBag.GrassClass</b></p>
+                        }
+                    </div>
+                }
+
+                <h1 class="govuk-heading-l">@Resource.lblTypicalFreshWeightYield</h1>
+                <div class="table-container">
+                    <table class="govuk-table">
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <th id="field_name" scope="col" class="govuk-table__header">@Resource.lblDefoliation</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblCutGrazing </th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblFreshWeightYieldPerHectare</th>
+                            </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                            @if (ViewBag.FreshWeightYieldDetails != null)
+                            {
+                                foreach (var detail in ViewBag.FreshWeightYieldDetails)
+                                {
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell">@detail.Defoliation</td>
+                                        <td class="govuk-table__cell">@detail.CutOrGrazing</td>
+                                        <td class="govuk-table__cell">@(detail.Yield == null ? Resource.lblHyphen : string.Format(Resource.lblRateWithTonnes, detail.Yield))</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (Model.Crops != null && Model.Crops.Count > 0)
+                {
+                    @for (int i = 0; i < Model.Crops.Count; i++)
+                    {
+                        @if (Model.FreshWeightDefaultCounter == i)
+                        {
+                            <govuk-radios for="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault">
+                                <govuk-radios-fieldset>
+                                    <govuk-radios-fieldset-legend is-page-heading="false">
+                                        @Resource.lblDoYouWantToUseTheseTypicalYieldValues
+                                    </govuk-radios-fieldset-legend>
+                                    <govuk-radios-item value="@yes">@Resource.lblYesUseTheseValues</govuk-radios-item>
+                                    <govuk-radios-item value="@no">@Resource.lblNoChangeTheseValues</govuk-radios-item>
+                                </govuk-radios-fieldset>
+                            </govuk-radios>
+
+                           
+                        }
+                        else
+                        {
+                            <div hidden="true">
+                                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[Model.FreshWeightManualCounter].IsFreshWeightYieldsDefault" value="@Model.FreshWeightYieldsPerField[Model.FreshWeightManualCounter].IsFreshWeightYieldsDefault"></govuk-input>
+                            </div>
+                        }
+                        <div hidden="true">
+                            <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldId" value="@Model.FreshWeightYieldsPerField[i].FieldId"></govuk-input>
+                            <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldName" value="@Model.FreshWeightYieldsPerField[i].FieldName"></govuk-input>
+                            @if (Model.FreshWeightYieldsPerField[i].FreshWeightYields != null && Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count > 0)
+                            {
+                                @for (int j = 0; j < Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count; j++)
+                                {
+                                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield"></govuk-input>
+                                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position"></govuk-input>
+                                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName"></govuk-input>
+                                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName"></govuk-input>
+
+                                }
+                            }
+
+                        </div>
+                    }
+                }
+
+                
+            </div>
+        </div>
+
+    }
+    <govuk-button type="submit" class="margin-bottom-forty">
+        @Resource.lblContinue
+    </govuk-button>
+    <p class="govuk-body cancel-link">
+        @if (!Model.IsCheckAnswer)
+        {
+            <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+        }
+        else
+        {
+            <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+        }
+    </p>
+</form>

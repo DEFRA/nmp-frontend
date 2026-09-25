@@ -226,7 +226,7 @@
         cropName = Model.CropType;
     }
 
-    
+
     string yieldQuestionText;
 
     if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
@@ -244,7 +244,7 @@
             yieldQuestionText = string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, cropName, Model.FieldName);
         }
     }
-
+    
 }
 
 @section BeforeContent {
@@ -1009,6 +1009,62 @@
                                 }
                             }
                         }
+                    }
+                    @if(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                    {
+                        @if (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover)
+                        {
+                            @foreach (var freshWeightDefault in Model.FreshWeightYieldsPerField)
+                            {
+                                <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblTargetDryMatterYieldForField, freshWeightDefault.FieldName)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @(freshWeightDefault.IsFreshWeightYieldsDefault == null ? Resource.lblNotSet : (freshWeightDefault.IsFreshWeightYieldsDefault == false ? Resource.lblNo : Resource.lblYes))
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+
+                                        <govuk-summary-list-row-action asp-action="FreshWeightYieldsDefault" asp-controller="Crop" asp-route-q="@Model.FreshWeightDefaultEncryptedCounter">
+                                            @Resource.lblChange
+                                            <span class="govuk-visually-hidden">
+                                                @string.Format(Resource.lblTargetDryMatterYieldForField, freshWeightDefault.FieldName)
+                                            </span>
+                                        </govuk-summary-list-row-action>
+
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                                
+                                <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
+                                    <govuk-summary-list-row-key>
+                                        @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, freshWeightDefault.FieldName)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @foreach (var yieldPerDefoliation in freshWeightDefault.FreshWeightYields)
+                                        {
+                                            <span class="yield-row">
+                                                <span class="yield-label">@yieldPerDefoliation.DefoliationName</span>
+                                                <span class="yield-value">@((yieldPerDefoliation.Yield == null && !yieldPerDefoliation.DefoliationSequenceName.Equals("Establishment")) ? Resource.lblNotSet : (yieldPerDefoliation.Yield == null ? Resource.lblHyphen : yieldPerDefoliation.Yield+" "+ Resource.lblTonnesPerHectare))</span>
+                                                <br /> 
+                                            </span>
+                                        }
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        @if (freshWeightDefault.IsFreshWeightYieldsDefault != null && !freshWeightDefault.IsFreshWeightYieldsDefault.Value)
+                                        {
+                                                <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual" asp-controller="Crop" asp-route-q="@Model.FreshWeightManualEncryptedCounter">
+                                                    @Resource.lblChange
+                                                    <span class="govuk-visually-hidden">
+                                                        @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, freshWeightDefault.FieldName)
+                                                    </span>
+                                                </govuk-summary-list-row-action>
+                                        }
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>                                    
+
+                            }
+                        }
+                        
                     }
 
                 }
