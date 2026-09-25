@@ -1063,16 +1063,18 @@
                                                 <span class="yield-value">@((yieldPerDefoliation.Yield == null && !yieldPerDefoliation.DefoliationSequenceName.Equals("Establishment")) ? Resource.lblNotSet : (yieldPerDefoliation.Yield == null ? Resource.lblHyphen : yieldPerDefoliation.Yield+" "+ Resource.lblTonnesPerHectare))</span>
                                                 <br /> 
                                             </span>
-@*                                             @string.Concat(yieldPerDefoliation.DefoliationName+" - " , (yieldPerDefoliation.Yield == null && !yieldPerDefoliation.DefoliationSequenceName.Equals("Establishment")) ? Resource.lblNotSet : (yieldPerDefoliation.Yield == null ? Resource.lblHyphen : yieldPerDefoliation.Yield))
- *@                                        }
+                                        }
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual" asp-controller="Crop" asp-route-q="@Model.FreshWeightManualEncryptedCounter">
-                                            @Resource.lblChange
-                                            <span class="govuk-visually-hidden">
-                                                @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, freshWeightDefault.FieldName)
-                                            </span>
-                                        </govuk-summary-list-row-action>
+                                        @if(!freshWeightDefault.IsFreshWeightYieldsDefault.Value)
+                                        {
+                                                <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual" asp-controller="Crop" asp-route-q="@Model.FreshWeightManualEncryptedCounter">
+                                                    @Resource.lblChange
+                                                    <span class="govuk-visually-hidden">
+                                                        @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, freshWeightDefault.FieldName)
+                                                    </span>
+                                                </govuk-summary-list-row-action>
+                                        }
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>                                    
 
