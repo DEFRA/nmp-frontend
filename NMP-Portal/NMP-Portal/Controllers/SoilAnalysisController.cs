@@ -394,7 +394,7 @@ namespace NMP.Portal.Controllers
 
         private void ValidateMinMaxDate(SoilAnalysisViewModel model)
         {
-            if (model.Date != null&& (model.Date.Value.Date.Year < 1601 || model.Date.Value.Date >= DateTime.Now.AddDays(1).Date))
+            if (model.Date != null&& model.Date.Value.Date >= DateTime.Now.AddDays(1).Date)
             {
                     ModelState.AddModelError("Date", Resource.lblTheDateCannotBeInTheFuture);
              
