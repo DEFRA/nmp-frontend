@@ -4530,7 +4530,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 SetReportDataToSession(model);
                 return RedirectToAction(_livestockCheckAnswerAction);
             }
-
+            ReportViewModel? reportModel = GetReportDataFromSession();
+            if(reportModel != null && reportModel.LivestockTypeId != model.LivestockTypeId)
+            {
+                model.IsLivestockTypeChange = true;
+            }
             SetReportDataToSession(model);
             var cattle = (int)NMP.Commons.Enums.LivestockGroup.Cattle;
             var sheep = (int)NMP.Commons.Enums.LivestockGroup.Sheep;
@@ -4974,10 +4978,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private async Task FillLivestockTypesByGroupId(ReportViewModel model)
     {
-        (List<LivestockTypeResponse> livestockTypes, _) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-        model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
-        model.AverageOccupancy = (int?)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
-        model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+        if (model.IsLivestockTypeChange)
+        {
+            (List<LivestockTypeResponse> livestockTypes, _) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
+            model.NitrogenStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.NByUnit;
+            model.AverageOccupancy = (int?)livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Occupancy;
+            model.PhosphateStandard = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.P2O5;
+        }
     }
 
     [HttpGet]
@@ -5429,7 +5436,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         Error? error = null;
         try
         {
-
+            model.IsLivestockTypeChange = false;
             var cattle = (int)NMP.Commons.Enums.LivestockGroup.Cattle;
             var sheep = (int)NMP.Commons.Enums.LivestockGroup.Sheep;
             var goatsDeerOrHorses = (int)NMP.Commons.Enums.LivestockGroup.GoatsDeerOrHorses;
