@@ -8523,7 +8523,7 @@ following crop year 2</value>
     <value>Select the option that best matched the previous grass management.</value>
   </data>
   <data name="lblPreviousGrassManagementHint" xml:space="preserve">
-    <value>Low nitrogen (N) means less than 150 kg/ha per year fertiliser N used on average. High N means more than 150 kg/ha per year fertiliser N used on average, or a high clover swards</value>
+    <value>Low nitrogen (N) means less than 150 kg per hectare per year fertiliser N used on average. High N means more than 150 kg per hectare per year fertiliser N used on average, or a high clover swards</value>
   </data>
   <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
     <value>What is the occupancy for this livestock type in {0}</value>
@@ -8532,13 +8532,13 @@ following crop year 2</value>
     <value>Undersown swards should be treated as an existing sward.</value>
   </data>
   <data name="lblLowNMoreThan150KgFertiliserN" xml:space="preserve">
-    <value>Low N : Less than 150kg/ha/year fertiliser N user on average in last 2 years.</value>
+    <value>Low N : Less than 150 kg per hectare per year fertiliser N user on average in last 2 years.</value>
   </data>
   <data name="String1" xml:space="preserve">
     <value />
   </data>
   <data name="lblHighNMoreThan150KgFertiliserN" xml:space="preserve">
-    <value>High N : More than 150kg/ha/year fertiliser N user on average in last 2 years, or High Clover.</value>
+    <value>High N : More than 150 kg per hectare per year fertiliser N user on average in last 2 years, or High Clover.</value>
   </data>
   <data name="lblSiteClass" xml:space="preserve">
     <value>Site class</value>
@@ -8614,5 +8614,8 @@ following crop year 2</value>
   </data>
   <data name="lblEnterTheValuesForYourFreshWeightYieldInField" xml:space="preserve">
     <value>Enter the values for your fresh weight yields for each cut or grazing in {0}</value>
+  </data>
+  <data name="lblDoYouWantToUseTheseTypicalYieldValues" xml:space="preserve">
+    <value>Do you want to use these typical yield values?</value>
   </data>
 </root>

@@ -27,13 +27,20 @@
         }
         else
         {
-            backAction = "FreshWeightYieldsManual";
+            if (Model.FreshWeightYieldsPerField[Model.FreshWeightDefaultCounter-1].IsFreshWeightYieldsDefault==false)
+            {
+                backAction = "FreshWeightYieldsManual";
+            }
+            else
+            {
+                backAction = "FreshWeightYieldsDefault";
+            }
         }
     }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Crop" asp-route-q="@Model.FreshWeightManualEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Crop" asp-route-q="@Model.FreshWeightDefaultEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="FreshWeightYieldsDefault" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -50,14 +57,17 @@
                 </h1>
                 <p class="govuk-body">@Resource.lblWeUseTheFreshWeightYieldToGivePhosphate <a class="govuk-link" target="_blank" href="https://ahdb.org.uk/knowledge-library/methods-for-measuring-forage-yield">@Resource.msgViewAhdbGuidence</a>.</p>
 
-                <h2 class="govuk-heading-m">@Resource.lblSiteClass</h2>
-                <div class="text_group">
-                    <p class="govuk-body">@string.Format(Resource.lblBasedOnYourDataTheGrassGrowthClassForXField, Model.FieldName)</p>
-                    @if (ViewBag.GrassClass != null)
-                    {
-                        <p class="govuk-body strong"><b>@ViewBag.GrassClass</b></p>
-                    }
-                </div>
+                @if (Model.SwardTypeId != (int)NMP.Commons.Enums.SwardType.RedClover)
+                {
+                    <h2 class="govuk-heading-m">@Resource.lblSiteClass</h2>
+                    <div class="text_group">
+                        <p class="govuk-body">@string.Format(Resource.lblBasedOnYourDataTheGrassGrowthClassForXField, Model.FieldName)</p>
+                        @if (ViewBag.GrassClass != null)
+                        {
+                            <p class="govuk-body strong"><b>@ViewBag.GrassClass</b></p>
+                        }
+                    </div>
+                }
 
                 <h1 class="govuk-heading-l">@Resource.lblTypicalFreshWeightYield</h1>
                 <div class="table-container">
@@ -94,7 +104,7 @@
                             <govuk-radios for="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault">
                                 <govuk-radios-fieldset>
                                     <govuk-radios-fieldset-legend is-page-heading="false">
-                                        @Resource.lblDoYouWantToUseTheseTypicalNutrientValues
+                                        @Resource.lblDoYouWantToUseTheseTypicalYieldValues
                                     </govuk-radios-fieldset-legend>
                                     <govuk-radios-item value="@yes">@Resource.lblYesUseTheseValues</govuk-radios-item>
                                     <govuk-radios-item value="@no">@Resource.lblNoChangeTheseValues</govuk-radios-item>

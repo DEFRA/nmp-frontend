@@ -5114,6 +5114,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these typical yield values?.
+        /// </summary>
+        public static string lblDoYouWantToUseTheseTypicalYieldValues {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToUseTheseTypicalYieldValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use these values for this {0} type?.
         /// </summary>
         public static string lblDoYouWantToUseTheseValuesForThis {
@@ -7752,7 +7761,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to High N : More than 150kg/ha/year fertiliser N user on average in last 2 years, or High Clover..
+        ///   Looks up a localized string similar to High N : More than 150 kg per hectare per year fertiliser N user on average in last 2 years, or High Clover..
         /// </summary>
         public static string lblHighNMoreThan150KgFertiliserN {
             get {
@@ -10012,7 +10021,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Low N : Less than 150kg/ha/year fertiliser N user on average in last 2 years..
+        ///   Looks up a localized string similar to Low N : Less than 150 kg per hectare per year fertiliser N user on average in last 2 years..
         /// </summary>
         public static string lblLowNMoreThan150KgFertiliserN {
             get {
@@ -13549,7 +13558,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Low nitrogen (N) means less than 150 kg/ha per year fertiliser N used on average. High N means more than 150 kg/ha per year fertiliser N used on average, or a high clover swards.
+        ///   Looks up a localized string similar to Low nitrogen (N) means less than 150 kg per hectare per year fertiliser N used on average. High N means more than 150 kg per hectare per year fertiliser N used on average, or a high clover swards.
         /// </summary>
         public static string lblPreviousGrassManagementHint {
             get {

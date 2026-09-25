@@ -244,30 +244,14 @@
             yieldQuestionText = string.Format(Resource.lblDoYouWantToEnterTheExpectedYieldInFieldName, cropName, Model.FieldName);
         }
     }
-
-    var encryptedCounter = "";
-    if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
-    {
-        if(Model.FarmRB209CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
-        {
-            encryptedCounter = Model.GrassClassEncryptedCounter;
-        }
-        else
-        {
-            encryptedCounter = Model.FreshWeightManualEncryptedCounter;
-        }
-    }
-    else
-    {
-        encryptedCounter = Model.YieldEncryptedCounter;
-    }
+    
 }
 
 @section BeforeContent {
 
     @*  @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
     { *@
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@encryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@(Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Model.GrassClassEncryptedCounter : Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
     @* }
     else
     {
@@ -1066,7 +1050,7 @@
                                         }
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        @if(!freshWeightDefault.IsFreshWeightYieldsDefault.Value)
+                                        @if (freshWeightDefault.IsFreshWeightYieldsDefault != null && !freshWeightDefault.IsFreshWeightYieldsDefault.Value)
                                         {
                                                 <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual" asp-controller="Crop" asp-route-q="@Model.FreshWeightManualEncryptedCounter">
                                                     @Resource.lblChange
