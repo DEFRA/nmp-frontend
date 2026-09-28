@@ -6574,59 +6574,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    private async Task InitialiseDryMatterYield(
-        PlanViewModel model,
-        bool isScotland,
-        List<GrassGrowthClassResponse>? grassGrowthClasses,
-        List<GrassSiteClassResponse>? grassSiteClasses)
-    {
-        model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
-
-        if (model.DryMatterYieldCounter == 0)
-        {
-            model.FieldID = model.Crops[0].FieldID.Value;
-        }
-
-        await BindYieldRange(model, GetClassId(isScotland, 0, grassGrowthClasses, grassSiteClasses));
-        SetCropToSession(model);
-    }
-
-    private async Task<IActionResult?> BindDryMatterYieldForCounter(
-        PlanViewModel model,
-        string q,
-        bool isScotland,
-        List<GrassGrowthClassResponse>? grassGrowthClasses,
-        List<GrassSiteClassResponse>? grassSiteClasses)
-    {
-        int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
-        int index = itemCount - 1; // index of list
-
-        if (itemCount == 0)
-        {
-            model.DryMatterYieldCounter = 0;
-            model.DryMatterYieldEncryptedCounter = string.Empty;
-            SetCropToSession(model);
-            return RedirectToAction(_grassGrowthClassActionName);
-        }
-
-        model.FieldID = model.Crops[index].FieldID.Value;
-        model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
-        model.DryMatterYieldCounter = index;
-        model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
-
-        SetCropToSession(model);
-
-        await FetchYieldRanges(model, GetClassId(isScotland, index, grassGrowthClasses, grassSiteClasses));
-        return null;
-    }
-
-    private static int GetClassId(bool isScotland, int index, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses)
-    {
-        return isScotland
-            ? grassSiteClasses![index].SiteClassId
-            : grassGrowthClasses![index].GrassGrowthClassId;
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DryMatterYield(PlanViewModel model)
@@ -6684,6 +6631,60 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return View(model);
     }
 
+    private async Task InitialiseDryMatterYield(
+        PlanViewModel model,
+        bool isScotland,
+        List<GrassGrowthClassResponse>? grassGrowthClasses,
+        List<GrassSiteClassResponse>? grassSiteClasses)
+    {
+        model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
+
+        if (model.DryMatterYieldCounter == 0)
+        {
+            model.FieldID = model.Crops[0].FieldID.Value;
+        }
+
+        await BindYieldRange(model, GetClassId(isScotland, 0, grassGrowthClasses, grassSiteClasses));
+        SetCropToSession(model);
+    }
+
+    private async Task<IActionResult?> BindDryMatterYieldForCounter(
+        PlanViewModel model,
+        string q,
+        bool isScotland,
+        List<GrassGrowthClassResponse>? grassGrowthClasses,
+        List<GrassSiteClassResponse>? grassSiteClasses)
+    {
+        int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
+        int index = itemCount - 1; // index of list
+
+        if (itemCount == 0)
+        {
+            model.DryMatterYieldCounter = 0;
+            model.DryMatterYieldEncryptedCounter = string.Empty;
+            SetCropToSession(model);
+            return RedirectToAction(_grassGrowthClassActionName);
+        }
+
+        model.FieldID = model.Crops[index].FieldID.Value;
+        model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
+        model.DryMatterYieldCounter = index;
+        model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
+
+        SetCropToSession(model);
+
+        await FetchYieldRanges(model, GetClassId(isScotland, index, grassGrowthClasses, grassSiteClasses));
+        return null;
+    }
+
+    private static int GetClassId(bool isScotland, int index, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses)
+    {
+        return isScotland
+            ? grassSiteClasses![index].SiteClassId
+            : grassGrowthClasses![index].GrassGrowthClassId;
+    }
+
+    
     private IActionResult RedirectForDryMatterIfSingleFigure(PlanViewModel model)
     {
         model.DryMatterYieldCounter = 1;
