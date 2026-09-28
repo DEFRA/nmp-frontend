@@ -10,11 +10,11 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropGroupId" />
     }
-    
+
     @if (currentStep != (int)CropWizardSteps.CropType)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.OtherCropName" value="@Model.OtherCropName" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" value="@Model.CropTypeID"/>        
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeID" value="@Model.CropTypeID" />
     }
 
     @if (currentStep != (int)CropWizardSteps.CropGroupName)
@@ -54,9 +54,9 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmRB209CountryID" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
- 
+
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldName" value="@Model.FieldName" />
-    
+
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldID" value="@Model.FieldID" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1Name" value="@Model.CropInfo1Name" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo2Name" value="@Model.CropInfo2Name" />
@@ -76,6 +76,10 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassDistinctCount" value="@Model.GrassClassDistinctCount" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassCounter" value="@Model.GrassClassCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassEncryptedCounter" value="@Model.GrassClassEncryptedCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreshWeightDefaultCounter" value="@Model.FreshWeightDefaultCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreshWeightDefaultEncryptedCounter" value="@Model.FreshWeightDefaultEncryptedCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreshWeightManualCounter" value="@Model.FreshWeightManualCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreshWeightManualEncryptedCounter" value="@Model.FreshWeightManualEncryptedCounter" />
     @if (currentStep != (int)CropWizardSteps.GrassClass)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassQuestion" />
@@ -177,6 +181,40 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropOrder" value="@Model.Crops[i].CropOrder" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropGroupName" value="@Model.Crops[i].CropGroupName" />
         }
-
     }
+
+
+    @if (currentStep != (int)CropWizardSteps.FreshWeightYieldsDefault && currentStep != (int)CropWizardSteps.FreshWeightYieldsManual && (Model.Crops != null && Model.Crops.Count > 0))
+    {
+        @for (int i = 0; i < Model.Crops.Count; i++)
+        {
+            @if (Model.FreshWeightYieldsPerField != null && Model.FreshWeightYieldsPerField.Count > 0)
+            {
+                @if (currentStep != (int)CropWizardSteps.FreshWeightYieldsDefault)
+                {
+                    <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault" value="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault"></govuk-input>
+                }
+                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldId" value="@Model.FreshWeightYieldsPerField[i].FieldId"></govuk-input>
+                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FieldName" value="@Model.FreshWeightYieldsPerField[i].FieldName"></govuk-input>
+
+                @if (Model.FreshWeightYieldsPerField[i].FreshWeightYields != null && Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count > 0)
+                {
+                    @for (int j = 0; j < Model.FreshWeightYieldsPerField[i].FreshWeightYields.Count; j++)
+                    {
+                        @if (currentStep != (int)CropWizardSteps.FreshWeightYieldsManual)
+                        {
+                            <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Yield"></govuk-input>
+                            <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].Position"></govuk-input>
+                        }
+                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationSequenceName"></govuk-input>
+                        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName" value="@Model.FreshWeightYieldsPerField[i].FreshWeightYields[j].DefoliationName"></govuk-input>
+
+                    }
+                }
+            }
+
+        }
+    }
+
+
 </div>
