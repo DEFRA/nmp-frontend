@@ -34,6 +34,8 @@ namespace NMP.Commons.Enums
         CopyCheckAnswer=23,
         CopyExistingPlan=24,
         CopyOrganicInorganicApplications=25,
-            CopyPlanYears=26
+        CopyPlanYears=26,
+        FreshWeightYieldsDefault=27,
+        FreshWeightYieldsManual=28
     }
 }
