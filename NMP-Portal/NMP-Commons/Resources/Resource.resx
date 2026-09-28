@@ -8507,4 +8507,7 @@ following crop year 2</value>
   <data name="lblWhatIsTheNitrogenNStandardForThisSuffix" xml:space="preserve">
     <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
   </data>
+  <data name="lblNutrientManagementPlansAndReports" xml:space="preserve">
+    <value>Nutrient management plans and reports</value>
+  </data>
 </root>
