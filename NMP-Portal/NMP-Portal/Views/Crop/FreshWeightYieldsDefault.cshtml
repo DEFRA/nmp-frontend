@@ -5,7 +5,7 @@
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
     ViewData["Title"] = Resource.lblAnnualDryMatterYield;
-    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.GrassClass;
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.FreshWeightYieldsDefault;
     var backAction = "";
     if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange))
     {

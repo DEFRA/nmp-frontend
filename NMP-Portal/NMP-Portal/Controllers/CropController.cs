@@ -2955,28 +2955,47 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             int i = 1;
             int utilisation1 = 0;
             List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
-            if (defoliationSequence != null)
+            if(model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland || model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithLowClover)
             {
-                foreach (char c in defoliationSequence)
+                if (defoliationSequence != null)
                 {
-                    utilisation1 = BindUtilisation1(c);
+                    foreach (char c in defoliationSequence)
+                    {
+                        utilisation1 = BindUtilisation1(c);
+                        managementPeriods.Add(new ManagementPeriod
+                        {
+                            Defoliation = i,
+                            Utilisation1ID = utilisation1,
+                            Yield = crop.Yield ?? 0 / model.PotentialCut,
+                            CreatedOn = DateTime.Now,
+                            CreatedByID = userId
+                        });
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var defoliationYield in model.FreshWeightYieldsPerField.FirstOrDefault(x => x.FieldId == crop.FieldID).FreshWeightYields)
+                {
+                    utilisation1 = BindUtilisation1(defoliationYield.DefoliationSequenceName[0]);
                     managementPeriods.Add(new ManagementPeriod
                     {
-                        Defoliation = i,
+                        Defoliation = defoliationYield.Position,
                         Utilisation1ID = utilisation1,
-                        Yield = crop.Yield ?? 0 / model.PotentialCut,
+                        Yield = defoliationYield.Yield??0,
                         CreatedOn = DateTime.Now,
                         CreatedByID = userId
                     });
-                    i++;
                 }
             }
 
-            return new CropData
-            {
-                Crop = crop,
-                ManagementPeriods = managementPeriods
-            };
+
+                return new CropData
+                {
+                    Crop = crop,
+                    ManagementPeriods = managementPeriods
+                };
         }
     }
     private async Task<(Crop, string)> BindDataForGrass(PlanViewModel model, Crop crop)
