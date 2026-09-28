@@ -28,7 +28,7 @@ else
                 </govuk-notification-banner>
             }
             <h1 class="govuk-heading-l">@Resource.lblNutrientSupplyEstimatesFromOrganicMaterials</h1>
-            <a class="govuk-button" asp-action="Name" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-s="@ViewBag.IsNewFarm"> @Resource.lblCreateANutrientSupplyEstimateForANewFarm</a>
+            <a class="govuk-button" asp-action="CreateNewMannerFarm" asp-controller="MannerEstimation" asp-route-s="@ViewBag.IsNewFarm"> @Resource.lblCreateANutrientSupplyEstimateForANewFarm</a>
 
             @if (ViewBag.MannerFarmList != null && ViewBag.MannerFarmList.Count > 0)
             {

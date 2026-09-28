@@ -514,9 +514,7 @@ public class MannerService(ILogger<MannerService> logger, IHttpContextAccessor h
             if (responseWrapper?.Data != null)
             {
                 topSoilList = responseWrapper?.Data?.ToObject<List<CommonResponse>>();
-
             }
-
         }
         else
         {

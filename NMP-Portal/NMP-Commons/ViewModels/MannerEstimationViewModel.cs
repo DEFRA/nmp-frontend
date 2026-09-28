@@ -9,8 +9,13 @@ namespace NMP.Commons.ViewModels
 {
     public class MannerEstimationViewModel
     {
-        public MannerEstimationViewModel()
+        public MannerEstimationViewModel(): this(Guid.NewGuid().ToString())
         {
+
+        }
+        public MannerEstimationViewModel(string sessionId)
+        {
+            SessionId = sessionId;
             MannerEstimationStep1 = new MannerEstimationStep1ViewModel();
             MannerEstimationStep2 = new MannerEstimationStep2ViewModel();
             MannerEstimationStep3 = new MannerEstimationStep3ViewModel();
