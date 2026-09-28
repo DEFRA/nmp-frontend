@@ -8597,4 +8597,7 @@ following crop year 2</value>
   <data name="lblEnterRainfallAmountForApplicationNoSuffix" xml:space="preserve">
     <value>What was the total rainfall since for application {0}</value>
   </data>
+  <data name="lblNutrientManagementPlansAndReports" xml:space="preserve">
+    <value>Nutrient management plans and reports</value>
+  </data>
 </root>

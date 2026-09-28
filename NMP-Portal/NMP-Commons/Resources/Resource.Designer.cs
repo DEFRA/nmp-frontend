@@ -11839,6 +11839,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nutrient management plans and reports.
+        /// </summary>
+        public static string lblNutrientManagementPlansAndReports {
+            get {
+                return ResourceManager.GetString("lblNutrientManagementPlansAndReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nutrient prices.
         /// </summary>
         public static string lblNutrientPrices {
