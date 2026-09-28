@@ -2240,7 +2240,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
                 if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter))
                 {
-                    
+
                     return RedirectToAction(_applicationRateMethodAction, new { sid = sid });
                 }
                 return RedirectToAction("DefaultNutrientValues", new { sid = sid });
@@ -6470,7 +6470,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
 
-            ViewBag.SessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
+            //ViewBag.SessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
 
             ViewBag.MannerFarmList = mannerFarmList.OrderBy(x => x.Name).ToList();
 
@@ -6484,7 +6484,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction("Index", "DashBoard", new { area = "" });
                 }
-                return RedirectToAction("Name", new { s = _mannerEstimationProtector.Protect(Resource.lblFalse), sid = ViewBag.SessionId });
+                //return RedirectToAction("Name", new { s = _mannerEstimationProtector.Protect(Resource.lblFalse), sid = ViewBag.SessionId });
             }
             return View();
         }
@@ -6517,7 +6517,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return RedirectToAction(_conditionsAffectingNutrients, new { sid = sid });
         }
         [HttpGet("RemoveMannerFarm/{sid?}")]
-        public async Task<IActionResult> RemoveMannerFarm(string? sid, string? q)
+        public async Task<IActionResult> RemoveMannerFarm(string? sid)
         {
             MannerEstimationStep42ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep42();
             await FetchRemoveMannerFarmSelectList();
@@ -6766,6 +6766,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             return mannerEstimationViewModel;
         }
+        [HttpGet("BackRedirectActionForApplicationDate")]
         public async Task<IActionResult> BackRedirectActionForApplicationDate(string? sid)
         {
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
@@ -6835,6 +6836,67 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             }
             return model;
+        }
+        [HttpGet("BindSessionData")]
+        public IActionResult BindSessionData(string actionName, string? q, string? r, string? s)//q=encryptedMannerFarmId,r=encryptedMannerEstimateId,r=encryptedMannerApplicationId
+        {
+            MannerEstimationViewModel model = new MannerEstimationViewModel(); //_mannerEstimationLogic.GetMannerEstimationFromSession(sid);
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                model.MannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
+                model.EncryptedMannerFarmId = q;
+            }
+            if (!string.IsNullOrWhiteSpace(r))
+            {
+                model.MannerEstimationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(r));
+                model.EncryptedMannerEstimationId = r;
+            }
+            if (!string.IsNullOrWhiteSpace(s))
+            {
+                model.MannerEstimationApplicationId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(s));
+                model.EncryptedMannerEstimationApplicationId = s;
+            }
+            _mannerEstimationLogic.SetMannerEstimationToSession(model);
+            if (actionName == "Name")
+            {
+                return RedirectToAction("Name", new { s = _mannerEstimationProtector.Protect(Resource.lblTrue), r = r, sid = model.SessionId });
+            }
+            if (actionName == "RemoveMannerFarm")
+            {
+                return RedirectToAction("RemoveMannerFarm", new { sid = model.SessionId });
+            }
+            if (actionName == "MannerEstimationResult")
+            {
+                return RedirectToAction("MannerEstimationResult", new { q = r, sid = model.SessionId });
+            }
+            if (actionName == "MannerHubPage")
+            {
+                return RedirectToAction("MannerHubPage", new { q = q, sid = model.SessionId });
+            }
+            if (actionName == "RemoveEstimations")
+            {
+                return RedirectToAction("RemoveEstimations", new { q = q, sid = model.SessionId });
+            }
+            if (actionName == "RemoveMannerEstimateApplication")
+            {
+                return RedirectToAction("RemoveMannerEstimateApplication", new { q = r, sid = model.SessionId });
+            }
+            if (actionName == "Report")
+            {
+                return RedirectToAction("Report", new { q = r, sid = model.SessionId });
+            }
+            if (actionName == "ManureGroup")
+            {
+                return RedirectToAction("ManureGroup", new
+                {
+                    q = r,
+                    sid = model.SessionId,
+                    s =_mannerEstimationProtector.Protect(Resource.lblTrue)
+                });
+            }
+
+            return View(model);
         }
     }
 }
