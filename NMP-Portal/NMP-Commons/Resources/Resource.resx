@@ -8531,14 +8531,8 @@ following crop year 2</value>
   <data name="lblUndersownSwardsShouldBeTreated" xml:space="preserve">
     <value>Undersown swards should be treated as an existing sward.</value>
   </data>
-  <data name="lblLowNMoreThan150KgFertiliserN" xml:space="preserve">
-    <value>Low N : Less than 150 kg per hectare per year fertiliser N user on average in last 2 years.</value>
-  </data>
   <data name="String1" xml:space="preserve">
     <value />
-  </data>
-  <data name="lblHighNMoreThan150KgFertiliserN" xml:space="preserve">
-    <value>High N : More than 150 kg per hectare per year fertiliser N user on average in last 2 years, or High Clover.</value>
   </data>
   <data name="lblSiteClass" xml:space="preserve">
     <value>Site class</value>
@@ -8616,9 +8610,18 @@ following crop year 2</value>
     <value>Enter the values for your fresh weight yields for each cut or grazing in {0}</value>
   </data>
   <data name="lblDoYouWantToUseTheseTypicalYieldValues" xml:space="preserve">
-    <value>Do you want to use these typical yield values?</value>
-    </data>
+    <value>Do you want to use these typical yield values for {0}?</value>
+  </data>
   <data name="lblNutrientManagementPlansAndReports" xml:space="preserve">
     <value>Nutrient management plans and reports</value>
+  </data>
+  <data name="lblFreshWeightYieldsForField" xml:space="preserve">
+    <value>Fresh weight yields for {0}</value>
+  </data>
+  <data name="lblEnterTheValuesForEachCutOrGrazing" xml:space="preserve">
+    <value>Enter the values for each cut or grazing</value>
+  </data>
+  <data name="lblHighCloverHint" xml:space="preserve">
+    <value>A high clover content is more than 30% clover over the season.</value>
   </data>
 </root>

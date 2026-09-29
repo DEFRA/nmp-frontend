@@ -5114,7 +5114,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to use these typical yield values?.
+        ///   Looks up a localized string similar to Do you want to use these typical yield values for {0}?.
         /// </summary>
         public static string lblDoYouWantToUseTheseTypicalYieldValues {
             get {
@@ -5695,6 +5695,15 @@ namespace NMP.Commons.Resources {
         public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
             get {
                 return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the values for each cut or grazing.
+        /// </summary>
+        public static string lblEnterTheValuesForEachCutOrGrazing {
+            get {
+                return ResourceManager.GetString("lblEnterTheValuesForEachCutOrGrazing", resourceCulture);
             }
         }
         
@@ -7149,6 +7158,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fresh weight yields for {0}.
+        /// </summary>
+        public static string lblFreshWeightYieldsForField {
+            get {
+                return ResourceManager.GetString("lblFreshWeightYieldsForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From fertilisers or lime.
         /// </summary>
         public static string lblFromFertilisersOrLime {
@@ -7761,11 +7779,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to High N : More than 150 kg per hectare per year fertiliser N user on average in last 2 years, or High Clover..
+        ///   Looks up a localized string similar to A high clover content is more than 30% clover over the season..
         /// </summary>
-        public static string lblHighNMoreThan150KgFertiliserN {
+        public static string lblHighCloverHint {
             get {
-                return ResourceManager.GetString("lblHighNMoreThan150KgFertiliserN", resourceCulture);
+                return ResourceManager.GetString("lblHighCloverHint", resourceCulture);
             }
         }
         
@@ -10017,15 +10035,6 @@ namespace NMP.Commons.Resources {
         public static string lblLow {
             get {
                 return ResourceManager.GetString("lblLow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Low N : Less than 150 kg per hectare per year fertiliser N user on average in last 2 years..
-        /// </summary>
-        public static string lblLowNMoreThan150KgFertiliserN {
-            get {
-                return ResourceManager.GetString("lblLowNMoreThan150KgFertiliserN", resourceCulture);
             }
         }
         
