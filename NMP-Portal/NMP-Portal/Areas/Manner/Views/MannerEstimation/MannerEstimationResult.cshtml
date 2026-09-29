@@ -66,20 +66,20 @@
             @if (applicationCount != 3)
             {
                 <li>
-                    <a asp-action="BindSessionData" asp-controller="MannerEstimation" asp-route-actionName="ManureGroup"  asp-route-r="@ViewBag.EncryptedEstimateId">@Resource.lblAddAnotherOrganicMaterialApplicationToThisEstimate</a>
+                    <a asp-action="BindSessionData" asp-controller="MannerEstimation" asp-route-actionName=@ViewBag.ManureGroupActionName asp-route-r="@ViewBag.EncryptedEstimateId">@Resource.lblAddAnotherOrganicMaterialApplicationToThisEstimate</a>
                 </li>
             }
             @if (applicationCount > 1)
             {
                 <li>
-                    <a asp-action="BindSessionData" asp-controller="MannerEstimation" asp-route-actionName="RemoveMannerEstimateApplication"  asp-route-r="@ViewBag.EncryptedEstimateId">@Resource.lblRemoveAnOrganicMaterialApplicationFromThisEstimate</a>
+                    <a asp-action="RemoveMannerEstimateApplication" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@ViewBag.EncryptedEstimateId">@Resource.lblRemoveAnOrganicMaterialApplicationFromThisEstimate</a>
                 </li>
             }
             <li>
-                <a asp-action="BindSessionData" asp-controller="MannerEstimation" asp-route-actionName="Name" asp-route-r="@ViewBag.EncryptedEstimateId">@Resource.lblCreateACopyOfThisEstimate</a>
+                <a asp-action="Name" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-r="@ViewBag.EncryptedEstimateId">@Resource.lblCreateACopyOfThisEstimate</a>
             </li>
             <li>
-                <a asp-action="BindSessionData" asp-controller="MannerEstimation" asp-route-actionName="Report" asp-route-r="@ViewBag.EncryptedEstimateId">@Resource.lblExportOrPrintThisEstimate</a>
+                <a asp-action="Report" asp-route-q="@ViewBag.EncryptedEstimateId" asp-route-sid="@ViewBag.SessionId">@Resource.lblExportOrPrintThisEstimate</a>
             </li>
         </ul>
     </div>
