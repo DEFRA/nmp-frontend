@@ -8612,6 +8612,7 @@ following crop year 2</value>
   <data name="lblDoYouWantToUseTheseTypicalYieldValues" xml:space="preserve">
     <value>Do you want to use these typical yield values?</value>
   </data>
+  <data name="lblDoYouWantToUseTheseTypicalYieldValuesForField" xml:space="preserve">
     <value>Do you want to use these typical yield values for {0}?</value>
   </data>
   <data name="lblNutrientManagementPlansAndReports" xml:space="preserve">
