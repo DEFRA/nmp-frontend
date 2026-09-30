@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -7365,6 +7365,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GrassPercentage.
+        /// </summary>
+        public static string lblGrassPercentage {
+            get {
+                return ResourceManager.GetString("lblGrassPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}% of this farm is grass..
         /// </summary>
         public static string lblGrassPercentageOfThisFarmIsGrass {
@@ -10327,7 +10336,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the fate of organic material N following land application.
+        ///   Looks up a localized string similar to the fate of organic material nitrogen (N) following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {

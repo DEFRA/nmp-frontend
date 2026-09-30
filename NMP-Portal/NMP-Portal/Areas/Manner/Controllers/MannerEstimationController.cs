@@ -6004,7 +6004,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                             CropTypeId = estimation?.CropTypeID,
                             FieldName = estimation?.FieldName,
                             CropTypeName = estimation?.CropTypeName,
-                            TotalRainfall = mannerFarm?.AverageAnuualRainfall
+                            TotalRainfall = application.RainfallPostApplication
                         });
                     }
                 }

@@ -2160,9 +2160,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ModelState.AddModelError(totalAreaInNVZKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblTotalAreaInAnNvz.ToLower(), 0, 99999));
         }
 
-        if (model.IsGrasslandDerogation == true && model.GrassPercentage == null)
+        if (model.IsGrasslandDerogation == true)
         {
-            ModelState.AddModelError("GrassPercentage", Resource.MsgEnterThePercentageOfTheLandIsFarmedAsGrass);
+            ValidateGrassPercentage(model);
         }
 
         if (model.TotalFarmArea <= 0)
@@ -2193,6 +2193,26 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         if (model.TotalAreaInNVZ != null && (ModelState.ContainsKey(totalAreaInNVZKey) && Math.Round(model.TotalAreaInNVZ.Value, 2) != model.TotalAreaInNVZ))
         {
             ModelState.AddModelError(totalAreaInNVZKey, string.Format(Resource.lblFarmAreaCanHaveOnlyTwoDecimalPlace, Resource.lblTotalAreaInAnNvz));
+        }
+    }
+
+    private void ValidateGrassPercentage(ReportViewModel model)
+    {
+        string _grassPercentage = "GrassPercentage";
+        if (model.GrassPercentage == null)
+        {
+            ModelState.AddModelError(_grassPercentage, Resource.MsgEnterThePercentageOfTheLandIsFarmedAsGrass);
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(_grassPercentage))
+        {
+            var grassPercentageError = ModelState[_grassPercentage]?.Errors.Count > 0 ?
+                            ModelState[_grassPercentage]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (grassPercentageError != null && grassPercentageError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_grassPercentage]?.RawValue, Resource.lblGrassPercentage)))
+            {
+                ModelState[_grassPercentage]?.Errors.Clear();
+                ModelState[_grassPercentage]?.Errors.Add(string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 80, 100));
+            }
         }
     }
 

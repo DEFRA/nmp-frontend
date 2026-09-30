@@ -1283,7 +1283,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
 
         decimal? nH4N = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.NH4N : mannerEstimationViewModel.MannerEstimationStep25.NH4N;
         decimal? nO3N = isDefaultnutrient ? mannerEstimationViewModel.MannerEstimationStep24.ManureType?.NO3N : mannerEstimationViewModel.MannerEstimationStep25.NO3N;
-
+        
         return new MannerEstimationApplication
         {
             ManureTypeID = mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId,
@@ -2013,14 +2013,14 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
 
     private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
     {
-        if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
-        {
-            return (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
-        }
 
         if (mannerEstimateApplication.AreaSpread != null && mannerEstimateApplication.ManureQuantity != null)
         {
             return (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
+        }
+        if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
+        {
+            return (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
         }
 
         return (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
@@ -2055,6 +2055,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
                 mannerEstimationViewModel.MannerEstimationStep32.RainfallWithinSixHours = rainType.Name;
             }
         }
+
     }
 
     public async Task<(MannerEstimationApplication?, Error?)> UpdateMannerEstimationApplicationData(string? sid = null)
