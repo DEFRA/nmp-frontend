@@ -246,15 +246,15 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return cropTypeList;
     }
 
-    private async Task<List<HarvestYearPlanResponse>?> FilterNonNVZFieldsList(List<HarvestYearPlanResponse>? cropTypeList,int farmId)
+    private async Task<List<HarvestYearPlanResponse>?> FilterNonNVZFieldsList(List<HarvestYearPlanResponse>? cropTypeList, int farmId)
     {
         List<HarvestYearPlanResponse> filteredList = new List<HarvestYearPlanResponse>();
-        (_,List<Field> fieldList)=await _fieldLogic.FetchFieldByFarmId(farmId, Resource.lblTrue);
+        (_, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(farmId, Resource.lblTrue);
         if (cropTypeList != null)
         {
             foreach (var cropType in cropTypeList)
             {
-                Field field =fieldList.FirstOrDefault(f => f.ID == cropType.FieldID);
+                Field field = fieldList.FirstOrDefault(f => f.ID == cropType.FieldID);
                 if (field != null && (!field.IsWithinNVZ.Value))
                 {
                     filteredList.Add(cropType);
@@ -1099,23 +1099,23 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         Error? error = null;
         int? nmaxLimit = 0;
         List<FieldDetails> fieldDetail = new List<FieldDetails>();
-        
+
         (List<CropTypeLinkingResponse> cropTypeLinkingList, _) = await _organicManureLogic.FetchAllCropTypeLinking();
-        
+
         foreach (var cropData in cropDetails)
         {
-                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                {
-                    nmaxLimit = await GetNMaxValueForScotland(error, cropData, isAutumn, scotlandNMaxValue);
-                }
-                else
-                {
-                    nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingList?.FirstOrDefault(x => x.CropTypeId == cropData.CropTypeID));
-                }
-                if (nmaxLimit != null)
-                {
-                    (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue, isAutumn);
-                }
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                nmaxLimit = await GetNMaxValueForScotland(error, cropData, isAutumn, scotlandNMaxValue);
+            }
+            else
+            {
+                nmaxLimit = FetchNmaxLimit(model.Farm.CountryID.Value, cropTypeLinkingList?.FirstOrDefault(x => x.CropTypeId == cropData.CropTypeID));
+            }
+            if (nmaxLimit != null)
+            {
+                (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit) = await BindNmaxReportData(nmaxLimit.Value, cropData, model, nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, scotlandNMaxValue, isAutumn);
+            }
         }
         return (nitrogenApplicationsForNMaxReportResponse, nMaxLimitReportResponse, fieldDetail, nmaxLimit ?? 0, error);
     }
@@ -2159,9 +2159,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ModelState.AddModelError(totalAreaInNVZKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblTotalAreaInAnNvz.ToLower(), 0, 99999));
         }
 
-        if (model.IsGrasslandDerogation == true && model.GrassPercentage == null)
+        if (model.IsGrasslandDerogation == true)
         {
-            ModelState.AddModelError("GrassPercentage", Resource.MsgEnterThePercentageOfTheLandIsFarmedAsGrass);
+            ValidateGrassPercentage(model);
         }
 
         if (model.TotalFarmArea <= 0)
@@ -2169,9 +2169,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ModelState.AddModelError(totalFarmAreaKey, Resource.MsgTotalFarmAreaShouldBeGreaterThanZero);
         }
 
-        if (model.TotalFarmArea >99999)
+        if (model.TotalFarmArea > 99999)
         {
-            ModelState.AddModelError(totalFarmAreaKey,string.Format(Resource.MsgEnterValueInBetween, Resource.lblTotalFarmArea.ToLower(), 1, 99999));
+            ModelState.AddModelError(totalFarmAreaKey, string.Format(Resource.MsgEnterValueInBetween, Resource.lblTotalFarmArea.ToLower(), 1, 99999));
         }
 
         if (model.TotalAreaInNVZ < 0)
@@ -2195,6 +2195,25 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
+    private void ValidateGrassPercentage(ReportViewModel model)
+    {
+        string _grassPercentage = "GrassPercentage";
+        if (model.GrassPercentage == null)
+        {
+            ModelState.AddModelError(_grassPercentage, Resource.MsgEnterThePercentageOfTheLandIsFarmedAsGrass);
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(_grassPercentage))
+        {
+            var grassPercentageError = ModelState[_grassPercentage]?.Errors.Count > 0 ?
+                            ModelState[_grassPercentage]?.Errors[0].ErrorMessage.ToString() : null;
+
+            if (grassPercentageError != null && grassPercentageError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_grassPercentage]?.RawValue, Resource.lblGrassPercentage)))
+            {
+                ModelState[_grassPercentage]?.Errors.Clear();
+                ModelState[_grassPercentage]?.Errors.Add(string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 80, 100));
+            }
+        }
+    }
     public async Task<IActionResult> BackCheckList()
     {
         _logger.LogTrace("Report Controller : BackCheckList() action called");

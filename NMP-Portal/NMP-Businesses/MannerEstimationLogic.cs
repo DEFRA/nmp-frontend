@@ -1745,14 +1745,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
     {
-        if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
-        {
-            return (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
-        }
-
         if (mannerEstimateApplication.AreaSpread != null && mannerEstimateApplication.ManureQuantity != null)
         {
             return (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
+        }
+        if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
+        {
+            return (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
         }
 
         return (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate;
