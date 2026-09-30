@@ -7776,7 +7776,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>the nutrients supplied from applications of organic materials</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent3" xml:space="preserve">
-    <value>the fate of organic material N following land application</value>
+    <value>the fate of organic material nitrogen (N) following land application</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent4" xml:space="preserve">
     <value>the financial value of organic material applications based on current inorganic fertiliser prices</value>
@@ -8610,10 +8610,15 @@ following crop year 2</value>
     <value>Enter the values for your fresh weight yields for each cut or grazing in {0}</value>
   </data>
   <data name="lblDoYouWantToUseTheseTypicalYieldValues" xml:space="preserve">
+    <value>Do you want to use these typical yield values?</value>
+  </data>
     <value>Do you want to use these typical yield values for {0}?</value>
   </data>
   <data name="lblNutrientManagementPlansAndReports" xml:space="preserve">
     <value>Nutrient management plans and reports</value>
+  </data>
+  <data name="lblGrassPercentage" xml:space="preserve">
+    <value>GrassPercentage</value>
   </data>
   <data name="lblFreshWeightYieldsForField" xml:space="preserve">
     <value>Fresh weight yields for {0}</value>
