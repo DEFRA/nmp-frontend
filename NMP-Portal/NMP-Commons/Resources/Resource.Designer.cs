@@ -7248,6 +7248,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GrassPercentage.
+        /// </summary>
+        public static string lblGrassPercentage {
+            get {
+                return ResourceManager.GetString("lblGrassPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}% of this farm is grass..
         /// </summary>
         public static string lblGrassPercentageOfThisFarmIsGrass {
@@ -10156,7 +10165,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the fate of organic material N following land application.
+        ///   Looks up a localized string similar to the fate of organic material nitrogen (N) following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {
