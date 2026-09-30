@@ -409,17 +409,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     await BindFarmFieldOrCropDataUpdate(q);
                 }
-                MannerEstimationStep4ViewModel model = await _mannerEstimationLogic.GetMannerEstimationStep4();
+                await _mannerEstimationLogic.GetMannerEstimationStep4();
                 return RedirectToAction(_isFarmOrganicKey, new { sid = sid });
 
-                if (model == null)
-                {
-                    _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AverageAnnualRainfall() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-                }
-                BindMannerFarmNameAndIdOnNavigation(sid);
-
-                return View(model);
+                
             }
             catch (HttpRequestException hre)
             {
