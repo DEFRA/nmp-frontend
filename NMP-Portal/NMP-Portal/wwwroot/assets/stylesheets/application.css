@@ -966,3 +966,27 @@ hr.seperator_five_report {
     display: grid !important;
     grid-template-columns: 50% 50%;
 }
+
+.yield-row {
+    display: flex;
+    width: 100%;
+}
+
+.yield-label {
+    flex: 0 0 35%;
+    max-width: 35%;
+}
+
+.yield-value {
+    flex: 0 0 65%;
+    max-width: 65%;
+}
+.yield-label-establish {
+    flex: 0 0 60%;
+    max-width: 60%;
+}
+
+.yield-value-establish {
+    flex: 0 0 40%;
+    max-width: 40%;
+}

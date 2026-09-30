@@ -226,7 +226,7 @@
         cropName = Model.CropType;
     }
 
-    
+
     string yieldQuestionText;
 
     if (ViewBag.DefaultYield != null && ViewBag.DefaultYield > 0)
@@ -282,7 +282,7 @@
             }
 
 
-          
+
             @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
             @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
             {
@@ -566,47 +566,47 @@
                     @if (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveASingleDateForAllTheseFields)
                     {
 
-                                string questionText;
-                                if (!isGrass)
-                                {
-                                    if (hasMultipleCrops && isSingleDateForAll)
-                                    {
-                                        questionText = string.Format(Resource.lblWhatIsThePlantingDateForYearInTheseField, cropName);
-                                    }
-                                    else
-                                    {
-                                        questionText = string.Format(Resource.lblWhatIsThePlantingDate, cropName, Model.Crops[0].FieldName);
-                                    }
-                                }
-                                else
-                                {
-                                    if (hasMultipleCrops && isSingleDateForAll)
-                                    {
-                                        questionText = string.Format(Resource.lblWhatIsTheSowingDateForCrop, cropName);
-                                    }
-                                    else
-                                    {
-                                        questionText = string.Format(Resource.lblWhatIsTheSowingDateForCropInField, cropName, Model.Crops[0].FieldName);
-                                    }
-                                }
-                                <govuk-summary-list-row class=@((!Model.Crops[0].SowingDate.HasValue) ? "govuk-error-message" : "")>
-                                    <govuk-summary-list-row-key>
+                        string questionText;
+                        if (!isGrass)
+                        {
+                            if (hasMultipleCrops && isSingleDateForAll)
+                            {
+                                questionText = string.Format(Resource.lblWhatIsThePlantingDateForYearInTheseField, cropName);
+                            }
+                            else
+                            {
+                                questionText = string.Format(Resource.lblWhatIsThePlantingDate, cropName, Model.Crops[0].FieldName);
+                            }
+                        }
+                        else
+                        {
+                            if (hasMultipleCrops && isSingleDateForAll)
+                            {
+                                questionText = string.Format(Resource.lblWhatIsTheSowingDateForCrop, cropName);
+                            }
+                            else
+                            {
+                                questionText = string.Format(Resource.lblWhatIsTheSowingDateForCropInField, cropName, Model.Crops[0].FieldName);
+                            }
+                        }
+                        <govuk-summary-list-row class=@((!Model.Crops[0].SowingDate.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row-key>
+                                @questionText
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.Crops[0].SowingDate.HasValue ? Model.Crops[0].SowingDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="SowingDate" asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">
+                                    @Resource.lblChange
+                                    <span class="govuk-visually-hidden">
                                         @questionText
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>
-                                        @(Model.Crops[0].SowingDate.HasValue ? Model.Crops[0].SowingDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
-                                    </govuk-summary-list-row-value>
-                                    <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="SowingDate" asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">
-                                            @Resource.lblChange
-                                            <span class="govuk-visually-hidden">
-                                                @questionText
-                                            </span>
-                                        </govuk-summary-list-row-action>
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
-                                                          
-                        
+                                    </span>
+                                </govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
+
                     }
                     else if (Model.SowingDateQuestion == (int)NMP.Commons.Enums.SowingDateQuestion.YesIHaveDifferentDatesForEachOfTheseFields)
                     {
@@ -624,7 +624,7 @@
                                     }
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(crop.SowingDate.HasValue ? crop.SowingDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
+                                    @(crop.SowingDate.HasValue? crop.SowingDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
                                     <govuk-summary-list-row-action asp-action="SowingDate" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">
@@ -669,69 +669,69 @@
 
                     @if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields)
                     {
-                                var isOptional = ViewBag.IsYieldOptional != null;
-                                var isMultiple = Model.Crops.Count > 1 && Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
-                                string cropName = GetCropName(Model);
-                                string yieldLabel;
+                        var isOptional = ViewBag.IsYieldOptional != null;
+                        var isMultiple = Model.Crops.Count > 1 && Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields;
+                        string cropName = GetCropName(Model);
+                        string yieldLabel;
 
-                                if (isOptional)
+                        if (isOptional)
+                        {
+                            yieldLabel = isMultiple
+                            ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, cropName)
+                            : string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, Model.Crops[0].FieldName);
+                        }
+                        else
+                        {
+                            yieldLabel = isMultiple
+                            ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, cropName)
+                            : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, Model.Crops[0].FieldName);
+                        }
+
+                        string manualyieldText;
+                        if (isOptional && isMultiple) manualyieldText = string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, cropName);
+                        else if (isOptional) manualyieldText = string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, Model.Crops[0].FieldName);
+                        else if (isMultiple) manualyieldText = string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, cropName);
+                        else manualyieldText = string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, Model.Crops[0].FieldName);
+
+                        <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !Model.Crops[0].Yield.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row-key>
+
+                                @yieldLabel
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @if (ViewBag.DefaultYield == null && (!Model.Crops[0].Yield.HasValue))
                                 {
-                                    yieldLabel = isMultiple
-                                        ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, cropName)
-                                : string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, Model.Crops[0].FieldName);
+                                    @Resource.lblNotSet
                                 }
                                 else
                                 {
-                                    yieldLabel = isMultiple
-                                        ? string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, cropName)
-                                : string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, Model.Crops[0].FieldName);
-                                }
-
-                                string manualyieldText;
-                                if (isOptional && isMultiple) manualyieldText = string.Format(Resource.lblWhatIsTheExpectedYieldForSingleForDefaultYield, cropName);
-                        else if (isOptional) manualyieldText = string.Format(Resource.lblWhatIsTheDifferentExpectedYieldForDefaultYield, cropName, Model.Crops[0].FieldName);
-                                else if (isMultiple) manualyieldText = string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, cropName);
-                                else manualyieldText = string.Format(Resource.lblWhatIsTheDifferentExpectedYield, cropName, Model.Crops[0].FieldName);
-
-                        <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !Model.Crops[0].Yield.HasValue) ? "govuk-error-message" : "")>
-                                    <govuk-summary-list-row-key>
-
-                                        @yieldLabel
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>
-                                @if (ViewBag.DefaultYield == null && (!Model.Crops[0].Yield.HasValue))
-                                        {
-                                            @Resource.lblNotSet
-                                        }
-                                        else
-                                        {
                                     @FormatYield(Model.Crops[0].Yield)
-                                        }
-                                    </govuk-summary-list-row-value>
-                                    <govuk-summary-list-row-actions>
+                                }
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
                                 @if (Model.Crops[0].Yield == null && (Model.YieldQuestion == null) && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)))
-                                        {
-                                            <govuk-summary-list-row-action asp-action="YieldQuestion" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>
-                                                @Resource.lblChange
-                                                <span class="govuk-visually-hidden">
-                                                    @yieldLabel
-                                                </span>
-                                            </govuk-summary-list-row-action>
-                                        }
-                                        else
-                                        {
-                                            <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>
-                                                @Resource.lblChange
-                                                <span class="govuk-visually-hidden">
-                                                    @manualyieldText
-                                                </span>
-                                            </govuk-summary-list-row-action>
-                                        }
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
-                               
-                            
-                        
+                                {
+                                    <govuk-summary-list-row-action asp-action="YieldQuestion" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>
+                                        @Resource.lblChange
+                                        <span class="govuk-visually-hidden">
+                                            @yieldLabel
+                                        </span>
+                                    </govuk-summary-list-row-action>
+                                }
+                                else
+                                {
+                                    <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>
+                                        @Resource.lblChange
+                                        <span class="govuk-visually-hidden">
+                                            @manualyieldText
+                                        </span>
+                                    </govuk-summary-list-row-action>
+                                }
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
+
+
                     }
                     else if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterDifferentFiguresForEachField)
                     {
@@ -782,26 +782,26 @@
                     }
                     else if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields)
                     {
-                       
-                                <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !Model.Crops[0].Yield.HasValue) ? "govuk-error-message" : "")>
-                                    <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
-                                    </govuk-summary-list-row-key>
-                                    <govuk-summary-list-row-value>
-                                        @if (ViewBag.DefaultYield != null && (!Model.Crops[0].Yield.HasValue))
-                                        {
-                                            @Resource.lblNotSet
-                                        }
-                                        else
-                                        {
+
+                        <govuk-summary-list-row class=@((ViewBag.DefaultYield == null && !Model.Crops[0].Yield.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row-key>
+                                @string.Format(Resource.lblWhatIsTheExpectedYieldForSingle, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @if (ViewBag.DefaultYield != null && (!Model.Crops[0].Yield.HasValue))
+                                {
+                                    @Resource.lblNotSet
+                                }
+                                else
+                                {
                                     @FormatYield(Model.Crops[0].Yield)
-                                        }
-                                    </govuk-summary-list-row-value>
-                                    <govuk-summary-list-row-actions>
-                                        @* <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action> *@
-                                    </govuk-summary-list-row-actions>
-                                </govuk-summary-list-row>
-                               
+                                }
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                @* <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action> *@
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+
                     }
                     @if (Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Other && ((Model.CropInfo1 == null && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))) || Model.CropInfo1 != null && Model.CropInfo1 != 0))
                     {
@@ -815,7 +815,7 @@
                                     }
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @(Model.CropInfo1.HasValue ? Model.CropInfo1Name : Resource.lblNotSet)
+                                    @(Model.CropInfo1.HasValue? Model.CropInfo1Name: Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
 
@@ -840,7 +840,7 @@
                                 @string.Format(Resource.lblCropInfo2ForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
                             </govuk-summary-list-row-key>
                             <govuk-summary-list-row-value>
-                                @(Model.CropInfo2.HasValue ? Model.CropInfo2Name : Resource.lblNotSet)
+                                @(Model.CropInfo2.HasValue? Model.CropInfo2Name: Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 <govuk-summary-list-row-action asp-action="CropInfoTwo" asp-controller="Crop">
@@ -1009,6 +1009,79 @@
                                 }
                             }
                         }
+                    }
+                    @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover))
+                    {
+                        @foreach (var freshWeightDefault in Model.FreshWeightYieldsPerField ?? [])
+                        {
+                            string defaultValueText = freshWeightDefault.IsFreshWeightYieldsDefault switch
+                            {
+                                null => Resource.lblNotSet,
+                                false => Resource.lblNo,
+                                true => Resource.lblYes
+                            };
+                            <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblDoYouWantToUseTheseTypicalYieldValues, freshWeightDefault.FieldName)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @defaultValueText
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+
+                                    <govuk-summary-list-row-action asp-action="FreshWeightYieldsDefault" asp-controller="Crop" asp-route-q="@Model.FreshWeightDefaultEncryptedCounter">
+                                        @Resource.lblChange
+                                        <span class="govuk-visually-hidden">
+                                            @string.Format(Resource.lblTargetDryMatterYieldForField, freshWeightDefault.FieldName)
+                                        </span>
+                                    </govuk-summary-list-row-action>
+
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+
+                            <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
+                                <govuk-summary-list-row-key>
+                                    @string.Format(Resource.lblFreshWeightYieldsForField, freshWeightDefault.FieldName)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @foreach (var yieldPerDefoliation in freshWeightDefault.FreshWeightYields)
+                                    {
+                                        string yieldText;
+
+                                        if (yieldPerDefoliation.Yield == null && !yieldPerDefoliation.DefoliationSequenceName.Equals("Establishment"))
+                                        {
+                                            yieldText = Resource.lblNotSet;
+                                        }
+                                        else if (yieldPerDefoliation.Yield == null)
+                                        {
+                                            yieldText = Resource.lblHyphen;
+                                        }
+                                        else
+                                        {
+                                            yieldText = yieldPerDefoliation.Yield + " " + Resource.lblTonnesPerHectare;
+                                        }
+                                        <span class="yield-row">
+                                            <span class=@(yieldPerDefoliation.DefoliationSequenceName.Equals("Establishment") ? "yield-label-establish" : "yield-label")>@(yieldPerDefoliation.Position + ". " + yieldPerDefoliation.DefoliationSequenceName)</span>
+                                            <span class=@(yieldPerDefoliation.DefoliationSequenceName.Equals("Establishment") ? "yield-value-establish" : "yield-value")>@yieldText</span>
+                                            <br />
+                                        </span>
+                                    }
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    @if (freshWeightDefault.IsFreshWeightYieldsDefault != null && !freshWeightDefault.IsFreshWeightYieldsDefault.Value)
+                                    {
+                                        <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual" asp-controller="Crop" asp-route-q="@Model.FreshWeightManualEncryptedCounter">
+                                            @Resource.lblChange
+                                            <span class="govuk-visually-hidden">
+                                                @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, freshWeightDefault.FieldName)
+                                            </span>
+                                        </govuk-summary-list-row-action>
+                                    }
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+
+                        }
+
                     }
 
                 }

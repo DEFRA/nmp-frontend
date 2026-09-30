@@ -27,10 +27,8 @@ namespace NMP.Commons.ViewModels
         public string? ReportTypeName { get; set; } = string.Empty;
         public bool? IsGrasslandDerogation { get; set; }
 
-        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalFarmArea))]
         public decimal? TotalFarmArea { get; set; }
 
-        //[Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblWhatIsTheTotalAreaInAnNVZ))]
         public decimal? TotalAreaInNVZ { get; set; }
         public decimal? LivestockNumbers { get; set; }
         public bool? IsAnyLivestockImportExport { get; set; }

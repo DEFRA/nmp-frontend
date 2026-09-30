@@ -4484,6 +4484,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cut / grazing.
+        /// </summary>
+        public static string lblCutGrazing {
+            get {
+                return ResourceManager.GetString("lblCutGrazing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cuts and grazing order.
         /// </summary>
         public static string lblCutsAndGrazingOrder {
@@ -5105,6 +5114,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these typical yield values?.
+        /// </summary>
+        public static string lblDoYouWantToUseTheseTypicalYieldValues {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToUseTheseTypicalYieldValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these typical yield values for {0}?.
+        /// </summary>
+        public static string lblDoYouWantToUseTheseTypicalYieldValuesForField {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToUseTheseTypicalYieldValuesForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use these values for this {0} type?.
         /// </summary>
         public static string lblDoYouWantToUseTheseValuesForThis {
@@ -5681,11 +5708,38 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the values for each cut or grazing.
+        /// </summary>
+        public static string lblEnterTheValuesForEachCutOrGrazing {
+            get {
+                return ResourceManager.GetString("lblEnterTheValuesForEachCutOrGrazing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the values for your {0}.
         /// </summary>
         public static string lblEnterTheValuesForYour {
             get {
                 return ResourceManager.GetString("lblEnterTheValuesForYour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the values for your fresh weight yields for each cut or grazing in {0}.
+        /// </summary>
+        public static string lblEnterTheValuesForYourFreshWeightYieldInField {
+            get {
+                return ResourceManager.GetString("lblEnterTheValuesForYourFreshWeightYieldInField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the values for your fresh weight yields for each cut or grazing.
+        /// </summary>
+        public static string lblEnterTheValuesForYourFreshWeightYields {
+            get {
+                return ResourceManager.GetString("lblEnterTheValuesForYourFreshWeightYields", resourceCulture);
             }
         }
         
@@ -7104,6 +7158,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fresh weight yield per hectare.
+        /// </summary>
+        public static string lblFreshWeightYieldPerHectare {
+            get {
+                return ResourceManager.GetString("lblFreshWeightYieldPerHectare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fresh weight yields for {0}.
+        /// </summary>
+        public static string lblFreshWeightYieldsForField {
+            get {
+                return ResourceManager.GetString("lblFreshWeightYieldsForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From fertilisers or lime.
         /// </summary>
         public static string lblFromFertilisersOrLime {
@@ -7316,6 +7388,15 @@ namespace NMP.Commons.Resources {
         public static string lblGrassManagementOptions {
             get {
                 return ResourceManager.GetString("lblGrassManagementOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GrassPercentage.
+        /// </summary>
+        public static string lblGrassPercentage {
+            get {
+                return ResourceManager.GetString("lblGrassPercentage", resourceCulture);
             }
         }
         
@@ -7716,11 +7797,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to High N : More than 150kg/ha/year fertiliser N user on average in last 2 years, or High Clover..
+        ///   Looks up a localized string similar to A high clover content is more than 30% clover over the season..
         /// </summary>
-        public static string lblHighNMoreThan150KgFertiliserN {
+        public static string lblHighCloverHint {
             get {
-                return ResourceManager.GetString("lblHighNMoreThan150KgFertiliserN", resourceCulture);
+                return ResourceManager.GetString("lblHighCloverHint", resourceCulture);
             }
         }
         
@@ -9976,15 +10057,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Low N : Less than 150kg/ha/year fertiliser N user on average in last 2 years..
-        /// </summary>
-        public static string lblLowNMoreThan150KgFertiliserN {
-            get {
-                return ResourceManager.GetString("lblLowNMoreThan150KgFertiliserN", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Magnesium.
         /// </summary>
         public static string lblMagnesium {
@@ -10147,6 +10219,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MANNER-NPK (&apos;this tool&apos;) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (&apos;Defra and partners&apos;)..
+        /// </summary>
+        public static string lblMannerAboutRecommendationContentOne {
+            get {
+                return ResourceManager.GetString("lblMannerAboutRecommendationContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application {0} details updated..
         /// </summary>
         public static string lblMannerApplicationDetailCountUpdated {
@@ -10282,7 +10363,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the fate of organic material N following land application.
+        ///   Looks up a localized string similar to the fate of organic material nitrogen (N) following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {
@@ -13522,7 +13603,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Low nitrogen (N) means less than 150 kg/ha per year fertiliser N used on average. High N means more than 150 kg/ha per year fertiliser N used on average, or a high clover swards.
+        ///   Looks up a localized string similar to Low nitrogen (N) means less than 150 kg per hectare per year fertiliser N used on average. High N means more than 150 kg per hectare per year fertiliser N used on average, or a high clover swards.
         /// </summary>
         public static string lblPreviousGrassManagementHint {
             get {
@@ -17738,6 +17819,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Typical fresh weight yields.
+        /// </summary>
+        public static string lblTypicalFreshWeightYield {
+            get {
+                return ResourceManager.GetString("lblTypicalFreshWeightYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Typical grass management.
         /// </summary>
         public static string lblTypicalGrassManagement {
@@ -18761,6 +18851,15 @@ namespace NMP.Commons.Resources {
         public static string lblWeightCapacity {
             get {
                 return ResourceManager.GetString("lblWeightCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We use the fresh weight yield to give phosphate and potash recommendation. AHDB publish guidance on measuring grass yields..
+        /// </summary>
+        public static string lblWeUseTheFreshWeightYieldToGivePhosphate {
+            get {
+                return ResourceManager.GetString("lblWeUseTheFreshWeightYieldToGivePhosphate", resourceCulture);
             }
         }
         
