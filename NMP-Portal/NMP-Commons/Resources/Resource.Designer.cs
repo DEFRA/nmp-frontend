@@ -10165,7 +10165,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the fate of organic material nitrogen (N) following land application..
+        ///   Looks up a localized string similar to the fate of organic material nitrogen (N) following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {
