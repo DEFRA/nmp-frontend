@@ -5512,7 +5512,7 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace($"Organic Manure Controller : AutumnCropNitrogenUptake() post action called");
             if (!ModelState.IsValid)
             {
-                ReplaceNumericError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.MsgEnterValidNumericValueBeforeContinuing);
+                ReplaceNumericError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.lblAutumnCropNitrogenNUptake);
             }
 
             if (model.AutumnCropNitrogenUptake == null)
