@@ -20,8 +20,11 @@
             <div class="govuk-grid-column-two-thirds">
 
                 <h1 class="govuk-heading-l">
-                    @Resource.lblEnterTheValuesForYourFreshWeightYields
+                    @string.Format(Resource.lblFreshWeightYieldsForField, Model.FieldName)
                 </h1>
+                <div class="govuk-hint">
+                    @Resource.lblEnterTheValuesForEachCutOrGrazing
+                </div>
 
                 @if (Model.Crops != null && Model.Crops.Count > 0)
                 {

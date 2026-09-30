@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -5123,6 +5123,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to use these typical yield values for {0}?.
+        /// </summary>
+        public static string lblDoYouWantToUseTheseTypicalYieldValuesForField {
+            get {
+                return ResourceManager.GetString("lblDoYouWantToUseTheseTypicalYieldValuesForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to use these values for this {0} type?.
         /// </summary>
         public static string lblDoYouWantToUseTheseValuesForThis {
@@ -5695,6 +5704,15 @@ namespace NMP.Commons.Resources {
         public static string lblEnterTheSoilMineralNitrogenAnalysisResult {
             get {
                 return ResourceManager.GetString("lblEnterTheSoilMineralNitrogenAnalysisResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the values for each cut or grazing.
+        /// </summary>
+        public static string lblEnterTheValuesForEachCutOrGrazing {
+            get {
+                return ResourceManager.GetString("lblEnterTheValuesForEachCutOrGrazing", resourceCulture);
             }
         }
         
@@ -7149,6 +7167,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fresh weight yields for {0}.
+        /// </summary>
+        public static string lblFreshWeightYieldsForField {
+            get {
+                return ResourceManager.GetString("lblFreshWeightYieldsForField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From fertilisers or lime.
         /// </summary>
         public static string lblFromFertilisersOrLime {
@@ -7361,6 +7388,15 @@ namespace NMP.Commons.Resources {
         public static string lblGrassManagementOptions {
             get {
                 return ResourceManager.GetString("lblGrassManagementOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GrassPercentage.
+        /// </summary>
+        public static string lblGrassPercentage {
+            get {
+                return ResourceManager.GetString("lblGrassPercentage", resourceCulture);
             }
         }
         
@@ -7761,11 +7797,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to High N : More than 150 kg per hectare per year fertiliser N user on average in last 2 years, or High Clover..
+        ///   Looks up a localized string similar to A high clover content is more than 30% clover over the season..
         /// </summary>
-        public static string lblHighNMoreThan150KgFertiliserN {
+        public static string lblHighCloverHint {
             get {
-                return ResourceManager.GetString("lblHighNMoreThan150KgFertiliserN", resourceCulture);
+                return ResourceManager.GetString("lblHighCloverHint", resourceCulture);
             }
         }
         
@@ -10021,15 +10057,6 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Low N : Less than 150 kg per hectare per year fertiliser N user on average in last 2 years..
-        /// </summary>
-        public static string lblLowNMoreThan150KgFertiliserN {
-            get {
-                return ResourceManager.GetString("lblLowNMoreThan150KgFertiliserN", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Magnesium.
         /// </summary>
         public static string lblMagnesium {
@@ -10192,6 +10219,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MANNER-NPK (&apos;this tool&apos;) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (&apos;Defra and partners&apos;)..
+        /// </summary>
+        public static string lblMannerAboutRecommendationContentOne {
+            get {
+                return ResourceManager.GetString("lblMannerAboutRecommendationContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application {0} details updated..
         /// </summary>
         public static string lblMannerApplicationDetailCountUpdated {
@@ -10327,7 +10363,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the fate of organic material N following land application.
+        ///   Looks up a localized string similar to the fate of organic material nitrogen (N) following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {

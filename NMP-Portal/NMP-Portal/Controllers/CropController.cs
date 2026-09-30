@@ -3013,7 +3013,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 Defoliation = y.Position,
                 Utilisation1ID = BindUtilisation1(y.DefoliationSequenceName[0]),
-                Yield = y.Yield ?? 0,
+                Yield = y.Yield,
                 CreatedOn = DateTime.Now,
                 CreatedByID = userId
             })
