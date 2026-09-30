@@ -10030,6 +10030,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MANNER-NPK (&apos;this tool&apos;) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (&apos;Defra and partners&apos;)..
+        /// </summary>
+        public static string lblMannerAboutRecommendationContentOne {
+            get {
+                return ResourceManager.GetString("lblMannerAboutRecommendationContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application {0} details updated..
         /// </summary>
         public static string lblMannerApplicationDetailCountUpdated {
