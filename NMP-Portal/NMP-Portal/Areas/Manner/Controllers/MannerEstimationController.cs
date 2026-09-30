@@ -407,7 +407,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     await BindFarmFieldOrCropDataUpdate(q);
                 }
                 MannerEstimationStep4ViewModel model = await _mannerEstimationLogic.GetMannerEstimationStep4();
-
+                return RedirectToAction("IsFarmOrganic", new { sid = sid });
                 if (model == null)
                 {
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AverageAnnualRainfall() action");

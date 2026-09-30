@@ -457,5 +457,18 @@
     </div>
 
 
-    @await Html.PartialAsync("~/Views/Report/_ReportDisclaimer.cshtml", Model)
+   <div class="govuk-grid-row margin-bottom-forty">
+        <div class="govuk-grid-column-full">
+            <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
+            <p class="govuk-body">
+                @Resource.lblMannerAboutRecommendationContentOne
+            </p>
+            <p class="govuk-body">
+                @Resource.lblAboutRecommendationGuidenceAdviceContent2
+            </p>
+            <p class="govuk-body">
+                @Resource.lblAboutRecommendationGuidenceAdviceContent3
+            </p>
+        </div>
+    </div>
 }
