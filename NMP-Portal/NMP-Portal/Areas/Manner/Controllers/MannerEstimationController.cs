@@ -89,6 +89,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _subSoilKey = "SubSoil";
         private const string _cropGroupKey = "CropGroup";
         private const string _cropTypeKey = "CropType";
+        private const string _isFarmOrganicKey = "IsFarmOrganic";
 
         [HttpGet("Index")]
         public IActionResult Index()
@@ -408,16 +409,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     await BindFarmFieldOrCropDataUpdate(q);
                 }
-                MannerEstimationStep4ViewModel model = await _mannerEstimationLogic.GetMannerEstimationStep4();
+                await _mannerEstimationLogic.GetMannerEstimationStep4();
+                return RedirectToAction(_isFarmOrganicKey, new { sid = sid });
 
-                if (model == null)
-                {
-                    _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AverageAnnualRainfall() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-                }
-                BindMannerFarmNameAndIdOnNavigation(sid);
-
-                return View(model);
+                
             }
             catch (HttpRequestException hre)
             {
@@ -446,7 +441,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("IsFarmOrganic", new { sid = sessionId });
+            return RedirectToAction(_isFarmOrganicKey, new { sid = sessionId });
         }
 
         [HttpGet("AverageAnnualRainfallManual/{sid?}")]
@@ -482,7 +477,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             await _mannerEstimationLogic.SetMannerEstimationStep4(model);
 
-            return RedirectToAction("IsFarmOrganic", new { sid = sessionId });
+            return RedirectToAction(_isFarmOrganicKey, new { sid = sessionId });
         }
 
         private void ValidateRainfall(MannerEstimationStep4ViewModel model)
@@ -1890,7 +1885,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 if (!model.IsFarmOrganic.HasValue)
                 {
-                    ModelState.AddModelError("IsFarmOrganic", Resource.MsgSelectWhetherYouAreARegisteredOrganicProducer);
+                    ModelState.AddModelError(_isFarmOrganicKey, Resource.MsgSelectWhetherYouAreARegisteredOrganicProducer);
                 }
                 BindSessionIdInViewBeg(sessionId);
                 BindMannerFarmNameAndIdOnNavigation(sessionId);

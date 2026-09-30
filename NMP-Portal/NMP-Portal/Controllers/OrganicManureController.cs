@@ -5492,6 +5492,7 @@ managementPeriod.CropID.HasValue
                 ViewBag.FieldName = field.Name;
                 ViewBag.CropTypeName = model.CropTypeName;
                 model.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptakes?.FirstOrDefault(x => x.EncryptedFieldId == f)?.AutumnCropNitrogenUptake;
+                SetOrganicManureToSession(model);
             }
             if (model.FieldList.Count == 1)
             {
@@ -5511,7 +5512,7 @@ managementPeriod.CropID.HasValue
             _logger.LogTrace($"Organic Manure Controller : AutumnCropNitrogenUptake() post action called");
             if (!ModelState.IsValid)
             {
-                ReplaceNumericError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.MsgEnterValidNumericValueBeforeContinuing);
+                ReplaceNumericError(_autumnCropNitrogenUptakeKey, _autumnCropNitrogenUptakeKey, Resource.lblAutumnCropNitrogenNUptake);
             }
 
             if (model.AutumnCropNitrogenUptake == null)
@@ -7290,7 +7291,7 @@ managementPeriod.CropID.HasValue
                 topSoilID = soilTexture.TopSoilID;
                 subSoilID = soilTexture.SubSoilID;
             }
-            
+
             var cropTypeLinkingData = cropTypeLinkingResponse
     .FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
             int mannerCropTypeID = isLateSownCropType
@@ -10653,7 +10654,7 @@ managementPeriod.CropID.HasValue
             if (string.IsNullOrEmpty(rawValue))
                 return;
 
-           
+
             // Max 10 digits
             if (rawValue.Length > 10)
             {

@@ -49,6 +49,9 @@ public class OrganicManureViewModel
     public decimal? NO3N { get; set; }
     public bool? IsDefaultNutrient { get; set; } = false;
     public bool IsCheckAnswer { get; set; } = false;
+    [Range(0, 9999,
+ErrorMessageResourceType = typeof(Resource),
+ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And9999))]
     public int? AutumnCropNitrogenUptake { get; set; }
     public List<AutumnCropNitrogenUptakeDetail>? AutumnCropNitrogenUptakes { get; set; }
     public int? RainfallWithinSixHoursID { get; set; }

@@ -8630,4 +8630,7 @@ following crop year 2</value>
   <data name="lblHighCloverHint" xml:space="preserve">
     <value>A high clover content is more than 30% clover over the season.</value>
   </data>
+  <data name="lblMannerAboutRecommendationContentOne" xml:space="preserve">
+    <value>MANNER-NPK ('this tool') was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions ('Defra and partners').</value>
+  </data>
 </root>
