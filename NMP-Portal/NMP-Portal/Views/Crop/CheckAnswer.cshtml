@@ -1012,7 +1012,7 @@
                     }
                     @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover))
                     {
-                        @foreach (var freshWeightDefault in Model.FreshWeightYieldsPerField)
+                        @foreach (var freshWeightDefault in Model.FreshWeightYieldsPerField ?? [])
                         {
                             string defaultValueText = freshWeightDefault.IsFreshWeightYieldsDefault switch
                             {
@@ -1022,7 +1022,7 @@
                             };
                             <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblTargetDryMatterYieldForField, freshWeightDefault.FieldName)
+                                    @string.Format(Resource.lblDoYouWantToUseTheseTypicalYieldValues, freshWeightDefault.FieldName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @defaultValueText
@@ -1041,7 +1041,7 @@
 
                             <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, freshWeightDefault.FieldName)
+                                    @string.Format(Resource.lblFreshWeightYieldsForField, freshWeightDefault.FieldName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @foreach (var yieldPerDefoliation in freshWeightDefault.FreshWeightYields)
@@ -1061,8 +1061,8 @@
                                             yieldText = yieldPerDefoliation.Yield + " " + Resource.lblTonnesPerHectare;
                                         }
                                         <span class="yield-row">
-                                            <span class="yield-label">@yieldPerDefoliation.DefoliationName</span>
-                                            <span class="yield-value">@yieldText</span>
+                                            <span class=@(yieldPerDefoliation.DefoliationSequenceName.Equals("Establishment") ? "yield-label-establish" : "yield-label")>@(yieldPerDefoliation.Position + ". " + yieldPerDefoliation.DefoliationSequenceName)</span>
+                                            <span class=@(yieldPerDefoliation.DefoliationSequenceName.Equals("Establishment") ? "yield-value-establish" : "yield-value")>@yieldText</span>
                                             <br />
                                         </span>
                                     }
