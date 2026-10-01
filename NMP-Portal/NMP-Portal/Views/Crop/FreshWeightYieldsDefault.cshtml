@@ -104,7 +104,7 @@
                             <govuk-radios for="@Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault">
                                 <govuk-radios-fieldset>
                                     <govuk-radios-fieldset-legend is-page-heading="false">
-                                        @string.Format(Resource.lblDoYouWantToUseTheseTypicalYieldValues, Model.FieldName)
+                                        @string.Format(Resource.lblDoYouWantToUseTheseTypicalYieldValuesForField, Model.FieldName)
                                     </govuk-radios-fieldset-legend>
                                     <govuk-radios-item value="@yes">@Resource.lblYesUseTheseValues</govuk-radios-item>
                                     <govuk-radios-item value="@no">@Resource.lblNoChangeTheseValues</govuk-radios-item>
