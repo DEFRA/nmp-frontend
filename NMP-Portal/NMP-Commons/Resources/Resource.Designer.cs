@@ -14189,7 +14189,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Grassland.
+        ///   Looks up a localized string similar to Autumn/Winter 2026 &amp;emsp; Scotland Grassland.
         /// </summary>
         public static string lblReleaseScheduleContentThirteen {
             get {
@@ -14198,7 +14198,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable.
+        ///   Looks up a localized string similar to Autumn/Winter 2026 &amp;emsp; Scotland Arable.
         /// </summary>
         public static string lblReleaseScheduleContentTwelve {
             get {
@@ -14244,7 +14244,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2nd September 2026.
+        ///   Looks up a localized string similar to 1st October 2026.
         /// </summary>
         public static string lblReleaseScheduleDate {
             get {
