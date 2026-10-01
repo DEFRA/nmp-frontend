@@ -2989,7 +2989,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 Defoliation = position++,
                 Utilisation1ID = BindUtilisation1(c),
-                Yield = crop.Yield ?? 0 / model.PotentialCut,
+                Yield = (crop.Yield ?? 0) / model.PotentialCut,
                 CreatedOn = DateTime.Now,
                 CreatedByID = userId
             });
@@ -5243,7 +5243,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     Defoliation = defoliation,
                     Utilisation1ID = utilisation1,
-                    Yield = crop.Yield ?? 0 / model.PotentialCut
+                    Yield = (crop.Yield ?? 0) / model.PotentialCut
                 });
                 if (managementPeriodList != null && managementPeriodList.Any() && crop.ID != null)
                 {
