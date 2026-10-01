@@ -6877,10 +6877,10 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Next releases</value>
   </data>
   <data name="lblReleaseScheduleContentTwelve" xml:space="preserve">
-    <value>Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable</value>
+    <value>Autumn/Winter 2026 &amp;emsp; Scotland Arable</value>
   </data>
   <data name="lblReleaseScheduleContentThirteen" xml:space="preserve">
-    <value>Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Grassland</value>
+    <value>Autumn/Winter 2026 &amp;emsp; Scotland Grassland</value>
   </data>
   <data name="lblReleaseScheduleContentSeventeen" xml:space="preserve">
     <value>N-max report</value>
@@ -6898,7 +6898,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
-    <value>2nd September 2026</value>
+    <value>1st October 2026</value>
   </data>
   <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
     <value>Add or update fields and soil analysis</value>
@@ -8501,6 +8501,21 @@ following crop year 2</value>
   <data name="lblMagnesiumForErrorMsg" xml:space="preserve">
     <value>magnesium (MgO)</value>
   </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenNStandardForThisSuffix" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
+  </data>
+  <data name="lblNutrientManagementPlansAndReports" xml:space="preserve">
+    <value>Nutrient management plans and reports</value>
+  </data>
+  <data name="lblGrassPercentage" xml:space="preserve">
+    <value>GrassPercentage</value>
+  </data>
+  <data name="lblMannerAboutRecommendationContentOne" xml:space="preserve">
+    <value>MANNER-NPK ('this tool') was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions ('Defra and partners').</value>
+  </data>
   <data name="lblCacheRedis" xml:space="preserve">
     <value>[Cache] REDIS HIT  key={0}</value>
   </data>
@@ -8524,9 +8539,6 @@ following crop year 2</value>
   </data>
   <data name="lblPreviousGrassManagementHint" xml:space="preserve">
     <value>Low nitrogen (N) means less than 150 kg per hectare per year fertiliser N used on average. High N means more than 150 kg per hectare per year fertiliser N used on average, or a high clover swards</value>
-  </data>
-  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
-    <value>What is the occupancy for this livestock type in {0}</value>
   </data>
   <data name="lblUndersownSwardsShouldBeTreated" xml:space="preserve">
     <value>Undersown swards should be treated as an existing sward.</value>
@@ -8576,9 +8588,6 @@ following crop year 2</value>
   <data name="lblWhatIsTheEndOfDrainageDateForApplicationNo" xml:space="preserve">
     <value>What is the date when soil drainage ends for application {0}?</value>
   </data>
-  <data name="lblWhatIsTheNitrogenNStandardForThisSuffix" xml:space="preserve">
-    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
-  </data>
   <data name="lblHowAreYouGoingToApplyTheManureApplicationNo" xml:space="preserve">
     <value>How are you going to apply the {0} for application {1}?</value>
   </data>
@@ -8615,12 +8624,6 @@ following crop year 2</value>
   <data name="lblDoYouWantToUseTheseTypicalYieldValuesForField" xml:space="preserve">
     <value>Do you want to use these typical yield values for {0}?</value>
   </data>
-  <data name="lblNutrientManagementPlansAndReports" xml:space="preserve">
-    <value>Nutrient management plans and reports</value>
-  </data>
-  <data name="lblGrassPercentage" xml:space="preserve">
-    <value>GrassPercentage</value>
-  </data>
   <data name="lblFreshWeightYieldsForField" xml:space="preserve">
     <value>Fresh weight yields for {0}</value>
   </data>
@@ -8629,8 +8632,5 @@ following crop year 2</value>
   </data>
   <data name="lblHighCloverHint" xml:space="preserve">
     <value>A high clover content is more than 30% clover over the season.</value>
-  </data>
-  <data name="lblMannerAboutRecommendationContentOne" xml:space="preserve">
-    <value>MANNER-NPK ('this tool') was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions ('Defra and partners').</value>
   </data>
 </root>

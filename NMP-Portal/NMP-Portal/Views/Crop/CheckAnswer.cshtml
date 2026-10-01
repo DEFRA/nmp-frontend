@@ -1022,7 +1022,7 @@
                             };
                             <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblDoYouWantToUseTheseTypicalYieldValues, freshWeightDefault.FieldName)
+                                    @string.Format(Resource.lblDoYouWantToUseTheseTypicalYieldValuesForField, freshWeightDefault.FieldName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @defaultValueText
