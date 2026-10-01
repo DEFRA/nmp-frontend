@@ -39,13 +39,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     private readonly IRb209Service _rb209Service = rb209Service;
 
 
-    public MannerEstimationStep1ViewModel SetMannerEstimationStep1(MannerEstimationStep1ViewModel mannerEstimationStep1,string sid)
+    public async Task<MannerEstimationStep1ViewModel> SetMannerEstimationStep1(MannerEstimationStep1ViewModel mannerEstimationStep1,string sid)
     {
-        MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
+        MannerEstimationViewModel? mannerEstimationViewModel =await GetMannerEstimationFromSessionabc(sid);
         if (mannerEstimationViewModel != null)
         {
             mannerEstimationViewModel.MannerEstimationStep1 = mannerEstimationStep1;
-            SetMannerEstimationToSession(mannerEstimationViewModel,sid);
+            SetMannerEstimationToSessionabc(mannerEstimationViewModel,sid);
         }
         _logger.LogWarning(
     "SET STEP1: sid={Sid}, ObjectSessionId={ObjectSessionId}, FarmName={FarmName}",
@@ -53,14 +53,14 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     mannerEstimationViewModel?.SessionId,
     mannerEstimationStep1?.FarmName);
 
-        return GetMannerEstimationStep1(sid);
+        return await GetMannerEstimationStep1(sid);
 
     }
 
 
-    public MannerEstimationStep1ViewModel GetMannerEstimationStep1(string sid)
+    public async Task<MannerEstimationStep1ViewModel> GetMannerEstimationStep1(string sid)
     {
-        MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
+        MannerEstimationViewModel? mannerEstimationViewModel =await GetMannerEstimationFromSessionabc(sid);
         if (mannerEstimationViewModel != null)
         {
             mannerEstimationViewModel.MannerEstimationStep1.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
@@ -75,21 +75,15 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return mannerEstimationViewModel.MannerEstimationStep1;
     }
 
-    public MannerEstimationStep2ViewModel GetMannerEstimationStep2(string sid)
+    public async Task<MannerEstimationStep2ViewModel> GetMannerEstimationStep2(string sid)
     {
-        MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
+        MannerEstimationViewModel? mannerEstimationViewModel = await GetMannerEstimationFromSessionabc(sid);
         if (mannerEstimationViewModel != null)
         {
             mannerEstimationViewModel.MannerEstimationStep2.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
             mannerEstimationViewModel.MannerEstimationStep2.FarmName = mannerEstimationViewModel.MannerEstimationStep1.FarmName;
         }
-        _logger.LogWarning(
-    "GET STEP211: sid={Sid}, ObjectSessionId={ObjectSessionId}, ExistingFarmName={FarmName}, Country={Country}",
-    sid,
-    mannerEstimationViewModel?.SessionId,
-    mannerEstimationViewModel?.MannerEstimationStep1?.FarmName,
-    mannerEstimationViewModel.MannerEstimationStep2.CountryID);
-
+        
         return mannerEstimationViewModel.MannerEstimationStep2;
     }
 
@@ -103,7 +97,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     }
     public async Task<MannerEstimationStep2ViewModel> SetMannerEstimationStep2(MannerEstimationStep2ViewModel mannerEstimationStep2,string sid)
     {
-        MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
+        MannerEstimationViewModel? mannerEstimationViewModel = await GetMannerEstimationFromSessionabc(sid);
 
         _logger.LogWarning(
     "SET PHLE STEP22: sid={Sid}, ObjectSessionId={ObjectSessionId}, ExistingFarmName={FarmName}, Country={Country}",
@@ -130,12 +124,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
 
         SetMannerEstimationToSession(mannerEstimationViewModel,sid);
-        return GetMannerEstimationStep2(sid);
+        return await GetMannerEstimationStep2(sid);
     }
 
-    public MannerEstimationStep3ViewModel GetMannerEstimationStep3(string sid)
+    public async Task<MannerEstimationStep3ViewModel> GetMannerEstimationStep3(string sid)
     {
-        MannerEstimationViewModel? mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
+        MannerEstimationViewModel? mannerEstimationViewModel = await GetMannerEstimationFromSessionabc(sid);
         if (mannerEstimationViewModel != null)
         {
             mannerEstimationViewModel.MannerEstimationStep3.IsCountryIdChange = mannerEstimationViewModel.MannerEstimationStep2.IsCountryIdChange;
@@ -146,10 +140,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
     }
     public async Task<MannerEstimationStep3ViewModel> SetMannerEstimationStep3(MannerEstimationStep3ViewModel mannerEstimationStep3,string sid)
     {
-        MannerEstimationStep3ViewModel previousMannerEstimationStep3ViewModel = GetMannerEstimationStep3(sid);
+        MannerEstimationStep3ViewModel previousMannerEstimationStep3ViewModel = await GetMannerEstimationStep3(sid);
         string? oldPostcode = previousMannerEstimationStep3ViewModel?.Postcode?.Trim();
         string? newPostcode = mannerEstimationStep3.Postcode?.Trim();
-        MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimationFromSession(sid);
+        MannerEstimationViewModel mannerEstimationViewModel = await GetMannerEstimationFromSessionabc(sid);
         if (!string.IsNullOrWhiteSpace(oldPostcode) && !string.IsNullOrWhiteSpace(newPostcode))
         {
             mannerEstimationStep3.IsPostCodeChange =
@@ -164,12 +158,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         }
         mannerEstimationViewModel.MannerEstimationStep3 = mannerEstimationStep3;
         SetMannerEstimationToSession(mannerEstimationViewModel,sid);
-        return GetMannerEstimationStep3(sid);
+        return await GetMannerEstimationStep3(sid);
     }
 
     private MannerEstimationViewModel GetMannerEstimation(string? sid=null)
     {
-        return GetMannerEstimationFromSession(sid) ?? new MannerEstimationViewModel();
+        return  GetMannerEstimationFromSession(sid) ?? new MannerEstimationViewModel();
     }
 
     public string? GetCurrentSessionId()
@@ -196,7 +190,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
         return null;
     }
-
     public MannerEstimationViewModel? GetMannerEstimationFromSession(string sessionId)
     {
         //// Use provided sessionId or try to get from current request
@@ -231,10 +224,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimation?.MannerEstimationStep2?.CountryID);
 
         return mannerEstimation;
-   
+
     }
 
-    public string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel,string sessionId)
+    public string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel, string sessionId)
     {
         // If SessionId is empty, generate a new one
         //if (string.IsNullOrWhiteSpace(mannerEstimationViewModel.SessionId))
@@ -255,14 +248,68 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         _httpContextAccessor.HttpContext?.Session
             .SetObjectAsJson(sessionId, mannerEstimationViewModel);
 
-        _logger.LogWarning(
-            "SESSION SET | key={SessionId} | ObjectSessionId={ObjectSessionId} | FarmName={FarmName} | Country={Country}",
-            sessionId,
-            mannerEstimationViewModel.SessionId,
-            mannerEstimationViewModel.MannerEstimationStep1?.FarmName,
-            mannerEstimationViewModel.MannerEstimationStep2?.CountryID);
+        return sessionId;
+    }
 
-        return mannerEstimationViewModel.SessionId;
+    public async Task<MannerEstimationViewModel?> GetMannerEstimationFromSessionabc(string sessionId)
+    {
+        //// Use provided sessionId or try to get from current request
+        ////var targetSessionId = sessionId ?? GetCurrentSessionId();
+        //if (string.IsNullOrWhiteSpace(sessionId))
+        //{
+        //    return null;
+        //}
+
+        //var mannerEstimation = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<MannerEstimationViewModel>(sessionId);
+
+        //return mannerEstimation;
+        if (string.IsNullOrWhiteSpace(sessionId))
+        {
+            _logger.LogWarning(
+                "SESSION GET SKIPPED | sessionId is empty");
+
+            return await Task.FromResult<MannerEstimationViewModel?>(null);
+        }
+
+        var session = _httpContextAccessor.HttpContext?.Session;
+
+        var mannerEstimation =
+            session?.GetObjectFromJson<MannerEstimationViewModel>(sessionId);
+
+        _logger.LogWarning(
+            "SESSION GET | key={SessionId} | found={Found} | ObjectSessionId={ObjectSessionId} | FarmName={FarmName} | Country={Country}",
+            sessionId,
+            mannerEstimation != null,
+            mannerEstimation?.SessionId,
+            mannerEstimation?.MannerEstimationStep1?.FarmName,
+            mannerEstimation?.MannerEstimationStep2?.CountryID);
+
+        return await Task.FromResult(mannerEstimation);
+   
+    }
+
+    public async Task<string> SetMannerEstimationToSessionabc(MannerEstimationViewModel mannerEstimationViewModel,string sessionId)
+    {
+        // If SessionId is empty, generate a new one
+        //if (string.IsNullOrWhiteSpace(mannerEstimationViewModel.SessionId))
+        //{
+        //    mannerEstimationViewModel.SessionId = Guid.NewGuid().ToString();
+        //}
+
+        // Store the manner estimation data with the session ID as part of the key
+        //_httpContextAccessor.HttpContext?.Session.SetObjectAsJson(sessionId, mannerEstimationViewModel);
+        //return mannerEstimationViewModel.SessionId;
+        if (string.IsNullOrWhiteSpace(sessionId))
+        {
+            throw new ArgumentException(
+                "SessionId cannot be empty.",
+                nameof(sessionId));
+        }
+
+        _httpContextAccessor.HttpContext?.Session
+            .SetObjectAsJson(sessionId, mannerEstimationViewModel);
+
+        return await Task.FromResult(sessionId);
     }
 
     public async Task<MannerEstimationStep4ViewModel> GetMannerEstimationStep4(string? sid)

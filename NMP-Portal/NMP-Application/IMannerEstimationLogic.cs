@@ -12,11 +12,13 @@ namespace NMP.Application
 {
     public interface IMannerEstimationLogic
     {
-        MannerEstimationStep1ViewModel GetMannerEstimationStep1(string? sid);
-        MannerEstimationStep1ViewModel SetMannerEstimationStep1(MannerEstimationStep1ViewModel mannerEstimationStep1,string? sid);
-        MannerEstimationStep2ViewModel GetMannerEstimationStep2(string? sid);
+        Task<MannerEstimationViewModel?> GetMannerEstimationFromSessionabc(string sessionId);
+        Task<string> SetMannerEstimationToSessionabc(MannerEstimationViewModel mannerEstimationViewModel, string sessionId);
+        Task<MannerEstimationStep1ViewModel> GetMannerEstimationStep1(string? sid);
+        Task<MannerEstimationStep1ViewModel> SetMannerEstimationStep1(MannerEstimationStep1ViewModel mannerEstimationStep1,string? sid);
+        Task<MannerEstimationStep2ViewModel> GetMannerEstimationStep2(string? sid);
         Task<MannerEstimationStep2ViewModel> SetMannerEstimationStep2(MannerEstimationStep2ViewModel mannerEstimationStep2,string? sid);
-        MannerEstimationStep3ViewModel GetMannerEstimationStep3(string? sid);
+        Task<MannerEstimationStep3ViewModel> GetMannerEstimationStep3(string? sid);
         Task<MannerEstimationStep3ViewModel> SetMannerEstimationStep3(MannerEstimationStep3ViewModel mannerEstimationStep3,string? sid);
         Task<MannerEstimationStep4ViewModel> GetMannerEstimationStep4(string? sid);
         Task<MannerEstimationStep4ViewModel> SetMannerEstimationStep4(MannerEstimationStep4ViewModel mannerEstimationStep4,string? sid);

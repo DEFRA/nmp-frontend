@@ -214,7 +214,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog} FarmName() action called");
             BindSessionIdInViewBeg(sid);
-            MannerEstimationStep1ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep1(sid);
+            MannerEstimationStep1ViewModel model =await _mannerEstimationLogic.GetMannerEstimationStep1(sid);
             (_, bool isAnyFarmExists) = await BindAllFarmList();
             if (isAnyFarmExists)
             {
@@ -243,12 +243,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!ModelState.IsValid)
             {
                 BindMannerFarmNameAndIdOnNavigation(sessionId);
-                model = _mannerEstimationLogic.GetMannerEstimationStep1(sessionId);
+                model =await _mannerEstimationLogic.GetMannerEstimationStep1(sessionId);
                 model.IsFarmCopied = farmList.Any();
                 return View(model);
             }
 
-            _mannerEstimationLogic.SetMannerEstimationStep1(model, sessionId);
+            await _mannerEstimationLogic.SetMannerEstimationStep1(model, sessionId);
 
             return RedirectToAction("Country", new { sid = sessionId.ToString() });
         }
@@ -276,7 +276,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 await BindFarmFieldOrCropDataUpdate(q);
             }
-            MannerEstimationStep2ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep2(sid);
+            MannerEstimationStep2ViewModel model =await _mannerEstimationLogic.GetMannerEstimationStep2(sid);
             try
             {
                 if (model == null)
@@ -325,7 +325,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
         public async Task<IActionResult> Country([FromRoute] string? sessionId, MannerEstimationStep2ViewModel model)
         {
             _logger.LogTrace($"{_mannerEstimationControllerForLog}  Country() post action called");
+            var mannerEstimation =
+      HttpContext.Session.GetString(sessionId);
 
+            _logger.LogWarning(
+                "COUNTRY POST SESSION | MannerEstimation={MannerEstimation}",
+                mannerEstimation);
             try
             {
                 if (model.CountryID == 0)
@@ -336,24 +341,13 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    model = _mannerEstimationLogic.GetMannerEstimationStep2(sessionId);
+                    model =await _mannerEstimationLogic.GetMannerEstimationStep2(sessionId);
                     ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
                     BindMannerFarmNameAndIdOnNavigation(sessionId);
                     return View("Country", model);
                 }
-                _logger.LogWarning(
-     "COUNTRY POST START | sid={Sid} | aspSession={AspSession}",
-     sessionId,
-     HttpContext.Session.Id);
-
-                var postSession =
-                    _mannerEstimationLogic.GetMannerEstimationFromSession(sessionId);
-
-                _logger.LogWarning(
-                    "COUNTRY POST SESSION | sid={Sid} | objectSid={ObjectSid} | farm={Farm}",
-                    sessionId,
-                    postSession?.SessionId,
-                    postSession?.MannerEstimationStep1?.FarmName);
+                
+            
 
                 await _mannerEstimationLogic.SetMannerEstimationStep2(model,sessionId);
                 return RedirectToAction("PostCode", new { sid = sessionId });
@@ -381,7 +375,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 await BindFarmFieldOrCropDataUpdate(q);
             }
             BindSessionIdInViewBeg(sid);
-            MannerEstimationStep3ViewModel model = _mannerEstimationLogic.GetMannerEstimationStep3(sid);
+            MannerEstimationStep3ViewModel model =await _mannerEstimationLogic.GetMannerEstimationStep3(sid);
 
             if (model == null)
             {
@@ -408,7 +402,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 BindMannerFarmNameAndIdOnNavigation(sessionId);
                 if (!ModelState.IsValid)
                 {
-                    MannerEstimationStep3ViewModel mannerEstimationStep3 = _mannerEstimationLogic.GetMannerEstimationStep3(sessionId);
+                    MannerEstimationStep3ViewModel mannerEstimationStep3 =await _mannerEstimationLogic.GetMannerEstimationStep3(sessionId);
                     mannerEstimationStep3.Postcode = model.Postcode;
                     return View(mannerEstimationStep3);
                 }
@@ -6839,6 +6833,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             MannerEstimationViewModel model = new MannerEstimationViewModel(); //_mannerEstimationLogic.GetMannerEstimationFromSession(sid);
             string action=_mannerEstimationProtector.Unprotect(actionName); 
+            
             if (!string.IsNullOrWhiteSpace(q))
             {
                 model.MannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
