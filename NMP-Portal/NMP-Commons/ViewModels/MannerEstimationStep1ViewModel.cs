@@ -12,7 +12,7 @@ namespace NMP.Commons.ViewModels
     {
         [Required(AllowEmptyStrings = false, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterTheFarmName))]
         [StringLength(250, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgFarmNameMinMaxValidation))]
-        public string FarmName { get; set; }
+        public string? FarmNameNew { get; set; } 
         public string EncryptedMannerEstimateId { get; set; } = string.Empty;
         public bool IsFarmCopied { get; set; } = false;
         public int? MannerFarmId { get; set; }

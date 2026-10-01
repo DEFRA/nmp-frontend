@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWhichCountryIsIn, Model.FarmNameForDisplay)} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.Country;
     var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "FarmName";
 }
@@ -20,7 +20,7 @@
             <govuk-radios for="@Model.CountryID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblWhichCountryIsIn, Model.FarmName)
+                        @string.Format(Resource.lblWhichCountryIsIn, Model.FarmNameForDisplay)
                     </govuk-radios-fieldset-legend>
                     @if (ViewBag.CountryList != null)
                     {

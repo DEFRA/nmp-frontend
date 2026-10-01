@@ -45,14 +45,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (mannerEstimationViewModel != null)
         {
             mannerEstimationViewModel.MannerEstimationStep1 = mannerEstimationStep1;
-            SetMannerEstimationToSessionabc(mannerEstimationViewModel,sid);
+          await  SetMannerEstimationToSessionabc(mannerEstimationViewModel,sid);
         }
-        _logger.LogWarning(
-    "SET STEP1: sid={Sid}, ObjectSessionId={ObjectSessionId}, FarmName={FarmName}",
-    sid,
-    mannerEstimationViewModel?.SessionId,
-    mannerEstimationStep1?.FarmName);
-
         return await GetMannerEstimationStep1(sid);
 
     }
@@ -66,12 +60,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep1.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
             mannerEstimationViewModel.MannerEstimationStep1.IsFarmCopied = mannerEstimationViewModel.MannerEstimationStep15.FarmId != null;
         }
-        _logger.LogWarning(
-    "GET STEP3: sid={sid}, ObjectSessionId={ObjectSessionId}, FarmName={FarmName}",
-    sid,
-    mannerEstimationViewModel?.SessionId,
-    mannerEstimationViewModel?.MannerEstimationStep1?.FarmName);
-
         return mannerEstimationViewModel.MannerEstimationStep1;
     }
 
@@ -81,7 +69,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (mannerEstimationViewModel != null)
         {
             mannerEstimationViewModel.MannerEstimationStep2.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
-            mannerEstimationViewModel.MannerEstimationStep2.FarmName = mannerEstimationViewModel.MannerEstimationStep1.FarmName;
+            mannerEstimationViewModel.MannerEstimationStep2.FarmNameForDisplay = mannerEstimationViewModel.MannerEstimationStep1.FarmNameNew;
         }
         
         return mannerEstimationViewModel.MannerEstimationStep2;
@@ -95,16 +83,10 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             return null;
         return country.RB209CountryID;
     }
-    public async Task<MannerEstimationStep2ViewModel> SetMannerEstimationStep2(MannerEstimationStep2ViewModel mannerEstimationStep2,string sid)
+    public async Task<MannerEstimationStep2ViewModel> SetMannerEstimationStep2(MannerEstimationStep2ViewModel mannerEstimationStep2,string sessionId)
     {
-        MannerEstimationViewModel? mannerEstimationViewModel = await GetMannerEstimationFromSessionabc(sid);
+        MannerEstimationViewModel? mannerEstimationViewModel = await GetMannerEstimationFromSessionabc(sessionId);
 
-        _logger.LogWarning(
-    "SET PHLE STEP22: sid={Sid}, ObjectSessionId={ObjectSessionId}, ExistingFarmName={FarmName}, Country={Country}",
-    sid,
-    mannerEstimationViewModel?.SessionId,
-    mannerEstimationViewModel?.MannerEstimationStep1?.FarmName,
-    mannerEstimationStep2.CountryID);
         if (mannerEstimationViewModel != null && mannerEstimationViewModel.MannerEstimationStep2.CountryID != mannerEstimationStep2.CountryID)
         {
             mannerEstimationStep2.IsCountryIdChange = true;
@@ -115,16 +97,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             mannerEstimationViewModel.MannerEstimationStep2.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
             mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerEstimationViewModel.MannerEstimationStep2.CountryID);
         }
-        _logger.LogWarning(
-    "SET BAAD ME STEP2: sid={Sid}, ObjectSessionId={ObjectSessionId}, ExistingFarmName={FarmName}, Country={Country}",
-    sid,
-    mannerEstimationViewModel?.SessionId,
-    mannerEstimationViewModel?.MannerEstimationStep1?.FarmName,
-    mannerEstimationStep2.CountryID);
 
-
-        SetMannerEstimationToSession(mannerEstimationViewModel,sid);
-        return await GetMannerEstimationStep2(sid);
+        await SetMannerEstimationToSessionabc(mannerEstimationViewModel, sessionId);
+        return await GetMannerEstimationStep2(sessionId);
     }
 
     public async Task<MannerEstimationStep3ViewModel> GetMannerEstimationStep3(string sid)
@@ -134,7 +109,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         {
             mannerEstimationViewModel.MannerEstimationStep3.IsCountryIdChange = mannerEstimationViewModel.MannerEstimationStep2.IsCountryIdChange;
             mannerEstimationViewModel.MannerEstimationStep3.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
-            mannerEstimationViewModel.MannerEstimationStep3.FarmName = mannerEstimationViewModel.MannerEstimationStep1.FarmName;
+            mannerEstimationViewModel.MannerEstimationStep3.FarmNameAbc = mannerEstimationViewModel.MannerEstimationStep1.FarmNameNew;
         }
         return mannerEstimationViewModel.MannerEstimationStep3;
     }
@@ -220,7 +195,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             sessionId,
             mannerEstimation != null,
             mannerEstimation?.SessionId,
-            mannerEstimation?.MannerEstimationStep1?.FarmName,
+            mannerEstimation?.MannerEstimationStep1?.FarmNameNew,
             mannerEstimation?.MannerEstimationStep2?.CountryID);
 
         return mannerEstimation;
@@ -263,13 +238,13 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         //var mannerEstimation = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<MannerEstimationViewModel>(sessionId);
 
         //return mannerEstimation;
-        if (string.IsNullOrWhiteSpace(sessionId))
-        {
-            _logger.LogWarning(
-                "SESSION GET SKIPPED | sessionId is empty");
+        //if (string.IsNullOrWhiteSpace(sessionId))
+        //{
+        //    _logger.LogWarning(
+        //        "SESSION GET SKIPPED | sessionId is empty");
 
-            return await Task.FromResult<MannerEstimationViewModel?>(null);
-        }
+        //    return await Task.FromResult<MannerEstimationViewModel?>(null);
+        //}
 
         var session = _httpContextAccessor.HttpContext?.Session;
 
@@ -281,7 +256,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
             sessionId,
             mannerEstimation != null,
             mannerEstimation?.SessionId,
-            mannerEstimation?.MannerEstimationStep1?.FarmName,
+            mannerEstimation?.MannerEstimationStep1?.FarmNameNew,
             mannerEstimation?.MannerEstimationStep2?.CountryID);
 
         return await Task.FromResult(mannerEstimation);
@@ -299,12 +274,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         // Store the manner estimation data with the session ID as part of the key
         //_httpContextAccessor.HttpContext?.Session.SetObjectAsJson(sessionId, mannerEstimationViewModel);
         //return mannerEstimationViewModel.SessionId;
-        if (string.IsNullOrWhiteSpace(sessionId))
-        {
-            throw new ArgumentException(
-                "SessionId cannot be empty.",
-                nameof(sessionId));
-        }
+        //if (string.IsNullOrWhiteSpace(sessionId))
+        //{
+        //    throw new ArgumentException(
+        //        "SessionId cannot be empty.",
+        //        nameof(sessionId));
+        //}
 
         _httpContextAccessor.HttpContext?.Session
             .SetObjectAsJson(sessionId, mannerEstimationViewModel);
@@ -1126,7 +1101,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         (FarmResponse? farm, Error? error) = await _farmService.FetchFarmByIdAsync(farmId);
         if (farm != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep1.FarmName = farm.Name;
+            mannerEstimationViewModel.MannerEstimationStep1.FarmNameNew = farm.Name;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = farm.CountryID.Value;
             mannerEstimationViewModel.MannerEstimationStep3.Postcode = farm.Postcode;
             mannerEstimationViewModel.MannerEstimationStep17.IsFarmOrganic = farm.RegisteredOrganicProducer;
@@ -1496,7 +1471,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         }
         else if (organisationId != null)
         {
-            mannerFarm.Name = mannerEstimationViewModel.MannerEstimationStep1.FarmName;
+            mannerFarm.Name = mannerEstimationViewModel.MannerEstimationStep1.FarmNameNew;
             mannerFarm.CountryID = mannerEstimationViewModel.MannerEstimationStep2.CountryID;
             mannerFarm.Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
             mannerFarm.AverageAnuualRainfall = mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall;
@@ -1968,7 +1943,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
             mannerEstimationViewModel.CropTypeId = mannerEstimate.CropTypeID;
             mannerEstimationViewModel.IsFarmOrganic = mannerFarm.RegisteredOrganicProducer;
             mannerEstimationViewModel.MannerEstimationStep31.Name = mannerEstimate.Name;
-            mannerEstimationViewModel.MannerEstimationStep1.FarmName = mannerFarm.Name;
+            mannerEstimationViewModel.MannerEstimationStep1.FarmNameNew = mannerFarm.Name;
             mannerEstimationViewModel.MannerEstimationStep2.CountryID = mannerFarm.CountryID.Value;
             mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId = await FetchFarmRB209CoutryId(mannerFarm.CountryID.Value);
             mannerEstimationViewModel.MannerEstimationStep3.Postcode = mannerFarm.Postcode;

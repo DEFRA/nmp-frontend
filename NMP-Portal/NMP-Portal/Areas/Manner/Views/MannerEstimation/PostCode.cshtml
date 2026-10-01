@@ -5,7 +5,7 @@
 
 @{
     string title = Resource.lblMannerEstimate;
-    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsPostcode, Model.FarmName)} {Resource.lblHyphen} {title}";
+    ViewData["Title"] = $"{string.Format(Resource.lblWhatIsPostcode, Model.FarmNameAbc)} {Resource.lblHyphen} {title}";
     ViewBag.CurrentStep = (int)MannerEstimateWizardSteps.Postcode;
     var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && (!Model.IsCountryIdChange)) ? "MannerEstimationResult" : "Country";
 }
@@ -19,7 +19,7 @@
         <form asp-action="PostCode" method="post" asp-controller="MannerEstimation" autocomplete="on" asp-route-sessionId="@ViewBag.SessionId">
             @Html.AntiForgeryToken()
             <govuk-input input-class="govuk-input--width-5" for="@Model.Postcode">
-                <govuk-input-label is-page-heading="true" class="govuk-label--l ">@string.Format(Resource.lblWhatIsPostcode, Model.FarmName)</govuk-input-label>
+                <govuk-input-label is-page-heading="true" class="govuk-label--l ">@string.Format(Resource.lblWhatIsPostcode, Model.FarmNameAbc)</govuk-input-label>
             </govuk-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button  margin-bottom-forty">
                 @Resource.lblContinue
