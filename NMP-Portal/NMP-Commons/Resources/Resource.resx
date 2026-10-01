@@ -6877,10 +6877,10 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Next releases</value>
   </data>
   <data name="lblReleaseScheduleContentTwelve" xml:space="preserve">
-    <value>Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable</value>
+    <value>Autumn/Winter 2026 &amp;emsp; Scotland Arable</value>
   </data>
   <data name="lblReleaseScheduleContentThirteen" xml:space="preserve">
-    <value>Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Grassland</value>
+    <value>Autumn/Winter 2026 &amp;emsp; Scotland Grassland</value>
   </data>
   <data name="lblReleaseScheduleContentSeventeen" xml:space="preserve">
     <value>N-max report</value>
@@ -6898,7 +6898,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
-    <value>2nd September 2026</value>
+    <value>1st October 2026</value>
   </data>
   <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
     <value>Add or update fields and soil analysis</value>
