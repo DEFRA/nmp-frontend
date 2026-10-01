@@ -1520,20 +1520,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         field.CropGroup = await _fieldLogic.FetchCropGroupById(field.CropGroupId.Value);
         SetFieldDataToSession(field);
-        if (field.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-        {
-            if (field.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
-            {
-                field.CropTypeID = (int)NMP.Commons.Enums.CropTypes.Grass;
-                SetFieldDataToSession(field);
-                return RedirectToAction("PreviousGrass");
-            }
-            else
-            {
-                field.PreviousCroppings.PreviousGrassID = null;
-                SetFieldDataToSession(field);
-            }
-        }
+        
         return RedirectToAction(_cropTypesActionName);
     }
 
@@ -1689,10 +1676,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         model.IsCheckAnswer = false;
         SetFieldDataToSession(model);
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
-        {
-            return RedirectToAction("PreviousGrass");
-        }
         if (model.PreviousCroppings.HasGrassInLastThreeYear != null && model.PreviousCroppings.HasGrassInLastThreeYear.Value)
         {
             if (!model.PreviousGrassYears.Contains(model.LastHarvestYear ?? 0))
@@ -1846,14 +1829,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 CropGroupID = model.CropGroupId,
                 CropTypeID = model.CropTypeID,
-                HasGrassInLastThreeYear = model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass,
+                HasGrassInLastThreeYear = false,
                 HarvestYear = model.LastHarvestYear,
                 LayDuration = null,
                 GrassManagementOptionID = null,
                 HasGreaterThan30PercentClover = null,
                 SoilNitrogenSupplyItemID = null,
                 CropInfo1=model.CropInfo1,
-                PreviousGrassID = model.PreviousCroppings.PreviousGrassID
+                PreviousGrassID = null
             };
             previousCropping.Add(newPreviousCropping);
         }
@@ -2269,10 +2252,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         else
         {
             ValidateCropGroupOrCropType(model);
-            if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && model.PreviousCroppings.PreviousGrassID == null)
-            {
-                ModelState.AddModelError("PreviousCroppings.PreviousGrassID", string.Format(_stringFormat, Resource.lblWhatWasThePreviousGrassManagement, Resource.lblNotSet));
-            }
         }
     }
 
@@ -2631,14 +2610,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.PreviousCroppings = prevCroppingData;
             model.CropGroupId = prevCroppingData.CropGroupID;
 
-            if (prevCroppingData.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
-            {
-                (PreviousGrassResponse? previousGrassManagement, _) = await _previousCroppingLogic.FetchPreviousGrassById(model.PreviousCroppings.PreviousGrassID.Value);
-                if (previousGrassManagement != null)
-                {
-                    model.PreviousGrassName = previousGrassManagement.PreviousGrassName;
-                }
-            }
 
             model.CropTypeID = prevCroppingData.CropTypeID;
 
@@ -3004,14 +2975,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.PreviousCroppings = prevCroppingDataForScotland;
             model.CropGroupId = prevCroppingDataForScotland.CropGroupID;
 
-            if (prevCroppingDataForScotland.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
-            {
-                (PreviousGrassResponse? previousGrassManagement, _) = await _previousCroppingLogic.FetchPreviousGrassById(model.PreviousCroppings.PreviousGrassID.Value);
-                if (previousGrassManagement != null)
-                {
-                    model.PreviousGrassName = previousGrassManagement.PreviousGrassName;
-                }
-            }
 
             model.CropTypeID = prevCroppingDataForScotland.CropTypeID;
 
@@ -3130,10 +3093,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 await FetchPscIndexName(model);
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
                 ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
-                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                {
-                    await BindPreviousGrassName(model);
-                }
+                
                 ViewData["ModelStateErrors"] = ModelState;
                 return View(model);
             }
@@ -3223,33 +3183,21 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 FieldID = fieldId,
                 CropGroupID = model.CropGroupId,
                 CropTypeID = model.CropTypeID,
-                HasGrassInLastThreeYear = model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass,
+                HasGrassInLastThreeYear = false,
                 HarvestYear = model.LastHarvestYear,
                 LayDuration = null,
                 GrassManagementOptionID = null,
                 HasGreaterThan30PercentClover = null,
                 SoilNitrogenSupplyItemID = null,
                 CropInfo1 = model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet ? model.CropInfo1 : null,
-                PreviousGrassID = model.PreviousCroppings.PreviousGrassID,
+                PreviousGrassID = null,
                 Action = preCropping != null ? (int)NMP.Commons.Enums.Action.Update : (int)NMP.Commons.Enums.Action.Insert
             };
             model.PreviousCroppingsList.Add(newPreviousCropping);
         }
     }
 
-    private async Task BindPreviousGrassName(FieldViewModel model)
-    {
-        int preCropGroupId = model.PreviousCroppings.CropGroupID ?? 0;
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && preCropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass && model.PreviousCroppings != null && model.PreviousCroppings.PreviousGrassID.HasValue)
-        {
-            ViewBag.PreCropGroupName = await _fieldLogic.FetchCropGroupById(preCropGroupId);
-            (PreviousGrassResponse? previousGrassManagement, _) = await _previousCroppingLogic.FetchPreviousGrassById(model.PreviousCroppings.PreviousGrassID.Value);
-            if (previousGrassManagement != null)
-            {
-                model.PreviousGrassName = previousGrassManagement.PreviousGrassName;
-            }
-        }
-    }
+   
 
     async Task<List<Crop>> GetCropPlans(FieldViewModel model, List<Crop> cropPlans)
     {
@@ -3407,19 +3355,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return (error, hasGrassInLastThreeYear, prevCroppings);
     }
 
-    private async Task<Error> BindPreviousGrassNameForScotland(FieldViewModel model, Error? error, PreviousCroppingData prevCroppings)
-    {
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && prevCroppings.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
-        {
-            (PreviousGrassResponse? previousGrassResponse, error) = await _previousCroppingLogic.FetchPreviousGrassById(prevCroppings.PreviousGrassID.Value);
-            if (previousGrassResponse != null)
-            {
-                model.PreviousGrassName = previousGrassResponse.PreviousGrassName;
-            }
-        }
-
-        return error;
-    }
 
     static void ResetSoilOverChalkAndReleasingClay(FieldViewModel model)
     {
@@ -4620,60 +4555,5 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return await Task.FromResult(RedirectToAction("SoilNutrientValueType"));
 
     }
-    [HttpGet]
-    public async Task<IActionResult> PreviousGrass()
-    {
-        _logger.LogTrace($"Field Controller: PreviousGrass() action called.");
-        FieldViewModel? model = LoadFieldDataFromSession();
-        if (model == null)
-        {
-            _logger.LogTrace("SoilAnalysisController: Session expired in PreviousGrass() action.");
-            return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
-        }
-        await BindPreviousGrassList(model);
 
-        return View("PreviousGrass", model);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> PreviousGrass(FieldViewModel model)
-    {
-        _logger.LogTrace($"Field Controller: PreviousGrass() post action called.");
-
-        if (model.PreviousCroppings.PreviousGrassID == null)
-        {
-            ModelState.AddModelError("PreviousCroppings.PreviousGrassID", Resource.MsgSelectAnOptionBeforeContinuing);
-        }
-
-        if (!ModelState.IsValid)
-        {
-            await BindPreviousGrassList(model);
-            return await Task.FromResult(View(model));
-        }
-        (PreviousGrassResponse? previousGrassManagement, _) = await _previousCroppingLogic.FetchPreviousGrassById(model.PreviousCroppings.PreviousGrassID.Value);
-        if (previousGrassManagement != null)
-        {
-            model.PreviousGrassName = previousGrassManagement.PreviousGrassName;
-        }
-        SetFieldDataToSession(model);
-        if (model.IsCheckAnswer)
-        {
-            return RedirectToAction(_checkAnswerActionName);
-        }
-        if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
-        {
-            return RedirectToAction(_updateFieldActionName);
-        }
-        return await Task.FromResult(RedirectToAction(_checkAnswerActionName));
-
-    }
-    private async Task BindPreviousGrassList(FieldViewModel model)
-    {
-        (List<PreviousGrassResponse>? previousGrassesList, _) = await _previousCroppingLogic.FetchPreviousGrassList();
-        if (previousGrassesList != null)
-        {
-            ViewBag.PreviousGrassManagementList = previousGrassesList.Where(x => x.CountryId == model.FarmRB209CountryID.ToString()).ToList();
-        }
-    }
 }
