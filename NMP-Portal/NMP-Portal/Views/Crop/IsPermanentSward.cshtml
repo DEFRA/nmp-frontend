@@ -1,0 +1,64 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
+@{
+    string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
+    ViewData["Title"] = $"{Resource.lblIsThisAPermanentSward} {Resource.lblHyphen} {title}";
+
+
+    var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
+    var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.IsPermanentSward;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsCropGroupChange) ? "CheckAnswer" : "CropGroupName")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="IsPermanentSward" asp-controller="Crop" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @if (TempData["CropInfoOneError"] != null)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["CropInfoOneError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            </div>
+        </div>
+    }
+    @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <govuk-radios for="@Model.IsPermanentSward">
+                <govuk-radios-fieldset>
+                    <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                        @Resource.lblIsThisAPermanentSward
+                    </govuk-radios-fieldset-legend>
+                    <govuk-radios-hint>
+                        @Resource.lblPermanentGrassRemainsInPlace
+                    </govuk-radios-hint>
+
+                    <govuk-radios-item value="@yes">@Resource.lblYes</govuk-radios-item>
+                    <govuk-radios-item value="@no">@Resource.lblNo</govuk-radios-item>
+
+                </govuk-radios-fieldset>
+            </govuk-radios>
+
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                }
+            </p>
+
+        </div>
+
+    </div>
+</form>

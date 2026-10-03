@@ -8633,4 +8633,13 @@ following crop year 2</value>
   <data name="lblMannerAboutRecommendationContentOne" xml:space="preserve">
     <value>MANNER-NPK ('this tool') was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions ('Defra and partners').</value>
   </data>
+  <data name="lblTheManagementOfTheGrassCropIsNeeded" xml:space="preserve">
+    <value>The management of the grass crop is needed to determine the nitrogen (N) residue group for the following arable crop. Select the option that best matches how the grass was managed.</value>
+  </data>
+  <data name="lblIsThisAPermanentSward" xml:space="preserve">
+    <value>Is this a permanent sward?</value>
+  </data>
+  <data name="lblPermanentGrassRemainsInPlace" xml:space="preserve">
+    <value>Permanent grass remains in place for over 5 years.</value>
+  </data>
 </root>

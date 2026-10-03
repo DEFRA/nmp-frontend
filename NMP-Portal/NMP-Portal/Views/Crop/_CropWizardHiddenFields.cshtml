@@ -80,6 +80,10 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreshWeightDefaultEncryptedCounter" value="@Model.FreshWeightDefaultEncryptedCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreshWeightManualCounter" value="@Model.FreshWeightManualCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreshWeightManualEncryptedCounter" value="@Model.FreshWeightManualEncryptedCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassCurrentCounter" value="@Model.PreviousGrassCurrentCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassEncryptedCounter" value="@Model.PreviousGrassEncryptedCounter" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassManagementName" value="@Model.PreviousGrassManagementName" />
+
     @if (currentStep != (int)CropWizardSteps.GrassClass)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.GrassClassQuestion" />
@@ -134,6 +138,10 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyExistingPlan" />
     }
+    @if (currentStep != (int)CropWizardSteps.IsPermanentSward)
+    {
+        <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.IsPermanentSward" value="@Model.IsPermanentSward"></govuk-input>
+    }
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCurrentSwardChange" value="@Model.IsCurrentSwardChange" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CountryId" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropOrder" />
@@ -180,6 +188,12 @@
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].EncryptedCounter" value="@Model.Crops[i].EncryptedCounter" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropOrder" value="@Model.Crops[i].CropOrder" />
             <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Crops[i].CropGroupName" value="@Model.Crops[i].CropGroupName" />
+
+            @if (currentStep != (int)CropWizardSteps.PreviousGrassManagement)
+            {
+                <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.Crops[i].PreviousGrass" value="@Model.Crops[i].PreviousGrass"></govuk-input>
+            }
+            
         }
     }
 

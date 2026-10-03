@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -8823,6 +8823,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is this a permanent sward?.
+        /// </summary>
+        public static string lblIsThisAPermanentSward {
+            get {
+                return ResourceManager.GetString("lblIsThisAPermanentSward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is {0} covered?.
         /// </summary>
         public static string lblIsThisCovered {
@@ -12820,6 +12829,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Permanent grass remains in place for over 5 years..
+        /// </summary>
+        public static string lblPermanentGrassRemainsInPlace {
+            get {
+                return ResourceManager.GetString("lblPermanentGrassRemainsInPlace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to % per tonne.
         /// </summary>
         public static string lblPerTonne {
@@ -16481,6 +16499,15 @@ namespace NMP.Commons.Resources {
         public static string lblTheInformationEnteredIndicatesCompliance {
             get {
                 return ResourceManager.GetString("lblTheInformationEnteredIndicatesCompliance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The management of the grass crop is needed to determine the nitrogen (N) residue group for the following arable crop. Select the option that best matches how the grass was managed..
+        /// </summary>
+        public static string lblTheManagementOfTheGrassCropIsNeeded {
+            get {
+                return ResourceManager.GetString("lblTheManagementOfTheGrassCropIsNeeded", resourceCulture);
             }
         }
         

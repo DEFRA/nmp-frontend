@@ -1,0 +1,82 @@
+﻿@using NMP.Commons.Resources
+@using NMP.Commons.Enums
+@model NMP.Commons.ViewModels.PlanViewModel
+@{
+    string heading = Resource.lblWhatWasThePreviousGrassManagement;
+    ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? $"{heading} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{heading} {Resource.lblHyphen} {Resource.lblAddField}";
+
+
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.PreviousGrassManagement;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "DefoliationSequence")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+}
+<form asp-action="PreviousGrassManagement" asp-controller="Crop" method="post" autocomplete="off">
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (TempData["Error"] != null)
+            {
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["Error"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            }
+
+            @if (Model.Crops != null && Model.Crops.Count > 0)
+            {
+                @for (int i = 0; i < Model.Crops.Count; i++)
+                {
+                    @if (Model.PreviousGrassCurrentCounter == i)
+                    {
+                        <govuk-radios for="@Model.Crops[i].PreviousGrass">
+                            <govuk-radios-fieldset>
+                                <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                                    @heading
+                                </govuk-radios-fieldset-legend>
+                                <govuk-radios-hint>
+                                    <br />
+                                    @Resource.lblTheManagementOfTheGrassCropIsNeeded
+                                    <br /> <br />
+                                    @Resource.lblPreviousGrassManagementHint
+                                </govuk-radios-hint>
+                                @if (ViewBag.PreviousGrassManagementList != null)
+                                {
+                                    @foreach (var item in ViewBag.PreviousGrassManagementList)
+                                    {
+                                        <govuk-radios-item value="@item.PreviousGrassId">@item.PreviousGrassName</govuk-radios-item>
+                                    }
+                                }
+
+                            </govuk-radios-fieldset>
+                        </govuk-radios>
+                    }
+                    else
+                    {
+                        <div hidden="true">
+                            <govuk-input class="govuk-visually-hidden" type="hidden" for="@Model.Crops[@i].PreviousGrass" value="@Model.Crops[i].PreviousGrass"></govuk-input>
+                        </div>
+                    }
+                }
+            }
+
+            
+            <govuk-button type="submit" class="margin-bottom-forty">
+                @Resource.lblContinue
+            </govuk-button>
+            <p class="govuk-body cancel-link">
+                @if (!Model.IsCheckAnswer)
+                {
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                }
+                else
+                {
+                    <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                }
+            </p>
+
+        </div>
+
+    </div>
+</form>

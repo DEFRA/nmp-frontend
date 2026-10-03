@@ -1961,6 +1961,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.CropInfo2 = null;
                     model.CropInfo2Name = null;
                     SetCropToSession(model);
+
                     return RedirectToAction(_checkAnswerActionName);
                 }
             }
@@ -2063,6 +2064,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         ResetCropInfoTwo(model);
+        bool isPreviousPlanHasGrass = true;
+        if (isPreviousPlanHasGrass && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            return RedirectToAction("PreviousGrassManagement");
+        }
         return RedirectToAction(_checkAnswerActionName);
     }
 
@@ -2138,7 +2144,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             TempData["CropInfoTwoError"] = ex.Message;
             return RedirectToAction(_cropInfoTwoActionName);
         }
-
+        bool isPreviousPlanHasGrass = true;
+        if(isPreviousPlanHasGrass && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            return RedirectToAction("PreviousGrassManagement");
+        }
         return RedirectToAction(_checkAnswerActionName);
     }
 
@@ -4509,6 +4519,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
+            if(model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                return RedirectToAction("IsPermanentSward");
+            }
             return RedirectToAction(_currentSwardActionName);
         }
         return RedirectToAction("VarietyName");
@@ -5664,7 +5678,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<PlanViewModel> BindDefoliationSequenceForCurrentSward(PlanViewModel model)
     {
-        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward, model.FarmRB209CountryID.Value);
+        List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
+        if (model.IsPermanentSward==false)
+        {
+            bool isNewSward = model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward;
+
+            (defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, isNewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, isNewSward, model.FarmRB209CountryID.Value);
+        }
+        else
+        {
+            (defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.PotentialCut ?? 0, false, model.FarmRB209CountryID.Value);
+        }
+
+
         if (defoliationSequenceResponses != null && defoliationSequenceResponses.Count > 0)
         {
             model.DefoliationSequenceId = defoliationSequenceResponses[0].DefoliationSequenceId;
@@ -7791,5 +7817,219 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         // Loop back to Default GET for the next field.
         return RedirectToAction(_freshWeightYieldsDefault);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> PreviousGrassManagement(string? q)
+    {
+        _logger.LogTrace($"Field Controller: PreviousGrassManagement() action called.");
+        PlanViewModel? model = GetCropFromSession(); 
+        if (model == null)
+        {
+            _logger.LogTrace("SoilAnalysisController: Session expired in PreviousGrassManagement() action.");
+            return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+        }
+        
+        try
+        {
+            (List<PreviousGrassResponse>? previousGrassesList, _) = await _previousCroppingLogic.FetchPreviousGrassList();
+            if (previousGrassesList != null)
+            {
+                ViewBag.PreviousGrassManagementList = previousGrassesList.Where(x => x.CountryId == model.FarmRB209CountryID.ToString()).ToList().OrderBy(x=>x.PreviousGrassName);
+            }
+            if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
+            {
+                model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
+                if (model.PreviousGrassCurrentCounter == 0)
+                {
+                    model.FieldID = model.Crops[0].FieldID.Value;
+                }
+                SetCropToSession(model);
+            }
+            else if (!string.IsNullOrWhiteSpace(q) && (model.Crops != null && model.Crops.Count > 0))
+            {
+                int itemCount = Convert.ToInt32(_fieldDataProtector.Unprotect(q));
+                int index = itemCount - 1;//index of list
+                if (itemCount == 0)
+                {
+                    model.PreviousGrassCurrentCounter = 0;
+                    model.PreviousGrassEncryptedCounter = string.Empty;
+                    SetCropToSession(model);
+                    return RedirectToAction(_sowingDateQuestion);
+                }
+                model.FieldID = model.Crops[index].FieldID.Value;
+                model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
+                model.PreviousGrassCurrentCounter = index;
+                model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["PreviousGrassManagementError"] = ex.Message;
+            return RedirectToAction("PreviousGrassManagement");
+        }
+
+        return View("PreviousGrassManagement", model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PreviousGrassManagement(PlanViewModel model)
+    {
+        _logger.LogTrace($"Field Controller: PreviousGrassManagement() post action called.");
+
+        if (model.Crops[model.PreviousGrassCurrentCounter].PreviousGrass == null)
+        {
+            ModelState.AddModelError(GetCropKey(model), Resource.MsgSelectAnOptionBeforeContinuing);
+        }
+
+        if (!ModelState.IsValid)
+        {
+            model= GetCropFromSession();
+            return await Task.FromResult(View(model));
+        }
+        (PreviousGrassResponse? previousGrassManagement, _) = await _previousCroppingLogic.FetchPreviousGrassById(model.Crops[model.PreviousGrassCurrentCounter].PreviousGrass.Value);
+        if (previousGrassManagement != null)
+        {
+            model.PreviousGrassManagementName = previousGrassManagement.PreviousGrassName;
+        }
+
+        for (int i = 0; i < model.Crops.Count; i++)
+        {
+            if (model.FieldID == model.Crops[i].FieldID.Value)
+            {
+                model.PreviousGrassCurrentCounter++;
+                if (i + 1 < model.Crops.Count)
+                {
+                    model.FieldID = model.Crops[i + 1].FieldID.Value;
+                }
+
+                break;
+            }
+        }
+
+        model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
+        SetCropToSession(model);
+
+        if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
+        {
+            return RedirectToAction(_checkAnswerActionName);
+        }
+        if (model.PreviousGrassCurrentCounter == model.Crops.Count)
+        {
+            if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
+            {
+                return RedirectToAction(_checkAnswerActionName);
+            }
+            
+            return RedirectToAction(_checkAnswerActionName);
+        }
+        (List<PreviousGrassResponse>? previousGrassesList, _) = await _previousCroppingLogic.FetchPreviousGrassList();
+        if (previousGrassesList != null)
+        {
+            ViewBag.PreviousGrassManagementList = previousGrassesList.Where(x => x.CountryId == model.FarmRB209CountryID.ToString()).ToList();
+        }
+        return View(model);
+
+    }
+
+
+    [HttpGet]
+    public async Task<IActionResult> IsPermanentSward(string? q)
+    {
+        _logger.LogTrace($"Field Controller: IsPermanentSward() action called.");
+        PlanViewModel? model = GetCropFromSession();
+        try
+        {
+            if (model == null)
+            {
+                return await Task.FromResult(RedirectToAction("FarmList", "Farm"));
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["IsPermanentSwardError"] = ex.Message;
+            return RedirectToAction("IsPermanentSward");
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> IsPermanentSward(PlanViewModel model)
+    {
+        _logger.LogTrace($"Field Controller: IsPermanentSward() post action called.");
+
+        try
+        {
+
+            if (model.IsPermanentSward == null)
+            {
+                ModelState.AddModelError("IsPermanentSward", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.IsCheckAnswer)
+            {
+                PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+
+                if (planViewModel.IsPermanentSward == model.IsPermanentSward && !model.IsAnyChangeInField)
+                {
+                    return RedirectToAction(_checkAnswerActionName);
+                }
+                if (planViewModel.IsPermanentSward != null && planViewModel.IsPermanentSward != model.IsPermanentSward)
+                {
+                    model.IsPermanentSwardChange = true;
+                }
+            }
+
+            if (model.IsPermanentSwardChange && (!model.IsCropTypeChange && !model.IsCropGroupChange))
+            {
+                model = await BindDefoliationSequenceForCurrentSward(model);
+            }
+
+            SetCropToSession(model);
+            return RedirectIsPermanentSward(model);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace(ex, "Crop Controller : Exception in IsPermanentSward() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            TempData["IsPermanentSwardError"] = ex.Message;
+            return RedirectToAction("IsPermanentSward");
+        }
+
+    }
+
+    private IActionResult RedirectIsPermanentSward(PlanViewModel model)
+    {
+        if (!model.IsPermanentSward.Value)
+        {
+            return RedirectToAction("CurrentSward");
+        }
+        else
+        {
+            model.CurrentSward = null;
+            model.GrassSeason = null;
+            model.SowingDateQuestion = null;
+            model.SowingDate = null;
+            SetCropToSession(model);
+            if (model.IsCheckAnswer && (!model.IsFieldToBeRemoved.HasValue))
+            {
+                if (model.SwardTypeId == null || model.Crops.Any(x => x.Yield == null))
+                {
+                    return RedirectToAction(_swardType);
+                }
+                return RedirectToAction(_checkAnswerActionName);
+            }
+            else
+            {
+                return RedirectToAction(_swardType);
+            }
+        }
     }
 }
