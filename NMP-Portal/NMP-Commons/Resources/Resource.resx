@@ -8538,7 +8538,7 @@ following crop year 2</value>
     <value>Select the option that best matched the previous grass management.</value>
   </data>
   <data name="lblPreviousGrassManagementHint" xml:space="preserve">
-    <value>Low nitrogen (N) means less than 150 kg per hectare per year fertiliser N used on average. High N means more than 150 kg per hectare per year fertiliser N used on average, or a high clover swards</value>
+    <value>Low nitrogen (N) means less than 150 kg per hectare per year fertiliser N used on average. High N means more than 150 kg per hectare per year fertiliser N used on average, or a high clover sward.</value>
   </data>
   <data name="lblUndersownSwardsShouldBeTreated" xml:space="preserve">
     <value>Undersown swards should be treated as an existing sward.</value>
@@ -8633,9 +8633,6 @@ following crop year 2</value>
   <data name="lblHighCloverHint" xml:space="preserve">
     <value>A high clover content is more than 30% clover over the season.</value>
   </data>
-  <data name="lblMannerAboutRecommendationContentOne" xml:space="preserve">
-    <value>MANNER-NPK ('this tool') was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions ('Defra and partners').</value>
-  </data>
   <data name="lblTheManagementOfTheGrassCropIsNeeded" xml:space="preserve">
     <value>The management of the grass crop is needed to determine the nitrogen (N) residue group for the following arable crop. Select the option that best matches how the grass was managed.</value>
   </data>
@@ -8644,5 +8641,11 @@ following crop year 2</value>
   </data>
   <data name="lblPermanentGrassRemainsInPlace" xml:space="preserve">
     <value>Permanent grass remains in place for over 5 years.</value>
+  </data>
+  <data name="lblHowWasTheGrassManaged" xml:space="preserve">
+    <value>How was the grass managed?</value>
+  </data>
+  <data name="lblHowWasTheGrassManagedFor" xml:space="preserve">
+    <value>How was the grass managed for {0}?</value>
   </data>
 </root>

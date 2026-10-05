@@ -83,6 +83,7 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassCurrentCounter" value="@Model.PreviousGrassCurrentCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassEncryptedCounter" value="@Model.PreviousGrassEncryptedCounter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassManagementName" value="@Model.PreviousGrassManagementName" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsPreviousGrassManaged" value="@Model.IsPreviousGrassManaged" />
 
     @if (currentStep != (int)CropWizardSteps.GrassClass)
     {

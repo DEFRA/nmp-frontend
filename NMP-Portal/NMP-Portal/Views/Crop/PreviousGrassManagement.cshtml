@@ -2,7 +2,7 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PlanViewModel
 @{
-    string heading = Resource.lblWhatWasThePreviousGrassManagement;
+    string heading = Model.Crops.Count == 1 ? Resource.lblHowWasTheGrassManaged : string.Format(Resource.lblHowWasTheGrassManagedFor, Model.Crops[Model.PreviousGrassCurrentCounter].FieldName);
     ViewData["Title"] = (Model != null && !string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? $"{heading} {Resource.lblHyphen} {Resource.lblUpdateField}" : $"{heading} {Resource.lblHyphen} {Resource.lblAddField}";
 
 

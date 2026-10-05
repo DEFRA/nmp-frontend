@@ -8148,6 +8148,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How was the grass managed?.
+        /// </summary>
+        public static string lblHowWasTheGrassManaged {
+            get {
+                return ResourceManager.GetString("lblHowWasTheGrassManaged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How was the grass managed for {0}?.
+        /// </summary>
+        public static string lblHowWasTheGrassManagedFor {
+            get {
+                return ResourceManager.GetString("lblHowWasTheGrassManagedFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How was the grass typically managed each year?.
         /// </summary>
         public static string lblHowWasTheGrassTypicallyManagedEachYear {
@@ -13621,7 +13639,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Low nitrogen (N) means less than 150 kg per hectare per year fertiliser N used on average. High N means more than 150 kg per hectare per year fertiliser N used on average, or a high clover swards.
+        ///   Looks up a localized string similar to Low nitrogen (N) means less than 150 kg per hectare per year fertiliser N used on average. High N means more than 150 kg per hectare per year fertiliser N used on average, or a high clover sward..
         /// </summary>
         public static string lblPreviousGrassManagementHint {
             get {

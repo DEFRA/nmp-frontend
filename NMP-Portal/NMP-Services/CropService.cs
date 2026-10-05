@@ -741,4 +741,47 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         return (grassGrowthClasses, error);
     }
+
+    public async Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int harvestYear)
+    {
+        var fieldIdsRequest = new { fieldIds };
+        Error? error = null;
+        List<GrassInPrevOrArableInNextYearResponse>? grassInPrevOrArableInNextYearList = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var jsonContent = JsonConvert.SerializeObject(fieldIdsRequest);
+            var content = new StringContent(jsonContent, Encoding.UTF8, _applicationJson);
+            var url = ApiurlHelper.FetchGrassSiteClassesAPI;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = content
+            };
+            var response = await httpClient.SendAsync(requestMessage);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                if (responseWrapper != null && responseWrapper.Data != null)
+                {
+                    var responseList = responseWrapper?.Data?.ToObject<List<GrassInPrevOrArableInNextYearResponse>>();
+                    grassInPrevOrArableInNextYearList.AddRange(responseList);
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            error = _logger.HandleException(ex, error);
+        }
+        return (grassInPrevOrArableInNextYearList, error);
+    }
+    
 }

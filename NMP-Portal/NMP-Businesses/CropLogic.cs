@@ -682,4 +682,11 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
         _logger.LogTrace("Fetching grass site class for FieldIds: {FieldIds}", string.Join(", ", fieldIds));
         return await _cropService.FetchGrassSiteClassAsync(fieldIds);
     }
+
+    public async Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int harvestYear)
+    {
+        _logger.LogTrace("check is grass in previous or arable in next year for FieldIds: {FieldIds}, {HarvestYear}", string.Join(", ", fieldIds), harvestYear);
+        return await _cropService.CheckIsGrassInPrevOrArableInNextYearAsync(fieldIds, harvestYear);
+    }
+    
 }
