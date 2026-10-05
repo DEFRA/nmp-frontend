@@ -2917,6 +2917,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             crop.FieldName = null;
             crop.EncryptedCounter = null;
             crop.FieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
+            crop.IsPermanentSward = model.IsPermanentSward;
 
             if (string.IsNullOrWhiteSpace(model.CropGroupName))
             {
@@ -7835,7 +7836,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             (List<PreviousGrassResponse>? previousGrassesList, _) = await _previousCroppingLogic.FetchPreviousGrassList();
             if (previousGrassesList != null)
             {
-                ViewBag.PreviousGrassManagementList = previousGrassesList.Where(x => x.CountryId == model.FarmRB209CountryID.ToString()).ToList().OrderBy(x=>x.PreviousGrassName);
+                ViewBag.PreviousGrassManagementList = previousGrassesList.Where(x => x.CountryId == model.FarmRB209CountryID.ToString() && x.PreviousGrassId != 26 && x.PreviousGrassId != 30).ToList().OrderBy(x=>x.PreviousGrassName);
             }
             if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
             {
