@@ -26,5 +26,6 @@ namespace NMP.Commons.ViewModels
         public bool IsManureTypeChange { get; set; } = false;
         public bool IsDefaultValueChange { get; set; } = false;
         public bool IsComingForAddNewApplication { get; set; } = false;
+        public int? ApplicationMethodCount { get; set; }
     }
 }
