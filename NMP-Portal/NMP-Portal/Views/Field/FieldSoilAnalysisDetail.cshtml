@@ -182,13 +182,6 @@
                                 <td class="govuk-table__cell">@string.Format(Resource.lblCropInYear, Model.LastHarvestYear)</td>
                                 <td class="govuk-table__cell">@(string.IsNullOrWhiteSpace(Model.CropType)?Resource.lblNotSet:Model.CropType)</td>
                             </tr>
-                            @if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
-                            {
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@Resource.lblPreviousGrass</td>
-                                <td class="govuk-table__cell">@Model.PreviousGrassName</td>
-                            </tr>
-                            }
                         }
                         else{
                         if (ViewBag.PreviousCroppingsList != null && ViewBag.PreviousCroppingsList.Count > 0)
