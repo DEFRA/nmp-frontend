@@ -122,6 +122,7 @@ namespace NMP.Commons.ViewModels
 
         public bool IsCropTypeChange { get; set; } = false;
         public int? OldCropTypeId { get; set; }
+        public bool IsCropGroupChange { get; set; } = false;
     }
 }
 

@@ -17,7 +17,7 @@
     {
         <govuk-back-link asp-action="ApplicationDate" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblBack</govuk-back-link>
     }
-    else if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationDateChange&&!Model.IsComingForAddNewApplication)
+    else if (string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsApplicationDateChange && !Model.IsComingForAddNewApplication)
     {
         <govuk-back-link asp-action="MannerEstimationResult" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@Model.EncryptedMannerEstimateId">@Resource.lblBack</govuk-back-link>
     }

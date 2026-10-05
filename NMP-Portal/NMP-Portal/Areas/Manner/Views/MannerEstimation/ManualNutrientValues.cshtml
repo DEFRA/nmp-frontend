@@ -12,7 +12,7 @@
     var backAction = "DefaultNutrientValues";
     if (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials)
     {
-        backAction = "ApplicationMethod";
+        backAction = Model.ApplicationMethodCount == 1 ? "ApplicationDate" : "ApplicationMethod";
     }
     if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsComingForAddNewApplication)
     {
