@@ -691,7 +691,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             model.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupId ?? 0);
-            model = _mannerEstimationLogic.SetMannerEstimationStep8(model);
+            _mannerEstimationLogic.SetMannerEstimationStep8(model);
 
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId) && !mannerEstimationViewModel.IsCropGroupChange) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("CropType", new { sid = sessionId });
@@ -2736,7 +2736,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (error == null)
                 {
-                    model.ApplicationRate = manureType?.ApplicationRateArable;
+                    model.ApplicationRate =model.CropTypeId==(int)NMP.Commons.Enums.CropTypes.Grass?manureType.ApplicationRateGrass: manureType?.ApplicationRateArable;
                 }
                 else
                 {

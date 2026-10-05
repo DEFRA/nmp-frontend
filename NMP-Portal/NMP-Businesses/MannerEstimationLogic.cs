@@ -305,8 +305,6 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         if (mannerEstimationStep9.CropTypeId != mannerEstimationViewModel.MannerEstimationStep9.CropTypeId)
         {
             mannerEstimationStep9.IsCropTypeChange = true;
-            mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = null;
-          await  SetMannerEstimationStep32(mannerEstimationViewModel.MannerEstimationStep32);
 
         }
         if (mannerEstimationStep9.CropTypeId != null && !Enum.IsDefined(typeof(NMP.Commons.Enums.EarlyOrLateSownCropTypes), mannerEstimationStep9.CropTypeId))
@@ -323,6 +321,12 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (CropTypeLinkingResponse cropTypeLinkingResponse, _) = await _organicManureLogic.FetchCropTypeLinkingByCropTypeId(mannerEstimationStep9.CropTypeId.Value);
         mannerEstimationStep9.MannerCropTypeId = cropTypeLinkingResponse.MannerCropTypeID;
         mannerEstimationViewModel.MannerEstimationStep9 = mannerEstimationStep9;
+        if (mannerEstimationStep9.IsCropTypeChange)
+        {
+            mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = null;
+            mannerEstimationViewModel.MannerEstimationStep32.CropTypeId = mannerEstimationStep9.CropTypeId;
+            mannerEstimationViewModel.MannerEstimationStep32.MannerCropTypeId = mannerEstimationStep9.MannerCropTypeId;
+        }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return GetMannerEstimationStep9();
     }
@@ -812,7 +816,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         if (manureType != null)
         {
             mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
-            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
             BindApplicationRateMethodIfSoilOrCropTypeChange(mannerEstimationViewModel, manureType);
         }
         mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
@@ -837,7 +841,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
         if (manureType != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
         }
         if (!string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter) &&
     mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
@@ -1180,7 +1184,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         mannerEstimationViewModel.MannerEstimationStep32.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId ?? string.Empty;
         mannerEstimationViewModel.MannerEstimationStep32.IsComingForAddNewApplication = mannerEstimationViewModel.IsComingForAddNewApplication;
         mannerEstimationViewModel.MannerEstimationStep32.IsApplicationDateChange = mannerEstimationViewModel.MannerEstimationStep13.IsApplicationDateChange;
-
+        mannerEstimationViewModel.MannerEstimationStep32.ApplicationMethodCount = mannerEstimationViewModel.MannerEstimationStep23.ApplicationMethodCount;
         mannerEstimationViewModel.MannerEstimationStep32.IsManureTypeChange = mannerEstimationViewModel.MannerEstimationStep12.IsManureTypeChange;
         mannerEstimationViewModel.MannerEstimationStep32.CropTypeName = await _rb209Service.FetchCropTypeByIdAsync(mannerEstimationViewModel.MannerEstimationStep32.CropTypeId.Value);
 
@@ -2012,18 +2016,19 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
 
     private static void BindApplicationRateMethod(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
     {
-        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = DetermineApplicationRateMethod(mannerEstimateApplication, manureType);
-        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+        int defaultRate = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass??0 : manureType.ApplicationRateArable??0;
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = DetermineApplicationRateMethod(mannerEstimateApplication, manureType,defaultRate);
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = defaultRate;
     }
 
-    private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
+    private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication, ManureType manureType,int defaultRate)
     {
-
+        
         if (mannerEstimateApplication.AreaSpread != null && mannerEstimateApplication.ManureQuantity != null)
         {
             return (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
         }
-        if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
+        if (mannerEstimateApplication.ApplicationRate == defaultRate)
         {
             return (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
         }
