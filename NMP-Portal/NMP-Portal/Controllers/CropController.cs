@@ -2217,10 +2217,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         int farmID = 0;
         try
         {
-            if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && model.IsPreviousGrassManaged)
-            {
-                await LoadPreviousGrassListAsync(model);
-            }
 
             if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) &&
                 !string.IsNullOrWhiteSpace(t) && !string.IsNullOrWhiteSpace(u))
@@ -2236,6 +2232,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 model = GetCropFromSession();
+                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                {
+                    await LoadPreviousGrassListAsync(model);
+                }
                 if (model == null)
                 {
                     _logger.LogError("Crop Controller : Session not found in CheckAnswer() action");
@@ -3211,6 +3211,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private static string FetchEncryptedCounter(PlanViewModel model)
     {
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        {
+            if (model.IsPreviousGrassManaged)
+            {
+                return model.PreviousGrassEncryptedCounter;
+            }
+        }
         if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
         {
             return model.YieldEncryptedCounter;
@@ -3250,7 +3257,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<string> BindActionForBackCheckAnswer(PlanViewModel model)
     {
         string action = string.Empty;
-
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        {
+            if(model.IsPreviousGrassManaged)
+            {
+                return _previousGrassManagement;
+            }
+        }
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
             action = BindActionForBackCheckAnswerGrass(model);
@@ -7899,7 +7912,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.PreviousGrassCurrentCounter = 0;
                     model.PreviousGrassEncryptedCounter = string.Empty;
                     SetCropToSession(model);
-                    return RedirectToAction(_sowingDateQuestion);
+                    if(model.CropInfo2 != null)
+                    {
+                        return RedirectToAction("CropInfoTwo");
+                    }
+                    if (model.CropInfo1 != null)
+                    {
+                        return RedirectToAction(_cropInfoOne);
+                    }
                 }
                 model.FieldID = model.Crops[index].FieldID.Value;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
@@ -7912,7 +7932,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             TempData["PreviousGrassManagementError"] = ex.Message;
             return RedirectToAction(_previousGrassManagement);
         }
-
+        SetCropToSession(model);
         return View(_previousGrassManagement, model);
     }
 

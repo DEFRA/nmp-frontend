@@ -7,10 +7,49 @@
 
 
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.PreviousGrassManagement;
+    var backAction = "";
+    if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange))
+    {
+        backAction = "CheckAnswer";
+    }
+    else
+    {
+        if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
+        {
+            if (Model.PreviousGrassCurrentCounter == 0)
+            {
+                if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly ||
+                    Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly)
+                {
+                    backAction = "Defoliation";
+                }
+                else
+                {
+                    backAction = "DefoliationSequence";
+                }
+            }
+            else
+            {
+                backAction = "PreviousGrassManagement";
+            }
+        }
+        else
+        {
+            if (Model.PreviousGrassCurrentCounter == 0)
+            {
+                backAction = Model.CropInfo2 != null ? "CropInfoTwo" : "CropInfoOne";
+            }
+            else
+            {
+                backAction = "PreviousGrassManagement";
+            }
+        }
+    }
+
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "DefoliationSequence")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Crop" asp-route-q="@Model.PreviousGrassEncryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="PreviousGrassManagement" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
