@@ -1584,55 +1584,57 @@
                             </div>
                         </div>
                     }
-                    @if (field.SoilAnalysis != null)
-                    {
-                        <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-full">
-                                <h3 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, field.Name)</h3>
-                                <div class="table-container">
-                                    <table class="govuk-table data-table">
-                                        <thead class="govuk-table__head">
+                  @if (field.SoilAnalysis != null&&field.SoilAnalysis.Count>0)
+                {
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full">
+                            <h3 class="govuk-heading-m">@string.Format(Resource.lblSoilAnalysisForField, field.Name)</h3>
+                            <div class="table-container">
+                                <table class="govuk-table data-table">
+                                    <thead class="govuk-table__head">
+                                        <tr class="govuk-table__row">
+                                            <th class="govuk-table__header">
+                                                @Resource.lblDateAnalysisTaken
+                                            </th>
+                                            <th class="govuk-table__header">@Resource.lblPh</th>
+                                            <th class="govuk-table__header">@Resource.lblPhosphorusP</th>
+                                            <th class="govuk-table__header">@Resource.lblPotassium</th>
+                                            <th class="govuk-table__header">@Resource.lblMagnesiumMg</th>
+                                            <th class="govuk-table__header">@Resource.lblOrganicMatter</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="govuk-table__body">
+                                        @foreach (var soilAnalysis in field.SoilAnalysis)
+                                        {
+
+                                            string GetIndexOrDefault(string? value) =>
+                                                                                                    !string.IsNullOrWhiteSpace(value)
+                                                                                                        ? $"{Resource.lblIndex} {value}"
+                                                                                                        : Resource.lblNotEntered;
+
+                                            string GetStatusOrDefault(string? value) =>
+                                                !string.IsNullOrWhiteSpace(value)
+                                                    ? $"{Resource.lblStatus} {value}"
+                                                    : Resource.lblNotEntered;
+
+                                            bool isSacMethod = soilAnalysis.PhosphorusMethodologyID
+                                                               == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac;
+
+                                            string? phosphorus = isSacMethod
+                                                ? GetStatusOrDefault(soilAnalysis.PhosphorusStatus)
+                                                : GetIndexOrDefault(soilAnalysis.PhosphorusIndex);
+
+                                            string? potash = isSacMethod
+                                                ? GetStatusOrDefault(soilAnalysis.PotassiumStatus)
+                                                : GetIndexOrDefault(soilAnalysis.PotassiumIndex);
+
+                                            string? magnesium = isSacMethod
+                                                ? GetStatusOrDefault(soilAnalysis.MagnesiumStatus)
+                                                : GetIndexOrDefault(soilAnalysis.MagnesiumIndex);
+
                                             <tr class="govuk-table__row">
-                                                <th class="govuk-table__header">
-                                                    @Resource.lblDateAnalysisTaken
-                                                </th>
-                                                <th class="govuk-table__header">@Resource.lblPh</th>
-                                                <th class="govuk-table__header">@Resource.lblPhosphorusP</th>
-                                                <th class="govuk-table__header">@Resource.lblPotassium</th>
-                                                <th class="govuk-table__header">@Resource.lblMagnesiumMg</th>
-                                                    <th class="govuk-table__header">@Resource.lblOrganicMatter</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="govuk-table__body">
-                                                @{
-                                                    string GetIndexOrDefault(string? value) =>
-                                                        !string.IsNullOrWhiteSpace(value)
-                                                            ? $"{Resource.lblIndex} {value}"
-                                                            : Resource.lblNotEntered;
-
-                                                    string GetStatusOrDefault(string? value) =>
-                                                        !string.IsNullOrWhiteSpace(value)
-                                                            ? $"{Resource.lblStatus} {value}"
-                                                            : Resource.lblNotEntered;
-
-                                                    bool isSacMethod = field.SoilAnalysis.PhosphorusMethodologyID
-                                                                       == (int)NMP.Commons.Enums.PhosphorusMethodology.Sac;
-
-                                                    string? phosphorus = isSacMethod
-                                                        ? GetStatusOrDefault(field.SoilAnalysis.PhosphorusStatus)
-                                                        : GetIndexOrDefault(field.SoilAnalysis.PhosphorusIndex);
-
-                                                    string? potash = isSacMethod
-                                                        ? GetStatusOrDefault(field.SoilAnalysis.PotassiumStatus)
-                                                        : GetIndexOrDefault(field.SoilAnalysis.PotassiumIndex);
-
-                                                    string? magnesium = isSacMethod
-                                                        ? GetStatusOrDefault(field.SoilAnalysis.MagnesiumStatus)
-                                                        : GetIndexOrDefault(field.SoilAnalysis.MagnesiumIndex);
-                                                }
-                                            <tr class="govuk-table__row">
-                                                <td class="govuk-table__cell">@(field.SoilAnalysis.Date != null ? field.SoilAnalysis.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
-                                                <td class="govuk-table__cell">@(field.SoilAnalysis.PH != null ? field.SoilAnalysis.PH : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">@(soilAnalysis.Date != null ? soilAnalysis.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">@(soilAnalysis.PH != null ? soilAnalysis.PH : Resource.lblNotEntered)</td>
                                                 <td class="govuk-table__cell">
                                                     @phosphorus
                                                 </td>
@@ -1640,18 +1642,18 @@
                                                     @potash
                                                 </td>
                                                 <td class="govuk-table__cell">
-                                                        @magnesium
+                                                    @magnesium
                                                 </td>
-                                                <td class="govuk-table__cell">@(field.SoilAnalysis.OrganicMatter != null ?$"{field.SoilAnalysis.OrganicMatter}{Resource.lblPercentage}"  : Resource.lblNotEntered)</td>
+                                                <td class="govuk-table__cell">@(soilAnalysis.OrganicMatter != null ?$"{soilAnalysis.OrganicMatter}{Resource.lblPercentage}"  : Resource.lblNotEntered)</td>
                                             </tr>
+                                        }
+                                    </tbody>
 
-                                        </tbody>
-
-                                    </table>
-                                </div>
+                                </table>
                             </div>
                         </div>
-                    }
+                    </div>
+                }
                     @if (crop.SNSAnalysis != null)
                     {
                         <div class="govuk-grid-row">
