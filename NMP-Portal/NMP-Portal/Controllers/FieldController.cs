@@ -1464,7 +1464,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         try
         {
-            ViewBag.CropGroupList = await _fieldLogic.FetchArableCropGroups();
+            List<CropGroupResponse> cropGroupList = await _fieldLogic.FetchArableCropGroups();
+            ViewBag.CropGroupList = model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland? cropGroupList: cropGroupList.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.England);
             return View(model);
         }
         catch (Exception ex)
@@ -1500,7 +1501,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (!ModelState.IsValid)
         {
-            ViewBag.CropGroupList = await _fieldLogic.FetchArableCropGroups();
+
+            List<CropGroupResponse> cropGroupList = await _fieldLogic.FetchArableCropGroups();
+            ViewBag.CropGroupList = field.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? cropGroupList : cropGroupList.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass && field.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.England);
             return View(field);
         }
 
