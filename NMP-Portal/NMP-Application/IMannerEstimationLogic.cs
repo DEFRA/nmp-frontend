@@ -97,14 +97,14 @@ namespace NMP.Application
         Task<(int, Error?)> CopyMannerEstimation(int id, string estimationName);
         Task<bool> FetchDefaultNutrientValue(int manureTypeId, MannerEstimationApplication mannerEstimationApplication);
         Task<(bool, int)> FetchApplicationRateOptionValue(int manureTypeId, MannerEstimationApplication mannerEstimationApplication, MannerEstimation mannerEstimation);
-         Task<bool> FetchIsManureLiquid(int manureTypeId);
+        Task<bool> FetchIsManureLiquid(int manureTypeId);
 
         MannerEstimationStep33ViewModel GetMannerEstimationStep33();
         MannerEstimationStep33ViewModel SetMannerEstimationStep33(MannerEstimationStep33ViewModel mannerEstimationStep33);
-       Task<MannerEstimationStep34ViewModel> GetMannerEstimationStep34();
+        Task<MannerEstimationStep34ViewModel> GetMannerEstimationStep34();
         Task<MannerEstimationStep34ViewModel> SetMannerEstimationStep34(MannerEstimationStep34ViewModel mannerEstimationStep34);
         MannerEstimationStep35ViewModel GetMannerEstimationStep35();
-        MannerEstimationStep35ViewModel SetMannerEstimationStep35(MannerEstimationStep35ViewModel mannerEstimationStep35    );
+        MannerEstimationStep35ViewModel SetMannerEstimationStep35(MannerEstimationStep35ViewModel mannerEstimationStep35);
 
         Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId);
         Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId);
@@ -147,12 +147,16 @@ namespace NMP.Application
         Task<(List<MannerFarmViewModel>, Error?)> FetchMannerFarmListByOrgId(Guid orgId);
         Task<(List<MannerEstimationSummaryViewModel>, Error?)> FetchMannerEstimateByFarmId(int mannerFarmId);
         Task<(MannerEstimationApplication?, Error?)> AddNewMannerEstimation();
-        bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId, int countryId);  
-        Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId,string sid);
+        bool CheckSandyShallowByTopSoilSubSoilId(int topSoilId, int subSoilId, int countryId);
+        Task BindFarmDataForMannerEstimateUpdateOrCreate(int mannerFarmId, string sid);
         MannerEstimationStep42ViewModel GetMannerEstimationStep42();
         MannerEstimationStep42ViewModel SetMannerEstimationStep42(MannerEstimationStep42ViewModel mannerEstimationStep42);
         Task<Error?> RemoveMannerFarms(string mannerFarmIds);
         Task<bool> FetchIsExistMannerFarmByOrgIdAndName(Guid organisationId, string farmName);
         Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRange(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry);
+        Task<(MannerEstimation?, Error?)> UpdateMannerEstimationByIdWithApplication(string sid);
+        Task<MannerEstimationViewModel> MapApplicationDetailToViewModel(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication);
+        Task BindConditionAffectingNutrientValues(MannerEstimationViewModel mannerEstimationViewModel);
+        void BindApplicationRateMethodIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType);
     }
 }

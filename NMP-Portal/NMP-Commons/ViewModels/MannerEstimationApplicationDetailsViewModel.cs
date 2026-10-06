@@ -1,16 +1,18 @@
 ﻿using NMP.Commons.Models;
+using NMP.Commons.Resources;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NMP.Commons.ViewModels
 {
-    public class MannerEstimationApplicationDetailsViewModel:MannerEstimationApplication
+    public class MannerEstimationApplicationDetailsViewModel : MannerEstimationApplication
     {
         public string ManureType { get; set; } = string.Empty;
-        public string Windspeed{ get; set; } = string.Empty;
+        public string Windspeed { get; set; } = string.Empty;
         public string RainType { get; set; } = string.Empty;
         public string MoistureType { get; set; } = string.Empty;
         public string ApplicationMethod { get; set; } = string.Empty;
@@ -19,5 +21,8 @@ namespace NMP.Commons.ViewModels
         public string EncryptedApplicationId { get; set; } = string.Empty;
         public bool IsManureTypeLiquid { get; set; } = false;
         public string ManureGroup { get; set; } = string.Empty;
+        public int Counter { get; set; }
+        public int ApplicationNo { get; set; }
+        public int ApplicationRateMethod { get; set; }
     }
 }
