@@ -3211,12 +3211,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private static string FetchEncryptedCounter(PlanViewModel model)
     {
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && model.IsPreviousGrassManaged)
         {
-            if (model.IsPreviousGrassManaged)
-            {
                 return model.PreviousGrassEncryptedCounter;
-            }
         }
         if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
         {
@@ -3257,12 +3254,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<string> BindActionForBackCheckAnswer(PlanViewModel model)
     {
         string action = string.Empty;
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && model.IsPreviousGrassManaged)
         {
-            if(model.IsPreviousGrassManaged)
-            {
-                return _previousGrassManagement;
-            }
+            return _previousGrassManagement;
         }
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
@@ -7912,14 +7906,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.PreviousGrassCurrentCounter = 0;
                     model.PreviousGrassEncryptedCounter = string.Empty;
                     SetCropToSession(model);
-                    if(model.CropInfo2 != null)
-                    {
-                        return RedirectToAction("CropInfoTwo");
-                    }
-                    if (model.CropInfo1 != null)
-                    {
-                        return RedirectToAction(_cropInfoOne);
-                    }
+                    string backPage= PreviousGrassCurrentCounterZeroBack(model);
+                    return RedirectToAction(backPage);
                 }
                 model.FieldID = model.Crops[index].FieldID.Value;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
@@ -7966,7 +7954,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         await LoadPreviousGrassListAsync(model);
         return View(model);
     }
-
+    private static string PreviousGrassCurrentCounterZeroBack(PlanViewModel model)
+    {
+        string action=string.Empty;
+        if (model.CropInfo2 != null)
+        {
+            action= "CropInfoTwo";
+        }
+        if (model.CropInfo1 != null)
+        {
+            action= _cropInfoOne;
+        }
+        return action;
+    }
     private static void MoveToNextCrop(PlanViewModel model)
     {
         for (int i = 0; i < model.Crops.Count; i++)
