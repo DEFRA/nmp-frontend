@@ -2309,6 +2309,9 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
             if (mannerEstimationApplicationItem != null)
             {
                 mannerEstimationApplicationItem.ApplicationDate = application.ApplicationDate;
+                mannerEstimationApplicationItem.ApplicationMethodID = application.ApplicationMethodID;
+                mannerEstimationApplicationItem.IncorporationMethodID = application.IncorporationMethodID;
+                mannerEstimationApplicationItem.IncorporationDelayID = application.IncorporationDelayID;
 
                 mannerEstimationApplicationItem.ApplicationRate = application.ApplicationRate;
                 mannerEstimationApplicationItem.AreaSpread = application.AreaSpread;
@@ -2330,9 +2333,9 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
             MannerEstimationApplications = mannerEstimationApplications
         });
 
-        //(MannerEstimation? mannerEstimationResult, error) = await _mannerEstimationService.UpdateMannerEstimationByIdWithApplicationAsync(jsonData);
-        //return (mannerEstimationResult, error);
-        return (null, null);
+        (MannerEstimation? mannerEstimationResult, error) = await _mannerEstimationService.UpdateMannerEstimationByIdWithApplicationAsync(jsonData);
+        return (mannerEstimationResult, error);
+        //return (null, null);
     }
     public void BindApplicationRateMethodIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType)
     {

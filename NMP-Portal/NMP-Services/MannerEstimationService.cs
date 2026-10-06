@@ -206,7 +206,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         Error? error = null;
 
         HttpClient httpClient = await GetNMPAPIClient();
-        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerManureTypeByManureTypeIdAPI, HttpUtility.UrlEncode(mannerApplicationId.ToString())));
+        var response = await httpClient.GetAsync(string.Format(ApiurlHelper.FetchMannerEstimateApplicationByIdAPI, HttpUtility.UrlEncode(mannerApplicationId.ToString())));
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -214,7 +214,7 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         {
             if (responseWrapper != null && responseWrapper.Data != null)
             {
-                mannerEstimationApplication = responseWrapper?.Data?.ToObject<MannerEstimationApplication>();
+                mannerEstimationApplication = responseWrapper?.Data?.records.ToObject<MannerEstimationApplication>();
             }
         }
         else
