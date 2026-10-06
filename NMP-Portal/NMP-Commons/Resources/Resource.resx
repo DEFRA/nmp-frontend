@@ -8057,9 +8057,6 @@ current crop</value>
     <value>Crop available nitrogen (N)
 following crop year 2</value>
   </data>
-  <data name="lblNitrogenUseEfficiency" xml:space="preserve">
-    <value>Nitrogen use efficiency</value>
-  </data>
   <data name="lblNitrogenMineralizationAndLosses" xml:space="preserve">
     <value>Nitrogen (N) mineralisation and losses</value>
   </data>
@@ -8632,6 +8629,9 @@ following crop year 2</value>
   </data>
   <data name="lblHighCloverHint" xml:space="preserve">
     <value>A high clover content is more than 30% clover over the season.</value>
+  </data>
+  <data name="lblNitrogenSupplyEfficiency" xml:space="preserve">
+    <value>Nitrogen supply efficiency</value>
   </data>
   <data name="lblTheManagementOfTheGrassCropIsNeeded" xml:space="preserve">
     <value>The management of the grass crop is needed to determine the nitrogen (N) residue group for the following arable crop. Select the option that best matches how the grass was managed.</value>
