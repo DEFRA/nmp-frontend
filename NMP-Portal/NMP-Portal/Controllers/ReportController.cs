@@ -668,9 +668,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private static void BindSoilAnalysisDataForCropFieldReport(FieldAndCropReportResponse fieldData)
     {
-        if (fieldData.SoilAnalysis != null)
-        {
-            foreach (var soilAnalysis in fieldData.SoilAnalysis)
+       foreach (var soilAnalysis in fieldData.SoilAnalysis?.Where(c=>c!=null))
             {
                 if (soilAnalysis != null && !string.IsNullOrWhiteSpace(soilAnalysis.PotassiumIndex))
                 {
@@ -683,7 +681,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                 }
             }
-        }
+        
         
     }
 
