@@ -301,5 +301,5 @@ internal static class ApiurlHelper
     public const string FetchGrassSiteClassesAPI = "site-class/byFieldIds";
     public const string FetchYieldRangesScotlandBySequenceIdAndGrassSiteClassIdAPI = "vendors/rb209/Grass/YieldRangesScotland/{0}/{1}";
     public const string UpdateMannerEstimateByIdWithApplicationsAPI = "manner-estimations/by-id-with-applications";
-    public const string CheckIsGrassInPrevOrArableInNextYearAPI = "crops/previous-next-crop-flags-by-year?year={0}";
+    public const string CheckIsGrassInPrevOrArableInNextYearAPI = "crops/previous-next-crop-flags-by-year";
 }

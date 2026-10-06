@@ -60,5 +60,5 @@ public interface ICropLogic
     Task<string> BindDefoliationNameForRecommendation(RecommendationHeader recommendation, CropViewModel crop);
     PlanViewModel FilterOrganicAndInorganicListForHarvestYearOverview(PlanViewModel model, string? s, string? u, string? t);
     Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClass(List<int> fieldIds);
-    Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int harvestYear);
+    Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int year);
 }

@@ -730,16 +730,20 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         return (grassGrowthClasses, error);
     }
 
-    public async Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int harvestYear)
+    public async Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int year)
     {
         Error? error = null;
         List<GrassInPrevOrArableInNextYearResponse>? grassInPrevOrArableInNextYearList = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var url = string.Format(ApiurlHelper.CheckIsGrassInPrevOrArableInNextYearAPI, harvestYear);
-            HttpRequestMessage requestMessage = CreatePostRequestWithFieldIds(fieldIds, url);
-            var response = await httpClient.SendAsync(requestMessage);
+            var fieldIdsRequest = new
+            {
+                fieldIds,
+                year
+            };
+            var jsonContent = JsonConvert.SerializeObject(fieldIdsRequest);
+            var response = await httpClient.PostAsync(ApiurlHelper.CheckIsGrassInPrevOrArableInNextYearAPI, new StringContent(jsonContent, Encoding.UTF8, _applicationJson));
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode)
@@ -747,6 +751,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
                 if (responseWrapper != null && responseWrapper.Data != null)
                 {
                     var responseList = responseWrapper?.Data?.ToObject<List<GrassInPrevOrArableInNextYearResponse>>();
+                    grassInPrevOrArableInNextYearList = new List<GrassInPrevOrArableInNextYearResponse>();
                     grassInPrevOrArableInNextYearList.AddRange(responseList);
                 }
             }

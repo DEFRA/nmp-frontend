@@ -10,7 +10,7 @@ namespace NMP.Commons.ServiceResponses
     public class GrassInPrevOrArableInNextYearResponse
     {
         [JsonProperty("fieldId")]
-        public bool? FieldId { get; set; }
+        public int? FieldId { get; set; }
 
         [JsonProperty("isGrassInPrevYear")]
         public bool? IsGrassInPrevYear { get; set; }
