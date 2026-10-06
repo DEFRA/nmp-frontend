@@ -6729,7 +6729,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        private async Task BindDataInModelIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel)
+        private async Task BindDataInModelIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel, bool isDefault = true)
         {
             if (mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
             {
@@ -6738,7 +6738,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (application != null)
                 {
                     mannerEstimationViewModel = await BindMannerEstimationApplicationDataForSoilOrCropTypeChange(mannerEstimationViewModel);
-                    mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = (mannerEstimationViewModel.IsCropGroupChange || mannerEstimationViewModel.IsCropTypeChange) ? null : mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake;
+                    if (isDefault)
+                    {
+                        mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = (mannerEstimationViewModel.IsCropGroupChange || mannerEstimationViewModel.IsCropTypeChange) ? null : mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake;
+                    }
                     mannerEstimationViewModel.MannerEstimationStep32.IsTotalRainfallEnteredManual = await BindIsTotalRainfallEnteredManualForCropTypeChange(mannerEstimationViewModel);
                     var (manureType, _) = await _mannerLogic.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
 
@@ -6793,7 +6796,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (mannerEstimationViewModel.SoilOrCropTypeChangeCounter != 1)
                 {
                     mannerEstimationViewModel.SoilOrCropTypeChangeCounter--;
-                    await BindDataInModelIfSoilOrCropTypeChange(mannerEstimationViewModel);
+                    await BindDataInModelIfSoilOrCropTypeChange(mannerEstimationViewModel,false);
                     _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
                 }
                 mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter = _mannerEstimationProtector.Protect(mannerEstimationViewModel.SoilOrCropTypeChangeCounter.ToString());

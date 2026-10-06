@@ -2307,8 +2307,11 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         {
             (MannerEstimationApplication mannerEstimationApplicationItem, error) = await FetchMannerApplicationById(application.ID.Value);
             if (mannerEstimationApplicationItem != null)
-            {
+            {                
                 mannerEstimationApplicationItem.ApplicationDate = application.ApplicationDate;
+                mannerEstimationApplicationItem.ApplicationMethodID = application.ApplicationMethodID;
+                mannerEstimationApplicationItem.IncorporationMethodID = application.IncorporationMethodID;
+                mannerEstimationApplicationItem.IncorporationDelayID = application.IncorporationDelayID;
 
                 mannerEstimationApplicationItem.ApplicationRate = application.ApplicationRate;
                 mannerEstimationApplicationItem.AreaSpread = application.AreaSpread;
