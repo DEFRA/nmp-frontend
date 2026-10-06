@@ -4062,7 +4062,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 await BindApplicationDetailForUpdate(q);
             }
             MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
-            if (model.IsSoilDrainageEndDateChange && model.PostCode != null)
+            if (model.IsSoilDrainageEndDateChange && model.PostCode != null && !model.IsTotalRainfallEnteredManual)
             {
                 // Effective rainfall after application
                 await FetchDefaultTotalRainfall(model);
