@@ -668,30 +668,37 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private static void BindSoilAnalysisDataForCropFieldReport(FieldAndCropReportResponse fieldData)
     {
-        if (fieldData.SoilAnalysis != null && !string.IsNullOrWhiteSpace(fieldData.SoilAnalysis.PotassiumIndex))
+        if (fieldData.SoilAnalysis != null)
         {
-            string? potassiumIndex = fieldData.SoilAnalysis.PotassiumIndex;
-            string? updatedPotassiumIndex = null;
-
-            if (!string.IsNullOrWhiteSpace(potassiumIndex))
+            foreach (var soilAnalysis in fieldData.SoilAnalysis)
             {
-                if (potassiumIndex == Resource.lblMinusTwo)
+                if (soilAnalysis != null && !string.IsNullOrWhiteSpace(soilAnalysis.PotassiumIndex))
                 {
-                    updatedPotassiumIndex = Resource.lblTwoMinus;
-                }
-                else if (potassiumIndex == Resource.lblPlusTwo)
-                {
-                    updatedPotassiumIndex = Resource.lblTwoPlus;
-                }
-                else
-                {
-                    updatedPotassiumIndex = potassiumIndex;
+                    string? potassiumIndex = soilAnalysis.PotassiumIndex;
+                    string? updatedPotassiumIndex = null;
+
+                    if (!string.IsNullOrWhiteSpace(potassiumIndex))
+                    {
+                        if (potassiumIndex == Resource.lblMinusTwo)
+                        {
+                            updatedPotassiumIndex = Resource.lblTwoMinus;
+                        }
+                        else if (potassiumIndex == Resource.lblPlusTwo)
+                        {
+                            updatedPotassiumIndex = Resource.lblTwoPlus;
+                        }
+                        else
+                        {
+                            updatedPotassiumIndex = potassiumIndex;
+                        }
+                    }
+
+                    soilAnalysis.PotassiumIndex = updatedPotassiumIndex;
+
                 }
             }
-
-            fieldData.SoilAnalysis.PotassiumIndex = updatedPotassiumIndex;
-
         }
+        
     }
 
     private async Task BindRateUnitForCropFieldReport(ReportViewModel model, OrganicManureDataViewModel organic)
@@ -4551,7 +4558,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return RedirectToAction(_livestockCheckAnswerAction);
             }
             ReportViewModel? reportModel = GetReportDataFromSession();
-            if(reportModel != null && reportModel.LivestockTypeId != model.LivestockTypeId)
+            if (reportModel != null && reportModel.LivestockTypeId != model.LivestockTypeId)
             {
                 model.IsLivestockTypeChange = true;
             }
