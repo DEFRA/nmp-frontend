@@ -771,5 +771,42 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         }
         return (totalRate, error);
     }
+    public async Task<(MannerEstimation?, Error?)> UpdateMannerEstimationByIdWithApplicationAsync(string mannerEstimationData)
+    {
+        MannerEstimation? mannerEstimation = null;
+        Error? error = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+
+            var response = await httpClient.PutAsync(
+                ApiurlHelper.UpdateMannerEstimateByIdWithApplicationsAPI,
+                new StringContent(mannerEstimationData, Encoding.UTF8, _contentType));
+
+            var result = await response.Content.ReadAsStringAsync();
+            var responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+
+            if (response.IsSuccessStatusCode)
+            {
+                mannerEstimation = responseWrapper?.Data?.MannerEstimation?
+                    .ToObject<MannerEstimation>();
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, new Error()) ?? new Error();
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            _logger.HandleException(ex, error);
+        }
+
+        return (mannerEstimation, error);
+
+    }
 }
 
