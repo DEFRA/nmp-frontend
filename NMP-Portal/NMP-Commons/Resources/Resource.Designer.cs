@@ -11398,11 +11398,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nitrogen use efficiency.
+        ///   Looks up a localized string similar to Nitrogen supply efficiency.
         /// </summary>
-        public static string lblNitrogenUseEfficiency {
+        public static string lblNitrogenSupplyEfficiency {
             get {
-                return ResourceManager.GetString("lblNitrogenUseEfficiency", resourceCulture);
+                return ResourceManager.GetString("lblNitrogenSupplyEfficiency", resourceCulture);
             }
         }
         
