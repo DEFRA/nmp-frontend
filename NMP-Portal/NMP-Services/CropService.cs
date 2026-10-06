@@ -468,19 +468,13 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
 
     public async Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClassAsync(List<int> fieldIds)
     {
-        var fieldIdsRequest = new { fieldIds };
         Error? error = null;        
         List<GrassGrowthClassResponse> grassGrowthClasses = new List<GrassGrowthClassResponse>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var jsonContent = JsonConvert.SerializeObject(fieldIdsRequest);
-            var content = new StringContent(jsonContent, Encoding.UTF8, _applicationJson);
             var url = ApiurlHelper.FetchGrassGrowthClassesAPI;
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
-            {
-                Content = content
-            };
+            HttpRequestMessage requestMessage = CreatePostRequestWithFieldIds(fieldIds, url);
             var response = await httpClient.SendAsync(requestMessage);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -702,19 +696,13 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
 
     public async Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClassAsync(List<int> fieldIds)
     {
-        var fieldIdsRequest = new { fieldIds };
         Error? error = null;
         List<GrassSiteClassResponse> grassGrowthClasses = new List<GrassSiteClassResponse>();
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var jsonContent = JsonConvert.SerializeObject(fieldIdsRequest);
-            var content = new StringContent(jsonContent, Encoding.UTF8, _applicationJson);
             var url = ApiurlHelper.FetchGrassSiteClassesAPI;
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
-            {
-                Content = content
-            };
+            HttpRequestMessage requestMessage = CreatePostRequestWithFieldIds(fieldIds, url);
             var response = await httpClient.SendAsync(requestMessage);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -744,19 +732,13 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
 
     public async Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int harvestYear)
     {
-        var fieldIdsRequest = new { fieldIds };
         Error? error = null;
         List<GrassInPrevOrArableInNextYearResponse>? grassInPrevOrArableInNextYearList = null;
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
-            var jsonContent = JsonConvert.SerializeObject(fieldIdsRequest);
-            var content = new StringContent(jsonContent, Encoding.UTF8, _applicationJson);
-            var url = ApiurlHelper.FetchGrassSiteClassesAPI;
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
-            {
-                Content = content
-            };
+            var url = string.Format(ApiurlHelper.CheckIsGrassInPrevOrArableInNextYearAPI, harvestYear);
+            HttpRequestMessage requestMessage = CreatePostRequestWithFieldIds(fieldIds, url);
             var response = await httpClient.SendAsync(requestMessage);
             string result = await response.Content.ReadAsStringAsync();
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
@@ -783,5 +765,16 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         }
         return (grassInPrevOrArableInNextYearList, error);
     }
-    
+
+    private static HttpRequestMessage CreatePostRequestWithFieldIds(List<int> fieldIds, string url)
+    {
+        var fieldIdsRequest = new { fieldIds };
+        var jsonContent = JsonConvert.SerializeObject(fieldIdsRequest);
+        var content = new StringContent(jsonContent, Encoding.UTF8, _applicationJson);
+        var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
+        {
+            Content = content
+        };
+        return requestMessage;
+    }
 }
