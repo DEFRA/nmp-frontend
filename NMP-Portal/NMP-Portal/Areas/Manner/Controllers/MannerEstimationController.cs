@@ -2645,7 +2645,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
                 if (error == null)
                 {
-                    model.ApplicationRate = manureType?.ApplicationRateArable;
+                    model.ApplicationRate =model.CropTypeId==(int)NMP.Commons.Enums.CropTypes.Grass?manureType?.ApplicationRateGrass: manureType?.ApplicationRateArable;
                 }
                 else
                 {

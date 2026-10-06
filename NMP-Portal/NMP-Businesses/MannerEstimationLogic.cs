@@ -186,7 +186,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         MannerEstimationViewModel mannerEstimationViewModel = GetMannerEstimation();
         mannerEstimationViewModel.MannerEstimationStep4.EncryptedMannerEstimateId = mannerEstimationViewModel.EncryptedMannerEstimationId;
         mannerEstimationViewModel.MannerEstimationStep4.Postcode = mannerEstimationViewModel.MannerEstimationStep3.Postcode;
-        if (mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall == 0|| mannerEstimationViewModel.MannerEstimationStep3.IsPostCodeChange)
+        if (mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall == 0 || mannerEstimationViewModel.MannerEstimationStep3.IsPostCodeChange)
         {
             mannerEstimationViewModel.MannerEstimationStep4.IsPostCodeChange = false;
             mannerEstimationViewModel.MannerEstimationStep4.AverageAnnualRainfall = await FetchAnnualRainfallAverageAsync(mannerEstimationViewModel.MannerEstimationStep4);
@@ -674,7 +674,7 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
                 mannerEstimationViewModel.MannerEstimationStep25.NH4N = manureType.NH4N;
                 mannerEstimationViewModel.MannerEstimationStep25.NO3N = manureType.NO3N;
                 mannerEstimationViewModel.MannerEstimationStep25.UricAcid = manureType.Uric;
-               
+
             }
         }
         return mannerEstimationViewModel.MannerEstimationStep25;
@@ -704,8 +704,9 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
         if (manureType != null)
         {
+            bool isGrass = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass;
             mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
-            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = isGrass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
         }
         mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CountryId ?? 0 : mannerEstimationViewModel.MannerEstimationStep2.CountryID;
@@ -729,7 +730,8 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         (ManureType? manureType, _) = await _mannerService.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
         if (manureType != null)
         {
-            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+            bool isGrass = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass;
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = isGrass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
         }
 
         SetMannerEstimationToSession(mannerEstimationViewModel);
@@ -1739,17 +1741,20 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     private static void BindApplicationRateMethod(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
     {
-        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = DetermineApplicationRateMethod(mannerEstimateApplication, manureType);
-        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = manureType.ApplicationRateArable;
+        bool isGrass = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass;
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = DetermineApplicationRateMethod(mannerEstimateApplication, manureType, isGrass);
+
+        mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = isGrass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
     }
 
-    private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
+    private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication, ManureType manureType, bool isGrass)
     {
+        int? defaultRate = isGrass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
         if (mannerEstimateApplication.AreaSpread != null && mannerEstimateApplication.ManureQuantity != null)
         {
             return (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
         }
-        if (mannerEstimateApplication.ApplicationRate == manureType.ApplicationRateArable)
+        if (mannerEstimateApplication.ApplicationRate == defaultRate)
         {
             return (int)NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate;
         }
