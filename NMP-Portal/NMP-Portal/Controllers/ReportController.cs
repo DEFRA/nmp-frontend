@@ -670,18 +670,17 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private static void BindSoilAnalysisDataForCropFieldReport(FieldAndCropReportResponse fieldData)
     {
-        foreach (var soilAnalysis in fieldData.SoilAnalysis)
+        foreach (var soilAnalysis in fieldData.SoilAnalysis
+    .Where(x => x != null && !string.IsNullOrWhiteSpace(x.PotassiumIndex)))
         {
-            if (soilAnalysis != null && !string.IsNullOrWhiteSpace(soilAnalysis.PotassiumIndex))
-            {
-                string? potassiumIndex = soilAnalysis.PotassiumIndex;
-                string? updatedPotassiumIndex = null;
+            string? potassiumIndex = soilAnalysis.PotassiumIndex;
+            string? updatedPotassiumIndex = null;
 
-                updatedPotassiumIndex = BindupdatedPotassiumIndexForReport(potassiumIndex, updatedPotassiumIndex);
+            updatedPotassiumIndex = BindupdatedPotassiumIndexForReport(potassiumIndex, updatedPotassiumIndex);
 
-                soilAnalysis.PotassiumIndex = updatedPotassiumIndex;
+            soilAnalysis.PotassiumIndex = updatedPotassiumIndex;
 
-            }
+
         }
 
 
