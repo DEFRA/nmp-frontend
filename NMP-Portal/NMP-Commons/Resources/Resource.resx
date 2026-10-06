@@ -8057,9 +8057,6 @@ current crop</value>
     <value>Crop available nitrogen (N)
 following crop year 2</value>
   </data>
-  <data name="lblNitrogenUseEfficiency" xml:space="preserve">
-    <value>Nitrogen use efficiency</value>
-  </data>
   <data name="lblNitrogenMineralizationAndLosses" xml:space="preserve">
     <value>Nitrogen (N) mineralisation and losses</value>
   </data>
@@ -8632,5 +8629,8 @@ following crop year 2</value>
   </data>
   <data name="lblHighCloverHint" xml:space="preserve">
     <value>A high clover content is more than 30% clover over the season.</value>
+  </data>
+  <data name="lblNitrogenSupplyEfficiency" xml:space="preserve">
+    <value>Nitrogen supply efficiency</value>
   </data>
 </root>
