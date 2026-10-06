@@ -590,8 +590,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     BindManagementDataForCropFieldReport(model, cropData);
                 }
             }
-
-            BindSoilAnalysisDataForCropFieldReport(fieldData);
+            if (fieldData.SoilAnalysis != null)
+            {
+                BindSoilAnalysisDataForCropFieldReport(fieldData);
+            }
         }
         model.CropAndFieldReport.Farm.GrassArea = totalGrassArea;
         model.CropAndFieldReport.Farm.ArableArea = totalArableArea;
@@ -668,21 +670,21 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private static void BindSoilAnalysisDataForCropFieldReport(FieldAndCropReportResponse fieldData)
     {
-       foreach (var soilAnalysis in fieldData.SoilAnalysis?.Where(c=>c!=null))
+        foreach (var soilAnalysis in fieldData.SoilAnalysis)
+        {
+            if (soilAnalysis != null && !string.IsNullOrWhiteSpace(soilAnalysis.PotassiumIndex))
             {
-                if (soilAnalysis != null && !string.IsNullOrWhiteSpace(soilAnalysis.PotassiumIndex))
-                {
-                    string? potassiumIndex = soilAnalysis.PotassiumIndex;
-                    string? updatedPotassiumIndex = null;
+                string? potassiumIndex = soilAnalysis.PotassiumIndex;
+                string? updatedPotassiumIndex = null;
 
-                    updatedPotassiumIndex = BindupdatedPotassiumIndexForReport(potassiumIndex, updatedPotassiumIndex);
+                updatedPotassiumIndex = BindupdatedPotassiumIndexForReport(potassiumIndex, updatedPotassiumIndex);
 
-                    soilAnalysis.PotassiumIndex = updatedPotassiumIndex;
+                soilAnalysis.PotassiumIndex = updatedPotassiumIndex;
 
-                }
             }
-        
-        
+        }
+
+
     }
 
     private static string? BindupdatedPotassiumIndexForReport(string potassiumIndex, string? updatedPotassiumIndex)
