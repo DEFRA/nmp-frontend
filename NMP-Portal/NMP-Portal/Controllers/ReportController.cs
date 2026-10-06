@@ -676,7 +676,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             string? potassiumIndex = soilAnalysis.PotassiumIndex;
             string? updatedPotassiumIndex = null;
 
-            updatedPotassiumIndex = BindupdatedPotassiumIndexForReport(potassiumIndex, updatedPotassiumIndex);
+            updatedPotassiumIndex = BindUpdatedPotassiumIndexForReport(potassiumIndex, updatedPotassiumIndex);
 
             soilAnalysis.PotassiumIndex = updatedPotassiumIndex;
 
@@ -686,7 +686,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     }
 
-    private static string? BindupdatedPotassiumIndexForReport(string potassiumIndex, string? updatedPotassiumIndex)
+    private static string? BindUpdatedPotassiumIndexForReport(string potassiumIndex, string? updatedPotassiumIndex)
     {
         if (!string.IsNullOrWhiteSpace(potassiumIndex))
         {
