@@ -851,14 +851,14 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
 
             if (application != null)
             {
-               application= BindApplicationRateForStep26(mannerEstimationStep26, application);
+               BindApplicationRateForStep26(mannerEstimationStep26, application);
             }
         }
         SetMannerEstimationToSession(mannerEstimationViewModel);
         return await GetMannerEstimationStep26();
     }
 
-    private static MannerEstimationApplicationDetailsViewModel BindApplicationRateForStep26(MannerEstimationStep26ViewModel mannerEstimationStep26, MannerEstimationApplicationDetailsViewModel application)
+    private static void BindApplicationRateForStep26(MannerEstimationStep26ViewModel mannerEstimationStep26, MannerEstimationApplicationDetailsViewModel application)
     {
         if (mannerEstimationStep26.ApplicationRateMethod != null)
         {
@@ -874,7 +874,6 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         {
             application.ApplicationRate = mannerEstimationStep26.ApplicationRate.Value;
         }
-        return application;
     }
 
     public async Task<MannerEstimationStep27ViewModel> GetMannerEstimationStep27()
