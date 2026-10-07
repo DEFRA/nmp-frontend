@@ -8057,8 +8057,8 @@ current crop</value>
     <value>Crop available nitrogen (N)
 following crop year 2</value>
   </data>
-  <data name="lblNitrogenUseEfficiency" xml:space="preserve">
-    <value>Nitrogen use efficiency</value>
+  <data name="lblNitrogenSupplyEfficiency" xml:space="preserve">
+    <value>Nitrogen supply efficiency</value>
   </data>
   <data name="lblNitrogenMineralizationAndLosses" xml:space="preserve">
     <value>Nitrogen (N) mineralisation and losses</value>
@@ -8515,5 +8515,53 @@ following crop year 2</value>
   </data>
   <data name="lblMannerAboutRecommendationContentOne" xml:space="preserve">
     <value>MANNER-NPK ('this tool') was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions ('Defra and partners').</value>
+  </data>
+  <data name="lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber" xml:space="preserve">
+    <value>When are you applying {0} on {1} for application {2}?</value>
+  </data>
+  <data name="lblHowAreYouGoingToApplyTheManureApplicationNo" xml:space="preserve">
+    <value>How are you going to apply the {0} for application {1}?</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterTheApplicationRateForYourManureForApplicationNumber" xml:space="preserve">
+    <value>How would you like to enter the application rate for your {0} for application {1}?</value>
+  </data>
+  <data name="lblEnterTheAreAndQuantityForApplicationNumber" xml:space="preserve">
+    <value>What is the area and quantity you are applying for application {0}?</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForApplication" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}?</value>
+  </data>
+  <data name="lblClimateConditionsAffectingNitrogenLossesFromThisAppicationNo" xml:space="preserve">
+    <value>Climate conditions affecting nitrogen losses from application {0}</value>
+  </data>
+  <data name="lblTotalRainfallSinceForApplicationNo" xml:space="preserve">
+    <value>Total rainfall since for application {0}</value>
+  </data>
+  <data name="lblEnterRainfallAmountForApplicationNoSuffix" xml:space="preserve">
+    <value>What was the total rainfall since for application {0}</value>
+  </data>
+  <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication" xml:space="preserve">
+    <value>How long is there between application and incorporation of your {0} for application {1}?</value>
+  </data>
+  <data name="lblWhatIsTheIncorporationMethodForApplication" xml:space="preserve">
+    <value>What is the incorporation method for your {0} for application {1}?</value>
+  </data>
+  <data name="lblRainfallWithin6HoursApplicationNo" xml:space="preserve">
+    <value>What is the rainfall within 6 hours for application {0}?</value>
+  </data>
+  <data name="lblWhatIsTheEndOfDrainageDateForApplicationNo" xml:space="preserve">
+    <value>What is the date when soil drainage ends for application {0}?</value>
+  </data>
+  <data name="lblWindAtTheTimeOfApplicationNo" xml:space="preserve">
+    <value>What was the wind speed at the time of application {0}?</value>
+  </data>
+  <data name="lblWhatIsTheApplicationRateForApplicationNumber" xml:space="preserve">
+    <value>What is the application rate for application {0}?</value>
+  </data>
+  <data name="lblHowWetWasTheTopsoilForApplicationNo" xml:space="preserve">
+    <value>How moist was the topsoil at the time of application {0}?</value>
   </data>
 </root>

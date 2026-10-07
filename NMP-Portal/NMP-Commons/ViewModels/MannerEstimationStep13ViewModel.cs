@@ -25,5 +25,10 @@ namespace NMP.Commons.ViewModels
         public bool IsManureTypeChange { get; set; } = false;
         public bool IsComingForAddNewApplication { get; set; } = false;
 
+
+        public string? EncryptedSoilOrCropTypeChangeCounter { get; set; }
+        public int? ApplicationNo { get; set; }
+        public bool IsCropTypeChange { get; set; } = false;
+        public bool IsSowingDateAction { get; set; } = false;
     }
 }

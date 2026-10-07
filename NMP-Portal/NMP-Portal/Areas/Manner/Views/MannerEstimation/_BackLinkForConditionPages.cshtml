@@ -3,7 +3,7 @@
 @model MannerEstimationStep32ViewModel
 
 @{
-    var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)
+    var backAction = !string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter)
         && !Model.IsComingForAddNewApplication &&!Model.IsManureTypeChange&&!Model.IsApplicationDateChange
         ? "MannerEstimationResult"
         : "ConditionsAffectingNutrients";
