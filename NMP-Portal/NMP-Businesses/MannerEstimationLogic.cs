@@ -2334,7 +2334,6 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
 
         (MannerEstimation? mannerEstimationResult, error) = await _mannerEstimationService.UpdateMannerEstimationByIdWithApplicationAsync(jsonData);
         return (mannerEstimationResult, error);
-        //return (null, null);
     }
     public void BindApplicationRateMethodIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType)
     {
