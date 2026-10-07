@@ -4,7 +4,11 @@
     string title = (!string.IsNullOrEmpty(Model.EncryptedIsCropUpdate)) ? Resource.lblUpdatePlan : Resource.lblCreatePlan;
     ViewData["Title"] = $"{string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Crops[0].Year)} {Resource.lblHyphen} {title}";
     var backAction = "";
-    if(Model.CurrentSward==(int)NMP.Commons.Enums.CurrentSward.ExistingSward)
+    if (Model.IsPermanentSward.Value)
+    {
+        backAction = "IsPermanentSward";
+    }
+    else if(Model.CurrentSward==(int)NMP.Commons.Enums.CurrentSward.ExistingSward)
     {
         backAction = "CurrentSward";
     }

@@ -120,4 +120,11 @@ public class PlanViewModel
     public string? FreshWeightDefaultEncryptedCounter { get; set; }
     public int FreshWeightManualCounter { get; set; } = 0;
     public string? FreshWeightManualEncryptedCounter { get; set; }
+    public string? PreviousGrassManagementName { get; set; }
+    public int PreviousGrassCurrentCounter { get; set; } = 0;
+    public string? PreviousGrassEncryptedCounter { get; set; }
+    public bool? IsPermanentSward { get; set; }
+    public bool IsPermanentSwardChange { get; set; } = false;
+    public bool IsPreviousGrassManaged { get; set; } = false;
+
 }

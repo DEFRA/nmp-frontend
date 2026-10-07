@@ -1,6 +1,7 @@
 ﻿﻿@using NMP.Commons.Resources
 @using System.Globalization
 @using NMP.Commons.ViewModels
+@using NMP.Commons.ServiceResponses;
 @model NMP.Commons.ViewModels.PlanViewModel
 
 @functions {
@@ -245,6 +246,10 @@
         }
     }
 
+    var isPermanentGrass = Model.IsPermanentSward == true ? Resource.lblYes : Resource.lblNo;
+
+    var previousGrassManagementList = (List<PreviousGrassResponse>)ViewBag.PreviousGrassManagementList;
+
 }
 
 @section BeforeContent {
@@ -481,21 +486,37 @@
                 }
                 @if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
                 {
-                    <govuk-summary-list-row class=@((!Model.CurrentSward.HasValue) ? "govuk-error-message" : "")>
-                        <govuk-summary-list-row-key>
-                            @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))
-                        </govuk-summary-list-row-key>
-                        <govuk-summary-list-row-value>
-                            @(Model.CurrentSward == null ? Resource.lblNotSet : currentSward)
-                        </govuk-summary-list-row-value>
-                        <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CurrentSward" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))</span></govuk-summary-list-row-action>
-                        </govuk-summary-list-row-actions>
-                    </govuk-summary-list-row>
-
+                    @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    {
+                        <govuk-summary-list-row class=@((!Model.IsPermanentSward.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row-key>
+                                @Resource.lblIsThisAPermanentSward
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.IsPermanentSward == null ? Resource.lblNotSet : isPermanentGrass)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="isPermanentSward" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblIsThisAPermanentSward</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
+                    @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland || Model.IsPermanentSward == false)
+                    {
+                        <govuk-summary-list-row class=@((!Model.CurrentSward.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row-key>
+                                @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @(Model.CurrentSward == null ? Resource.lblNotSet : currentSward)
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+                                <govuk-summary-list-row-action asp-action="CurrentSward" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))</span></govuk-summary-list-row-action>
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                    }
 
                 }
-                @if (Model.CurrentSward != (int)NMP.Commons.Enums.CurrentSward.ExistingSward)
+                @if (Model.CurrentSward != (int)NMP.Commons.Enums.CurrentSward.ExistingSward && Model.IsPermanentSward == false)
                 {
                     @if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
                     {
@@ -1085,6 +1106,43 @@
                     }
 
                 }
+                @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsPreviousGrassManaged)
+                {
+                    @foreach (var crop in Model.Crops)
+                    {
+                        var questionText = Model.Crops.Count == 1
+                        ? Resource.lblHowWasTheGrassManaged
+                        : string.Format(Resource.lblHowWasTheGrassManagedFor, crop.FieldName);
+
+                        var previousGrassName = crop.PreviousGrass.HasValue
+                        ? previousGrassManagementList
+                        .Where(x => x.PreviousGrassId == crop.PreviousGrass.Value)
+                        .Select(x => x.PreviousGrassName)
+                        .FirstOrDefault()
+                        : Resource.lblNotSet;
+
+                        <govuk-summary-list-row class=@((!crop.PreviousGrass.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row-key>
+                                @questionText
+                            </govuk-summary-list-row-key>
+                            <govuk-summary-list-row-value>
+                                @previousGrassName
+                            </govuk-summary-list-row-value>
+                            <govuk-summary-list-row-actions>
+
+                                <govuk-summary-list-row-action asp-action="PreviousGrassManagement" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">
+                                    @Resource.lblChange
+                                    <span class="govuk-visually-hidden">
+                                        @questionText
+                                    </span>
+                                </govuk-summary-list-row-action>
+
+                            </govuk-summary-list-row-actions>
+                        </govuk-summary-list-row>
+                       
+                    }
+                }
+                
 
             </govuk-summary-list>
             @if (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
