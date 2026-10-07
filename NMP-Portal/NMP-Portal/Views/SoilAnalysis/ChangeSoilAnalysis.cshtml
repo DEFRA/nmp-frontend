@@ -82,17 +82,17 @@
             }
             else
             {
-                @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
+                 @if ((Model.PH.HasValue) || Model.Potassium.HasValue ||
                                                                     Model.Phosphorus.HasValue || Model.Magnesium.HasValue)
                 {
                     phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotEntered : string.Format(phosphorusFormat, Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
-                    potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
+                    potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndexValue})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotEntered : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
                 }
                 else
                 {
                     phosphorus = ((!Model.Phosphorus.HasValue) ? Resource.lblNotSet : string.Format(phosphorusFormat, Model.Phosphorus) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PhosphorusIndex})");
-                    potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndex})");
+                    potassium = ((!Model.Potassium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Potassium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.PotassiumIndexValue})");
                     magnesium = ((!Model.Magnesium.HasValue) ? Resource.lblNotSet : string.Format("{0:N0}", Model.Magnesium) + Resource.lblMg + $" ({Resource.lblIndex} {Model.MagnesiumIndex})");
                 }
             }
