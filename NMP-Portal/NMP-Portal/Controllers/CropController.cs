@@ -2964,7 +2964,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             crop.EncryptedCounter = null;
             crop.FieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
             crop.IsPermanentSward = model.IsPermanentSward;
-            crop.IsDefaultFreshWeightYield = model.FreshWeightYieldsPerField.Where(x=>x.FieldId==crop.FieldID).FirstOrDefault()?.IsFreshWeightYieldsDefault;
+            crop.IsDefaultFreshWeightYield = model.FreshWeightYieldsPerField.FirstOrDefault(x=>x.FieldId==crop.FieldID)?.IsFreshWeightYieldsDefault;
             if (string.IsNullOrWhiteSpace(model.CropGroupName))
             {
                 if (lastGroupNumber != null)
