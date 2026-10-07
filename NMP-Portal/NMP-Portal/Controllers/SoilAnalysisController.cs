@@ -347,6 +347,8 @@ namespace NMP.Portal.Controllers
             {
                 if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
+                    model.IsSoilAnalysesMethodChange = true;
+                    SetSoilAnalysisDataToSession(model);
                     return RedirectToAction(_soilNutrientValueTypeActionName);
                 }
                 else

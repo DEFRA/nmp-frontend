@@ -816,8 +816,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         if (manureType != null)
         {
             mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
-            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
-            BindApplicationRateMethodIfSoilOrCropTypeChange(mannerEstimationViewModel, manureType);
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;            
         }
         mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CountryId ?? 0 : mannerEstimationViewModel.MannerEstimationStep2.CountryID;
