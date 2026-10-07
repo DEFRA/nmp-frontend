@@ -589,7 +589,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     BindManagementDataForCropFieldReport(model, cropData);
                 }
             }
-            if (fieldData.SoilAnalysis != null)
+            if (fieldData.SoilAnalysis != null && fieldData.SoilAnalysis.Count > 0)
             {
                 BindSoilAnalysisDataForCropFieldReport(fieldData);
             }
