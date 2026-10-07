@@ -3913,6 +3913,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             if (model.IsSoilDrainageEndDateChange)
             {
+                mannerEstimationStep32ViewModel.IsTotalRainfallEnteredManual = false;
+                await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
                 return RedirectToAction("EffectiveRainfall", new { sid = sessionId });
             }
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
@@ -4292,6 +4294,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             Error error = new Error();
             try
             {
+                model.IsSoilDrainageEndDateChange = false;
                 BindSessionIdInViewBeg(sid);
                 BindMannerFarmNameAndIdOnNavigation(sid);
                 if (string.IsNullOrWhiteSpace(model.EncryptedSoilOrCropTypeChangeCounter))
