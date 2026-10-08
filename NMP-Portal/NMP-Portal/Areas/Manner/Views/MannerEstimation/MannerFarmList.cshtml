@@ -3,8 +3,6 @@
 
 @{
     ViewData["Title"] = Resource.lblMannerFarmList;
-    string createFullEstimateSid=Guid.NewGuid().ToString();
-    string removeFullEstimateSid=Guid.NewGuid().ToString();
 }
 @section BeforeContent {
     <govuk-back-link asp-action="Index" asp-controller="Dashboard" asp-area="">@Resource.lblBack</govuk-back-link>
@@ -30,11 +28,11 @@ else
                 </govuk-notification-banner>
             }
             <h1 class="govuk-heading-l">@Resource.lblNutrientSupplyEstimatesFromOrganicMaterials</h1>
-            <a class="govuk-button" asp-action="Name" asp-controller="MannerEstimation" asp-route-sid="@createFullEstimateSid" asp-route-s="@ViewBag.IsNewFarm"> @Resource.lblCreateANutrientSupplyEstimateForANewFarm</a>
+            <a class="govuk-button" asp-action="Name" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-s="@ViewBag.IsNewFarm"> @Resource.lblCreateANutrientSupplyEstimateForANewFarm</a>
 
             @if (ViewBag.MannerFarmList != null && ViewBag.MannerFarmList.Count > 0)
             {
-                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveMannerFarm" asp-controller="MannerEstimation" asp-route-sid="@removeFullEstimateSid">@Resource.lblRemoveAFarm</a></p>
+                <p class="govuk-body margin-bottom-thirty">@Resource.lblYouCanAlso <a asp-action="RemoveMannerFarm" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId">@Resource.lblRemoveAFarm</a></p>
             }
             <h2 class="govuk-heading-m">@Resource.lblYourFarms</h2>
 
@@ -51,11 +49,10 @@ else
                     {
                         @foreach (var mannerFarm in ViewBag.MannerFarmList)
                         {
-                            string viewFullEstimateSid=Guid.NewGuid().ToString();
                             <tr class="govuk-table__row">
                                 <td class="govuk-table__cell">@mannerFarm.Name</td>
                                 <td class="govuk-table__cell">@(mannerFarm.LastUpdatedDate != null ? mannerFarm.LastUpdatedDate.ToString("dd MMMM yyyy") : string.Empty)</td>
-                                <td class="govuk-table__cell"><a asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@mannerFarm.EncryptedId" asp-route-sid="@viewFullEstimateSid" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, mannerFarm.Name)))">@Resource.lblViewChangeOrCreateNewEstimate</a></td>
+                                <td class="govuk-table__cell"><a asp-action="MannerHubPage" asp-controller="MannerEstimation" asp-route-q="@mannerFarm.EncryptedId" asp-route-sid="@ViewBag.SessionId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateOrMakeACopy, string.Format(Resource.MsgGenericFor, mannerFarm.Name)))">@Resource.lblViewChangeOrCreateNewEstimate</a></td>
                             </tr>
                         }
                     }
