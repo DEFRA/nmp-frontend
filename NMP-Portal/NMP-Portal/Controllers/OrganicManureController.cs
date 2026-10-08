@@ -253,7 +253,7 @@ namespace NMP.Portal.Controllers
         {
             string fieldId = model.FieldList[0];
             // Crop plans
-            var (cropPlans, cropError) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
+             (var cropPlans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
 
             model = await BindGrassPropertyForField(model, cropPlans);
             var (manIds, error) = await _fertiliserManureLogic
