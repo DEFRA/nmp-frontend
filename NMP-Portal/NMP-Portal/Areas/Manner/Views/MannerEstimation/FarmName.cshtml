@@ -6,12 +6,10 @@
 @{
     string title = Resource.lblMannerEstimate;
     ViewData["Title"] = $"{Resource.lblWhatIsTheFarmName} {Resource.lblHyphen} {title}";
-    string backAction = "MannerHubPage";
-    var parameter=ViewBag.IsBack;
+    string backAction = "Name";
     if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId))
     {
         backAction = "MannerEstimationResult";
-        parameter=Model.EncryptedMannerEstimateId;
     }
     else if (Model.IsFarmCopied)
     {
@@ -20,7 +18,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@parameter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult"?Model.EncryptedMannerEstimateId:null)">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
