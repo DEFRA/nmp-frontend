@@ -252,6 +252,11 @@ namespace NMP.Portal.Controllers
         private async Task<IActionResult?> TryLoadFieldManureDataAsync(string q, string r, string s, OrganicManureViewModel model)
         {
             string fieldId = model.FieldList[0];
+            // Crop plans
+             (var cropPlans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
+
+            model = await BindGrassPropertyForField(model, cropPlans);
+
             var (manIds, error) = await _fertiliserManureLogic
                 .FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
                     model.HarvestYear.Value, fieldId, null, 1);
@@ -3838,7 +3843,7 @@ managementPeriod.CropID.HasValue
 
             if (model.MoistureTypeId == null)
             {
-                (moisterType, error) = await _organicManureLogic.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                (moisterType, error) = await _organicManureLogic.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.Date.ToString("yyyy-MM-dd"));
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     return BuildApplicationMethodOrIncorporationRedirect(model, error.Message);
