@@ -2306,6 +2306,53 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return View(model);
     }
 
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CheckAnswer(PlanViewModel model)
+    {
+        _logger.LogTrace("Crop Controller : CheckAnswer() post action called");
+        try
+        {
+            await ValidateCropData(model);
+
+            if (!ModelState.IsValid)
+            {
+                model = await BindModelInvalidPropertiesForCheckAnswer(model, false);
+                return View(_checkAnswerActionName, model);
+            }
+
+
+            Error? error = null;
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+
+            int lastGroupNumber = await BindLastGroupName(model);
+
+            List<CropData> cropEntries = await BindCropDataForCheckAnswer(model, lastGroupNumber, userId);
+            CropDataWrapper cropDataWrapper = new CropDataWrapper
+            {
+                Crops = cropEntries
+            };
+
+            (bool success, error) = await _cropLogic.AddCropNutrientManagementPlan(cropDataWrapper);
+
+            if (string.IsNullOrWhiteSpace(error?.Message) && success)
+            {
+                return BackActionForCopyCheckAnswer(model, success);
+            }
+            else
+            {
+                TempData[_errorCreatePlan] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                return RedirectToAction(_checkAnswerActionName);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            TempData[_errorCreatePlan] = ex.Message;
+            return RedirectToAction(_checkAnswerActionName);
+        }
+    }
     private async Task BindScotlandGrassData(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse)
     {
         if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
@@ -2364,53 +2411,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.FreshWeightYieldsPerField.Add(fieldYield);
             }
 
-        }
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CheckAnswer(PlanViewModel model)
-    {
-        _logger.LogTrace("Crop Controller : CheckAnswer() post action called");
-        try
-        {
-            await ValidateCropData(model);
-
-            if (!ModelState.IsValid)
-            {
-                model = await BindModelInvalidPropertiesForCheckAnswer(model, false);
-                return View(_checkAnswerActionName, model);
-            }
-
-
-            Error? error = null;
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-
-            int lastGroupNumber = await BindLastGroupName(model);
-
-            List<CropData> cropEntries = await BindCropDataForCheckAnswer(model, lastGroupNumber, userId);
-            CropDataWrapper cropDataWrapper = new CropDataWrapper
-            {
-                Crops = cropEntries
-            };
-
-            (bool success, error) = await _cropLogic.AddCropNutrientManagementPlan(cropDataWrapper);
-
-            if (string.IsNullOrWhiteSpace(error?.Message) && success)
-            {
-                return BackActionForCopyCheckAnswer(model, success);
-            }
-            else
-            {
-                TempData[_errorCreatePlan] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-                return RedirectToAction(_checkAnswerActionName);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            TempData[_errorCreatePlan] = ex.Message;
-            return RedirectToAction(_checkAnswerActionName);
         }
     }
 
@@ -5322,7 +5322,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         else if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
-            (crop, managementPeriods) = await BindGrassDataForUpdate(model, userId, crop, managementPeriodList);
+            (crop, managementPeriods) = await BindGrassDataForUpdate(model, userId, crop);
 
         }
 
@@ -5338,7 +5338,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return cropEntry;
 
     }
-    private async Task<(Crop, List<ManagementPeriod>)> BindGrassDataForUpdate(PlanViewModel model, int userId, Crop crop, List<ManagementPeriod> managementPeriodList)
+    private async Task<(Crop, List<ManagementPeriod>)> BindGrassDataForUpdate(PlanViewModel model, int userId, Crop crop)
     {
         crop.CropTypeID = model.CropTypeID;
         crop.CropInfo1 = model.CropInfo1;
@@ -5350,15 +5350,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         crop.Establishment = model.GrassSeason ?? 0;
         crop.IsPermanentSward = model.IsPermanentSward;
 
-        //string defoliationSequence = "";
-        //(DefoliationSequenceResponse defoliationSequenceResponse, _) = await _cropLogic.FetchDefoliationSequencesById(model.DefoliationSequenceId.Value);
-        //if (defoliationSequenceResponse != null)
-        //{
-        //    defoliationSequence = defoliationSequenceResponse.DefoliationSequence;
-        //}
-        //int defoliation = 1;
-        //int utilisation1 = 0;
-        //List<ManagementPeriod> managementPeriods = BindManageperiodListForGrass(model, userId, crop, managementPeriodList, defoliationSequence, ref defoliation, ref utilisation1);
 
         (crop, string defoliationSequence) = await BindDataForGrass(model, crop);
 
