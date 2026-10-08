@@ -127,6 +127,7 @@
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCropTypeChange" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsQuestionChange" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedCropGroupName" />
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsFreshWeightYieldsDefaultChange" />
     @if (currentStep != (int)CropWizardSteps.CopyPlanYears)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CopyYear" />

@@ -125,6 +125,7 @@ public class PlanViewModel
     public string? PreviousGrassEncryptedCounter { get; set; }
     public bool? IsPermanentSward { get; set; }
     public bool IsPermanentSwardChange { get; set; } = false;
+    public bool IsFreshWeightYieldsDefaultChange { get; set; } = false;
     public bool IsPreviousGrassManaged { get; set; } = false;
 
 }

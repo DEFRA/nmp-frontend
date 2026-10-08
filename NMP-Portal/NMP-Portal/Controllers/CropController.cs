@@ -2357,6 +2357,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
+            int counter = 1;
             foreach (var crop in harvestYearPlanResponse)
             {
                 (List<ManagementPeriod> managementPeriodList, _) =
@@ -2409,6 +2410,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.FreshWeightYieldsPerField ??= new List<FreshWeightYieldForFieldViewModel>();
 
                 model.FreshWeightYieldsPerField.Add(fieldYield);
+                model.FreshWeightDefaultCounter = counter;
+                model.FreshWeightManualCounter = counter;
+                model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
+                model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
+                counter++;
+
             }
 
         }
@@ -5345,6 +5352,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         crop.PotentialCut = model.PotentialCut;
         crop.Establishment = model.GrassSeason ?? 0;
         crop.IsPermanentSward = model.IsPermanentSward;
+        crop.IsDefaultFreshWeightYield= model.FreshWeightYieldsPerField.FirstOrDefault(x => x.FieldId == crop.FieldID)?.IsFreshWeightYieldsDefault;
 
 
         (crop, string defoliationSequence) = await BindDataForGrass(model, crop);
@@ -7752,6 +7760,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : FreshWeightYieldsDefault() post action called");
 
+        PlanViewModel planViewModel = GetCropFromSession();
+        if (planViewModel.FreshWeightYieldsPerField[planViewModel.FreshWeightDefaultCounter].IsFreshWeightYieldsDefault != model.FreshWeightYieldsPerField[model.FreshWeightDefaultCounter].IsFreshWeightYieldsDefault)
+        {
+            model.IsFreshWeightYieldsDefaultChange = true;
+        }
+
         List<int> fieldIds = model.Crops.Select(crop => crop.FieldID ?? 0).ToList();
 
         // The field being confirmed right now - BEFORE we move the pointer anywhere.
@@ -7789,7 +7803,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
             SetCropToSession(model);
 
-            if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
+            if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange && !model.IsFreshWeightYieldsDefaultChange)
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
