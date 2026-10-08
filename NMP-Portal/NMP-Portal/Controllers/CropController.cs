@@ -5299,18 +5299,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ? string.Format(Resource.lblCropGroupWithCounter, lastGroupNumber + 1)
             : model.CropGroupName;
             List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
-            List<ManagementPeriod> managementPeriodList = new List<ManagementPeriod>();
-            if (crop.ID != null)
-            {
-                (managementPeriodList, _) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, false);
-            }
-            CropData cropEntry = await BindCropForUpdate(model, userId, crop, managementPeriods, managementPeriodList);
+            
+            CropData cropEntry = await BindCropForUpdate(model, userId, crop, managementPeriods);
             cropEntries.Add(cropEntry);
         }
         return cropEntries;
     }
 
-    private async Task<CropData> BindCropForUpdate(PlanViewModel model, int userId, Crop crop, List<ManagementPeriod> managementPeriods, List<ManagementPeriod> managementPeriodList)
+    private async Task<CropData> BindCropForUpdate(PlanViewModel model, int userId, Crop crop, List<ManagementPeriod> managementPeriods)
     {
         if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
         {
