@@ -3842,7 +3842,7 @@ managementPeriod.CropID.HasValue
 
             if (model.MoistureTypeId == null)
             {
-                (moisterType, error) = await _organicManureLogic.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                (moisterType, error) = await _organicManureLogic.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.Date.ToString("yyyy-MM-dd"));
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     return BuildApplicationMethodOrIncorporationRedirect(model, error.Message);

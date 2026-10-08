@@ -4369,7 +4369,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     (moistureType, error) = await _organicManureLogic
                         .FetchMoisterTypeDefaultByApplicationDate(
-                            model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                            model.ApplicationDate.Value.Date.ToString("yyyy-MM-dd"));
                 }
 
                 result = HandleError(error, model);
@@ -4377,7 +4377,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return result;
                 }
-                model.MoistureTypeId ??= moistureType.ID;
+                model.MoistureTypeId = moistureType.ID;
                 model.MoistureType = moistureType.Name;
                 _mannerEstimationLogic.SetMannerEstimationStep32(model);
 
