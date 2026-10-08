@@ -3913,6 +3913,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             model = await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
             if (model.IsSoilDrainageEndDateChange)
             {
+                mannerEstimationStep32ViewModel.IsTotalRainfallEnteredManual = false;
+                await _mannerEstimationLogic.SetMannerEstimationStep32(mannerEstimationStep32ViewModel);
                 return RedirectToAction("EffectiveRainfall", new { sid = sessionId });
             }
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
@@ -4062,7 +4064,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 await BindApplicationDetailForUpdate(q);
             }
             MannerEstimationStep32ViewModel? model = await _mannerEstimationLogic.GetMannerEstimationStep32();
-            if (model.IsSoilDrainageEndDateChange && model.PostCode != null)
+            if (model.IsSoilDrainageEndDateChange && model.PostCode != null && !model.IsTotalRainfallEnteredManual)
             {
                 // Effective rainfall after application
                 await FetchDefaultTotalRainfall(model);
@@ -4292,6 +4294,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             Error error = new Error();
             try
             {
+                model.IsSoilDrainageEndDateChange = false;
                 BindSessionIdInViewBeg(sid);
                 BindMannerFarmNameAndIdOnNavigation(sid);
                 if (string.IsNullOrWhiteSpace(model.EncryptedSoilOrCropTypeChangeCounter))
@@ -6729,7 +6732,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
         }
 
-        private async Task BindDataInModelIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel)
+        private async Task BindDataInModelIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel, bool isDefault = true)
         {
             if (mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication != null)
             {
@@ -6738,7 +6741,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (application != null)
                 {
                     mannerEstimationViewModel = await BindMannerEstimationApplicationDataForSoilOrCropTypeChange(mannerEstimationViewModel);
-                    mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = (mannerEstimationViewModel.IsCropGroupChange || mannerEstimationViewModel.IsCropTypeChange) ? null : mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake;
+                    if (isDefault)
+                    {
+                        mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake = (mannerEstimationViewModel.IsCropGroupChange || mannerEstimationViewModel.IsCropTypeChange) ? null : mannerEstimationViewModel.MannerEstimationStep32.AutumnCropNitrogenUptake;
+                    }
                     mannerEstimationViewModel.MannerEstimationStep32.IsTotalRainfallEnteredManual = await BindIsTotalRainfallEnteredManualForCropTypeChange(mannerEstimationViewModel);
                     var (manureType, _) = await _mannerLogic.FetchManureTypeByManureTypeId(mannerEstimationViewModel.MannerEstimationStep12.ManureTypeId.Value);
 
@@ -6793,7 +6799,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (mannerEstimationViewModel.SoilOrCropTypeChangeCounter != 1)
                 {
                     mannerEstimationViewModel.SoilOrCropTypeChangeCounter--;
-                    await BindDataInModelIfSoilOrCropTypeChange(mannerEstimationViewModel);
+                    await BindDataInModelIfSoilOrCropTypeChange(mannerEstimationViewModel,false);
                     _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
                 }
                 mannerEstimationViewModel.EncryptedSoilOrCropTypeChangeCounter = _mannerEstimationProtector.Protect(mannerEstimationViewModel.SoilOrCropTypeChangeCounter.ToString());

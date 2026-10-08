@@ -8,10 +8,24 @@
     var valueNewSward = (int)NMP.Commons.Enums.CurrentSward.NewSward;
     var valueExistingSward = (int)NMP.Commons.Enums.CurrentSward.ExistingSward;
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.CurrentSward;
+
+    var backAction = "";
+    if(Model.IsCheckAnswer&& (!Model.IsCropGroupChange))
+    {
+        backAction = "CheckAnswer";
+    }
+    else if(!Model.IsPermanentSward.Value)
+    {
+        backAction = "IsPermanentSward";
+    }
+    else
+    {
+        backAction = "CropGroupName";
+    }
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) ? "CheckAnswer" :"CropGroupName")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CurrentSward" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()

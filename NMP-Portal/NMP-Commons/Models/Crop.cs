@@ -40,4 +40,7 @@ public class Crop
     public string? FieldName { get; set; }
     public string? EncryptedCounter { get; set; }
     public bool? IsDeleted { get; set; }
+    public bool? IsPermanentSward { get; set; }
+    public bool? IsDefaultFreshWeightYield { get; set; }
+
 }

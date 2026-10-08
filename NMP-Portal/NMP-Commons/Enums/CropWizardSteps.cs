@@ -36,6 +36,8 @@ namespace NMP.Commons.Enums
         CopyOrganicInorganicApplications=25,
         CopyPlanYears=26,
         FreshWeightYieldsDefault=27,
-        FreshWeightYieldsManual=28
+        FreshWeightYieldsManual=28,
+        PreviousGrassManagement=29,
+        IsPermanentSward=30,
     }
 }
