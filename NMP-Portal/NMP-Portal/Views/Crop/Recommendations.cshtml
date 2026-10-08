@@ -443,19 +443,22 @@
                                                 <td class="govuk-table__cell">@((!string.IsNullOrWhiteSpace(crop.DefoliationSequenceName)) ? crop.DefoliationSequenceName : Resource.lblNotEntered)</td>
                                             </tr>
                                         }
-                                        <tr class="govuk-table__row">
-                                            <th class="govuk-table__cell" scope="row">
-                                                @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
-                                                {
-                                                    @Resource.lblEstimatedYield
-                                                }
-                                                else
-                                                {
-                                                    @Resource.lblTotalAnnualTargetDryMatterYield
-                                                }
-                                            </th>
-                                            <td class="govuk-table__cell">@(crop.Yield == null ? Resource.lblNotEntered : string.Format(Resource.lblYieldTonnesPerHectare, string.Format("{0:N1}", crop.Yield)))</td>
-                                        </tr>
+                                        @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass || (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <th class="govuk-table__cell" scope="row">
+                                                    @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
+                                                    {
+                                                        @Resource.lblEstimatedYield
+                                                    }
+                                                    else
+                                                    {
+                                                        @Resource.lblTotalAnnualTargetDryMatterYield
+                                                    }
+                                                </th>
+                                                <td class="govuk-table__cell">@(crop.Yield == null ? Resource.lblNotEntered : string.Format(Resource.lblYieldTonnesPerHectare, string.Format("{0:N1}", crop.Yield)))</td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
