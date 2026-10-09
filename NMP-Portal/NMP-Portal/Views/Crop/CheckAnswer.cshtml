@@ -1033,39 +1033,39 @@
                     }
                     @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover))
                     {
-                        @foreach (var freshWeightDefault in Model.FreshWeightYieldsPerField ?? [])
+                        @for (int i=0; i< Model.FreshWeightYieldsPerField.Count; i++)
                         {
-                            string defaultValueText = freshWeightDefault.IsFreshWeightYieldsDefault switch
+                            string defaultValueText = Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault switch
                             {
                                 null => Resource.lblNotSet,
                                 false => Resource.lblNo,
                                 true => Resource.lblYes
                             };
-                            <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row class=@((!Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblDoYouWantToUseTheseTypicalYieldValuesForField, freshWeightDefault.FieldName)
+                                    @string.Format(Resource.lblDoYouWantToUseTheseTypicalYieldValuesForField, Model.FreshWeightYieldsPerField[i].FieldName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @defaultValueText
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
 
-                                    <govuk-summary-list-row-action asp-action="FreshWeightYieldsDefault" asp-controller="Crop" asp-route-q="@Model.FreshWeightDefaultEncryptedCounter">
+                                    <govuk-summary-list-row-action asp-action="FreshWeightYieldsDefault" asp-controller="Crop" asp-route-q="@Model.Crops[i].EncryptedCounter">
                                         @Resource.lblChange
                                         <span class="govuk-visually-hidden">
-                                            @string.Format(Resource.lblTargetDryMatterYieldForField, freshWeightDefault.FieldName)
+                                            @string.Format(Resource.lblTargetDryMatterYieldForField, Model.FreshWeightYieldsPerField[i].FieldName)
                                         </span>
                                     </govuk-summary-list-row-action>
 
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
-                            <govuk-summary-list-row class=@((!freshWeightDefault.IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
+                            <govuk-summary-list-row class=@((!Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault.HasValue) ? "govuk-error-message" : "")>
                                 <govuk-summary-list-row-key>
-                                    @string.Format(Resource.lblFreshWeightYieldsForField, freshWeightDefault.FieldName)
+                                    @string.Format(Resource.lblFreshWeightYieldsForField, Model.FreshWeightYieldsPerField[i].FieldName)
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
-                                    @foreach (var yieldPerDefoliation in freshWeightDefault.FreshWeightYields)
+                                    @foreach (var yieldPerDefoliation in Model.FreshWeightYieldsPerField[i].FreshWeightYields)
                                     {
                                         string yieldText;
 
@@ -1089,12 +1089,12 @@
                                     }
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    @if (freshWeightDefault.IsFreshWeightYieldsDefault != null && !freshWeightDefault.IsFreshWeightYieldsDefault.Value)
+                                    @if (Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault != null && !Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault.Value)
                                     {
-                                        <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual" asp-controller="Crop" asp-route-q="@Model.FreshWeightManualEncryptedCounter">
+                                        <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual" asp-controller="Crop" asp-route-q="@Model.Crops[i].EncryptedCounter">
                                             @Resource.lblChange
                                             <span class="govuk-visually-hidden">
-                                                @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, freshWeightDefault.FieldName)
+                                                @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, Model.FreshWeightYieldsPerField[i].FieldName)
                                             </span>
                                         </govuk-summary-list-row-action>
                                     }
