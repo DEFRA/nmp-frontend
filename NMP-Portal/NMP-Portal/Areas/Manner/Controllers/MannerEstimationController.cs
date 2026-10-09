@@ -158,7 +158,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
             if (mannerEstimationViewModel != null && !string.IsNullOrWhiteSpace(mannerEstimationViewModel.EncryptedMannerFarmId))
             {
-                return RedirectToAction(_mannerHubPageAction, new { sid = mannerEstimationViewModel.SessionId, q = mannerEstimationViewModel.EncryptedMannerFarmId });
+                return RedirectToAction(_mannerHubPageAction, new { q = mannerEstimationViewModel.EncryptedMannerFarmId });
             }
             return RedirectToAction("MannerFarmList");
         }
