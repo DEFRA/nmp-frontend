@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Identity.Client;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
@@ -100,7 +101,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return View();
         }
         [HttpGet("MannerHubPage")]
-        public async Task<IActionResult> MannerHubPage(string? q, string? r, string? s, string? sid)
+        public async Task<IActionResult> MannerHubPage(string? q, string? r, string? s)
         {
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -121,7 +122,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 ViewBag.NameAction = _mannerEstimationProtector.Protect(_nameKey);
                 ViewBag.MannerEstimationResultAction = _mannerEstimationProtector.Protect(_mannerEstimationResultKey);
                 ViewBag.RemoveEstimationAction = _mannerEstimationProtector.Protect(_removeEstimationsKey);
-                await BindMannerEstimationSessionForHubPage(q, mannerFarmId, sid);
+                
             }
             if (!string.IsNullOrWhiteSpace(r))
             {
@@ -136,37 +137,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return View();
             }
-            return RedirectToAction(_nameKey, new { sid = sid });
+            return View();
         }
 
-        private async Task BindMannerEstimationSessionForHubPage(string? q, int mannerFarmId, string sid)
-        {
-            MannerEstimationViewModel? mannerEstimationViewModel = null;
-            if (string.IsNullOrWhiteSpace(sid))
-            {
-                mannerEstimationViewModel = new MannerEstimationViewModel();
-                sid = _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
-                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
-
-
-            }
-            else
-            {
-                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
-            }
-
-            mannerEstimationViewModel = mannerEstimationViewModel ?? new MannerEstimationViewModel();
-            mannerEstimationViewModel.IsNewEstimate = true;
-            mannerEstimationViewModel.MannerFarmId = mannerFarmId;
-            mannerEstimationViewModel.EncryptedMannerFarmId = q;
-            _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
-            await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerFarmId, sid);
-
-
-            // Pass SessionId to view for use in forms and links
-            ViewBag.SessionId = sid;
-        }
-
+        
         private void BindEncryptedIdForMannerHubPage(List<MannerEstimationSummaryViewModel> mannerEstimateList)
         {
             foreach (var estimation in mannerEstimateList)
@@ -3385,31 +3359,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
             ViewBag.CropTypeAction = _mannerEstimationProtector.Protect(_cropTypeKey);
 
 
-            MannerEstimationViewModel? mannerEstimationViewModel = null;
-            if (string.IsNullOrWhiteSpace(sid))
-            {
-                mannerEstimationViewModel = new MannerEstimationViewModel();
-                sid = _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
-                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sid);
-            }
-            else
-            {
-                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
-            }
-            mannerEstimationViewModel = mannerEstimationViewModel ?? new MannerEstimationViewModel();
-            if (mannerEstimationViewModel.MannerEstimationStep31 != null)
-            {
-                mannerEstimationViewModel.MannerEstimationStep31.Name = string.Empty;
-                mannerEstimationViewModel.MannerEstimationStep31.IsCopyEstimate = null;
-            }
-
+           
             ViewBag.SessionId = sid;
-            mannerEstimationViewModel.IsNewEstimate = false;
-            mannerEstimationViewModel.EncryptedMannerFarmId = encryptedMannerFarmId;
-            mannerEstimationViewModel.IsCopyEstimate = null;
-            _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
-
-            await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationResultResponse.MannerFarm.ID ?? 0, sid);
             ViewBag.ManureGroupAction = _mannerEstimationProtector.Protect("ManureGroup");
             ViewBag.RemoveMannerEstimateApplicationAction = _mannerEstimationProtector.Protect("RemoveMannerEstimateApplication");
             ViewBag.NameAction = _mannerEstimationProtector.Protect(_nameKey);
@@ -3434,26 +3385,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 }
             }
         }
-        //private async Task BindTempDataForMannerestimationResultPage(MannerEstimationResultResponse mannerEstimationResultResponse, int count, MannerEstimationApplicationDetailsViewModel application, string manureUnit)
-        //{
-        //    if (application.AreaSpread != null && application.ManureQuantity != null)
-        //    {
-        //        TempData[$"ApplicationRateOption{count}"] = Resource.lblCalculateBasedOnTheAreaAndQuantity;
-        //    }
-        //    else
-        //    {
-        //        (bool isDefaultRate, int defaultRate) = await _mannerEstimationLogic.FetchApplicationRateOptionValue(application.ManureTypeID.Value, application, mannerEstimationResultResponse.MannerEstimation);
-        //        if (isDefaultRate)
-        //        {
-        //            TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblUseTypicalApplicationRate, defaultRate, manureUnit);
-        //        }
-        //        else
-        //        {
-        //            TempData[$"ApplicationRateOption{count}"] = string.Format(Resource.lblEnterAnApplicationRate, manureUnit);
-        //        }
-        //    }
-        //}
-
+       
         private async Task LoadMannerEstimations()
         {
             Guid organisationId = GetOrganisationId();
@@ -3756,13 +3688,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (newEstimationId > 0)
                 {
                     RemoveMannerEstimationSessionByKey(sessionId);
-                    string sId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
+                    
                     return RedirectToAction(_mannerHubPageAction, new
                     {
                         q = mannerEstimationViewModel.EncryptedMannerFarmId,
                         r = _mannerEstimationProtector.Protect(Resource.lblTrue),
-                        s = _mannerEstimationProtector.Protect(Resource.lblTrue),//nned to pass guid
-                        sid = sId
+                        s = _mannerEstimationProtector.Protect(Resource.lblTrue)                   
 
                     });
                 }
@@ -4466,7 +4397,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (mannerFarmEstimationApplicationResult != null && mannerFarmEstimationApplicationResult.MannerEstimation.ID != null)
                 {
                     RemoveMannerEstimationSessionByKey(sessionId);
-                    string sId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
+                    (string sId, _) = await BindDataWithNewSessionId(mannerFarmEstimationApplicationResult.MannerEstimation.ID.Value);
                     return RedirectToAction(_mannerEstimationResultKey, new
                     {
                         q = _mannerEstimationProtector.Protect(
@@ -4546,20 +4477,20 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData[_mannerEstimationResultErrorKey] = error.Message;
-                return RedirectToAction(_mannerEstimationResultKey, new
+                return RedirectToAction("RedirectFromMannerHubPage", new
                 {
                     q = mannerEstimationViewModel?.EncryptedMannerEstimationId,
-                    sid = sid
+                    r = _mannerEstimationProtector.Protect(_mannerEstimationResultKey)
                 });
             }
-            return RedirectForFieldDataUpdate(sid, mannerEstimation);
+            return await RedirectForFieldDataUpdate(sid, mannerEstimation);
         }
 
-        private IActionResult RedirectForFieldDataUpdate(string sid, MannerEstimation? mannerEstimation)
+        private async Task<IActionResult> RedirectForFieldDataUpdate(string sid, MannerEstimation? mannerEstimation)
         {
             RemoveMannerEstimationSessionByKey(sid);
             string succesMsg = Resource.lblFarmFieldCropDataUpdated;
-            return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, succesMsg, "FarmFieldAndCrop");
+            return await RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, succesMsg, "FarmFieldAndCrop");
         }
 
         [HttpGet("BackRedirectForConditionPage/{sid?}")]
@@ -4893,7 +4824,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             string successMsg = Resource.lblNutrientPricesAndFinancialValueUpdated;
 
-            return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
+            return await RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
         }
 
         private void ValidateNitrogenPrice(MannerEstimationStep34ViewModel model, string nitrogenProductPriceKey, MannerEstimationStep34ViewModel mannerEstimationStep34ViewModel)
@@ -5013,7 +4944,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             string successMsg = Resource.lblNutrientPricesAndFinancialValueUpdated;
 
-            return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
+            return await RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
         }
 
         private void ValidatePhosphorusPrice(MannerEstimationStep37ViewModel model, string phosphorusProductPriceKey, MannerEstimationStep37ViewModel mannerEstimationStep37ViewModel)
@@ -5134,21 +5065,41 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             string successMsg = Resource.lblNutrientPricesAndFinancialValueUpdated;
 
-            return RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
+            return await RedirectToResultWithSuccessValues(mannerEstimation.ID.Value, successMsg, "FinancialValue");
 
         }
 
-        private IActionResult RedirectToResultWithSuccessValues(int mannerEstimateId, string succesMsg, string tabId)
-        {
-            string sId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
-            return RedirectToAction(actionName: _mannerEstimationResultKey,
+        private async Task<IActionResult> RedirectToResultWithSuccessValues(int mannerEstimateId, string succesMsg, string tabId)
+        {            
+            (string sessionId, MannerEstimationViewModel? mannerEstimationViewModel) = await BindDataWithNewSessionId(mannerEstimateId);
+
+            _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
+            return await Task.FromResult(RedirectToAction(actionName: _mannerEstimationResultKey,
                        controllerName: _mannerEstimationKey, routeValues: new
                        {
                            q = _mannerEstimationProtector.Protect(mannerEstimateId.ToString()),
                            r = _mannerEstimationProtector.Protect(Resource.lblTrue),
                            s = _mannerEstimationProtector.Protect(succesMsg),
-                           sid = sId,
-                       }, fragment: tabId);
+                           sid = sessionId,
+                       }, fragment: tabId));
+        }
+
+        private async Task<(string sessionId, MannerEstimationViewModel? mannerEstimationViewModel)> BindDataWithNewSessionId(int mannerEstimateId)
+        {
+            string sessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
+            MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sessionId);
+            mannerEstimationViewModel = mannerEstimationViewModel ?? new MannerEstimationViewModel();
+            (MannerEstimation? mannerEst, _) = await _mannerEstimationLogic.FetchMannerEstimateById(mannerEstimateId);
+            if (mannerEst != null)
+            {
+                mannerEstimationViewModel.MannerFarmId = mannerEst.MannerFarmID;
+                mannerEstimationViewModel.EncryptedMannerFarmId = _mannerEstimationProtector.Protect(mannerEst.MannerFarmID.ToString());
+                _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
+                await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerEstimationViewModel.MannerFarmId.Value, sessionId);
+                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sessionId);
+            }
+
+            return (sessionId, mannerEstimationViewModel);
         }
 
         private void ValidatePotashPrice(MannerEstimationStep39ViewModel model, MannerEstimationStep39ViewModel mannerEstimationStep39ViewModel)
@@ -5801,7 +5752,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 });
             }
 
-            return RedirectForFieldDataUpdate(sid, mannerEstimation);
+            return await RedirectForFieldDataUpdate(sid, mannerEstimation);
         }
         [HttpGet("BindApplicationDetailForUpdate")]
         public async Task<IActionResult?> BindApplicationDetailForUpdate(string? q, string? sid = null)
@@ -5855,7 +5806,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
 
             RemoveMannerEstimationSessionByKey(sid);
-            return RedirectToResult(mannerEstimationApplication, mannerEstimationResultResponse, true);
+            return await RedirectToResult(mannerEstimationApplication, mannerEstimationResultResponse, true);
         }
         [HttpGet("Report")]
         public async Task<IActionResult> Report(string? q, string? sid)
@@ -6147,10 +6098,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 });
             }
             RemoveMannerEstimationSessionByKey(sid);
-            return RedirectToResult(mannerEstimationApplication, mannerEstimationResultResponse, false);
+            return await RedirectToResult(mannerEstimationApplication, mannerEstimationResultResponse, false);
         }
 
-        private IActionResult RedirectToResult(MannerEstimationApplication mannerEstimationApplication, MannerEstimationResultResponse? mannerEstimationResultResponse, bool isUpdate)
+        private async Task<IActionResult> RedirectToResult(MannerEstimationApplication mannerEstimationApplication, MannerEstimationResultResponse? mannerEstimationResultResponse, bool isUpdate)
         {
             string succesMsg = isUpdate ? Resource.lblApplicationDetailUpdated : Resource.lblOrganicMaterialApplicationAdded;
 
@@ -6166,10 +6117,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (mannerEstimationResultResponse.MannerEstimationApplication.Count != 1)
                 {
                     succesMsg = isUpdate ? string.Format(Resource.lblMannerApplicationDetailCountUpdated, applicationNumber) : succesMsg;
-                    return RedirectToResultWithSuccessValues(mannerEstimationApplication.MannerEstimationID.Value, succesMsg, tabName);
+                    return await RedirectToResultWithSuccessValues(mannerEstimationApplication.MannerEstimationID.Value, succesMsg, tabName);
                 }
             }
-            return RedirectToResultWithSuccessValues(mannerEstimationApplication.MannerEstimationID.Value, succesMsg, tabName);
+            return await RedirectToResultWithSuccessValues(mannerEstimationApplication.MannerEstimationID.Value, succesMsg, tabName);
         }
 
         private List<WarningItemViewModel> BuildApplicationDateWarnings(MannerEstimationStep13ViewModel model)
@@ -6325,12 +6276,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 else
                 {
                     RemoveMannerEstimationSessionByKey(sessionId);
-                    string sId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
                     return RedirectToAction(_mannerHubPageAction, new
                     {
                         q = mannerEstimationStep40ViewModel.EncryptedMannerFarmId,
-                        r = _mannerEstimationProtector.Protect(Resource.lblTrue),
-                        sid = sId
+                        r = _mannerEstimationProtector.Protect(Resource.lblTrue)
                     });
                 }
             }
@@ -6461,7 +6410,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             RemoveMannerEstimationSessionByKey(sessionId);
             string successMsg = Resource.lblOrganicMaterialApplicationRemoved;
 
-            return RedirectToResultWithSuccessValues(mannerApplicationId, successMsg, "Nutrients");
+            return await RedirectToResultWithSuccessValues(mannerApplicationId, successMsg, "Nutrients");
 
         }
 
@@ -6492,12 +6441,10 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 foreach (var mannerfarm in mannerFarmList)
                 {
-                    mannerfarm.EncryptedId = _mannerEstimationProtector.Protect(mannerfarm.ID.ToString());
-                    mannerfarm.SessionId = new Guid();
+                   mannerfarm.EncryptedId = _mannerEstimationProtector.Protect(mannerfarm.ID.ToString());            
                 }
             }
-
-            //ViewBag.SessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
+                        
             ViewBag.NameAction = _mannerEstimationProtector.Protect(_nameKey);
             ViewBag.MannerHubPageAction = _mannerEstimationProtector.Protect(_mannerHubPageAction);
             ViewBag.RemoveMannerFarmAction = _mannerEstimationProtector.Protect(_removeMannerFarmKey);
@@ -6531,17 +6478,17 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             if (!string.IsNullOrWhiteSpace(sid))
             {
-                RemoveMannerEstimationSessionByKey(sid);
-                sid = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
+                RemoveMannerEstimationSessionByKey(sid);                
             }
             if (mannerEstimationApplicationResult != null && mannerEstimationApplicationResult.MannerEstimationID != null)
             {
+               (string sessionId,_)= await BindDataWithNewSessionId(mannerEstimationApplicationResult.MannerEstimationID.Value);
                 return RedirectToAction(_mannerEstimationResultKey, new
                 {
                     q = _mannerEstimationProtector.Protect(
                       mannerEstimationApplicationResult.MannerEstimationID.ToString()),
                     r = _mannerEstimationProtector.Protect(Resource.lblTrue),
-                    sid = sid
+                    sid = sessionId
                 });
             }
             return RedirectToAction(_conditionsAffectingNutrients, new { sid = sid });
@@ -6608,11 +6555,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 else
                 {
                     RemoveMannerEstimationSessionByKey(sessionId);
-                    string sId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
                     return RedirectToAction("MannerFarmList", new
                     {
-                        q = _mannerEstimationProtector.Protect(Resource.lblTrue),
-                        sid = sId
+                        q = _mannerEstimationProtector.Protect(Resource.lblTrue)
                     });
                 }
             }
@@ -6909,12 +6854,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             else if (action == _mannerHubPageAction)
             {
-                return RedirectToAction(_mannerHubPageAction, new { q = q, sid = sessionId });
+                return RedirectToAction(_mannerHubPageAction, new { q = q });
             }
             return RedirectToAction("MannerFarmList");
         }
         [HttpGet("RedirectFromMannerHubPage")]
-        public async Task<IActionResult> RedirectFromMannerHubPage(string r, string? q, string s)//r=actioName,q = encryptedMannerFarmId,s=encryptedEstimateId
+        public async Task<IActionResult> RedirectFromMannerHubPage(string r, string? q, string s, string? t)//r=actioName,q = encryptedMannerFarmId,s=encryptedEstimateId,t=successMsg
         {
             string action = string.Empty;
             if (!string.IsNullOrWhiteSpace(r))
@@ -6924,27 +6869,31 @@ namespace NMP.Portal.Areas.Manner.Controllers
             string sessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sessionId);
             mannerEstimationViewModel = mannerEstimationViewModel ?? new MannerEstimationViewModel();
-            mannerEstimationViewModel.IsNewEstimate = true;
+
             if (!string.IsNullOrWhiteSpace(q))
             {
                 int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(q));
                 mannerEstimationViewModel.MannerFarmId = mannerFarmId;
                 mannerEstimationViewModel.EncryptedMannerFarmId = q;
+                _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
                 await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerFarmId, sessionId);
+                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sessionId);
             }
 
             _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
             if (action == _nameKey)
             {
+                mannerEstimationViewModel.IsNewEstimate = true;
+                _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
                 return RedirectToAction(_nameKey, new { sid = sessionId });
             }
             else if (action == _removeEstimationsKey)
             {
-                return RedirectToAction(_removeEstimationsKey, new { sid = sessionId });
+                return RedirectToAction(_removeEstimationsKey, new { sid = sessionId, q = q });
             }
             else if (action == _mannerEstimationResultKey)
             {
-                return RedirectToAction(_mannerEstimationResultKey, new { q = s, sid = sessionId });
+                return RedirectToAction(_mannerEstimationResultKey, new { q = s, r = t, sid = sessionId });
             }
             return RedirectToAction("MannerFarmList");
         }
@@ -6959,21 +6908,30 @@ namespace NMP.Portal.Areas.Manner.Controllers
             string sessionId = _mannerEstimationLogic.SetMannerEstimationToSession(new MannerEstimationViewModel());
             MannerEstimationViewModel? mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sessionId);
             mannerEstimationViewModel = mannerEstimationViewModel ?? new MannerEstimationViewModel();
-
+            if (mannerEstimationViewModel.MannerEstimationStep31 != null)
+            {
+                mannerEstimationViewModel.MannerEstimationStep31.Name = string.Empty;
+                mannerEstimationViewModel.MannerEstimationStep31.IsCopyEstimate = null;
+            }
             ViewBag.SessionId = sessionId;
             mannerEstimationViewModel.IsNewEstimate = false;
+            mannerEstimationViewModel.IsCopyEstimate = null;
             if (!string.IsNullOrWhiteSpace(r))
             {
                 int mannerFarmId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(r));
                 mannerEstimationViewModel.MannerFarmId = mannerFarmId;
                 mannerEstimationViewModel.EncryptedMannerFarmId = r;
+                _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
                 await _mannerEstimationLogic.BindFarmDataForMannerEstimateUpdateOrCreate(mannerFarmId, sessionId);
+                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sessionId);
             }
-            if (!string.IsNullOrWhiteSpace(s))
+            if (!string.IsNullOrWhiteSpace(s) && action != _nameKey)
             {
                 mannerEstimationViewModel.EncryptedMannerEstimationId = s;
-                int mannerEstimateId= Convert.ToInt32(_mannerEstimationProtector.Unprotect(s));
+                _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
+                int mannerEstimateId = Convert.ToInt32(_mannerEstimationProtector.Unprotect(s));
                 await _mannerEstimationLogic.BindMannerEstimationDataForUpdate(mannerEstimateId, sessionId);
+                mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession(sessionId);
             }
             _mannerEstimationLogic.SetMannerEstimationToSession(mannerEstimationViewModel);
             if (action == _nameKey)
@@ -6982,7 +6940,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             }
             else if (action == "ManureGroup")
             {
-                return RedirectToAction("ManureGroup", new { r = r, s = t });
+                return RedirectToAction("ManureGroup", new { r = s, s = t, sid = sessionId });
             }
             else if (action == "RemoveMannerEstimateApplication")
             {
