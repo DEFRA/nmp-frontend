@@ -94,6 +94,8 @@ namespace NMP.Portal.Areas.Manner.Controllers
         private const string _nameKey = "Name";
         private const string _removeEstimationsKey = "RemoveEstimations";
         private const string _removeMannerFarmKey = "RemoveMannerFarm";
+        private const string _mannerFarmListKey = "MannerFarmList";
+        private const string _manureGroupKey = "ManureGroup";
 
         [HttpGet("Index")]
         public IActionResult Index()
@@ -160,7 +162,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction(_mannerHubPageAction, new { q = mannerEstimationViewModel.EncryptedMannerFarmId });
             }
-            return RedirectToAction("MannerFarmList");
+            return RedirectToAction(_mannerFarmListKey);
         }
 
         private void RemoveMannerEstimationSession(string sessionId)
@@ -729,7 +731,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return RedirectToAction(_applicationDateKey, new { sid = sessionId });
             }
 
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("ManureGroup", new { sid = sessionId });
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction(_manureGroupKey, new { sid = sessionId });
         }
 
         [HttpGet("IsEarlySown")]
@@ -765,7 +767,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             model = _mannerEstimationLogic.SetMannerEstimationStep10(model);
 
-            return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("ManureGroup");
+            return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction(_manureGroupKey);
         }
         [HttpGet("ManureGroup/{sid?}")]
         public async Task<IActionResult> ManureGroup(string? sid, string? q, string? r, string? s)
@@ -2115,7 +2117,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction(_applicationDateKey, new { sid = sessionId });
                 }
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("ManureGroup", new { sid = sessionId });
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction(_manureGroupKey, new { sid = sessionId });
 
             }
             catch (Exception ex)
@@ -3361,7 +3363,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
            
             ViewBag.SessionId = sid;
-            ViewBag.ManureGroupAction = _mannerEstimationProtector.Protect("ManureGroup");
+            ViewBag.ManureGroupAction = _mannerEstimationProtector.Protect(_manureGroupKey);
             ViewBag.RemoveMannerEstimateApplicationAction = _mannerEstimationProtector.Protect("RemoveMannerEstimateApplication");
             ViewBag.NameAction = _mannerEstimationProtector.Protect(_nameKey);
         }
@@ -6556,7 +6558,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 else
                 {
                     RemoveMannerEstimationSessionByKey(sessionId);
-                    return RedirectToAction("MannerFarmList", new
+                    return RedirectToAction(_mannerFarmListKey, new
                     {
                         q = _mannerEstimationProtector.Protect(Resource.lblTrue)
                     });
@@ -6857,7 +6859,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction(_mannerHubPageAction, new { q = q });
             }
-            return RedirectToAction("MannerFarmList");
+            return RedirectToAction(_mannerFarmListKey);
         }
         [HttpGet("RedirectFromMannerHubPage")]
         public async Task<IActionResult> RedirectFromMannerHubPage(string r, string? q, string s, string? t)//r=actioName,q = encryptedMannerFarmId,s=encryptedEstimateId,t=successMsg
@@ -6896,7 +6898,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction(_mannerEstimationResultKey, new { q = s, r = t, sid = sessionId });
             }
-            return RedirectToAction("MannerFarmList");
+            return RedirectToAction(_mannerFarmListKey);
         }
         [HttpGet("RedirectFromMannerEstimateResult")]
         public async Task<IActionResult> RedirectFromMannerEstimateResult(string q, string r, string s, string? t)//q=actioName,r = encryptedMannerFarmId,s=encryptedEstimateId
@@ -6939,9 +6941,9 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction(_nameKey, new { sid = sessionId, r = s });
             }
-            else if (action == "ManureGroup")
+            else if (action == _manureGroupKey)
             {
-                return RedirectToAction("ManureGroup", new { r = s, s = t, sid = sessionId });
+                return RedirectToAction(_manureGroupKey, new { r = s, s = t, sid = sessionId });
             }
             else if (action == "RemoveMannerEstimateApplication")
             {
