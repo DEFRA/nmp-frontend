@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Build.Execution;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Newtonsoft.Json;
 using NMP.Application;
 using NMP.Commons.Enums;
@@ -16,12 +18,11 @@ using Parlot.Fluent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Error = NMP.Commons.ServiceResponses.Error;
-using System.Linq;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 
 namespace NMP.Portal.Controllers;
 
@@ -7813,6 +7814,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         // "Yes" - defaults already bound above. Advance to the next field.
         model.FreshWeightDefaultCounter++;
+        model.FreshWeightManualCounter++;
 
         if (currentIndex + 1 < model.Crops.Count)
         {
@@ -7821,6 +7823,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
+        model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
         SetCropToSession(model);
 
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
@@ -7901,10 +7904,21 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         for (int i = 0; i < model.FreshWeightYieldsPerField[model.FreshWeightManualCounter].FreshWeightYields.Count; i++)
         {
-            if (model.FreshWeightYieldsPerField[model.FreshWeightManualCounter].FreshWeightYields[i].Yield == null
-                && !model.FreshWeightYieldsPerField[model.FreshWeightManualCounter].FreshWeightYields[i].DefoliationSequenceName.Equals("Establishment"))
+            var yield = model.FreshWeightYieldsPerField[model.FreshWeightManualCounter].FreshWeightYields[i];
+
+            bool isEstablishment = yield.DefoliationSequenceName.Equals("Establishment");
+
+            if (!isEstablishment && yield.Yield == null)
             {
-                ModelState.AddModelError($"FreshWeightYieldsPerField[{model.FreshWeightManualCounter}].FreshWeightYields[{i}].FreshWeightYield", Resource.MsgEnterADateBeforeContinuing);
+                ModelState.AddModelError(
+                    $"FreshWeightYieldsPerField[{model.FreshWeightManualCounter}].FreshWeightYields[{i}].Yield",
+                    Resource.MsgEnterADateBeforeContinuing);
+            }
+            else if (yield.Yield.HasValue && (yield.Yield.Value < 1 || yield.Yield.Value > 100 || yield.Yield.Value % 1 != 0))
+            {
+                ModelState.AddModelError(
+                    $"FreshWeightYieldsPerField[{model.FreshWeightManualCounter}].FreshWeightYields[{i}].Yield",
+                    Resource.lblEnterAWholeNumberBetween1And100);
             }
         }
 
@@ -8003,12 +8017,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.Crops[model.PreviousGrassCurrentCounter].PreviousGrass == null)
         {
-            ModelState.AddModelError(GetCropKey(model), Resource.MsgSelectAnOptionBeforeContinuing);
+            //$"FreshWeightYieldsPerField[{model.FreshWeightManualCounter}].FreshWeightYields[{i}].Yield"
+            ModelState.AddModelError($"Crops[{model.PreviousGrassCurrentCounter}].PreviousGrass", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
         if (!ModelState.IsValid)
         {
-            return View(GetCropFromSession());
+            await LoadPreviousGrassListAsync(model);
+            return View(model);
         }
 
         MoveToNextCrop(model);
