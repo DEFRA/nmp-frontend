@@ -2228,6 +2228,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 (model, farm) = await BindFarmData(model, farmID);
                 (harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
                 model = await PrepareCropUpdateData(model, harvestYearPlanResponse, isBasePlan, allSowingAreSame, firstSowingDate);
+
+                //working for scotland grass update
+                await BindScotlandGrassData(model, harvestYearPlanResponse);
             }
             else
             {
@@ -2348,6 +2351,73 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             TempData[_errorCreatePlan] = ex.Message;
             return RedirectToAction(_checkAnswerActionName);
+        }
+    }
+    private async Task BindScotlandGrassData(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse)
+    {
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
+        {
+            int counter = 1;
+            foreach (var crop in harvestYearPlanResponse)
+            {
+                (List<ManagementPeriod> managementPeriodList, _) =
+                    await _cropLogic.FetchManagementperiodByCropId(crop.CropID, false);
+
+                var fieldYield = new FreshWeightYieldForFieldViewModel
+                {
+                    FieldId = crop.FieldID,
+                    FieldName = crop.FieldName,
+                    IsFreshWeightYieldsDefault = crop.IsDefaultFreshWeightYield,
+                    FreshWeightYields = new List<FreshWeightYieldViewModel>()
+                };
+                model.IsPermanentSward = crop.IsPermanentSward;
+                (DefoliationSequenceResponse defoliationSequenceResponse, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
+
+                for (int i = 0; i < managementPeriodList.Count; i++)
+                {
+
+                    char sequence = defoliationSequenceResponse.DefoliationSequence[i];
+
+                    string defoliation = i switch
+                    {
+                        0 => "One",
+                        1 => "Two",
+                        2 => "Three",
+                        3 => "Four",
+                        4 => "Five",
+                        _ => (i + 1).ToString()
+                    };
+
+                    string cutOrGrazing = sequence switch
+                    {
+                        'E' => "Establishment",
+                        'G' => "Grazing",
+                        'S' => "Silage",
+                        'H' => "Hay",
+                        _ => string.Empty
+                    };
+
+                    fieldYield.FreshWeightYields.Add(new FreshWeightYieldViewModel
+                    {
+                        Position = managementPeriodList[i].Defoliation,
+                        Yield = Convert.ToInt32(managementPeriodList[i].Yield),
+                        DefoliationName = defoliation,
+                        DefoliationSequenceName = cutOrGrazing
+
+                    });
+                }
+
+                model.FreshWeightYieldsPerField ??= new List<FreshWeightYieldForFieldViewModel>();
+
+                model.FreshWeightYieldsPerField.Add(fieldYield);
+                model.FreshWeightDefaultCounter = counter;
+                model.FreshWeightManualCounter = counter;
+                model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
+                model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
+                counter++;
+
+            }
+
         }
     }
 
@@ -5236,18 +5306,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ? string.Format(Resource.lblCropGroupWithCounter, lastGroupNumber + 1)
             : model.CropGroupName;
             List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
-            List<ManagementPeriod> managementPeriodList = new List<ManagementPeriod>();
-            if (crop.ID != null)
-            {
-                (managementPeriodList, _) = await _cropLogic.FetchManagementperiodByCropId(crop.ID.Value, false);
-            }
-            CropData cropEntry = await BindCropForUpdate(model, userId, crop, managementPeriods, managementPeriodList);
+            
+            CropData cropEntry = await BindCropForUpdate(model, userId, crop, managementPeriods);
             cropEntries.Add(cropEntry);
         }
         return cropEntries;
     }
 
-    private async Task<CropData> BindCropForUpdate(PlanViewModel model, int userId, Crop crop, List<ManagementPeriod> managementPeriods, List<ManagementPeriod> managementPeriodList)
+    private async Task<CropData> BindCropForUpdate(PlanViewModel model, int userId, Crop crop, List<ManagementPeriod> managementPeriods)
     {
         if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
         {
@@ -5259,7 +5325,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         else if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
-            (crop, managementPeriods) = await BindGrassDataForUpdate(model, userId, crop, managementPeriodList);
+            (crop, managementPeriods) = await BindGrassDataForUpdate(model, userId, crop);
 
         }
 
@@ -5275,7 +5341,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return cropEntry;
 
     }
-    private async Task<(Crop, List<ManagementPeriod>)> BindGrassDataForUpdate(PlanViewModel model, int userId, Crop crop, List<ManagementPeriod> managementPeriodList)
+    private async Task<(Crop, List<ManagementPeriod>)> BindGrassDataForUpdate(PlanViewModel model, int userId, Crop crop)
     {
         crop.CropTypeID = model.CropTypeID;
         crop.CropInfo1 = model.CropInfo1;
@@ -5285,16 +5351,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         crop.SwardManagementID = model.SwardManagementId;
         crop.PotentialCut = model.PotentialCut;
         crop.Establishment = model.GrassSeason ?? 0;
+        crop.IsPermanentSward = model.IsPermanentSward;
+        crop.IsDefaultFreshWeightYield= model.FreshWeightYieldsPerField.FirstOrDefault(x => x.FieldId == crop.FieldID)?.IsFreshWeightYieldsDefault;
 
-        string defoliationSequence = "";
-        (DefoliationSequenceResponse defoliationSequenceResponse, _) = await _cropLogic.FetchDefoliationSequencesById(model.DefoliationSequenceId.Value);
-        if (defoliationSequenceResponse != null)
-        {
-            defoliationSequence = defoliationSequenceResponse.DefoliationSequence;
-        }
-        int defoliation = 1;
-        int utilisation1 = 0;
-        List<ManagementPeriod> managementPeriods = BindManageperiodListForGrass(model, userId, crop, managementPeriodList, defoliationSequence, ref defoliation, ref utilisation1);
+
+        (crop, string defoliationSequence) = await BindDataForGrass(model, crop);
+
+        List<ManagementPeriod> managementPeriods = UseDefoliationSequence(model)
+            ? BuildPeriodsFromDefoliationSequence(crop, model, defoliationSequence, userId)
+            : BuildPeriodsFromFreshWeightYields(crop, model, userId);
 
         return (crop, managementPeriods);
     }
@@ -7695,6 +7760,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : FreshWeightYieldsDefault() post action called");
 
+        PlanViewModel planViewModel = GetCropFromSession();
+        if (planViewModel.FreshWeightYieldsPerField[planViewModel.FreshWeightDefaultCounter].IsFreshWeightYieldsDefault != model.FreshWeightYieldsPerField[model.FreshWeightDefaultCounter].IsFreshWeightYieldsDefault)
+        {
+            model.IsFreshWeightYieldsDefaultChange = true;
+        }
+
         List<int> fieldIds = model.Crops.Select(crop => crop.FieldID ?? 0).ToList();
 
         // The field being confirmed right now - BEFORE we move the pointer anywhere.
@@ -7732,7 +7803,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
             SetCropToSession(model);
 
-            if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
+            if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange && !model.IsFreshWeightYieldsDefaultChange)
             {
                 return RedirectToAction(_checkAnswerActionName);
             }

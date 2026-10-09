@@ -57,4 +57,13 @@ public class HarvestYearPlanResponse
     public int TotalFertiliserManures { get; set; }
     [JsonProperty("IsBasePlan")]
     public bool? IsBasePlan { get; set; }
+
+    [JsonProperty("previousGrass")]
+    public bool? PreviousGrass { get; set; }
+
+    [JsonProperty("isPermanentSward")]
+    public bool? IsPermanentSward { get; set; }
+
+    [JsonProperty("isDefaultFreshWeightYield")]
+    public bool? IsDefaultFreshWeightYield { get; set; }
 }
