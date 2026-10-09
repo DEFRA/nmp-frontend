@@ -4476,11 +4476,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
             (MannerEstimation? mannerEstimation, Error? error) = await _mannerEstimationLogic.UpdateMannerEstimationByIdWithApplication(sid);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
-                TempData[_mannerEstimationResultErrorKey] = error.Message;
-                return RedirectToAction("RedirectFromMannerHubPage", new
+                TempData[_mannerEstimationResultErrorKey] = error.Message;                
+                return RedirectToAction(_mannerEstimationResultKey, new
                 {
-                    q = mannerEstimationViewModel?.EncryptedMannerEstimationId,
-                    r = _mannerEstimationProtector.Protect(_mannerEstimationResultKey)
+                    q = _mannerEstimationProtector.Protect(
+                      mannerEstimation.ID.ToString()),
+                    sid = sid
                 });
             }
             return await RedirectForFieldDataUpdate(sid, mannerEstimation);
@@ -6946,7 +6947,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             {
                 return RedirectToAction("RemoveMannerEstimateApplication", new { q = s, sid = sessionId });
             }
-            return RedirectToAction(_mannerHubPageAction, new { q = s, sid = sessionId });
+            return RedirectToAction(_mannerHubPageAction, new { q = r});
         }
     }
 }
