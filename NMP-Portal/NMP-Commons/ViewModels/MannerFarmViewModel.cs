@@ -13,5 +13,6 @@ namespace NMP.Commons.ViewModels
         public string? FieldName { get; set; }
         public string? ReferenceName { get; set; }
         public string? EncryptedId { get; set; }
+        public Guid? SessionId { get; set; }
     }
 }
