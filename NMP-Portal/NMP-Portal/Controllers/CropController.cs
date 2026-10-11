@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Build.Execution;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Newtonsoft.Json;
 using NMP.Application;
 using NMP.Commons.Enums;
@@ -82,7 +83,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _defoliationError = "DefoliationError";  //GrassGrowthClassError
     private const string _grassGrowthClassError = "GrassGrowthClassError";
     private const string _freshWeightYieldsManual = "FreshWeightYieldsManual";
-    private const string _freshWeightYieldsDefault = "FreshWeightYieldsDefault"; 
+    private const string _freshWeightYieldsDefault = "FreshWeightYieldsDefault";
     private const string _previousGrassManagement = "PreviousGrassManagement";
     private const string _isPermanentSward = "IsPermanentSward";
 
@@ -1136,7 +1137,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     if (planViewModel.Crops[i].FieldID == fieldId)
                     {
                         crop.SowingDate = planViewModel.Crops[i].SowingDate;
-                        crop.Yield = planViewModel.Crops[i].Yield; break;
+                        crop.Yield = planViewModel.Crops[i].Yield;
+                        crop.PreviousGrass = planViewModel.Crops[i].PreviousGrass;
+                        break;
                     }
                 }
             }
@@ -1964,7 +1967,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.CropInfo2 = null;
                     model.CropInfo2Name = null;
                     SetCropToSession(model);
+                    if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    {
+                        //call api for this
+                        (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
+                        if (!flowControl)
+                        {
+                            return value;
+                        }
 
+                    }
                     return RedirectToAction(_checkAnswerActionName);
                 }
             }
@@ -2067,7 +2079,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         ResetCropInfoTwo(model);
-        if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
             //call api for this
             (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
@@ -2091,14 +2103,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
             {
-                if (gassInPrevOrArableInNextYearList[model.PreviousGrassCurrentCounter]?.IsGrassInPrevYear == true)
+                if (gassInPrevOrArableInNextYearList.Any(x => x.IsGrassInPrevYear == true))
                 {
                     return (flowControl: false, value: RedirectToAction(_previousGrassManagement));
                 }
             }
             else
             {
-                if (gassInPrevOrArableInNextYearList[model.PreviousGrassCurrentCounter]?.IsArableInNextYear == true)
+                if (gassInPrevOrArableInNextYearList.Any(x => x.IsArableInNextYear == true))
                 {
                     return (flowControl: false, value: RedirectToAction(_previousGrassManagement));
                 }
@@ -2236,17 +2248,39 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 model = GetCropFromSession();
-                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
-                {
-                    await LoadPreviousGrassListAsync(model);
-                }
+
                 if (model == null)
                 {
                     _logger.LogError("Crop Controller : Session not found in CheckAnswer() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
             }
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                await GetPreviousGrassManagementListAsync(model);
+                List<GrassInPrevOrArableInNextYearResponse>? gassInPrevOrArableInNextYearList = null;
+                List<int> fieldIds = model.Crops.Select(crop => crop.FieldID ?? 0).ToList();
+                (gassInPrevOrArableInNextYearList, error) = await _cropLogic.CheckIsGrassInPrevOrArableInNextYearAsync(fieldIds, model.Year ?? 0);
 
+                List<int> previousGrassManagementFields = new List<int>();
+                if (string.IsNullOrWhiteSpace(error?.Message) && gassInPrevOrArableInNextYearList != null)
+                {
+                    foreach (Crop crop in model.Crops)
+                    {
+                        foreach (var gassInPrevOrArableInNextYear in gassInPrevOrArableInNextYearList)
+                        {
+                            if (crop.FieldID == gassInPrevOrArableInNextYear.FieldId)
+                            {
+                                if ((gassInPrevOrArableInNextYear.IsGrassInPrevYear == true && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass) || gassInPrevOrArableInNextYear.IsArableInNextYear == true)
+                                {
+                                    previousGrassManagementFields.Add(crop.FieldID ?? 0);
+                                }
+                            }
+                        }
+                    }
+                }
+                ViewBag.PreviousGrassManagementFields = previousGrassManagementFields;
+            }
 
             model.IsCurrentSwardChange = false;
             farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
@@ -2849,7 +2883,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             model.GrassSeason = harvestYearPlanResponse[0].Establishment;
             crop.EncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
-
+            crop.PreviousGrass = harvestYearPlanResponse[i].PreviousGrass;
+            if (harvestYearPlanResponse[i].PreviousGrass != null)
+            {
+                model.IsPreviousGrassManaged = true;
+            }
 
             if (harvestYearPlanResponse[i].IsBasePlan != null && (harvestYearPlanResponse[i].IsBasePlan.Value))
             {
@@ -3035,7 +3073,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             crop.EncryptedCounter = null;
             crop.FieldType = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? (int)NMP.Commons.Enums.FieldType.Grass : (int)NMP.Commons.Enums.FieldType.Arable;
             crop.IsPermanentSward = model.IsPermanentSward;
-            crop.IsDefaultFreshWeightYield = model.FreshWeightYieldsPerField?.FirstOrDefault(x=>x.FieldId==crop.FieldID)?.IsFreshWeightYieldsDefault;
+            crop.IsDefaultFreshWeightYield = model.FreshWeightYieldsPerField?.FirstOrDefault(x => x.FieldId == crop.FieldID)?.IsFreshWeightYieldsDefault;
             if (string.IsNullOrWhiteSpace(model.CropGroupName))
             {
                 if (lastGroupNumber != null)
@@ -3135,7 +3173,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             return new List<ManagementPeriod>();
         }
-        crop.Yield = fieldYield.FreshWeightYields.Sum(x=>x.Yield);
+        crop.Yield = fieldYield.FreshWeightYields.Sum(x => x.Yield);
         return fieldYield.FreshWeightYields
             .Select(y => new ManagementPeriod
             {
@@ -3284,7 +3322,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && model.IsPreviousGrassManaged)
         {
-                return model.PreviousGrassEncryptedCounter;
+            return model.PreviousGrassEncryptedCounter;
         }
         if (model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass)
         {
@@ -4644,7 +4682,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
-            if(model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland)
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
                 return RedirectToAction(_isPermanentSward);
             }
@@ -5307,7 +5345,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             ? string.Format(Resource.lblCropGroupWithCounter, lastGroupNumber + 1)
             : model.CropGroupName;
             List<ManagementPeriod> managementPeriods = new List<ManagementPeriod>();
-            
+
             CropData cropEntry = await BindCropForUpdate(model, userId, crop, managementPeriods);
             cropEntries.Add(cropEntry);
         }
@@ -5353,7 +5391,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         crop.PotentialCut = model.PotentialCut;
         crop.Establishment = model.GrassSeason ?? 0;
         crop.IsPermanentSward = model.IsPermanentSward;
-        crop.IsDefaultFreshWeightYield= model.FreshWeightYieldsPerField?.FirstOrDefault(x => x.FieldId == crop.FieldID)?.IsFreshWeightYieldsDefault;
+        crop.IsDefaultFreshWeightYield = model.FreshWeightYieldsPerField?.FirstOrDefault(x => x.FieldId == crop.FieldID)?.IsFreshWeightYieldsDefault;
 
 
         (crop, string defoliationSequence) = await BindDataForGrass(model, crop);
@@ -5799,7 +5837,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private async Task<PlanViewModel> BindDefoliationSequenceForCurrentSward(PlanViewModel model)
     {
         List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
-        if (model.IsPermanentSward==false)
+        if (model.IsPermanentSward == false)
         {
             bool isNewSward = model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward;
 
@@ -6287,7 +6325,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 SetCropToSession(model);
                 return RedirectToAction(_freshWeightYieldsDefault);
             }
-            
+
         }
 
         return RedirectToAction(_checkAnswerActionName);
@@ -6684,7 +6722,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             List<int> fieldIds = model.Crops.Select(crop => crop.FieldID ?? 0).ToList();
             bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
 
-            (bool fetchFlowControl, IActionResult? fetchValue, _ , List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses) =
+            (bool fetchFlowControl, IActionResult? fetchValue, _, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses) =
                 await FetchGrassClasses(fieldIds, isScotland);
 
             if (!fetchFlowControl && fetchValue != null)
@@ -6830,7 +6868,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             : grassGrowthClasses![index].GrassGrowthClassId;
     }
 
-    
+
     private IActionResult RedirectForDryMatterIfSingleFigure(PlanViewModel model)
     {
         model.DryMatterYieldCounter = 1;
@@ -7962,23 +8000,24 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> PreviousGrassManagement(string? q)
     {
         _logger.LogTrace($"Field Controller: PreviousGrassManagement() action called.");
-        PlanViewModel? model = GetCropFromSession(); 
+        PlanViewModel? model = GetCropFromSession();
         if (model == null)
         {
             _logger.LogTrace("SoilAnalysisController: Session expired in PreviousGrassManagement() action.");
             return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
         }
-        
+
         try
         {
             model.IsPreviousGrassManaged = true;
-            await LoadPreviousGrassListAsync(model);
+            await GetPreviousGrassManagementListAsync(model);
             if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
             {
                 model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
                 if (model.PreviousGrassCurrentCounter == 0)
                 {
                     model.FieldID = model.Crops[0].FieldID.Value;
+                    model.FieldName = model.Crops[0].FieldName;
                 }
                 SetCropToSession(model);
             }
@@ -7991,7 +8030,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.PreviousGrassCurrentCounter = 0;
                     model.PreviousGrassEncryptedCounter = string.Empty;
                     SetCropToSession(model);
-                    string backPage= PreviousGrassCurrentCounterZeroBack(model);
+                    string backPage = PreviousGrassCurrentCounterZeroBack(model);
                     return RedirectToAction(backPage);
                 }
                 model.FieldID = model.Crops[index].FieldID.Value;
@@ -8006,6 +8045,47 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_previousGrassManagement);
         }
         SetCropToSession(model);
+        //
+        Error? error = null;
+        List<GrassInPrevOrArableInNextYearResponse>? gassInPrevOrArableInNextYearList = null;
+        List<int> fieldIds = model.Crops.Select(crop => crop.FieldID ?? 0).ToList();
+        (gassInPrevOrArableInNextYearList, error) = await _cropLogic.CheckIsGrassInPrevOrArableInNextYearAsync(fieldIds, model.Year ?? 0);
+        if (string.IsNullOrWhiteSpace(error?.Message) && gassInPrevOrArableInNextYearList != null)
+        {
+            if (model.Crops[model.PreviousGrassCurrentCounter].CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
+            {
+                if (gassInPrevOrArableInNextYearList[model.PreviousGrassCurrentCounter]?.IsGrassInPrevYear == true)
+                {
+                    return View(model);
+                }
+                else
+                {
+                    model.PreviousGrassCurrentCounter++;
+                    model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
+                    SetCropToSession(model);
+                    return RedirectToAction(_previousGrassManagement);
+                }
+            }
+            else
+            {
+                if (gassInPrevOrArableInNextYearList[model.PreviousGrassCurrentCounter]?.IsArableInNextYear == true)
+                {
+                    return View(model);
+                }
+                else
+                {
+                    model.PreviousGrassCurrentCounter++;
+                    model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
+                    SetCropToSession(model);
+                    return RedirectToAction(_previousGrassManagement);
+                }
+            }
+        }
+        //(bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
+        //if (!flowControl)
+        //{
+        //    return value;
+        //}
         return View(_previousGrassManagement, model);
     }
 
@@ -8023,7 +8103,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (!ModelState.IsValid)
         {
-            await LoadPreviousGrassListAsync(model);
+            await GetPreviousGrassManagementListAsync(model);
             return View(model);
         }
 
@@ -8038,19 +8118,47 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_checkAnswerActionName);
         }
 
-        await LoadPreviousGrassListAsync(model);
+        await GetPreviousGrassManagementListAsync(model);
+        List<GrassInPrevOrArableInNextYearResponse>? gassInPrevOrArableInNextYearList = null;
+        List<int> fieldIds = model.Crops.Select(crop => crop.FieldID ?? 0).ToList();
+        (gassInPrevOrArableInNextYearList, Error? error) = await _cropLogic.CheckIsGrassInPrevOrArableInNextYearAsync(fieldIds, model.Year ?? 0);
+
+        List<int> previousGrassManagementFields = new List<int>();
+        if (string.IsNullOrWhiteSpace(error?.Message) && gassInPrevOrArableInNextYearList != null)
+        {
+            if (gassInPrevOrArableInNextYearList.Any(x=>x.FieldId== model.Crops[model.PreviousGrassCurrentCounter].FieldID))
+            {
+                bool isPreviousGrass = gassInPrevOrArableInNextYearList.FirstOrDefault(x => x.FieldId == model.Crops[model.PreviousGrassCurrentCounter].FieldID).IsGrassInPrevYear??false;
+                bool isArableNext = gassInPrevOrArableInNextYearList.FirstOrDefault(x => x.FieldId == model.Crops[model.PreviousGrassCurrentCounter].FieldID).IsArableInNextYear ?? false;
+
+                if ((isPreviousGrass == true && model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass) || isArableNext == true)
+                {
+                    return View(model);
+                }
+                else
+                {
+                    model.PreviousGrassCurrentCounter++;
+                    model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
+                    if (model.PreviousGrassCurrentCounter == model.Crops.Count)
+                    {
+                        return RedirectToAction(_checkAnswerActionName);
+                    }
+                }
+            }
+        }
+
         return View(model);
     }
     private static string PreviousGrassCurrentCounterZeroBack(PlanViewModel model)
     {
-        string action=string.Empty;
+        string action = string.Empty;
         if (model.CropInfo2 != null)
         {
-            action= "CropInfoTwo";
+            action = "CropInfoTwo";
         }
         if (model.CropInfo1 != null)
         {
-            action= _cropInfoOne;
+            action = _cropInfoOne;
         }
         return action;
     }
@@ -8086,7 +8194,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             || model.PreviousGrassCurrentCounter == model.Crops.Count;
     }
 
-    private async Task LoadPreviousGrassListAsync(PlanViewModel model)
+    private async Task GetPreviousGrassManagementListAsync(PlanViewModel model)
     {
         (List<PreviousGrassResponse>? previousGrassesList, _) =
             await _previousCroppingLogic.FetchPreviousGrassList();
