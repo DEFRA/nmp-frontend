@@ -59,7 +59,7 @@ public class HarvestYearPlanResponse
     public bool? IsBasePlan { get; set; }
 
     [JsonProperty("previousGrass")]
-    public bool? PreviousGrass { get; set; }
+    public int? PreviousGrass { get; set; }
 
     [JsonProperty("isPermanentSward")]
     public bool? IsPermanentSward { get; set; }

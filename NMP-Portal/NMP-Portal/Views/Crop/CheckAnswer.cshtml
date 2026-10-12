@@ -1110,6 +1110,10 @@
                 {
                     @foreach (var crop in Model.Crops)
                     {
+                        if (!((List<int>)ViewBag.PreviousGrassManagementFields).Contains(crop.FieldID ?? 0))
+                        {
+                            continue;
+                        }
                         var questionText = Model.Crops.Count == 1
                         ? Resource.lblHowWasTheGrassManaged
                         : string.Format(Resource.lblHowWasTheGrassManagedFor, crop.FieldName);
