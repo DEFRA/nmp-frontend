@@ -44,7 +44,16 @@
 }
 <form asp-action="FreshWeightYieldsDefault" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
-
+    @if (TempData["FreshWeightYieldsDefaultError"] != null)
+    {
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <govuk-error-summary>
+                    <govuk-error-summary-item href="#">@TempData["FreshWeightYieldsDefaultError"]</govuk-error-summary-item>
+                </govuk-error-summary>
+            </div>
+        </div>
+    }
     @await Html.PartialAsync("~/Views/Crop/_CropWizardHiddenFields.cshtml", Model)
     @if (Model.Crops != null && Model.Crops.Count > 0)
     {

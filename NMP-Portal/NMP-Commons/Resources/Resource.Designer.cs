@@ -5483,6 +5483,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a whole number between 1 and 100..
+        /// </summary>
+        public static string lblEnterAWholeNumberBetween1And100 {
+            get {
+                return ResourceManager.GetString("lblEnterAWholeNumberBetween1And100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter different figures for each field.
         /// </summary>
         public static string lblEnterDifferentFiguresForEachField {
