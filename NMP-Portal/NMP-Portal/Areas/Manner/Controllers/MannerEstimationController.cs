@@ -5946,6 +5946,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                         {
                             TotalNitrogen = application.TotalN,
                             CropAvailableNitrogenCurrentCrop = application.CropAvailableNCurrentCrop,
+                            NextGrassNitrogenCropCurrentYear=application.NextGrassNitrogenCropCurrentYear,
                             CropAvailableNitrogenFollowingCropYear2 = application.CropAvailableNitrogenFollowingCropYearTwo,
                             NitrogenUseEfficiency = application.NitrogenUseEfficiency,
                             MineralisedNitrogen = application.MineralisedNitrogenLosses,

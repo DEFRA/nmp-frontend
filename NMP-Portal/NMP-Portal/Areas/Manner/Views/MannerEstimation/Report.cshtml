@@ -256,6 +256,10 @@
                             }
                             <th scope="row" class="govuk-table__header">@Resource.lblTotalNitrogenN</th>
                             <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenN <br>@Resource.lblCurrentCrop</th>
+                            @if (Model.MannerFieldAndCropDetails.MannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                            {
+                                <th scope="row" class="govuk-table__header">@Resource.lblNextCropGroupCurrentYear</th>
+                            }
                             <th scope="row" class="govuk-table__header">@Resource.lblCropAvailableNitrogenN <br>@Resource.lblFollowingCropYear2</th>
                             <th scope="row" class="govuk-table__header">@Resource.lblNitrogenSupplyEfficiency</th>
                         </tr>
@@ -274,6 +278,10 @@
                                 }
                                 <td class="govuk-table__cell">@(cropAvailableN.TotalNitrogen != 0 ? string.Format("{0:N0}{1}", cropAvailableN.TotalNitrogen, Resource.lblkg) : "0")</td>
                                 <td class="govuk-table__cell">@(cropAvailableN.CropAvailableNitrogenCurrentCrop != 0 ? string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenCurrentCrop, Resource.lblkg) : "0")</td>
+                                @if (Model.MannerFieldAndCropDetails.MannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                {
+                                    <td class="govuk-table__cell">@cropAvailableN.NextGrassNitrogenCropCurrentYear</td>
+                                }
                                 <td class="govuk-table__cell">@(cropAvailableN.CropAvailableNitrogenFollowingCropYear2 != 0 ? string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenFollowingCropYear2, Resource.lblkg) : "0")</td>
                                 <td class="govuk-table__cell">@(cropAvailableN.NitrogenUseEfficiency != 0 ? string.Format("{0:N0}{1}", cropAvailableN.NitrogenUseEfficiency, Resource.lblPercentage) : "0")</td>
                             </tr>
