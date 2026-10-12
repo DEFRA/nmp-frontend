@@ -2287,6 +2287,53 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return View(model);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CheckAnswer(PlanViewModel model)
+    {
+        _logger.LogTrace("Crop Controller : CheckAnswer() post action called");
+        try
+        {
+            await ValidateCropData(model);
+
+            if (!ModelState.IsValid)
+            {
+                model = await BindModelInvalidPropertiesForCheckAnswer(model, false);
+                return View(_checkAnswerActionName, model);
+            }
+
+
+            Error? error = null;
+            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
+
+            int lastGroupNumber = await BindLastGroupName(model);
+
+            List<CropData> cropEntries = await BindCropDataForCheckAnswer(model, lastGroupNumber, userId);
+            CropDataWrapper cropDataWrapper = new CropDataWrapper
+            {
+                Crops = cropEntries
+            };
+
+            (bool success, error) = await _cropLogic.AddCropNutrientManagementPlan(cropDataWrapper);
+
+            if (string.IsNullOrWhiteSpace(error?.Message) && success)
+            {
+                return BackActionForCopyCheckAnswer(model, success);
+            }
+            else
+            {
+                TempData[_errorCreatePlan] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
+                return RedirectToAction(_checkAnswerActionName);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            TempData[_errorCreatePlan] = ex.Message;
+            return RedirectToAction(_checkAnswerActionName);
+        }
+    }
+
     private static bool HasAllEncryptedParams(string? q, string? r, string? t, string? u)
     {
         return !string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) &&
@@ -2301,7 +2348,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         const bool allSowingAreSame = true;
         DateTime? firstSowingDate = null;
 
-        BindModelWithEncryptedValues(q, r, t, u, v, w, model);
+        model = BindModelWithEncryptedValues(q, r, t, u, v, w, model);
 
         int farmID = Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId));
 
@@ -2365,52 +2412,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return fieldList;
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CheckAnswer(PlanViewModel model)
-    {
-        _logger.LogTrace("Crop Controller : CheckAnswer() post action called");
-        try
-        {
-            await ValidateCropData(model);
-
-            if (!ModelState.IsValid)
-            {
-                model = await BindModelInvalidPropertiesForCheckAnswer(model, false);
-                return View(_checkAnswerActionName, model);
-            }
-
-
-            Error? error = null;
-            int userId = Convert.ToInt32(HttpContext.User.FindFirst("UserId")?.Value);
-
-            int lastGroupNumber = await BindLastGroupName(model);
-
-            List<CropData> cropEntries = await BindCropDataForCheckAnswer(model, lastGroupNumber, userId);
-            CropDataWrapper cropDataWrapper = new CropDataWrapper
-            {
-                Crops = cropEntries
-            };
-
-            (bool success, error) = await _cropLogic.AddCropNutrientManagementPlan(cropDataWrapper);
-
-            if (string.IsNullOrWhiteSpace(error?.Message) && success)
-            {
-                return BackActionForCopyCheckAnswer(model, success);
-            }
-            else
-            {
-                TempData[_errorCreatePlan] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-                return RedirectToAction(_checkAnswerActionName);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            TempData[_errorCreatePlan] = ex.Message;
-            return RedirectToAction(_checkAnswerActionName);
-        }
-    }
+    
     private async Task BindScotlandGrassData(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse)
     {
         if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
