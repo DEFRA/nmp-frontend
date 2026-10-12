@@ -516,7 +516,18 @@
                     }
 
                 }
-                @if (Model.CurrentSward != (int)NMP.Commons.Enums.CurrentSward.ExistingSward && Model.IsPermanentSward == false)
+                @if (
+    (
+        Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland
+        && Model.CurrentSward != (int)NMP.Commons.Enums.CurrentSward.ExistingSward
+        && Model.IsPermanentSward == false
+    )
+    || Model.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass
+    || (
+        Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.England
+        && Model.CurrentSward != (int)NMP.Commons.Enums.CurrentSward.ExistingSward
+    )
+)
                 {
                     @if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
                     {
