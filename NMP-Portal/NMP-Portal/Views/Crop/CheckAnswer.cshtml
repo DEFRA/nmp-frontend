@@ -1106,7 +1106,7 @@
                     }
 
                 }
-                @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsPreviousGrassManaged == true)
+                @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && Model.IsPreviousGrassManaged)
                 {
                     @foreach (var crop in Model.Crops)
                     {
