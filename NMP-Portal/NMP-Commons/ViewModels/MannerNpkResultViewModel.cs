@@ -11,6 +11,7 @@ namespace NMP.Commons.ViewModels
         // Total and crop available nitrogen
         public decimal? TotalNitrogen { get; set; }
         public decimal? CropAvailableNitrogenCurrentCrop { get; set; }
+        public decimal? NextGrassNitrogenCropCurrentYear { get; set; }
         public decimal? CropAvailableNitrogenFollowingCropYear2 { get; set; }
         public decimal? NitrogenUseEfficiency { get; set; }
 
