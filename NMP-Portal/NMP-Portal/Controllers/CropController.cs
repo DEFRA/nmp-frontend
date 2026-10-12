@@ -2260,7 +2260,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             await BindFarmData(model, farmID);
 
             //Fetch fields allowed for second crop based on first crop
-            await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
+            (List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
+            ViewBag.FieldOptions.AddRange(fieldsAllowedForSecondCrop);
+            ((List<int>)ViewBag.FieldOptions).RemoveAll(item => fieldRemoveList.Contains(item));
 
             (model, _) = await BindGrassProperties(model);
             BindCropGroupNameForCheckAnswer(model, harvestYearPlanResponse);
