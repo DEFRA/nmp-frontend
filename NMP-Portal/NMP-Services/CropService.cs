@@ -218,7 +218,7 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             return secondCropLinkingList
                 .Where(c =>
                     c.FirstCropID == firstCropTypeId &&
-                    c.RB209CountryID == rb209CountryId)
+                    c.RB209CountryID == rb209CountryId || c.RB209CountryID==(int)NMP.Commons.Enums.RB209Country.All)
                 .Select(c => c.SecondCropID)
                 .ToList();
         }
