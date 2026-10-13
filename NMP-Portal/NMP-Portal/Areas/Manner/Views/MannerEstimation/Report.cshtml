@@ -6,6 +6,7 @@
     string title = Resource.lblEstimateOfNutrientSupplyFromOrganicMaterial;
     ViewData["Title"] = $"{ViewBag.FarmName} {Resource.lblHyphen} {title}";
     bool isMultiApplication = Model.MannerEstimationApplicationDetails.Count > 1;
+    var totalMannerCalculation = Model.TotalMannerCalculateNutrient;
 }
 @section BeforeContent {
     <div class="noprint">
@@ -95,7 +96,7 @@
                                 }
                                 <td class="govuk-table__cell">@application.ManureType</td>
                                 <td class="govuk-table__cell">@application.ApplicationDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB"))</td>
-                            <td class="govuk-table__cell">
+                                <td class="govuk-table__cell">
                                     @{
                                         var manureUnit = application.IsManureTypeLiquid
                                         ? Resource.lblMeterCubePerHa
@@ -107,7 +108,7 @@
                                     }
 
                                     @applicationRate
-                            </td>
+                                </td>
                                 <td class="govuk-table__cell">@application.ApplicationMethod</td>
                                 <td class="govuk-table__cell">@application.IncorporationMethod</td>
                                 <td class="govuk-table__cell">@application.IncorporationDelay</td>
@@ -234,7 +235,7 @@
                 <ul class="govuk-list govuk-list--bullet">
                     @foreach (var applicationWarning in uniqueWarnings)
                     {
-                         <li>@applicationWarning.Header</li>
+                        <li>@applicationWarning.Header</li>
                     }
                 </ul>
             }
@@ -280,7 +281,7 @@
                                 <td class="govuk-table__cell">@(cropAvailableN.CropAvailableNitrogenCurrentCrop != 0 ? string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenCurrentCrop, Resource.lblkg) : "0")</td>
                                 @if (Model.MannerFieldAndCropDetails.MannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                 {
-                                    <td class="govuk-table__cell">@cropAvailableN.NextGrassNitrogenCropCurrentYear</td>
+                                    <td class="govuk-table__cell">@(cropAvailableN.NextGrassNitrogenCropCurrentYear != 0 ? string.Format("{0:N0}{1}", cropAvailableN.NextGrassNitrogenCropCurrentYear, Resource.lblkg) : "0")</td>
                                 }
                                 <td class="govuk-table__cell">@(cropAvailableN.CropAvailableNitrogenFollowingCropYear2 != 0 ? string.Format("{0:N0}{1}", cropAvailableN.CropAvailableNitrogenFollowingCropYear2, Resource.lblkg) : "0")</td>
                                 <td class="govuk-table__cell">@(cropAvailableN.NitrogenUseEfficiency != 0 ? string.Format("{0:N0}{1}", cropAvailableN.NitrogenUseEfficiency, Resource.lblPercentage) : "0")</td>
@@ -289,15 +290,15 @@
                         @if (isMultiApplication)
                         {
                             <tr class="total_row">
-                                <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
-                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalNitrogen), Resource.lblkg) : "0") </td>
-                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop), Resource.lblkg) : "0")</td>
+                                <td class="govuk-table__header">@Resource.lblTotals</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerCalculation.TotalN, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerCalculation.CurrentCropAvailableN, Resource.lblkg)</td>
                                 @if (Model.MannerFieldAndCropDetails.MannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                 {
-                                    <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.NextGrassNitrogenCropCurrentYear))</td>
+                                    <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerCalculation.NextGrassNCropCurrentYear, Resource.lblkg)</td>
                                 }
-                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2), Resource.lblkg) : "0")</td>
-                                <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency), Resource.lblPercentage) : "0")</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerCalculation.FollowingCropYear2AvailableN, Resource.lblkg)</td>
+                                <td class="govuk-table__header">@string.Format("{0:N0}{1}", totalMannerCalculation.NitrogenEfficiencePercentage, Resource.lblPercentage)</td>
                             </tr>
                         }
 
@@ -469,7 +470,7 @@
     </div>
 
 
-   <div class="govuk-grid-row margin-bottom-forty">
+    <div class="govuk-grid-row margin-bottom-forty">
         <div class="govuk-grid-column-full">
             <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
             <p class="govuk-body">
