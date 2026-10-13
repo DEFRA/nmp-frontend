@@ -292,6 +292,10 @@
                                 <th scope="row" class="govuk-table__header">@Resource.lblTotals</th>
                                 <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.TotalNitrogen) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.TotalNitrogen), Resource.lblkg) : "0") </td>
                                 <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenCurrentCrop), Resource.lblkg) : "0")</td>
+                                @if (Model.MannerFieldAndCropDetails.MannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                                {
+                                    <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.NextGrassNitrogenCropCurrentYear))</td>
+                                }
                                 <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.CropAvailableNitrogenFollowingCropYear2), Resource.lblkg) : "0")</td>
                                 <td class="govuk-table__cell">@(Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency) != 0 ? string.Format("{0:N0}{1}", Model.MannerNpkResults.Sum(x => x.NitrogenUseEfficiency), Resource.lblPercentage) : "0")</td>
                             </tr>
