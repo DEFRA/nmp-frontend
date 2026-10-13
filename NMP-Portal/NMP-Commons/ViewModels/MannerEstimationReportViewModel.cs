@@ -18,6 +18,7 @@ namespace NMP.Commons.ViewModels
             ManureAnalyses = new List<MannerManureAnalysisViewModel>();
             MannerNpkResults = new List<MannerNpkResultViewModel>();
             ApplicationWarnings = new List<MannerEstimationApplicationWarningViewModel>();
+            TotalMannerCalculateNutrient = new MannerCalculateNutrientResponse();
         }
         public int? FarmRB209CountryID { get; set; }
         public string? EncryptedMannerEstimateId { get; set; }
