@@ -31,7 +31,14 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="@controller" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimationId : Model.EncryptedMannerFarmId)" asp-route-r="@(backAction == "MannerFarmList" ? ViewBag.IsBack : "")">@Resource.lblBack</govuk-back-link>
+    @if (backAction == "MannerHubPage" || backAction == "MannerFarmList")
+    {
+        <govuk-back-link asp-action=@backAction asp-controller="@controller" asp-route-q="@(backAction == "MannerHubPage" ? Model.EncryptedMannerFarmId : "")" asp-route-r="@(backAction == "MannerFarmList" ? ViewBag.IsBack : "")">@Resource.lblBack</govuk-back-link>
+    }
+    else
+    {
+        <govuk-back-link asp-action=@backAction asp-controller="@controller" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimationId : Model.EncryptedMannerFarmId)">@Resource.lblBack</govuk-back-link>
+    }
 }
 
 <div class="govuk-grid-row">
