@@ -111,6 +111,15 @@ namespace NMP.Portal.Controllers
             RemoveAddressesSession();
             return RedirectToAction(_farmListActionName);
         }
+        private void BindNMPTFarmIdAndNameForNavigation(FarmViewModel? model)
+        {
+            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+            {
+                //pooja
+                ViewBag.NMPTFarmId = model?.EncryptedFarmId;
+                ViewBag.NMPTFarmName = model?.Name;
+            }
+        }
 
         [HttpGet]
         public IActionResult Name()
@@ -121,10 +130,10 @@ namespace NMP.Portal.Controllers
             {
                 model = new FarmViewModel();
             }
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
-
+     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Name(FarmViewModel farm)
@@ -136,11 +145,11 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("Name", Resource.MsgEnterTheFarmName);
             }
 
+            BindNMPTFarmIdAndNameForNavigation(farm);
             if (!ModelState.IsValid)
             {
                 return View(farm);
             }
-
             SetFarmToSession(farm);
 
             return farm.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName) : RedirectToAction("Country");
@@ -161,7 +170,7 @@ namespace NMP.Portal.Controllers
                 }
 
                 ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
-
+                BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
             }
             catch (HttpRequestException hre)
@@ -188,6 +197,7 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("CountryID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCountry.ToLower()));
                 }
 
+                BindNMPTFarmIdAndNameForNavigation(farm);
                 if (!ModelState.IsValid)
                 {
                     ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
@@ -200,7 +210,7 @@ namespace NMP.Portal.Controllers
                 {
                     farm.Country = Enum.GetName(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID);
                 }
-
+                
                 SetFarmToSession(farm);
 
                 if (farm.IsCheckAnswer)
@@ -233,6 +243,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in FarmingRules() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
 
@@ -242,6 +253,7 @@ namespace NMP.Portal.Controllers
         public IActionResult FarmingRules(FarmViewModel model)
         {
             SetFarmToSession(model);
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (model.IsCheckAnswer)
             {
@@ -264,6 +276,7 @@ namespace NMP.Portal.Controllers
                 model = new FarmViewModel();
             }
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
 
@@ -277,6 +290,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("BusinessName", Resource.MsgEnterTheBusinessName);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
             {
@@ -300,6 +314,7 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
 
@@ -312,6 +327,7 @@ namespace NMP.Portal.Controllers
             {
                 ValidatePostcode(farm);
 
+                BindNMPTFarmIdAndNameForNavigation(farm);
                 if (!ModelState.IsValid)
                 {
                     return View(farm);
@@ -390,6 +406,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogError("Farm Controller : Session not found in Address() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
 
                 RemoveAddressesSession();
 
@@ -429,6 +446,7 @@ namespace NMP.Portal.Controllers
                 ValidateAddress(farm);
                 var addresses = await LoadAddressesAsync(farm);
 
+                BindNMPTFarmIdAndNameForNavigation(farm);
                 if (!ModelState.IsValid)
                 {
                     PopulateAddressViewBags(addresses);
@@ -437,7 +455,7 @@ namespace NMP.Portal.Controllers
 
                 ApplySelectedAddress(farm, addresses);
                 farm.IsManualAddress = false;
-
+                                
                 SetFarmToSession(farm);
 
                 return (farm.IsPostCodeChanged || !farm.IsCheckAnswer)
@@ -507,6 +525,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in AddressNotFound() post action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
 
@@ -521,6 +540,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in ManualAddress() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
 
@@ -534,6 +554,7 @@ namespace NMP.Portal.Controllers
             {
                 await ValidateManualAddress(farm);
 
+                BindNMPTFarmIdAndNameForNavigation(farm);
                 if (!ModelState.IsValid)
                 {
                     return View("~/Views/Farm/ManualAddress.cshtml", farm);
@@ -548,7 +569,7 @@ namespace NMP.Portal.Controllers
 
                 farm.FullAddress = string.Empty;
                 farm.IsManualAddress = true;
-
+                                
                 SetFarmToSession(farm);
 
                 return RedirectToAction("ClimatePostCode");
@@ -643,6 +664,7 @@ namespace NMP.Portal.Controllers
 
                 bool rainfallNotAvailable = !model.Rainfall.HasValue || model.Rainfall <= 0;
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (rainfallNotAvailable)
                 {
                     string firstHalfPostcode = Functions.ExtractFirstHalfPostcode(model.Postcode);
@@ -688,6 +710,7 @@ namespace NMP.Portal.Controllers
             {
                 await ValidateClimatePostcode(model);
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -763,6 +786,7 @@ namespace NMP.Portal.Controllers
 
                     SetFarmToSession(model);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
 
                 return View(model);
             }
@@ -787,10 +811,11 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError(_rainfallActionName, Resource.MsgEnterAverageAnnualRainfall);
             }
+            BindNMPTFarmIdAndNameForNavigation(farm);
             if (!ModelState.IsValid)
             {
                 return View(_rainfallActionName, farm);
-            }
+            }            
 
             SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
@@ -810,6 +835,7 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
 
@@ -820,6 +846,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Farm Controller : RainfallManual() post action called");
             ValidateRainfall(farm);
 
+            BindNMPTFarmIdAndNameForNavigation(farm);
             if (!ModelState.IsValid)
             {
                 return View("RainfallManual", farm);
@@ -873,6 +900,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in NVZ() action");
                 return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales)
             {
@@ -894,6 +922,7 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("NVZFields", Resource.MsgSelectAnOptionBeforeContinuing);
             }
 
+            BindNMPTFarmIdAndNameForNavigation(farm);      
             if (!ModelState.IsValid)
             {
                 return View("NVZ", farm);
@@ -922,6 +951,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in Elevation() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID ?? 0);
             return View(model);
         }
@@ -937,6 +967,7 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("NitrateVulnerableZoneList", Resource.MsgSelectAnOptionBeforeContinuing);
             }
 
+            BindNMPTFarmIdAndNameForNavigation(farm);
             if (!ModelState.IsValid)
             {
                 ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(farm.CountryID ?? 0);
@@ -964,6 +995,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in Elevation() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             return View(model);
         }
@@ -978,6 +1010,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("FieldsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(farm);
 
             if (!ModelState.IsValid)
             {
@@ -1005,6 +1038,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in Organic() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
                 model.RegisteredOrganicProducer = false;
@@ -1025,6 +1059,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("RegisteredOrganicProducer", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(farm);
 
             if (!ModelState.IsValid)
             {
@@ -1063,7 +1098,6 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(q))
             {
                 SetFarmDataBeforeUpdateToSession(model);
-
             }
 
             var previousModel = GetFarmDataBeforeUpdateFromSession();
@@ -1083,6 +1117,10 @@ namespace NMP.Portal.Controllers
                 ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.Value)).Select(s => s.Text).ToList();
                 ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(model.ID);
             }
+
+            //pooja
+            ViewBag.NMPTFarmId = model.EncryptedFarmId;
+            ViewBag.NMPTFarmName = model?.Name;
             return View(model);
         }
 
@@ -1113,6 +1151,12 @@ namespace NMP.Portal.Controllers
                     if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                     {
                         ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.NvzId.ToString())).Select(s => s.NvzName).ToList();
+                    }
+                    if(!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+                    {
+                        //pooja
+                        ViewBag.NMPTFarmId = model?.EncryptedFarmId;
+                        ViewBag.NMPTFarmName = model?.Name;
                     }
                     return View(model);
                 }
@@ -1288,6 +1332,10 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction(_farmListActionName);
                     }
 
+                    //pooja
+                    ViewBag.NMPTFarmId = id;
+                    ViewBag.NMPTFarmName = farm?.Name;
+
                     HttpContext.Session.SetString("current_farm_name", farm?.Name ?? "");
                     HttpContext.Session.SetString("current_farm_id", id);
 
@@ -1351,6 +1399,9 @@ namespace NMP.Portal.Controllers
                     farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                     farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                     farmData.ID = farm.ID;
+                    //pooja
+                    ViewBag.NMPTFarmId = farmData?.EncryptedFarmId;
+                    ViewBag.NMPTFarmName = farm?.Name;
                     farmData.Name = farm.Name;
                     farmData.Address1 = farm.Address1;
                     farmData.Address2 = farm.Address2;
@@ -1417,6 +1468,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError(_rainfallActionName, string.Format("{0} {1}", Resource.lblAverageAnnualRainfall, Resource.lblNotSet));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
             {
@@ -1580,6 +1632,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogError("Farm Controller : Session not found in FarmRemove() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             return View(model);
         }
@@ -1595,6 +1648,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("FarmRemove", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+                BindNMPTFarmIdAndNameForNavigation(farm);
 
                 if (!ModelState.IsValid)
                 {
@@ -1641,6 +1695,7 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Farm Controller : Cancel() action called");
             FarmViewModel? model = GetFarmFromSession();
+            BindNMPTFarmIdAndNameForNavigation(model);
             try
             {
                 if (model == null)
@@ -1667,6 +1722,7 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
             }
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View("Cancel", model);

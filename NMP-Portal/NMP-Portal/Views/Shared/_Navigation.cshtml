@@ -16,8 +16,10 @@
     bool isMannerContext = string.Equals(currentArea, "Manner", StringComparison.OrdinalIgnoreCase)
             && (string.Equals(currentController, "MannerEstimation", StringComparison.OrdinalIgnoreCase)
             || string.Equals(currentController, "AboutManner", StringComparison.OrdinalIgnoreCase));
-    var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
-    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id");
+    @* var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
+    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id"); *@
+    var currentNMPTFarmId = ViewBag.NMPTFarmId;
+    var currentNMPTFarmName = ViewBag.NMPTFarmName;
     var currentManureEstimateFarmName = ViewBag.MannerFarmName;
     var currentManureEstimateFarmId = ViewBag.MannerFarmId;
     
@@ -57,10 +59,10 @@
         <govuk-service-navigation-nav>
             <govuk-service-navigation-nav-start></govuk-service-navigation-nav-start>
 
-            @if (isNmptFarmContext && !string.IsNullOrWhiteSpace(currentFarmName) && !string.IsNullOrWhiteSpace(currentFarmId))
+            @if (isNmptFarmContext && !string.IsNullOrWhiteSpace(currentNMPTFarmId) && !string.IsNullOrWhiteSpace(currentNMPTFarmName))
             {
-                <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentFarmId" active="@(isNmptFarmContext)">
-                    @currentFarmName
+                <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentNMPTFarmId" active="@(isNmptFarmContext)">
+                    @currentNMPTFarmName
                 </govuk-service-navigation-nav-item>
             }
             else if (!string.IsNullOrWhiteSpace(currentManureEstimateFarmName))
