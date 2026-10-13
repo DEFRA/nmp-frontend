@@ -158,7 +158,8 @@
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNCurrentCrop, Resource.lblkg)</td>
                                     @if (mannerEstimation.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                     {
-                                        <td class="govuk-table__cell">@item.NextGrassNitrogenCropCurrentYear</td>
+                                        <td class="govuk-table__cell">@(item.NextGrassNitrogenCropCurrentYear != 0 ? string.Format("{0:N0}{1}", item.NextGrassNitrogenCropCurrentYear, Resource.lblkg) : "0")</td>
+                                        
                                     }
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.CropAvailableNitrogenFollowingCropYearTwo, Resource.lblkg)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0}{1}", item.NitrogenUseEfficiency, Resource.lblPercentage)</td>

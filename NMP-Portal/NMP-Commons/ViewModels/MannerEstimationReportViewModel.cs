@@ -1,4 +1,5 @@
 ﻿using NMP.Commons.Models;
+using NMP.Commons.ServiceResponses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace NMP.Commons.ViewModels
         public List<MannerEstimationStep32ViewModel> MannerEstimationConditions { get; set; }
         public List<MannerManureAnalysisViewModel> ManureAnalyses { get; set; }
         public List<MannerNpkResultViewModel> MannerNpkResults { get; set; }
-        public List<MannerEstimationApplicationWarningViewModel> ApplicationWarnings { get; set; } 
+        public List<MannerEstimationApplicationWarningViewModel> ApplicationWarnings { get; set; }
+        public MannerCalculateNutrientResponse TotalMannerCalculateNutrient { get; set; }
     }
 }
