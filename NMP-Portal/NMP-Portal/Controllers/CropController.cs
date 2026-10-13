@@ -2261,7 +2261,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             //Fetch fields allowed for second crop based on first crop
             (List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-            ViewBag.FieldOptions.AddRange(fieldsAllowedForSecondCrop);
+            
+            if (ViewBag.FieldOptions != null)
+            {
+                var fieldOptions = (List<int>)ViewBag.FieldOptions;
+
+                fieldOptions.AddRange(
+                    fieldsAllowedForSecondCrop.Except(fieldOptions)
+                );
+                ViewBag.FieldOptions = fieldOptions;
+            }
             ((List<int>)ViewBag.FieldOptions).RemoveAll(item => fieldRemoveList.Contains(item));
 
             (model, _) = await BindGrassProperties(model);
@@ -2714,14 +2723,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     .ToList();
             }
 
-            var fieldIdsForFilter = fieldList.Select(f => f.ID);
-            return (model, harvestYearPlanResponse
-                  .Where(x => fieldIdsForFilter.Contains(x.FieldID))
-                  .ToList());
+            var fieldIdsForFilter = fieldList.Where(f => f.ID.HasValue).Select(f => f.ID.Value).ToList();
+            ViewBag.FieldOptions = fieldIdsForFilter;
+            return (model, harvestYearPlanResponse.Where(x => fieldIdsForFilter.Contains(x.FieldID)).ToList());
         }
         else
         {
-            ViewBag.FieldOptions = fieldList;
+            ViewBag.FieldOptions = fieldList.Where(f => f.ID.HasValue).Select(f => f.ID.Value).ToList();
         }
         return (model, harvestYearPlanResponse);
     }
