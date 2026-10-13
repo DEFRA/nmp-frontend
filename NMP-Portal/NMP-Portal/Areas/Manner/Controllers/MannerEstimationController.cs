@@ -728,7 +728,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 return RedirectToAction(_applicationDateKey, new { sid = sessionId });
             }
 
-            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("ManureGroup", new { sid = sessionId });
+            return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction(_manureGroupKey, new { sid = sessionId });
         }
 
         [HttpGet("IsEarlySown")]
@@ -764,7 +764,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
 
             model = _mannerEstimationLogic.SetMannerEstimationStep10(model);
 
-            return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction("ManureGroup");
+            return model.IsCheckAnswer ? RedirectToAction(_updateFieldOrCropDataActionName) : RedirectToAction(_manureGroupKey);
         }
         [HttpGet("ManureGroup/{sid?}")]
         public async Task<IActionResult> ManureGroup(string? sid, string? q, string? r, string? s)
@@ -2114,7 +2114,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 {
                     return RedirectToAction(_applicationDateKey, new { sid = sessionId });
                 }
-                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction("ManureGroup", new { sid = sessionId });
+                return (!string.IsNullOrWhiteSpace(mannerEstimationViewModel?.EncryptedMannerEstimationId)) ? RedirectToAction(_updateFieldOrCropDataActionName, new { sid = sessionId }) : RedirectToAction(_manureGroupKey, new { sid = sessionId });
 
             }
             catch (Exception ex)
