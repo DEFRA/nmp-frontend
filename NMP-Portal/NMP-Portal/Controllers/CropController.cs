@@ -86,7 +86,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _freshWeightYieldsDefault = "FreshWeightYieldsDefault";
     private const string _previousGrassManagement = "PreviousGrassManagement";
     private const string _isPermanentSward = "IsPermanentSward";
+    private void BindNMPTFarmIdAndNameForNavigation(PlanViewModel? model)
+    {
+        //pooja
+        ViewBag.NMPTFarmId = model?.EncryptedFarmId;
+        ViewBag.NMPTFarmName = model?.FarmName;
 
+    }
     private PlanViewModel? GetCropFromSession()
     {
         if (HttpContext.Session.Exists(_cropDataSessionKey))
