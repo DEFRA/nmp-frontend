@@ -5844,6 +5844,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 var mannerFarm = mannerEstimationResultResponse?.MannerFarm;
                 var estimation = mannerEstimationResultResponse?.MannerEstimation;
                 var applications = mannerEstimationResultResponse?.MannerEstimationApplication;
+                var totalCalculation = mannerEstimationResultResponse?.TotalMannerCalculateNutrient;
                 if (estimation != null)
                 {
                     int nitrogenValue = applications?.Sum(x => x.NitrogenValue) ?? 0;
@@ -5865,6 +5866,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     // Field and crop details
                     model.MannerFieldAndCropDetails.MannerEstimation = estimation;
                     model.MannerFieldAndCropDetails.MannerFarm = mannerFarm;
+                    model.TotalMannerCalculateNutrient = totalCalculation;
                 }
 
                 if (applications != null && applications.Any())

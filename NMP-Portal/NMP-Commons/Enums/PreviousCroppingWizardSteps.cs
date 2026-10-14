@@ -17,5 +17,6 @@ namespace NMP.Commons.Enums
         CropGroup = 7,
         CropType = 8,
         CropInfoOne = 9,
+        PreviousGrssManagement=10
     }
 }

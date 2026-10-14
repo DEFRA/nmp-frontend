@@ -8651,4 +8651,10 @@ following crop year 2</value>
   <data name="lblEnterAWholeNumberBetween1And100" xml:space="preserve">
     <value>Enter a whole number between 1 and 100.</value>
   </data>
+  <data name="lblToGetRecommendationsForPreviousYear" xml:space="preserve">
+    <value>To get recommendations for {0} for {1}, you'll need to add last year's history to the crop details for {2}.</value>
+  </data>
+  <data name="lblAddLastYearHistoryToCropDetailsFor" xml:space="preserve">
+    <value>Add last year's history to crop details for {0}.</value>
+  </data>
 </root>

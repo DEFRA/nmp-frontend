@@ -1692,6 +1692,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add last year&apos;s history to crop details for {0}..
+        /// </summary>
+        public static string lblAddLastYearHistoryToCropDetailsFor {
+            get {
+                return ResourceManager.GetString("lblAddLastYearHistoryToCropDetailsFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add livestock details for {0}.
         /// </summary>
         public static string lblAddLivestockDetailsFor {
@@ -17221,6 +17230,15 @@ namespace NMP.Commons.Resources {
         public static string lblToCreatePlansAndGiveRecommendation {
             get {
                 return ResourceManager.GetString("lblToCreatePlansAndGiveRecommendation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To get recommendations for {0} for {1}, you&apos;ll need to add last year&apos;s history to the crop details for {2}..
+        /// </summary>
+        public static string lblToGetRecommendationsForPreviousYear {
+            get {
+                return ResourceManager.GetString("lblToGetRecommendationsForPreviousYear", resourceCulture);
             }
         }
         
