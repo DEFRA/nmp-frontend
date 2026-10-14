@@ -13,6 +13,7 @@ public class SnsAnalysisViewModel:SnsAnalysis
     public string? EncryptedCropId { get; set; } = string.Empty;
     public int CropId { get; set; } 
     public string? EncryptedFieldName { get; set; } = string.Empty;
+    public string? FarmName { get; set; } = string.Empty;
     public int? CropTypeId { get; set; }
     public int? SoilMineralNitrogenAt030CM { get; set; }
     public int? SoilMineralNitrogenAt3060CM { get; set; }

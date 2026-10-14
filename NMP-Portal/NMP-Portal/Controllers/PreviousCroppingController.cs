@@ -34,6 +34,14 @@ namespace NMP.Portal.Controllers
         private const string _sasGreaterThan30PercentCloverActionName = "HasGreaterThan30PercentClover";
         private const string _errorTempData = "Error";
         private const string _previousGrassManagement = "PreviousGrassManagement";
+
+        private void BindNMPTFarmIdAndNameForNavigation(PreviousCroppingViewModel? model)
+        {
+            
+            ViewBag.NMPTFarmId = model?.EncryptedFarmID;
+            ViewBag.NMPTFarmName = model?.FarmName;
+
+        }
         private PreviousCroppingViewModel? GetPreviousCroppingFromSession()
         {
             if (HttpContext.Session.Exists(_previousCroppingSessionKey))
@@ -90,7 +98,9 @@ namespace NMP.Portal.Controllers
                     if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                     {
                         model.FarmRB209CountryID = farm.RB209CountryID;
+                        model.FarmName = farm.Name;
                     }
+                    BindNMPTFarmIdAndNameForNavigation(model);
                     if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                     {
                         model.HasGrassInLastThreeYear = false;
@@ -120,6 +130,8 @@ namespace NMP.Portal.Controllers
                     _hasGrassInLastThreeYearText,
                     Resource.MsgSelectAnOptionBeforeContinuing);
             }
+
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
             {
@@ -222,6 +234,7 @@ namespace NMP.Portal.Controllers
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
                 }
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 ViewBag.CropGroupList = await _fieldLogic.FetchArableCropGroups();
             }
             catch (Exception ex)
@@ -242,6 +255,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("CropGroupID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 ViewBag.CropGroupList = await _fieldLogic.FetchArableCropGroups();
@@ -281,6 +295,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace($"Previous Croppping Controller : CropTypes() action : PreviousCropping data is not available in session");
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
 
                 List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value, model.FarmRB209CountryID);
 
@@ -321,6 +336,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value, model.FarmRB209CountryID);
@@ -359,6 +375,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogError("Previous Croppping Controller : Session not found in CropInfoOne() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
                 await BindCropInfoViewBag(model);
 
             }
@@ -384,6 +401,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("CropInfo1", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
 
                 if (!ModelState.IsValid)
                 {
@@ -512,6 +530,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() action : PreviousCropping data is not available in session");
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
                 List<int> previousYears = BindViewBagForGrassLatsThreeYear(model);
                 ViewBag.PreviousGrassesYear = previousYears;
                 SetPreviousCroppingToSession(model);
@@ -534,6 +553,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
             {
@@ -603,6 +623,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Previous Croppping Controller : GrassManagementOptions() action : PreviousCropping data is not available in session");
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             ViewBag.GrassManagementOptions = await _fieldLogic.GetGrassManagementOptions();
             return View(model);
@@ -618,6 +639,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("GrassManagementOptionID", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
             {
@@ -651,6 +673,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Previous Croppping Controller : HasGreaterThan30PercentClover() action : PreviousCropping data is not available in session");
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             return await Task.FromResult(View(model));
         }
@@ -665,6 +688,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("HasGreaterThan30PercentClover", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -706,6 +730,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Previous Croppping Controller : SoilNitrogenSupplyItems() action : PreviousCropping data is not available in session");
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             ViewBag.SoilNitrogenSupplyItems = (await _fieldLogic.GetSoilNitrogenSupplyItems()).OrderBy(x => x.Id);
             SetPreviousCroppingToSession(model);
@@ -722,6 +747,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilNitrogenSupplyItemID", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 ViewBag.SoilNitrogenSupplyItems = (await _fieldLogic.GetSoilNitrogenSupplyItems()).OrderBy(x => x.Id);
@@ -753,6 +779,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace($"Previous Croppping Controller : LayDuration() action : PreviousCropping data is not available in session");
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             return View(model);
         }
@@ -767,6 +794,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("LayDuration", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -796,6 +824,7 @@ namespace NMP.Portal.Controllers
                     return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
                 }
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 List<CommonResponse> grassManagements = await _fieldLogic.GetGrassManagementOptions();
                 ViewBag.GrassManagementOptions = grassManagements.FirstOrDefault(x => x.Id == model.GrassManagementOptionID)?.Name;
 
@@ -835,6 +864,7 @@ namespace NMP.Portal.Controllers
 
             ValidatePreviousCroppingModel(model);
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 await PopulatePreviousCroppingViewBagsAsync(model);
@@ -1222,6 +1252,7 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace("Previous cropping Controller : Cancel() action - PreviousCroppingData not found in session");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
             }
             catch (Exception ex)
             {
@@ -1243,6 +1274,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
             {

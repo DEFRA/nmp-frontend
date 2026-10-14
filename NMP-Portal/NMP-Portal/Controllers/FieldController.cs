@@ -65,6 +65,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return await Task.FromResult(View());
     }
 
+    private void BindNMPTFarmIdAndNameForNavigation(FieldViewModel? model)
+    {
+        
+        ViewBag.NMPTFarmId = model?.EncryptedFarmId;
+        ViewBag.NMPTFarmName = model?.FarmName;
+
+    }
+
     public async Task<IActionResult> CreateFieldCancel(string id, string? q)
     {
         _logger.LogTrace("Field Controller : CreateFieldCancel({Id}) action called", id);
@@ -79,6 +87,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
             if (model != null)
             {
+                BindNMPTFarmIdAndNameForNavigation(model);
                 RemoveFieldDataFromSession();
 
                 if (!string.IsNullOrWhiteSpace(model.EncryptedFieldId) && !string.IsNullOrWhiteSpace(model.EncryptedFarmId))
@@ -198,6 +207,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 }
             }
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!string.IsNullOrWhiteSpace(r))
             {
                 model.EncryptedHarvestYear = r;
@@ -222,6 +232,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         _logger.LogTrace("Field Controller : AddField() action called");
         await ValidateField(model);
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             return View(model);
@@ -319,6 +330,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         return View(model);
     }
 
@@ -329,6 +341,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         _logger.LogTrace("Field Controller : FieldMeasurements() post action called");
         ValidateFieldMeasurements(field);
 
+        BindNMPTFarmIdAndNameForNavigation(field);
         if (!ModelState.IsValid)
         {
             return View(field);
@@ -454,6 +467,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (model.IsWithinNVZForFarm.HasValue && model.IsWithinNVZForFarm.Value)
         {
             return View(model);
@@ -480,6 +494,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("IsWithinNVZ", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (!ModelState.IsValid)
         {
@@ -584,6 +599,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : ElevationField() action : Field data is not available in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (model.IsAbove300SeaLevelForFarm.HasValue && model.IsAbove300SeaLevelForFarm.Value)
         {
@@ -610,6 +626,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("IsAbove300SeaLevel", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(field);
 
         if (!ModelState.IsValid)
         {
@@ -644,6 +661,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogTrace("Field Controller : SoilType() action : Field data is not available in session");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (model.FarmRB209CountryID.HasValue)
             {
@@ -677,6 +695,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 ModelState.AddModelError("SoilTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblSoilType.ToLower()));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             List<SoilTypesResponse> soilTypes = new List<SoilTypesResponse>();
             if (model.FarmRB209CountryID.HasValue)
@@ -761,6 +780,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : SoilReleasingClay() action : Field data is not available in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         return View(model);
     }
@@ -778,6 +798,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         field.IsSoilReleasingClay = true;
 
+        BindNMPTFarmIdAndNameForNavigation(field);
         if (!ModelState.IsValid)
         {
             return View(field);
@@ -821,6 +842,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         model.IsSoilReleasingClay = false;
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         return View(model);
     }
 
@@ -833,6 +855,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("SoilAnalyses.SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (!ModelState.IsValid)
         {
@@ -860,6 +883,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         return await Task.FromResult(View(model));
     }
 
@@ -873,6 +897,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             NormalizeDateModelStateErrors();
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         ValidateSoilAnalysisDate(model);
 
         if (!ModelState.IsValid)
@@ -955,6 +980,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : SoilNutrientValueType() action : Field data is not available in session");
             return Task.FromResult<IActionResult>(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         return Task.FromResult<IActionResult>(View(model));
     }
@@ -968,6 +994,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("SoilAnalyses.SoilNutrientValueType", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (!ModelState.IsValid)
         {
@@ -1007,6 +1034,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : SoilNutrientValue() action : Field data is not available in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (model.FarmRB209CountryID.HasValue && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
@@ -1026,6 +1054,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ValidateSoilNutrientValues(model);
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 if (IsScotland(model))
@@ -1462,10 +1491,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         try
         {
             List<CropGroupResponse> cropGroupList = await _fieldLogic.FetchArableCropGroups();
-            ViewBag.CropGroupList = model.FarmRB209CountryID==(int)NMP.Commons.Enums.RB209Country.Scotland? cropGroupList: cropGroupList.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.England);
+            ViewBag.CropGroupList = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? cropGroupList : cropGroupList.Where(x => x.CropGroupId != (int)NMP.Commons.Enums.CropGroup.Grass && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.England);
             return View(model);
         }
         catch (Exception ex)
@@ -1499,6 +1529,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("CropGroupId", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropGroup.ToLower()));
         }
+        BindNMPTFarmIdAndNameForNavigation(field);
         if (!ModelState.IsValid)
         {
 
@@ -1523,7 +1554,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         field.CropGroup = await _fieldLogic.FetchCropGroupById(field.CropGroupId.Value);
         SetFieldDataToSession(field);
-        
+
         return RedirectToAction(_cropTypesActionName);
     }
 
@@ -1541,6 +1572,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryID);
             ViewBag.CropTypeList = cropTypeList;
             if (cropTypeList.Count == 1 && cropTypeList[0].CropTypeId == (int)NMP.Commons.Enums.CropTypes.Other)
@@ -1573,6 +1605,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("CropTypeID", string.Format(Resource.MsgSelectANameOfFieldBeforeContinuing, Resource.lblCropType.ToLower()));
         }
+        BindNMPTFarmIdAndNameForNavigation(field);
         if (!ModelState.IsValid)
         {
             List<CropTypeResponse> cropTypes = await _fieldLogic.FetchCropTypes(field.CropGroupId ?? 0, field.FarmRB209CountryID);
@@ -1593,10 +1626,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             return RedirectToAction(_updateFieldActionName);
         }
-        if(field.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && field.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+        if (field.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && field.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
         {
             return RedirectToAction("CropInfoOne");
-        }    
+        }
         return RedirectToAction(_checkAnswerActionName);
     }
 
@@ -1613,6 +1646,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogError("Field Controller : Session not found in CropInfoOne() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             await BindCropInfoViewBag(model);
 
         }
@@ -1638,6 +1672,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 ModelState.AddModelError("CropInfo1", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
             {
@@ -1665,7 +1700,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
     }
-    
+
     public async Task<IActionResult> BackCheckAnswer()
     {
         _logger.LogTrace("Field Controller : BackCheckAnswer() action called");
@@ -1716,6 +1751,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogTrace("Field Controller : CheckAnswer() Field Data session not found");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             model.IsGrassLastThreeHarvestYearChange = false;
             ViewBag.IsAdding = true;
             model.IsRecentSoilAnalysisQuestionChange = false;
@@ -1765,6 +1801,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ValidateCheckAnwser(model, true);
             ViewBag.IsAdding = true;
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return await GetDataForInvalidModelState(model);
@@ -1838,7 +1875,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 GrassManagementOptionID = null,
                 HasGreaterThan30PercentClover = null,
                 SoilNitrogenSupplyItemID = null,
-                CropInfo1=model.CropInfo1,
+                CropInfo1 = model.CropInfo1,
                 PreviousGrassID = null
             };
             previousCropping.Add(newPreviousCropping);
@@ -1966,7 +2003,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             GrassManagementOptionID = null,
             HasGreaterThan30PercentClover = null,
             SoilNitrogenSupplyItemID = null,
-            CropInfo1=model.CropInfo1
+            CropInfo1 = model.CropInfo1
         };
         previousCropping.Add(newPreviousCropping);
 
@@ -2360,6 +2397,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (farm != null)
             {
                 model.FarmName = farm.Name;
+                
+                ViewBag.NMPTFarmId = id;
+                ViewBag.NMPTFarmName = farm.Name;
             }
             if (string.IsNullOrWhiteSpace(isDeleted) && name != null)
             {
@@ -2379,6 +2419,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> ManageFarmFields(FieldViewModel field)
     {
         _logger.LogTrace("Field Controller : ManageFarmFields() post action called");
+        BindNMPTFarmIdAndNameForNavigation(field);
         if (ModelState.IsValid)
         {
             await Task.FromResult(RedirectToAction(_manageFarmFieldsActionName));
@@ -2411,6 +2452,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         await FetchSelectedNVZName(model);
         await FetchPscIndexName(model);
         ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
+        BindNMPTFarmIdAndNameForNavigation(model);
         return View(model);
 
     }
@@ -2850,6 +2892,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogTrace("Field Controller : RecentSoilAnalysisQuestion() action : No field data found in session.");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
         }
         catch (Exception ex)
         {
@@ -2869,6 +2912,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("RecentSoilAnalysisQuestion", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             return View(model);
@@ -2937,6 +2981,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : SoilOverChalk() action : No field data found in session.");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         return View(model);
     }
@@ -2950,6 +2995,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("SoilOverChalk", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(field);
         if (!ModelState.IsValid)
         {
             return View(field);
@@ -2993,7 +3039,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
 
 
-    private async Task<(Error error, bool? hasGrassInLastThreeYear,int?, List<PreviousCroppingData> prevCroppings, PreviousCropping? prevCroppingDataForScotland)> BindPreviousCroppingDataForUpdateField(FieldViewModel model, List<Crop> cropPlans, Error error,  bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired, PreviousCropping? prevCroppingDataForScotland)
+    private async Task<(Error error, bool? hasGrassInLastThreeYear, int?, List<PreviousCroppingData> prevCroppings, PreviousCropping? prevCroppingDataForScotland)> BindPreviousCroppingDataForUpdateField(FieldViewModel model, List<Crop> cropPlans, Error error, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired, PreviousCropping? prevCroppingDataForScotland)
     {
         int decryptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
         if (isPreviousCroppingBindRequired)
@@ -3027,7 +3073,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (!string.IsNullOrWhiteSpace(fieldId))
             {
                 model.EncryptedFieldId = fieldId;
-                (cropPlans, Error error,  bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired) = await PreviousCroppingsByFieldId(fieldId, farmId, model);
+                (cropPlans, Error error, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired) = await PreviousCroppingsByFieldId(fieldId, farmId, model);
                 PreviousCropping? prevCroppingDataForScotland = null;
                 (error, hasGrassInLastThreeYear, model.LastHarvestYear, prevCroppings, prevCroppingDataForScotland) = await BindPreviousCroppingDataForUpdateField(model, cropPlans, error, hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired, prevCroppingDataForScotland);
 
@@ -3066,6 +3112,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 HttpContext.Session.SetObjectAsJson(_fieldDataBeforeUpdateKey, model);
             }
 
+            BindNMPTFarmIdAndNameForNavigation(model);
         }
         catch (Exception ex)
         {
@@ -3090,13 +3137,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ValidateCheckAnwser(model, false);
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
             List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(fieldId);
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 await FetchSelectedNVZName(model);
                 await FetchPscIndexName(model);
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
                 ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
-                
+
                 ViewData["ModelStateErrors"] = ModelState;
                 return View(model);
             }
@@ -3200,7 +3248,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
-   
+
 
     async Task<List<Crop>> GetCropPlans(FieldViewModel model, List<Crop> cropPlans)
     {
@@ -3212,7 +3260,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         return cropPlans;
     }
-    async Task<(List<Crop> cropPlans, Error error,  bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired)> PreviousCroppingsByFieldId(string? fieldId, string farmId, FieldViewModel model)
+    async Task<(List<Crop> cropPlans, Error error, bool? hasGrassInLastThreeYear, List<PreviousCroppingData> prevCroppings, bool isPreviousCroppingBindRequired)> PreviousCroppingsByFieldId(string? fieldId, string farmId, FieldViewModel model)
     {
         (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(farmId)));
         int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(fieldId));
@@ -3238,7 +3286,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             isPreviousCroppingBindRequired = CheckPreviousCroppingNeedToShow(cropPlans, isPreviousCroppingBindRequired, model.FarmRB209CountryID.Value);
         }
 
-        return (cropPlans, error,  hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired);
+        return (cropPlans, error, hasGrassInLastThreeYear, prevCroppings, isPreviousCroppingBindRequired);
     }
 
     private static List<int> YearsToCheck(List<Crop> cropPlans)
@@ -3290,14 +3338,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         model.PscIndexID = field.PscIndexID;
         model.NVZProgrammeID = field.NVZProgrammeID;
         model.LPIDNumber = field.LPIDNumber;
-        model.CropInfo1 = prevCroppings.Where(x => x.FieldID == decrptedFieldId).Select(x=>x.CropInfo1).FirstOrDefault();
+        model.CropInfo1 = prevCroppings.Where(x => x.FieldID == decrptedFieldId).Select(x => x.CropInfo1).FirstOrDefault();
 
-        
-            model.FarmRB209CountryID = farm.RB209CountryID;
-            model.FarmName = farm.Name;
-            model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-            model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
-       
+
+        model.FarmRB209CountryID = farm.RB209CountryID;
+        model.FarmName = farm.Name;
+        model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+        model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
+
         bool isUpdateField = true;
         model.EncryptedIsUpdate = _fieldDataProtector.Protect(isUpdateField.ToString());
         if (model.SoilOverChalk != null && model.SoilTypeID != (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
@@ -3435,7 +3483,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     GrassManagementOptionID = null,
                     HasGreaterThan30PercentClover = null,
                     SoilNitrogenSupplyItemID = null,
-                    CropInfo1=model.CropInfo1,
+                    CropInfo1 = model.CropInfo1,
                     Action = (int)NMP.Commons.Enums.Action.Insert,
 
                 });
@@ -3557,6 +3605,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction(_manageFarmFieldsActionName, "Farm");
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         return View(model);
     }
 
@@ -3569,6 +3618,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("FieldRemove", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(field);
 
         if (!ModelState.IsValid)
         {
@@ -3602,7 +3652,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public IActionResult CopyExistingField(string q)
+    public async Task<IActionResult> CopyExistingField(string q)
     {
         _logger.LogTrace("Field Controller : CopyExistingField() action called");
         FieldViewModel model = LoadFieldDataFromSession() ?? new FieldViewModel();
@@ -3617,9 +3667,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.EncryptedFarmId = q;
+            (FarmResponse farm,_)=await _farmLogic.FetchFarmByIdAsync(model.FarmID);
+            if(farm!=null)
+            {
+                model.FarmName = farm.Name;
+            }
         }
 
         SetFieldDataToSession(model);
+        BindNMPTFarmIdAndNameForNavigation(model);
         return View(model);
     }
 
@@ -3632,6 +3688,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("CopyExistingField", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(field);
 
         if (!ModelState.IsValid)
         {
@@ -3665,6 +3722,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         (Error error, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmID, Resource.lblTrue);
 
         if (string.IsNullOrWhiteSpace(error?.Message))
@@ -3686,6 +3744,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("ID", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(field);
 
         if (!ModelState.IsValid)
         {
@@ -3718,6 +3777,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : HasGrassInLastThreeYear() : field data not found in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         SetFieldDataToSession(model);
         return View(model);
@@ -3735,6 +3795,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 "PreviousCroppings.HasGrassInLastThreeYear",
                 Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (!ModelState.IsValid)
         {
@@ -3872,6 +3933,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : field data not found in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         int lastHarvestYear = model.LastHarvestYear ?? 0;
         List<int> previousYears = GetLastThreeYears(lastHarvestYear);
         if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
@@ -3901,6 +3963,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         int lastHarvestYear = model.LastHarvestYear ?? 0;
 
@@ -3984,6 +4047,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         ViewBag.GrassManagementOptions = await _fieldLogic.GetGrassManagementOptions();
         SetFieldDataToSession(model);
         return View(model);
@@ -4000,6 +4064,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError("PreviousCroppings.GrassManagementOptionID", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             List<CommonResponse> commonResponses = await _fieldLogic.GetGrassManagementOptions();
@@ -4039,6 +4104,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Task.FromResult<IActionResult>(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         SetFieldDataToSession(model);
         return Task.FromResult<IActionResult>(View(model));
     }
@@ -4054,6 +4120,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError("PreviousCroppings.HasGreaterThan30PercentClover", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             return View(model);
@@ -4100,6 +4167,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         List<CommonResponse> commonResponses = await _fieldLogic.GetSoilNitrogenSupplyItems();
         ViewBag.SoilNitrogenSupplyItems = commonResponses.OrderBy(x => x.Id);
 
@@ -4116,6 +4184,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("PreviousCroppings.SoilNitrogenSupplyItemID", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (!ModelState.IsValid)
         {
@@ -4156,6 +4225,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         SetFieldDataToSession(model);
         return await Task.FromResult(View(model));
     }
@@ -4171,6 +4241,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError("PreviousCroppings.LayDuration", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             return Task.FromResult<IActionResult>(View(model));
@@ -4203,6 +4274,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 _logger.LogTrace("Field Controller : field data not found in session");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            else
+            {
+                BindNMPTFarmIdAndNameForNavigation(model);
+            }
         }
         catch (Exception ex)
         {
@@ -4225,6 +4300,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             return View("Cancel", model);
@@ -4260,6 +4336,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         SetLastHarvestYearViewBag();
         return View(model);
 
@@ -4275,6 +4352,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError("LastHarvestYear", Resource.MsgSelectAHarvestYearBeforeContinuing);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             SetLastHarvestYearViewBag();
@@ -4362,6 +4440,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : LPIDNumber() action : Field data is not available in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         return View(model);
     }
@@ -4372,6 +4451,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace("Field Controller : LPIDNumber() post action called");
 
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (!ModelState.IsValid)
         {
@@ -4404,6 +4484,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : NitrateVulnerableZones() action : Field data is not available in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         await BindNitrateVulnerableZones(model);
         return View(model);
     }
@@ -4417,6 +4498,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("NVZProgrammeID", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (!ModelState.IsValid)
         {
@@ -4437,12 +4519,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         return RedirectToAction(_elevationFieldActionName);
     }
-    [HttpGet]
+
     private async Task FetchPscIndexList()
     {
         List<CommonResponse> pscIndexList = await _fieldLogic.FetchPscIndex();
         ViewBag.PscIndexList = pscIndexList;
     }
+    [HttpGet]
     public async Task<IActionResult> PscIndex()
     {
         _logger.LogTrace("Field Controller : PscIndex() action called");
@@ -4453,6 +4536,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("Field Controller : PscIndex() action : Field data is not available in session");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         await FetchPscIndexList();
         return View(model);
     }
@@ -4466,6 +4550,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             ModelState.AddModelError("PscIndexID", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (!ModelState.IsValid)
         {
@@ -4516,6 +4601,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace("SoilAnalysisController: Session expired in SoilAnalysesMethod() action.");
             return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         await SoilAnalysisViewModel(model);
         return View(model);
     }
@@ -4531,6 +4617,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ModelState.AddModelError("SoilAnalyses.PhosphorusMethodologyID", Resource.MsgSelectAnOptionBeforeContinuing);
         }
 
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             await SoilAnalysisViewModel(model);

@@ -41,6 +41,13 @@ namespace NMP.Portal.Controllers
         private const string _fieldSoilAnalysisDetailAction = "FieldSoilAnalysisDetail";
         private const string _fieldController = "Field";
         private const string _phosphorusKey = "Phosphorus";
+        private void BindNMPTFarmIdAndNameForNavigation(SoilAnalysisViewModel? model)
+        {
+            
+            ViewBag.NMPTFarmId = model?.EncryptedFarmId;
+            ViewBag.NMPTFarmName = model?.FarmName;
+
+        }
         private SoilAnalysisViewModel? GetSoilAnalysisFromSession()
         {
             if (HttpContext.Session.Exists(_soilAnalysisDataKey))
@@ -221,6 +228,7 @@ namespace NMP.Portal.Controllers
 
                     SetSoilAnalysisDataToSession(model);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
 
                 BindDataForCheckAnswer(i, l, model);
             }
@@ -318,7 +326,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("SoilAnalysisController: Session expired in Date() action.");
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
 
@@ -329,7 +337,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Soil Analysis Controller: Date() post action called.");
 
             ValidateDate(model);
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -413,7 +421,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilNutrientValueType() action.");
                 return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
             }
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             return await Task.FromResult(View(model));
         }
 
@@ -426,6 +434,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilNutrientValueType", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
             {
@@ -488,6 +497,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilNutrientValue() action.");
                 return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
             {
@@ -520,7 +530,7 @@ namespace NMP.Portal.Controllers
             {
 
                 ValidateSoilNutrientValueProperties(model);
-
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     await BindViewbegForSoilNutrientValue(model);
@@ -969,7 +979,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("SoilAnalysisController: Session expired in SulphurDeficient() action.");
                 return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
             }
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
 
@@ -983,7 +993,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SulphurDeficient", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return await Task.FromResult(View(model));
@@ -1014,7 +1024,8 @@ namespace NMP.Portal.Controllers
             {
                 ValidateSoilAnalysis(model);
 
-                await FetchMethodologyName(model);
+                await FetchMethodologyName(model); 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     ViewData["ModelStateErrors"] = ModelState;
@@ -1150,6 +1161,7 @@ namespace NMP.Portal.Controllers
                 if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                 {
                     model.FarmRB209CountryID = farm.RB209CountryID;
+                    model.FarmName = farm.Name;
                 }
                 int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(i));
                 var field = await _fieldLogic.FetchFieldByFieldId(fieldId);
@@ -1160,6 +1172,7 @@ namespace NMP.Portal.Controllers
                     model.FieldID = fieldId;
                 }
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             SetSoilAnalysisDataToSession(model);
             return RedirectToAction("SulphurDeficient");
@@ -1175,6 +1188,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("SoilAnalysisController: Session expired in RemoveSoilAnalysis() action.");
                 return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             return View(model);
         }
@@ -1188,6 +1202,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("SoilAnalysisRemove", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View("RemoveSoilAnalysis", model);
@@ -1225,6 +1240,7 @@ namespace NMP.Portal.Controllers
             }
             try
             {
+                BindNMPTFarmIdAndNameForNavigation(model);
                 model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
                 SetSoilAnalysisDataToSession(model);
             }
@@ -1248,7 +1264,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
             }
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View("Cancel", model);
@@ -1327,7 +1343,7 @@ namespace NMP.Portal.Controllers
         private async Task<IActionResult> ReturnViewWithMethods(SoilAnalysisViewModel model)
         {
             await FetchMethologies(model);
-            return View(model);
+            return View("SoilAnalysesMethod",model);
         }
         [HttpGet]
         public async Task<IActionResult> SoilAnalysesMethod()
@@ -1339,6 +1355,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilAnalysesMethod() action.");
                 return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             Error? error = await FetchMethologies(model);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
@@ -1355,10 +1372,10 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Soil Analysis Controller: SoilAnalysesMethod() post action called.");
 
             ValidateSoilAnalysisMethod(model.PhosphorusMethodologyID, "PhosphorusMethodologyID");
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
-                await ReturnViewWithMethods(model);
+              return  await ReturnViewWithMethods(model);
             }
             SoilAnalysisViewModel? soilAnalysisViewModel = GetSoilAnalysisFromSession();
             if (soilAnalysisViewModel != null && soilAnalysisViewModel.PhosphorusMethodologyID == model.PhosphorusMethodologyID)
