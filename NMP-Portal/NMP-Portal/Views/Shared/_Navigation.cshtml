@@ -16,8 +16,6 @@
     bool isMannerContext = string.Equals(currentArea, "Manner", StringComparison.OrdinalIgnoreCase)
             && (string.Equals(currentController, "MannerEstimation", StringComparison.OrdinalIgnoreCase)
             || string.Equals(currentController, "AboutManner", StringComparison.OrdinalIgnoreCase));
-    @* var currentFarmName = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_name");
-    var currentFarmId = httpContextAccessor?.HttpContext?.Session.GetString("current_farm_id"); *@
     var currentNMPTFarmId = ViewBag.NMPTFarmId;
     var currentNMPTFarmName = ViewBag.NMPTFarmName;
     var currentManureEstimateFarmName = ViewBag.MannerFarmName;
