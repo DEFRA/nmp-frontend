@@ -115,7 +115,7 @@ namespace NMP.Portal.Controllers
         {
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
             {
-                //pooja
+                
                 ViewBag.NMPTFarmId = model?.EncryptedFarmId;
                 ViewBag.NMPTFarmName = model?.Name;
             }
@@ -1118,7 +1118,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(model.ID);
             }
 
-            //pooja
+            
             ViewBag.NMPTFarmId = model.EncryptedFarmId;
             ViewBag.NMPTFarmName = model?.Name;
             return View(model);
@@ -1154,7 +1154,7 @@ namespace NMP.Portal.Controllers
                     }
                     if(!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
                     {
-                        //pooja
+                        
                         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
                         ViewBag.NMPTFarmName = model?.Name;
                     }
@@ -1332,7 +1332,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction(_farmListActionName);
                     }
 
-                    //pooja
+                    
                     ViewBag.NMPTFarmId = id;
                     ViewBag.NMPTFarmName = farm?.Name;
 
@@ -1399,7 +1399,7 @@ namespace NMP.Portal.Controllers
                     farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                     farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                     farmData.ID = farm.ID;
-                    //pooja
+                    
                     ViewBag.NMPTFarmId = farmData?.EncryptedFarmId;
                     ViewBag.NMPTFarmName = farm?.Name;
                     farmData.Name = farm.Name;

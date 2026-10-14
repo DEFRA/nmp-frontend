@@ -67,7 +67,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     private void BindNMPTFarmIdAndNameForNavigation(FieldViewModel? model)
     {
-        //pooja
+        
         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
         ViewBag.NMPTFarmName = model?.FarmName;
 
@@ -2397,7 +2397,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (farm != null)
             {
                 model.FarmName = farm.Name;
-                //pooja
+                
                 ViewBag.NMPTFarmId = id;
                 ViewBag.NMPTFarmName = model?.FarmName;
             }

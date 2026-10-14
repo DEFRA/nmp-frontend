@@ -56,6 +56,13 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private const string _nutrientValuesError = "NutrientValuesError";
     private const string _twoParamStringFormat = "{0} {1}";
 
+    private void BindNMPTFarmIdAndNameForNavigation(FertiliserManureViewModel? model)
+    {
+        
+        ViewBag.NMPTFarmId = model?.EncryptedFarmId;
+        ViewBag.NMPTFarmName = model?.FarmName;
+
+    }
     private FertiliserManureViewModel? GetFertiliserManureFromSession()
     {
         if (HttpContext.Session.Exists(_fertiliserManureSessionKey))
@@ -224,7 +231,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     return RedirectForFieldGroupGet(model);
                 }
             }
-
+            BindNMPTFarmIdAndNameForNavigation(model);
             (_, _, error) = await BindFieldGroupList(model, error);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
@@ -270,6 +277,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 TempData[_fieldGroupErrorTempDataKey] = error.Message;
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View("Views/FertiliserManure/FieldGroup.cshtml", model);
@@ -454,6 +462,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 return value;
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             model = RemoveFieldsFromDoubleCropList(model);
             var result = ProcessFertiliserManureModel(model);
@@ -505,6 +514,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }
 
                 ValidateFieldsProperty(model);
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -1053,6 +1063,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 }).ToList();
                 ViewBag.InOrganicManureDurationsList = SelectListItem;
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             await SetClosedPeriodAndNVZAsync(model);
 
         }
@@ -1127,6 +1138,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             {
                 ModelState.AddModelError("Date", string.Format(Resource.MsgManureApplicationMinDate, model.HarvestYear.Value, minDate.Date.ToString("dd MMMM yyyy")));
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 await SetClosedPeriodAndNVZAsync(model);
@@ -1184,6 +1196,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         try
         {
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (model.FieldList != null && model.FieldList.Count == 1)
             {
                 Error? error = null;
@@ -1227,6 +1240,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             ValidateNutrientValues(model);
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 (bool isSuccess, IActionResult? action) = await ValidateNutrientValuesProperties(model, error);
@@ -1721,6 +1735,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             PersistModel(q, r, s, model);
 
             ViewBag.IsDataChange = CheckIfDataChanged(model);
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             return View(model);
         }
@@ -1747,6 +1762,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
             await ValidatePropertiesForCheckAnswer(model, cropPlans);
             await BindViewBegForCheckAnswerPost(model);
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 model.IsCheckAnswer = false;
@@ -2736,6 +2752,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     _logger.LogError("Fertiliser Manure Controller : Session not found in RemoveFertiliser() action");
                     return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
                 await BindViewBegForField(model);
             }
             else
@@ -2771,6 +2788,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             ModelState.AddModelError("IsDeleteFertliser", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             await BindViewBegForField(model);
@@ -2876,6 +2894,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 _logger.LogError("Fertiliser Manure Controller : Session not found in Cancel() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
         }
         catch (Exception ex)
         {
@@ -2896,6 +2915,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             return View("Cancel", model);
@@ -3112,6 +3132,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             _logger.LogError("Fertiliser Manure Controller : Session not found in Defoliation() action");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         try
         {
             if (_fertiliserManureLogic.IsComingFirstTimeForDefoliationGet(model, q))
@@ -3161,6 +3182,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         try
         {
             ValidateDefoliationSelection(model);
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 await BindViewBegForDefoliationList(model);
@@ -3535,6 +3557,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             _logger.LogError("Fertiliser Manure Controller : Session not found in BackActionForDefoliation() action");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
 
         if (model.IsCheckAnswer && (!model.IsAnyChangeInSameDefoliationFlag) && (!model.IsAnyChangeInField))
         {
@@ -3665,6 +3688,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             _logger.LogError("Fertiliser Manure Controller : Session not found in IsSameDefoliationForAll() action");
             return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (model.IsAnyChangeInSameDefoliationFlag)
         {
             model.IsAnyChangeInSameDefoliationFlag = false;
@@ -3698,6 +3722,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         {
             ModelState.AddModelError(_isSameDefoliationForAllActionName, Resource.MsgSelectAnOptionBeforeContinuing);
         }
+        BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
         {
             return View(model);
@@ -3889,6 +3914,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 _logger.LogError("Fertiliser Manure Controller : Session not found in DoubleCrop() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             (_, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);
             List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchAllCropTypes();
             if (_fertiliserManureLogic.IsInitialLoadAfterFieldChange(model, q))
@@ -3946,6 +3972,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         try
         {
             List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchAllCropTypes();
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
                 return await HandleInvalidModel(model, cropTypeList);
             (_, List<Field> fieldList) = await _fieldLogic.FetchFieldByFarmId(model.FarmId.Value, Resource.lblTrue);

@@ -36,7 +36,13 @@ namespace NMP.Portal.Controllers
         private const string _tempDataErrorOnCheckAnswer = "ErrorOnCheckAnswer";
         private const string _manageStorageCapacity = "ManageStorageCapacity";
         private const string _removeStorageCapacity = "RemoveStorageCapacity";
+        private void BindNMPTFarmIdAndNameForNavigation(StorageCapacityViewModel? model)
+        {
+            
+            ViewBag.NMPTFarmId = model?.EncryptedFarmID;
+            ViewBag.NMPTFarmName = model?.FarmName;
 
+        }
         [HttpGet]
         public async Task<IActionResult> ManageStorageCapacity(string y, string q, string? r, string? s, string? isPlan, string? t, string? u)
         {
@@ -63,6 +69,7 @@ namespace NMP.Portal.Controllers
                 await _storageCapacityLogic.FetchStoreCapacityByFarmId(farmId);
 
             HandleSuccessMessages(r, s, model, storeCapacityList);
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (string.IsNullOrWhiteSpace(storeError.Message) && storeCapacityList.Any())
                 await PopulateStorageLists(storeCapacityList);
@@ -120,6 +127,7 @@ namespace NMP.Portal.Controllers
                     }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
             }
             catch (Exception ex)
             {
@@ -146,6 +154,7 @@ namespace NMP.Portal.Controllers
 
                 await CheckStoreCapacityAsync(model);
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 SaveSessionModel(model);
                 return View(model);
             }
@@ -166,6 +175,7 @@ namespace NMP.Portal.Controllers
             {
                 ValidateMaterialState(model);
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     await LoadMaterialStatesAsync();
@@ -209,6 +219,7 @@ namespace NMP.Portal.Controllers
                 await PopulateFarmAndStoreCapacityAsync(model, f, isPlan, x, w);
                 await PopulateMaterialStateAsync(model, q);
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 SaveSessionModel(model);
                 return View(model);
             }
@@ -244,6 +255,7 @@ namespace NMP.Portal.Controllers
                     }
                 }
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -277,6 +289,7 @@ namespace NMP.Portal.Controllers
                     return RedirectToFarmList();
                 }
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 await BindViewBegForStorageTypes(model);
             }
             catch (Exception ex)
@@ -301,6 +314,7 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("StorageTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     await BindViewBegForStorageTypes(model);
@@ -417,6 +431,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToFarmList();
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
             }
             catch (Exception ex)
             {
@@ -456,6 +471,8 @@ namespace NMP.Portal.Controllers
                     BindModelStateErrorForCircumferenceAndDiameter(model);
                     BindModelStateErrorForDepth();
                 }
+
+                BindNMPTFarmIdAndNameForNavigation(model);
 
                 if (!ModelState.IsValid)
                 {
@@ -833,6 +850,7 @@ namespace NMP.Portal.Controllers
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 }
 
+                BindNMPTFarmIdAndNameForNavigation(model);
             }
             catch (Exception ex)
             {
@@ -851,6 +869,7 @@ namespace NMP.Portal.Controllers
             {
                 ValidateWeightCapacity(model);
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -936,6 +955,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToFarmList();
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
             }
             catch (Exception ex)
             {
@@ -953,6 +973,7 @@ namespace NMP.Portal.Controllers
             try
             {
                 ValidateStorageBagcapacity(model);
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -1025,6 +1046,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToFarmList();
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
                 (List<BankSlopeAnglesResponse> bankSlopeAngles, Error error) = await _storageCapacityLogic.FetchBankSlopeAngles();
                 if (error == null || string.IsNullOrWhiteSpace(error.Message))
                 {
@@ -1060,6 +1082,7 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError("BankSlopeAngleId", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     (List<BankSlopeAnglesResponse> bankSlopeAngles, error) = await _storageCapacityLogic.FetchBankSlopeAngles();
@@ -1275,6 +1298,7 @@ namespace NMP.Portal.Controllers
                 }
                 ViewBag.IsDataChange = isDataChanged;
 
+                BindNMPTFarmIdAndNameForNavigation(model);
             }
             catch (Exception ex)
             {
@@ -1295,6 +1319,7 @@ namespace NMP.Portal.Controllers
 
                 ValidationForCheckAnswer(model);
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -1652,8 +1677,10 @@ namespace NMP.Portal.Controllers
                     return View(model);
 
                 model.Farm = farm;
+                model.FarmName = farm?.Name;
                 model.EncryptedFarmID = q;
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 PopulateStoreCapacitiesByMaterialState(storeCapacities);
 
                 return View(model);
@@ -1697,9 +1724,11 @@ namespace NMP.Portal.Controllers
                     List<int> fixedYearList = GetReportYearsList();
                     (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
-                    {
+                    {                        
                         ViewBag.FarmName = farm.Name;
                     }
+                    ViewBag.NMPTFarmId = q;
+                    ViewBag.NMPTFarmName = farm.Name;
                     await BindYearListInViewBegForStorageCapacityManagement(decryptedFarmId, fixedYearList, error);
                 }
                 catch (Exception ex)
@@ -1830,7 +1859,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToFarmList();
                 }
-
+                BindNMPTFarmIdAndNameForNavigation(model);
             }
             catch (Exception ex)
             {
@@ -1850,6 +1879,7 @@ namespace NMP.Portal.Controllers
             {
                 ModelState.AddModelError("IsCancel", Resource.MsgSelectAnOptionBeforeContinuing);
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View("Cancel", model);
@@ -1905,6 +1935,7 @@ namespace NMP.Portal.Controllers
                 await PopulateFarmForCopyAsync(model, q, isPlan, v);
                 SaveSessionModel(model);
 
+                BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
             }
             catch (Exception ex)
@@ -1924,6 +1955,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("IsCopyExistingManureStorage", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -1969,6 +2001,7 @@ namespace NMP.Portal.Controllers
 
             try
             {
+                BindNMPTFarmIdAndNameForNavigation(model);
                 await BindYearListForCopyExistingStorage(model);
             }
             catch (Exception ex)
@@ -1994,6 +2027,7 @@ namespace NMP.Portal.Controllers
                 {
                     ModelState.AddModelError("YearToCopyFrom", Resource.MsgSelectAnOptionBeforeContinuing);
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
                 List<StoreCapacityResponse> storageCapacityList = await BindYearListForCopyExistingStorage(model);
                 if (!ModelState.IsValid)
                 {
@@ -2072,6 +2106,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToFarmList();
                 }
+                BindNMPTFarmIdAndNameForNavigation(model);
             }
             catch (Exception ex)
             {
@@ -2089,6 +2124,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("StorageCapacity Controller : RemoveStorageCapacity() post action called");
             ValidateRemoveStorageCapacity(model);
 
+            BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 return View(_removeStorageCapacity, model);

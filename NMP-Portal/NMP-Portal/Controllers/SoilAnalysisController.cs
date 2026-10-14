@@ -43,7 +43,7 @@ namespace NMP.Portal.Controllers
         private const string _phosphorusKey = "Phosphorus";
         private void BindNMPTFarmIdAndNameForNavigation(SoilAnalysisViewModel? model)
         {
-            //pooja
+            
             ViewBag.NMPTFarmId = model?.EncryptedFarmId;
             ViewBag.NMPTFarmName = model?.FarmName;
 
@@ -1343,7 +1343,7 @@ namespace NMP.Portal.Controllers
         private async Task<IActionResult> ReturnViewWithMethods(SoilAnalysisViewModel model)
         {
             await FetchMethologies(model);
-            return View(model);
+            return View("SoilAnalysesMethod",model);
         }
         [HttpGet]
         public async Task<IActionResult> SoilAnalysesMethod()
@@ -1375,7 +1375,7 @@ namespace NMP.Portal.Controllers
             BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
-                await ReturnViewWithMethods(model);
+              return  await ReturnViewWithMethods(model);
             }
             SoilAnalysisViewModel? soilAnalysisViewModel = GetSoilAnalysisFromSession();
             if (soilAnalysisViewModel != null && soilAnalysisViewModel.PhosphorusMethodologyID == model.PhosphorusMethodologyID)
