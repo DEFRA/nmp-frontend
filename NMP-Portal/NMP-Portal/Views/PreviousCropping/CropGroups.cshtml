@@ -3,7 +3,6 @@
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.HarvestYear)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
-    int grassGroupId = (int)NMP.Commons.Enums.CropGroup.Grass;
 
     var backAction = "";
     if (Model.HasGrassInLastThreeYear != null)

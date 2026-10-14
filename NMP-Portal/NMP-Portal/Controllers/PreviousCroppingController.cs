@@ -436,7 +436,6 @@ namespace NMP.Portal.Controllers
                 return View(_previousGrassManagement, model);
             }
 
-            bool isCurrentCropGrass = model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass;
             var currentInfo = grassInPrevOrArableInNextYearList[0];
             if (currentInfo.IsArableInNextYear == true)
             {
