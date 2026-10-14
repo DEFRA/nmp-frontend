@@ -1974,8 +1974,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 (FarmResponse? farm, error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
                 if (farm != null)
                 {
-                    model.Country = farm?.CountryID;
-                    model.FarmName = farm?.Name;
+                    model.Country = farm.CountryID;
+                    model.FarmName = farm.Name;
                 }
             }
             BindNMPTFarmIdAndNameForNavigation(model);

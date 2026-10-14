@@ -1726,9 +1726,10 @@ namespace NMP.Portal.Controllers
                     if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
                     {                        
                         ViewBag.FarmName = farm.Name;
+                        ViewBag.NMPTFarmId = q;
+                        ViewBag.NMPTFarmName = farm.Name;
                     }
-                    ViewBag.NMPTFarmId = q;
-                    ViewBag.NMPTFarmName = farm.Name;
+               
                     await BindYearListInViewBegForStorageCapacityManagement(decryptedFarmId, fixedYearList, error);
                 }
                 catch (Exception ex)

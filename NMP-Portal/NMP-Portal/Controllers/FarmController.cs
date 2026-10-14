@@ -113,11 +113,11 @@ namespace NMP.Portal.Controllers
         }
         private void BindNMPTFarmIdAndNameForNavigation(FarmViewModel? model)
         {
-            if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+            if (model != null && !string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
             {
-                
-                ViewBag.NMPTFarmId = model?.EncryptedFarmId;
-                ViewBag.NMPTFarmName = model?.Name;
+
+                ViewBag.NMPTFarmId = model.EncryptedFarmId;
+                ViewBag.NMPTFarmName = model.Name;
             }
         }
 
@@ -133,7 +133,7 @@ namespace NMP.Portal.Controllers
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
         }
-     
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Name(FarmViewModel farm)
@@ -210,7 +210,7 @@ namespace NMP.Portal.Controllers
                 {
                     farm.Country = Enum.GetName(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID);
                 }
-                
+
                 SetFarmToSession(farm);
 
                 if (farm.IsCheckAnswer)
@@ -455,7 +455,7 @@ namespace NMP.Portal.Controllers
 
                 ApplySelectedAddress(farm, addresses);
                 farm.IsManualAddress = false;
-                                
+
                 SetFarmToSession(farm);
 
                 return (farm.IsPostCodeChanged || !farm.IsCheckAnswer)
@@ -569,7 +569,7 @@ namespace NMP.Portal.Controllers
 
                 farm.FullAddress = string.Empty;
                 farm.IsManualAddress = true;
-                                
+
                 SetFarmToSession(farm);
 
                 return RedirectToAction("ClimatePostCode");
@@ -815,7 +815,7 @@ namespace NMP.Portal.Controllers
             if (!ModelState.IsValid)
             {
                 return View(_rainfallActionName, farm);
-            }            
+            }
 
             SetFarmToSession(farm);
             if (farm.IsCheckAnswer)
@@ -922,7 +922,7 @@ namespace NMP.Portal.Controllers
                 ModelState.AddModelError("NVZFields", Resource.MsgSelectAnOptionBeforeContinuing);
             }
 
-            BindNMPTFarmIdAndNameForNavigation(farm);      
+            BindNMPTFarmIdAndNameForNavigation(farm);
             if (!ModelState.IsValid)
             {
                 return View("NVZ", farm);
@@ -1118,7 +1118,7 @@ namespace NMP.Portal.Controllers
                 ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(model.ID);
             }
 
-            
+
             ViewBag.NMPTFarmId = model.EncryptedFarmId;
             ViewBag.NMPTFarmName = model?.Name;
             return View(model);
@@ -1152,9 +1152,9 @@ namespace NMP.Portal.Controllers
                     {
                         ViewBag.SelectedNVZs = nvzs.Where(n => model.NitrateVulnerableZoneList != null && model.NitrateVulnerableZoneList.Contains(n.NvzId.ToString())).Select(s => s.NvzName).ToList();
                     }
-                    if(!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
+                    if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
                     {
-                        
+
                         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
                         ViewBag.NMPTFarmName = model?.Name;
                     }
@@ -1332,7 +1332,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction(_farmListActionName);
                     }
 
-                    
+
                     ViewBag.NMPTFarmId = id;
                     ViewBag.NMPTFarmName = farm?.Name;
 
@@ -1399,9 +1399,9 @@ namespace NMP.Portal.Controllers
                     farmData.FullAddress = string.Format("{0}, {1} {2}, {3} {4}", farm.Address1, farm.Address2 != null ? farm.Address2 + "," : string.Empty, farm.Address3, farm.Address4, farm.Postcode);
                     farmData.EncryptedFarmId = _dataProtector.Protect(farm.ID.ToString());
                     farmData.ID = farm.ID;
-                    
-                    ViewBag.NMPTFarmId = farmData?.EncryptedFarmId;
-                    ViewBag.NMPTFarmName = farm?.Name;
+
+                    ViewBag.NMPTFarmId = farmData.EncryptedFarmId;
+                    ViewBag.NMPTFarmName = farm.Name;
                     farmData.Name = farm.Name;
                     farmData.Address1 = farm.Address1;
                     farmData.Address2 = farm.Address2;

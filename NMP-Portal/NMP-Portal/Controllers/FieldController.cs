@@ -2399,7 +2399,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.FarmName = farm.Name;
                 
                 ViewBag.NMPTFarmId = id;
-                ViewBag.NMPTFarmName = model?.FarmName;
+                ViewBag.NMPTFarmName = farm.Name;
             }
             if (string.IsNullOrWhiteSpace(isDeleted) && name != null)
             {
