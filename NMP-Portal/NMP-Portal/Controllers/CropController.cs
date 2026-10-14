@@ -4231,19 +4231,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task BindPreviousCropping(string? s, RecommendationViewModel model, Error? error, int decryptedFieldId, int decryptedHarvestYear, string firstCropName)
     {
-        int count = 0;
-        List<int> yearsToCheck = new List<int>();
         bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
-        if (isScotland)
-        {
-            yearsToCheck= new List<int> { decryptedHarvestYear - 1};
-        }
-        else
-        {
-            yearsToCheck = new List<int> { decryptedHarvestYear - 1, decryptedHarvestYear - 2, decryptedHarvestYear - 3 };
-        }
+        List<int> yearsToCheck = GetYearsToCheck(decryptedHarvestYear, isScotland);
+        int previousYearCountToCheck = isScotland ? 1 : 3;
 
-
+        int count = 0;
         List<int> missingYears = new List<int>();
         List<Crop> planList = await _cropLogic.FetchCropsByFieldId(decryptedFieldId);
         if (planList.Count > 0)
@@ -4251,42 +4243,52 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             count = planList.Count(x => yearsToCheck.Contains(x.Year));
             missingYears = yearsToCheck.Where(year => !planList.Any(x => x.Year == year)).ToList();
         }
-        int previousYearCountToCheck = isScotland ? 1 : 3;
-        
-        if (count < previousYearCountToCheck && missingYears.Count > 0)
+
+        if (count >= previousYearCountToCheck || missingYears.Count == 0)
         {
-            (List<PreviousCroppingData> previousCropping, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, null);
-            if (previousCropping != null)
-            {
-                if (previousCropping.Count > 0)
-                {
-                    previousCropping = previousCropping.Where(x => missingYears.Contains(x.HarvestYear.Value)).ToList();
-                }
-                if (missingYears.Count != previousCropping.Count)
-                {
-                    if(!isScotland)
-                    {
-                        ViewBag.PreviousYear = s;
-                        ViewBag.IsThereAnyPreviousCropping = false;
-                        TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
-                        TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, decryptedHarvestYear, model.FieldName);
-                        TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, model.FieldName);
-                    }
-                    else
-                    {
-                        ViewBag.PreviousYear = s;
-                        ViewBag.IsThereAnyPreviousCropping = false;
-                        TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
-                        TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblToGetRecommendationsForPreviousYear, firstCropName, decryptedHarvestYear, model.FieldName);
-                        TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddLastYearHistoryToCropDetailsFor, model.FieldName);
-                    }
-
-
-                }
-            }
+            return;
         }
 
+        (List<PreviousCroppingData> previousCropping, error) = await _previousCroppingLogic.FetchDataByFieldId(decryptedFieldId, null);
+        if (previousCropping == null)
+        {
+            return;
+        }
 
+        if (previousCropping.Count > 0)
+        {
+            previousCropping = previousCropping.Where(x => missingYears.Contains(x.HarvestYear.Value)).ToList();
+        }
+
+        if (missingYears.Count != previousCropping.Count)
+        {
+            SetPreviousCroppingMessages(s, model, firstCropName, decryptedHarvestYear, isScotland);
+        }
+    }
+
+    private static List<int> GetYearsToCheck(int harvestYear, bool isScotland)
+    {
+        return isScotland
+            ? new List<int> { harvestYear - 1 }
+            : new List<int> { harvestYear - 1, harvestYear - 2, harvestYear - 3 };
+    }
+
+    private void SetPreviousCroppingMessages(string? s, RecommendationViewModel model, string firstCropName, int harvestYear, bool isScotland)
+    {
+        ViewBag.PreviousYear = s;
+        ViewBag.IsThereAnyPreviousCropping = false;
+        TempData["PreviousCroppingContentOne"] = Resource.lblRecommendationNotAvailable;
+
+        if (isScotland)
+        {
+            TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblToGetRecommendationsForPreviousYear, firstCropName, harvestYear, model.FieldName);
+            TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddLastYearHistoryToCropDetailsFor, model.FieldName);
+        }
+        else
+        {
+            TempData["PreviousCroppingContentSecond"] = string.Format(Resource.lblPreviousCroppingContentOnRecommendation, firstCropName, harvestYear, model.FieldName);
+            TempData["PreviousCroppingContentThird"] = string.Format(Resource.lblAddYearCropDetailsForFieldName, model.FieldName);
+        }
     }
 
     private void BindSuccessMsgForRecommendation(string? sns, string? t, string? u)
