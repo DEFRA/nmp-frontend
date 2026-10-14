@@ -1,4 +1,5 @@
 ﻿@using NMP.Commons.Resources
+@using NMP.Commons.ServiceResponses;
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblAddYearCropHistoryToFieldName, Model.HarvestYear, Model.FieldName)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
@@ -195,6 +196,29 @@
                                     <govuk-summary-list-row-action asp-action="CropInfoOne" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.CropInfo1 == null ? Resource.lblNotSet : ViewBag.CropInfo1Name)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                                 
+                            </govuk-summary-list-row>
+                        }
+                        @if (Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                        {
+                            var previousGrassManagementList = (List<PreviousGrassResponse>)ViewBag.PreviousGrassManagementList;
+                            var previousGrassName = Model.PreviousGrassID.HasValue
+                            ? previousGrassManagementList
+                            .Where(x => x.PreviousGrassId == Model.PreviousGrassID.Value)
+                            .Select(x => x.PreviousGrassName)
+                            .FirstOrDefault()
+                            : Resource.lblNotSet;
+
+                            <govuk-summary-list-row class=@(Model.PreviousGrassID == null ?"govuk-error-message":"")>
+                                <govuk-summary-list-row-key>
+                                    @Resource.lblHowWasTheGrassManaged
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @(Model.PreviousGrassID == null ? Resource.lblNotSet : previousGrassName)
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="PreviousGrassManagement" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.PreviousGrassID == null ? Resource.lblNotSet : previousGrassName)</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+
                             </govuk-summary-list-row>
                         }
                         

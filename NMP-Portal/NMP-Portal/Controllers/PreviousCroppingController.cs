@@ -33,6 +33,7 @@ namespace NMP.Portal.Controllers
         private const string _cropGroupsActionName = "CropGroups";
         private const string _sasGreaterThan30PercentCloverActionName = "HasGreaterThan30PercentClover";
         private const string _errorTempData = "Error";
+        private const string _previousGrassManagement = "PreviousGrassManagement";
         private PreviousCroppingViewModel? GetPreviousCroppingFromSession()
         {
             if (HttpContext.Session.Exists(_previousCroppingSessionKey))
@@ -284,7 +285,7 @@ namespace NMP.Portal.Controllers
                 List<CropTypeResponse> cropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupID.Value, model.FarmRB209CountryID);
 
                 ViewBag.CropTypeList = cropTypeList;
-                if (cropTypeList.Count == 1 && cropTypeList[0].CropTypeId == (int)NMP.Commons.Enums.CropTypes.Other)
+                if (cropTypeList.Count == 1)
                 {
                     model.CropTypeID = cropTypeList[0].CropTypeId;
                     model.CropTypeName = cropTypeList[0].CropType;
@@ -293,6 +294,10 @@ namespace NMP.Portal.Controllers
                     if (model.IsCheckAnswer)
                     {
                         return RedirectToAction(_checkAnswerActionName);
+                    }
+                    if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
+                    {
+                        return RedirectToAction(_previousGrassManagement);
                     }
                 }
 
@@ -396,8 +401,83 @@ namespace NMP.Portal.Controllers
                 TempData["CropInfoOneError"] = ex.Message;
                 return RedirectToAction("CropInfo1");
             }
-
         }
+
+        [HttpGet]
+        public async Task<IActionResult> PreviousGrassManagement(string? q)
+        {
+            _logger.LogTrace($"Previous Croppping Controller : PreviousGrassManagement() action called");
+            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            if (model == null)
+            {
+                _logger.LogTrace("PreviousCropppingController: Session expired in PreviousGrassManagement() action.");
+                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+            }
+
+            try
+            {
+                await GetPreviousGrassManagementListAsync(model);
+
+            }
+            catch (Exception ex)
+            {
+                TempData["PreviousGrassManagementError"] = ex.Message;
+                return RedirectToAction("PreviousGrassManagement");
+            }
+            SetPreviousCroppingToSession(model);
+
+            List<int> fieldIds = new List<int>();
+            fieldIds.Add(model.FieldID);
+            (List<GrassInPrevOrArableInNextYearResponse>? grassInPrevOrArableInNextYearList, Error? error) =
+                await _cropLogic.CheckIsGrassInPrevOrArableInNextYearAsync(fieldIds, model.HarvestYear ?? 0);
+
+            if (!string.IsNullOrWhiteSpace(error?.Message) || grassInPrevOrArableInNextYearList == null)
+            {
+                return View(_previousGrassManagement, model);
+            }
+
+            bool isCurrentCropGrass = model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass;
+            var currentInfo = grassInPrevOrArableInNextYearList[0];
+            if (currentInfo.IsArableInNextYear == true)
+            {
+                return View(model);
+            }
+            return RedirectToAction(_checkAnswerActionName);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PreviousGrassManagement(PreviousCroppingViewModel model)
+        {
+            _logger.LogTrace("Previous Croppping Controller: PreviousGrassManagement() post action called.");
+
+            if (model.PreviousGrassID == null)
+            {
+                ModelState.AddModelError("PreviousGrassID", Resource.MsgSelectAnOptionBeforeContinuing);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await GetPreviousGrassManagementListAsync(model);
+                return View(model);
+            }
+            SetPreviousCroppingToSession(model);
+
+            return RedirectToAction(_checkAnswerActionName);
+        }
+        private async Task GetPreviousGrassManagementListAsync(PreviousCroppingViewModel model)
+        {
+            (List<PreviousGrassResponse>? previousGrassesList, _) =
+                await _previousCroppingLogic.FetchPreviousGrassList();
+
+            if (previousGrassesList != null)
+            {
+                ViewBag.PreviousGrassManagementList = previousGrassesList
+                    .Where(x => x.CountryId == model.FarmRB209CountryID.ToString() && x.PreviousGrassId != (int)NMP.Commons.Enums.PerviousGrassManagements.NotAGrassland && x.PreviousGrassId != (int)NMP.Commons.Enums.PerviousGrassManagements.NotGrassInPreviousHarvestYear)
+                    .ToList();
+            }
+        }
+
         private async Task BindCropInfoViewBag(PreviousCroppingViewModel model)
         {
             if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
@@ -450,7 +530,7 @@ namespace NMP.Portal.Controllers
         public IActionResult GrassLastThreeHarvestYear(PreviousCroppingViewModel model)
         {
             _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() post action called");
-        
+
             if (model.PreviousGrassYears == null)
             {
                 ModelState.AddModelError("PreviousGrassYears", Resource.lblSelectAtLeastOneYearBeforeContinuing);
@@ -732,6 +812,12 @@ namespace NMP.Portal.Controllers
                     ViewBag.CropGroupName = await _fieldLogic.FetchCropGroupById(model.CropGroupID.Value);
                 }
                 await BindCropInfoViewBag(model);
+
+                if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
+                {
+                    await GetPreviousGrassManagementListAsync(model);
+                }
+
                 SetPreviousCroppingToSession(model);
             }
             catch (Exception ex)
@@ -754,14 +840,39 @@ namespace NMP.Portal.Controllers
             {
                 await PopulatePreviousCroppingViewBagsAsync(model);
                 await BindCropInfoViewBag(model);
+                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
+                {
+                    await GetPreviousGrassManagementListAsync(model);
+                }
                 return View(model);
             }
+            List<PreviousCropping> previousCropping = new List<PreviousCropping>();
+            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (List<PreviousCroppingData> previousCropList, Error? error) = await _previousCroppingLogic.FetchDataByFieldId(model.FieldID, null);
 
-            (List<PreviousCroppingData> previousCropList, Error? error) = await _previousCroppingLogic.FetchDataByFieldId(model.FieldID, null);
-
-            List<PreviousCropping> previousCropping = (model.IsPreviousYearGrass == true && model.PreviousGrassYears != null)
-                ? BuildIsPreviousYearGrassTrueList(model, previousCropList, error)
-                : BuildIsPreviousYearGrassFalseList(model, previousCropList, error);
+                previousCropping = (model.IsPreviousYearGrass == true && model.PreviousGrassYears != null)
+                    ? BuildIsPreviousYearGrassTrueList(model, previousCropList, error)
+                    : BuildIsPreviousYearGrassFalseList(model, previousCropList, error);
+            }
+            if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                previousCropping.Add(new PreviousCropping
+                {
+                    ID = model.ID,
+                    FieldID = model.FieldID,
+                    CropGroupID = model.CropGroupID,
+                    CropTypeID = model.CropTypeID,
+                    HasGrassInLastThreeYear = model.HasGrassInLastThreeYear ?? false,
+                    HarvestYear = model.HarvestYear,
+                    LayDuration = model.LayDuration,
+                    GrassManagementOptionID = model.GrassManagementOptionID,
+                    HasGreaterThan30PercentClover = model.HasGreaterThan30PercentClover,
+                    SoilNitrogenSupplyItemID = model.SoilNitrogenSupplyItemID,
+                    CropInfo1 = model.CropInfo1,
+                    PreviousGrassID = model.PreviousGrassID
+                });
+            }
 
             return await SaveAndBuildResultAsync(model, previousCropping);
         }
@@ -895,7 +1006,7 @@ namespace NMP.Portal.Controllers
         {
             int? id = GetExistingIdForYear(previousCropList, error, year);
 
-            if (!previousGrassYears.Contains(year??0))
+            if (!previousGrassYears.Contains(year ?? 0))
             {
                 previousCropping.Add(new PreviousCropping
                 {
@@ -931,15 +1042,15 @@ namespace NMP.Portal.Controllers
                 CropInfo1=model.CropInfo1
             });
 
-            if (model.PreviousGrassYears != null)
-            {
-                BuildNonGrassWithPreviousGrassYears(previousCropping, model, previousCropList, error);
-            }
-            else
-            {
-                BuildNonGrassWithoutPreviousGrassYears(previousCropping, model, previousCropList, error);
-            }
-
+                if (model.PreviousGrassYears != null)
+                {
+                    BuildNonGrassWithPreviousGrassYears(previousCropping, model, previousCropList, error);
+                }
+                else
+                {
+                    BuildNonGrassWithoutPreviousGrassYears(previousCropping, model, previousCropList, error);
+                }
+            
             return previousCropping;
         }
 
@@ -986,7 +1097,7 @@ namespace NMP.Portal.Controllers
             List<PreviousCropping> previousCropping, PreviousCroppingViewModel model, List<PreviousCroppingData> previousCropList,
             Error? error, int? year, List<int> previousGrassYears)
         {
-            if (!previousGrassYears.Contains(year??0))
+            if (!previousGrassYears.Contains(year ?? 0))
             {
                 int? id = GetExistingIdForYear(previousCropList, error, year);
                 previousCropping.Add(new PreviousCropping
@@ -1091,6 +1202,10 @@ namespace NMP.Portal.Controllers
             if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
                 return RedirectToAction("CropInfoOne");
+            }
+            if (model.PreviousGrassID != null)
+            {
+                return RedirectToAction(_previousGrassManagement);
             }
             return RedirectToAction("CropTypes");
         }
