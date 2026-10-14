@@ -3,7 +3,6 @@
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
     ViewData["Title"] = $"{string.Format(Resource.lblWhatWasThePreviousCropGroup, Model.HarvestYear)} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
-    int grassGroupId = (int)NMP.Commons.Enums.CropGroup.Grass;
 
     var backAction = "";
     if (Model.HasGrassInLastThreeYear != null)
@@ -76,14 +75,7 @@
                     {
                         @foreach (var item in ViewBag.CropGroupList)
                         {
-                            @if (item.CropGroupId == grassGroupId)
-                            {
-                                <govuk-radios-item value="@item.CropGroupId" disabled="true">@item.CropGroupName</govuk-radios-item>
-                            }
-                            else
-                            {
-                                <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
-                            }
+                            <govuk-radios-item value="@item.CropGroupId">@item.CropGroupName</govuk-radios-item>
                         }
                     }
 

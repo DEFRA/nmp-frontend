@@ -47,6 +47,10 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropInfo1" />
     }
+    @if (currentStep != (int)PreviousCroppingWizardSteps.PreviousGrssManagement)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PreviousGrassID" />
+    }
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CropTypeName" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldID" />
