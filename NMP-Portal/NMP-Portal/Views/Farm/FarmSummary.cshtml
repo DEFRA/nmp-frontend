@@ -26,7 +26,7 @@
                         <div class="">
                             <h3 class="govuk-notification-banner__heading text-wrap-anywhere"> @string.Format(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? Resource.lblYouHaveUpdated : Resource.lblYouHaveAdded, Model.Name)</h3>
                             <p class="govuk-body"></p>
-                            <a class="govuk-notification-banner__link text-wrap-anywhere" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
+                            <a class="govuk-notification-banner__link text-wrap-anywhere" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionid="@Model.SessionId">@string.Format(Resource.lblAddFieldFor, Model.Name)</a>
                         </div>
                     }
                     else
@@ -55,17 +55,17 @@
             </div>
             <ul class="menu-list govuk-list">
                 <li>
-                    <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblUpdateFarmOrBusinessDetails : Resource.lblUpdateFarmDetails)</a>
+                    <a class="govuk-link" asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionid="@Model.SessionId">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblUpdateFarmOrBusinessDetails : Resource.lblUpdateFarmDetails)</a>
                 </li>
                 @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
                 {
                     <li>
-                        <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblAddOrUpdateFieldsOrSoilAnalysis</a>
+                        <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionid="@Model.SessionId">@Resource.lblAddOrUpdateFieldsOrSoilAnalysis</a>
                     </li>
                 }
                 else
                 {
-                    <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddAField</a>
+                    <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionid="@Model.SessionId">@Resource.lblAddAField</a>
                 }
             </ul>
             <div>
@@ -83,7 +83,7 @@
                     <li>
                         @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))
                         {
-                            <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
+                            <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionid="@Model.SessionId">
                                 @Resource.lblFarmSummaryContent3
                             </a>
                         }
@@ -91,7 +91,7 @@
                         {
                             <p class="govuk-body">
                                 @Resource.lblToStartCreatingPlanAndRecords
-                                <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblAddYourFields</a>
+                                <a class="govuk-link" asp-action="AddField" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionid="@Model.SessionId">@Resource.lblAddYourFields</a>
                             </p>
                         }
 
@@ -124,7 +124,7 @@
 
             <ul class="menu-list govuk-list govuk-list--spaced">
                 <li>
-                    <a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId">
+                        <a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-sessionid="@Model.SessionId">
                         @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
                                                 Resource.lblFarmSummaryContent6 : Resource.lblCreateAnNVZReport)
 
