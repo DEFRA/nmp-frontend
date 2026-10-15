@@ -86,6 +86,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _freshWeightYieldsDefault = "FreshWeightYieldsDefault";
     private const string _previousGrassManagement = "PreviousGrassManagement";
     private const string _isPermanentSward = "IsPermanentSward";
+    private const string _dryMatterYieldActionName = "DryMatterYield";
 
     private PlanViewModel? GetCropFromSession()
     {
@@ -1967,15 +1968,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.CropInfo2 = null;
                     model.CropInfo2Name = null;
                     SetCropToSession(model);
-                    if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                    IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
+                    if (redirectResult != null)
                     {
-                        //call api for this
-                        (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
-                        if (!flowControl)
-                        {
-                            return value;
-                        }
-
+                        return redirectResult;
                     }
                     return RedirectToAction(_checkAnswerActionName);
                 }
@@ -2079,15 +2075,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         ResetCropInfoTwo(model);
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
+        if (redirectResult != null)
         {
-            //call api for this
-            (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
-            if (!flowControl)
-            {
-                return value;
-            }
-
+            return redirectResult;
         }
 
         return RedirectToAction(_checkAnswerActionName);
@@ -2192,15 +2183,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             TempData["CropInfoTwoError"] = ex.Message;
             return RedirectToAction(_cropInfoTwoActionName);
         }
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
+        if (redirectResult != null)
         {
-            //call api for this
-            (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
-            if (!flowControl)
-            {
-                return value;
-            }
-
+            return redirectResult;
         }
         return RedirectToAction(_checkAnswerActionName);
     }
@@ -3414,72 +3400,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         return action;
     }
-    public async Task<IActionResult> BackGrassManagement()
-    {
-        string action = string.Empty;
-        PlanViewModel? model = GetCropFromSession();
-        if (model == null)
-        {
-            _logger.LogError("Crop Controller : Session not found in BackGrassManagement() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
-        }
-        if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
-        {
-            if (IsHighCloverSward(model))
-            {
-                if(model.PreviousGrassCurrentCounter==0)
-                {
-                    bool isDefaultFreshWeight = model.FreshWeightYieldsPerField[model.FreshWeightDefaultCounter - 1]
-                        .IsFreshWeightYieldsDefault.Value;
-
-                    action = isDefaultFreshWeight ? _freshWeightYieldsDefault : _freshWeightYieldsManual;
-                }
-                else
-                {
-                    action = _previousGrassManagement;
-                }
-                
-            }
-            else
-            {
-                if (model.PreviousGrassCurrentCounter == 0)
-                {
-                    action = IsDryMatterAction(model) ? "DryMatterYield" : _grassGrowthClassActionName;
-                }
-                else
-                {
-                    action = _previousGrassManagement;
-                }
-            }
-
-        }
-        else
-        {
-            bool isCereal = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals;
-            if (isCereal)
-            {
-                action = _cropInfoTwoActionName;
-            }
-            else
-            {
-                bool isUseStandardOrNoYield =
-                (model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields || model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield);
-
-                List<CropInfoOneResponse> cropInfoOneList = await _cropLogic.FetchCropInfoOneByCropTypeId(model.CropTypeID ?? 0, model.FarmRB209CountryID);
-
-                if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other || cropInfoOneList.Count == 1)
-                {
-                    action = isUseStandardOrNoYield ? _yieldQuestion : _yield;
-                }
-                else
-                {
-                    action = _cropInfoOne;
-                }
-
-            }
-        }
-        return RedirectToAction(action);
-    }
 
     private static string BindActionForBackCheckAnswerGrass(PlanViewModel model)
     {
@@ -3538,7 +3458,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         return IsDryMatterAction(model)
-            ? "DryMatterYield"
+            ? _dryMatterYieldActionName
             : _grassGrowthClassActionName;
     }
 
@@ -3547,7 +3467,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass)
         {
             return isGrazeSilageAndHay && IsDryMatterAction(model)
-                ? "DryMatterYield"
+                ? _dryMatterYieldActionName
                 : _grassGrowthClassActionName;
         }
 
@@ -6619,15 +6539,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.GrassClassCounter = 1;
             model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
             SetCropToSession(model);
-            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
+            if (redirectResult != null)
             {
-                //call api for this
-                (bool flowControl1, IActionResult value1) = await CheckPreviousGrassManagementRedirect(model);
-                if (!flowControl1)
-                {
-                    return value1;
-                }
-
+                return redirectResult;
             }
             return RedirectToAction(_checkAnswerActionName);
         }
@@ -6668,19 +6583,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.GrassClassDistinctCount == 1 && model.Crops.Count > 1)
         {
-            return RedirectToAction("DryMatterYield");
+            return RedirectToAction(_dryMatterYieldActionName);
         }
         if (model.GrassClassCounter == model.Crops.Count)
         {
-            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
+            if (redirectResult != null)
             {
-                //call api for this
-                (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
-                if (!flowControl)
-                {
-                    return value;
-                }
-
+                return redirectResult;
             }
             return RedirectToAction(_checkAnswerActionName);
         }
@@ -7031,19 +6941,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             SetCropToSession(model);
             return RedirectToAction(_checkAnswerActionName);
         }
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
+        if (redirectResult != null)
         {
-            //call api for this
-            (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
-            if (!flowControl)
-            {
-                return value;
-            }
-
+            return redirectResult;
         }
+
         return RedirectToAction(_checkAnswerActionName);
     }
-
+    
     private async Task<(bool flowControl, IActionResult? value)> RedirectForDryMatterIfDifferentFigure(PlanViewModel model, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses, bool isScotland)
     {
         for (int i = 0; i < model.Crops.Count; i++)
@@ -8036,16 +7942,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model.FreshWeightDefaultCounter == model.Crops.Count)
         {
             // All fields answered "Yes" (or finished) - move past this whole step.
-
-            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
+            if (redirectResult != null)
             {
-                //call api for this
-                (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
-                if (!flowControl)
-                {
-                    return value;
-                }
-
+                return redirectResult;
             }
             return RedirectToAction(_checkAnswerActionName);
         }
@@ -8164,15 +8064,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.FreshWeightDefaultCounter == model.Crops.Count)
         {
-            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
+            if (redirectResult != null)
             {
-                //call api for this
-                (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
-                if (!flowControl)
-                {
-                    return value;
-                }
-
+                return redirectResult;
             }
             return RedirectToAction(_checkAnswerActionName);
         }
@@ -8502,5 +8397,20 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return RedirectToAction(_swardType);
             }
         }
+    }
+    private async Task<IActionResult?> HandlePreviousGrassManagementRedirect(PlanViewModel model)
+    {
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            (bool flowControl, IActionResult value) =
+                await CheckPreviousGrassManagementRedirect(model);
+
+            if (!flowControl)
+            {
+                return value;
+            }
+        }
+
+        return null;
     }
 }
