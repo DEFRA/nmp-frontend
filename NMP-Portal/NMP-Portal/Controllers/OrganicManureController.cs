@@ -261,7 +261,7 @@ namespace NMP.Portal.Controllers
         {
             string fieldId = model.FieldList[0];
             // Crop plans
-             (var cropPlans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
+            (var cropPlans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
 
             model = await BindGrassPropertyForField(model, cropPlans);
 
@@ -417,6 +417,10 @@ namespace NMP.Portal.Controllers
                 {
                     model.CropOrder = 1;
                 }
+            }
+            if (model.FieldGroup != null && (model.FieldGroup.Equals(Resource.lblAll) || model.FieldGroup.Equals(Resource.lblSelectSpecificFields)))
+            {
+                model.CropOrder = 1;
             }
             return model;
         }
@@ -1008,7 +1012,9 @@ namespace NMP.Portal.Controllers
                     model.FieldGroup == Resource.lblSelectSpecificFields || model.FieldGroup == Resource.lblAll
                         ? null
                         : model.FieldGroup,
-                    1);
+                    model.FieldGroup == Resource.lblSelectSpecificFields || model.FieldGroup == Resource.lblAll
+                        ? model.CropOrder
+                        : null);
 
             if (error != null) return error;
 
@@ -10739,7 +10745,7 @@ managementPeriod.CropID.HasValue
 
             if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
             {
-                ReplaceError(state,Resource.MsgIfUserEnterDecimalValueInRainfall);
+                ReplaceError(state, Resource.MsgIfUserEnterDecimalValueInRainfall);
             }
         }
 
