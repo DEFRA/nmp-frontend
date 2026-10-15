@@ -7,6 +7,9 @@
 
 
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.CropWizardSteps.PreviousGrassManagement;
+
+    var encryptedCounter = Model.PreviousGrassEncryptedCounter;
+
     var backAction = "";
     if (Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsCropGroupChange) && (!Model.IsCurrentSwardChange))
     {
@@ -16,40 +19,69 @@
     {
         if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
-            if (Model.PreviousGrassCurrentCounter == 0)
+            if (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover)
             {
-                if (Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly ||
-                    Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || Model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly)
+                if (Model.PreviousGrassCurrentCounter == 0)
                 {
-                    backAction = "Defoliation";
+                    bool isDefaultFreshWeight = Model.FreshWeightYieldsPerField[Model.FreshWeightDefaultCounter - 1]
+                        .IsFreshWeightYieldsDefault.Value;
+
+                    backAction = isDefaultFreshWeight ? "FreshWeightYieldsDefault" : "FreshWeightYieldsManual";
+                    encryptedCounter = isDefaultFreshWeight ? Model.FreshWeightDefaultEncryptedCounter : Model.FreshWeightManualEncryptedCounter;
                 }
                 else
                 {
-                    backAction = "DefoliationSequence";
+                    backAction = "PreviousGrassManagement";
                 }
+
             }
             else
             {
-                backAction = "PreviousGrassManagement";
+                if (Model.PreviousGrassCurrentCounter == 0)
+                {
+                    backAction = (Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1) ? "DryMatterYield" : "GrassClass";
+                    encryptedCounter = (Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1) ? Model.DryMatterYieldEncryptedCounter : Model.GrassClassEncryptedCounter;
+
+                }
+                else
+                {
+                    backAction = "PreviousGrassManagement";
+                }
             }
+
         }
         else
         {
-            if (Model.PreviousGrassCurrentCounter == 0)
+            bool isCereal = Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals;
+            if (isCereal)
             {
-                backAction = Model.CropInfo2 != null ? "CropInfoTwo" : "CropInfoOne";
+                backAction = "CropInfoTwo";
             }
             else
             {
-                backAction = "PreviousGrassManagement";
+                bool isUseStandardOrNoYield =
+                (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields || Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield);
+
+
+                if (Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other || ViewBag.CropInfoOneList.Count == 1)
+                {
+                    backAction = isUseStandardOrNoYield ? "YieldQuestion" : "Yield";
+                }
+                else
+                {
+                    backAction = "CropInfoOne";
+                }
+
             }
         }
     }
 
+    
+
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Crop" asp-route-q="@Model.PreviousGrassEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Crop" asp-route-q="@encryptedCounter">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="PreviousGrassManagement" asp-controller="Crop" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
