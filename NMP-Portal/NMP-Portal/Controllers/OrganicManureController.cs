@@ -409,6 +409,10 @@ namespace NMP.Portal.Controllers
                     model.CropOrder = 1;
                 }
             }
+            if (model.FieldGroup != null && (model.FieldGroup.Equals(Resource.lblAll) || model.FieldGroup.Equals(Resource.lblSelectSpecificFields)))
+            {
+                model.CropOrder = 1;
+            }
             return model;
         }
         private async Task<List<SelectListItem>> BindFieldGroupList(OrganicManureViewModel model)
@@ -997,7 +1001,8 @@ namespace NMP.Portal.Controllers
                     model.FieldGroup == Resource.lblSelectSpecificFields || model.FieldGroup == Resource.lblAll
                         ? null
                         : model.FieldGroup,
-                    1);
+                    model.FieldGroup == Resource.lblSelectSpecificFields || model.FieldGroup == Resource.lblAll
+                    ? model.CropOrder: null);
 
             if (error != null) return error;
 
