@@ -6534,37 +6534,30 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return View(model);
         }
 
-        if (model.Crops.Count == 1 || model.GrassClassDistinctCount > 1 && (model.IsCheckAnswer && planViewModelBeforeUpdate.Crops[model.GrassClassCounter].Yield == model.Crops[model.GrassClassCounter].Yield && !model.IsAnyChangeInField && !model.IsCurrentSwardChange))
+        if (ShouldSkipToCheckAnswer(model, planViewModelBeforeUpdate))
         {
             model.GrassClassCounter = 1;
             model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
             SetCropToSession(model);
             IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
-            if (redirectResult != null)
-            {
-                return redirectResult;
-            }
-            return RedirectToAction(_checkAnswerActionName);
+            return redirectResult ?? RedirectToAction(_checkAnswerActionName);
         }
+
         if (model.Crops.Count > 1 && model.GrassClassDistinctCount == 1)
         {
-            if (model.IsCheckAnswer && planViewModelBeforeUpdate.GrassClassQuestion == model.GrassClassQuestion && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
+            if (IsGrassClassUnchanged(model, planViewModelBeforeUpdate))
             {
                 SetCropToSession(model);
                 return RedirectToAction(_checkAnswerActionName);
             }
-            else if (model.IsAnyChangeInField)
+
+            if (model.IsAnyChangeInField)
             {
-                model.Yield = null;
-                model.Crops.ForEach(x => x.Yield = null);
+                ResetYield(model);
             }
         }
 
-        foreach (var crop in model.Crops)
-        {
-            fieldIds.Add(crop.FieldID ?? 0);
-        }
-
+        fieldIds.AddRange(model.Crops.Select(crop => crop.FieldID ?? 0));
 
         (bool flowControl, IActionResult? value, List<int> classIds, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses) = await FetchGrassClasses(fieldIds, isScotland);
         if (!flowControl && value != null)
@@ -6572,11 +6565,38 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return value;
         }
 
-
         model = await BindPropertiesForGrassGrowthClass(model, grassGrowthClasses, grassSiteClasses, classIds, isScotland);
 
         SetCropToSession(model);
         return await RedirectForGrassGrowthClass(model);
+    }
+
+    private static bool ShouldSkipToCheckAnswer(PlanViewModel model, PlanViewModel planViewModelBeforeUpdate)
+    {
+        return model.Crops.Count == 1 ||
+               (model.GrassClassDistinctCount > 1 && IsYieldUnchangedInCheckAnswer(model, planViewModelBeforeUpdate));
+    }
+
+    private static bool IsYieldUnchangedInCheckAnswer(PlanViewModel model, PlanViewModel planViewModelBeforeUpdate)
+    {
+        return model.IsCheckAnswer
+            && planViewModelBeforeUpdate.Crops[model.GrassClassCounter].Yield == model.Crops[model.GrassClassCounter].Yield
+            && !model.IsAnyChangeInField
+            && !model.IsCurrentSwardChange;
+    }
+
+    private static bool IsGrassClassUnchanged(PlanViewModel model, PlanViewModel planViewModelBeforeUpdate)
+    {
+        return model.IsCheckAnswer
+            && planViewModelBeforeUpdate.GrassClassQuestion == model.GrassClassQuestion
+            && !model.IsAnyChangeInField
+            && !model.IsCurrentSwardChange;
+    }
+
+    private static void ResetYield(PlanViewModel model)
+    {
+        model.Yield = null;
+        model.Crops.ForEach(x => x.Yield = null);
     }
 
     private async Task<IActionResult> RedirectForGrassGrowthClass(PlanViewModel model)
@@ -6585,34 +6605,34 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             return RedirectToAction(_dryMatterYieldActionName);
         }
+
         if (model.GrassClassCounter == model.Crops.Count)
         {
             IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
-            if (redirectResult != null)
-            {
-                return redirectResult;
-            }
+            return redirectResult ?? RedirectToAction(_checkAnswerActionName);
+        }
+
+        return RedirectForPendingGrassClass(model);
+    }
+
+    private IActionResult RedirectForPendingGrassClass(PlanViewModel model)
+    {
+        if (model.IsCheckAnswer && model.GrassClassQuestion == null && !model.IsAnyChangeInField && model.GrassClassCounter == model.Crops.Count)
+        {
             return RedirectToAction(_checkAnswerActionName);
         }
-        else
+
+        if (model.IsCheckAnswer && !model.IsAnyChangeInField && model.GrassClassCounter < model.Crops.Count)
         {
-            if (model.IsCheckAnswer && model.GrassClassQuestion == null && !model.IsAnyChangeInField && model.GrassClassCounter == model.Crops.Count)
+            if (model.Crops[model.GrassClassCounter].Yield == null)
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return View(model);
             }
-            if (model.IsCheckAnswer && !model.IsAnyChangeInField && model.GrassClassCounter < model.Crops.Count)
-            {
-                if (model.Crops[model.GrassClassCounter].Yield == null)
-                {
-                    return View(model);
-                }
-                else
-                {
-                    return RedirectToAction(_checkAnswerActionName);
-                }
-            }
-            return View(model);
+
+            return RedirectToAction(_checkAnswerActionName);
         }
+
+        return View(model);
     }
 
 
@@ -6949,8 +6969,31 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         return RedirectToAction(_checkAnswerActionName);
     }
-    
+
     private async Task<(bool flowControl, IActionResult? value)> RedirectForDryMatterIfDifferentFigure(PlanViewModel model, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses, bool isScotland)
+    {
+        await MoveToNextDryMatterField(model, grassGrowthClasses, grassSiteClasses, isScotland);
+
+        model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
+        SetCropToSession(model);
+        if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange) && (!model.IsCurrentSwardChange))
+        {
+            SetCropToSession(model);
+            return (flowControl: false, value: RedirectToAction(_checkAnswerActionName));
+        }
+        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            //call api for this
+            (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
+            if (!flowControl)
+            {
+                return (flowControl: true, value: value);
+            }
+        }
+        return (flowControl: true, value: null);
+    }
+
+    private async Task MoveToNextDryMatterField(PlanViewModel model, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses, bool isScotland)
     {
         for (int i = 0; i < model.Crops.Count; i++)
         {
@@ -6969,31 +7012,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         await BindYieldRange(model, grassGrowthClasses![i + 1].GrassGrowthClassId);
                     }
-
                 }
 
                 break;
             }
         }
-
-        model.DryMatterYieldEncryptedCounter = _fieldDataProtector.Protect(model.DryMatterYieldCounter.ToString());
-        SetCropToSession(model);
-        if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange) && (!model.IsCurrentSwardChange))
-        {
-            SetCropToSession(model);
-            return (flowControl: false, value: RedirectToAction(_checkAnswerActionName));
-        }
-        if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-        {
-            //call api for this
-            (bool flowControl, IActionResult value) = await CheckPreviousGrassManagementRedirect(model);
-            if (!flowControl)
-            {
-                return (flowControl: true, value: value);
-            }
-
-        }
-        return (flowControl: true, value: null);
     }
 
     private async Task BindYieldRange(PlanViewModel model, int grassGrowthClassId)
