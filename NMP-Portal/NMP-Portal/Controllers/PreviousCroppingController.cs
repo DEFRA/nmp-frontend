@@ -437,6 +437,9 @@ namespace NMP.Portal.Controllers
             }
 
             var currentInfo = grassInPrevOrArableInNextYearList[0];
+            model.IsArableInNextYear = currentInfo.IsArableInNextYear;
+            SetPreviousCroppingToSession(model);
+
             if (currentInfo.IsArableInNextYear == true)
             {
                 return View(model);
@@ -1205,6 +1208,10 @@ namespace NMP.Portal.Controllers
             if (model.PreviousGrassID != null)
             {
                 return RedirectToAction(_previousGrassManagement);
+            }
+            if (model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
+            {
+                return RedirectToAction("CropGroups");
             }
             return RedirectToAction("CropTypes");
         }
