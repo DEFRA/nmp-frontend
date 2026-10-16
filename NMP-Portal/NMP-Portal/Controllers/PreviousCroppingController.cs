@@ -437,7 +437,9 @@ namespace NMP.Portal.Controllers
             }
 
             var currentInfo = grassInPrevOrArableInNextYearList[0];
-            ViewBag.IsArableInNextYear = currentInfo.IsArableInNextYear;
+            model.IsArableInNextYear = currentInfo.IsArableInNextYear;
+            SetPreviousCroppingToSession(model);
+
             if (currentInfo.IsArableInNextYear == true)
             {
                 return View(model);

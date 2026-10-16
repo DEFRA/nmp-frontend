@@ -204,7 +204,7 @@
                         }
                         @if (Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass 
                              && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland
-                                        && ViewBag.IsArableInNextYear == true)
+                                        && Model.IsArableInNextYear == true)
                         {
                             var previousGrassManagementList = (List<PreviousGrassResponse>)ViewBag.PreviousGrassManagementList;
                             var previousGrassName = Model.PreviousGrassID.HasValue
