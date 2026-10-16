@@ -1524,13 +1524,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         model.SowingDateEncryptedCounter = _fieldDataProtector.Protect(model.SowingDateCurrentCounter.ToString());
         SetCropToSession(model);
-
-        if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
-        {
-            SetCropToSession(model);
-            return (model, RedirectToAction(_checkAnswerActionName));
-        }
-
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
             if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
@@ -1539,6 +1532,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             return (model, RedirectToAction(_swardType));
         }
+        if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
+        {
+            SetCropToSession(model);
+            return (model, RedirectToAction(_checkAnswerActionName));
+        }
+        
         return (model, RedirectToAction(_yieldQuestion));
     }
     private async Task<PlanViewModel> ValidateSowingDatePost(PlanViewModel model)
@@ -6041,7 +6040,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
 
-        if (model.IsCheckAnswer && planViewModel.SwardTypeId == model.SwardTypeId && !model.IsAnyChangeInField)
+        if (model.IsCheckAnswer && planViewModel.SwardTypeId == model.SwardTypeId && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
         {
             return RedirectToAction(_checkAnswerActionName);
         }
@@ -6112,7 +6111,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
 
-            if (model.IsCheckAnswer && planViewModel.SwardManagementId == model.SwardManagementId && !model.IsAnyChangeInField)
+            if (model.IsCheckAnswer && planViewModel.SwardManagementId == model.SwardManagementId && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
@@ -6190,7 +6189,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
 
-            if (model.IsCheckAnswer && planViewModel.PotentialCut == model.PotentialCut && !model.IsAnyChangeInField)
+            if (model.IsCheckAnswer && planViewModel.PotentialCut == model.PotentialCut && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
@@ -6311,7 +6310,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
 
-            if (model.IsCheckAnswer && planViewModel.DefoliationSequenceId == model.DefoliationSequenceId && !model.IsAnyChangeInField)
+            if (model.IsCheckAnswer && planViewModel.DefoliationSequenceId == model.DefoliationSequenceId && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
             {
                 return RedirectToAction(_checkAnswerActionName);
             }

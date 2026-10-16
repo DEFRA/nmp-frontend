@@ -1044,7 +1044,7 @@
                     }
                     @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland && (Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.RedClover || Model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithHighClover))
                     {
-                        @for (int i=0; i< Model.FreshWeightYieldsPerField.Count; i++)
+                        @for (int i=0; i< Model.Crops.Count; i++)
                         {
                             string defaultValueText = Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault switch
                             {
