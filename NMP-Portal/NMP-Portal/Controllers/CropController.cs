@@ -103,7 +103,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return null;
     }
-
+    private PlanViewModel? GetCropFromSession(Guid? sessionId)
+    {
+        if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _cropDataSessionKey))
+        {
+            return HttpContext.Session.GetObjectFromJson<PlanViewModel>(sessionId + " " + _cropDataSessionKey);
+        }
+        return null;
+    }
     private void SetCropToSession(PlanViewModel plan)
     {
         HttpContext.Session.SetObjectAsJson(_cropDataSessionKey, plan);
