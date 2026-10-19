@@ -486,7 +486,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.SwardManagementId = null;
             model.PotentialCut = null;
             model.DefoliationSequenceId = null;
-            model.Crops.ForEach(x => x.PreviousGrass = null);
+            if (model?.Crops != null)
+            {
+                model.Crops.Where(x => x != null).ToList().ForEach(x => x.PreviousGrass = null);
+            }
             model.FreshWeightYieldsPerField = null;
             model.IsPermanentSward = null;
             SetCropToSession(model);
@@ -2419,61 +2422,64 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             int counter = 1;
             foreach (var crop in harvestYearPlanResponse)
             {
-                (List<ManagementPeriod> managementPeriodList, _) =
+                if(crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                {
+                    (List<ManagementPeriod> managementPeriodList, _) =
                     await _cropLogic.FetchManagementperiodByCropId(crop.CropID, false);
 
-                var fieldYield = new FreshWeightYieldForFieldViewModel
-                {
-                    FieldId = crop.FieldID,
-                    FieldName = crop.FieldName,
-                    IsFreshWeightYieldsDefault = crop.IsDefaultFreshWeightYield,
-                    FreshWeightYields = new List<FreshWeightYieldViewModel>()
-                };
-                model.IsPermanentSward = crop.IsPermanentSward;
-                (DefoliationSequenceResponse defoliationSequenceResponse, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
-
-                for (int i = 0; i < managementPeriodList.Count; i++)
-                {
-
-                    char sequence = defoliationSequenceResponse.DefoliationSequence[i];
-
-                    string defoliation = i switch
+                    var fieldYield = new FreshWeightYieldForFieldViewModel
                     {
-                        0 => "One",
-                        1 => "Two",
-                        2 => "Three",
-                        3 => "Four",
-                        4 => "Five",
-                        _ => (i + 1).ToString()
+                        FieldId = crop.FieldID,
+                        FieldName = crop.FieldName,
+                        IsFreshWeightYieldsDefault = crop.IsDefaultFreshWeightYield,
+                        FreshWeightYields = new List<FreshWeightYieldViewModel>()
                     };
+                    model.IsPermanentSward = crop.IsPermanentSward;
+                    (DefoliationSequenceResponse defoliationSequenceResponse, _) = await _cropLogic.FetchDefoliationSequencesById(crop.DefoliationSequenceID.Value);
 
-                    string cutOrGrazing = sequence switch
+                    for (int i = 0; i < managementPeriodList.Count; i++)
                     {
-                        'E' => "Establishment",
-                        'G' => "Grazing",
-                        'S' => "Silage",
-                        'H' => "Hay",
-                        _ => string.Empty
-                    };
 
-                    fieldYield.FreshWeightYields.Add(new FreshWeightYieldViewModel
-                    {
-                        Position = managementPeriodList[i].Defoliation,
-                        Yield = Convert.ToInt32(managementPeriodList[i].Yield),
-                        DefoliationName = defoliation,
-                        DefoliationSequenceName = cutOrGrazing
+                        char sequence = defoliationSequenceResponse.DefoliationSequence[i];
 
-                    });
+                        string defoliation = i switch
+                        {
+                            0 => "One",
+                            1 => "Two",
+                            2 => "Three",
+                            3 => "Four",
+                            4 => "Five",
+                            _ => (i + 1).ToString()
+                        };
+
+                        string cutOrGrazing = sequence switch
+                        {
+                            'E' => "Establishment",
+                            'G' => "Grazing",
+                            'S' => "Silage",
+                            'H' => "Hay",
+                            _ => string.Empty
+                        };
+
+                        fieldYield.FreshWeightYields.Add(new FreshWeightYieldViewModel
+                        {
+                            Position = managementPeriodList[i].Defoliation,
+                            Yield = Convert.ToInt32(managementPeriodList[i].Yield),
+                            DefoliationName = defoliation,
+                            DefoliationSequenceName = cutOrGrazing
+
+                        });
+                    }
+
+                    model.FreshWeightYieldsPerField ??= new List<FreshWeightYieldForFieldViewModel>();
+
+                    model.FreshWeightYieldsPerField.Add(fieldYield);
+                    model.FreshWeightDefaultCounter = counter;
+                    model.FreshWeightManualCounter = counter;
+                    model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
+                    model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
+                    counter++;
                 }
-
-                model.FreshWeightYieldsPerField ??= new List<FreshWeightYieldForFieldViewModel>();
-
-                model.FreshWeightYieldsPerField.Add(fieldYield);
-                model.FreshWeightDefaultCounter = counter;
-                model.FreshWeightManualCounter = counter;
-                model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
-                model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
-                counter++;
 
             }
 
