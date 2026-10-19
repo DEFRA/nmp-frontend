@@ -18,7 +18,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-        <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
 
     <form asp-action="FieldRemove" asp-controller="Field" method="post" autocomplete="off">
@@ -29,7 +29,7 @@
                 <p class="govuk-body">@Resource.MsgRemoveThisField</p>
                 @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
 
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.FieldRemove">
+                <govuk-radios class="govuk-radios--inline" for="@Model.FieldRemove">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend>
                             @Resource.lblAreYouSureYouWantToContinue
@@ -41,7 +41,7 @@
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-                <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link"><a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
 
             </div>
         </div>

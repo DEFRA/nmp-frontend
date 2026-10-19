@@ -22,8 +22,8 @@ namespace NMP.Portal.Security
                     farmContext.EncryptedFarmId = encryptedfarmId;
                     farmContext.FarmId = farm.ID;
                     farmContext.FarmName = farm.Name ?? "Unknown";
-                    context.Session.SetString("current_farm_name", farm.Name ?? "Unknown");
-                    context.Session.SetString("current_farm_id", encryptedfarmId);
+                    //context.Session.SetString("current_farm_name", farm.Name ?? "Unknown");
+                    //context.Session.SetString("current_farm_id", encryptedfarmId);
                 }
             }
             else

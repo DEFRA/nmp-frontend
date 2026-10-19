@@ -10,7 +10,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : @backAction)" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : @backAction)" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -27,7 +27,7 @@
                 <a target="_blank" href="https://www.royalmail.com/find-a-postcode">@Resource.lblClimateParagraphThird</a>
                 @Resource.lblClimateParagraphFourth
             </p>
-            <govuk-input input-class="govuk-input--width-5" asp-for="@Model.ClimateDataPostCode">
+            <govuk-input input-class="govuk-input--width-5" for="@Model.ClimateDataPostCode">
             </govuk-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
@@ -36,11 +36,11 @@
         <p class="govuk-body cancel-link">
             @if (!Model.IsCheckAnswer)
             {
-                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
             else
             {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
         </p>
     </div>

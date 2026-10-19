@@ -32,7 +32,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="ElevationField" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -46,7 +46,7 @@
                 </govuk-error-summary>
             }
 
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAbove300SeaLevel">
+            <govuk-radios class="govuk-radios--inline" for="@Model.IsAbove300SeaLevel">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblIsAbove300SeaLevel, Model.Name)
@@ -62,15 +62,15 @@
 
                 @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
                 {
-                    <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
+                    <a asp-action="UpdateField" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else if (Model.IsCheckAnswer)
                 {
-                    <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
+                    <a asp-action="CheckAnswer" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
 

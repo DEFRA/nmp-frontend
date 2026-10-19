@@ -6,7 +6,7 @@ public class FarmViewModel:Farm
     {
         SessionId = Guid.NewGuid();
     }
-    public Guid? SessionId { get; set; }
+    public Guid SessionId { get; set; }
     public string? Country { get; set; }
     public bool IsManualAddress { get; set; } = false;
     public bool IsCheckAnswer { get; set; } = false;

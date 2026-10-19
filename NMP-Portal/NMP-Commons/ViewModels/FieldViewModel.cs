@@ -14,7 +14,7 @@ public class FieldViewModel : Field
         PreviousCroppings = new PreviousCropping();
         PreviousCroppingsList = new List<PreviousCroppingData>();
     }
-    public string SessionId { get; set; } = string.Empty;
+    public string SessionId { get; set; } = Guid.NewGuid().ToString();
     public List<Field> Fields { get; set; }
     public List<ManagementPeriod> ManagementPeriods { get; set; }
     public bool IsSoilReleasingClay { get; set; } = false;

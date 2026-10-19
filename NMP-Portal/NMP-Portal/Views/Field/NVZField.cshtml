@@ -30,7 +30,7 @@
     @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsWithinNVZ">
+            <govuk-radios class="govuk-radios--inline" for="@Model.IsWithinNVZ">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblIsNVZField, Model.Name)
@@ -46,15 +46,15 @@
 
                 @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
                 {
-                    <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
+                    <a asp-action="UpdateField" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else if (Model.IsCheckAnswer)
                 {
-                    <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
+                    <a asp-action="CheckAnswer" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
 

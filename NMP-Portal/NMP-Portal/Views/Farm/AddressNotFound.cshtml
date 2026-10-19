@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent{
-    <govuk-back-link class="govuk-back-link back-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link class="govuk-back-link back-link" asp-action="PostCode" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -15,20 +15,20 @@
 
         <h1 class="govuk-heading-l">@string.Format(Resource.lblWeCouldNotFindAnyAddressesFor, Model.Postcode)</h1>
         <div class="govuk-body">
-            <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChangeThisPostcode</a>
+            <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChangeThisPostcode</a>
         </div>
         <div class="govuk-body">
-            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterTheAddressManually <span class="govuk-visually-hidden">@($"{Resource.lblEnterAddressManually}")</span></a>
+            @Resource.lblOr <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblEnterTheAddressManually <span class="govuk-visually-hidden">@($"{Resource.lblEnterAddressManually}")</span></a>
         </div>
         <br />
         <p class="govuk-body cancel-link">
              @if (!Model.IsCheckAnswer)
             {
-                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
             else
             {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
         </p>
     </div>

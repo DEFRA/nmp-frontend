@@ -47,7 +47,7 @@
         <p class="govuk-body cancel-link">
             <a asp-action="@cancelAction"
                asp-controller="Field"
-               asp-route-id="@cancelRouteId">
+               asp-route-id="@cancelRouteId" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblCancel
             </a>
         </p>

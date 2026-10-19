@@ -17,6 +17,7 @@ using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using Error = NMP.Commons.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -47,11 +48,11 @@ namespace NMP.Portal.Controllers
             return RedirectToAction(_farmListActionName);
         }
 
-        public async Task<IActionResult> FarmList(string? q)
+        public async Task<IActionResult> FarmList(string? q, Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : FarmList({0}) action called", q);
             RemoveAllNmptSession();
-
+            //RemoveFarmSession(sessionId);
             FarmsViewModel model = new FarmsViewModel();
             Error? error = null;
             try
@@ -104,10 +105,10 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-        public IActionResult CreateFarmCancel()
+        public IActionResult CreateFarmCancel(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : CreateFarmCancel() action called");
-            RemoveFarmSession(null);
+            RemoveFarmSession(sessionId);
             RemoveAddressesSession();
             return RedirectToAction(_farmListActionName);
         }
@@ -122,7 +123,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Name(string? sessionId)
+        public IActionResult Name(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : Name() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -152,11 +153,11 @@ namespace NMP.Portal.Controllers
             }
             SetFarmToSession(farm);
 
-            return farm.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName, new {sessionId=farm.SessionId}) : RedirectToAction("Country", new {sessionId=farm.SessionId});
+            return farm.IsCheckAnswer ? RedirectToAction(_checkAnswerActionName, new { sessionId = farm.SessionId }) : RedirectToAction("Country", new { sessionId = farm.SessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> Country(string? sessionId)
+        public async Task<IActionResult> Country(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : Country() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -215,7 +216,7 @@ namespace NMP.Portal.Controllers
 
                 if (farm.IsCheckAnswer)
                 {
-                    return RedirectToAction(_checkAnswerActionName, new {sessionId=farm.SessionId});
+                    return RedirectToAction(_checkAnswerActionName, new { sessionId = farm.SessionId });
                 }
             }
             catch (HttpRequestException hre)
@@ -229,14 +230,14 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError);
             }
 
-            return RedirectToAction("FarmingRules", new {sessionId=farm.SessionId});
+            return RedirectToAction("FarmingRules", new { sessionId = farm.SessionId });
         }
 
         [HttpGet]
-        public IActionResult FarmingRules()
+        public IActionResult FarmingRules(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : FarmingRules() action called");
-            FarmViewModel? model = GetFarmFromSession();
+            FarmViewModel? model = GetFarmFromSession(sessionId);
 
             if (model == null)
             {
@@ -267,7 +268,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult BusinessInformation(string? sessionId)
+        public IActionResult BusinessInformation(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : BusinessInformation() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -303,7 +304,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult PostCode(string? sessionId)
+        public IActionResult PostCode(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : PostCode() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -333,7 +334,7 @@ namespace NMP.Portal.Controllers
                     return View(farm);
                 }
 
-                var farmView = GetFarmFromSession(farm.SessionId.ToString());
+                var farmView = GetFarmFromSession(farm.SessionId);
                 bool isPostcodeChanged = farmView?.Postcode != farm.Postcode;
 
                 if (farm.IsCheckAnswer)
@@ -395,7 +396,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Address(string? sessionId)
+        public async Task<IActionResult> Address(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : Address() action called");
             try
@@ -516,7 +517,7 @@ namespace NMP.Portal.Controllers
             farm.Address4 = address.HistoricCounty;
         }
 
-        public IActionResult AddressNotFound(string? sessionId)
+        public IActionResult AddressNotFound(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : AddressNotFound() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -530,7 +531,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult ManualAddress(string? sessionId)
+        public IActionResult ManualAddress(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : ManualAddress() action called");
             FarmViewModel? model = null;
@@ -560,7 +561,7 @@ namespace NMP.Portal.Controllers
                     return View("~/Views/Farm/ManualAddress.cshtml", farm);
                 }
 
-                FarmViewModel? farmView = GetFarmFromSession();
+                FarmViewModel? farmView = GetFarmFromSession(farm.SessionId);
 
                 if (farmView != null && farmView.Postcode != farm.Postcode)
                 {
@@ -649,7 +650,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ClimatePostCode(string? sessionId)
+        public async Task<IActionResult> ClimatePostCode(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : ClimatePostCode() action called");
 
@@ -741,7 +742,7 @@ namespace NMP.Portal.Controllers
             if (!string.IsNullOrWhiteSpace(model.ClimateDataPostCode))
             {
                 FarmViewModel? farmView = null;
-                farmView = GetFarmFromSession();
+                farmView = GetFarmFromSession(model.SessionId);
                 bool ClimateDataPostCodeChange = false;
                 if (farmView != null && model.ClimateDataPostCode != farmView.ClimateDataPostCode)
                 {
@@ -763,7 +764,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Rainfall(string? sessionId)
+        public async Task<IActionResult> Rainfall(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : Rainfall() action called");
             try
@@ -825,7 +826,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction("NVZ", new { sessionId = farm.SessionId });
         }
         [HttpGet]
-        public IActionResult RainfallManual(string? sessionId)
+        public IActionResult RainfallManual(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : RainfallManual() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -890,7 +891,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> NVZ(string? sessionId)
+        public async Task<IActionResult> NVZ(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : NVZ() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -941,7 +942,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction(_elevationActionName, new { sessionId = farm.SessionId });
         }
         [HttpGet]
-        public async Task<IActionResult> NitrateVulnerableZones(string? sessionId)
+        public async Task<IActionResult> NitrateVulnerableZones(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : NitrateVulnerableZones() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -956,7 +957,7 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-        [HttpPost]  
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NitrateVulnerableZones(FarmViewModel farm)
         {
@@ -985,7 +986,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Elevation(string? sessionId)
+        public IActionResult Elevation(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : Elevation() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -1028,7 +1029,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Organic(string? sessionId)
+        public IActionResult Organic(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : Organic() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -1071,7 +1072,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer(string id, string? q, string? sessionId)
+        public async Task<IActionResult> CheckAnswer(string id, string? q, Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : CheckAnswer({Q}) action called", q);
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -1263,10 +1264,10 @@ namespace NMP.Portal.Controllers
                 farmResponse.EncryptedFarmId =
                     _dataProtector.Protect(farmResponse.ID.ToString());
             return RedirectToAction("FarmSummary",
-                new { id = farmResponse?.EncryptedFarmId, q = success, sessionId = Guid.NewGuid() });
+                new { id = farmResponse?.EncryptedFarmId, q = success, sessionId = Guid.NewGuid().ToString() });
         }
 
-        public IActionResult BackCheckAnswer(string? sessionId)
+        public IActionResult BackCheckAnswer(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : BackCheckAnswer() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -1301,7 +1302,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r, Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : FarmSummary() action called");
-            RemoveAllNmptSession();
+            RemoveAllNmptSession(sessionId);
             string farmId = string.Empty;
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -1346,8 +1347,10 @@ namespace NMP.Portal.Controllers
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
                         farmData.EncryptedIsUpdate = u;
-                        farmData.SessionId = sessionId?? Guid.NewGuid();
+                        // farmData.SessionId = sessionId ?? Guid.NewGuid();
                     }
+                    RemoveFarmSession(sessionId);
+                    RemoveFarmDataBeforeUpdateFromSession(sessionId);
                 }
             }
             catch (HttpRequestException hre)
@@ -1373,6 +1376,7 @@ namespace NMP.Portal.Controllers
             Error? error = null;
             try
             {
+                RemoveFarmSession(sessionId);
                 RemoveFarmDataBeforeUpdateFromSession(sessionId);
                 if (string.IsNullOrWhiteSpace(id))
                 {
@@ -1430,7 +1434,7 @@ namespace NMP.Portal.Controllers
                     {
                         farmData.Country = Enum.GetName(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID);
                     }
-
+                    //farmData.SessionId = sessionId;
                     bool update = true;
                     farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
                     farmData.NitrateVulnerableZoneList = farmsNvz.FarmsNvz?.Select(n => n.NVZProgrammeID.ToString()).ToList() ?? new List<string>();
@@ -1584,10 +1588,11 @@ namespace NMP.Portal.Controllers
                 {
                     farmResponse.EncryptedFarmId = _dataProtector.Protect(farmResponse.ID.ToString());
                 }
-                RemoveFarmSession(null);
+                RemoveFarmSession(model.SessionId);
                 RemoveAddressesSession();
+                RemoveFarmDataBeforeUpdateFromSession(model.SessionId);
                 string isUpdate = _dataProtector.Protect("true");
-                return RedirectToAction("FarmSummary", new { id = farmResponse?.EncryptedFarmId, q = success, u = isUpdate, sessionId = Guid.NewGuid() });
+                return RedirectToAction("FarmSummary", new { id = farmResponse?.EncryptedFarmId, q = success, u = isUpdate, sessionId = Guid.NewGuid().ToString() });
             }
             catch (HttpRequestException hre)
             {
@@ -1620,7 +1625,7 @@ namespace NMP.Portal.Controllers
             return nvzs;
         }
         [HttpGet]
-        public IActionResult FarmRemove(string? sessionId)
+        public IActionResult FarmRemove(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : FarmRemove() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -1689,7 +1694,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Cancel(string? sessionId)
+        public IActionResult Cancel(Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : Cancel() action called");
             FarmViewModel? model = GetFarmFromSession(sessionId);
@@ -1728,7 +1733,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCancel.HasValue && !model.IsCancel.Value)
             {
-                return RedirectToAction(_checkAnswerActionName,new {sessionId=model.SessionId});
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else
             {
@@ -1741,48 +1746,48 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private FarmViewModel? GetFarmFromSession(string? sessionId = null)
+        private FarmViewModel? GetFarmFromSession(Guid? sessionId)
         {
-            if ( !string.IsNullOrWhiteSpace(sessionId) && HttpContext.Session.Exists(sessionId))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _farmDataKey))
             {
-                return HttpContext.Session.GetObjectFromJson<FarmViewModel>(sessionId);
+                return HttpContext.Session.GetObjectFromJson<FarmViewModel>(sessionId + " " + _farmDataKey);
             }
             return null;
         }
 
         private void SetFarmToSession(FarmViewModel farm)
         {
-            HttpContext.Session.SetObjectAsJson(farm.SessionId.ToString(), farm);
+            HttpContext.Session.SetObjectAsJson(farm.SessionId.ToString() + " " + _farmDataKey, farm);
         }
 
         private void RemoveFarmSession(Guid? sessionId)
         {
-            if (sessionId != null && HttpContext.Session.Exists(sessionId.ToString()))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _farmDataKey))
             {
-                HttpContext.Session.Remove(sessionId.ToString());
+                HttpContext.Session.Remove(sessionId + " " + _farmDataKey);
             }
         }
 
         private FarmViewModel? GetFarmDataBeforeUpdateFromSession(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists(sessionId+"" + _farmDataBeforeUpdateSessionKey))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _farmDataBeforeUpdateSessionKey))
             {
-                return HttpContext.Session.GetObjectFromJson<FarmViewModel>(sessionId+"" + _farmDataBeforeUpdateSessionKey);
+                return HttpContext.Session.GetObjectFromJson<FarmViewModel>(sessionId + " " + _farmDataBeforeUpdateSessionKey);
             }
             return null;
         }
 
         private void RemoveFarmDataBeforeUpdateFromSession(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists(sessionId+"" + _farmDataBeforeUpdateSessionKey))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _farmDataBeforeUpdateSessionKey))
             {
-                HttpContext.Session.Remove(sessionId+"" + _farmDataBeforeUpdateSessionKey);
+                HttpContext.Session.Remove(sessionId + " " + _farmDataBeforeUpdateSessionKey);
             }
         }
 
         private void SetFarmDataBeforeUpdateToSession(FarmViewModel farm)
         {
-            HttpContext.Session.SetObjectAsJson(farm.SessionId+"" + _farmDataBeforeUpdateSessionKey, farm);
+            HttpContext.Session.SetObjectAsJson(farm.SessionId + " " + _farmDataBeforeUpdateSessionKey, farm);
         }
 
         private List<AddressLookupResponse>? GetAddressesFromSession()
@@ -1819,19 +1824,19 @@ namespace NMP.Portal.Controllers
         }
 
 
-        private void RemoveAllNmptSession()
+        private void RemoveAllNmptSession(Guid? sessionId=null)
         {
             //crop session
             CropSessionRemoved();
 
             //Farm session
-            FarmSessionRemoved();
+            FarmSessionRemoved(sessionId);
 
             //Fertiliser session
             FertiliserSessionRemoved();
 
             //Field session
-            FieldSessionRemoved();
+            FieldSessionRemoved(sessionId);
 
             //OrganicManure session
             OrganicManureSessionRemoved();
@@ -1846,7 +1851,7 @@ namespace NMP.Portal.Controllers
             SnsDataSessionRemoved();
 
             //SoilAnalysisData session
-            SoilAnalysisDataSessionRemoved();
+            SoilAnalysisDataSessionRemoved(sessionId);
 
             //StorageCapacityData session
             StorageCapacityDataSessionRemoved();
@@ -1871,15 +1876,15 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private void SoilAnalysisDataSessionRemoved()
+        private void SoilAnalysisDataSessionRemoved(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists("SoilAnalysisData"))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "SoilAnalysisDataBeforeUpdate"))
             {
-                HttpContext.Session.Remove("SoilAnalysisData");
+                HttpContext.Session.Remove(sessionId + " " + "SoilAnalysisDataBeforeUpdate");
             }
-            if (HttpContext.Session.Exists("SoilAnalysisDataBeforeUpdate"))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "SoilAnalysisData"))
             {
-                HttpContext.Session.Remove("SoilAnalysisDataBeforeUpdate");
+                HttpContext.Session.Remove(sessionId + " " + "SoilAnalysisData");
             }
         }
 
@@ -1930,16 +1935,31 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private void FieldSessionRemoved()
+        private void FieldSessionRemoved(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists("FieldDataBeforeUpdate"))
+            //if (HttpContext.Session.Exists("FieldDataBeforeUpdate"))
+            //{
+            //    HttpContext.Session.Remove("FieldDataBeforeUpdate");
+            //}
+            //if (HttpContext.Session.Exists("FieldData"))
+            //{
+            //    HttpContext.Session.Remove("FieldData");
+            //}
+
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "FieldData"))
             {
-                HttpContext.Session.Remove("FieldDataBeforeUpdate");
+                HttpContext.Session.Remove(sessionId + " " + "FieldData");
             }
-            if (HttpContext.Session.Exists("FieldData"))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "FieldDataBeforeUpdate"))
             {
-                HttpContext.Session.Remove("FieldData");
+                HttpContext.Session.Remove(sessionId + " " + "FieldDataBeforeUpdate");
             }
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "FieldRemove"))
+            {
+                HttpContext.Session.Remove(sessionId + " " + "FieldRemove");
+            }
+
+           
         }
 
         private void FertiliserSessionRemoved()
@@ -1954,20 +1974,23 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private void FarmSessionRemoved()
+        private void FarmSessionRemoved(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists("FarmData"))
-            {
-                HttpContext.Session.Remove("FarmData");
-            }
-            if (HttpContext.Session.Exists("FarmDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove("FarmDataBeforeUpdate");
-            }
-            if (HttpContext.Session.Exists("AddressList"))
-            {
-                HttpContext.Session.Remove("AddressList");
-            }
+            //if (HttpContext.Session.Exists("FarmData"))
+            //{
+            //    HttpContext.Session.Remove("FarmData");
+            //}
+            //if (HttpContext.Session.Exists("FarmDataBeforeUpdate"))
+            //{
+            //    HttpContext.Session.Remove("FarmDataBeforeUpdate");
+            //}
+            //if (HttpContext.Session.Exists("AddressList"))
+            //{
+            //    HttpContext.Session.Remove("AddressList");
+            //}
+            RemoveFarmSession(sessionId);
+            RemoveAddressesSession();
+            RemoveFarmDataBeforeUpdateFromSession(sessionId);
         }
 
         private void CropSessionRemoved()

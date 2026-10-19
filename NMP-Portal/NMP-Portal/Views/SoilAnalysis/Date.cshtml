@@ -20,11 +20,11 @@
 @section BeforeContent {
     @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
     {
-        <govuk-back-link asp-action="SulphurDeficient" asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="SulphurDeficient" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else
     {
-        <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged" asp-route-sessionId="@Model?.SessionId">@Resource.lblBack</govuk-back-link>
 
     }
 }
@@ -33,7 +33,7 @@
     @await Html.PartialAsync("~/Views/SoilAnalysis/_SoilAnalysisWizardHiddenFields.cshtml", Model)
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <govuk-date-input asp-for="@Model.Date">
+            <govuk-date-input for="@Model.Date">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @heading
@@ -52,12 +52,12 @@
 
             @if (Model.isSoilAnalysisAdded != null && Model.isSoilAnalysisAdded.Value && (!Model.IsCheckAnswer))
             {
-                <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link"><a asp-action="FieldSoilAnalysisDetail" asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a></p>
 
             }
             else
             {
-                <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link"><a asp-action="ChangeSoilAnalysis" asp-controller="SoilAnalysis" asp-route-i="@Model.EncryptedSoilAnalysisId" asp-route-j="@Model.EncryptedFieldId" asp-route-k="@Model.EncryptedFarmId" asp-route-l="@Model.IsSoilDataChanged" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a></p>
             }
         </div>
 

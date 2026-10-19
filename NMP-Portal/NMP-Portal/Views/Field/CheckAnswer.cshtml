@@ -9,7 +9,7 @@
 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <form class="form-with-overlay" asp-action="CheckAnswer" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -40,7 +40,7 @@
                 @Resource.lblAddThisField
             </govuk-button>
             <p class="govuk-body cancel-link">
-                <a asp-action="Cancel" asp-controller="Field">@Resource.lblCancel</a>
+                <a asp-action="Cancel" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             </p>
         </div>
     </div>

@@ -41,7 +41,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-        <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
     <h1 class="govuk-heading-l text-wrap-anywhere">@Model.Name</h1>
     <div class="govuk-grid-row">
@@ -133,8 +133,8 @@
                     </tr>
                 </tbody>
             </table>
-            <p class="govuk-body"><a asp-action="CheckAnswer" asp-controller="Farm" asp-route-id="@Model.EncryptedFarmId" asp-route-q=@Model.EncryptedIsUpdate>@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblUpdateFarmOrBusinessInformation : Resource.lblUpdateFarmInformation)</a></p>
-            <p class="govuk-body margin-bottom-forty"><a asp-action="FarmRemove" asp-controller="Farm" asp-route-id=@Model.EncryptedFarmId>@string.Format(Resource.lblRemoveFarm, Model.Name)</a></p>
+            <p class="govuk-body"><a asp-action="CheckAnswer" asp-controller="Farm" asp-route-id="@Model.EncryptedFarmId" asp-route-q=@Model.EncryptedIsUpdate asp-route-sessionId="@Model.SessionId">@(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland ? Resource.lblUpdateFarmOrBusinessInformation : Resource.lblUpdateFarmInformation)</a></p>
+            <p class="govuk-body margin-bottom-forty"><a asp-action="FarmRemove" asp-controller="Farm" asp-route-id=@Model.EncryptedFarmId asp-route-sessionId="@Model.SessionId">@string.Format(Resource.lblRemoveFarm, Model.Name)</a></p>
         </div>
     </div>
 }

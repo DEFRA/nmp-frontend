@@ -47,7 +47,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="Field">
+    <govuk-back-link asp-action="@backAction" asp-controller="Field" asp-route-sessionId="@Model.SessionId">
         @Resource.lblBack
     </govuk-back-link>
 }
@@ -99,7 +99,7 @@
 
                 <a asp-controller="Field"
                    asp-action=@cancelAction
-                   asp-route-id="@(Model.IsCheckAnswer ? null : Model.EncryptedFarmId)">
+                   asp-route-id="@(Model.IsCheckAnswer ? null : Model.EncryptedFarmId)" asp-route-sessionId="@Model.SessionId">
                     @Resource.lblCancel
                 </a>
             </p>

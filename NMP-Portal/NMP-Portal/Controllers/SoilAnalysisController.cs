@@ -13,6 +13,7 @@ using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
 using NMP.Portal.Helpers;
 using System.Globalization;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace NMP.Portal.Controllers
 {
@@ -43,31 +44,32 @@ namespace NMP.Portal.Controllers
         private const string _phosphorusKey = "Phosphorus";
         private void BindNMPTFarmIdAndNameForNavigation(SoilAnalysisViewModel? model)
         {
-            
+
             ViewBag.NMPTFarmId = model?.EncryptedFarmId;
             ViewBag.NMPTFarmName = model?.FarmName;
 
         }
-        private SoilAnalysisViewModel? GetSoilAnalysisFromSession()
+        private SoilAnalysisViewModel? GetSoilAnalysisFromSession(string sessionId)
         {
-            if (HttpContext.Session.Exists(_soilAnalysisDataKey))
+            if (HttpContext.Session.Exists(sessionId + " " + _soilAnalysisDataKey))
             {
-                return HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>(_soilAnalysisDataKey);
+                return HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>(sessionId + " " + _soilAnalysisDataKey);
             }
             return null;
         }
 
-        private void SetSoilAnalysisDataToSession(SoilAnalysisViewModel plan)
+        private void SetSoilAnalysisDataToSession(SoilAnalysisViewModel model)
         {
-            HttpContext.Session.SetObjectAsJson(_soilAnalysisDataKey, plan);
+            HttpContext.Session.SetObjectAsJson(model.SessionId + " " + _soilAnalysisDataKey, model);
         }
 
-        private void RemoveSoilAnalysisDataFromSession()
+        private void RemoveSoilAnalysisDataFromSession(string sessionId)
         {
-            if (HttpContext.Session.Exists(_soilAnalysisDataKey))
+            if (HttpContext.Session.Exists(sessionId + " " + _soilAnalysisDataKey))
             {
-                HttpContext.Session.Remove(_soilAnalysisDataKey);
+                HttpContext.Session.Remove(sessionId + " " + _soilAnalysisDataKey);
             }
+           
         }
         private void ValidateSoilAnalysisIndexValues(SoilAnalysisViewModel model)
         {
@@ -148,7 +150,7 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> ChangeSoilAnalysis(string i, string j, string k, string l)//i= soilAnalysisId,j=EncryptedFieldId,k=EncryptedFarmId,l=IsSoilDataChanged
+        public async Task<IActionResult> ChangeSoilAnalysis(string i, string j, string k, string l, string sessionId)//i= soilAnalysisId,j=EncryptedFieldId,k=EncryptedFarmId,l=IsSoilDataChanged
         {
             _logger.LogTrace("Soil Analysis Controller: ChangeSoilAnalysis({I}, {J},{K}, {L}) action called.", i, j, k, l);
             SoilAnalysisViewModel? model = new SoilAnalysisViewModel();
@@ -157,7 +159,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!string.IsNullOrWhiteSpace(l))
                 {
-                    model = GetSoilAnalysisFromSession();
+                    model = GetSoilAnalysisFromSession(sessionId);
                     if (model == null)
                     {
                         _logger.LogTrace("SoilAnalysisController: Session expired in ChangeSoilAnalysis() action.");
@@ -175,7 +177,6 @@ namespace NMP.Portal.Controllers
                         TempData[_changeSoilAnalysisError] = error.Message;
                         return View(model);
                     }
-
                     model.FarmRB209CountryID = farm?.RB209CountryID;
                     int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(j));
                     _logger.LogTrace("SoilAnalysisController: fields/{FieldId} called.", fieldId);
@@ -225,6 +226,7 @@ namespace NMP.Portal.Controllers
                     }
 
                     BindSoilNutrientValueTypeForChangeSoilAnalysis(model);
+                    //model.SessionId = sessionId;
 
                     SetSoilAnalysisDataToSession(model);
                 }
@@ -253,7 +255,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(l))
                 {
-                    HttpContext.Session.SetObjectAsJson("SoilAnalysisDataBeforeUpdate", model);
+                    HttpContext.Session.SetObjectAsJson(model.SessionId + " " + "SoilAnalysisDataBeforeUpdate", model);
                 }
 
                 BindViewBegForIsDataChange(model);
@@ -262,7 +264,7 @@ namespace NMP.Portal.Controllers
 
         private void BindViewBegForIsDataChange(SoilAnalysisViewModel? model)
         {
-            var previousModel = HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>("SoilAnalysisDataBeforeUpdate");
+            var previousModel = HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>(model.SessionId + " " + "SoilAnalysisDataBeforeUpdate");
             bool isDataChanged = false;
 
             if (previousModel != null)
@@ -316,10 +318,10 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Date()
+        public IActionResult Date(string sessionId)
         {
             _logger.LogTrace("Soil Analysis Controller: Date() action called.");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession(sessionId);
 
             if (model == null)
             {
@@ -348,7 +350,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
             }
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
@@ -357,15 +359,15 @@ namespace NMP.Portal.Controllers
                 {
                     model.IsSoilAnalysesMethodChange = true;
                     SetSoilAnalysisDataToSession(model);
-                    return RedirectToAction(_soilNutrientValueTypeActionName);
+                    return RedirectToAction(_soilNutrientValueTypeActionName, new { sessionId = model.SessionId });
                 }
                 else
                 {
-                    return RedirectToAction("SoilAnalysesMethod");
+                    return RedirectToAction("SoilAnalysesMethod", new { sessionId = model.SessionId });
                 }
             }
 
-            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
         }
 
         private void ValidateDate(SoilAnalysisViewModel model)
@@ -404,18 +406,18 @@ namespace NMP.Portal.Controllers
 
         private void ValidateMinMaxDate(SoilAnalysisViewModel model)
         {
-            if (model.Date != null&& model.Date.Value.Date >= DateTime.Now.AddDays(1).Date)
+            if (model.Date != null && model.Date.Value.Date >= DateTime.Now.AddDays(1).Date)
             {
-                    ModelState.AddModelError("Date", Resource.lblTheDateCannotBeInTheFuture);
-             
+                ModelState.AddModelError("Date", Resource.lblTheDateCannotBeInTheFuture);
+
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> SoilNutrientValueType()
+        public async Task<IActionResult> SoilNutrientValueType(string sessionId)
         {
             _logger.LogTrace($"Soil Analysis Controller: SoilNutrientValueType() action called.");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilNutrientValueType() action.");
@@ -442,7 +444,7 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsSoilDataChanged = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
-            SoilAnalysisViewModel? soilAnalysisViewModel = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? soilAnalysisViewModel = GetSoilAnalysisFromSession(model.SessionId);
 
             if (soilAnalysisViewModel == null)
             {
@@ -469,29 +471,29 @@ namespace NMP.Portal.Controllers
             SetSoilAnalysisDataToSession(model);
             if (soilAnalysisViewModel.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value != soilAnalysisViewModel.SoilNutrientValueType.Value)
             {
-                return RedirectToAction(_soilNutrientValueActionName);
+                return RedirectToAction(_soilNutrientValueActionName, new { sessionId = model.SessionId });
             }
             if (model.IsCheckAnswer && !model.IsSoilAnalysesMethodChange)
             {
-                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
             }
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
-                return RedirectToAction(_soilNutrientValueActionName);
+                return RedirectToAction(_soilNutrientValueActionName, new { sessionId = model.SessionId });
             }
 
 
-            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
         }
 
 
 
         [HttpGet]
-        public async Task<IActionResult> SoilNutrientValue()
+        public async Task<IActionResult> SoilNutrientValue(string sessionId)
         {
             _logger.LogTrace($"Soil Analysis Controller: SoilNutrientValue() action called.");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilNutrientValue() action.");
@@ -574,7 +576,7 @@ namespace NMP.Portal.Controllers
 
             SetSoilAnalysisDataToSession(model);
 
-            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
         }
 
         private async Task<(bool flowControl, IActionResult? value)> BindIndexOrStatus(SoilAnalysisViewModel model, Error? error)
@@ -970,10 +972,10 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> SulphurDeficient()
+        public async Task<IActionResult> SulphurDeficient(string sessionId)
         {
             _logger.LogTrace($"Soil Analysis Controller: SulphurDeficient() action called.");
-            SoilAnalysisViewModel model = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel model = GetSoilAnalysisFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SulphurDeficient() action.");
@@ -1004,15 +1006,15 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCheckAnswer)
             {
-                return await Task.FromResult(RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged }));
+                return await Task.FromResult(RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId }));
             }
 
             if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
             {
-                return await Task.FromResult(RedirectToAction("Date"));
+                return await Task.FromResult(RedirectToAction("Date", new { sessionId = model.SessionId }));
             }
 
-            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+            return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
         }
 
         [HttpPost]
@@ -1024,7 +1026,7 @@ namespace NMP.Portal.Controllers
             {
                 ValidateSoilAnalysis(model);
 
-                await FetchMethodologyName(model); 
+                await FetchMethodologyName(model);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 if (!ModelState.IsValid)
                 {
@@ -1101,7 +1103,8 @@ namespace NMP.Portal.Controllers
                         return View(_changeSoilAnalysisActionName, model);
                     }
                 }
-
+                RemoveSoilAnalysisDataBeforeUpdate(model);
+                RemoveSoilAnalysisDataFromSession(model.SessionId);
                 return RedirectToAction(_fieldSoilAnalysisDetailAction, _fieldController, new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis), s = (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value) ? _soilAnalysisDataProtector.Protect(Resource.lblAdd) : _soilAnalysisDataProtector.Protect(Resource.lblUpdate) });
             }
             catch (Exception ex)
@@ -1175,14 +1178,14 @@ namespace NMP.Portal.Controllers
             BindNMPTFarmIdAndNameForNavigation(model);
 
             SetSoilAnalysisDataToSession(model);
-            return RedirectToAction("SulphurDeficient");
+            return RedirectToAction("SulphurDeficient", new {sessionId=model.SessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> RemoveSoilAnalysis()
+        public async Task<IActionResult> RemoveSoilAnalysis(string sessionId)
         {
             _logger.LogTrace($"Soil Analysis Controller: RemoveSoilAnalysis() action called.");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in RemoveSoilAnalysis() action.");
@@ -1219,20 +1222,30 @@ namespace NMP.Portal.Controllers
                     TempData["RemoveSoilAnalysisError"] = error.Message;
                     return View(model);
                 }
+                RemoveSoilAnalysisDataBeforeUpdate(model);
+                RemoveSoilAnalysisDataFromSession(model.SessionId);
                 success = _soilAnalysisDataProtector.Protect(Resource.lblTrue);
                 return RedirectToAction(_fieldSoilAnalysisDetailAction, _fieldController, new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId, q = success, r = _fieldDataProtector.Protect(Resource.lblSoilAnalysis), s = _soilAnalysisDataProtector.Protect(Resource.lblRemove) });
             }
             else
             {
-                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
+            }
+        }
+
+        private void RemoveSoilAnalysisDataBeforeUpdate(SoilAnalysisViewModel model)
+        {
+            if (HttpContext.Session.Exists(model.SessionId + " " + "SoilAnalysisDataBeforeUpdate"))
+            {
+                HttpContext.Session.Remove(model.SessionId + " " + "SoilAnalysisDataBeforeUpdate");
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> Cancel()
+        public async Task<IActionResult> Cancel(string sessionId)
         {
             _logger.LogTrace("SoilAnalysis Controller : Cancel() action called");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in Cancel() action.");
@@ -1248,7 +1261,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "SoilAnalysis Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_changeSoilAnalysisError] = ex.Message;
-                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
             }
 
             return View(model);
@@ -1272,20 +1285,21 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCancel.HasValue && !model.IsCancel.Value)
             {
-                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
             }
             else
             {
-                RemoveSoilAnalysisDataFromSession();
+                RemoveSoilAnalysisDataBeforeUpdate(model);
+                RemoveSoilAnalysisDataFromSession(model.SessionId);
                 return RedirectToAction(_fieldSoilAnalysisDetailAction, _fieldController, new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId });
             }
         }
 
         [HttpGet]
-        public IActionResult BackActionForCheckAnswer()
+        public IActionResult BackActionForCheckAnswer(string sessionId)
         {
             _logger.LogTrace("SoilAnalysis Controller : BackActionForCheckAnswer() action called");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace("Soil Analysis Controller: Session expired in BackActionForCheckAnswer action.");
@@ -1298,10 +1312,12 @@ namespace NMP.Portal.Controllers
 
                 if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
                 {
-                    return RedirectToAction(_soilNutrientValueActionName);
+                    return RedirectToAction(_soilNutrientValueActionName, new { sessionId = model.SessionId });
                 }
                 else
                 {
+                    RemoveSoilAnalysisDataBeforeUpdate(model);
+                    RemoveSoilAnalysisDataFromSession(model.SessionId);
                     return RedirectToAction(_fieldSoilAnalysisDetailAction, _fieldController, new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId });
                 }
             }
@@ -1309,7 +1325,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "SoilAnalysis Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_changeSoilAnalysisError] = ex.Message;
-                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
+                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });
             }
         }
 
@@ -1343,13 +1359,13 @@ namespace NMP.Portal.Controllers
         private async Task<IActionResult> ReturnViewWithMethods(SoilAnalysisViewModel model)
         {
             await FetchMethologies(model);
-            return View("SoilAnalysesMethod",model);
+            return View("SoilAnalysesMethod", model);
         }
         [HttpGet]
-        public async Task<IActionResult> SoilAnalysesMethod()
+        public async Task<IActionResult> SoilAnalysesMethod(string sessionId)
         {
             _logger.LogTrace($"Soil Analysis Controller: SoilAnalysesMethod() action called.");
-            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? model = GetSoilAnalysisFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilAnalysesMethod() action.");
@@ -1360,7 +1376,7 @@ namespace NMP.Portal.Controllers
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["SoilDateError"] = error.Message;
-                return RedirectToAction("SoilDate");
+                return RedirectToAction("SoilDate", new {sessionId=sessionId});
             }
             return View(model);
         }
@@ -1375,14 +1391,14 @@ namespace NMP.Portal.Controllers
             BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
-              return  await ReturnViewWithMethods(model);
+                return await ReturnViewWithMethods(model);
             }
-            SoilAnalysisViewModel? soilAnalysisViewModel = GetSoilAnalysisFromSession();
+            SoilAnalysisViewModel? soilAnalysisViewModel = GetSoilAnalysisFromSession(model.SessionId);
             if (soilAnalysisViewModel != null && soilAnalysisViewModel.PhosphorusMethodologyID == model.PhosphorusMethodologyID)
             {
                 model.IsSoilAnalysesMethodChange = false;
                 SetSoilAnalysisDataToSession(model);
-                return await Task.FromResult(RedirectToAction("ChangeSoilAnalysis"));
+                return await Task.FromResult(RedirectToAction("ChangeSoilAnalysis", new { sessionId = model.SessionId }));
             }
             else
             {
@@ -1402,7 +1418,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsSoilAnalysesMethodChange)
             {
-                return RedirectToAction(nextAction);
+                return RedirectToAction(nextAction, new { sessionId = model.SessionId });
             }
 
             return RedirectToAction(_changeSoilAnalysisActionName,
@@ -1411,7 +1427,8 @@ namespace NMP.Portal.Controllers
                     i = model.EncryptedSoilAnalysisId,
                     j = model.EncryptedFieldId,
                     k = model.EncryptedFarmId,
-                    l = model.IsSoilDataChanged
+                    l = model.IsSoilDataChanged,
+                    sessionId = model.SessionId
                 });
 
 
