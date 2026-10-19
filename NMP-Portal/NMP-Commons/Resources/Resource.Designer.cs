@@ -15468,6 +15468,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RB209 soil analysis uses a sodium bicarbonate soil extract (Olsen’s method) for phosphorus (P), and an ammonium nitrate soil extract for potassium (K) and magnesium (Mg), and is typically used by laboratories in England and Wales..
+        /// </summary>
+        public static string lblSoilAnalysisMethodHintRb209 {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysisMethodHintRb209", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SAC soil analysis uses an ammonium acetate soil extract (Modified Morgan’s method) for phosphorus (P), potassium (K) and magnesium (Mg) and is typically used by laboratories in Scotland..
+        /// </summary>
+        public static string lblSoilAnalysisMethodHintSac {
+            get {
+                return ResourceManager.GetString("lblSoilAnalysisMethodHintSac", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil contains potash releasing clay.
         /// </summary>
         public static string lblSoilContainsPostashReleasingClay {

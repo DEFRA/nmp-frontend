@@ -8657,4 +8657,10 @@ following crop year 2</value>
   <data name="lblAddLastYearHistoryToCropDetailsFor" xml:space="preserve">
     <value>Add last year's history to crop details for {0}.</value>
   </data>
+  <data name="lblSoilAnalysisMethodHintRb209" xml:space="preserve">
+    <value>RB209 soil analysis uses a sodium bicarbonate soil extract (Olsen’s method) for phosphorus (P), and an ammonium nitrate soil extract for potassium (K) and magnesium (Mg), and is typically used by laboratories in England and Wales.</value>
+  </data>
+  <data name="lblSoilAnalysisMethodHintSac" xml:space="preserve">
+    <value>SAC soil analysis uses an ammonium acetate soil extract (Modified Morgan’s method) for phosphorus (P), potassium (K) and magnesium (Mg) and is typically used by laboratories in Scotland.</value>
+  </data>
 </root>
