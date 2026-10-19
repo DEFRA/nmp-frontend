@@ -51,7 +51,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> FarmList(string? q, Guid? sessionId)
         {
             _logger.LogTrace("Farm Controller : FarmList({0}) action called", q);
-            RemoveAllNmptSession();
+            RemoveAllNmptSession(sessionId);
             //RemoveFarmSession(sessionId);
             FarmsViewModel model = new FarmsViewModel();
             Error? error = null;
