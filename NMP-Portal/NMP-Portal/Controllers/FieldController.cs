@@ -75,7 +75,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     }
 
-    public async Task<IActionResult> CreateFieldCancel(string id, string? q, string sessionId)
+    public async Task<IActionResult> CreateFieldCancel(string id, string? q, Guid sessionId)
     {
         _logger.LogTrace("Field Controller : CreateFieldCancel({Id}) action called", id);
         if (string.IsNullOrWhiteSpace(q))
@@ -107,7 +107,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
-    public async Task<IActionResult> BackActionForAddField(string id, string sessionId)
+    public async Task<IActionResult> BackActionForAddField(string id, Guid sessionId)
     {
         _logger.LogTrace("Field Controller : BackActionForAddField({Id}) action called", id);
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -182,11 +182,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     /// <param name="r">Encrypted Year</param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<IActionResult> AddField(string q, string? r, string sessionId)
+    public async Task<IActionResult> AddField(string q, string? r, Guid sessionId)
     {
         _logger.LogTrace("Field Controller : AddField({Q}) action called", q);
         FieldViewModel? model = null;
-        if (string.IsNullOrWhiteSpace(sessionId))
+        if (sessionId == Guid.Empty)
         {
             model ??= new FieldViewModel();
             sessionId = model.SessionId;
@@ -329,7 +329,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
 
     [HttpGet]
-    public IActionResult FieldMeasurements(string sessionId)
+    public IActionResult FieldMeasurements(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : FieldMeasurements() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -465,7 +465,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
 
     [HttpGet]
-    public async Task<IActionResult> NVZField(string sessionId)
+    public async Task<IActionResult> NVZField(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : NVZField() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -598,7 +598,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> ElevationField(string sessionId)
+    public async Task<IActionResult> ElevationField(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : ElevationField() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -658,7 +658,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> SoilType(string sessionId)
+    public async Task<IActionResult> SoilType(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilType() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -780,7 +780,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public IActionResult SoilReleasingClay(string sessionId)
+    public IActionResult SoilReleasingClay(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilReleasingClay() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -840,7 +840,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public IActionResult SulphurDeficient(string sessionId)
+    public IActionResult SulphurDeficient(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SulphurDeficient() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -882,7 +882,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> SoilDate(string sessionId)
+    public async Task<IActionResult> SoilDate(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilDateAndPHLevel() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -980,7 +980,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public Task<IActionResult> SoilNutrientValueType(string sessionId)
+    public Task<IActionResult> SoilNutrientValueType(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilNutrientValueType() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -1034,7 +1034,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
 
     [HttpGet]
-    public async Task<IActionResult> SoilNutrientValue(string? sessionId)
+    public async Task<IActionResult> SoilNutrientValue(Guid? sessionId)
     {
         _logger.LogTrace("Field Controller : SoilNutrientValue() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -1489,7 +1489,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> CropGroups(string sessionId)
+    public async Task<IActionResult> CropGroups(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : CropGroups() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -1568,7 +1568,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> CropTypes(string? sessionId)
+    public async Task<IActionResult> CropTypes(Guid? sessionId)
     {
         _logger.LogTrace($"Field Controller : CropTypes() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -1643,7 +1643,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> CropInfoOne(string? sessionId)
+    public async Task<IActionResult> CropInfoOne(Guid? sessionId)
     {
         _logger.LogTrace($"Field Controller : CropTypes() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -1710,7 +1710,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     }
 
-    public async Task<IActionResult> BackCheckAnswer(string sessionId)
+    public async Task<IActionResult> BackCheckAnswer(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : BackCheckAnswer() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -1749,7 +1749,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> CheckAnswer(string sessionId)
+    public async Task<IActionResult> CheckAnswer(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : CheckAnswer() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -2376,13 +2376,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
     [HttpGet]
-    public async Task<IActionResult> ManageFarmFields(string id, string? q, string? name, string? isDeleted, string? sessionId)
+    public async Task<IActionResult> ManageFarmFields(string id, string? q, string? name, string? isDeleted, Guid? sessionId)
     {
         _logger.LogTrace($"Field Controller : ManageFarmFields() action called");
         FarmFieldsViewModel model = new FarmFieldsViewModel();
-        if (!string.IsNullOrWhiteSpace(sessionId))
+        if (sessionId.HasValue)
         {
-            model.SessionId = sessionId;
+            model.SessionId = sessionId.Value;
         }
         if (!string.IsNullOrWhiteSpace(q))
         {
@@ -2440,7 +2440,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> FieldSoilAnalysisDetail(string farmId, string fieldId, string? q, string? r, string? s, string? t, string? sessionId)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
+    public async Task<IActionResult> FieldSoilAnalysisDetail(string farmId, string fieldId, string? q, string? r, string? s, string? t, Guid? sessionId)//id encryptedFieldId,farmID=EncryptedFarmID,q=success,r=FiedlOrSoilAnalysis,s=soilUpdateOrSave
     {
         _logger.LogTrace("Field Controller : FieldSoilAnalysisDetail() action called");
 
@@ -2902,7 +2902,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public IActionResult RecentSoilAnalysisQuestion(string sessionId)
+    public IActionResult RecentSoilAnalysisQuestion(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : RecentSoilAnalysisQuestion() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -2994,7 +2994,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public IActionResult SoilOverChalk(string sessionId)
+    public IActionResult SoilOverChalk(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilOverChalk() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -3082,7 +3082,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return (error, hasGrassInLastThreeYear, model.LastHarvestYear, prevCroppings, prevCroppingDataForScotland);
     }
     [HttpGet]
-    public async Task<IActionResult> UpdateField(string? fieldId, string? farmId, string? sessionId)
+    public async Task<IActionResult> UpdateField(string? fieldId, string? farmId, Guid? sessionId)
     {
         _logger.LogTrace("Field Controller : UpdateField() action called");
         FieldViewModel model = new FieldViewModel();
@@ -3622,7 +3622,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
 
     [HttpGet]
-    public IActionResult FieldRemove(string sessionId)
+    public IActionResult FieldRemove(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : FieldRemove() action called");
         FieldViewModel? model = null;
@@ -3686,18 +3686,18 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         return View(field);
     }
 
-    public IActionResult BackActionForCopyExistingField(string farmId, string sessionId)
+    public IActionResult BackActionForCopyExistingField(string farmId, Guid sessionId)
     {
         RemoveFieldDataFromSession(sessionId);
         return RedirectToAction(_manageFarmFieldsActionName, new { id = farmId, sessionId = sessionId });
     }
 
     [HttpGet]
-    public async Task<IActionResult> CopyExistingField(string q, string sessionId)
+    public async Task<IActionResult> CopyExistingField(string q, Guid? sessionId)
     {
         _logger.LogTrace("Field Controller : CopyExistingField() action called");
         FieldViewModel? model = null;
-        if (string.IsNullOrWhiteSpace(sessionId))
+        if (!sessionId.HasValue)
         {
             model = new FieldViewModel();
             sessionId = model.SessionId;
@@ -3759,7 +3759,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> CopyFields(string sessionId)
+    public async Task<IActionResult> CopyFields(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : CopyFields() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -3815,7 +3815,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public IActionResult HasGrassInLastThreeYear(string sessionId)
+    public IActionResult HasGrassInLastThreeYear(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : HasGrassInLastThreeYear() action called");
 
@@ -3971,7 +3971,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> GrassLastThreeHarvestYear(string sessionId)
+    public async Task<IActionResult> GrassLastThreeHarvestYear(Guid sessionId)
     {
         _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() action called");
 
@@ -4084,7 +4084,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
 
     [HttpGet]
-    public async Task<IActionResult> GrassManagementOptions(string sessionId)
+    public async Task<IActionResult> GrassManagementOptions(Guid sessionId)
     {
         _logger.LogTrace($"Field Controller : GrassManagementOptions() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -4141,7 +4141,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public Task<IActionResult> HasGreaterThan30PercentClover(string sessionId)
+    public Task<IActionResult> HasGreaterThan30PercentClover(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : HasGreaterThan30PercentClover() action called");
 
@@ -4204,7 +4204,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> SoilNitrogenSupplyItems(string sessionId)
+    public async Task<IActionResult> SoilNitrogenSupplyItems(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilNitrogenSupplyItems() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -4262,7 +4262,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> LayDuration(string sessionId)
+    public async Task<IActionResult> LayDuration(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : LayDuration() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -4311,7 +4311,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public IActionResult Cancel(string sessionId)
+    public IActionResult Cancel(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : Cancel() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -4373,7 +4373,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public IActionResult LastHarvestYear(string sessionId)
+    public IActionResult LastHarvestYear(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : LastHarvestYear() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -4454,9 +4454,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         ViewBag.SecondLastHarvestYear = secondLastHarvestYear;
     }
 
-    private FieldViewModel? LoadFieldDataFromSession(string sessionId)
+    private FieldViewModel? LoadFieldDataFromSession(Guid? sessionId)
     {
-        if (HttpContext.Session.Exists(sessionId + " " + _fieldDataKey))
+        if (sessionId.HasValue&&HttpContext.Session.Exists(sessionId + " " + _fieldDataKey))
         {
             return HttpContext.Session.GetObjectFromJson<FieldViewModel>(sessionId + " " + _fieldDataKey);
         }
@@ -4467,16 +4467,16 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         HttpContext.Session.SetObjectAsJson(model.SessionId + " " + _fieldDataKey, model);
     }
-    private void RemoveFieldDataFromSession(string sessionId)
+    private void RemoveFieldDataFromSession(Guid? sessionId)
     {
-        if (HttpContext.Session.Exists(sessionId + " " + _fieldDataKey))
+        if (sessionId.HasValue&&HttpContext.Session.Exists(sessionId + " " + _fieldDataKey))
         {
             HttpContext.Session.Remove(sessionId + " " + _fieldDataKey);
         }
     }
 
     [HttpGet]
-    public IActionResult LPIDNumber(string sessionId)
+    public IActionResult LPIDNumber(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : LPIDNumber() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -4520,7 +4520,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     }
 
     [HttpGet]
-    public async Task<IActionResult> NitrateVulnerableZones(string sessionId)
+    public async Task<IActionResult> NitrateVulnerableZones(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : NitrateVulnerableZones() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -4572,7 +4572,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         ViewBag.PscIndexList = pscIndexList;
     }
     [HttpGet]
-    public async Task<IActionResult> PscIndex(string sessionId)
+    public async Task<IActionResult> PscIndex(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : PscIndex() action called");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);
@@ -4638,7 +4638,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
     [HttpGet]
-    public async Task<IActionResult> SoilAnalysesMethod(string sessionId)
+    public async Task<IActionResult> SoilAnalysesMethod(Guid sessionId)
     {
         _logger.LogTrace($"Field Controller: SoilAnalysesMethod() action called.");
         FieldViewModel? model = LoadFieldDataFromSession(sessionId);

@@ -10,5 +10,5 @@ public class FarmFieldsViewModel
     public string? FarmName { get; set; }
     public string? FieldName { get; set; }
     public string EncryptedFarmId { get; set; } = string.Empty;
-    public string SessionId { get; set; } = string.Empty;
+    public Guid SessionId { get; set; } = Guid.NewGuid();
 }
