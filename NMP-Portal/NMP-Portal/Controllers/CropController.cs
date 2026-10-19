@@ -7732,7 +7732,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         var selectedDefoliationSequence = defoliationSequenceResponses.FirstOrDefault(x => x.DefoliationSequenceId == model.DefoliationSequenceId);
         var defoliationDetails = new List<object>();
 
-        if (defoliationDetails != null && selectedDefoliationSequence?.DefoliationSequence != null)
+        if (selectedDefoliationSequence?.DefoliationSequence != null)
         {
             int yield = 5;
             for (int i = 0; i < selectedDefoliationSequence.DefoliationSequence.Length; i++)
