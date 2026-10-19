@@ -221,7 +221,6 @@ namespace NMP.Portal.Controllers
 
                     SetSoilAnalysisDataToSession(model);
                 }
-                model = GetSoilAnalysisFromSession();
 
                 BindDataForCheckAnswer(i, l, model);
             }
