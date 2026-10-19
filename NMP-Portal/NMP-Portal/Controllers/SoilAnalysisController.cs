@@ -221,6 +221,7 @@ namespace NMP.Portal.Controllers
 
                     SetSoilAnalysisDataToSession(model);
                 }
+                model = GetSoilAnalysisFromSession();
 
                 BindDataForCheckAnswer(i, l, model);
             }
@@ -826,18 +827,18 @@ namespace NMP.Portal.Controllers
 
         private void ValidateModelErrorForSoilNutrientValueIndex(SoilAnalysisViewModel model)
         {
-            int potassiumIndexMaxValue = model.FarmRB209CountryID.Value != (int)NMP.Commons.Enums.RB209Country.Scotland ? 9 : 4;
+            int potassiumIndexMaxValue = 9;
             if (!string.IsNullOrEmpty(model.PotassiumIndexValue))
             {
                 ValidatePotassiumIndexValue(model, potassiumIndexMaxValue);
             }
 
-            int phosphorusIndexMaxValue = model.FarmRB209CountryID.Value != (int)NMP.Commons.Enums.RB209Country.Scotland ? 9 : 4;
+            int phosphorusIndexMaxValue = 9;
             if (model.PhosphorusIndex.HasValue && (model.PhosphorusIndex > phosphorusIndexMaxValue || model.PhosphorusIndex < 0))
             {
                 ModelState.AddModelError(_phosphorusIndex, string.Format(Resource.MsgEnterValidValueForNutrientIndex, phosphorusIndexMaxValue));
             }
-            int magnesiumIndexIndexMaxValue = model.FarmRB209CountryID.Value != (int)NMP.Commons.Enums.RB209Country.Scotland ? 9 : 4;
+            int magnesiumIndexIndexMaxValue = 9;
             if (model.MagnesiumIndex.HasValue && (model.MagnesiumIndex > phosphorusIndexMaxValue || model.PhosphorusIndex < 0))
             {
                 ModelState.AddModelError(_magnesiumIndex, string.Format(Resource.MsgEnterValidValueForNutrientIndex, magnesiumIndexIndexMaxValue));
