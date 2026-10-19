@@ -1415,9 +1415,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (string.IsNullOrWhiteSpace(model.PotassiumIndexValue))
             return;
 
-        var isScotland = model.FarmRB209CountryID ==
-                         (int)NMP.Commons.Enums.RB209Country.Scotland;
-
         int maxValue = 9;
 
         var value = model.PotassiumIndexValue.Replace(" ", "");
