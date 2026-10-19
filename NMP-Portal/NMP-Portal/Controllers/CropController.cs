@@ -486,6 +486,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.SwardManagementId = null;
             model.PotentialCut = null;
             model.DefoliationSequenceId = null;
+            model.Crops.ForEach(x => x.PreviousGrass = null);
+            model.FreshWeightYieldsPerField = null;
+            model.IsPermanentSward = null;
             SetCropToSession(model);
         }
         return model;
@@ -2709,7 +2712,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             var fieldIdsForFilter = fieldList.Where(f => f.ID.HasValue).Select(f => f.ID.Value).ToList();
-            ViewBag.FieldOptions = fieldIdsForFilter;
             return (model, harvestYearPlanResponse.Where(x => fieldIdsForFilter.Contains(x.FieldID)).ToList());
         }
         else
@@ -6052,6 +6054,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.GrassClassQuestion = null;
             model.Yield = null;
             model.Crops.ForEach(x => x.Yield = null);
+            model.Crops.ForEach(x => x.PreviousGrass = null);
+            model.FreshWeightYieldsPerField = null;
         }
 
         SetCropToSession(model);
@@ -6115,13 +6119,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-            else if (!model.IsAnyChangeInField)
+            else if (model.IsAnyChangeInField)
             {
                 model.PotentialCut = null;
                 model.DefoliationSequenceId = null;
                 model.GrassClassQuestion = null;
                 model.Yield = null;
                 model.Crops.ForEach(x => x.Yield = null);
+                model.Crops.ForEach(x => x.PreviousGrass = null);
+                model.FreshWeightYieldsPerField = null;
             }
 
             SetCropToSession(model);
@@ -6193,12 +6199,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-            else if (!model.IsAnyChangeInField)
+            else if (model.IsAnyChangeInField)
             {
                 model.DefoliationSequenceId = null;
                 model.GrassClassQuestion = null;
                 model.Yield = null;
                 model.Crops.ForEach(x => x.Yield = null);
+                model.Crops.ForEach(x => x.PreviousGrass = null);
+                model.FreshWeightYieldsPerField = null;
             }
 
             SetCropToSession(model);
@@ -6314,11 +6322,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return RedirectToAction(_checkAnswerActionName);
             }
-            else if (!model.IsAnyChangeInField)
+            else if (model.IsAnyChangeInField)
             {
                 model.GrassClassQuestion = null;
                 model.Yield = null;
                 model.Crops.ForEach(x => x.Yield = null);
+                model.Crops.ForEach(x => x.PreviousGrass = null);
+                model.FreshWeightYieldsPerField = null;
             }
             SetCropToSession(model);
 
@@ -7722,7 +7732,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         var selectedDefoliationSequence = defoliationSequenceResponses.FirstOrDefault(x => x.DefoliationSequenceId == model.DefoliationSequenceId);
         var defoliationDetails = new List<object>();
 
-        if (selectedDefoliationSequence?.DefoliationSequence != null)
+        if (defoliationDetails != null && selectedDefoliationSequence?.DefoliationSequence != null)
         {
             int yield = 5;
             for (int i = 0; i < selectedDefoliationSequence.DefoliationSequence.Length; i++)
@@ -7929,9 +7939,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (!wantsDefaultValues)
         {
-            // "No" - edit THIS field manually. Do not advance the field pointer yet.
-            model.FreshWeightManualCounter = currentIndex;
-            model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
+            model.FreshWeightDefaultCounter++;
+            model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
             SetCropToSession(model);
 
             if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange && !model.IsFreshWeightYieldsDefaultChange)
@@ -8067,8 +8076,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         ValidateGrassGrowthClassProperties(model);
 
-        // Keep the master field pointer in sync with what was just manually completed.
-        model.FreshWeightDefaultCounter = model.FreshWeightManualCounter + 1;
+        model.FreshWeightManualCounter = model.FreshWeightManualCounter + 1;
 
         if (model.FreshWeightManualCounter + 1 < model.Crops.Count)
         {
@@ -8076,7 +8084,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.FieldName = model.Crops[model.FreshWeightManualCounter + 1].FieldName;
         }
 
-        model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
+        model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
         SetCropToSession(model);
 
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
