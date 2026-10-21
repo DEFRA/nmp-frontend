@@ -9,7 +9,7 @@
     var backAction = ViewBag?.IsDataChange ? "Cancel" : "FieldSoilAnalysisDetail";
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@(backAction) asp-controller ="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(backAction) asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="UpdateField" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -44,7 +44,7 @@
             </govuk-button>
 
             <p class="govuk-body cancel-link">
-                <a asp-action=@(ViewBag.IsDataChange ? "Cancel" : "FieldSoilAnalysisDetail") asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId">@Resource.lblCancel</a>
+                <a asp-action=@(ViewBag.IsDataChange ? "Cancel" : "FieldSoilAnalysisDetail") asp-controller="Field" asp-route-farmId="@Model.EncryptedFarmId" asp-route-fieldId="@Model.EncryptedFieldId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             </p>
 
 

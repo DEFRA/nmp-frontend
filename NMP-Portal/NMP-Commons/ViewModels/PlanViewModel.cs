@@ -127,5 +127,6 @@ public class PlanViewModel
     public bool IsPermanentSwardChange { get; set; } = false;
     public bool IsFreshWeightYieldsDefaultChange { get; set; } = false;
     public bool IsPreviousGrassManaged { get; set; } = false;
+    public Guid SessionId { get; set; } = Guid.NewGuid();
 
 }

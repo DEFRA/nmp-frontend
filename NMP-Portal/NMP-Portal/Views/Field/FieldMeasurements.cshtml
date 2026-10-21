@@ -21,7 +21,7 @@
     ViewBag.CurrentStep = (int)FieldWizardSteps.FieldMeasurment;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field"   asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -32,7 +32,7 @@
                 <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                     <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblFieldMeasurements, Model.Name)</h1>
                 </govuk-fieldset-legend>
-                <govuk-input name="TotalArea" asp-for=@Model.TotalArea type="number" inputmode="decimal"
+                <govuk-input name="TotalArea" for=@Model.TotalArea type="number" inputmode="decimal"
                              pattern="^\d+(\.\d{0,2})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>@Resource.lblTotalFieldArea
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
@@ -40,7 +40,7 @@
 
                     <govuk-input-suffix>@Resource.lblHectares.ToLower()</govuk-input-suffix>
                 </govuk-input>
-                <govuk-input name="CroppedArea" asp-for=@Model.CroppedArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input name="CroppedArea" for=@Model.CroppedArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>
                         @Resource.lblCroppedAreaForCheckAnswere
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span>
@@ -48,7 +48,7 @@
 
                     <govuk-input-suffix>@Resource.lblHectares.ToLower()</govuk-input-suffix>
                 </govuk-input>
-                <govuk-input name="ManureNonSpreadingArea" asp-for=@Model.ManureNonSpreadingArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
+                <govuk-input name="ManureNonSpreadingArea" for=@Model.ManureNonSpreadingArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                     <govuk-input-label>
                         @Resource.lblManureNonSpreadingAreaForCheckAnswere
                         <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblHectares)</span> 
@@ -62,20 +62,6 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-
-            @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
-            {
-                <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
-            }
-            else if (!Model.IsCheckAnswer)
-            {
-                <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
-            }
-            else if (Model.IsCheckAnswer)
-            {
-                <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
-            }
-        </p>
+        <partial name="_AddOrUpdateCancelLink" model="@Model" />
     </div>
 </div>

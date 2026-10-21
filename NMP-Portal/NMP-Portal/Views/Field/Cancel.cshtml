@@ -12,7 +12,7 @@
     };
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@(string.IsNullOrWhiteSpace(Model.EncryptedFieldId)?"CheckAnswer":"UpdateField") asp-controller="Field">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(string.IsNullOrWhiteSpace(Model.EncryptedFieldId) ? "CheckAnswer" : "UpdateField") asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 
 }
 
@@ -25,5 +25,5 @@
     </govuk-button>
 </form>
 <p class="govuk-body cancel-link">
-    <a asp-action=@(string.IsNullOrWhiteSpace(Model.EncryptedFieldId)?"CheckAnswer":"UpdateField") asp-controller="Field">@Resource.lblCancel</a>
+    <a asp-action=@(string.IsNullOrWhiteSpace(Model.EncryptedFieldId)?"CheckAnswer":"UpdateField") asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
 </p>

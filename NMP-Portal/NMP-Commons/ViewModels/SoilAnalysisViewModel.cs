@@ -26,4 +26,5 @@ public class SoilAnalysisViewModel : SoilAnalysis
     
     public bool IsSoilAnalysesMethodChange { get; set; } = false;
     public bool IsSoilNutrientValueTypeChange { get; set; } = false;
+    public string SessionId { get; set; } = Guid.NewGuid().ToString();
 }
