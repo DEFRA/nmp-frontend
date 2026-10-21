@@ -256,7 +256,7 @@
 
     @*  @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
     { *@
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@(Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Model.GrassClassEncryptedCounter : Model.YieldEncryptedCounter)">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Crop" asp-route-q="@(Model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? Model.GrassClassEncryptedCounter : Model.YieldEncryptedCounter)" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     @* }
     else
     {
@@ -307,13 +307,13 @@
                         @if (Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)
                         {
                             @string.Format(Resource.lblUpdateCropGroupNameContentForSingleField, Model.FieldName)
-                            <a asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@ViewBag.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId">@Resource.lblUpdateThisCropGroup</a>
+                            <a asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@ViewBag.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId" asp-route-sessionId="@Model?.SessionId">@Resource.lblUpdateThisCropGroup</a>
 
                         }
                         else
                         {
                             @Resource.lblUpdateCropGroupNameContent1
-                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@string.Format(Resource.lblViewTheYearCropPlan, Model.Year)</a>
+                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model?.SessionId">@string.Format(Resource.lblViewTheYearCropPlan, Model.Year)</a>
 
                         }
                         .
@@ -348,7 +348,7 @@
                         @Model.CropGroup
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblCropGroup</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblCropGroup</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -376,7 +376,7 @@
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
 
-                            <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblWhatIsTheCropType</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CropTypes"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblWhatIsTheCropType</span></govuk-summary-list-row-action>
 
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
@@ -435,7 +435,7 @@
                         <govuk-summary-list-row-actions>
                             @if (!(!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate) && (ViewBag.IsFieldChange != null && ViewBag.IsFieldChange)))
                             {
-                                <govuk-summary-list-row-action class="@(ViewBag.FieldOptions != null && ViewBag.FieldOptions.Count == 1 ? "disabled" : "")" asp-action="CropFields" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhichFieldsWouldYouLikeToPlanFor, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action class="@(ViewBag.FieldOptions != null && ViewBag.FieldOptions.Count == 1 ? "disabled" : "")" asp-action="CropFields"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhichFieldsWouldYouLikeToPlanFor, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)</span></govuk-summary-list-row-action>
                             }
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
@@ -448,7 +448,7 @@
                             @(Model.CropGroupName == null ? Resource.lblNotEntered : Model.CropGroupName)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CropGroupName" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblWhatWouldYouLikeToCallThisCropGroup</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CropGroupName"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblWhatWouldYouLikeToCallThisCropGroup</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -465,7 +465,7 @@
                             @(string.IsNullOrWhiteSpace(Model.Variety) ? Resource.lblNotEntered : Model.Variety)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblVarietyNameForCheckAnswer</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="VarietyName"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblVarietyNameForCheckAnswer</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     @* }
@@ -479,7 +479,7 @@
                                     @(string.IsNullOrWhiteSpace(Model.Variety) ? Resource.lblNotSet : Model.Variety)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="VarietyName" asp-controller="Crop">@Resource.lblChange</govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="VarietyName"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange</govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         } *@
@@ -496,7 +496,7 @@
                                 @(Model.IsPermanentSward == null ? Resource.lblNotSet : isPermanentGrass)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="isPermanentSward" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblIsThisAPermanentSward</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="isPermanentSward"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @Resource.lblIsThisAPermanentSward</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -510,7 +510,7 @@
                                 @(Model.CurrentSward == null ? Resource.lblNotSet : currentSward)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="CurrentSward" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="CurrentSward"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @(Model.FieldList.Count == 1 ? Resource.lblIsThisANewSwardOrExistingSward : string.Format(Resource.lblAreTheseNewSwardOrExistingSwardInTheseFields, Resource.lblTheseFields))</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -539,7 +539,7 @@
                                 @(Model.GrassSeason == null ? Resource.lblNotSet : Model.GrassSeasonName)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="GrassSeason" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year) </span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="GrassSeason"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhenIsTheSwardInTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Year) </span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
@@ -578,7 +578,7 @@
 
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SowingDateQuestion" asp-controller="Crop">
+                            <govuk-summary-list-row-action asp-action="SowingDateQuestion"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">
                                     string cropName = GetCropName(Model);
@@ -629,7 +629,7 @@
                                 @(Model.Crops[0].SowingDate.HasValue ? Model.Crops[0].SowingDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SowingDate" asp-controller="Crop" asp-route-q="@Model.SowingDateEncryptedCounter">
+                                <govuk-summary-list-row-action asp-action="SowingDate"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@Model.SowingDateEncryptedCounter">
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">
                                         @questionText
@@ -659,7 +659,7 @@
                                     @(crop.SowingDate.HasValue? crop.SowingDate.Value.Date.ToString("dd MMMM yyyy") : Resource.lblNotSet)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="SowingDate" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">
+                                    <govuk-summary-list-row-action asp-action="SowingDate"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@crop.EncryptedCounter">
                                         @Resource.lblChange
                                         <span class="govuk-visually-hidden">
                                             @if (!isGrass)
@@ -689,7 +689,7 @@
                                 @(string.IsNullOrWhiteSpace(yieldQuestion) ? Resource.lblNotSet : yieldQuestion)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="YieldQuestion" asp-controller="Crop">
+                                <govuk-summary-list-row-action asp-action="YieldQuestion"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">
                                         @yieldQuestionText
@@ -743,7 +743,7 @@
                             <govuk-summary-list-row-actions>
                                 @if (Model.Crops[0].Yield == null && (Model.YieldQuestion == null) && (!string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate)))
                                 {
-                                    <govuk-summary-list-row-action asp-action="YieldQuestion" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>
+                                    <govuk-summary-list-row-action asp-action="YieldQuestion"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q=@Model.YieldEncryptedCounter>
                                         @Resource.lblChange
                                         <span class="govuk-visually-hidden">
                                             @yieldLabel
@@ -752,7 +752,7 @@
                                 }
                                 else
                                 {
-                                    <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>
+                                    <govuk-summary-list-row-action asp-action="Yield"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q=@Model.YieldEncryptedCounter>
                                         @Resource.lblChange
                                         <span class="govuk-visually-hidden">
                                             @manualyieldText
@@ -795,7 +795,7 @@
                                     }
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@crop.EncryptedCounter>
+                                    <govuk-summary-list-row-action asp-action="Yield"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q=@crop.EncryptedCounter>
                                         @Resource.lblChange
                                         <span class="govuk-visually-hidden">
                                             @if (ViewBag.IsYieldOptional != null)
@@ -830,7 +830,7 @@
                                 }
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                @* <govuk-summary-list-row-action asp-action="Yield" asp-controller="Crop" asp-route-q=@Model.YieldEncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action> *@
+                                @* <govuk-summary-list-row-action asp-action="Yield"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q=@Model.YieldEncryptedCounter>@Resource.lblChange</govuk-summary-list-row-action> *@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
@@ -851,7 +851,7 @@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
 
-                                    <govuk-summary-list-row-action asp-action="CropInfoOne" asp-controller="Crop">
+                                    <govuk-summary-list-row-action asp-action="CropInfoOne"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">
                                         @Resource.lblChange
                                         <span class="govuk-visually-hidden">
                                             @if (ViewBag.CropInfoOneQuestion != null)
@@ -875,7 +875,7 @@
                                 @(Model.CropInfo2.HasValue? Model.CropInfo2Name: Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="CropInfoTwo" asp-controller="Crop">
+                                <govuk-summary-list-row-action asp-action="CropInfoTwo"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">
                                         @string.Format(Resource.lblCropInfo2ForCheckAnswer, Model.CropGroupId == OtherGroupId ? Model.OtherCropName : Model.CropType)
@@ -896,7 +896,7 @@
                             @(Model.SwardTypeId == null ? Resource.lblNotSet : ViewBag.SwardType)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SwardType" asp-controller="Crop">
+                            <govuk-summary-list-row-action asp-action="SwardType"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">
                                     @string.Format(Resource.lblWhatIsTheSwardTypeForTheseFields, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields), Model.Crops[0].Year)
@@ -913,7 +913,7 @@
                             @(Model.SwardManagementId == null ? Resource.lblNotSet : ViewBag.SwardManagementName)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="GrassManagement" asp-controller="Crop">
+                            <govuk-summary-list-row-action asp-action="GrassManagement"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden"> @string.Format(Resource.lblHowWillTheseFieldsBeManaged, (Model.FieldList.Count == 1 ? Model.Crops[0].FieldName : Resource.lblTheseFields))</span>
                             </govuk-summary-list-row-action>
@@ -928,7 +928,7 @@
                             @(Model.PotentialCut == null ? Resource.lblNotSet : potentialCutName)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="Crop">
+                            <govuk-summary-list-row-action asp-action="Defoliation"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">
                                 @Resource.lblChange
                                 <span class="govuk-visually-hidden">
                                     @potentialCutText
@@ -959,7 +959,7 @@
                                 </govuk-summary-list-row-value>
                             }
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="DefoliationSequence" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @defoliationSequenceText </span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="DefoliationSequence"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @defoliationSequenceText </span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -979,7 +979,7 @@
                                         @(crop.Yield == null ? Resource.lblNotSet : (string.Format("{0:N0} {1}", Convert.ToInt32(crop.Yield), Resource.lblTonnesPerHectare)))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="GrassClass" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="GrassClass"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@crop.EncryptedCounter">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, crop.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -1011,7 +1011,7 @@
                                     @ggcQuestion
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="GrassClass" asp-controller="Crop">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="GrassClass"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden"> @string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForField, Model.FieldName, Model.Crops[0].Year)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
@@ -1026,7 +1026,7 @@
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
 
-                                        <govuk-summary-list-row-action asp-action="DryMatterYield" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">
+                                        <govuk-summary-list-row-action asp-action="DryMatterYield"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@crop.EncryptedCounter">
                                             @Resource.lblChange
                                             <span class="govuk-visually-hidden">
                                                 @(Model.GrassClassQuestion == (int)NMP.Commons.Enums.YieldQuestion.EnterASingleFigureForAllTheseFields ? string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldForFields, Model.Crops[0].Year) : string.Format(Resource.lblWhatIsTheTotalTargetDryMatterYieldFor, crop.FieldName, crop.Year))
@@ -1061,7 +1061,7 @@
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
 
-                                    <govuk-summary-list-row-action asp-action="FreshWeightYieldsDefault" asp-controller="Crop" asp-route-q="@Model.Crops[i].EncryptedCounter">
+                                    <govuk-summary-list-row-action asp-action="FreshWeightYieldsDefault"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@Model.Crops[i].EncryptedCounter">
                                         @Resource.lblChange
                                         <span class="govuk-visually-hidden">
                                             @string.Format(Resource.lblTargetDryMatterYieldForField, Model.FreshWeightYieldsPerField[i].FieldName)
@@ -1102,7 +1102,7 @@
                                 <govuk-summary-list-row-actions>
                                     @if (Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault != null && !Model.FreshWeightYieldsPerField[i].IsFreshWeightYieldsDefault.Value)
                                     {
-                                        <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual" asp-controller="Crop" asp-route-q="@Model.Crops[i].EncryptedCounter">
+                                        <govuk-summary-list-row-action asp-action="FreshWeightYieldsManual"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@Model.Crops[i].EncryptedCounter">
                                             @Resource.lblChange
                                             <span class="govuk-visually-hidden">
                                                 @string.Format(Resource.lblEnterTheValuesForYourFreshWeightYieldInField, Model.FreshWeightYieldsPerField[i].FieldName)
@@ -1145,7 +1145,7 @@
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
 
-                                <govuk-summary-list-row-action asp-action="PreviousGrassManagement" asp-controller="Crop" asp-route-q="@crop.EncryptedCounter">
+                                <govuk-summary-list-row-action asp-action="PreviousGrassManagement"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@crop.EncryptedCounter" asp-route-sessionId="@Model?.SessionId">
                                     @Resource.lblChange
                                     <span class="govuk-visually-hidden">
                                         @questionText
@@ -1166,11 +1166,11 @@
                     @Resource.lblYouCanAlso
                     @if (!Model.IsComingFromRecommendation.HasValue)
                     {
-                        <a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName == null ? null : ViewBag.EncryptedCropGroupName)">@Resource.lblRemoveThisCropGroup</a>
+                        <a asp-action="RemoveCrop"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@ViewBag.EncryptedCropTypeId" asp-route-r="@(ViewBag.EncryptedCropGroupName == null ? null : ViewBag.EncryptedCropGroupName)" asp-route-sessionId="@Model?.SessionId">@Resource.lblRemoveThisCropGroup</a>
                     }
                     else
                     {
-                        <a asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@Model.EncryptedCropType" asp-route-s="@Model.EncryptedFieldName" asp-route-t="@Model.EncryptedFieldId" asp-route-u="@Model.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId" asp-route-w="@Model.EncryptedHarvestYear">@string.Format(Resource.lblRemoveCropFromFieldInYear, Model.CropType, Model.FieldName, Model.Year)</a>
+                        <a asp-action="RemoveCrop"  asp-controller="Crop" asp-route-sessionId="@Model?.SessionId" asp-route-q="@Model.EncryptedCropType" asp-route-s="@Model.EncryptedFieldName" asp-route-t="@Model.EncryptedFieldId" asp-route-u="@Model.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId" asp-route-w="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model?.SessionId">@string.Format(Resource.lblRemoveCropFromFieldInYear, Model.CropType, Model.FieldName, Model.Year)</a>
                     }
                     .
                 </p>
@@ -1188,23 +1188,23 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedIsCropUpdate))
                     {
-                        <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                        <a asp-action="Cancel" asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a>
                     }
                     else
                     {
                         if (ViewBag.IsDataChange != null && ViewBag.IsDataChange)
                         {
-                            <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                            <a asp-action="Cancel" asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a>
                         }
                         else
                         {
-                            <a asp-action="BackCheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                            <a asp-action="BackCheckAnswer" asp-controller="Crop" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a>
                         }
                     }
                 }

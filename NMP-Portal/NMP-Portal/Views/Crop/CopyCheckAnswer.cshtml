@@ -33,7 +33,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCopyCheckAnswer" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCopyCheckAnswer" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -86,7 +86,7 @@
                         @copyQuestion
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CopyExistingPlan" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CopyExistingPlan" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeToStartWithCopyOfPlanFromPreviousYear</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     <govuk-summary-list-row class=@((!Model.CopyYear.HasValue)?"govuk-error-message":"")>
@@ -97,7 +97,7 @@
                             @(Model.CopyYear.HasValue ? Model.CopyYear : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CopyPlanYears" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CopyPlanYears" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhichPlanWouldYouLikeToCopyFor, Model.Year)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     <govuk-summary-list-row class=@((!Model.OrganicInorganicCopy.HasValue)?"govuk-error-message":"")>
@@ -109,7 +109,7 @@
                                 Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="CopyOrganicInorganicApplications" asp-controller="Crop">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="CopyOrganicInorganicApplications" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToIncludeOrganicMaterialInorganicFertiliserApplications</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 </govuk-summary-list>
@@ -120,11 +120,11 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a asp-action="Cancel" asp-controller="Crop">@Resource.lblCancel</a>
+                    <a asp-action="Cancel" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
         </form>

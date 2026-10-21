@@ -78,7 +78,7 @@
 {
     @section BeforeContent {
         <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-            <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+            <govuk-breadcrumbs-item asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblPlanningAndRecording
             </govuk-breadcrumbs-item>
             <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
@@ -124,11 +124,11 @@
                 @if (Model.AnnualRainfall != null)
                 {
                     @ViewBag.ExcessRainfallContentFirst
-                    <a asp-action="UpdateExcessOrWinterRainfall" asp-controller="Crop">@ViewBag.ExcessRainfallContentSecond</a>
+                    <a asp-action="UpdateExcessOrWinterRainfall" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@ViewBag.ExcessRainfallContentSecond</a>
                 }
             </p>
             <p class="govuk-body pb-25">
-                <a asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-h="@Model.EncryptedHarvestYear">@Resource.lblDownloadPrintOrExportThisPlan</a>
+                <a asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-h="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblDownloadPrintOrExportThisPlan</a>
             </p>
 
             @if (Model.HarvestYearPlans != null)
@@ -136,7 +136,7 @@
                 <govuk-tabs>
                     <govuk-tabs-item id="CropAndFields" label=@Resource.lblCropsAndFields>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblCropsAndFields</h2>
-                        <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblAddACropToAField</a>
+                        <a class="govuk-button add-button" asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblAddACropToAField</a>
                         <hr class="seperator_five">
 
                         <!-- Crops Table -->
@@ -154,7 +154,7 @@
                                     </h2>
                                     <p class="govuk-body"></p>
                                 </div>
-                                <a class=" govuk-button govuk-button--secondary" asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId">@Resource.lblUpdateThisGroup</a>
+                                <a class=" govuk-button govuk-button--secondary" asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName" asp-route-t="@Model.EncryptedHarvestYear" asp-route-u="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblUpdateThisGroup</a>
                                 @* <a class=" govuk-button govuk-button--secondary" asp-action="RemoveCrop" asp-controller="Crop" asp-route-q="@harvestYearPlan.EncryptedCropTypeName" asp-route-r="@harvestYearPlan.EncryptedCropGroupName">@Resource.lblRemoveThisGroup</a> *@
                                 <div class="tab-right">
 
@@ -230,7 +230,7 @@
 
                                                         </td>
                                                         <td class="govuk-table__cell">
-                                                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-fragment="@(field.CropOrder == 2 ? "crop-2" : "crop-1")" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateThisFieldOrViewRecommendations, string.Format(Resource.MsgGenericFor, field.FieldName)))">
+                                                            <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-fragment="@(field.CropOrder == 2 ? "crop-2" : "crop-1")" asp-route-r="@field.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId" aria-label="@(string.Format("{0} {1}", Resource.lblUpdateThisFieldOrViewRecommendations, string.Format(Resource.MsgGenericFor, field.FieldName)))">
                                                                 @Resource.lblUpdateThisFieldOrViewRecommendations
                                                             </a>
                                                         </td>
@@ -247,11 +247,11 @@
                         <h2 class="govuk-heading-m non-standard">@Resource.lblOrganicMaterialApplications</h2>
                         @if (ViewBag.AddMannerDisabled != null && ViewBag.AddMannerDisabled)
                         {
-                            <a class="govuk-button disabled add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnOrganicMaterialApplication</a>
+                            <a class="govuk-button disabled add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblAddAnOrganicMaterialApplication</a>
                         }
                         else
                         {
-                            <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnOrganicMaterialApplication</a>
+                            <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblAddAnOrganicMaterialApplication</a>
                         }
                         @if (Model.HarvestYearPlans != null && Model.HarvestYearPlans.OrganicManureList != null && Model.HarvestYearPlans.OrganicManureList.Any())
                         {
@@ -259,11 +259,11 @@
                             <h2 class="govuk-heading-m">@string.Format(Resource.lblAllOrganicMaterialApplicationsForHarvestYear, Model.Year)</h2>
                             <p class="govuk-body">@Resource.lblAllAmountsArePerHectare</p>
                             <p class="govuk-body">
-                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.OrganicListSortByDate" asp-route-r="@Model.EncryptSortOrganicListOrderByDate" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByApplicationDate</a>
+                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.OrganicListSortByDate" asp-route-r="@Model.EncryptSortOrganicListOrderByDate" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblSortByApplicationDate</a>
                                 <span>&nbsp;</span>  or <span>&nbsp;</span>
-                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.OrganicListSortByFieldName" asp-route-r="@Model.EncryptSortOrganicListOrderByFieldName" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByFieldName</a>
+                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.OrganicListSortByFieldName" asp-route-r="@Model.EncryptSortOrganicListOrderByFieldName" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblSortByFieldName</a>
                                 <span>&nbsp;</span>  or <span>&nbsp;</span>
-                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.OrganicListSortByCropType" asp-route-r="@Model.EncryptSortOrganicListOrderByCropType" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByCropType</a>
+                                <a asp-action="SortOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.OrganicListSortByCropType" asp-route-r="@Model.EncryptSortOrganicListOrderByCropType" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblSortByCropType</a>
 
                             </p>
                             <!-- Organic Table -->
@@ -296,7 +296,7 @@
                                                 <td class="govuk-table__cell">
                                                     @string.Format("{0} {1}", organicManure.Rate, organicManure.RateUnit)
                                                 </td>
-                                                <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@organicManure.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, organicManure.Field))">@Resource.lblViewOrChange</a></td>
+                                                <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@organicManure.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, organicManure.Field))" asp-route-sessionId="@Model.SessionId">@Resource.lblViewOrChange</a></td>
                                             </tr>
                                         }
                                     </tbody>
@@ -308,18 +308,18 @@
                     </govuk-tabs-item>
                     <govuk-tabs-item id="InorganicFertiliserApplications" label=@Resource.lblInorganicFertiliserApplications>
                         <h2 class="govuk-heading-m non-standard">@Resource.lblInorganicFertiliserApplications</h2>
-                        <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnInorganicFertiliserApplication</a>
+                        <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblAddAnInorganicFertiliserApplication</a>
                         @if (Model.HarvestYearPlans != null && Model.HarvestYearPlans.InorganicFertiliserList != null && Model.HarvestYearPlans.InorganicFertiliserList.Any())
                         {
                             <hr class="seperator_five">
                             <h2 class="govuk-heading-m">@string.Format(Resource.lblAllInorganicFertiliserApplicationsForHarvestYear, Model.Year)</h2>
                             <p class="govuk-body">@Resource.lblAllAmountsArePerHectare</p>
                             <p class="govuk-body">
-                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.InOrganicListSortByDate" asp-route-r="@Model.EncryptSortInOrganicListOrderByDate" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByApplicationDate</a>
+                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.InOrganicListSortByDate" asp-route-r="@Model.EncryptSortInOrganicListOrderByDate" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblSortByApplicationDate</a>
                                 <span>&nbsp;</span>  or <span>&nbsp;</span>
-                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.InOrganicListSortByFieldName" asp-route-r="@Model.EncryptSortInOrganicListOrderByFieldName" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByFieldName</a>
+                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.InOrganicListSortByFieldName" asp-route-r="@Model.EncryptSortInOrganicListOrderByFieldName" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblSortByFieldName</a>
                                 <span>&nbsp;</span>  or <span>&nbsp;</span>
-                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.InOrganicListSortByCropType" asp-route-r="@Model.EncryptSortInOrganicListOrderByCropType" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId">@Resource.lblSortByCropType</a>
+                                <a asp-action="SortInOrganicList" asp-controller="Crop" asp-route-q="@ViewBag.InOrganicListSortByCropType" asp-route-r="@Model.EncryptSortInOrganicListOrderByCropType" asp-route-year="@Model.EncryptedHarvestYear" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblSortByCropType</a>
 
                             </p>
 
@@ -383,7 +383,7 @@
                                                     @* <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@ViewBag.Fertliser" asp-route-s="@inorganicFertiliser.EncryptedFieldName">@Resource.lblRemove</a>
                                                 <br /> *@
 
-                                                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblChange, string.Format(Resource.MsgGenericFor, inorganicFertiliser.Field)))">@Resource.lblChange</a>
+                                                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-q="@inorganicFertiliser.EncryptedFertId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@inorganicFertiliser.EncryptedFieldName" asp-route-sessionId="@Model.SessionId" aria-label="@(string.Format("{0} {1}", Resource.lblChange, string.Format(Resource.MsgGenericFor, inorganicFertiliser.Field)))">@Resource.lblChange</a>
 
                                                 </td>
                                             </tr>
