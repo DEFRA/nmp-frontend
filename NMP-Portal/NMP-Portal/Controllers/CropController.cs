@@ -6826,8 +6826,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (error != null && !string.IsNullOrWhiteSpace(error.Message))
         {
-            TempData[_grassGrowthClassError] = error.Message;
-            return (flowControl: false, value: RedirectToAction(_defoliationSequenceActionName), classIds, grassGrowthClasses, grassSiteClasses);
+            ViewBag.Error = error.Message;
+            return (flowControl: false, value: Functions.RedirectToErrorHandler((int)HttpStatusCode.InternalServerError), classIds, grassGrowthClasses, grassSiteClasses);
         }
 
         return (flowControl: true, value: null, classIds, grassGrowthClasses, grassSiteClasses);
