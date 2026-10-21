@@ -30,7 +30,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-        <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackActionForCheckAnswer") asp-controller="SoilAnalysis">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackActionForCheckAnswer") asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblBack</govuk-back-link>
 
     }
     <form class="form-with-overlay" asp-action="UpdateSoil" asp-controller="SoilAnalysis" method="post" autocomplete="off">
@@ -170,7 +170,7 @@
                             @((!Model.Date.HasValue) ? Resource.lblNotSet : (Model.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Date" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblDateSampleTakenForChangePage)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="Date" asp-controller="SoilAnalysis" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblDateSampleTakenForChangePage)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
@@ -196,7 +196,7 @@
                             }
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SulphurDeficient" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblSulphurDeficiencyStatus)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SulphurDeficient" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblSulphurDeficiencyStatus)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
@@ -216,7 +216,7 @@
                                 }
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilAnalysesMethod" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblSoilAnalysisMethod</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilAnalysesMethod" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblSoilAnalysisMethod</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -236,7 +236,7 @@
 
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblHowValuesAreEntered)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SoilNutrientValueType" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblHowValuesAreEntered)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
 
@@ -249,7 +249,7 @@
                             @ph
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPh)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPh)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     @if (Model.SoilNutrientValueType.HasValue && Model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index)
@@ -262,7 +262,7 @@
                                 @phosphorusIndex
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusIndex)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusIndex)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
@@ -273,7 +273,7 @@
                                 @potassiumIndex
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotassiumIndex)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotassiumIndex)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
@@ -284,7 +284,7 @@
                                 @magnesiumIndex
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -298,7 +298,7 @@
                                 @phosphorus
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusPerLitreOfSoil)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusPerLitreOfSoil)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
@@ -309,7 +309,7 @@
                                 @potassium
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotassiumPerLitreOfSoil)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotassiumPerLitreOfSoil)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
@@ -320,7 +320,7 @@
                                 @magnesium
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumPerLitreOfSoil)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumPerLitreOfSoil)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -334,7 +334,7 @@
                                 @phosphorusStatus
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusStatus)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPhosphorusStatus)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
@@ -345,7 +345,7 @@
                                 @potassiumStatus
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotashStatus)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPotashStatus)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row>
@@ -356,7 +356,7 @@
                                 @magnesiumStatus
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumStatus)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumStatus)</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -369,7 +369,7 @@
                             @((!Model.OrganicMatterPercentage.HasValue) ? Resource.lblNotEntered : (string.Format("{0}{1}", Model.OrganicMatterPercentage, Resource.lblPercentage)))
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="SoilNutrientValue" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblMagnesiumIndex)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 </govuk-summary-list>
@@ -378,7 +378,7 @@
                 {
                     <p class="govuk-body">
                         @Resource.lblYouCanAlso
-                        <a asp-action="RemoveSoilAnalysis" asp-controller="SoilAnalysis">
+                        <a asp-action="RemoveSoilAnalysis" asp-controller="SoilAnalysis" asp-route-sessionId="@Model.SessionId">
                             @Resource.lblRemoveThisSoilAnalysis
                         </a>
                     </p>
@@ -397,17 +397,17 @@
                 <p class="govuk-body cancel-link">
                     @if (string.IsNullOrWhiteSpace(Model.EncryptedSoilAnalysisId))
                     {
-                        <a asp-action="Cancel" asp-controller="SoilAnalysis">@Resource.lblCancel</a>
+                        <a asp-action="Cancel" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a>
                     }
                     else
                     {
                         if (ViewBag.IsDataChange != null && (bool)ViewBag.IsDataChange)
                         {
-                            <a asp-action="Cancel" asp-controller="SoilAnalysis">@Resource.lblCancel</a>
+                            <a asp-action="Cancel" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a>
                         }
                         else
                         {
-                            <a asp-action="BackActionForCheckAnswer" asp-controller="SoilAnalysis">@Resource.lblCancel</a>
+                            <a asp-action="BackActionForCheckAnswer" asp-controller="SoilAnalysis" asp-route-sessionId="@Model?.SessionId">@Resource.lblCancel</a>
                         }
                     }
                 </p>

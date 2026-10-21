@@ -8,7 +8,7 @@
     ViewBag.CurrentStep = (int)FarmWizardSteps.ManualRainFall;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -16,7 +16,7 @@
         <form asp-action="RainfallManual" asp-controller="Farm" method="post" autocomplete="off">
             @Html.AntiForgeryToken()           
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
-            <govuk-input asp-for=@Model.Rainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
+            <govuk-input for=@Model.Rainfall input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
                     @string.Format(Resource.lblEnterAverageAnualRainfall, Model.Postcode)
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblmm)</span>
@@ -29,11 +29,11 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+                    <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
         </form>

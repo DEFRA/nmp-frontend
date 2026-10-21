@@ -19,7 +19,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model != null && Model.IsCheckAnswer ? "CheckAnswer" : "AddField")" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model != null && Model.IsCheckAnswer ? "CheckAnswer" : "AddField")" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -47,7 +47,7 @@
         <p class="govuk-body cancel-link">
             <a asp-action="@cancelAction"
                asp-controller="Field"
-               asp-route-id="@cancelRouteId">
+               asp-route-id="@cancelRouteId" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblCancel
             </a>
         </p>

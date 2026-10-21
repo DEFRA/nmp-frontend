@@ -21,14 +21,14 @@
     ViewBag.CurrentStep = (int)FieldWizardSteps.NVZProgramme;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="NitrateVulnerableZones" method="post" asp-controller="Field" autocomplete="off">
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Field/_FieldWizardHiddenFields.cshtml", Model)
-            <govuk-radios class="govuk-radios--inline" asp-for="@Model.NVZProgrammeID">
+            <govuk-radios class="govuk-radios--inline" for="@Model.NVZProgrammeID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblWhichNitrateVulnerableZoneNVZIsIn, Model.Name)
@@ -51,20 +51,6 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-
-            @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
-            {
-                <a asp-action="UpdateField" asp-controller="Field">@Resource.lblCancel</a>
-            }
-            else if (!Model.IsCheckAnswer)
-            {
-                <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
-            }
-            else if (Model.IsCheckAnswer)
-            {
-                <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
-            }
-        </p>
+        <partial name="_AddOrUpdateCancelLink" model="@Model" />
     </div>
 </div>

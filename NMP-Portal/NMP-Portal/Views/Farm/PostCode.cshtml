@@ -19,7 +19,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@actionName" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@actionName" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -29,7 +29,7 @@
         <form asp-action="PostCode" method="post" asp-controller="Farm" autocomplete="on">
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)            
-            <govuk-input input-class="govuk-input--width-5" asp-for="@Model.Postcode">
+            <govuk-input input-class="govuk-input--width-5" for="@Model.Postcode">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l text-wrap-anywhere">@string.Format(Resource.lblWhatIsPostcode, Model.Name)</govuk-input-label>
             </govuk-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
@@ -39,11 +39,11 @@
         <p class="govuk-body cancel-link">
             @if (!Model.IsCheckAnswer)
             {
-                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
             else
             {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
         </p>
     </div>

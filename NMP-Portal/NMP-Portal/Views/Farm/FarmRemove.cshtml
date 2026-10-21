@@ -16,7 +16,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-        <govuk-back-link asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="FarmDetails" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
 
     <form asp-action="FarmRemove" asp-controller="Farm" method="post" autocomplete="off">
@@ -26,7 +26,7 @@
                 <h1 class="govuk-heading-l text-wrap-anywhere">@string.Format(Resource.lblRemoveFarm, Model.Name)</h1>
                 <p class="govuk-body">@Resource.MsgRemoveFarm</p>
                 @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)                
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.FarmRemove">
+                <govuk-radios class="govuk-radios--inline" for="@Model.FarmRemove">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend>
                             @Resource.lblAreYouSureYouWantToContinue
@@ -38,7 +38,7 @@
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-                <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link"><a asp-action="CreateFarmCancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
 
             </div>
         </div>

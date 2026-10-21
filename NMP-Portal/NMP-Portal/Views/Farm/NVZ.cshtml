@@ -10,7 +10,7 @@
     ViewBag.CurrentStep = (int)FarmWizardSteps.Nvz;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "Rainfall")" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="Elevation" asp-controller="Farm" method="post" autocomplete="off">
@@ -18,7 +18,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)            
-            <govuk-radios asp-for="@Model.NVZFields">
+            <govuk-radios for="@Model.NVZFields">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l text-wrap-anywhere">
                          @string.Format(Resource.lblHowManyFieldsInNVZ,Model.Name)
@@ -36,13 +36,13 @@
                 @Resource.lblContinue
             </govuk-button>
             <p class="govuk-body cancel-link">
-                 @if (!Model.IsCheckAnswer)
+                @if (!Model.IsCheckAnswer)
                 {
-                    <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+                    <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
 

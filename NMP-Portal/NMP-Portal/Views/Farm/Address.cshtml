@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "PostCode")" asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : "PostCode")" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -29,10 +29,10 @@
                         @Model.Postcode
                     </p>
                     <p class="govuk-body">
-                        <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblPostCode</span></a>
+                        <a class="govuk-link change-link" asp-action="PostCode" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@Resource.lblPostCode</span></a>
                     </p>
                 </div>
-                <govuk-select class="govuk-!-width-full" id="FullAddress" name="FullAddress" asp-for="FullAddress">
+                <govuk-select class="govuk-!-width-full" id="FullAddress" name="FullAddress" for="FullAddress">
                     <govuk-select-item value="">@ViewBag.AddressCount</govuk-select-item>
                     @foreach (var item in ViewBag.AddressList as List<SelectListItem>)
                     {
@@ -41,7 +41,7 @@
                 </govuk-select>
 
                 <p class="govuk-body margin-bottom-forty">
-                    <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm">@Resource.lblEnterAddressManually</a>
+                    <a class="govuk-link change-link" asp-action="ManualAddress" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblEnterAddressManually</a>
                 </p>
             </govuk-fieldset>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
@@ -51,11 +51,11 @@
         <p class="govuk-body cancel-link">
             @if (!Model.IsCheckAnswer)
             {
-                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CreateFarmCancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
             else
             {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
         </p>
 

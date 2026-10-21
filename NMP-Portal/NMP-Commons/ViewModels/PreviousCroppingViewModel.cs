@@ -18,5 +18,6 @@ public class PreviousCroppingViewModel:PreviousCropping
     public bool IsHasGreaterThan30PercentCloverChange { get; set; } = false;
     public bool IsGrassLastThreeHarvestYearChange { get; set; } = false;
     public bool? IsArableInNextYear { get; set; } = false;
+    public string? FarmName { get; set; }
 
 }
