@@ -140,52 +140,54 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     private async Task<(bool flowControl, IActionResult? value)> BackRedirectForAddField(string id, Guid sessionId, FieldViewModel? model, int fieldCount)
     {
-        if (model != null && model.IsCheckAnswer)
+        if (model != null)
         {
-            return (flowControl: false, value: await Task.FromResult(RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId })));
-        }
-        else if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
-        {
-            return (flowControl: false, value: await Task.FromResult(RedirectToAction(_updateFieldActionName, new
+            if (model.IsCheckAnswer)
             {
-                fieldId = model.EncryptedFieldId,
-                farmId = model.EncryptedFarmId,
-                sessionId = sessionId
-            })));
-        }
-        else if (HttpContext.Session.Keys.Contains("ReportData"))
-        {
-            ReportViewModel? reportViewModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
-            if (reportViewModel != null)
+                return (flowControl: false, value: await Task.FromResult(RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId })));
+            }
+            else if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && !string.IsNullOrWhiteSpace(model.EncryptedFieldId))
+            {
+                return (flowControl: false, value: await Task.FromResult(RedirectToAction(_updateFieldActionName, new
+                {
+                    fieldId = model.EncryptedFieldId,
+                    farmId = model.EncryptedFarmId,
+                    sessionId = sessionId
+                })));
+            }
+            else if (HttpContext.Session.Keys.Contains("ReportData"))
+            {
+                ReportViewModel? reportViewModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
+                if (reportViewModel != null)
+                {
+                    RemoveFieldDataFromSession(sessionId);
+                    return (flowControl: false, value: await Task.FromResult(RedirectToAction("ExportFieldsOrCropType", "Report")));
+                }
+
+                return (flowControl: false, value: await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { id = id, sessionId = sessionId })));
+            }
+            else if (model.HarvestYear != null && (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear)))
             {
                 RemoveFieldDataFromSession(sessionId);
-                return (flowControl: false, value: await Task.FromResult(RedirectToAction("ExportFieldsOrCropType", "Report")));
+                return (flowControl: false, value: await Task.FromResult(RedirectToAction("HarvestYearOverview", "Crop", new
+                {
+                    id = model.EncryptedFarmId,
+                    year = model.EncryptedHarvestYear,
+                    sessionId = sessionId
+                })));
             }
-
-            return (flowControl: false, value: await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { id = id, sessionId = sessionId })));
-        }
-        else if (model.HarvestYear != null && (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear)))
-        {
-            RemoveFieldDataFromSession(sessionId);
-            return (flowControl: false, value: await Task.FromResult(RedirectToAction("HarvestYearOverview", "Crop", new
+            else if (fieldCount > 0)
             {
-                id = model.EncryptedFarmId,
-                year = model.EncryptedHarvestYear,
-                sessionId = sessionId
-            })));
-        }
-        else if (fieldCount > 0)
-        {
-            if (model.CopyExistingField != null && model.CopyExistingField.Value)
-            {
-                return (flowControl: false, value: await Task.FromResult(RedirectToAction("CopyFields", _fieldKey, new { sessionId = sessionId })));
-            }
-            else
-            {
-                return (flowControl: false, value: await Task.FromResult(RedirectToAction("CopyExistingField", _fieldKey, new { sessionId = sessionId })));
+                if (model.CopyExistingField != null && model.CopyExistingField.Value)
+                {
+                    return (flowControl: false, value: await Task.FromResult(RedirectToAction("CopyFields", _fieldKey, new { sessionId = sessionId })));
+                }
+                else
+                {
+                    return (flowControl: false, value: await Task.FromResult(RedirectToAction("CopyExistingField", _fieldKey, new { sessionId = sessionId })));
+                }
             }
         }
-
         return (flowControl: true, value: null);
     }
 
@@ -3717,8 +3719,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model = LoadFieldDataFromSession(sessionId) ?? new FieldViewModel();
             model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.EncryptedFarmId = q;
-            model.SessionId = sessionId??model.SessionId;
-            (FarmResponse farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmID);
+            model.SessionId = sessionId.Value;
+            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmID);
             if (farm != null)
             {
                 model.FarmName = farm.Name;
