@@ -3,30 +3,28 @@
 @using NMP.Commons.ViewModels
 @model SoilAnalysisViewModel
 
-<govuk-radios  for="@Model.PhosphorusMethodologyID">
-    
+<govuk-radios for="@Model.PhosphorusMethodologyID">
+
     <govuk-radios-fieldset>
 
         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
             @Resource.lblWhichSoilAnalysisMethodWasUsed
         </govuk-radios-fieldset-legend>
-        @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-        {
-            <govuk-radios-hint>
-                @Resource.lblSoilAnalysisMethodHintRb209
-                <br />
-                @Resource.lblSoilAnalysisMethodHintSac
-            </govuk-radios-hint>
-        }
-        
+
+        <govuk-radios-hint>
+            @Resource.lblSoilAnalysisMethodHintRb209
+            <br />
+            @Resource.lblSoilAnalysisMethodHintSac
+        </govuk-radios-hint>
+
         @if (ViewBag.SoilMethologiesList != null)
         {
             @foreach (var item in ViewBag.SoilMethologiesList)
-{
-                    <govuk-radios-item value="@item.Value">
-                        @item.Text
-                    </govuk-radios-item>
-                
+            {
+                <govuk-radios-item value="@item.Value">
+                    @item.Text
+                </govuk-radios-item>
+
             }
         }
 
