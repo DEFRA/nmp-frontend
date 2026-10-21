@@ -577,7 +577,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     {
                         model.IsNVZProgrammeNeedToShow = true;
                         SetFieldDataToSession(model);
-                        return RedirectToAction("NitrateVulnerableZones");
+                        return RedirectToAction("NitrateVulnerableZones", new { sessionId = model.SessionId });
                     }
                 }
                 else
@@ -1613,7 +1613,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             _logger.LogTrace(ex, "Field Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorTempData] = ex.Message;
-            return RedirectToAction(_cropGroupsActionName);
+            return RedirectToAction(_cropGroupsActionName, new {sessionId=sessionId});
         }
 
         return View(model);
@@ -1677,7 +1677,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             _logger.LogTrace(ex, "Field Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorTempData] = ex.Message;
-            return RedirectToAction(_cropGroupsActionName);
+            return RedirectToAction(_cropGroupsActionName, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -1719,7 +1719,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             _logger.LogTrace(ex, "Field Controller : Exception in CropInfoOne() post action : {Message}, {StackTrace}",
                 ex.Message, ex.StackTrace);
             TempData["CropInfoOneError"] = ex.Message;
-            return RedirectToAction("CropInfo1");
+            return RedirectToAction("CropInfo1", new { sessionId = model.SessionId });
         }
 
     }
