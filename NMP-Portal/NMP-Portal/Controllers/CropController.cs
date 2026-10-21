@@ -2534,7 +2534,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             var fieldIdsForFilter = fieldList.Where(f => f.ID.HasValue)
        .Select(f => f.ID.Value)
        .ToList();
-            ViewBag.FieldOptions = fieldIdsForFilter;
+            
             return (model, harvestYearPlanResponse
                   .Where(x => fieldIdsForFilter.Contains(x.FieldID))
                   .ToList());

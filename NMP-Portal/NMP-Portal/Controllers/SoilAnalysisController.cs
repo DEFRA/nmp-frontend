@@ -222,6 +222,7 @@ namespace NMP.Portal.Controllers
                     SetSoilAnalysisDataToSession(model);
                 }
 
+                model = GetSoilAnalysisFromSession();
                 BindDataForCheckAnswer(i, l, model);
             }
             catch (Exception ex)
@@ -1364,7 +1365,7 @@ namespace NMP.Portal.Controllers
             {
                 model.IsSoilAnalysesMethodChange = false;
                 SetSoilAnalysisDataToSession(model);
-                return await Task.FromResult(RedirectToAction("ChangeSoilAnalysis"));
+                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
             }
             else
             {
