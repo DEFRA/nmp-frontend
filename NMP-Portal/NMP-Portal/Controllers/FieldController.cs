@@ -122,10 +122,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 RemoveFieldDataFromSession(sessionId);
                 return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { id = id, sessionId = sessionId }));
             }
-            (bool flowControl, IActionResult? value) = await BackRedirectForAddField(id, sessionId, model, fieldCount);
-            if (!flowControl && value != null)
+            else
             {
-                return value;
+                (bool flowControl, IActionResult? value) = await BackRedirectForAddField(id, sessionId, model, fieldCount);
+                if (!flowControl && value != null)
+                {
+                    return value;
+                }
             }
             RemoveFieldDataFromSession(sessionId);
             return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { id = id, sessionId = sessionId }));
@@ -138,10 +141,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
     }
 
-    private async Task<(bool flowControl, IActionResult? value)> BackRedirectForAddField(string id, Guid sessionId, FieldViewModel? model, int fieldCount)
+    private async Task<(bool flowControl, IActionResult? value)> BackRedirectForAddField(string id, Guid sessionId, FieldViewModel model, int fieldCount)
     {
-        if (model != null)
-        {
             if (model.IsCheckAnswer)
             {
                 return (flowControl: false, value: await Task.FromResult(RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId })));
@@ -187,7 +188,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     return (flowControl: false, value: await Task.FromResult(RedirectToAction("CopyExistingField", _fieldKey, new { sessionId = sessionId })));
                 }
             }
-        }
+        
         return (flowControl: true, value: null);
     }
 
