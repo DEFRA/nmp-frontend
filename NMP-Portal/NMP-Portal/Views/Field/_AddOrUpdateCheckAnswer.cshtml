@@ -757,7 +757,7 @@
                 @if (row.ShowAction)
                 {
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="@row.ActionName" asp-controller="@row.ControllerName">
+                        <govuk-summary-list-row-action asp-action="@row.ActionName" asp-controller="@row.ControllerName" asp-route-sessionId="@Model.SessionId">
                             @Resource.lblChange
                             <span class="govuk-visually-hidden">@row.Key</span>
                         </govuk-summary-list-row-action>

@@ -31,7 +31,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : backAction)" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" : backAction)" asp-controller="Field" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="RecentSoilAnalysisQuestion" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -64,16 +64,8 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a asp-action="CreateFieldCancel" asp-controller="Field" asp-route-id="@Model.EncryptedFarmId">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a asp-action="CheckAnswer" asp-controller="Field">@Resource.lblCancel</a>
-                }
-            </p>
+
+            <partial name="_CancelLink" model="@Model" />
 
         </div>
 

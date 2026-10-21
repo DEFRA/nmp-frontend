@@ -60,7 +60,7 @@
                 @if (ViewBag.FieldCount != null && ViewBag.FieldCount > 0)
                 {
                     <li>
-                        <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblAddOrUpdateFieldsOrSoilAnalysis</a>
+                        <a class="govuk-link" asp-action="ManageFarmFields" asp-controller="Field" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblAddOrUpdateFieldsOrSoilAnalysis</a>
                     </li>
                 }
                 else
@@ -83,7 +83,7 @@
                     <li>
                         @if (ViewBag.FieldCount != null && (ViewBag.FieldCount > 0))
                         {
-                            <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">
+                            <a class="govuk-link" asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">
                                 @Resource.lblFarmSummaryContent3
                             </a>
                         }
@@ -124,7 +124,7 @@
 
             <ul class="menu-list govuk-list govuk-list--spaced">
                 <li>
-                    <a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId">
+                        <a class="govuk-link" asp-action="ReportOptions" asp-controller="Report" asp-route-f="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">
                         @(Model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Wales ?
                                                 Resource.lblFarmSummaryContent6 : Resource.lblCreateAnNVZReport)
 

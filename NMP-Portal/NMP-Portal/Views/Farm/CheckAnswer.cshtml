@@ -43,7 +43,7 @@
     }
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Farm">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <form class="form-with-overlay" asp-action="@(!string.IsNullOrEmpty(Model.EncryptedIsUpdate) ? "FarmUpdate" : "CheckAnswer")" asp-controller="Farm" method="post">
     @Html.AntiForgeryToken()
@@ -93,7 +93,7 @@
                         @Model.Name
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="Name" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmName)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="Name" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmName)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -106,7 +106,7 @@
                     <govuk-summary-list-row-actions>
                         @if (string.IsNullOrEmpty(Model.EncryptedIsUpdate))
                         {
-                            <govuk-summary-list-row-action asp-action="Country" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblCountry)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="Country" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblCountry)</span></govuk-summary-list-row-action>
                         }
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
@@ -120,7 +120,7 @@
                             @Model.BusinessName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     <govuk-summary-list-row>
@@ -131,7 +131,7 @@
                             @(string.IsNullOrWhiteSpace(Model.SBI) ? Resource.lblNotEntered : Model.SBI)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                     <govuk-summary-list-row>
@@ -142,7 +142,7 @@
                             @(string.IsNullOrWhiteSpace(Model.CPH) ? Resource.lblNotEntered : Model.CPH)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="BusinessInformation" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -154,7 +154,7 @@
                         @Model.Postcode
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="PostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="PostCode" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblPostCode)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -165,7 +165,7 @@
                         @Model.FullAddress
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmAddress)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="@(Model.IsManualAddress ? "ManualAddress" : "Address")" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblFarmAddress)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @if (!string.IsNullOrWhiteSpace(Model.ClimateDataPostCode) && Model.ClimateDataPostCode != Model.Postcode)
@@ -178,7 +178,7 @@
                             @Model.ClimateDataPostCode
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="ClimatePostCode" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblClimatePostcode)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="ClimatePostCode" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblClimatePostcode)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -190,7 +190,7 @@
                         @(!Model.Rainfall.HasValue ? Resource.lblNotSet : string.Format("{0:N0}{1}", Model.Rainfall, Resource.lblmm))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblAnnualRainfall)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="Rainfall" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblAnnualRainfall)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -209,12 +209,12 @@
                             {
                                 if (ViewBag.FieldCount == 0)
                                 {
-                                    <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name))</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name))</span></govuk-summary-list-row-action>
                                 }
                             }
                             else
                             {
-                                <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name))</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="NVZ" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblHowManyFieldsInNVZ, Model.Name))</span></govuk-summary-list-row-action>
                             }
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
@@ -236,7 +236,7 @@
                         <govuk-summary-list-row-actions>
                             @if (ViewBag.FieldCount == 0)
                             {
-                                <govuk-summary-list-row-action asp-action="NitrateVulnerableZones" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@string.Format(Resource.lblWhichNVZAreTheFieldsAtYourFarmIn, Model.Name)</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="NitrateVulnerableZones" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@string.Format(Resource.lblWhichNVZAreTheFieldsAtYourFarmIn, Model.Name)</span></govuk-summary-list-row-action>
                             }
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
@@ -250,7 +250,7 @@
                         @fieldsAbove300m
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="Elevation" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name))</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="Elevation" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(string.Format(Resource.lblFieldsAbove300SeaLevel, Model.Name))</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 @if (Model.CountryID != (int)NMP.Commons.Enums.FarmCountry.Scotland)
@@ -263,7 +263,7 @@
                             @organicProducer
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="Organic" asp-controller="Farm">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblRegisteredOrganicProducer)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="Organic" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblChange <span class="govuk-visually-hidden">@(Resource.lblRegisteredOrganicProducer)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -277,17 +277,17 @@
 
                 @if (string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
                 {
-                    <a class="govuk-link" asp-action="Cancel" asp-controller="Farm">@Resource.lblCancel</a>
+                    <a class="govuk-link" asp-action="Cancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
                     if (ViewBag.IsDataChange != null && (bool)ViewBag.IsDataChange)
                     {
-                        <a class="govuk-link" asp-action="Cancel" asp-controller="Farm">@Resource.lblCancel</a>
+                        <a class="govuk-link" asp-action="Cancel" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                     }
                     else
                     {
-                        <a class="govuk-link" asp-action="BackCheckAnswer" asp-controller="Farm">@Resource.lblCancel</a>
+                        <a class="govuk-link" asp-action="BackCheckAnswer" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                     }
                 }
             </p>

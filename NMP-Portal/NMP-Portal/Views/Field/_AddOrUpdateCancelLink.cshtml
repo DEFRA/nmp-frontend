@@ -1,0 +1,13 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.FieldViewModel
+
+<p class="govuk-body cancel-link">
+    @if (!string.IsNullOrWhiteSpace(Model.EncryptedFieldId))
+    {
+        <a asp-action="UpdateField" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
+    }
+    else 
+    {
+        <partial name="_CancelLink" model="@Model" />
+    }
+</p>
