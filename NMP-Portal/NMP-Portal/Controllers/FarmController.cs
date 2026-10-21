@@ -1577,7 +1577,7 @@ namespace NMP.Portal.Controllers
                 {
                     TempData["AddFarmError"] = error.Message;
                     string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
-                    return RedirectToAction(_checkAnswerActionName, new { q = EncryptUpdateStatus });
+                    return RedirectToAction(_checkAnswerActionName, new { q = EncryptUpdateStatus,sessionId=model.SessionId });
                 }
 
                 string success = _dataProtector.Protect("true");
