@@ -230,6 +230,7 @@ namespace NMP.Portal.Controllers
 
                     SetSoilAnalysisDataToSession(model);
                 }
+                model = GetSoilAnalysisFromSession();
                 BindNMPTFarmIdAndNameForNavigation(model);
 
                 BindDataForCheckAnswer(i, l, model);
