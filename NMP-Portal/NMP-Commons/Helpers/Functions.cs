@@ -36,7 +36,7 @@ namespace NMP.Commons.Helpers
                 }
                 else
                 {
-                    error = wrapper?.Error?.ToObject<Error>();
+                    error = wrapper.Error?.ToObject<Error>();
                 }
 
                 if (error != null)
