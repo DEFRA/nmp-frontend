@@ -52,7 +52,6 @@ namespace NMP.Portal.Controllers
         {
             _logger.LogTrace("Farm Controller : FarmList({0}) action called", q);
             RemoveAllNmptSession(sessionId);
-            //RemoveFarmSession(sessionId);
             FarmsViewModel model = new FarmsViewModel();
             Error? error = null;
             try
@@ -1347,7 +1346,6 @@ namespace NMP.Portal.Controllers
                         farmData.ClimateDataPostCode = farm.ClimateDataPostCode;
                         ViewBag.FieldCount = await _farmLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmId));
                         farmData.EncryptedIsUpdate = u;
-                        // farmData.SessionId = sessionId ?? Guid.NewGuid();
                     }
                     RemoveFarmSession(sessionId);
                     RemoveFarmDataBeforeUpdateFromSession(sessionId);
@@ -1434,7 +1432,6 @@ namespace NMP.Portal.Controllers
                     {
                         farmData.Country = Enum.GetName(typeof(NMP.Commons.Enums.FarmCountry), farm.CountryID);
                     }
-                    //farmData.SessionId = sessionId;
                     bool update = true;
                     farmData.EncryptedIsUpdate = _dataProtector.Protect(update.ToString());
                     farmData.NitrateVulnerableZoneList = farmsNvz.FarmsNvz?.Select(n => n.NVZProgrammeID.ToString()).ToList() ?? new List<string>();
@@ -1937,14 +1934,6 @@ namespace NMP.Portal.Controllers
 
         private void FieldSessionRemoved(Guid? sessionId)
         {
-            //if (HttpContext.Session.Exists("FieldDataBeforeUpdate"))
-            //{
-            //    HttpContext.Session.Remove("FieldDataBeforeUpdate");
-            //}
-            //if (HttpContext.Session.Exists("FieldData"))
-            //{
-            //    HttpContext.Session.Remove("FieldData");
-            //}
 
             if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "FieldData"))
             {
@@ -1976,18 +1965,6 @@ namespace NMP.Portal.Controllers
 
         private void FarmSessionRemoved(Guid? sessionId)
         {
-            //if (HttpContext.Session.Exists("FarmData"))
-            //{
-            //    HttpContext.Session.Remove("FarmData");
-            //}
-            //if (HttpContext.Session.Exists("FarmDataBeforeUpdate"))
-            //{
-            //    HttpContext.Session.Remove("FarmDataBeforeUpdate");
-            //}
-            //if (HttpContext.Session.Exists("AddressList"))
-            //{
-            //    HttpContext.Session.Remove("AddressList");
-            //}
             RemoveFarmSession(sessionId);
             RemoveAddressesSession();
             RemoveFarmDataBeforeUpdateFromSession(sessionId);

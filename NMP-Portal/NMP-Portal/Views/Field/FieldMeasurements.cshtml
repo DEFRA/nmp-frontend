@@ -21,7 +21,7 @@
     ViewBag.CurrentStep = (int)FieldWizardSteps.FieldMeasurment;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Field" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Field"   asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

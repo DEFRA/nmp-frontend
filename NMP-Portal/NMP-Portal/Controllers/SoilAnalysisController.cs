@@ -42,6 +42,7 @@ namespace NMP.Portal.Controllers
         private const string _fieldSoilAnalysisDetailAction = "FieldSoilAnalysisDetail";
         private const string _fieldController = "Field";
         private const string _phosphorusKey = "Phosphorus";
+        private const string _soilAnalysisDataBeforeUpdateKey = "SoilAnalysisDataBeforeUpdate";
         private void BindNMPTFarmIdAndNameForNavigation(SoilAnalysisViewModel? model)
         {
 
@@ -226,11 +227,10 @@ namespace NMP.Portal.Controllers
                     }
 
                     BindSoilNutrientValueTypeForChangeSoilAnalysis(model);
-                    //model.SessionId = sessionId;
 
                     SetSoilAnalysisDataToSession(model);
                 }
-                model = GetSoilAnalysisFromSession();
+               
                 BindNMPTFarmIdAndNameForNavigation(model);
 
                 BindDataForCheckAnswer(i, l, model);
@@ -256,7 +256,7 @@ namespace NMP.Portal.Controllers
 
                 if (!string.IsNullOrWhiteSpace(i) && string.IsNullOrWhiteSpace(l))
                 {
-                    HttpContext.Session.SetObjectAsJson(model.SessionId + " " + "SoilAnalysisDataBeforeUpdate", model);
+                    HttpContext.Session.SetObjectAsJson(model.SessionId + " " + _soilAnalysisDataBeforeUpdateKey, model);
                 }
 
                 BindViewBegForIsDataChange(model);
@@ -265,7 +265,7 @@ namespace NMP.Portal.Controllers
 
         private void BindViewBegForIsDataChange(SoilAnalysisViewModel? model)
         {
-            var previousModel = HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>(model.SessionId + " " + "SoilAnalysisDataBeforeUpdate");
+            var previousModel = HttpContext.Session.GetObjectFromJson<SoilAnalysisViewModel>(model.SessionId + " " + _soilAnalysisDataBeforeUpdateKey);
             bool isDataChanged = false;
 
             if (previousModel != null)
@@ -1236,9 +1236,9 @@ namespace NMP.Portal.Controllers
 
         private void RemoveSoilAnalysisDataBeforeUpdate(SoilAnalysisViewModel model)
         {
-            if (HttpContext.Session.Exists(model.SessionId + " " + "SoilAnalysisDataBeforeUpdate"))
+            if (HttpContext.Session.Exists(model.SessionId + " " + _soilAnalysisDataBeforeUpdateKey))
             {
-                HttpContext.Session.Remove(model.SessionId + " " + "SoilAnalysisDataBeforeUpdate");
+                HttpContext.Session.Remove(model.SessionId + " " + _soilAnalysisDataBeforeUpdateKey);
             }
         }
 
