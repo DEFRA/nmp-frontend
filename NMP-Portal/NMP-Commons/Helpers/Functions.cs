@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using NMP.Commons.Enums;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
@@ -12,13 +13,34 @@ namespace NMP.Commons.Helpers
         private const string _1AugustTo31December = "1 August to 31 December";
         public static Error? ExtractError(this ILogger logger, ResponseWrapper? wrapper, Error? error)
         {
-            if (wrapper != null && wrapper.Error != null)
+            if (wrapper?.Error != null)
             {
-                error = wrapper?.Error?.ToObject<Error>();
+                if (wrapper.Error is JObject errorObject)
+                {
+                    error = errorObject.ToObject<Error>();
+                }
+                else if (wrapper.Error is JToken errorToken)
+                {
+                    error = errorToken.ToObject<Error>();
+                }
+                else if (wrapper.Error is string errorMessage)
+                {
+                    error ??= new Error();
+                    error.Message = errorMessage;
+                    error.Stack = wrapper.Error;
+                    error.Code = wrapper.StatusCode;
+                }
+                else if (wrapper.Error is Error existingError)
+                {
+                    error = existingError;
+                }
+                else
+                {
+                    error = wrapper.Error?.ToObject<Error>();
+                }
 
                 if (error != null)
                 {
-                    // Cast dynamic values to object to avoid dynamic dispatch for extension methods
                     logger.LogError(
                         "{Code} : {Message} : {Stack} : {Path}",
                         error.Code,
@@ -299,7 +321,7 @@ namespace NMP.Commons.Helpers
                     isPerennial,
                     september16);
         }
-        
+
         private static string GetScotlandClosedPeriod(
     int fieldType,
     bool isSandyShallowSoil,
