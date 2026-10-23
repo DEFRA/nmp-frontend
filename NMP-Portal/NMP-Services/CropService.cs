@@ -202,6 +202,10 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
         (List<CropTypeLinkingResponse> allCropTypes, Error? error) = await _cropTypeLinkingService.FetchCropTypeLinkingAsync();
         if (allCropTypes != null && allCropTypes.Count > 0 && error == null)
         {
+            if (isScotland)
+            {
+                return allCropTypes.FirstOrDefault(c => c.CropTypeId == cropTypeId)?.DefaultYieldScotland ?? 0;
+            }
             return allCropTypes.FirstOrDefault(c => c.CropTypeId == cropTypeId)?.DefaultYield ?? 0;
         }
         return new decimal();
