@@ -306,6 +306,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.FarmRB209CountryID = farm?.RB209CountryID;
             model.CountryId = farm?.CountryID;
             model.FarmName = farm?.Name;
+            model.FarmID = farm?.ID;
             BindNMPTFarmIdAndNameForNavigation(model);
             if (model.FarmRB209CountryID.HasValue)
             {
@@ -318,6 +319,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.IsCropGroupChange = false;
                 SetCropToSession(model);
             }
+            RemoveHarvestYearPlanFromSession(model.FarmID ?? 0, model.Year ?? 0);
         }
         catch (Exception ex)
         {
@@ -2403,6 +2405,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmID);
         await PrepareCropUpdateData(model, harvestYearPlanResponse, isBasePlan, allSowingAreSame, firstSowingDate);
 
+        RemoveHarvestYearPlanFromSession(farmID, model.Year.Value);
         //working for scotland grass update
         await BindScotlandGrassData(model, harvestYearPlanResponse);
     }
@@ -3636,10 +3639,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 int harvestYear = model?.Year ?? 0;
                 if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(year))
                 {
-                    farmId= Convert.ToInt32(_farmDataProtector.Unprotect(id));
+                    farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
                     harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
                 }
-                (bool flowControl, IActionResult? value, model) = BindSessionDataForHarvestYearOverview(farmId,harvestYear);
+                (bool flowControl, IActionResult? value, model) = BindSessionDataForHarvestYearOverview(farmId, harvestYear);
                 if (!flowControl && value != null)
                 {
                     return value;
@@ -3648,6 +3651,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     model = BindSortingData(s, t, u, model);
                     BindViewBegForSortingList();
+                    (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
+                    if (farm != null)
+                    {
+                        await BindRainfallDataForHarvestYearOverview(model, farmId, harvestYear, new Error(), farm);
+                    }
                     SetHarvestYearPlanToSession(model);
                 }
             }
@@ -3733,20 +3741,20 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (flowControl: true, value: null, model);
     }
 
-    private (bool flowControl, IActionResult? value,PlanViewModel? model) BindSessionDataForHarvestYearOverview(int farmId,int year)
+    private (bool flowControl, IActionResult? value, PlanViewModel? model) BindSessionDataForHarvestYearOverview(int farmId, int year)
     {
         PlanViewModel? model = null;
         if (HttpContext.Session.Keys.Contains(farmId + " " + year + " " + _harvestYearPlanActionName))
         {
-             model = HttpContext.Session.GetObjectFromJson<PlanViewModel>(farmId + " " + year + " " + _harvestYearPlanActionName);
+            model = HttpContext.Session.GetObjectFromJson<PlanViewModel>(farmId + " " + year + " " + _harvestYearPlanActionName);
         }
         else
         {
             _logger.LogError("Crop Controller : Session not found in HarvestYearOverview() action");
-            return (flowControl: false, value: Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict),model:model);
+            return (flowControl: false, value: Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict), model: model);
         }
 
-        return (flowControl: true, value: null,model:model);
+        return (flowControl: true, value: null, model: model);
     }
 
     private PlanViewModel BindSortingData(string? s, string? t, string? u, PlanViewModel? model)
@@ -5130,6 +5138,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
         {
+            RemoveHarvestYearPlanFromSession(model.FarmID ?? 0, model.Year ?? 0);
             (ExcessRainfalls excessRainfalls, _) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmID.Value, model.Year.Value);
             if (excessRainfalls.WinterRainfall != null)
             {
