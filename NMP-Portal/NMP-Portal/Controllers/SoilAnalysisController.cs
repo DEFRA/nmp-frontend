@@ -1399,7 +1399,7 @@ namespace NMP.Portal.Controllers
             {
                 model.IsSoilAnalysesMethodChange = false;
                 SetSoilAnalysisDataToSession(model);
-                return await Task.FromResult(RedirectToAction("ChangeSoilAnalysis", new { sessionId = model.SessionId }));
+                return await Task.FromResult(RedirectToAction("ChangeSoilAnalysis", new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId }));
             }
             else
             {
