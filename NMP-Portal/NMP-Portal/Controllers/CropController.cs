@@ -2252,7 +2252,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (hasEncryptedParams)
             {
-                
+
                 await BindModelFromEncryptedParamsForCheckAnswer(q, r, t, u, v, w, model);
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
@@ -3629,9 +3629,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else
             {
-                int farmId = model?.FarmID ?? 0;
-                int harvestYear = model?.Year ?? 0;
-                (bool flowControl, IActionResult? value, model) = await BindHarvestYearOverviewData(id, year, s, t, u, model, farmId, harvestYear);
+
+                (bool flowControl, IActionResult? value, model) = await BindHarvestYearOverviewData(id, year, s, t, u, model);
                 if (!flowControl && value != null)
                 {
                     return value;
@@ -3644,7 +3643,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             _logger.LogTrace(ex, "Crop Controller : Exception in HarvestYearOverview() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             model = null;
             ViewBag.Error = ex.Message;
-            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model.SessionId });
+            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model?.SessionId });
 
         }
         return View(model);
@@ -3664,17 +3663,22 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return await Task.FromResult(View(model));
     }
-    private async Task<(bool flowControl, IActionResult? value, PlanViewModel?)> BindHarvestYearOverviewData(string id, string year, string? s, string? t, string? u, PlanViewModel? model, int farmId, int harvestYear)
+    private async Task<(bool flowControl, IActionResult? value, PlanViewModel?)> BindHarvestYearOverviewData(string id, string year, string? s, string? t, string? u, PlanViewModel? model)
     {
+        int? farmId = model?.FarmID;
+        int? harvestYear = model?.Year;
         if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(year))
         {
             farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
             harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
         }
-        (bool flowControl, IActionResult? value, model) = BindSessionDataForHarvestYearOverview(farmId, harvestYear);
-        if (!flowControl && value != null)
+        if (farmId != null && harvestYear != null)
         {
-            return (flowControl: false, value: value, model);
+            (bool flowControl, IActionResult? value, model) = BindSessionDataForHarvestYearOverview(farmId??0, harvestYear??0);
+            if (!flowControl && value != null)
+            {
+                return (flowControl: false, value: value, model);
+            }
         }
         if (model != null)
         {
@@ -4921,7 +4925,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> RemoveCrop(string? q, string? r = null,string? t = null, string? u = null, string? v = null, string? w = null, Guid? sessionId = null)
+    public async Task<IActionResult> RemoveCrop(string? q, string? r = null, string? t = null, string? u = null, string? v = null, string? w = null, Guid? sessionId = null)
     {
         _logger.LogTrace("Crop Controller : RemoveCrop() action called");
         PlanViewModel? model = GetCropFromSession(sessionId) ?? new PlanViewModel();
@@ -4938,7 +4942,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.EncryptedFarmId = v;
 
             }
-            model =await BindCropDataForRemove(q, r,  t, u, w, model);
+            model = await BindCropDataForRemove(q, r, t, u, w, model);
             ViewBag.EncryptedCropType = q;
             if (!string.IsNullOrWhiteSpace(r))
             {
@@ -5094,7 +5098,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             model.CropGroupName = _cropDataProtector.Unprotect(r);
         }
-       
+
         if (!string.IsNullOrWhiteSpace(t))
         {
             model.EncryptedFieldId = t;
@@ -6872,7 +6876,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
 
         PlanViewModel planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
-        if (planViewModel != null && model.GrassClassQuestion != planViewModel.GrassClassQuestion)
+        if (model.GrassClassQuestion != planViewModel.GrassClassQuestion)
         {
             model.DryMatterYieldCounter = 0;
             model.DryMatterYieldEncryptedCounter = _cropDataProtector.Protect(model.DryMatterYieldCounter.ToString());
@@ -6979,7 +6983,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     public async Task<IActionResult> DryMatterYield(string q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : DryMatterYield({Q}) action called", q);
-        PlanViewModel model = GetCropFromSession(sessionId);
+        PlanViewModel? model = GetCropFromSession(sessionId);
 
         try
         {
@@ -8631,7 +8635,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 PlanViewModel? planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
 
-                if (planViewModel != null && planViewModel.IsPermanentSward == model.IsPermanentSward && !model.IsAnyChangeInField)
+                if (planViewModel.IsPermanentSward == model.IsPermanentSward && !model.IsAnyChangeInField)
                 {
                     return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                 }
