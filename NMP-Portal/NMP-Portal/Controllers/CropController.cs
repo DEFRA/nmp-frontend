@@ -96,14 +96,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         ViewBag.NMPTFarmName = model?.FarmName;
 
     }
-    //private PlanViewModel? GetCropFromSession()
-    //{
-    //    if (HttpContext.Session.Exists(_cropDataSessionKey))
-    //    {
-    //        return HttpContext.Session.GetObjectFromJson<PlanViewModel>(_cropDataSessionKey);
-    //    }
-    //    return null;
-    //}
+   
     private PlanViewModel? GetCropFromSession(Guid? sessionId)
     {
         if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _cropDataSessionKey))
