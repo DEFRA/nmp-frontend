@@ -8666,4 +8666,10 @@ following crop year 2</value>
   <data name="MsgEnterFreshWeightYield" xml:space="preserve">
     <value>Enter fresh weight yield for {0}</value>
   </data>
+  <data name="lblAboutRecommendationForScotlandContent1New" xml:space="preserve">
+    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC.</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New" xml:space="preserve">
+    <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp;amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (‘Defra and partners’).</value>
+  </data>
 </root>
