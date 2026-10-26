@@ -94,6 +94,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
         ViewBag.NMPTFarmName = model?.FarmName;
+        ViewBag.Year =model?.EncryptedHarvestYear;
+        ViewBag.SessionId = model?.SessionId;
 
     }
 
@@ -3629,7 +3631,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else
             {
-
                 (bool flowControl, IActionResult? value, model) = await BindHarvestYearOverviewData(id, year, s, t, u, model);
                 if (!flowControl && value != null)
                 {
@@ -3643,7 +3644,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             _logger.LogTrace(ex, "Crop Controller : Exception in HarvestYearOverview() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             model = null;
             ViewBag.Error = ex.Message;
-            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model.SessionId });
+            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model?.SessionId });
 
         }
         return View(model);
@@ -3691,7 +3692,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 SetHarvestYearPlanToSession(model);
             }
         }
-       
+
 
         return (flowControl: true, value: null, model);
     }

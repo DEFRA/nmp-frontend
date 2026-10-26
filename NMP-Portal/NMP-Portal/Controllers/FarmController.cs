@@ -118,6 +118,7 @@ namespace NMP.Portal.Controllers
 
                 ViewBag.NMPTFarmId = model.EncryptedFarmId;
                 ViewBag.NMPTFarmName = model.Name;
+                ViewBag.SessionId = model?.SessionId;
             }
         }
 
@@ -1298,10 +1299,10 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r, Guid? sessionId)
+        public async Task<IActionResult> FarmSummary(string id, string? q, string? u, string? r, Guid? sessionId, string? year)
         {
             _logger.LogTrace("Farm Controller : FarmSummary() action called");
-            RemoveAllNmptSession(sessionId);
+            RemoveAllNmptSession(sessionId, id, year);
             string farmId = string.Empty;
             if (!string.IsNullOrWhiteSpace(q))
             {
@@ -1577,7 +1578,7 @@ namespace NMP.Portal.Controllers
                 {
                     TempData["AddFarmError"] = error.Message;
                     string EncryptUpdateStatus = _dataProtector.Protect(Resource.lblTrue.ToString());
-                    return RedirectToAction(_checkAnswerActionName, new { q = EncryptUpdateStatus,sessionId=model.SessionId });
+                    return RedirectToAction(_checkAnswerActionName, new { q = EncryptUpdateStatus, sessionId = model.SessionId });
                 }
 
                 string success = _dataProtector.Protect("true");
@@ -1821,10 +1822,10 @@ namespace NMP.Portal.Controllers
         }
 
 
-        private void RemoveAllNmptSession(Guid? sessionId=null)
+        private void RemoveAllNmptSession(Guid? sessionId = null, string? farmId = null, string? year = null)
         {
             //crop session
-            CropSessionRemoved();
+            CropSessionRemoved(sessionId, farmId, year);
 
             //Farm session
             FarmSessionRemoved(sessionId);
@@ -1948,7 +1949,7 @@ namespace NMP.Portal.Controllers
                 HttpContext.Session.Remove(sessionId + " " + "FieldRemove");
             }
 
-           
+
         }
 
         private void FertiliserSessionRemoved()
@@ -1970,19 +1971,28 @@ namespace NMP.Portal.Controllers
             RemoveFarmDataBeforeUpdateFromSession(sessionId);
         }
 
-        private void CropSessionRemoved()
+        private void CropSessionRemoved(Guid? sessionId, string? farmId, string? year)
         {
-            if (HttpContext.Session.Exists("CropData"))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "CropData"))
             {
-                HttpContext.Session.Remove("CropData");
+                HttpContext.Session.Remove(sessionId + " " + "CropData");
             }
-            if (HttpContext.Session.Exists("CropDataBeforeUpdate"))
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "CropDataBeforeUpdate"))
             {
-                HttpContext.Session.Remove("CropDataBeforeUpdate");
+                HttpContext.Session.Remove(sessionId + " " + "CropDataBeforeUpdate");
             }
-            if (HttpContext.Session.Exists("HarvestYearPlan"))
+            if (!string.IsNullOrWhiteSpace(farmId) && !string.IsNullOrWhiteSpace(year))
             {
-                HttpContext.Session.Remove("HarvestYearPlan");
+                int decryptedFarmId = Convert.ToInt32(_dataProtector.Unprotect(farmId));
+                int decryptedYear = Convert.ToInt32(_dataProtector.Unprotect(year));
+                if (HttpContext.Session.Keys.Contains(decryptedFarmId + " " + decryptedYear + " " + "HarvestYearPlan"))
+                {
+                    HttpContext.Session.Remove(decryptedFarmId + " " + decryptedYear + " " + "HarvestYearPlan");
+                }
+            }
+            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "ExcessWinterRainfall"))
+            {
+                HttpContext.Session.Remove(sessionId + " " + "ExcessWinterRainfall");
             }
         }
     }
