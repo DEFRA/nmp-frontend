@@ -27,13 +27,13 @@
     @section BeforeContent {
     @if (Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)
         {
-            <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
+            <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblBack
             </govuk-back-link>
         }
         else
         {
-            <govuk-back-link asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropType" asp-route-r="@(ViewBag.EncryptedCropGroupName!=null?ViewBag.EncryptedCropGroupName:null)" asp-route-s="@Model.EncryptedIsCropUpdate">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="CheckAnswer" asp-controller="Crop" asp-route-q="@ViewBag.EncryptedCropType" asp-route-r="@(ViewBag.EncryptedCropGroupName!=null?ViewBag.EncryptedCropGroupName:null)" asp-route-s="@Model.EncryptedIsCropUpdate" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 
         }
         }
@@ -94,11 +94,11 @@
 
                 @if (Model.IsComingFromRecommendation.HasValue && Model.IsComingFromRecommendation.Value)
                 {
-                    <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+                    <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
                 }
                 else
                 {
-                    <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="Crop" >@Resource.lblCancel</a></p>
+                    <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="Crop"  asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
                 }
             </div>
         </div>
