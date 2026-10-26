@@ -3643,7 +3643,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             _logger.LogTrace(ex, "Crop Controller : Exception in HarvestYearOverview() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             model = null;
             ViewBag.Error = ex.Message;
-            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model?.SessionId });
+            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model.SessionId });
 
         }
         return View(model);
@@ -3674,7 +3674,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (farmId != null && harvestYear != null)
         {
-            (bool flowControl, IActionResult? value, model) = BindSessionDataForHarvestYearOverview(farmId??0, harvestYear??0);
+            (bool flowControl, IActionResult? value, model) = BindSessionDataForHarvestYearOverview(farmId.Value, harvestYear.Value);
             if (!flowControl && value != null)
             {
                 return (flowControl: false, value: value, model);
@@ -7030,7 +7030,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in DryMatterYield() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["DryMatterYieldError"] = ex.Message;
-            return RedirectToAction(_grassGrowthClassActionName, new { sessionId = model.SessionId });
+            return RedirectToAction(_grassGrowthClassActionName, new { sessionId = sessionId });
         }
     }
 
