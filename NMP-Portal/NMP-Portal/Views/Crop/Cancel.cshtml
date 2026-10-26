@@ -16,7 +16,7 @@
     };
 }
 @section BeforeContent {
-        <govuk-back-link asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
  
 
 }
@@ -30,6 +30,6 @@
     </govuk-button>
 </form>
 <p class="govuk-body cancel-link">
-        <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+        <a asp-action="CheckAnswer" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
    
 </p>

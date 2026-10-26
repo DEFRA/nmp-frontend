@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsCropGroupChange) && (!Model.IsCropTypeChange) && (!Model.IsAnyChangeInField) ? "CheckAnswer" : "CropGroupName")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer && (!Model.IsCropGroupChange) && (!Model.IsCropTypeChange) && (!Model.IsAnyChangeInField) ? "CheckAnswer" : "CropGroupName")" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     
 }
 
@@ -35,11 +35,11 @@
         <p class="govuk-body cancel-link">
             @if (!Model.IsCheckAnswer)
             {
-                <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
             else
             {
-                <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                <a asp-action="CheckAnswer" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             }
         </p>
         

@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="UpdateExcessOrWinterRainfall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="UpdateExcessOrWinterRainfall" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -52,7 +52,7 @@
                 <button class="govuk-button" data-module="govuk-button">Continue</button>
             </fieldset>
 
-            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">Cancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">Cancel</a></p>
 
         </form>
     </div>

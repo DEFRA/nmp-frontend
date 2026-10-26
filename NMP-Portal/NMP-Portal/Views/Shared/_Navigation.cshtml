@@ -59,7 +59,7 @@
 
             @if (isNmptFarmContext && !string.IsNullOrWhiteSpace(currentNMPTFarmId) && !string.IsNullOrWhiteSpace(currentNMPTFarmName))
             {
-                <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentNMPTFarmId" active="@(isNmptFarmContext)">
+                <govuk-service-navigation-nav-item asp-action="FarmSummary" asp-controller="Farm" asp-route-id="@currentNMPTFarmId" asp-route-year="@ViewBag.Year" asp-route-sessionId="@ViewBag.SessionId" active="@(isNmptFarmContext)">
                     @currentNMPTFarmName
                 </govuk-service-navigation-nav-item>
             }
