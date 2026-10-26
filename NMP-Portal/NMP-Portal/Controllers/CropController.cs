@@ -3612,6 +3612,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         PlanViewModel? model = null;
         try
         {
+            RemoveExcessWinterRainfallFromSession(sessionId);
             RemoveOrganicDataBeforeUpdateFromSession();
             RemoveFertiliserDataBeforeUpdateFromSession();
             RemoveCropDataBeforeUpdateFromSession(sessionId);
