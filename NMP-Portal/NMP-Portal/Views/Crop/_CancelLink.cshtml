@@ -1,0 +1,13 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.PlanViewModel
+
+<p class="govuk-body cancel-link">
+    @if (!Model.IsCheckAnswer)
+    {
+        <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
+    }
+    else
+    {
+        <a asp-action="CheckAnswer" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
+    }
+</p>

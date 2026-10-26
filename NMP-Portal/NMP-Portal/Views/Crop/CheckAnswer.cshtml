@@ -1170,7 +1170,7 @@
                     }
                     else
                     {
-                        <a asp-action="RemoveCrop"  asp-controller="Crop" asp-route-q="@Model.EncryptedCropType" asp-route-s="@Model.EncryptedFieldName" asp-route-t="@Model.EncryptedFieldId" asp-route-u="@Model.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId" asp-route-w="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model?.SessionId">@string.Format(Resource.lblRemoveCropFromFieldInYear, Model.CropType, Model.FieldName, Model.Year)</a>
+                        <a asp-action="RemoveCrop"  asp-controller="Crop" asp-route-q="@Model.EncryptedCropType" asp-route-t="@Model.EncryptedFieldId" asp-route-u="@Model.EncryptedCropOrder" asp-route-v="@Model.EncryptedFarmId" asp-route-w="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model?.SessionId">@string.Format(Resource.lblRemoveCropFromFieldInYear, Model.CropType, Model.FieldName, Model.Year)</a>
                     }
                     .
                 </p>
