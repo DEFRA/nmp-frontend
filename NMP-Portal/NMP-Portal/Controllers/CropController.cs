@@ -3642,9 +3642,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in HarvestYearOverview() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            model = null;
+           
             ViewBag.Error = ex.Message;
-            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model?.SessionId });
+            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model?.SessionId??null });
 
         }
         return View(model);
