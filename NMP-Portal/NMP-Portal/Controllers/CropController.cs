@@ -3679,18 +3679,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return (flowControl: false, value: value, model);
             }
-        }
-        if (model != null)
-        {
-            model = BindSortingData(s, t, u, model);
-            BindViewBegForSortingList();
-            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId);
-            if (farm != null)
+            if (model != null)
             {
-                await BindRainfallDataForHarvestYearOverview(model, farmId, harvestYear, new Error(), farm);
+                model = BindSortingData(s, t, u, model);
+                BindViewBegForSortingList();
+                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId.Value);
+                if (farm != null)
+                {
+                    await BindRainfallDataForHarvestYearOverview(model, farmId.Value, harvestYear.Value, new Error(), farm);
+                }
+                SetHarvestYearPlanToSession(model);
             }
-            SetHarvestYearPlanToSession(model);
         }
+       
 
         return (flowControl: true, value: null, model);
     }
