@@ -8663,6 +8663,9 @@ following crop year 2</value>
   <data name="lblSoilAnalysisMethodHintSac" xml:space="preserve">
     <value>SAC soil analysis uses an ammonium acetate soil extract (Modified Morgan’s method) for phosphorus (P), potassium (K) and magnesium (Mg) and is typically used by laboratories in Scotland.</value>
   </data>
+  <data name="MsgEnterFreshWeightYield" xml:space="preserve">
+    <value>Enter fresh weight yield for {0}</value>
+  </data>
   <data name="lblSourceRB209ForEngland" xml:space="preserve">
     <value>Crop need is from the AHDB Nutrient Management Guide (RB209). Nutrient supply from manures is calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
   </data>

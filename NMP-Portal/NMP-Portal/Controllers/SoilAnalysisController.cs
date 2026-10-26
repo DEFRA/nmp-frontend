@@ -474,6 +474,10 @@ namespace NMP.Portal.Controllers
             {
                 return RedirectToAction(_soilNutrientValueActionName, new { sessionId = model.SessionId });
             }
+            if (model.IsCheckAnswer && model.IsSoilAnalysesMethodChange)
+            {
+                return RedirectToAction(_soilNutrientValueActionName, new { sessionId = model.SessionId });
+            }
             if (model.IsCheckAnswer && !model.IsSoilAnalysesMethodChange)
             {
                 return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged, sessionId = model.SessionId });

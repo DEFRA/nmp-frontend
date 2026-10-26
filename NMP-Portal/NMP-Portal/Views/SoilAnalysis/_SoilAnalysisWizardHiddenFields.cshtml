@@ -4,6 +4,9 @@
 @model NMP.Commons.ViewModels.SoilAnalysisViewModel
 @{
     var currentStep = ViewBag.CurrentStep as int?;
+
+    var isMilligramInputRendered = currentStep == (int)SoilAnalysisWizardSteps.SoilNutrientValue
+        && Model.SoilNutrientValueType == (int)SoilNutrientValueType.Miligram;
 }
 <div hidden="hidden">
     @if (currentStep != (int)SoilAnalysisWizardSteps.SulphurDeficiency)
@@ -23,6 +26,12 @@
     @if (currentStep != (int)SoilAnalysisWizardSteps.SoilAnalysesMethod)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID" />
+    }
+    @if (currentStep == (int)SoilAnalysisWizardSteps.SoilNutrientValue && !isMilligramInputRendered)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Phosphorus" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Potassium" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Magnesium" />
     }
     @if (currentStep != (int)SoilAnalysisWizardSteps.SoilNutrientValue)
     {

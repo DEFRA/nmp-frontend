@@ -23231,6 +23231,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter fresh weight yield for {0}.
+        /// </summary>
+        public static string MsgEnterFreshWeightYield {
+            get {
+                return ResourceManager.GetString("MsgEnterFreshWeightYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter name of the material.
         /// </summary>
         public static string MsgEnterNameOfTheMaterial {
