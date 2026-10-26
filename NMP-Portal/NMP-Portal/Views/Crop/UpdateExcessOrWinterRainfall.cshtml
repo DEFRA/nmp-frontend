@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -51,15 +51,15 @@
             
             @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
-                <a class="govuk-button add-button" asp-action="IsWinterRainfallMoreThan450" asp-controller="Crop" class="margin-bottom-forty">@Resource.lblUpdateWinterRainfall</a>
+                <a class="govuk-button add-button margin-bottom-forty" asp-action="IsWinterRainfallMoreThan450" asp-controller="Crop"  asp-route-sessionId="@Model.SessionId">@Resource.lblUpdateWinterRainfall</a>
             }
             else
             {
-                <a class="govuk-button add-button" asp-action="ExcessWinterRainfall" asp-controller="Crop" class="margin-bottom-forty">@Resource.lblUpdateExcessWinterRainfall</a>
+                <a class="govuk-button add-button margin-bottom-forty" asp-action="ExcessWinterRainfall" asp-controller="Crop"  asp-route-sessionId="@Model.SessionId">@Resource.lblUpdateExcessWinterRainfall</a>
             }
         </div>
 
-        <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+        <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
 
 
     </div>

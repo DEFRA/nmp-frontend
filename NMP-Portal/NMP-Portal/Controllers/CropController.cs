@@ -52,6 +52,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _harvestYearForPlanActionName = "HarvestYearForPlan";
     private const string _cropDataBeforeUpdateSessionKey = "CropDataBeforeUpdate";
     private const string _defoliationActionName = "Defoliation";
+    private const string _excessWinterRainfallActionName = "ExcessWinterRainfall";
     private const string _cropTypeTempErrorName = "CropTypeError";
     private const string _cropPrefix = "Crops[";
     private const string _yieldPrefix = "].Yield";
@@ -90,19 +91,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private void BindNMPTFarmIdAndNameForNavigation(PlanViewModel? model)
     {
-        
+
         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
         ViewBag.NMPTFarmName = model?.FarmName;
+        ViewBag.Year =model?.EncryptedHarvestYear;
+        ViewBag.SessionId = model?.SessionId;
 
     }
-    private PlanViewModel? GetCropFromSession()
-    {
-        if (HttpContext.Session.Exists(_cropDataSessionKey))
-        {
-            return HttpContext.Session.GetObjectFromJson<PlanViewModel>(_cropDataSessionKey);
-        }
-        return null;
-    }
+
     private PlanViewModel? GetCropFromSession(Guid? sessionId)
     {
         if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _cropDataSessionKey))
@@ -113,14 +109,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
     private void SetCropToSession(PlanViewModel plan)
     {
-        HttpContext.Session.SetObjectAsJson(_cropDataSessionKey, plan);
+        HttpContext.Session.SetObjectAsJson(plan.SessionId + " " + _cropDataSessionKey, plan);
     }
 
-    private void RemoveCropSession()
+    private void RemoveCropSession(Guid? sessionId)
     {
-        if (HttpContext.Session.Exists(_cropDataSessionKey))
+        if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _cropDataSessionKey))
         {
-            HttpContext.Session.Remove(_cropDataSessionKey);
+            HttpContext.Session.Remove(sessionId + " " + _cropDataSessionKey);
         }
     }
 
@@ -130,10 +126,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return await Task.FromResult(View());
     }
 
-    public async Task<IActionResult> CreateCropPlanCancel(string q)
+    public async Task<IActionResult> CreateCropPlanCancel(string q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CreateCropPlanCancel({Q}) action called", q);
-        RemoveCropSession();
+        RemoveCropSession(sessionId);
 
         if (!string.IsNullOrWhiteSpace(q))
         {
@@ -142,17 +138,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (planSummaryResponse.Count > 0)
             {
-                return await Task.FromResult(RedirectToAction(_plansAndRecordsOverviewActionName, "Crop", new { id = q }));
+                return await Task.FromResult(RedirectToAction(_plansAndRecordsOverviewActionName, "Crop", new { id = q, sessionId = sessionId }));
             }
         }
-        return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { Id = q }));
+        return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { Id = q, sessionId = sessionId }));
     }
 
 
 
     [HttpGet]
     [SuppressMessage("SonarAnalyzer.CSharp", "S6967:ModelState.IsValid should be called in controller actions", Justification = "No validation is needed as data is not saving in database.")]
-    public async Task<IActionResult> HarvestYearForPlan(string q, string? year, bool? isPlanRecord)
+    public async Task<IActionResult> HarvestYearForPlan(string q, string? year, bool? isPlanRecord, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : HarvestYearForPlan({Q}, {Year}, {IsPlanRecord}) action called", q, year, isPlanRecord);
 
@@ -161,7 +157,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return HandleBadRequest();
         }
 
-        var model = GetCropFromSession() ?? new PlanViewModel();
+        var model = GetCropFromSession(sessionId) ?? new PlanViewModel();
 
         try
         {
@@ -183,7 +179,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogError(ex, "Crop Controller: Exception in HarvestYearForPlan() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = ex.Message;
-            return RedirectToAction(_farmSummaryActionName, "Farm", new { id = q });
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { id = q, sessionId = sessionId });
         }
     }
 
@@ -214,10 +210,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             SetCropToSession(model);
 
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
-        return RedirectToAction(_cropGroupsActionName);
+        return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
     }
 
     private IActionResult HandleHarvestYearSelection(
@@ -231,7 +227,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         model.IsPlanRecord = isPlanRecord == true;
 
         SetCropToSession(model);
-        return RedirectToAction(_cropGroupsActionName);
+        return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
     }
 
     private async Task<IActionResult> ResolveNavigationAsync(PlanViewModel model)
@@ -240,7 +236,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (!plans.Any() && model.IsPlanRecord != true)
         {
-            return RedirectToAction(_farmSummaryActionName, "Farm", new { id = model.EncryptedFarmId });
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { id = model.EncryptedFarmId, sessionId = model.SessionId });
         }
 
         if (model.IsPlanRecord == true)
@@ -249,7 +245,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 new
                 {
                     id = model.EncryptedFarmId,
-                    year = _farmDataProtector.Protect(plaintext: model.Year.ToString())
+                    year = _farmDataProtector.Protect(plaintext: model.Year.ToString()),
+                    sessionId = model.SessionId
                 });
         }
 
@@ -259,7 +256,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 new
                 {
                     id = model.EncryptedFarmId,
-                    year = _farmDataProtector.Protect(model.Year.ToString())
+                    year = _farmDataProtector.Protect(model.Year.ToString()),
+                    sessionId = model.SessionId
                 });
         }
 
@@ -287,10 +285,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public async Task<IActionResult> CropGroups()
+    public async Task<IActionResult> CropGroups(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CropGroups() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -303,6 +301,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.FarmRB209CountryID = farm?.RB209CountryID;
             model.CountryId = farm?.CountryID;
             model.FarmName = farm?.Name;
+            model.FarmID = farm?.ID;
             BindNMPTFarmIdAndNameForNavigation(model);
             if (model.FarmRB209CountryID.HasValue)
             {
@@ -315,12 +314,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.IsCropGroupChange = false;
                 SetCropToSession(model);
             }
+            RemoveHarvestYearPlanFromSession(model.FarmID ?? 0, model.Year ?? 0);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Crop Controller: Exception in CropGroups() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnHarvestYear"] = ex.Message;
-            return RedirectToAction(_harvestYearForPlanActionName);
+            return RedirectToAction(_harvestYearForPlanActionName, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -349,7 +349,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
 
-            PlanViewModel? CropData = GetCropFromSession();
+            PlanViewModel? CropData = GetCropFromSession(model.SessionId);
 
             if (CropData == null)
             {
@@ -373,7 +373,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             CropData.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Other)
                             && model.IsCheckAnswer && (!model.IsCropGroupChange))
                 {
-                    return RedirectToAction(_checkAnswerActionName);
+                    return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                 }
             }
 
@@ -452,20 +452,20 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 bool success = RedirectCropGroupWitherror(model, harvestYearPlanResponse, selectListItem, fieldsAllowedForSecondCrop);
                 if (!success)
                 {
-                    return RedirectToAction(_cropGroupsActionName);
+                    return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
                 }
             }
 
             SetCropToSession(model);
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && model.IsComingFromRecommendation == true)
             {
-                return RedirectToAction(_cropGroupName);
+                return RedirectToAction(_cropGroupName, new { sessionId = model.SessionId });
             }
-            return RedirectToAction(_cropFields);
+            return RedirectToAction(_cropFields, new { sessionId = model.SessionId });
         }
         model = ResetGrassProperties(model);
 
-        return RedirectToAction(_cropTypes);
+        return RedirectToAction(_cropTypes, new { sessionId = model.SessionId });
     }
 
     private bool RedirectCropGroupWitherror(PlanViewModel model, List<HarvestYearPlanResponse> harvestYearPlanResponse, List<SelectListItem> selectListItem, List<int> fieldsAllowedForSecondCrop)
@@ -508,6 +508,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 model.Crops.Where(x => x != null).ToList().ForEach(x => x.PreviousGrass = null);
             }
+
             model.FreshWeightYieldsPerField = null;
             model.IsPermanentSward = null;
             SetCropToSession(model);
@@ -520,7 +521,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         List<HarvestYearPlanResponse> cropPlanForFirstCropFilter = harvestYearPlanResponse;
 
         (List<int> fieldsAllowedForSecondCrop, _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
-        PlanViewModel? cropData = GetCropFromSession();
+        PlanViewModel? cropData = GetCropFromSession(model.SessionId);
 
         model.IsCropTypeChange = model.IsCropGroupChange || (cropData != null && cropData.CropTypeID != model.CropTypeID);
 
@@ -540,13 +541,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (model, selectListItem, fieldsAllowedForSecondCrop);
     }
     [HttpGet]
-    public async Task<IActionResult> CropTypes()
+    public async Task<IActionResult> CropTypes(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CropTypes() action called");
 
         try
         {
-            PlanViewModel? model = GetCropFromSession();
+            PlanViewModel? model = GetCropFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in CropTypes() action");
@@ -565,7 +566,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogError(ex, "Crop Controller: Exception in CropTypes() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CropGroupError"] = ex.Message;
-            return RedirectToAction(_cropGroupsActionName);
+            return RedirectToAction(_cropGroupsActionName, new { sessionId = sessionId });
         }
     }
 
@@ -603,7 +604,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 Text = f.Name
             }).ToList();
 
-            PlanViewModel? cropData = GetCropFromSession();
+            PlanViewModel? cropData = GetCropFromSession(model.SessionId);
             SetCropToSession(model);
             List<int> fieldsAllowedForSecondCrop = new List<int>();
 
@@ -624,7 +625,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (result != null)
             {
-                return RedirectToAction(_cropTypes);
+                return RedirectToAction(_cropTypes, new { sessionId = model.SessionId });
             }
 
             return await RedirectForCropType(model, cropData, harvestYearPlanResponse, fieldsAllowedForSecondCrop);
@@ -689,7 +690,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             (selectListItem, model, var result) = await FetchNoFieldsAreAvailable(model, harvestYearPlanResponse, fieldsAllowedForSecondCrop, selectListItem);
             if (result != null)
             {
-                return (selectListItem, model, RedirectToAction(_cropTypes));
+                return (selectListItem, model, RedirectToAction(_cropTypes, new { sessionId = model.SessionId }));
             }
         }
         return (selectListItem, model, null);
@@ -715,7 +716,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 TempData[_cropTypeTempErrorName] = Resource.lblNoFieldsAreAvailable;
                 ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
-                return (selectListItem, model, RedirectToAction(_cropTypes));
+                return (selectListItem, model, RedirectToAction(_cropTypes, new { sessionId = model.SessionId }));
             }
         }
         return (selectListItem, model, null);
@@ -727,7 +728,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (cropData != null && cropData.CropTypeID == model.CropTypeID && !model.IsCropGroupChange)
             {
                 ViewBag.FieldOptions = harvestYearPlanResponse.Where(x => x.CropGroupName == model.PreviousCropGroupName).Select(x => x.FieldID).ToList();
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else
             {
@@ -745,9 +746,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && model.IsComingFromRecommendation == true)
         {
-            return RedirectToAction(_cropGroupName);
+            return RedirectToAction(_cropGroupName, new { sessionId = model.SessionId });
         }
-        return RedirectToAction(_cropFields);
+        return RedirectToAction(_cropFields, new { sessionId = model.SessionId });
     }
 
     private async Task<PlanViewModel> BindCropData(PlanViewModel model, List<int> fieldsAllowedForSecondCrop)
@@ -812,10 +813,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return model;
     }
     [HttpGet]
-    public IActionResult VarietyName()
+    public IActionResult VarietyName(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : VarietyName() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -829,7 +830,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in VarietyName() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CropGroupNameError"] = ex.Message;
-            return RedirectToAction(_cropGroupName);
+            return RedirectToAction(_cropGroupName, new { sessionId = sessionId });
         }
         return View(model);
     }
@@ -866,11 +867,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
                 if (model.IsCropTypeChange || model.IsAnyChangeInField)
                 {
-                    return RedirectToAction(_sowingDateQuestion);
+                    return RedirectToAction(_sowingDateQuestion, new { sessionId = model.SessionId });
                 }
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
-            return await Task.FromResult(RedirectToAction(_sowingDateQuestion));
+            return await Task.FromResult(RedirectToAction(_sowingDateQuestion, new { sessionId = model.SessionId }));
         }
         catch (Exception ex)
         {
@@ -881,10 +882,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> CropFields()
+    public async Task<IActionResult> CropFields(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CropFields() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -937,7 +938,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in CropFields() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_cropTypeTempErrorName] = ex.Message;
-            return RedirectToAction(_cropTypes);
+            return RedirectToAction(_cropTypes, new { sessionId = sessionId });
         }
         return View(model);
     }
@@ -987,7 +988,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
 
-            PlanViewModel? planViewModel = GetCropFromSession();
+            PlanViewModel? planViewModel = GetCropFromSession(model.SessionId);
             bool success = BuildCropList(model, allFields, harvestYearPlanResponseForFilter, fieldsAllowedForSecondCrop, selectListItem);
             if (!success)
             {
@@ -1063,7 +1064,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 };
                 counter++;
                 crop = BindCropInfoOneTwoOrCropGroupName(model, crop, harvestYearPlanResponseForFilter, allFields, fieldId);
-                (crop, var result) = BindSowingDateAndYield(crop, fieldId);
+                (crop, var result) = BindSowingDateAndYield(crop, fieldId, model.SessionId);
                 if (result != null)
                 {
                     return false;
@@ -1147,18 +1148,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         SetCropToSession(model);
         if (!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate) && model.IsAnyChangeInField)
         {
-            return (RedirectToAction("AddOrRemoveField"));
+            return (RedirectToAction("AddOrRemoveField", new { sessionId = model.SessionId }));
         }
         if (matchFound && (!model.IsAnyChangeInField) && model.IsCheckAnswer && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
         {
             SetCropToSession(model);
-            return (RedirectToAction(_checkAnswerActionName));
+            return (RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
         }
-        return RedirectToAction(_cropGroupName);
+        return RedirectToAction(_cropGroupName, new { sessionId = model.SessionId });
     }
-    private (Crop, IActionResult?) BindSowingDateAndYield(Crop crop, int fieldId)
+    private (Crop, IActionResult?) BindSowingDateAndYield(Crop crop, int fieldId, Guid sessionId)
     {
-        PlanViewModel? planViewModel = GetCropFromSession();
+        PlanViewModel? planViewModel = GetCropFromSession(sessionId);
         if (planViewModel != null)
         {
             if (planViewModel.Crops != null && planViewModel.Crops.Count > 0)
@@ -1246,10 +1247,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return fieldList;
     }
     [HttpGet]
-    public async Task<IActionResult> SowingDateQuestion()
+    public async Task<IActionResult> SowingDateQuestion(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : SowingDateQuestion() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -1269,7 +1270,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in SowingDateQuestion() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorOnSelectField] = ex.Message;
-            return RedirectToAction(_cropFields);
+            return RedirectToAction(_cropFields, new { sessionId = sessionId });
         }
         return View(model);
     }
@@ -1310,7 +1311,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return null;
         }
 
-        var sessionModel = GetCropFromSession();
+        var sessionModel = GetCropFromSession(model.SessionId);
 
         if (sessionModel == null)
         {
@@ -1320,7 +1321,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (IsSameSowingQuestionWithNoChanges(sessionModel, model))
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         if (sessionModel.SowingDateQuestion != model.SowingDateQuestion)
@@ -1365,12 +1366,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         SetCropToSession(model);
 
         if (IsCheckAnswerValid(model))
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
 
         if (IsGrass(model))
-            return RedirectToAction(_swardType);
+            return RedirectToAction(_swardType, new { sessionId = model.SessionId });
 
-        return RedirectToAction(_yieldQuestion);
+        return RedirectToAction(_yieldQuestion, new { sessionId = model.SessionId });
     }
     private IActionResult HandleDateEntryOption(PlanViewModel model)
     {
@@ -1380,7 +1381,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             SetCropToSession(model);
         }
 
-        return RedirectToAction(_sowingDate);
+        return RedirectToAction(_sowingDate, new { sessionId = model.SessionId });
     }
     private static void ResetSowingDates(PlanViewModel model)
     {
@@ -1405,10 +1406,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass;
     }
     [HttpGet]
-    public async Task<IActionResult> SowingDate(string q)
+    public async Task<IActionResult> SowingDate(string q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : SowingDate action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in SowingDate() action");
@@ -1435,7 +1436,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.SowingDateCurrentCounter = 0;
                     model.SowingDateEncryptedCounter = string.Empty;
                     SetCropToSession(model);
-                    return RedirectToAction(_sowingDateQuestion);
+                    return RedirectToAction(_sowingDateQuestion, new { sessionId = model.SessionId });
                 }
                 model.FieldID = model.Crops[index].FieldID.Value;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
@@ -1446,7 +1447,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             TempData["SowingDateQuestionError"] = ex.Message;
-            return RedirectToAction(_sowingDateQuestion);
+            return RedirectToAction(_sowingDateQuestion, new { sessionId = model.SessionId });
         }
         return View(model);
     }
@@ -1507,17 +1508,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.IsCheckAnswer && (!model.IsAnyChangeInField))
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
             {
                 if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
                 {
-                    return RedirectToAction(_checkAnswerActionName);
+                    return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                 }
-                return RedirectToAction(_swardType);
+                return RedirectToAction(_swardType, new { sessionId = model.SessionId });
             }
-            return RedirectToAction(_yieldQuestion);
+            return RedirectToAction(_yieldQuestion, new { sessionId = model.SessionId });
         }
         else
         {
@@ -1544,7 +1545,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         SetCropToSession(model);
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
         {
-            return (model, RedirectToAction(_checkAnswerActionName));
+            return (model, RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
         }
         return (model, null);
     }
@@ -1562,17 +1563,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
             {
-                return (model, RedirectToAction(_checkAnswerActionName));
+                return (model, RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
             }
-            return (model, RedirectToAction(_swardType));
+            return (model, RedirectToAction(_swardType, new { sessionId = model.SessionId }));
         }
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
         {
             SetCropToSession(model);
-            return (model, RedirectToAction(_checkAnswerActionName));
+            return (model, RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
         }
-        
-        return (model, RedirectToAction(_yieldQuestion));
+
+        return (model, RedirectToAction(_yieldQuestion, new { sessionId = model.SessionId }));
     }
     private async Task<PlanViewModel> ValidateSowingDatePost(PlanViewModel model)
     {
@@ -1661,10 +1662,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return $"Crops[{model.SowingDateCurrentCounter}].SowingDate";
     }
     [HttpGet]
-    public async Task<IActionResult> YieldQuestion()
+    public async Task<IActionResult> YieldQuestion(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : YieldQuestion() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in YieldQuestion() action");
@@ -1684,7 +1685,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             TempData[_sowingDateError] = ex.Message;
-            return RedirectToAction(_sowingDate, new { q = model.SowingDateEncryptedCounter });
+            return RedirectToAction(_sowingDate, new { q = model.SowingDateEncryptedCounter, sessionId = model.SessionId });
         }
         return View(model);
     }
@@ -1709,7 +1710,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.IsCheckAnswer)
             {
-                PlanViewModel planViewModel = GetCropFromSession();
+                PlanViewModel planViewModel = GetCropFromSession(model.SessionId);
                 if (planViewModel == null)
                 {
                     _logger.LogError("Crop Controller : Session not found in YieldQuestion() post action");
@@ -1718,7 +1719,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
                 if (planViewModel.YieldQuestion == model.YieldQuestion && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
                 {
-                    return RedirectToAction(_checkAnswerActionName);
+                    return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                 }
                 else
                 {
@@ -1737,10 +1738,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.Crops.ForEach(c => c.Yield = null);
                 }
                 SetCropToSession(model);
-                return RedirectToAction(_cropInfoOne);
+                return RedirectToAction(_cropInfoOne, new { sessionId = model.SessionId });
             }
             SetCropToSession(model);
-            return RedirectToAction(_yield);
+            return RedirectToAction(_yield, new { sessionId = model.SessionId });
         }
         catch (Exception ex)
         {
@@ -1750,10 +1751,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> Yield(string q)
+    public async Task<IActionResult> Yield(string q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : Yield({0}) action called", q);
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in Yield() action");
@@ -1787,7 +1788,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             TempData["YieldQuestionError"] = ex.Message;
-            return RedirectToAction(_yieldQuestion);
+            return RedirectToAction(_yieldQuestion, new { sessionId = model.SessionId });
         }
         return View(model);
     }
@@ -1828,7 +1829,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             TempData["ErrorOnYield"] = ex.Message;
-            return RedirectToAction(_yield, new { q = model.YieldEncryptedCounter });
+            return RedirectToAction(_yield, new { q = model.YieldEncryptedCounter, sessionId = model.SessionId });
         }
     }
 
@@ -1862,7 +1863,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         SetCropToSession(model);
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
         {
-            return (model, RedirectToAction(_checkAnswerActionName));
+            return (model, RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
         }
         return (model, null);
     }
@@ -1935,7 +1936,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.YieldCurrentCounter = 0;
             model.YieldEncryptedCounter = string.Empty;
             SetCropToSession(model);
-            return RedirectToAction(_yieldQuestion);
+            return RedirectToAction(_yieldQuestion, new { sessionId = model.SessionId });
         }
 
         model.FieldID = model.Crops[index].FieldID.Value;
@@ -1960,18 +1961,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             SetCropToSession(model);
             return model.IsCropTypeChange
-           ? RedirectToAction(_cropInfoOne)
-           : RedirectToAction(_checkAnswerActionName);
+           ? RedirectToAction(_cropInfoOne, new { sessionId = model.SessionId })
+           : RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
-        return RedirectToAction(_cropInfoOne);
+        return RedirectToAction(_cropInfoOne, new { sessionId = model.SessionId });
 
     }
     [HttpGet]
-    public async Task<IActionResult> CropInfoOne()
+    public async Task<IActionResult> CropInfoOne(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CropInfoOne() action called");
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -1997,7 +1998,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 SetCropToSession(model);
                 if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Cereals)
                 {
-                    return RedirectToAction(_cropInfoTwoActionName);
+                    return RedirectToAction(_cropInfoTwoActionName, new { sessionId = model.SessionId });
                 }
                 else
                 {
@@ -2011,7 +2012,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     {
                         return redirectResult;
                     }
-                    return RedirectToAction(_checkAnswerActionName);
+                    return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                 }
             }
         }
@@ -2019,7 +2020,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogError(ex, "Crop Controller : Exception in CropInfoOne() action: {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ErrorOnYield"] = ex.Message;
-            return RedirectToAction(_yield);
+            return RedirectToAction(_yield, new { sessionId = model.SessionId });
         }
 
         return View(model);
@@ -2058,7 +2059,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             _logger.LogTrace(ex, "Crop Controller : Exception in CropInfoOne() post action : {Message}, {StackTrace}",
                 ex.Message, ex.StackTrace);
             TempData["CropInfoOneError"] = ex.Message;
-            return RedirectToAction(_cropInfoOne);
+            return RedirectToAction(_cropInfoOne, new { sessionId = model.SessionId });
         }
 
         return await GetNextAction(model);
@@ -2104,13 +2105,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             !model.IsCropGroupChange &&
             !model.IsCropTypeChange)
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         if (model.CropGroupId ==
             (int)NMP.Commons.Enums.CropGroup.Cereals)
         {
-            return RedirectToAction(_cropInfoTwoActionName);
+            return RedirectToAction(_cropInfoTwoActionName, new { sessionId = model.SessionId });
         }
 
         ResetCropInfoTwo(model);
@@ -2120,7 +2121,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return redirectResult;
         }
 
-        return RedirectToAction(_checkAnswerActionName);
+        return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
     }
 
     private async Task<(bool flowControl, IActionResult value)> CheckPreviousGrassManagementRedirect(PlanViewModel model)
@@ -2135,14 +2136,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (gassInPrevOrArableInNextYearList.Any(x => x.IsGrassInPrevYear == true))
                 {
-                    return (flowControl: false, value: RedirectToAction(_previousGrassManagement));
+                    return (flowControl: false, value: RedirectToAction(_previousGrassManagement, new { sessionId = model.SessionId }));
                 }
             }
             else
             {
                 if (gassInPrevOrArableInNextYearList.Any(x => x.IsArableInNextYear == true))
                 {
-                    return (flowControl: false, value: RedirectToAction(_previousGrassManagement));
+                    return (flowControl: false, value: RedirectToAction(_previousGrassManagement, new { sessionId = model.SessionId }));
                 }
             }
         }
@@ -2163,10 +2164,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public async Task<IActionResult> CropInfoTwo()
+    public async Task<IActionResult> CropInfoTwo(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CropInfoTwo() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -2183,7 +2184,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in CropInfoTwo() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CropInfoOneError"] = ex.Message;
-            return RedirectToAction(_cropInfoOne);
+            return RedirectToAction(_cropInfoOne, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -2222,14 +2223,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in CropInfoTwo() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CropInfoTwoError"] = ex.Message;
-            return RedirectToAction(_cropInfoTwoActionName);
+            return RedirectToAction(_cropInfoTwoActionName, new { sessionId = model.SessionId });
         }
         IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
         if (redirectResult != null)
         {
             return redirectResult;
         }
-        return RedirectToAction(_checkAnswerActionName);
+        return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
     }
 
     private async Task<List<CropInfoTwoResponse>> GetFilteredCropInfoTwoList(PlanViewModel model)
@@ -2244,7 +2245,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public async Task<IActionResult> CheckAnswer(string? q, string? r, string? t, string? u, string? v, string? w)
+    public async Task<IActionResult> CheckAnswer(string? q, string? r, string? t, string? u, string? v, string? w, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CheckAnswer() action called");
         PlanViewModel model = new PlanViewModel();
@@ -2253,12 +2254,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (hasEncryptedParams)
             {
+
                 await BindModelFromEncryptedParamsForCheckAnswer(q, r, t, u, v, w, model);
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
             else
             {
-                model = GetCropFromSession();
+                model = GetCropFromSession(sessionId);
 
                 if (model == null)
                 {
@@ -2313,7 +2315,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (hasEncryptedParams)
             {
-                HttpContext.Session.SetObjectAsJson(_cropDataBeforeUpdateSessionKey, model);
+                HttpContext.Session.SetObjectAsJson(model.SessionId + " " + _cropDataBeforeUpdateSessionKey, model);
             }
             SetCropToSession(model);
 
@@ -2364,14 +2366,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 TempData[_errorCreatePlan] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
         }
         catch (Exception ex)
         {
             TempData[_errorCreatePlan] = ex.Message;
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
     }
 
@@ -2398,6 +2400,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, farmID);
         await PrepareCropUpdateData(model, harvestYearPlanResponse, isBasePlan, allSowingAreSame, firstSowingDate);
 
+        RemoveHarvestYearPlanFromSession(farmID, model.Year.Value);
         //working for scotland grass update
         await BindScotlandGrassData(model, harvestYearPlanResponse);
     }
@@ -2550,6 +2553,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(counter.ToString());
     }
 
+
     private void BindCropGroupNameForCheckAnswer(PlanViewModel model, List<HarvestYearPlanResponse>? harvestYearPlanResponse)
     {
         bool isBasePlan = false;
@@ -2652,7 +2656,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_harvestYearOverviewActionName, new
             {
                 id = model.EncryptedFarmId,
-                year = model.EncryptedHarvestYear
+                year = model.EncryptedHarvestYear,
+                sessionId = model.SessionId
             });
         }
         else if ((!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate)) && (model.IsComingFromRecommendation != null && model.IsComingFromRecommendation.Value))
@@ -2663,12 +2668,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 q = model.EncryptedFarmId,
                 r = model.EncryptedFieldId,
-                s = model.EncryptedHarvestYear
+                s = model.EncryptedHarvestYear,
+                sessionId = model.SessionId
             });
         }
         action = await BindActionForBackCheckAnswer(model);
 
-        return RedirectToAction(action, new { q = model.YieldEncryptedCounter });
+        return RedirectToAction(action, new { q = model.YieldEncryptedCounter, sessionId = model.SessionId });
     }
 
     private void CheckAnyChangesInSessionData(PlanViewModel model, string? q, string? r, string? t, string? u)
@@ -3101,10 +3107,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return cropInfoOneResponse;
     }
 
-    public async Task<IActionResult> BackCheckAnswer()
+    public async Task<IActionResult> BackCheckAnswer(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : BackCheckAnswer() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in BackCheckAnswer() action");
@@ -3121,7 +3127,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return RedirectToAction(_harvestYearOverviewActionName, new
                 {
                     id = model.EncryptedFarmId,
-                    year = model.EncryptedHarvestYear
+                    year = model.EncryptedHarvestYear,
+                    sessionId = model.SessionId
                 });
             }
             else if ((!string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate)) && isComingFromRec)
@@ -3131,7 +3138,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 {
                     q = model.EncryptedFarmId,
                     r = model.EncryptedFieldId,
-                    s = model.EncryptedHarvestYear
+                    s = model.EncryptedHarvestYear,
+                    sessionId = model.SessionId
                 });
             }
 
@@ -3143,12 +3151,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in BackCheckAnswer() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorCreatePlan] = ex.Message;
-            return RedirectToAction(_checkAnswerActionName, model);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         string encryptedCounter = FetchEncryptedCounter(model);
 
-        return RedirectToAction(action, new { q = encryptedCounter });
+        return RedirectToAction(action, new { q = encryptedCounter, sessionId = model.SessionId });
     }
 
 
@@ -3578,34 +3586,37 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private IActionResult BackActionForCopyCheckAnswer(PlanViewModel model, bool success)
     {
         model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-        RemoveCropSession();
+        RemoveCropSession(model.SessionId);
+        RemoveCropDataBeforeUpdateFromSession(model.SessionId);
         return RedirectToAction(_harvestYearOverviewActionName, new
         {
             id = model.EncryptedFarmId,
             year = model.EncryptedHarvestYear,
             q = _farmDataProtector.Protect(success.ToString()),
             r = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblGrass, model.Year)) : _cropDataProtector.Protect(string.Format(Resource.MsgCropsAddedForYear, Resource.lblCrops, model.Year)),
-            v = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations) : _cropDataProtector.Protect(Resource.MsgForSuccessCrop)
+            v = model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass ? _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsNutrientRecommendations) : _cropDataProtector.Protect(Resource.MsgForSuccessCrop)//,
+                                                                                                                                                                                                                          //   sessionId=model.SessionId
         });
     }
 
 #pragma warning disable S107
     [HttpGet]
-    public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r, string? s, string? t, string? u, string? v, string? w)//w is a link
+    public async Task<IActionResult> HarvestYearOverview(string id, string year, string? q, string? r, string? s, string? t, string? u, string? v, string? w, Guid? sessionId)//w is a link
     {
         _logger.LogTrace("Crop Controller : HarvestYearOverview({Id}, {Year}, {Q}, {R}) action called", id, year, q, r);
         PlanViewModel? model = null;
         try
         {
+            RemoveExcessWinterRainfallFromSession(sessionId);
             RemoveOrganicDataBeforeUpdateFromSession();
             RemoveFertiliserDataBeforeUpdateFromSession();
-            RemoveCropDataBeforeUpdateFromSession();
+            RemoveCropDataBeforeUpdateFromSession(sessionId);
             RemoveReportDataFromSession();
             RemoveStorageCapacityDataFromSession();
             RemoveFertiliserManureFromSession();
             RemoveOrganicManureFromSession();
-            RemoveCropSession();
-            await BindSuccessMsgForHarvestYearOverviewPage(q, r, v, w);
+            RemoveCropSession(sessionId);
+            await BindSuccessMsgForHarvestYearOverviewPage(q, r, v, w, sessionId);
 
             if (string.IsNullOrWhiteSpace(s) && string.IsNullOrWhiteSpace(u))
             {
@@ -3620,16 +3631,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             else
             {
-                (bool flowControl, IActionResult? value) = BindSessionDataForHarvestYearOverview(ref model);
+                (bool flowControl, IActionResult? value, model) = await BindHarvestYearOverviewData(id, year, s, t, u, model);
                 if (!flowControl && value != null)
                 {
                     return value;
-                }
-                if (model != null)
-                {
-                    model = BindSortingData(s, t, u, model);
-                    BindViewBegForSortingList();
-                    HttpContext.Session.SetObjectAsJson(_harvestYearPlanActionName, model);
                 }
             }
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -3637,13 +3642,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in HarvestYearOverview() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
-            model = null;
+           
             ViewBag.Error = ex.Message;
-            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year });
+            return RedirectToAction(_plansAndRecordsOverviewActionName, new { id = id, year = year, sessionId = model?.SessionId});
 
         }
         return View(model);
     }
+
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -3657,7 +3664,38 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         return await Task.FromResult(View(model));
     }
+    private async Task<(bool flowControl, IActionResult? value, PlanViewModel?)> BindHarvestYearOverviewData(string id, string year, string? s, string? t, string? u, PlanViewModel? model)
+    {
+        int? farmId = model?.FarmID;
+        int? harvestYear = model?.Year;
+        if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(year))
+        {
+            farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+            harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
+        }
+        if (farmId != null && harvestYear != null)
+        {
+            (bool flowControl, IActionResult? value, model) = BindSessionDataForHarvestYearOverview(farmId.Value, harvestYear.Value);
+            if (!flowControl && value != null)
+            {
+                return (flowControl: false, value: value, model);
+            }
+            if (model != null)
+            {
+                model = BindSortingData(s, t, u, model);
+                BindViewBegForSortingList();
+                (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(farmId.Value);
+                if (farm != null)
+                {
+                    await BindRainfallDataForHarvestYearOverview(model, farmId.Value, harvestYear.Value, new Error(), farm);
+                }
+                SetHarvestYearPlanToSession(model);
+            }
+        }
 
+
+        return (flowControl: true, value: null, model);
+    }
     private async Task<(bool flowControl, IActionResult? value, PlanViewModel)> BindDataForHarvestYearOverview(string id, string year)
     {
         PlanViewModel model = new PlanViewModel();
@@ -3671,7 +3709,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             return (flowControl: false, value: value, model);
         }
-
+        model.FarmID = farmId;
         model.Year = harvestYear;
         (HarvestYearResponseHeader? harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansDetailsByFarmId(harvestYear, farmId);
 
@@ -3707,27 +3745,27 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.EncryptedFarmId = id;
                 model.EncryptedHarvestYear = year;
                 model.Year = harvestYear;
-                HttpContext.Session.SetObjectAsJson(_harvestYearPlanActionName, model);
             }
         }
-        HttpContext.Session.SetObjectAsJson(_harvestYearPlanActionName, model);
+        SetHarvestYearPlanToSession(model);
 
         return (flowControl: true, value: null, model);
     }
 
-    private (bool flowControl, IActionResult? value) BindSessionDataForHarvestYearOverview(ref PlanViewModel? model)
+    private (bool flowControl, IActionResult? value, PlanViewModel? model) BindSessionDataForHarvestYearOverview(int farmId, int year)
     {
-        if (HttpContext.Session.Keys.Contains(_harvestYearPlanActionName))
+        PlanViewModel? model = null;
+        if (HttpContext.Session.Keys.Contains(farmId + " " + year + " " + _harvestYearPlanActionName))
         {
-            model = HttpContext.Session.GetObjectFromJson<PlanViewModel>(_harvestYearPlanActionName);
+            model = HttpContext.Session.GetObjectFromJson<PlanViewModel>(farmId + " " + year + " " + _harvestYearPlanActionName);
         }
         else
         {
             _logger.LogError("Crop Controller : Session not found in HarvestYearOverview() action");
-            return (flowControl: false, value: Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+            return (flowControl: false, value: Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict), model: model);
         }
 
-        return (flowControl: true, value: null);
+        return (flowControl: true, value: null, model: model);
     }
 
     private PlanViewModel BindSortingData(string? s, string? t, string? u, PlanViewModel? model)
@@ -3947,12 +3985,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     }
 
-    private async Task BindSuccessMsgForHarvestYearOverviewPage(string? q, string? r, string? v, string? w)
+    private async Task BindSuccessMsgForHarvestYearOverviewPage(string? q, string? r, string? v, string? w, Guid? sessionId)
     {
         if (string.IsNullOrWhiteSpace(q))
         {
             ViewBag.Success = false;
-            RemoveCropSession();
+            if (sessionId.HasValue)
+            {
+                RemoveCropSession(sessionId);
+            }
             return;
         }
 
@@ -4010,11 +4051,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    private void RemoveCropDataBeforeUpdateFromSession()
+    private void RemoveCropDataBeforeUpdateFromSession(Guid? sessionId)
     {
-        if (HttpContext.Session.Exists(_cropDataBeforeUpdateSessionKey))
+        if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _cropDataBeforeUpdateSessionKey))
         {
-            HttpContext.Session.Remove(_cropDataBeforeUpdateSessionKey);
+            HttpContext.Session.Remove(sessionId + " " + _cropDataBeforeUpdateSessionKey);
         }
     }
 
@@ -4135,13 +4176,21 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (model, planSummaryResponse);
     }
     [HttpGet]
-    public async Task<IActionResult> PlansAndRecordsOverview(string id, string? year, string? q)
+    public async Task<IActionResult> PlansAndRecordsOverview(string id, string? year, string? q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : PlansAndRecordsOverview({Id}, {Year}) action called", id, year);
         PlanViewModel model = new PlanViewModel();
 
         RemoveInoganicAndOrganicSession();
-        RemoveCropSession();
+        RemoveCropSession(sessionId);
+        RemoveCropDataBeforeUpdateFromSession(sessionId);
+        RemoveExcessWinterRainfallFromSession(sessionId);
+        if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(year))
+        {
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+            int harvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(year));
+            RemoveHarvestYearPlanFromSession(farmId, harvestYear);
+        }
         if (!string.IsNullOrWhiteSpace(q))
         {
             TempData["successMsg"] = _cropDataProtector.Unprotect(q);
@@ -4220,7 +4269,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns)//q=farmId,r=fieldId,s=harvestYear
+    public async Task<IActionResult> Recommendations(string q, string r, string? s, string? t, string? u, string? sns, Guid? sessionId)//q=farmId,r=fieldId,s=harvestYear
     {
         _logger.LogTrace("Crop Controller : Recommendations({Q}, {R}, {S}) action called", q, r, s);
         RecommendationViewModel model = new RecommendationViewModel();
@@ -4245,7 +4294,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return RedirectToAction(_harvestYearOverviewActionName, new
                 {
                     id = q,
-                    year = s
+                    year = s,
+                    sessionId = sessionId
                 });
             }
             bool isAllBasePlan = harvestYearPlanResponse.All(h => ((h.IsBasePlan != null) && (h.IsBasePlan.Value)));
@@ -4261,7 +4311,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return RedirectToAction(_harvestYearOverviewActionName, new
                 {
                     id = q,
-                    year = s
+                    year = s,
+                    sessionId = sessionId
                 });
             }
             if (recommendations.Any())
@@ -4286,7 +4337,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_harvestYearOverviewActionName, new
             {
                 id = q,
-                year = s
+                year = s,
+                sessionId = sessionId
             });
         }
 
@@ -4629,10 +4681,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public IActionResult SortOrganicList(string year, string id, string q, string r)
+    public IActionResult SortOrganicList(string harvestYear, string id, string q, string r, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : SortOrganicList() action called");
-        PlanViewModel? model = GetHarvestYearPlanFromSession();
+        int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+        int year = Convert.ToInt32(_farmDataProtector.Unprotect(harvestYear));
+        PlanViewModel? model = GetHarvestYearPlanFromSession(farmId, year);
 
         if (model == null)
         {
@@ -4666,8 +4720,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
         }
         BindNMPTFarmIdAndNameForNavigation(model);
-        SetCropToSession(model);
-        return Redirect(Url.Action(_harvestYearOverviewActionName, new { year = year, id = id, s = q, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationsForSorting), u = r }) + Resource.lblOrganicMaterialApplicationsForSorting);
+        SetHarvestYearPlanToSession(model);
+        return Redirect(Url.Action(_harvestYearOverviewActionName, new { year = harvestYear, id = id, s = q, t = _cropDataProtector.Protect(Resource.lblOrganicMaterialApplicationsForSorting), u = r }) + Resource.lblOrganicMaterialApplicationsForSorting);
     }
 
     private string BindSortOrder(string r)
@@ -4686,10 +4740,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public IActionResult SortInOrganicList(string year, string id, string q, string r)
+    public IActionResult SortInOrganicList(string harvestYear, string id, string q, string r, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : SortInOrganicList() action called");
-        PlanViewModel? model = GetHarvestYearPlanFromSession();
+        int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));
+        int year = Convert.ToInt32(_farmDataProtector.Unprotect(harvestYear));
+        PlanViewModel? model = GetHarvestYearPlanFromSession(farmId, year);
 
         if (model == null)
         {
@@ -4725,16 +4781,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         }
 
-        SetCropToSession(model);
-        return Redirect(Url.Action(_harvestYearOverviewActionName, new { year = year, id = id, s = q, t = _cropDataProtector.Protect(Resource.lblInorganicFertiliserApplicationsForSorting), u = r }) + Resource.lblInorganicFertiliserApplicationsForSorting);
+        SetHarvestYearPlanToSession(model);
+        return Redirect(Url.Action(_harvestYearOverviewActionName, new { year = harvestYear, id = id, s = q, t = _cropDataProtector.Protect(Resource.lblInorganicFertiliserApplicationsForSorting), u = r }) + Resource.lblInorganicFertiliserApplicationsForSorting);
     }
 
     [HttpGet]
-    public async Task<IActionResult> CropGroupName()
+    public async Task<IActionResult> CropGroupName(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CropGroupName() action called");
 
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Crop Controller : session not found in CropGroupName() action");
@@ -4759,7 +4815,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in CropGroupName() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorOnSelectField] = ex.Message;
-            return RedirectToAction(_cropFields);
+            return RedirectToAction(_cropFields, new { sessionId = sessionId });
         }
     }
 
@@ -4798,23 +4854,23 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in CropGroupName() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CropGroupNameError"] = ex.Message;
-            return RedirectToAction(_cropGroupName);
+            return RedirectToAction(_cropGroupName, new { sessionId = model.SessionId });
         }
 
         if (model.IsCheckAnswer && (!model.IsCropGroupChange) && (!model.IsCropTypeChange) && (!model.IsAnyChangeInField))
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
         {
             if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
-                return RedirectToAction(_isPermanentSward);
+                return RedirectToAction(_isPermanentSward, new { sessionId = model.SessionId });
             }
-            return RedirectToAction(_currentSwardActionName);
+            return RedirectToAction(_currentSwardActionName, new { sessionId = model.SessionId });
         }
-        return RedirectToAction("VarietyName");
+        return RedirectToAction("VarietyName", new { sessionId = model.SessionId });
     }
 
     private async Task<(bool flowControl, IActionResult? value)> FetchCropGroupNameExist(PlanViewModel model, Error? error, bool isThereAnyPreviousFieldLeft)
@@ -4871,10 +4927,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> RemoveCrop(string? q, string? r = null, string? s = null, string? t = null, string? u = null, string? v = null, string? w = null)
+    public async Task<IActionResult> RemoveCrop(string? q, string? r = null, string? t = null, string? u = null, string? v = null, string? w = null, Guid? sessionId = null)
     {
         _logger.LogTrace("Crop Controller : RemoveCrop() action called");
-        PlanViewModel? model = GetCropFromSession() ?? new PlanViewModel();
+        PlanViewModel? model = GetCropFromSession(sessionId) ?? new PlanViewModel();
         try
         {
             if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
@@ -4882,34 +4938,34 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 _logger.LogTrace("Crop Controller : session not found in RemoveCrop() action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
-            BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!string.IsNullOrWhiteSpace(v))
             {
                 model.EncryptedFarmId = v;
 
             }
-            model = BindCropDataForRemove(q, r, s, t, u, w, model);
+            model = await BindCropDataForRemove(q, r, t, u, w, model);
             ViewBag.EncryptedCropType = q;
             if (!string.IsNullOrWhiteSpace(r))
             {
                 ViewBag.EncryptedCropGroupName = r;
             }
+            BindNMPTFarmIdAndNameForNavigation(model);
 
             SetCropToSession(model);
         }
         catch (Exception ex)
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in RemoveCrop() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
-            if (string.IsNullOrWhiteSpace(s) || (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value))))
+            if (model.IsComingFromRecommendation == null || (model.IsComingFromRecommendation.HasValue && (!model.IsComingFromRecommendation.Value)))
             {
                 TempData[_errorCreatePlan] = ex.Message;
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else
             {
                 TempData["NutrientRecommendationsError"] = ex.Message;
-                return RedirectToAction(_recommendationsActionName, new { q = v, r = t, s = w });
+                return RedirectToAction(_recommendationsActionName, new { q = v, r = t, s = w, sessionId = sessionId });
             }
         }
         return View(model);
@@ -4949,6 +5005,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                             TempData["RemoveGroupError"] = error.Message;
                             return View(model);
                         }
+                        RemoveCropSession(model.SessionId);
+                        RemoveCropDataBeforeUpdateFromSession(model.SessionId);
                         return await RedirectForRemoveCrop(model, true, harvestYearPlanResponse);
                     }
                 }
@@ -4987,10 +5045,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.IsComingFromRecommendation != null && model.IsComingFromRecommendation.Value)
             {
-                return RedirectToAction(_recommendationsActionName, new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear });
+                return RedirectToAction(_recommendationsActionName, new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
 
         }
         else
@@ -5012,21 +5070,21 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         (harvestYearPlanResponse, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, decryptedFarmId);
         if (harvestYearPlanResponse.Count > 0)
         {
-            return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = isNotComingFromRecommendation ? successMsgForCrop : successMsgContent2ForCrop });
+            return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = isNotComingFromRecommendation ? successMsgForCrop : successMsgContent2ForCrop, sessionId = model.SessionId });
         }
         else
         {
             List<PlanSummaryResponse> planSummaryResponse = await _cropLogic.FetchPlanSummaryByFarmId(decryptedFarmId, 0);
             if (planSummaryResponse != null && planSummaryResponse.Count > 0)
             {
-                return RedirectToAction(_plansAndRecordsOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()), q = isNotComingFromRecommendation ? successMsgForCrop : successMsgContent2ForCrop });
+                return RedirectToAction(_plansAndRecordsOverviewActionName, "Crop", new { id = model.EncryptedFarmId, year = _farmDataProtector.Protect(model.Year.ToString()), q = isNotComingFromRecommendation ? successMsgForCrop : successMsgContent2ForCrop, sessionId = model.SessionId });
             }
-            return RedirectToAction(_farmSummaryActionName, "Farm", new { id = model.EncryptedFarmId, q = _farmDataProtector.Protect(Resource.lblTrue), r = isNotComingFromRecommendation ? successMsgForFarm : successMsgContent2ForFarm });
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { id = model.EncryptedFarmId, q = _farmDataProtector.Protect(Resource.lblTrue), r = isNotComingFromRecommendation ? successMsgForFarm : successMsgContent2ForFarm, sessionId = model.SessionId });
 
         }
     }
 
-    private PlanViewModel BindCropDataForRemove(string? q, string? r, string? s, string? t, string? u, string? w, PlanViewModel model)
+    private async Task<PlanViewModel> BindCropDataForRemove(string? q, string? r, string? t, string? u, string? w, PlanViewModel model)
     {
         if (!string.IsNullOrWhiteSpace(w))
         {
@@ -5042,14 +5100,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             model.CropGroupName = _cropDataProtector.Unprotect(r);
         }
-        if (!string.IsNullOrWhiteSpace(s))
-        {
-            model.FieldName = _cropDataProtector.Unprotect(s);
-        }
+
         if (!string.IsNullOrWhiteSpace(t))
         {
             model.EncryptedFieldId = t;
             model.FieldID = Convert.ToInt32(_fieldDataProtector.Unprotect(t));
+            Field field = await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value);
+            model.FieldName = field.Name;
         }
         if (!string.IsNullOrWhiteSpace(u))
         {
@@ -5066,14 +5123,43 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public IActionResult UpdateExcessOrWinterRainfall()
+    public async Task<IActionResult> UpdateExcessOrWinterRainfall(string q, string r, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : UpdateExcessOrWinterRainfall() action called");
-        PlanViewModel? model = GetHarvestYearPlanFromSession();
-        if (model == null)
+        PlanViewModel model = GetExcessWinterRainfallFromSession(sessionId) ?? new PlanViewModel();
+        if (!string.IsNullOrWhiteSpace(q))
         {
-            _logger.LogTrace("Crop Controller : session not found in UpdateExcessOrWinterRainfall() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            model.EncryptedFarmId = q;
+            model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+
+            (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(model.FarmID.Value);
+            if (farm != null)
+            {
+                model.FarmName = farm.Name;
+                model.FarmRB209CountryID = farm.RB209CountryID;
+            }
+            SetExcessWinterRainfallToSession(model);
+        }
+        if (!string.IsNullOrWhiteSpace(r))
+        {
+            model.EncryptedHarvestYear = r;
+            model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+            SetExcessWinterRainfallToSession(model);
+        }
+        if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r))
+        {
+            RemoveHarvestYearPlanFromSession(model.FarmID ?? 0, model.Year ?? 0);
+            (ExcessRainfalls excessRainfalls, _) = await _farmLogic.FetchExcessRainfallsAsync(model.FarmID.Value, model.Year.Value);
+            if (excessRainfalls.WinterRainfall != null)
+            {
+                model.IsExcessOrWinterRainfallUpdated = true;
+                await BindExcessRainfallDataForHarvestYearOverviewPage(model, excessRainfalls);
+            }
+            else
+            {
+                model.IsExcessOrWinterRainfallUpdated = false;
+            }
+            SetExcessWinterRainfallToSession(model);
         }
         BindNMPTFarmIdAndNameForNavigation(model);
         try
@@ -5084,7 +5170,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in UpdateExcessOrWinterRainfall() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorOnHarvestYearOverview] = ex.Message;
-            return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear });
+            return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, sessionId = sessionId });
         }
 
 
@@ -5104,10 +5190,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> ExcessWinterRainfall()
+    public async Task<IActionResult> ExcessWinterRainfall(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : ExcessWinterRainfall() action called");
-        PlanViewModel? model = GetHarvestYearPlanFromSession();
+        PlanViewModel? model = GetExcessWinterRainfallFromSession(sessionId);
 
         try
         {
@@ -5134,7 +5220,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in ExcessWinterRainfall() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["UpdateExcessOrWinterRainfallError"] = ex.Message;
-            return RedirectToAction("UpdateExcessOrWinterRainfall");
+            return RedirectToAction("UpdateExcessOrWinterRainfall", new { sessionId = sessionId });
         }
 
         return View(model);
@@ -5168,8 +5254,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
                 return View(model);
             }
-            SetHarvestYearPlanToSession(model);
-            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer");
+            SetExcessWinterRainfallToSession(model);
+            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer", new { sessionId = model.SessionId });
         }
         catch (Exception ex)
         {
@@ -5180,10 +5266,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public IActionResult IsWinterRainfallMoreThan450()
+    public IActionResult IsWinterRainfallMoreThan450(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : IsWinterRainfallMoreThan450() action called");
-        PlanViewModel? model = GetHarvestYearPlanFromSession();
+        PlanViewModel? model = GetExcessWinterRainfallFromSession(sessionId);
 
         try
         {
@@ -5199,7 +5285,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in IsWinterRainfallMoreThan450() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["UpdateExcessOrWinterRainfallError"] = ex.Message;
-            return RedirectToAction("UpdateExcessOrWinterRainfall");
+            return RedirectToAction("UpdateExcessOrWinterRainfall", new { sessionId = sessionId });
         }
 
         return View(model);
@@ -5232,8 +5318,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
 
-            SetHarvestYearPlanToSession(model);
-            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer");
+            SetExcessWinterRainfallToSession(model);
+            return RedirectToAction("ExcessOrWinterRainfallCheckAnswer", new { sessionId = model.SessionId });
         }
         catch (Exception ex)
         {
@@ -5244,10 +5330,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> ExcessOrWinterRainfallCheckAnswer()
+    public async Task<IActionResult> ExcessOrWinterRainfallCheckAnswer(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : ExcessOrWinterRainfallCheckAnswer() action called");
-        PlanViewModel? model = GetHarvestYearPlanFromSession();
+        PlanViewModel? model = GetExcessWinterRainfallFromSession(sessionId);
 
         try
         {
@@ -5268,13 +5354,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
             model.IsExcessOrWinterRainfallCheckAnswer = true;
-            SetHarvestYearPlanToSession(model);
+            SetExcessWinterRainfallToSession(model);
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessOrWinterRainfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+            _logger.LogTrace(ex, "Crop Controller : Exception in ExcessOrWinterfallCheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["ExcessWinterRainfallError"] = ex.Message;
-            return RedirectToAction("ExcessWinterRainfall", model);
+            return RedirectToAction("ExcessWinterRainfall", new { sessionId = sessionId });
         }
 
         return View(model);
@@ -5294,13 +5380,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
 
-            if (HttpContext.Session.Keys.Contains(_harvestYearPlanActionName))
+            if (HttpContext.Session.Keys.Contains(model.SessionId + " " + _excessWinterRainfallActionName))
             {
-                model = GetHarvestYearPlanFromSession();
+                model = GetExcessWinterRainfallFromSession(model.SessionId);
             }
             else
             {
-                _logger.LogTrace("Crop Controller :HarvestYearPlan session not found in ExcessOrWinterRainfallCheckAnswer() post action");
+                _logger.LogTrace("Crop Controller :ExcessWinterRainfall session not found in ExcessOrWinterRainfallCheckAnswer() post action");
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
 
@@ -5325,7 +5411,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             (ExcessRainfalls? excessRainfall, Error? error) = await _farmLogic.AddExcessWinterRainfallAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)), model.Year.Value, jsonData, model.IsExcessOrWinterRainfallUpdated.Value);
             if (excessRainfall != null)
             {
-                return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(successMsg), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)) });
+                RemoveExcessWinterRainfallFromSession(model.SessionId);
+                return RedirectToAction(_harvestYearOverviewActionName, new { Id = model.EncryptedFarmId, year = model.EncryptedHarvestYear, q = Resource.lblTrue, r = _cropDataProtector.Protect(successMsg), v = _cropDataProtector.Protect(string.Format(Resource.MsgAddExcessWinterRainfallContentSecond, model.Year.Value)), sessionId = model.SessionId });
             }
             else
             {
@@ -5382,11 +5469,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (!success || !string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData[_errorCreatePlan] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-                    return RedirectToAction(_checkAnswerActionName);
+                    return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                 }
 
                 model.EncryptedHarvestYear = _farmDataProtector.Protect(model.Year.ToString());
-                RemoveCropSession();
+                RemoveCropSession(model.SessionId);
 
                 if (model.IsComingFromRecommendation == true)
                 {
@@ -5405,6 +5492,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     year = model.EncryptedHarvestYear,
                     q = Resource.lblTrue,
                     r = _cropDataProtector.Protect(Resource.lblCropPlanUpdated),
+                    sessionId = model.SessionId,
                     v = _cropDataProtector.Protect(Resource.lblSelectAFieldToSeeItsUpdatedRecommendations)
                 });
 
@@ -5414,7 +5502,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in UpdateCrop() post action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorCreatePlan] = ex.Message;
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
         return View(model);
     }
@@ -5873,10 +5961,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (model, error);
     }
     [HttpGet]
-    public async Task<IActionResult> CurrentSward()
+    public async Task<IActionResult> CurrentSward(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CurrentSward() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -5889,7 +5977,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in CurrentSward() action : {Message} : {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CurrentSwardError"] = ex.Message;
-            return RedirectToAction(_cropGroupName);
+            return RedirectToAction(_cropGroupName, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -5916,11 +6004,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (model.IsCheckAnswer)
             {
-                PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+                PlanViewModel planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
 
                 if (planViewModel.CurrentSward == model.CurrentSward && !model.IsAnyChangeInField)
                 {
-                    return RedirectToAction(_checkAnswerActionName);
+                    return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                 }
                 if (planViewModel.CurrentSward != null && planViewModel.CurrentSward != model.CurrentSward)
                 {
@@ -5941,7 +6029,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in CurrentSward() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CurrentSwardError"] = ex.Message;
-            return RedirectToAction(_currentSwardActionName);
+            return RedirectToAction(_currentSwardActionName, new { sessionId = model.SessionId });
         }
     }
 
@@ -5949,7 +6037,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward)
         {
-            return RedirectToAction(_grassSeasonModelProp);
+            return RedirectToAction(_grassSeasonModelProp, new { sessionId = model.SessionId });
         }
         else
         {
@@ -5961,13 +6049,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (model.SwardTypeId == null || model.Crops.Any(x => x.Yield == null))
                 {
-                    return RedirectToAction(_swardType);
+                    return RedirectToAction(_swardType, new { sessionId = model.SessionId });
                 }
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else
             {
-                return RedirectToAction(_swardType);
+                return RedirectToAction(_swardType, new { sessionId = model.SessionId });
             }
         }
     }
@@ -6015,10 +6103,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> GrassSeason()
+    public async Task<IActionResult> GrassSeason(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : GrassSeason() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -6036,7 +6124,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in GrassSeason() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["GrassSeasonError"] = ex.Message;
-            return RedirectToAction(_currentSwardActionName);
+            return RedirectToAction(_currentSwardActionName, new { sessionId = sessionId });
         }
         return View(model);
     }
@@ -6061,11 +6149,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
 
-            PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+            PlanViewModel planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
 
             if (model.IsCheckAnswer && planViewModel.GrassSeason == model.GrassSeason && !model.IsAnyChangeInField)
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else if (planViewModel.GrassSeason != model.GrassSeason)
             {
@@ -6078,16 +6166,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in GrassSeason() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["GrassSeasonError"] = ex.Message;
-            return RedirectToAction(_grassSeasonModelProp);
+            return RedirectToAction(_grassSeasonModelProp, new { sessionId = model.SessionId });
         }
 
-        return RedirectToAction(_sowingDateQuestion);
+        return RedirectToAction(_sowingDateQuestion, new { sessionId = model.SessionId });
     }
     [HttpGet]
-    public async Task<IActionResult> SwardType()
+    public async Task<IActionResult> SwardType(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : SwardType() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -6101,7 +6189,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_sowingDateError] = error.Message;
-                return RedirectToAction(_sowingDate);
+                return RedirectToAction(_sowingDate, new { sessionId = sessionId });
             }
             else
             {
@@ -6112,7 +6200,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in SwardType() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_sowingDateError] = ex.Message;
-            return RedirectToAction(_sowingDate);
+            return RedirectToAction(_sowingDate, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -6135,11 +6223,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return View(model);
         }
 
-        PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+        PlanViewModel planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
 
         if (model.IsCheckAnswer && planViewModel.SwardTypeId == model.SwardTypeId && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
         else if (planViewModel.SwardTypeId != model.SwardTypeId)
         {
@@ -6154,14 +6242,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         SetCropToSession(model);
-        return RedirectToAction("GrassManagement");
+        return RedirectToAction("GrassManagement", new { sessionId = model.SessionId });
     }
 
     [HttpGet]
-    public async Task<IActionResult> GrassManagement()
+    public async Task<IActionResult> GrassManagement(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : GrassManagement() action called");
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -6175,7 +6263,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (error != null)
             {
                 TempData["SwardManagementError"] = error.Message;
-                return RedirectToAction(_swardType);
+                return RedirectToAction(_swardType, new { sessionId = sessionId });
             }
             else
             {
@@ -6186,7 +6274,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in GrassManagement() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["SwardManagementError"] = ex.Message;
-            return RedirectToAction(_swardType);
+            return RedirectToAction(_swardType, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -6210,11 +6298,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 ViewBag.SwardManagement = swardManagementResponses;
                 return View(model);
             }
-            PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+            PlanViewModel planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
 
             if (model.IsCheckAnswer && planViewModel.SwardManagementId == model.SwardManagementId && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else if (model.IsAnyChangeInField)
             {
@@ -6228,7 +6316,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             SetCropToSession(model);
-            return RedirectToAction(_defoliationActionName);
+            return RedirectToAction(_defoliationActionName, new { sessionId = model.SessionId });
         }
         catch (Exception ex)
         {
@@ -6238,10 +6326,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> Defoliation()
+    public async Task<IActionResult> Defoliation(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : Defoliation() action called");
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -6255,7 +6343,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData["SwardManagementError"] = error.Message;
-                return RedirectToAction(_swardType);
+                return RedirectToAction(_swardType, new { sessionId = sessionId });
             }
             else
             {
@@ -6266,7 +6354,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in Defoliation() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_defoliationError] = ex.Message;
-            return RedirectToAction("GrassManagement");
+            return RedirectToAction("GrassManagement", new { sessionId = sessionId });
         }
 
         return View(model);
@@ -6292,11 +6380,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
 
-            PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+            PlanViewModel planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
 
             if (model.IsCheckAnswer && planViewModel.PotentialCut == model.PotentialCut && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else if (model.IsAnyChangeInField)
             {
@@ -6309,7 +6397,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             SetCropToSession(model);
-            return RedirectToAction(_defoliationSequenceActionName);
+            return RedirectToAction(_defoliationSequenceActionName, new { sessionId = model.SessionId });
         }
         catch (Exception ex)
         {
@@ -6332,7 +6420,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.GrassClassCounter = 0;
                 SetCropToSession(model);
             }
-            return RedirectToAction(_grassGrowthClassActionName);
+            return RedirectToAction(_grassGrowthClassActionName, new { sessionId = model.SessionId });
         }
         else
         {
@@ -6340,7 +6428,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithLowClover)
                 {
-                    return RedirectToAction(_grassGrowthClassActionName);
+                    return RedirectToAction(_grassGrowthClassActionName, new { sessionId = model.SessionId });
                 }
                 else
                 {
@@ -6349,18 +6437,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
                     model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
                     SetCropToSession(model);
-                    return RedirectToAction(_freshWeightYieldsDefault);
+                    return RedirectToAction(_freshWeightYieldsDefault, new { sessionId = model.SessionId });
                 }
             }
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
     }
 
     [HttpGet]
-    public async Task<IActionResult> DefoliationSequence()
+    public async Task<IActionResult> DefoliationSequence(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : DefoliationSequence() action called");
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -6375,7 +6463,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_defoliationError] = error.Message;
-                return RedirectToAction(_defoliationActionName);
+                return RedirectToAction(_defoliationActionName, new { sessionId = sessionId });
             }
             else
             {
@@ -6394,7 +6482,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in DefoliationSequence() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_defoliationError] = ex.Message;
-            return RedirectToAction(_defoliationActionName);
+            return RedirectToAction(_defoliationActionName, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -6417,11 +6505,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return await HandleInvalidDefoliationSequenceModel(model);
             }
 
-            PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+            PlanViewModel planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
 
             if (model.IsCheckAnswer && planViewModel.DefoliationSequenceId == model.DefoliationSequenceId && !model.IsAnyChangeInField && !model.IsCurrentSwardChange)
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else if (model.IsAnyChangeInField)
             {
@@ -6462,15 +6550,15 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay))
         {
             return model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass
-                ? RedirectToAction(_grassGrowthClassActionName)
-                : RedirectToAction(_checkAnswerActionName);
+                ? RedirectToAction(_grassGrowthClassActionName, new { sessionId = model.SessionId })
+                : RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
             if (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.GrassWithLowClover)
             {
-                return RedirectToAction(_grassGrowthClassActionName);
+                return RedirectToAction(_grassGrowthClassActionName, new { sessionId = model.SessionId });
             }
             else
             {
@@ -6479,12 +6567,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
                 model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
                 SetCropToSession(model);
-                return RedirectToAction(_freshWeightYieldsDefault);
+                return RedirectToAction(_freshWeightYieldsDefault, new { sessionId = model.SessionId });
             }
 
         }
 
-        return RedirectToAction(_checkAnswerActionName);
+        return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
     }
 
 
@@ -6530,7 +6618,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (model.GrassClassQuestion != null)
             {
-                return (false, RedirectToAction(_defoliationSequenceActionName));
+                return (false, RedirectToAction(_defoliationSequenceActionName, new { sessionId = model.SessionId }));
             }
         }
 
@@ -6564,24 +6652,24 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         //back button logic start
         if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndSilage || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazingAndHay)
         {
-            return RedirectToAction(_defoliationSequenceActionName);
+            return RedirectToAction(_defoliationSequenceActionName, new { sessionId = model.SessionId });
         }
         else if (model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.GrazedOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForHayOnly || model.SwardManagementId == (int)NMP.Commons.Enums.SwardManagement.CutForSilageOnly && (model.SwardTypeId == (int)NMP.Commons.Enums.SwardType.Grass))
         {
 
-            return RedirectToAction(_defoliationActionName);
+            return RedirectToAction(_defoliationActionName, new { sessionId = model.SessionId });
 
         }
 
-        return RedirectToAction(_defoliationSequenceActionName);
+        return RedirectToAction(_defoliationSequenceActionName, new { sessionId = model.SessionId });
     }
 
     [HttpGet]
-    public async Task<IActionResult> GrassClass(string? q)
+    public async Task<IActionResult> GrassClass(string? q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : GrassClass() action called");
 
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -6622,7 +6710,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in GrassClass() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_grassGrowthClassError] = ex.Message;
-            return RedirectToAction(_defoliationSequenceActionName);
+            return RedirectToAction(_defoliationSequenceActionName, new { sessionId = sessionId });
         }
 
         SetCropToSession(model);
@@ -6637,7 +6725,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         List<int> fieldIds = new List<int>();
         bool isScotland = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
 
-        PlanViewModel planViewModelBeforeUpdate = GetCropFromSession() ?? new PlanViewModel();
+        PlanViewModel planViewModelBeforeUpdate = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
         ValidateGrassGrowthClassProperties(model);
         BindNMPTFarmIdAndNameForNavigation(model);
         if (!ModelState.IsValid)
@@ -6652,7 +6740,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
             SetCropToSession(model);
             IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
-            return redirectResult ?? RedirectToAction(_checkAnswerActionName);
+            return redirectResult ?? RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         if (model.Crops.Count > 1 && model.GrassClassDistinctCount == 1)
@@ -6660,7 +6748,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (IsGrassClassUnchanged(model, planViewModelBeforeUpdate))
             {
                 SetCropToSession(model);
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
             if (model.IsAnyChangeInField)
@@ -6715,13 +6803,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.GrassClassDistinctCount == 1 && model.Crops.Count > 1)
         {
-            return RedirectToAction(_dryMatterYieldActionName);
+            return RedirectToAction(_dryMatterYieldActionName, new { sessionId = model.SessionId });
         }
 
         if (model.GrassClassCounter == model.Crops.Count)
         {
             IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
-            return redirectResult ?? RedirectToAction(_checkAnswerActionName);
+            return redirectResult ?? RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         return RedirectForPendingGrassClass(model);
@@ -6731,7 +6819,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.IsCheckAnswer && model.GrassClassQuestion == null && !model.IsAnyChangeInField && model.GrassClassCounter == model.Crops.Count)
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         if (model.IsCheckAnswer && !model.IsAnyChangeInField && model.GrassClassCounter < model.Crops.Count)
@@ -6741,7 +6829,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return View(model);
             }
 
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         return View(model);
@@ -6789,7 +6877,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
 
-        PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+        PlanViewModel planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
         if (model.GrassClassQuestion != planViewModel.GrassClassQuestion)
         {
             model.DryMatterYieldCounter = 0;
@@ -6894,10 +6982,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public async Task<IActionResult> DryMatterYield(string q)
+    public async Task<IActionResult> DryMatterYield(string q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : DryMatterYield({Q}) action called", q);
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
 
         try
         {
@@ -6943,7 +7031,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in DryMatterYield() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["DryMatterYieldError"] = ex.Message;
-            return RedirectToAction(_grassGrowthClassActionName);
+            return RedirectToAction(_grassGrowthClassActionName, new { sessionId = sessionId });
         }
     }
 
@@ -7000,7 +7088,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             (model.IsCheckAnswer && model.Crops.Where((crop, index) => index != model.DryMatterYieldCounter - 1).All(crop => crop != null && crop.Yield != null)))
         {
             SetCropToSession(model);
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
         return View(model);
     }
@@ -7037,7 +7125,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.DryMatterYieldCounter = 0;
             model.DryMatterYieldEncryptedCounter = string.Empty;
             SetCropToSession(model);
-            return RedirectToAction(_grassGrowthClassActionName);
+            return RedirectToAction(_grassGrowthClassActionName, new { sessionId = model.SessionId });
         }
 
         model.FieldID = model.Crops[index].FieldID.Value;
@@ -7073,7 +7161,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
         {
             SetCropToSession(model);
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
         IActionResult? redirectResult = await HandlePreviousGrassManagementRedirect(model);
         if (redirectResult != null)
@@ -7081,7 +7169,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return redirectResult;
         }
 
-        return RedirectToAction(_checkAnswerActionName);
+        return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
     }
 
     private async Task<(bool flowControl, IActionResult? value)> RedirectForDryMatterIfDifferentFigure(PlanViewModel model, List<GrassGrowthClassResponse>? grassGrowthClasses, List<GrassSiteClassResponse>? grassSiteClasses, bool isScotland)
@@ -7093,7 +7181,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange) && (!model.IsCurrentSwardChange))
         {
             SetCropToSession(model);
-            return (flowControl: false, value: RedirectToAction(_checkAnswerActionName));
+            return (flowControl: false, value: RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
         }
         if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
@@ -7173,10 +7261,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public IActionResult Cancel()
+    public IActionResult Cancel(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : Cancel() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -7191,7 +7279,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorCreatePlan] = ex.Message;
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = sessionId });
         }
     }
 
@@ -7211,11 +7299,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
         if (!model.IsCancel.Value)
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
         else
         {
-            RemoveCropSession();
+            RemoveCropSession(model.SessionId);
             return await RedirectForCancel(model);
         }
     }
@@ -7226,7 +7314,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return RedirectToAction(_harvestYearOverviewActionName, new
             {
                 id = model.EncryptedFarmId,
-                year = model.EncryptedHarvestYear
+                year = model.EncryptedHarvestYear,
+                sessionId = model.SessionId
             });
         }
         else
@@ -7256,7 +7345,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 q = model.EncryptedFarmId,
                 r = model.EncryptedFieldId,
-                s = model.EncryptedHarvestYear
+                s = model.EncryptedHarvestYear,
+                sessionId = model.SessionId
             });
         }
 
@@ -7284,10 +7374,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return model;
     }
     [HttpGet]
-    public async Task<IActionResult> CheckYourPlanData(string? year, string? q)
+    public async Task<IActionResult> CheckYourPlanData(string? year, string? q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CheckYourPlanData() action called");
-        PlanViewModel model = new PlanViewModel();
+        PlanViewModel? model = null;
+        if (sessionId.HasValue)
+        {
+            model = GetCropFromSession(sessionId) ?? new PlanViewModel();
+        }
+        else
+        {
+            model = new PlanViewModel();
+        }
         int farmId = 0;
         FarmResponse? farm = new FarmResponse();
         Error? error = null;
@@ -7318,7 +7416,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in CheckYourPlanData() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["CheckYourPlanDataError"] = ex.Message;
-            return RedirectToAction(_plansAndRecordsOverviewActionName, "Crop", new { id = q });
+            return RedirectToAction(_plansAndRecordsOverviewActionName, "Crop", new { id = q, sessionId = sessionId });
         }
 
         return View(model);
@@ -7351,19 +7449,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 SetCropToSession(model);
                 if (model.HarvestYear != null && model.HarvestYear.All(x => !x.IsAnyPlan))
                 {
-                    return RedirectToAction(_harvestYearForPlanActionName, new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = false });
+                    return RedirectToAction(_harvestYearForPlanActionName, new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = false, sessionId = model.SessionId });
                 }
 
                 return View(model);
             }
             else
             {
-                return RedirectToAction(_harvestYearForPlanActionName, new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = true });
+                return RedirectToAction(_harvestYearForPlanActionName, new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = true, sessionId = model.SessionId });
             }
         }
         else
         {
-            return RedirectToAction(_harvestYearForPlanActionName, new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = true });
+            return RedirectToAction(_harvestYearForPlanActionName, new { q = q, year = _farmDataProtector.Protect(model.Year.ToString()), isPlanRecord = true, sessionId = model.SessionId });
         }
     }
 
@@ -7387,10 +7485,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> CopyExistingPlan(string q)
+    public async Task<IActionResult> CopyExistingPlan(string q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CopyExistingPlan() action called");
-        PlanViewModel model = GetCropFromSession() ?? new PlanViewModel();
+        PlanViewModel model = GetCropFromSession(sessionId) ?? new PlanViewModel();
 
         if (string.IsNullOrWhiteSpace(q))
         {
@@ -7431,22 +7529,22 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.IsCheckAnswer)
         {
-            return await Task.FromResult(RedirectToAction(_checkAnswerActionName));
+            return await Task.FromResult(RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
         }
 
         if (model.CopyExistingPlan != null && !(model.CopyExistingPlan.Value))
         {
-            return await Task.FromResult(RedirectToAction(_cropGroupsActionName));
+            return await Task.FromResult(RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId }));
         }
 
-        return await Task.FromResult(RedirectToAction("CopyPlanYears"));
+        return await Task.FromResult(RedirectToAction("CopyPlanYears", new { sessionId = model.SessionId }));
     }
 
     [HttpGet]
-    public async Task<IActionResult> CopyPlanYears()
+    public async Task<IActionResult> CopyPlanYears(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CopyPlanYears() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         Error? error = null;
 
         try
@@ -7478,7 +7576,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogError(ex, "Crop Controller: Exception in CopyPlanYears() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = string.Concat(error == null ? "" : error.Message, ex.Message);
-            return RedirectToAction(_farmSummaryActionName, "Farm");
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { sessionId = sessionId });
         }
     }
 
@@ -7508,17 +7606,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             SetCropToSession(model);
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
-        return RedirectToAction("CopyOrganicInorganicApplications");
+        return RedirectToAction("CopyOrganicInorganicApplications", new { sessionId = model.SessionId });
     }
 
     [HttpGet]
-    public async Task<IActionResult> CopyOrganicInorganicApplications()
+    public async Task<IActionResult> CopyOrganicInorganicApplications(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
 
         try
         {
@@ -7535,7 +7633,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = ex.Message;
-            return RedirectToAction(_farmSummaryActionName, "Farm");
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { sessionId = sessionId });
         }
     }
 
@@ -7556,14 +7654,14 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         SetCropToSession(model);
-        return RedirectToAction(_copyCheckAnswerActionName);
+        return RedirectToAction(_copyCheckAnswerActionName, new { sessionId = model.SessionId });
     }
 
     [HttpGet]
-    public async Task<IActionResult> CopyCheckAnswer()
+    public async Task<IActionResult> CopyCheckAnswer(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -7581,7 +7679,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogError(ex, "Crop Controller: Exception in CopyOrganicInorganicApplications() action : {Message} {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_tempDataErrorKey] = ex.Message;
-            return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm"));
+            return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { sessionId = sessionId }));
         }
     }
 
@@ -7629,16 +7727,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 TempData["ErrorCopyPlan"] = Resource.MsgWeCouldNotCreateYourPlanPleaseTryAgainLater;
-                return RedirectToAction(_copyCheckAnswerActionName);
+                return RedirectToAction(_copyCheckAnswerActionName, new { sessionId = model.SessionId });
             }
         }
         return View(_copyCheckAnswerActionName, model);
     }
 
-    public async Task<IActionResult> BackCopyCheckAnswer()
+    public async Task<IActionResult> BackCopyCheckAnswer(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : BackCopyCheckAnswer() action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Crop Controller : BackCopyCheckAnswer() action called - CropData session is null");
@@ -7647,16 +7745,16 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         model.IsCheckAnswer = false;
         SetCropToSession(model);
-        return await Task.FromResult(RedirectToAction("CopyOrganicInorganicApplications"));
+        return await Task.FromResult(RedirectToAction("CopyOrganicInorganicApplications", new { sessionId = sessionId }));
     }
 
 
 
     [HttpGet]
-    public async Task<IActionResult> AddOrRemoveField()
+    public async Task<IActionResult> AddOrRemoveField(Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : AddOrRemoveField() get action called");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -7699,13 +7797,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model.CropGroupId == (int)NMP.Commons.Enums.CropGroup.Grass)
             {
-                return RedirectToAction(_currentSwardActionName);
+                return RedirectToAction(_currentSwardActionName, new { sessionId = model.SessionId });
             }
-            return RedirectToAction(_sowingDateQuestion);
+            return RedirectToAction(_sowingDateQuestion, new { sessionId = model.SessionId });
         }
         else
         {
-            return RedirectToAction(_cropFields);
+            return RedirectToAction(_cropFields, new { sessionId = model.SessionId });
         }
     }
 
@@ -7745,20 +7843,47 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (fieldsToBeRemoved, newFields);
     }
 
-    private PlanViewModel? GetHarvestYearPlanFromSession()
+    private PlanViewModel? GetHarvestYearPlanFromSession(int farmId, int year)
     {
-        if (HttpContext.Session.Exists(_harvestYearPlanActionName))
+        if (HttpContext.Session.Exists(farmId + " " + year + " " + _harvestYearPlanActionName))
         {
-            return HttpContext.Session.GetObjectFromJson<PlanViewModel>(_harvestYearPlanActionName);
+            return HttpContext.Session.GetObjectFromJson<PlanViewModel>(farmId + " " + year + " " + _harvestYearPlanActionName);
         }
         return null;
     }
 
     private void SetHarvestYearPlanToSession(PlanViewModel plan)
     {
-        HttpContext.Session.SetObjectAsJson(_harvestYearPlanActionName, plan);
+        HttpContext.Session.SetObjectAsJson(plan.FarmID + " " + plan.Year + " " + _harvestYearPlanActionName, plan);
+    }
+    private void RemoveHarvestYearPlanFromSession(int farmId, int year)
+    {
+        if (HttpContext.Session.Exists(farmId + " " + year + " " + _harvestYearPlanActionName))
+        {
+            HttpContext.Session.Remove(farmId + " " + year + " " + _harvestYearPlanActionName);
+        }
+    }
+    private PlanViewModel? GetExcessWinterRainfallFromSession(Guid? sessionId)
+    {
+        if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _excessWinterRainfallActionName))
+        {
+            return HttpContext.Session.GetObjectFromJson<PlanViewModel>(sessionId + " " + _excessWinterRainfallActionName);
+        }
+        return null;
     }
 
+    private void SetExcessWinterRainfallToSession(PlanViewModel plan)
+    {
+        HttpContext.Session.SetObjectAsJson(plan.SessionId + " " + _excessWinterRainfallActionName, plan);
+    }
+
+    private void RemoveExcessWinterRainfallFromSession(Guid? sessionId)
+    {
+        if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _excessWinterRainfallActionName))
+        {
+            HttpContext.Session.Remove(sessionId + " " + _excessWinterRainfallActionName);
+        }
+    }
     private async Task<List<Field>> GetFilteredFields(PlanViewModel model, int farmId, bool isCropUpdate)
     {
         var fields = await _fieldLogic.FetchFieldsByFarmId(farmId);
@@ -7939,11 +8064,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     }
 
     [HttpGet]
-    public async Task<IActionResult> FreshWeightYieldsDefault(string? q)
+    public async Task<IActionResult> FreshWeightYieldsDefault(string? q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : FreshWeightYieldsDefault() action called");
 
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -7994,7 +8119,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.FreshWeightDefaultCounter = 0;
                     model.FreshWeightDefaultEncryptedCounter = string.Empty;
                     SetCropToSession(model);
-                    return RedirectToAction(_defoliationSequenceActionName);
+                    return RedirectToAction(_defoliationSequenceActionName, new { sessionId = model.SessionId });
                 }
                 model.FieldID = model.Crops[index].FieldID.Value;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
@@ -8010,7 +8135,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in FreshWeightYieldsDefault() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_grassGrowthClassError] = ex.Message;
-            return RedirectToAction(_defoliationSequenceActionName);
+            return RedirectToAction(_defoliationSequenceActionName, new { sessionId = sessionId });
         }
 
         SetCropToSession(model);
@@ -8022,8 +8147,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         _logger.LogTrace("Crop Controller : FreshWeightYieldsDefault() post action called");
 
-        PlanViewModel planViewModel = GetCropFromSession();
-        if (planViewModel.FreshWeightYieldsPerField[planViewModel.FreshWeightDefaultCounter].IsFreshWeightYieldsDefault != model.FreshWeightYieldsPerField[model.FreshWeightDefaultCounter].IsFreshWeightYieldsDefault)
+        PlanViewModel? planViewModel = GetCropFromSession(model.SessionId);
+        if (planViewModel != null && planViewModel.FreshWeightYieldsPerField[planViewModel.FreshWeightDefaultCounter].IsFreshWeightYieldsDefault != model.FreshWeightYieldsPerField[model.FreshWeightDefaultCounter].IsFreshWeightYieldsDefault)
         {
             model.IsFreshWeightYieldsDefaultChange = true;
         }
@@ -8058,19 +8183,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         bool wantsDefaultValues = model.FreshWeightYieldsPerField[currentIndex].IsFreshWeightYieldsDefault == true;
-
-        if (!wantsDefaultValues)
+        (bool flowControl, IActionResult? value) = RedirectForFarmWeightYieldsDefault(model, wantsDefaultValues);
+        if (!flowControl && value != null)
         {
-            model.FreshWeightDefaultCounter++;
-            model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
-            SetCropToSession(model);
-
-            if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange && !model.IsFreshWeightYieldsDefaultChange)
-            {
-                return RedirectToAction(_checkAnswerActionName);
-            }
-
-            return RedirectToAction(_freshWeightYieldsManual);
+            return value;
         }
 
         // "Yes" - defaults already bound above. Advance to the next field.
@@ -8089,7 +8205,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         if (model.FreshWeightDefaultCounter == model.Crops.Count)
@@ -8100,19 +8216,38 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return redirectResult;
             }
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         // More fields to confirm - reload Default GET, now pointing at the next field.
-        return RedirectToAction(_freshWeightYieldsDefault);
+        return RedirectToAction(_freshWeightYieldsDefault, new { sessionId = model.SessionId });
+    }
+
+    private (bool flowControl, IActionResult? value) RedirectForFarmWeightYieldsDefault(PlanViewModel model, bool wantsDefaultValues)
+    {
+        if (!wantsDefaultValues)
+        {
+            model.FreshWeightDefaultCounter++;
+            model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
+            SetCropToSession(model);
+
+            if (model.IsCheckAnswer && !model.IsCropGroupChange && !model.IsAnyChangeInField && !model.IsCurrentSwardChange && !model.IsFreshWeightYieldsDefaultChange)
+            {
+                return (flowControl: false, value: RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
+            }
+
+            return (flowControl: false, value: RedirectToAction(_freshWeightYieldsManual, new { sessionId = model.SessionId }));
+        }
+
+        return (flowControl: true, value: null);
     }
 
     [HttpGet]
-    public async Task<IActionResult> FreshWeightYieldsManual(string? q)
+    public async Task<IActionResult> FreshWeightYieldsManual(string? q, Guid? sessionId)
     {
         _logger.LogTrace("Crop Controller : FreshWeightYieldsManual() action called");
 
-        PlanViewModel model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -8141,7 +8276,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     model.FreshWeightManualCounter = 0;
                     model.FreshWeightManualEncryptedCounter = string.Empty;
                     SetCropToSession(model);
-                    return RedirectToAction(_freshWeightYieldsDefault);
+                    return RedirectToAction(_freshWeightYieldsDefault, new { sessionId = model.SessionId });
                 }
                 model.FieldID = model.Crops[index].FieldID.Value;
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.Crops[index].FieldID.Value)).Name;
@@ -8156,7 +8291,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in FreshWeightYieldsDefault() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_grassGrowthClassError] = ex.Message;
-            return RedirectToAction(_defoliationSequenceActionName);
+            return RedirectToAction(_defoliationSequenceActionName, new { sessionId = sessionId });
         }
 
         SetCropToSession(model);
@@ -8213,7 +8348,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsQuestionChange) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         if (model.FreshWeightDefaultCounter == model.Crops.Count)
@@ -8223,18 +8358,18 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 return redirectResult;
             }
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         // Loop back to Default GET for the next field.
-        return RedirectToAction(_freshWeightYieldsDefault);
+        return RedirectToAction(_freshWeightYieldsDefault, new { sessionId = model.SessionId });
     }
 
     [HttpGet]
-    public async Task<IActionResult> PreviousGrassManagement(string? q)
+    public async Task<IActionResult> PreviousGrassManagement(string? q, Guid? sessionId)
     {
         _logger.LogTrace($"Field Controller: PreviousGrassManagement() action called.");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("SoilAnalysisController: Session expired in PreviousGrassManagement() action.");
@@ -8258,7 +8393,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             TempData["PreviousGrassManagementError"] = ex.Message;
-            return RedirectToAction(_previousGrassManagement);
+            return RedirectToAction(_previousGrassManagement, new { sessionId = model.SessionId });
         }
         SetCropToSession(model);
 
@@ -8291,7 +8426,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (ShouldRedirectToCheckAnswer(model))
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         await GetPreviousGrassManagementListAsync(model);
@@ -8319,7 +8454,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             model.PreviousGrassEncryptedCounter = string.Empty;
             SetCropToSession(model);
             string backPage = PreviousGrassCurrentCounterZeroBack(model);
-            return RedirectToAction(backPage);
+            return RedirectToAction(backPage, new { sessionId = model.SessionId });
         }
 
         model.FieldID = model.Crops[index].FieldID.Value;
@@ -8365,7 +8500,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         model.PreviousGrassCurrentCounter++;
         model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
         SetCropToSession(model);
-        return RedirectToAction(_previousGrassManagement);
+        return RedirectToAction(_previousGrassManagement, new { sessionId = model.SessionId });
     }
 
 
@@ -8391,7 +8526,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         model.PreviousGrassEncryptedCounter = _fieldDataProtector.Protect(model.PreviousGrassCurrentCounter.ToString());
         if (model.PreviousGrassCurrentCounter == model.Crops.Count)
         {
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         return View(model);
@@ -8457,10 +8592,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
 
     [HttpGet]
-    public async Task<IActionResult> IsPermanentSward(string? q)
+    public async Task<IActionResult> IsPermanentSward(string? q, Guid? sessionId)
     {
         _logger.LogTrace($"Field Controller: IsPermanentSward() action called.");
-        PlanViewModel? model = GetCropFromSession();
+        PlanViewModel? model = GetCropFromSession(sessionId);
         try
         {
             if (model == null)
@@ -8472,7 +8607,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         catch (Exception ex)
         {
             TempData["IsPermanentSwardError"] = ex.Message;
-            return RedirectToAction(_isPermanentSward);
+            return RedirectToAction(_isPermanentSward, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -8500,11 +8635,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             if (model.IsCheckAnswer)
             {
-                PlanViewModel planViewModel = GetCropFromSession() ?? new PlanViewModel();
+                PlanViewModel? planViewModel = GetCropFromSession(model.SessionId) ?? new PlanViewModel();
 
                 if (planViewModel.IsPermanentSward == model.IsPermanentSward && !model.IsAnyChangeInField)
                 {
-                    return RedirectToAction(_checkAnswerActionName);
+                    return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                 }
                 if (planViewModel.IsPermanentSward != null && planViewModel.IsPermanentSward != model.IsPermanentSward)
                 {
@@ -8524,7 +8659,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _logger.LogTrace(ex, "Crop Controller : Exception in IsPermanentSward() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData["IsPermanentSwardError"] = ex.Message;
-            return RedirectToAction(_isPermanentSward);
+            return RedirectToAction(_isPermanentSward, new { sessionId = model.SessionId });
         }
 
     }
@@ -8533,7 +8668,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (model.IsPermanentSward == false)
         {
-            return RedirectToAction("CurrentSward");
+            return RedirectToAction("CurrentSward", new { sessionId = model.SessionId });
         }
         else
         {
@@ -8546,13 +8681,13 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 if (model.SwardTypeId == null || model.Crops.Any(x => x.Yield == null))
                 {
-                    return RedirectToAction(_swardType);
+                    return RedirectToAction(_swardType, new { sessionId = model.SessionId });
                 }
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else
             {
-                return RedirectToAction(_swardType);
+                return RedirectToAction(_swardType, new { sessionId = model.SessionId });
             }
         }
     }

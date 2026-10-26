@@ -73,6 +73,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
         ViewBag.NMPTFarmName = model?.FarmName;
+        ViewBag.SessionId = model?.SessionId;
 
     }
 

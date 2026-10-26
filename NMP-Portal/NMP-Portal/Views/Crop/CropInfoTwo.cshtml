@@ -10,7 +10,7 @@
 @section BeforeContent {
     @if (Model.CropInfo1 != null && Model.CropInfo1 != 0)
     {
-        <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&&(!Model.IsCropTypeChange) ? "CheckAnswer" :"CropInfoOne")" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange)&&(!Model.IsCropTypeChange) ? "CheckAnswer" :"CropInfoOne")" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 
     }
     else
@@ -18,11 +18,11 @@
         if (Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.UseTheStandardFigureForAllTheseFields ||
         Model.YieldQuestion == (int)NMP.Commons.Enums.YieldQuestion.NoDoNotEnterAYield)
         {
-            <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :"YieldQuestion")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :"YieldQuestion")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
         }
         else
         {
-            <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :"Yield")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="@(Model.IsCheckAnswer&& (!Model.IsCropGroupChange) &&(!Model.IsCropTypeChange) ? "CheckAnswer" :"Yield")" asp-controller="Crop" asp-route-q="@Model.YieldEncryptedCounter" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
         }
     }
 }
@@ -65,11 +65,11 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                    <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a asp-action="CheckAnswer" asp-controller="Crop">@Resource.lblCancel</a>
+                    <a asp-action="CheckAnswer" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
 

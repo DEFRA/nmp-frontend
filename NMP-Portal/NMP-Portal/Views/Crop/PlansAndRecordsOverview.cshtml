@@ -82,13 +82,13 @@
                                     <td class="govuk-table__cell">
                                         @if (Model.HarvestYear[i].IsAnyPlan)
                                         {
-                                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear">
+                                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear" asp-route-sessionId="@Model.SessionId">
                                                 @string.Format(Resource.lblViewEditThePlan, Model.HarvestYear[i].Year)
                                             </a>
                                         }
                                         else
                                         {
-                                            <a asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear" asp-route-isPlanRecord="true">
+                                            <a asp-action="CheckYourPlanData" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[i].EncryptedYear" asp-route-isPlanRecord="true" asp-route-sessionId="@Model.SessionId">
                                                 @string.Format((Model.HarvestYear[i].IsThisOldYear) ? Resource.lblEnterTheDetailsFor : Resource.lblStartAPlan, Model.HarvestYear[i].Year)
                                             </a>
                                         }

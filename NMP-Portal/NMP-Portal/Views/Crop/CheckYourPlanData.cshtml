@@ -20,7 +20,7 @@
 
 @section BeforeContent {
 
-    <govuk-back-link asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="PlansAndRecordsOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 @if (ViewBag.Error != null)
@@ -67,14 +67,14 @@
             </ul>
 
             <p class="govuk-body">
-                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index+1].EncryptedYear">
+                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index+1].EncryptedYear" asp-route-sessionId="@Model.SessionId">
                     @string.Format(Resource.lblCheckYourPlan, Model.Year - 1)
                 </a>
             </p>
 
             @* Normal journey *@
             <p class="govuk-body">
-                <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index].EncryptedYear" asp-route-isPlanRecord="true">
+                <a asp-action="HarvestYearForPlan" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-year="@Model.HarvestYear[index].EncryptedYear" asp-route-isPlanRecord="true" asp-route-sessionId="@Model.SessionId">
                     @string.Format(Resource.lblContinueToCreateAPlanFor, Model.Year)
                 </a>
             </p>
@@ -99,7 +99,7 @@
 
             <br>
             <p class="govuk-body cancel-link">
-                <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId">@Resource.lblCancel</a>
+                <a asp-action="CreateCropPlanCancel" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
             </p>
         </div>
     </div>

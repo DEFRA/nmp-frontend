@@ -13,7 +13,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="UpdateExcessOrWinterRainfall" asp-controller="Crop">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="UpdateExcessOrWinterRainfall" asp-controller="Crop" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -27,7 +27,7 @@
         <form asp-action="IsWinterRainfallMoreThan450" asp-controller="Crop" method="post" autocomplete="off">
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/Crop/_ExcessWinterRainfall.cshtml", Model)
-            <govuk-radios asp-for="@Model.IsWinterRainfallMoreThan450" class="govuk-radios--inline">
+            <govuk-radios for="@Model.IsWinterRainfallMoreThan450" class="govuk-radios--inline">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblIsTheWinterRainfallFrom1OctTo1March, previousYear, Model.Year, Model.FarmName)
@@ -47,7 +47,7 @@
                 <button class="govuk-button" data-module="govuk-button">@Resource.lblContinue</button>
             </fieldset>
 
-            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">Cancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-Id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
 
         </form>
     </div>
