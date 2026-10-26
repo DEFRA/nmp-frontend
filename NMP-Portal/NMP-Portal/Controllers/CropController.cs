@@ -8179,7 +8179,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 ModelState.AddModelError(
                     $"FreshWeightYieldsPerField[{model.FreshWeightManualCounter}].FreshWeightYields[{i}].Yield",
-                    Resource.MsgEnterADateBeforeContinuing);
+                    string.Format(Resource.MsgEnterFreshWeightYield, model.FreshWeightYieldsPerField[model.FreshWeightManualCounter].FreshWeightYields[i].DefoliationName));
             }
             else if (yield.Yield.HasValue && (yield.Yield.Value < 1 || yield.Yield.Value > 100 || yield.Yield.Value % 1 != 0))
             {
