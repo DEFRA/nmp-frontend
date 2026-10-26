@@ -74,15 +74,26 @@
 
                         <govuk-input for="@Model.SoilAnalyses.PhosphorusIndex" type="number" step="1" input-class="govuk-input--width-5">
                             <govuk-input-label is-page-heading="false">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
+                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                <govuk-input-hint>@string.Format(Resource.MsgEnterValidValueForNutrientIndex, 9)</govuk-input-hint>
+                            }
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" for="@Model.PotassiumIndexValue">
                             <govuk-input-label is-page-heading="false">@Resource.lblPotassiumIndexOptional</govuk-input-label>
-                            <govuk-input-hint>@Resource.MsgEnterTheValueOYourSoilAnalysisHint3</govuk-input-hint>
+                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                <govuk-input-hint>@Resource.lblHintTextForPotassiumForScotland</govuk-input-hint>
+                            }
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" for="@Model.SoilAnalyses.MagnesiumIndex" type="number" step="1">
                             <govuk-input-label is-page-heading="false">@Resource.lblMagnesiumIndexOptional</govuk-input-label>
+                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                <govuk-input-hint>@string.Format(Resource.MsgEnterValidValueForNutrientIndex, 9)</govuk-input-hint>
+                            }
                         </govuk-input>
 
                     }
@@ -170,7 +181,7 @@
 
                         
                 </govuk-fieldset>
-             
+
             </div>
             <govuk-input for=@Model.SoilAnalyses.OrganicMatterPercentage type="number" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">

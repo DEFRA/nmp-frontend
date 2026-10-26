@@ -86,15 +86,30 @@
 
                         <govuk-input for="@Model.PhosphorusIndex" type="number" step="1" input-class="govuk-input--width-5">
                             <govuk-input-label is-page-heading="false">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
+                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                <govuk-input-hint>@string.Format(Resource.MsgEnterValidValueForNutrientIndex, 9)</govuk-input-hint>
+                            }
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" for="@Model.PotassiumIndexValue">
                             <govuk-input-label is-page-heading="false">@Resource.lblPotassiumIndexOptional</govuk-input-label>
-                            <govuk-input-hint>@Resource.MsgEnterTheValueOYourSoilAnalysisHint3</govuk-input-hint>
+                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                <govuk-input-hint>@Resource.lblHintTextForPotassiumForScotland</govuk-input-hint>
+                            }
+                            else
+                            {
+                                <govuk-input-hint>@Resource.MsgEnterTheValueOYourSoilAnalysisHint3</govuk-input-hint>
+                            }
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" for="@Model.MagnesiumIndex" type="number" step="1">
                             <govuk-input-label is-page-heading="false">@Resource.lblMagnesiumIndexOptional</govuk-input-label>
+                            @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                            {
+                                <govuk-input-hint>@string.Format(Resource.MsgEnterValidValueForNutrientIndex, 9)</govuk-input-hint>
+                            }
                         </govuk-input>
 
                     }
@@ -129,59 +144,59 @@
                     }
                     else
                     {
-                    @if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                    {
-                        <govuk-radios for="@Model.PhosphorusStatus">
-                            <govuk-radios-fieldset>
-                                <govuk-radios-fieldset-legend is-page-heading="false">
-                                    @Resource.lblPhosphorusStatusOptional
-                                </govuk-radios-fieldset-legend>
+                        @if (Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland)
+                        {
+                            <govuk-radios for="@Model.PhosphorusStatus">
+                                <govuk-radios-fieldset>
+                                    <govuk-radios-fieldset-legend is-page-heading="false">
+                                        @Resource.lblPhosphorusStatusOptional
+                                    </govuk-radios-fieldset-legend>
 
-                                @if (ViewBag.PhosphorusSelectList != null)
-                                {
-                                    @foreach (var item in ViewBag.PhosphorusSelectList)
+                                    @if (ViewBag.PhosphorusSelectList != null)
                                     {
-                                        <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                        @foreach (var item in ViewBag.PhosphorusSelectList)
+                                        {
+                                            <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                        }
                                     }
-                                }
 
-                            </govuk-radios-fieldset>
-                        </govuk-radios>
-                        <govuk-radios for="@Model.PotassiumStatus">
-                            <govuk-radios-fieldset>
-                                <govuk-radios-fieldset-legend is-page-heading="false">
-                                    @Resource.lblPotashStatusOptional
-                                </govuk-radios-fieldset-legend>
+                                </govuk-radios-fieldset>
+                            </govuk-radios>
+                            <govuk-radios for="@Model.PotassiumStatus">
+                                <govuk-radios-fieldset>
+                                    <govuk-radios-fieldset-legend is-page-heading="false">
+                                        @Resource.lblPotashStatusOptional
+                                    </govuk-radios-fieldset-legend>
 
-                                @if (ViewBag.PhosphorusSelectList != null)
-                                {
-                                    @foreach (var item in ViewBag.PhosphorusSelectList)
+                                    @if (ViewBag.PhosphorusSelectList != null)
                                     {
-                                        <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                        @foreach (var item in ViewBag.PhosphorusSelectList)
+                                        {
+                                            <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                        }
                                     }
-                                }
 
-                            </govuk-radios-fieldset>
-                        </govuk-radios>
-                        <govuk-radios for="@Model.MagnesiumStatus">
-                            <govuk-radios-fieldset>
-                                <govuk-radios-fieldset-legend is-page-heading="false">
-                                    @Resource.lblMagnesiumStatusOptional
-                                </govuk-radios-fieldset-legend>
+                                </govuk-radios-fieldset>
+                            </govuk-radios>
+                            <govuk-radios for="@Model.MagnesiumStatus">
+                                <govuk-radios-fieldset>
+                                    <govuk-radios-fieldset-legend is-page-heading="false">
+                                        @Resource.lblMagnesiumStatusOptional
+                                    </govuk-radios-fieldset-legend>
 
-                                @if (ViewBag.MagnesiumSelectList != null)
-                                {
-                                    @foreach (var item in ViewBag.MagnesiumSelectList)
+                                    @if (ViewBag.MagnesiumSelectList != null)
                                     {
-                                        <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                        @foreach (var item in ViewBag.MagnesiumSelectList)
+                                        {
+                                            <govuk-radios-item value="@item.Value">@item.Text</govuk-radios-item>
+                                        }
                                     }
-                                }
 
-                            </govuk-radios-fieldset>
-                        </govuk-radios>
+                                </govuk-radios-fieldset>
+                            </govuk-radios>
 
 
-                    }
+                        }
                     }
                 </govuk-fieldset>
             </div>
