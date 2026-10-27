@@ -156,7 +156,15 @@
                                         managementTableIndex++;
                                     }
 
-                                    <p class="govuk-body-s margin-bottom-forty">@Resource.lblSourceRb209</p>
+                                    <p class="govuk-body-s margin-bottom-forty">
+                                        @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+                                        {
+                                            @Resource.lblSourceRB209ForEngland
+                                        }
+                                        else
+                                        {
+                                            @Resource.lblSourceRb209
+                                        }</p>
 
                                     @if (Model.RecommendationComments != null && Model.RecommendationComments.Count > 0)
                                     {
