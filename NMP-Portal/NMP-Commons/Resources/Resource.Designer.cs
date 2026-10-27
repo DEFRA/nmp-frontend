@@ -837,6 +837,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC..
+        /// </summary>
+        public static string lblAboutRecommendationForScotlandContent1New {
+            get {
+                return ResourceManager.GetString("lblAboutRecommendationForScotlandContent1New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, DEFRA and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​.
         /// </summary>
         public static string lblAboutRecommendationForScotlandContent2 {
@@ -905,6 +914,15 @@ namespace NMP.Commons.Resources {
         public static string lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1 {
             get {
                 return ResourceManager.GetString("lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp;amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (‘Defra and partners’)..
+        /// </summary>
+        public static string lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New {
+            get {
+                return ResourceManager.GetString("lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New", resourceCulture);
             }
         }
         
