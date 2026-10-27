@@ -8672,4 +8672,10 @@ following crop year 2</value>
   <data name="lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New" xml:space="preserve">
     <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp;amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (‘Defra and partners’).</value>
   </data>
+  <data name="lblSourceRB209ForEngland" xml:space="preserve">
+    <value>Crop need is from the AHDB Nutrient Management Guide (RB209). Nutrient supply from manures is calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
+  </data>
+  <data name="lblHintTextForPotassiumForScotland" xml:space="preserve">
+    <value>Enter an index between 0 and 9. Potassium (K) index 2 must be entered as either 2- or 2+</value>
+  </data>
 </root>
