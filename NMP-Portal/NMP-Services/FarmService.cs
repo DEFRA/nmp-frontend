@@ -7,6 +7,7 @@ using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Net;
@@ -16,7 +17,7 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFarmService
+public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IFarmService
 {
     private readonly ILogger<FarmService> _logger = logger;
     private const string _applicationJson = "application/json";
@@ -438,5 +439,27 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         }
 
         return (farmList, error);
+    }
+    public async Task<FarmViewModel?> GetFarmFromSessionAsync(Guid? sessionId)
+    {
+        string cacheKey = sessionId.ToString();
+        var cached = await GetFromCacheAsync<List<FarmViewModel>>(cacheKey);
+        if (cached != null)
+        {
+            return cached.FirstOrDefault();
+        }
+        return null;
+    }
+
+    public async Task SetFarmToSessionAsync(FarmViewModel farm)
+    {
+        string cacheKey = farm.SessionId.ToString();
+        await SetCacheAsync(cacheKey, new List<FarmViewModel> { farm });
+    }
+    public async Task RemoveFarmSessionAsync(Guid? sessionId)
+    {
+        string cacheKey = sessionId.ToString();
+        await RemoveCacheAsync<List<FarmViewModel>>(cacheKey);
+
     }
 }

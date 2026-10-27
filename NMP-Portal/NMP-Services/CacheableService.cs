@@ -38,6 +38,20 @@ namespace NMP.Services
             Console.WriteLine(string.Format(Resource.lblCacheSet, cacheKey));
 
         }
-        
+        protected async Task<T?> RemoveCacheAsync<T>(string cacheKey) where T : class
+        {
+            var redisValue = await _redisCacheService.GetAsync<T>(cacheKey);
+            if (redisValue != null)
+            {
+                await _redisCacheService.RemoveAsync(cacheKey);
+            }
+
+            var memoryValue = _memoryCacheService.Get<T>(cacheKey);
+            if (memoryValue != null)
+            {
+                _memoryCacheService.Remove(cacheKey);
+            }
+            return null;
+        }
     }
 }

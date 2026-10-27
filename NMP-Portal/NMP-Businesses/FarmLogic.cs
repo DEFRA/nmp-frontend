@@ -4,6 +4,7 @@ using NMP.Application;
 using NMP.Commons.Enums;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 
@@ -124,4 +125,19 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         _logger.LogTrace("Fetching farms with last updated date for Organization ID: {OrgId}", orgId);
         return await _farmService.FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(orgId);
     }
+    public async Task<FarmViewModel?> GetFarmFromSession(Guid? sessionId)
+    {
+       return await _farmService.GetFarmFromSessionAsync(sessionId);
+    }
+
+    public async Task SetFarmToSession(FarmViewModel farm)
+    {
+        await _farmService.SetFarmToSessionAsync(farm);
+    }
+    public async Task RemoveFarmSession(Guid? sessionId)
+    {
+        await _farmService.RemoveFarmSessionAsync(sessionId);
+
+    }
+
 }
