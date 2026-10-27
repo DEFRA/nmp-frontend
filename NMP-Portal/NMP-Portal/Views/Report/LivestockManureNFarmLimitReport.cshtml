@@ -1069,19 +1069,4 @@ else
         </p>
     </div>
 </div>
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-s">
-            @Resource.lblAboutRecommendationGuidenceAdvice
-        </h2>
-        <p class="govuk-body">
-            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1)
-        </p>
-        <p class="govuk-body">
-            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)
-        </p>
-        <p class="govuk-body">
-            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent3 : Resource.lblAboutRecommendationGuidenceAdviceContent3)
-        </p>
-    </div>
-</div>
+@await Html.PartialAsync("_ReportDisclaimer", Model)
