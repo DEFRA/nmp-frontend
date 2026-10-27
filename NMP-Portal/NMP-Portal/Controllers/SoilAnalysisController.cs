@@ -797,7 +797,7 @@ namespace NMP.Portal.Controllers
                     if (errorMessage == string.Format(Resource.lblEnterNumericValue, entry.AttemptedValue, Resource.lblMagnesiumPerLitreOfSoil))
                     {
                         entry.Errors.Clear();
-                        entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9998));
+                        entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9999));
                     }
                 }
             }
@@ -835,7 +835,7 @@ namespace NMP.Portal.Controllers
                     if (errorMessage == string.Format(Resource.lblEnterNumericValue, entry.AttemptedValue, Resource.lblPotassiumPerLitreOfSoil))
                     {
                         entry.Errors.Clear();
-                        entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9998));
+                        entry.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9999));
                     }
                 }
             }
