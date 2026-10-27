@@ -595,7 +595,7 @@
     <value>Potash</value>
   </data>
   <data name="MsgEnterValidValueForNutrient" xml:space="preserve">
-    <value>Enter an amount between 0 and 9,998 litres</value>
+    <value>Enter an amount between 0 and 9,999 mg per litre</value>
   </data>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
     <value>Enter an index between 0 and {0}</value>
@@ -3151,7 +3151,7 @@ cubic metres per hectare  not set</value>
     <value>Climate postcode</value>
   </data>
   <data name="MsgEnterValidValueForPhosphorus" xml:space="preserve">
-    <value>Enter an amount between 0 and 999 litres</value>
+    <value>Enter an amount between 0 and 999 mg per litre</value>
   </data>
   <data name="lblStandardNutrientValuesWhwnWeHaveValues" xml:space="preserve">
     <value>Do you want to use the nutrient values for {0} you added on {1}?</value>
