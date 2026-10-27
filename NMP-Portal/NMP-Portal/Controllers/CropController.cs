@@ -67,7 +67,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _yield = "Yield";
     private const string _errorCreatePlan = "ErrorCreatePlan";
     private const string _errorOnHarvestYearOverview = "ErrorOnHarvestYearOverview";
-    private const string _recommendationsActionName = "Recommendations"; 
+    private const string _recommendationsActionName = "Recommendations";
     private const string _defoliationSequenceActionName = "DefoliationSequence";  //_twoParamStringFormat
     private const string _harvestYearPlanActionName = "HarvestYearPlan";
     private const string _organicManureKey = "OrganicManure";
@@ -2205,14 +2205,23 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             (model, harvestYearPlanResponse) = await BindEncryptedPropertiesAndViewBegForCheckAnswer(model, harvestYearPlanResponse, allFieldList, fieldList);
 
-            List<int> fieldsAllowedForSecondCrop = new List<int>();
             harvestYearPlanResponse = BindDataAnyChangesInField(model, harvestYearPlanResponse, allFieldList);
 
             await BindFarmData(model, farmID);
 
             //Fetch fields allowed for second crop based on first crop
 
-            (fieldsAllowedForSecondCrop, _) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
+            (List<int> fieldsAllowedForSecondCrop, List<int> fieldRemoveList) = await FetchAllowedFieldsForSecondCrop(cropPlanForFirstCropFilter, model.Year ?? 0, model.CropTypeID ?? 0, model, !string.IsNullOrWhiteSpace(model.EncryptedIsCropUpdate), model.Crops, model.FarmRB209CountryID ?? 3);
+            if (ViewBag.FieldOptions != null)
+            {
+                var fieldOptions = (List<int>)ViewBag.FieldOptions;
+
+                fieldOptions.AddRange(
+                    fieldsAllowedForSecondCrop.Except(fieldOptions)
+                );
+                ViewBag.FieldOptions = fieldOptions;
+                ((List<int>)ViewBag.FieldOptions).RemoveAll(item => fieldRemoveList.Contains(item));
+            }
 
             (model, _) = await BindGrassProperties(model);
             BindCropGroupNameForCheckAnswer(model, harvestYearPlanResponse);
@@ -2522,14 +2531,20 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     .ToList();
             }
 
-            var fieldIdsForFilter = fieldList.Select(f => f.ID);
+            var fieldIdsForFilter = fieldList.Where(f => f.ID.HasValue)
+       .Select(f => f.ID.Value)
+       .ToList();
+            
             return (model, harvestYearPlanResponse
                   .Where(x => fieldIdsForFilter.Contains(x.FieldID))
                   .ToList());
         }
         else
         {
-            ViewBag.FieldOptions = fieldList;
+            ViewBag.FieldOptions = fieldList
+       .Where(f => f.ID.HasValue)
+       .Select(f => f.ID.Value)
+       .ToList();
         }
         return (model, harvestYearPlanResponse);
     }
@@ -2609,7 +2624,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                          .OfType<int>()
                          .Where(id => cropFieldIds.Contains(id)))
             {
-                
+
                 // If a match is found, remove the corresponding row from model.Crops
                 var cropToDelete = model.Crops.First(c => c.FieldID == fieldId);
                 model.Crops.Remove(cropToDelete);
@@ -3660,7 +3675,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    
+
     private void RemoveInoganicAndOrganicSession()
     {
         if (HttpContext.Session.Exists(_fertiliserManureKey))
@@ -5558,7 +5573,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     private async Task<PlanViewModel> BindDefoliationSequenceForCurrentSward(PlanViewModel model)
     {
-        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
+        (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward, model.FarmRB209CountryID.Value);
         if (defoliationSequenceResponses != null && defoliationSequenceResponses.Count > 0)
         {
             model.DefoliationSequenceId = defoliationSequenceResponses[0].DefoliationSequenceId;
@@ -5912,7 +5927,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
 
             List<DefoliationSequenceResponse> defoliationSequenceResponses = new List<DefoliationSequenceResponse>();
-            (defoliationSequenceResponses, Error error) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
+            (defoliationSequenceResponses, Error error) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward, model.FarmRB209CountryID.Value);
             if (error != null && !string.IsNullOrWhiteSpace(error.Message))
             {
                 TempData[_defoliationError] = error.Message;
@@ -5954,7 +5969,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             }
             if (!ModelState.IsValid)
             {
-                (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward,model.FarmRB209CountryID.Value);
+                (List<DefoliationSequenceResponse> defoliationSequenceResponses, _) = await _cropLogic.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(model.SwardTypeId.Value, model.SwardManagementId ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward ? model.PotentialCut.Value + 1 : model.PotentialCut ?? 0, model.CurrentSward == (int)NMP.Commons.Enums.CurrentSward.NewSward, model.FarmRB209CountryID.Value);
                 ViewBag.DefoliationSequenceResponses = defoliationSequenceResponses;
                 return View(model);
             }

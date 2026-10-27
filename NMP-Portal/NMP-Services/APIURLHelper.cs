@@ -293,4 +293,5 @@ internal static class ApiurlHelper
     public const string CalculateNutrientValueBasedOnDryMatterAPI = "vendors/manner/calculate-nutrients-by-dry-matter-percentage";
 
     public const string FetchMannerTotalApplicationRateByDateRangeAPI = "manner-estimations/total-application-rate/{0}?fromDate={1}&toDate={2}";
+    public const string UpdateMannerEstimateByIdWithApplicationsAPI = "manner-estimations/by-id-with-applications";
 }

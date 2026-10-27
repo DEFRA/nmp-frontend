@@ -23,7 +23,6 @@
     @if (currentStep != (int)SoilAnalysisWizardSteps.SoilAnalysesMethod)
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.PhosphorusMethodologyID" />
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilAnalysesMethodChange" />
     }
     @if (currentStep != (int)SoilAnalysisWizardSteps.SoilNutrientValue)
     {
@@ -47,6 +46,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilAnalysisRemove" />
     }
     @Html.HiddenFor(m => m.FarmRB209CountryID)
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsSoilAnalysesMethodChange" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SoilNutrientValueTypeName" value="@Model.SoilNutrientValueTypeName" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmId" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />

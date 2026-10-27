@@ -6413,9 +6413,6 @@ livestock manure.</value>
   <data name="lblWhatIsTheAverageTotalNumberOfThisSuffix" xml:space="preserve">
     <value>What is the average total number of this {0} type in {1}</value>
   </data>
-  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
-    <value>What is the occupancy for this livestock type in {0}</value>
-  </data>
   <data name="lblWhatIsTheAdjustmentValuePerPectareSuffix" xml:space="preserve">
     <value>What is the adjustment value per hectare</value>
   </data>
@@ -6880,10 +6877,10 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>Next releases</value>
   </data>
   <data name="lblReleaseScheduleContentTwelve" xml:space="preserve">
-    <value>Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable</value>
+    <value>Autumn/Winter 2026 &amp;emsp; Scotland Arable</value>
   </data>
   <data name="lblReleaseScheduleContentThirteen" xml:space="preserve">
-    <value>Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Grassland</value>
+    <value>Autumn/Winter 2026 &amp;emsp; Scotland Grassland</value>
   </data>
   <data name="lblReleaseScheduleContentSeventeen" xml:space="preserve">
     <value>N-max report</value>
@@ -6901,7 +6898,7 @@ Zone (NVZ) rules and Control of Agricultural (CoAP) Warning Messages</value>
     <value>&lt;a href="/HelpAndFeedback"&gt;Get help or give your feedback &lt;/a&gt;</value>
   </data>
   <data name="lblReleaseScheduleDate" xml:space="preserve">
-    <value>2nd September 2026</value>
+    <value>1st October 2026</value>
   </data>
   <data name="lblAddOrUpdateFieldsOrSoilAnalysis" xml:space="preserve">
     <value>Add or update fields and soil analysis</value>
@@ -7031,7 +7028,7 @@ Regulations warnings for {0}</value>
     <value>What is the occupancy for this {0} type in {1}?</value>
   </data>
   <data name="lblWhatIsTheNitrogenNStandardForThis" xml:space="preserve">
-    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
+    <value>What is the nitrogen (N) standard for this {0} type in {1}?</value>
   </data>
   <data name="lblNitrogenNStandardForThistype" xml:space="preserve">
     <value>Nitrogen (N) standard for this {0} type</value>
@@ -7779,7 +7776,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>the nutrients supplied from applications of organic materials</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent3" xml:space="preserve">
-    <value>the fate of organic material N following land application</value>
+    <value>the fate of organic material nitrogen (N) following land application</value>
   </data>
   <data name="lblMannerEstimateAboutPageContent4" xml:space="preserve">
     <value>the financial value of organic material applications based on current inorganic fertiliser prices</value>
@@ -8060,8 +8057,8 @@ current crop</value>
     <value>Crop available nitrogen (N)
 following crop year 2</value>
   </data>
-  <data name="lblNitrogenUseEfficiency" xml:space="preserve">
-    <value>Nitrogen use efficiency</value>
+  <data name="lblNitrogenSupplyEfficiency" xml:space="preserve">
+    <value>Nitrogen supply efficiency</value>
   </data>
   <data name="lblNitrogenMineralizationAndLosses" xml:space="preserve">
     <value>Nitrogen (N) mineralisation and losses</value>
@@ -8503,5 +8500,68 @@ following crop year 2</value>
   </data>
   <data name="lblMagnesiumForErrorMsg" xml:space="preserve">
     <value>magnesium (MgO)</value>
+  </data>
+  <data name="lblWhatIsTheOccupancyForThisLivestockTypeInSuffix" xml:space="preserve">
+    <value>What is the occupancy for this livestock type in {0}</value>
+  </data>
+  <data name="lblWhatIsTheNitrogenNStandardForThisSuffix" xml:space="preserve">
+    <value>What is the nitrogen (N) standard for this {0} type in {1}</value>
+  </data>
+  <data name="lblNutrientManagementPlansAndReports" xml:space="preserve">
+    <value>Nutrient management plans and reports</value>
+  </data>
+  <data name="lblGrassPercentage" xml:space="preserve">
+    <value>GrassPercentage</value>
+  </data>
+  <data name="lblMannerAboutRecommendationContentOne" xml:space="preserve">
+    <value>MANNER-NPK ('this tool') was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions ('Defra and partners').</value>
+  </data>
+  <data name="lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber" xml:space="preserve">
+    <value>When are you applying {0} on {1} for application {2}?</value>
+  </data>
+  <data name="lblHowAreYouGoingToApplyTheManureApplicationNo" xml:space="preserve">
+    <value>How are you going to apply the {0} for application {1}?</value>
+  </data>
+  <data name="lblHowWouldYouLikeToEnterTheApplicationRateForYourManureForApplicationNumber" xml:space="preserve">
+    <value>How would you like to enter the application rate for your {0} for application {1}?</value>
+  </data>
+  <data name="lblEnterTheAreAndQuantityForApplicationNumber" xml:space="preserve">
+    <value>What is the area and quantity you are applying for application {0}?</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}</value>
+  </data>
+  <data name="lblWhatIsTheAutumnCropNitrogenUptakeForApplication" xml:space="preserve">
+    <value>What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}?</value>
+  </data>
+  <data name="lblClimateConditionsAffectingNitrogenLossesFromThisAppicationNo" xml:space="preserve">
+    <value>Climate conditions affecting nitrogen losses from application {0}</value>
+  </data>
+  <data name="lblTotalRainfallSinceForApplicationNo" xml:space="preserve">
+    <value>Total rainfall since for application {0}</value>
+  </data>
+  <data name="lblEnterRainfallAmountForApplicationNoSuffix" xml:space="preserve">
+    <value>What was the total rainfall since for application {0}</value>
+  </data>
+  <data name="lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication" xml:space="preserve">
+    <value>How long is there between application and incorporation of your {0} for application {1}?</value>
+  </data>
+  <data name="lblWhatIsTheIncorporationMethodForApplication" xml:space="preserve">
+    <value>What is the incorporation method for your {0} for application {1}?</value>
+  </data>
+  <data name="lblRainfallWithin6HoursApplicationNo" xml:space="preserve">
+    <value>What is the rainfall within 6 hours for application {0}?</value>
+  </data>
+  <data name="lblWhatIsTheEndOfDrainageDateForApplicationNo" xml:space="preserve">
+    <value>What is the date when soil drainage ends for application {0}?</value>
+  </data>
+  <data name="lblWindAtTheTimeOfApplicationNo" xml:space="preserve">
+    <value>What was the wind speed at the time of application {0}?</value>
+  </data>
+  <data name="lblWhatIsTheApplicationRateForApplicationNumber" xml:space="preserve">
+    <value>What is the application rate for application {0}?</value>
+  </data>
+  <data name="lblHowWetWasTheTopsoilForApplicationNo" xml:space="preserve">
+    <value>How moist was the topsoil at the time of application {0}?</value>
   </data>
 </root>

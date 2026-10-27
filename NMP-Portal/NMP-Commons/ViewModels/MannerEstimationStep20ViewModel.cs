@@ -13,5 +13,7 @@ namespace NMP.Commons.ViewModels
         public DateTime? SowingDate { get; set; }
         public bool IsCropTypeChange { get; set; }
         public string EncryptedMannerEstimateId { get; set; } = string.Empty;
+        public string? EncryptedSoilOrCropTypeChangeCounter { get; set; }
+        public int? ApplicationNo { get; set; }
     }
 }

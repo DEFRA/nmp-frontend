@@ -2,13 +2,18 @@
 @model NMP.Commons.ViewModels.MannerEstimationStep30ViewModel
 @{
     
-    ViewData["Title"] = $"{string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, Model.ManureTypeName)} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
-    
-    var backAction = "IncorporationMethod";
-    if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange&&!Model.IsComingForAddNewApplication)
-    {
-        backAction = "MannerEstimationResult";
-    }
+    string heading = string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, Model.ManureTypeName);
+ 
+ if (!string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter))
+ {
+     heading = string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication, Model.ManureTypeName, Model.ApplicationNo);
+ }
+ ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblMannerEstimate}";
+ var backAction = "IncorporationMethod";
+ if (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)&&string.IsNullOrWhiteSpace(Model.EncryptedSoilOrCropTypeChangeCounter) && !Model.IsManureTypeChange && !Model.IsIncorporationMethodChange&&!Model.IsComingForAddNewApplication)
+ {
+     backAction = "MannerEstimationResult";
+ }
 }
 @section BeforeContent {
     <govuk-back-link asp-action="@backAction" asp-controller="MannerEstimation" asp-route-sid="@ViewBag.SessionId" asp-route-q="@(backAction == "MannerEstimationResult" ? Model.EncryptedMannerEstimateId : null)">@Resource.lblBack</govuk-back-link>
@@ -28,7 +33,7 @@
             <govuk-radios for="@Model.IncorporationDelayId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
-                        @string.Format(Resource.lblHowLongIsTheGapBetweenApplicationAndIncoporation, Model.ManureTypeName)
+                        @heading
                     </govuk-radios-fieldset-legend>
                     <govuk-radios-hint>
                         @Resource.lblSelectOneOption

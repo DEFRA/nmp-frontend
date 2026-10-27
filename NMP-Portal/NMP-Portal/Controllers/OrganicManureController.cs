@@ -252,6 +252,10 @@ namespace NMP.Portal.Controllers
         private async Task<IActionResult?> TryLoadFieldManureDataAsync(string q, string r, string s, OrganicManureViewModel model)
         {
             string fieldId = model.FieldList[0];
+            // Crop plans
+             (var cropPlans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
+
+            model = await BindGrassPropertyForField(model, cropPlans);
             var (manIds, error) = await _fertiliserManureLogic
                 .FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupName(
                     model.HarvestYear.Value, fieldId, null, 1);
@@ -404,6 +408,10 @@ namespace NMP.Portal.Controllers
                 {
                     model.CropOrder = 1;
                 }
+            }
+            if (model.FieldGroup != null && (model.FieldGroup.Equals(Resource.lblAll) || model.FieldGroup.Equals(Resource.lblSelectSpecificFields)))
+            {
+                model.CropOrder = 1;
             }
             return model;
         }
@@ -993,7 +1001,8 @@ namespace NMP.Portal.Controllers
                     model.FieldGroup == Resource.lblSelectSpecificFields || model.FieldGroup == Resource.lblAll
                         ? null
                         : model.FieldGroup,
-                    1);
+                    model.FieldGroup == Resource.lblSelectSpecificFields || model.FieldGroup == Resource.lblAll
+                    ? model.CropOrder: null);
 
             if (error != null) return error;
 
@@ -3838,7 +3847,7 @@ managementPeriod.CropID.HasValue
 
             if (model.MoistureTypeId == null)
             {
-                (moisterType, error) = await _organicManureLogic.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                (moisterType, error) = await _organicManureLogic.FetchMoisterTypeDefaultByApplicationDate(model.ApplicationDate.Value.Date.ToString("yyyy-MM-dd"));
                 if (error != null && !string.IsNullOrWhiteSpace(error.Message))
                 {
                     return BuildApplicationMethodOrIncorporationRedirect(model, error.Message);
@@ -7290,7 +7299,7 @@ managementPeriod.CropID.HasValue
                 topSoilID = soilTexture.TopSoilID;
                 subSoilID = soilTexture.SubSoilID;
             }
-            
+
             var cropTypeLinkingData = cropTypeLinkingResponse
     .FirstOrDefault(x => x.CropTypeId == crop.CropTypeID);
             int mannerCropTypeID = isLateSownCropType
@@ -8725,9 +8734,17 @@ managementPeriod.CropID.HasValue
 
             try
             {
+                (List<ManureType> manureTypeList, _) = await GetManureTypeList(model);
                 if (!ModelState.IsValid)
                 {
+                    if (manureTypeList.Count > 0)
+                    {
+                        var manures = manureTypeList.OrderBy(m => m.SortOrder).ToList();
+                        var SelectListItem = ToSelectList(manures, f => f.Id.ToString(), f => f.Name);
+                        ViewBag.ManureTypeList = SelectListItem.ToList();
+                    }
                     return View(model);
+
                 }
                 OrganicManureViewModel? orgManureViewModel = GetOrganicManureFromSession();
                 if (orgManureViewModel == null)
@@ -8735,17 +8752,15 @@ managementPeriod.CropID.HasValue
                     return RedirectToAction(_farmList, "Farm");
                 }
 
-                (List<ManureType> manureTypeList, Error? error) = await GetManureTypeList(model);
 
-                if (error == null)
-                {
+               
                     IActionResult? earlyResult;
                     (model, earlyResult) = await ProcessManureTypeSelectionAsync(model, orgManureViewModel, manureTypeList);
                     if (earlyResult != null)
                     {
                         return earlyResult;
                     }
-                }
+                
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
 
@@ -10648,7 +10663,7 @@ managementPeriod.CropID.HasValue
             if (string.IsNullOrEmpty(rawValue))
                 return;
 
-           
+
             // Max 10 digits
             if (rawValue.Length > 10)
             {
@@ -10660,7 +10675,7 @@ managementPeriod.CropID.HasValue
 
             if (!string.IsNullOrEmpty(firstError) && firstError.Equals(expectedError))
             {
-                ReplaceError(state,Resource.MsgIfUserEnterDecimalValueInRainfall);
+                ReplaceError(state, Resource.MsgIfUserEnterDecimalValueInRainfall);
             }
         }
 

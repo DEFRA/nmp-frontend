@@ -106,14 +106,14 @@
                         @foreach (var crop in Model.Crops)
                         {
                             var tablabel = Model.Crops.Count == 1 ? Resource.lblNutrientAndLimeRecommendations : Resource.lblCrop1Recommendations;
-                                var grassHeadingCrop =  ViewBag.GrassHeadingCropOne;
-                                var tabId = "crop-1";
+                            var grassHeadingCrop = ViewBag.GrassHeadingCropOne;
+                            var tabId = "crop-1";
                             if (cropNumber == 2)
-                                {
-                                    grassHeadingCrop = ViewBag.GrassHeadingCropTwo;
-                                    tablabel = Resource.lblCrop2Recommendations;
-                                    managementTableIndex = 1;
-                                    tabId = "crop-2";
+                            {
+                                grassHeadingCrop = ViewBag.GrassHeadingCropTwo;
+                                tablabel = Resource.lblCrop2Recommendations;
+                                managementTableIndex = 1;
+                                tabId = "crop-2";
                             }
 
                             <govuk-tabs-item id=@tabId label=@tablabel>
@@ -199,7 +199,8 @@
                                     </p>
 
                                     <p class="govuk-body mt-5 margin-top-forty">
-                                    <a class="govuk-link" href="@(string.Format("{0}{1}", "#", tabId))">@Resource.lblBackToTheTop</a></p>
+                                        <a class="govuk-link" href="@(string.Format("{0}{1}", "#", tabId))">@Resource.lblBackToTheTop</a>
+                                    </p>
 
                                 }
 
@@ -443,19 +444,22 @@
                                                 <td class="govuk-table__cell">@((!string.IsNullOrWhiteSpace(crop.DefoliationSequenceName)) ? crop.DefoliationSequenceName : Resource.lblNotEntered)</td>
                                             </tr>
                                         }
-                                        <tr class="govuk-table__row">
-                                            <th class="govuk-table__cell" scope="row">
-                                                @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
-                                                {
-                                                    @Resource.lblEstimatedYield
-                                                }
-                                                else
-                                                {
-                                                    @Resource.lblTotalAnnualTargetDryMatterYield
-                                                }
-                                            </th>
-                                            <td class="govuk-table__cell">@(crop.Yield == null ? Resource.lblNotEntered : string.Format(Resource.lblYieldTonnesPerHectare, string.Format("{0:N1}", crop.Yield)))</td>
-                                        </tr>
+                                        @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass || (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && crop.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass))
+                                        {
+                                            <tr class="govuk-table__row">
+                                                <th class="govuk-table__cell" scope="row">
+                                                    @if (crop.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Grass)
+                                                    {
+                                                        @Resource.lblEstimatedYield
+                                                    }
+                                                    else
+                                                    {
+                                                        @Resource.lblTotalAnnualTargetDryMatterYield
+                                                    }
+                                                </th>
+                                                <td class="govuk-table__cell">@(crop.Yield == null ? Resource.lblNotEntered : string.Format(Resource.lblYieldTonnesPerHectare, string.Format("{0:N1}", crop.Yield)))</td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -571,31 +575,31 @@
                                                 }
                                                 @if (crop.SnsAnalysisData.PercentageOfOrganicMatter != null && crop.SnsAnalysisData.PercentageOfOrganicMatter > 0)
                                                 {
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">
-                                    @Resource.lblPercentageOfOrganicMatter
-                                </td>
-                                <td class="govuk-table__cell">
-                                    @string.Concat(crop.SnsAnalysisData.PercentageOfOrganicMatter % 1 == 0
-                                                                        ? ((int)crop.SnsAnalysisData.PercentageOfOrganicMatter).ToString()
-                                                                        : crop.SnsAnalysisData.PercentageOfOrganicMatter.ToString(), Resource.lblPercentage)
-                                </td>
-                            </tr>
-                                                        }
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            @Resource.lblPercentageOfOrganicMatter
+                                                        </td>
+                                                        <td class="govuk-table__cell">
+                                                            @string.Concat(crop.SnsAnalysisData.PercentageOfOrganicMatter % 1 == 0
+                                                                                                ? ((int)crop.SnsAnalysisData.PercentageOfOrganicMatter).ToString()
+                                                                                                : crop.SnsAnalysisData.PercentageOfOrganicMatter.ToString(), Resource.lblPercentage)
+                                                        </td>
+                                                    </tr>
+                                                }
 
                                                 @if (crop.SnsAnalysisData.AdjustmentValue != null && crop.SnsAnalysisData.AdjustmentValue > 0)
                                                 {
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">
-                                    @Resource.lblPercentageOfOrganicMatter
-                                </td>
-                                <td class="govuk-table__cell">
-                                    @string.Concat(crop.SnsAnalysisData.AdjustmentValue % 1 == 0
-                                                                        ? ((int)crop.SnsAnalysisData.AdjustmentValue).ToString()
-                                                                        : crop.SnsAnalysisData.AdjustmentValue.ToString(), Resource.lblKgPerHectare)
-                                </td>
-                            </tr>
-                                                        }
+                                                    <tr class="govuk-table__row">
+                                                        <td class="govuk-table__cell">
+                                                            @Resource.lblPercentageOfOrganicMatter
+                                                        </td>
+                                                        <td class="govuk-table__cell">
+                                                            @string.Concat(crop.SnsAnalysisData.AdjustmentValue % 1 == 0
+                                                                                                ? ((int)crop.SnsAnalysisData.AdjustmentValue).ToString()
+                                                                                                : crop.SnsAnalysisData.AdjustmentValue.ToString(), Resource.lblKgPerHectare)
+                                                        </td>
+                                                    </tr>
+                                                }
 
                                                 <tr class="govuk-table__row">
                                                     <td class="govuk-table__cell">
@@ -603,7 +607,7 @@
                                                     </td>
                                                     <td class="govuk-table__cell">
                                                         @if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-                                                        {                                                            
+                                                        {
                                                             @string.Format("{0} ({1})", crop.SnsAnalysisData.SoilNitrogenSupplyIndex, crop.SnsAnalysisData.NitrogenResidueGroup)
                                                         }
                                                         else

@@ -3312,6 +3312,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Climate conditions affecting nitrogen losses from application {0}.
+        /// </summary>
+        public static string lblClimateConditionsAffectingNitrogenLossesFromThisAppicationNo {
+            get {
+                return ResourceManager.GetString("lblClimateConditionsAffectingNitrogenLossesFromThisAppicationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We can&apos;t find weather data for {0}. You can find rainfall and other weather information by entering a postcode near to {1} Farm..
         /// </summary>
         public static string lblClimateParagraphFirst {
@@ -5465,6 +5474,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What was the total rainfall since for application {0}.
+        /// </summary>
+        public static string lblEnterRainfallAmountForApplicationNoSuffix {
+            get {
+                return ResourceManager.GetString("lblEnterRainfallAmountForApplicationNoSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the address for {0}.
         /// </summary>
         public static string lblEnterTheAddressFor {
@@ -5506,6 +5524,15 @@ namespace NMP.Commons.Resources {
         public static string lblEnterTheAreaAndQuantity {
             get {
                 return ResourceManager.GetString("lblEnterTheAreaAndQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the area and quantity you are applying for application {0}?.
+        /// </summary>
+        public static string lblEnterTheAreAndQuantityForApplicationNumber {
+            get {
+                return ResourceManager.GetString("lblEnterTheAreAndQuantityForApplicationNumber", resourceCulture);
             }
         }
         
@@ -7248,6 +7275,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GrassPercentage.
+        /// </summary>
+        public static string lblGrassPercentage {
+            get {
+                return ResourceManager.GetString("lblGrassPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}% of this farm is grass..
         /// </summary>
         public static string lblGrassPercentageOfThisFarmIsGrass {
@@ -7752,6 +7788,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How are you going to apply the {0} for application {1}?.
+        /// </summary>
+        public static string lblHowAreYouGoingToApplyTheManureApplicationNo {
+            get {
+                return ResourceManager.GetString("lblHowAreYouGoingToApplyTheManureApplicationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How do you plan to use the crop?.
         /// </summary>
         public static string lblHowDoYouPlanToUseTheCrop {
@@ -7802,6 +7847,15 @@ namespace NMP.Commons.Resources {
         public static string lblHowLongIsTheGapBetweenApplicationAndIncoporation {
             get {
                 return ResourceManager.GetString("lblHowLongIsTheGapBetweenApplicationAndIncoporation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How long is there between application and incorporation of your {0} for application {1}?.
+        /// </summary>
+        public static string lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication {
+            get {
+                return ResourceManager.GetString("lblHowLongIsTheGapBetweenApplicationAndIncoporationForApplication", resourceCulture);
             }
         }
         
@@ -7986,6 +8040,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How moist was the topsoil at the time of application {0}?.
+        /// </summary>
+        public static string lblHowWetWasTheTopsoilForApplicationNo {
+            get {
+                return ResourceManager.GetString("lblHowWetWasTheTopsoilForApplicationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to How will {0} be managed?.
         /// </summary>
         public static string lblHowWillTheseFieldsBeManaged {
@@ -8054,6 +8117,15 @@ namespace NMP.Commons.Resources {
         public static string lblHowWouldYouLikeToEnterTheApplicationRateA {
             get {
                 return ResourceManager.GetString("lblHowWouldYouLikeToEnterTheApplicationRateA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How would you like to enter the application rate for your {0} for application {1}?.
+        /// </summary>
+        public static string lblHowWouldYouLikeToEnterTheApplicationRateForYourManureForApplicationNumber {
+            get {
+                return ResourceManager.GetString("lblHowWouldYouLikeToEnterTheApplicationRateForYourManureForApplicationNumber", resourceCulture);
             }
         }
         
@@ -10021,6 +10093,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MANNER-NPK (&apos;this tool&apos;) was developed by Department for Environment, Food &amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (&apos;Defra and partners&apos;)..
+        /// </summary>
+        public static string lblMannerAboutRecommendationContentOne {
+            get {
+                return ResourceManager.GetString("lblMannerAboutRecommendationContentOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application {0} details updated..
         /// </summary>
         public static string lblMannerApplicationDetailCountUpdated {
@@ -10156,7 +10237,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to the fate of organic material N following land application.
+        ///   Looks up a localized string similar to the fate of organic material nitrogen (N) following land application.
         /// </summary>
         public static string lblMannerEstimateAboutPageContent3 {
             get {
@@ -11191,11 +11272,11 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nitrogen use efficiency.
+        ///   Looks up a localized string similar to Nitrogen supply efficiency.
         /// </summary>
-        public static string lblNitrogenUseEfficiency {
+        public static string lblNitrogenSupplyEfficiency {
             get {
-                return ResourceManager.GetString("lblNitrogenUseEfficiency", resourceCulture);
+                return ResourceManager.GetString("lblNitrogenSupplyEfficiency", resourceCulture);
             }
         }
         
@@ -11709,6 +11790,15 @@ namespace NMP.Commons.Resources {
         public static string lblNutrientManagementPlansAndNitrateVulnerableZoneReports {
             get {
                 return ResourceManager.GetString("lblNutrientManagementPlansAndNitrateVulnerableZoneReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nutrient management plans and reports.
+        /// </summary>
+        public static string lblNutrientManagementPlansAndReports {
+            get {
+                return ResourceManager.GetString("lblNutrientManagementPlansAndReports", resourceCulture);
             }
         }
         
@@ -13603,6 +13693,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the rainfall within 6 hours for application {0}?.
+        /// </summary>
+        public static string lblRainfallWithin6HoursApplicationNo {
+            get {
+                return ResourceManager.GetString("lblRainfallWithin6HoursApplicationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rainfall within 6 hours of application.
         /// </summary>
         public static string lblRainfallWithin6HoursOfApplication {
@@ -13946,7 +14045,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dec 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Grassland.
+        ///   Looks up a localized string similar to Autumn/Winter 2026 &amp;emsp; Scotland Grassland.
         /// </summary>
         public static string lblReleaseScheduleContentThirteen {
             get {
@@ -13955,7 +14054,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oct 2026 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Scotland Arable.
+        ///   Looks up a localized string similar to Autumn/Winter 2026 &amp;emsp; Scotland Arable.
         /// </summary>
         public static string lblReleaseScheduleContentTwelve {
             get {
@@ -14001,7 +14100,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2nd September 2026.
+        ///   Looks up a localized string similar to 1st October 2026.
         /// </summary>
         public static string lblReleaseScheduleDate {
             get {
@@ -17405,6 +17504,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total rainfall since for application {0}.
+        /// </summary>
+        public static string lblTotalRainfallSinceForApplicationNo {
+            get {
+                return ResourceManager.GetString("lblTotalRainfallSinceForApplicationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Totals.
         /// </summary>
         public static string lblTotals {
@@ -18684,6 +18792,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the application rate for application {0}?.
+        /// </summary>
+        public static string lblWhatIsTheApplicationRateForApplicationNumber {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheApplicationRateForApplicationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake?.
         /// </summary>
         public static string lblWhatIsTheAutumnCropNitrogenUptake {
@@ -18702,11 +18819,29 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}?.
+        /// </summary>
+        public static string lblWhatIsTheAutumnCropNitrogenUptakeForApplication {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAutumnCropNitrogenUptakeForApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1}.
         /// </summary>
         public static string lblWhatIsTheAutumnCropNitrogenUptakeForSuffix {
             get {
                 return ResourceManager.GetString("lblWhatIsTheAutumnCropNitrogenUptakeForSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the autumn crop nitrogen (N) uptake for {0} in {1} for application {2}.
+        /// </summary>
+        public static string lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheAutumnCropNitrogenUptakeForSuffixForApplication", resourceCulture);
             }
         }
         
@@ -18963,6 +19098,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the date when soil drainage ends for application {0}?.
+        /// </summary>
+        public static string lblWhatIsTheEndOfDrainageDateForApplicationNo {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheEndOfDrainageDateForApplicationNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the bank slope?.
         /// </summary>
         public static string lblWhatIsTheEstimatedAngleOfTheBankSlope {
@@ -19080,6 +19224,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What is the incorporation method for your {0} for application {1}?.
+        /// </summary>
+        public static string lblWhatIsTheIncorporationMethodForApplication {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheIncorporationMethodForApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What is the length?.
         /// </summary>
         public static string lblWhatIsTheLength {
@@ -19152,7 +19305,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the nitrogen (N) standard for this {0} type in {1}.
+        ///   Looks up a localized string similar to What is the nitrogen (N) standard for this {0} type in {1}?.
         /// </summary>
         public static string lblWhatIsTheNitrogenNStandardForThis {
             get {
@@ -19166,6 +19319,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhatIsTheNitrogenNStandardForThisLivestock {
             get {
                 return ResourceManager.GetString("lblWhatIsTheNitrogenNStandardForThisLivestock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What is the nitrogen (N) standard for this {0} type in {1}.
+        /// </summary>
+        public static string lblWhatIsTheNitrogenNStandardForThisSuffix {
+            get {
+                return ResourceManager.GetString("lblWhatIsTheNitrogenNStandardForThisSuffix", resourceCulture);
             }
         }
         
@@ -19827,6 +19989,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When are you applying {0} on {1} for application {2}?.
+        /// </summary>
+        public static string lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber {
+            get {
+                return ResourceManager.GetString("lblWHenAreYouApplyingManureOnThisFieldForApplicationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When are you applying organic material on {0}?.
         /// </summary>
         public static string lblWhenAreYouApplyingOrganicMaterialOnFieldName {
@@ -20336,6 +20507,15 @@ namespace NMP.Commons.Resources {
         public static string lblWindAtTheTimeOfApplication {
             get {
                 return ResourceManager.GetString("lblWindAtTheTimeOfApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What was the wind speed at the time of application {0}?.
+        /// </summary>
+        public static string lblWindAtTheTimeOfApplicationNo {
+            get {
+                return ResourceManager.GetString("lblWindAtTheTimeOfApplicationNo", resourceCulture);
             }
         }
         

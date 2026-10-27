@@ -6,7 +6,7 @@
     ViewData["Title"] = $"{Resource.lblRegisteredOrganicProducer} {Resource.lblHyphen} {title}";
     var organicProducer = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var noOrganicProducer = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
-    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "AverageAnnualRainfall";
+    var backAction = (!string.IsNullOrWhiteSpace(Model.EncryptedMannerEstimateId)) ? "MannerEstimationResult" : "PostCode";
 }
 
 @section BeforeContent {

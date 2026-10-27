@@ -222,6 +222,7 @@ namespace NMP.Portal.Controllers
                     SetSoilAnalysisDataToSession(model);
                 }
 
+                model = GetSoilAnalysisFromSession();
                 BindDataForCheckAnswer(i, l, model);
             }
             catch (Exception ex)
@@ -347,6 +348,8 @@ namespace NMP.Portal.Controllers
             {
                 if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
                 {
+                    model.IsSoilAnalysesMethodChange = true;
+                    SetSoilAnalysisDataToSession(model);
                     return RedirectToAction(_soilNutrientValueTypeActionName);
                 }
                 else
@@ -394,22 +397,9 @@ namespace NMP.Portal.Controllers
 
         private void ValidateMinMaxDate(SoilAnalysisViewModel model)
         {
-            if (model.Date != null)
+            if (model.Date != null && model.Date.Value.Date >= DateTime.Now.AddDays(1).Date)
             {
-                if (model.isSoilAnalysisAdded != null && model.isSoilAnalysisAdded.Value)
-                {
-                    if (model.Date.Value.Date.Year < 1601 || model.Date.Value.Date >= DateTime.Now.AddDays(1).Date)
-                    {
-                        ModelState.AddModelError("Date", Resource.lblTheDateCannotBeInTheFuture);
-                    }
-                }
-                else
-                {
-                    if (model.Date.Value.Date.Year < 1601 || model.Date.Value.Date.Year > DateTime.Now.AddYears(1).Year)
-                    {
-                        ModelState.AddModelError("Date", Resource.MsgEnterTheDateInNumber);
-                    }
-                }
+                ModelState.AddModelError("Date", Resource.lblTheDateCannotBeInTheFuture);
             }
         }
 
@@ -1375,7 +1365,7 @@ namespace NMP.Portal.Controllers
             {
                 model.IsSoilAnalysesMethodChange = false;
                 SetSoilAnalysisDataToSession(model);
-                return await Task.FromResult(RedirectToAction("ChangeSoilAnalysis"));
+                return RedirectToAction(_changeSoilAnalysisActionName, new { i = model.EncryptedSoilAnalysisId, j = model.EncryptedFieldId, k = model.EncryptedFarmId, l = model.IsSoilDataChanged });
             }
             else
             {
