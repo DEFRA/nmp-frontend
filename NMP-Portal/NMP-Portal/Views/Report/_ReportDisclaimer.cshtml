@@ -2,10 +2,16 @@
 @model dynamic
 <div class="govuk-grid-row margin-bottom-forty">
     <div class="govuk-grid-column-full">
-        
-        <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
+        @if (Model.NVZReportOption == (int)NMP.Commons.Enums.NvzReportOption.LivestockManureNFarmLimitReport)
+        {
+            <h2 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h2>
+        }
+        else
+        {
+            <h4 class="govuk-heading-s">@Resource.lblAboutRecommendationGuidenceAdvice</h4>
+        }
         <p class="govuk-body">
-            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent1 : Resource.lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1)
+            @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent1New : Resource.lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New)
         </p>
         <p class="govuk-body">
             @(Model.FarmRB209CountryID != null && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblAboutRecommendationForScotlandContent2 : Resource.lblAboutRecommendationGuidenceAdviceContent2)

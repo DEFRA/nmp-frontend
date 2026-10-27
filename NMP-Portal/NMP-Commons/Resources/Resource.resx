@@ -595,7 +595,7 @@
     <value>Potash</value>
   </data>
   <data name="MsgEnterValidValueForNutrient" xml:space="preserve">
-    <value>Enter an amount between 0 and 9,998 litres</value>
+    <value>Enter an amount between 0 and 9,999 mg per litre</value>
   </data>
   <data name="MsgEnterValidValueForNutrientIndex" xml:space="preserve">
     <value>Enter an index between 0 and {0}</value>
@@ -3151,7 +3151,7 @@ cubic metres per hectare  not set</value>
     <value>Climate postcode</value>
   </data>
   <data name="MsgEnterValidValueForPhosphorus" xml:space="preserve">
-    <value>Enter an amount between 0 and 999 litres</value>
+    <value>Enter an amount between 0 and 999 mg per litre</value>
   </data>
   <data name="lblStandardNutrientValuesWhwnWeHaveValues" xml:space="preserve">
     <value>Do you want to use the nutrient values for {0} you added on {1}?</value>
@@ -8662,5 +8662,20 @@ following crop year 2</value>
   </data>
   <data name="lblSoilAnalysisMethodHintSac" xml:space="preserve">
     <value>SAC soil analysis uses an ammonium acetate soil extract (Modified Morgan’s method) for phosphorus (P), potassium (K) and magnesium (Mg) and is typically used by laboratories in Scotland.</value>
+  </data>
+  <data name="MsgEnterFreshWeightYield" xml:space="preserve">
+    <value>Enter fresh weight yield for {0}</value>
+  </data>
+  <data name="lblAboutRecommendationForScotlandContent1New" xml:space="preserve">
+    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC.</value>
+  </data>
+  <data name="lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New" xml:space="preserve">
+    <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp;amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (‘Defra and partners’).</value>
+  </data>
+  <data name="lblSourceRB209ForEngland" xml:space="preserve">
+    <value>Crop need is from the AHDB Nutrient Management Guide (RB209). Nutrient supply from manures is calculated using MANNER-NPK (Nutrient Calculation Engine).</value>
+  </data>
+  <data name="lblHintTextForPotassiumForScotland" xml:space="preserve">
+    <value>Enter an index between 0 and 9. Potassium (K) index 2 must be entered as either 2- or 2+</value>
   </data>
 </root>

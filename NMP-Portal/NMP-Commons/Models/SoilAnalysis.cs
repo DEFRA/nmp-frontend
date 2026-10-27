@@ -22,14 +22,14 @@ public class SoilAnalysis
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPhosphorusIndex))]
     public int? PhosphorusIndex { get; set; }
 
-    [Range(0, 9998, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
+    [Range(0, 9999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPotassiumPerLitreOfSoil))]
     public int? Potassium { get; set; }
         
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPotassiumIndex))]
     public int? PotassiumIndex { get; set; }
     
-    [Range(0, 9998, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
+    [Range(0, 9999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblMagnesiumPerLitreOfSoil))]
     public int? Magnesium { get; set; }
 

@@ -837,6 +837,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC..
+        /// </summary>
+        public static string lblAboutRecommendationForScotlandContent1New {
+            get {
+                return ResourceManager.GetString("lblAboutRecommendationForScotlandContent1New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, DEFRA and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​.
         /// </summary>
         public static string lblAboutRecommendationForScotlandContent2 {
@@ -905,6 +914,15 @@ namespace NMP.Commons.Resources {
         public static string lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1 {
             get {
                 return ResourceManager.GetString("lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp;amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (‘Defra and partners’)..
+        /// </summary>
+        public static string lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New {
+            get {
+                return ResourceManager.GetString("lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New", resourceCulture);
             }
         }
         
@@ -7865,6 +7883,15 @@ namespace NMP.Commons.Resources {
         public static string lblHintOfLPIDNumber {
             get {
                 return ResourceManager.GetString("lblHintOfLPIDNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an index between 0 and 9. Potassium (K) index 2 must be entered as either 2- or 2+.
+        /// </summary>
+        public static string lblHintTextForPotassiumForScotland {
+            get {
+                return ResourceManager.GetString("lblHintTextForPotassiumForScotland", resourceCulture);
             }
         }
         
@@ -15963,6 +15990,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crop need is from the AHDB Nutrient Management Guide (RB209). Nutrient supply from manures is calculated using MANNER-NPK (Nutrient Calculation Engine)..
+        /// </summary>
+        public static string lblSourceRB209ForEngland {
+            get {
+                return ResourceManager.GetString("lblSourceRB209ForEngland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sowing date.
         /// </summary>
         public static string lblSowingDate {
@@ -23213,6 +23249,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter fresh weight yield for {0}.
+        /// </summary>
+        public static string MsgEnterFreshWeightYield {
+            get {
+                return ResourceManager.GetString("MsgEnterFreshWeightYield", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter name of the material.
         /// </summary>
         public static string MsgEnterNameOfTheMaterial {
@@ -23510,7 +23555,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an amount between 0 and 9,998 litres.
+        ///   Looks up a localized string similar to Enter an amount between 0 and 9,999 mg per litre.
         /// </summary>
         public static string MsgEnterValidValueForNutrient {
             get {
@@ -23528,7 +23573,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter an amount between 0 and 999 litres.
+        ///   Looks up a localized string similar to Enter an amount between 0 and 999 mg per litre.
         /// </summary>
         public static string MsgEnterValidValueForPhosphorus {
             get {
