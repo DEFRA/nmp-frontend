@@ -591,7 +591,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
                 foreach (var cropData in fieldData.Crops)
                 {
-                    (bool flowControl, IActionResult value, totalCount, totalGrassArea, totalArableArea) = await BindGrassDataForCropFieldReport(totalCount, totalGrassArea, totalArableArea, fieldData, fieldIdsForGrowthClass, cropData);
+                    (bool flowControl, IActionResult value, totalCount, totalGrassArea, totalArableArea) = await BindGrassDataForCropFieldReport(totalCount, totalGrassArea, totalArableArea, fieldData, fieldIdsForGrowthClass, cropData,model.FarmRB209CountryID.Value);
                     if (!flowControl)
                     {
                         return (flowControl: false, value: value);
@@ -611,11 +611,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return (flowControl: true, value: null);
     }
 
-    private async Task<(bool flowControl, IActionResult? value, int, int, int)> BindGrassDataForCropFieldReport(int totalCount, int totalGrassArea, int totalArableArea, FieldAndCropReportResponse fieldData, List<int> fieldIdsForGrowthClass, CropReportResponse cropData)
+    private async Task<(bool flowControl, IActionResult? value, int, int, int)> BindGrassDataForCropFieldReport(int totalCount, int totalGrassArea, int totalArableArea, FieldAndCropReportResponse fieldData, List<int> fieldIdsForGrowthClass, CropReportResponse cropData,int rb209CountryId)
     {
         if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
         {
-            (bool flowControl, IActionResult? value) = await BindGrowthClassForCropAndFieldReport(fieldIdsForGrowthClass, cropData);
+            (bool flowControl, IActionResult? value) = await BindGrowthClassForCropAndFieldReport(fieldIdsForGrowthClass, cropData, rb209CountryId);
             if (!flowControl && value != null)
             {
                 return (flowControl: false, value: value, totalCount, totalGrassArea, totalArableArea);
@@ -817,19 +817,36 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
-    private async Task<(bool flowControl, IActionResult? value)> BindGrowthClassForCropAndFieldReport(List<int> fieldIdsForGrowthClass, CropReportResponse cropData)
+    private async Task<(bool flowControl, IActionResult? value)> BindGrowthClassForCropAndFieldReport(List<int> fieldIdsForGrowthClass, CropReportResponse cropData,int rb209CountryId)
     {
         Error? error = null;
-        (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
-        if (!string.IsNullOrWhiteSpace(error?.Message))
+        if (rb209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
-            TempData[_errorOnSelectField] = error.Message;
-            return (flowControl: false, value: RedirectToAction(_exportFieldsOrCropTypeAction));
+            (List<GrassSiteClassResponse> grassSiteClasses, error) = await _cropLogic.FetchGrassSiteClass(fieldIdsForGrowthClass);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData[_errorOnSelectField] = error.Message;
+                return (flowControl: false, value: RedirectToAction(_exportFieldsOrCropTypeAction));
+            }
 
+            if (cropData.SwardTypeID != (int)NMP.Commons.Enums.SwardType.RedClover)
+            {
+                cropData.SiteClass = grassSiteClasses.FirstOrDefault()?.SiteClass;
+            }
         }
-        if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+        else
         {
-            cropData.GrowthClass = grassGrowthClasses.FirstOrDefault()?.GrassGrowthClassName;
+            (List<GrassGrowthClassResponse> grassGrowthClasses, error) = await _cropLogic.FetchGrassGrowthClass(fieldIdsForGrowthClass);
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData[_errorOnSelectField] = error.Message;
+                return (flowControl: false, value: RedirectToAction(_exportFieldsOrCropTypeAction));
+            }
+
+            if (cropData.SwardTypeID == (int)NMP.Commons.Enums.SwardType.Grass)
+            {
+                cropData.GrowthClass = grassGrowthClasses.FirstOrDefault()?.GrassGrowthClassName;
+            }
         }
 
         return (flowControl: true, value: null);

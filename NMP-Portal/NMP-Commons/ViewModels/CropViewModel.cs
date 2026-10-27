@@ -19,4 +19,5 @@ public class CropViewModel:Crop
     public string? EncryptedCropGroupName { get; set; }     
     public string? GrowthClass { get; set; }
     public int? CropGroupID { get; set; }
+    public string? SiteClass { get; set; }
 }
