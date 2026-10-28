@@ -1389,7 +1389,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_soilAnalysesMagnesiumValue].AttemptedValue, Resource.lblMagnesiumPerLitreOfSoil)))
             {
                 ModelState[_soilAnalysesMagnesiumValue]?.Errors.Clear();
-                ModelState[_soilAnalysesMagnesiumValue]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9998));
+                ModelState[_soilAnalysesMagnesiumValue]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblMagnesiumMg, 0, 9999));
 
             }
         }
@@ -1420,7 +1420,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (InvalidFormatError != null && InvalidFormatError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_soilAnalysesPotassiumValue].AttemptedValue, Resource.lblPotassiumPerLitreOfSoil)))
             {
                 ModelState[_soilAnalysesPotassiumValue]?.Errors.Clear();
-                ModelState[_soilAnalysesPotassiumValue]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9998));
+                ModelState[_soilAnalysesPotassiumValue]?.Errors.Add(string.Format(Resource.MsgForNotValidValueForNutrient, Resource.lblPotassium, 0, 9999));
             }
         }
     }

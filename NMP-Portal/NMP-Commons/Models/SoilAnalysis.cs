@@ -15,21 +15,21 @@ public class SoilAnalysis
     public decimal? PH { get; set; }
     public int? PhosphorusMethodologyID { get; set; }
 
-    [Range(0, 999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForPhosphorus))]
+    [Range(typeof(decimal),"0", "999", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForPhosphorus))]
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPhosphorusPerLitreOfSoil))]
     public decimal? Phosphorus { get; set; }
         
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPhosphorusIndex))]
     public int? PhosphorusIndex { get; set; }
 
-    [Range(0, 9998, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
+    [Range(0, 9999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPotassiumPerLitreOfSoil))]
     public int? Potassium { get; set; }
         
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblPotassiumIndex))]
     public int? PotassiumIndex { get; set; }
     
-    [Range(0, 9998, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
+    [Range(0, 9999, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = nameof(Resource.MsgEnterValidValueForNutrient))]
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblMagnesiumPerLitreOfSoil))]
     public int? Magnesium { get; set; }
 
