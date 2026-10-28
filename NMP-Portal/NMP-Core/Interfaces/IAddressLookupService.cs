@@ -6,5 +6,5 @@ public interface IAddressLookupService : IService
 {
     Task<List<AddressLookupResponse>> AddressesAsync(string postcode, int offset);
     Task<List<AddressLookupResponse>?> GetAddressesFromSession(string cacheKey);
-    Task SetAddressesToSession(List<AddressLookupResponse> addresses, string cacheKey);
+    Task SetAddressesToSession(List<AddressLookupResponse> addresses, string postcode);
 }
