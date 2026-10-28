@@ -29,4 +29,9 @@ public interface IFarmLogic
 
      void SetFarmToSession(FarmViewModel farm);
      void RemoveFarmSession(Guid? sessionId);
+    FarmViewModel? GetFarmDataBeforeUpdateFromSession(Guid? sessionId);
+
+    void SetFarmDataBeforeUpdateToSession(FarmViewModel farm);
+    void RemoveFarmDataBeforeUpdateFromSession(Guid? sessionId);
+    
 }

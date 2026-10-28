@@ -8,6 +8,7 @@ using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
@@ -15,7 +16,7 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, ICropTypeLinkingService cropTypeLinkingService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFieldService
+public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, ICropTypeLinkingService cropTypeLinkingService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IFieldService
 {
     private readonly ILogger<FieldService> _logger = logger;
     private const string _applicationJson = "application/json";
@@ -660,6 +661,25 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
             _logger.LogError(ex, ex.Message);
         }
         return pscIndex;
+    }
+    public async Task<FieldViewModel?> LoadFieldDataFromSession(string? cacheKey)
+    {
+        var cached = await GetFromCacheAsync<List<FieldViewModel>>(cacheKey);
+        if (cached != null)
+        {
+            return cached.FirstOrDefault();
+        }
+        return null;
+    }
+
+    public async Task SetFieldDataToSession(FieldViewModel field, string? cacheKey)
+    {
+        await SetCacheAsync(cacheKey, new List<FieldViewModel> { field });
+    }
+    public async Task RemoveFieldDataFromSession(string? cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
     }
 
 }

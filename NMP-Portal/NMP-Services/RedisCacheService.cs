@@ -40,7 +40,8 @@ public class RedisCacheService(IDistributedCache distributedCache, ILogger<Redis
             var bytes = JsonSerializer.SerializeToUtf8Bytes(value, JsonOptions);
             await _distributedCache.SetAsync(key, bytes, new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = expiration
+                AbsoluteExpirationRelativeToNow = expiration,
+                SlidingExpiration= TimeSpan.FromMinutes(2)
             }, token);
         }
         catch (Exception ex)

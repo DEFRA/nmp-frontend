@@ -147,7 +147,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         var response = await httpClient.GetAsync(url);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode &&  responseWrapper?.Data?.avarageAnnualRainfall != null)
+        if (response.IsSuccessStatusCode && responseWrapper?.Data?.avarageAnnualRainfall != null)
         {
             rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall.value;
         }
@@ -207,7 +207,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        
+
         if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
         {
             message = data["message"]?.Value<string>() ?? string.Empty;
@@ -340,7 +340,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (excessWinterRainfallOption, error);
     }
-    
+
     public async Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId)
     {
         FarmAndFarmsNvzResponse? farmsAndNvz = null;
@@ -440,9 +440,8 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (farmList, error);
     }
-    public async Task<FarmViewModel?> GetFarmFromSessionAsync(Guid? sessionId)
+    public async Task<FarmViewModel?> GetFarmFromSessionAsync(string? cacheKey)
     {
-        string cacheKey = sessionId.ToString();
         var cached = await GetFromCacheAsync<List<FarmViewModel>>(cacheKey);
         if (cached != null)
         {
@@ -451,15 +450,14 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         return null;
     }
 
-    public async Task SetFarmToSessionAsync(FarmViewModel farm)
+    public async Task SetFarmToSessionAsync(FarmViewModel farm, string? cacheKey)
     {
-        string cacheKey = farm.SessionId.ToString();
         await SetCacheAsync(cacheKey, new List<FarmViewModel> { farm });
     }
-    public async Task RemoveFarmSessionAsync(Guid? sessionId)
+    public async Task RemoveFarmSessionAsync(string? cacheKey)
     {
-        string cacheKey = sessionId.ToString();
-        await RemoveCacheAsync<List<FarmViewModel>>(cacheKey);
-
+        await RemoveCacheAsync(cacheKey);
     }
+
+
 }

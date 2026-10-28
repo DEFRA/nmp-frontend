@@ -20,8 +20,9 @@ public interface IFarmService:IService
     Task<(CommonResponse, Error)> FetchExcessWinterRainfallOptionByIdAsync(int id);
     Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId);
     Task<(List<FarmListSummary>, Error?)> FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(Guid orgId);
-    Task<FarmViewModel?> GetFarmFromSessionAsync(Guid? sessionId);
+    Task<FarmViewModel?> GetFarmFromSessionAsync(string? sessionId);
 
-    Task SetFarmToSessionAsync(FarmViewModel farm);
-    Task RemoveFarmSessionAsync(Guid? sessionId);
+    Task SetFarmToSessionAsync(FarmViewModel farm, string? cacheKey);
+    Task RemoveFarmSessionAsync(string? sessionId);
+  
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NMP.Application;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Collections.Generic;
@@ -16,6 +17,9 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService,I
     private readonly IFieldService _fieldService = fieldService;
     private readonly IRb209Service _rb209Service = rb209Service;
     private readonly ICropService _cropService = cropService;
+    private const string _fieldDataBeforeUpdateSessionKey = "FieldDataBeforeUpdate";
+    private const string _fieldRemoveKey = "FieldRemove";
+    private const string _fieldDataKey = "FieldData";
     public async Task<(Field?, Error?)> AddFieldAsync(FieldData fieldData, int farmId, string farmName)
     {
         _logger.LogTrace("Adding new field: {FieldName} to FarmId: {FarmId}", fieldData.Field.Name, farmId);
@@ -221,5 +225,55 @@ public class FieldLogic(ILogger<FieldLogic> logger, IFieldService fieldService,I
         _logger.LogTrace("Fetch Soil nutrient status list by methodologyId");
         return await _rb209Service.FetchSoilNutrientStatusList(methodologyId);
     }
-    
+    public FieldViewModel? LoadFieldDataFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fieldDataKey;
+        return _fieldService.LoadFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetFieldDataToSession(FieldViewModel field)
+    {
+        string cacheKey = field.SessionId + " " + _fieldDataKey;
+        _fieldService.SetFieldDataToSession(field, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveFieldDataFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fieldDataKey;
+        _fieldService.RemoveFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+
+    }
+    public FieldViewModel? GetFieldDataBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fieldDataBeforeUpdateSessionKey;
+        return _fieldService.LoadFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetFieldDataBeforeUpdateToSession(FieldViewModel field)
+    {
+        string cacheKey = field.SessionId + " " + _fieldDataBeforeUpdateSessionKey;
+        _fieldService.SetFieldDataToSession(field, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveFieldDataBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fieldDataBeforeUpdateSessionKey;
+        _fieldService.RemoveFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+
+    }
+    public FieldViewModel? GetFieldDataRemoveJourneyFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fieldRemoveKey;
+        return _fieldService.LoadFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetFieldDataRemoveJourneyToSession(FieldViewModel field)
+    {
+        string cacheKey = field.SessionId + " " + _fieldRemoveKey;
+        _fieldService.SetFieldDataToSession(field, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveFieldDataJourneySession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fieldRemoveKey;
+        _fieldService.RemoveFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+
+    }
 }

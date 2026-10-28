@@ -11,13 +11,17 @@ using NMP.Core.Interfaces;
 namespace NMP.Businesses;
 
 [Business(ServiceLifetime.Transient)]
-public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFieldService fieldService, IFarmAverageYieldLogic farmAverageYieldLogic, IRb209Service rb209Service) : IFarmLogic
+public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFieldService fieldService, IFarmAverageYieldLogic farmAverageYieldLogic, IRb209Service rb209Service, IAddressLookupLogic addressLookupLogic) : IFarmLogic
 {
     private readonly ILogger<FarmLogic> _logger = logger;
     private readonly IFarmService _farmService = farmService;
     private readonly IFieldService _fieldService = fieldService;
     private readonly IFarmAverageYieldLogic _farmAverageYieldLogic = farmAverageYieldLogic;
     private readonly IRb209Service _rb209Service = rb209Service;
+    private readonly IAddressLookupLogic _addressLookupLogic = addressLookupLogic;
+    private const string _farmDataKey = "FarmData";
+    private const string _addressListKey = "AddressList";
+    private const string _farmDataBeforeUpdateSessionKey = "FarmDataBeforeUpdate";
 
     public async Task<(ExcessRainfalls?, Error?)> AddExcessWinterRainfallAsync(int farmId, int year, string excessWinterRainfallData, bool isUpdated)
     {
@@ -40,8 +44,8 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
     public async Task<List<Country>> FetchCountryAsync()
     {
         _logger.LogTrace("Fetching list of countries");
-        (List<Country> countryList, _) = await _farmService.FetchCountryAsync();        
-        return countryList;        
+        (List<Country> countryList, _) = await _farmService.FetchCountryAsync();
+        return countryList;
     }
 
     public async Task<(ExcessRainfalls, Error)> FetchExcessRainfallsAsync(int farmId, int year)
@@ -110,8 +114,8 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
 
     public async Task<(List<FarmAverageYields>?, Error?)> FetchFarmAverageYieldByFarmIdAndHarvestYear(int farmId, int harvestYear)
     {
-        _logger.LogTrace("Fetch farm average yield by FarmID: {FarmId} and HarvestYear: {HarvestYear}",farmId,harvestYear);
-        return await _farmAverageYieldLogic.FetchFarmAverageYieldByFarmIdAndHarvestYear(farmId,harvestYear);
+        _logger.LogTrace("Fetch farm average yield by FarmID: {FarmId} and HarvestYear: {HarvestYear}", farmId, harvestYear);
+        return await _farmAverageYieldLogic.FetchFarmAverageYieldByFarmIdAndHarvestYear(farmId, harvestYear);
     }
 
     public async Task<(List<FarmAverageYields>?, Error?)> AddFarmAverageYieldsAsync(List<FarmAverageYields> farmAverageYieldData)
@@ -125,18 +129,38 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         _logger.LogTrace("Fetching farms with last updated date for Organization ID: {OrgId}", orgId);
         return await _farmService.FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(orgId);
     }
-    public async Task<FarmViewModel?> GetFarmFromSession(Guid? sessionId)
+    public FarmViewModel? GetFarmFromSession(Guid? sessionId)
     {
-       return await _farmService.GetFarmFromSessionAsync(sessionId);
+        string cacheKey = sessionId + " " + _farmDataKey;
+        return _farmService.GetFarmFromSessionAsync(cacheKey).GetAwaiter().GetResult();
     }
 
-    public async Task SetFarmToSession(FarmViewModel farm)
+    public void SetFarmToSession(FarmViewModel farm)
     {
-        await _farmService.SetFarmToSessionAsync(farm);
+        string cacheKey = farm.SessionId + " " + _farmDataKey;
+        _farmService.SetFarmToSessionAsync(farm, cacheKey).GetAwaiter().GetResult();
     }
-    public async Task RemoveFarmSession(Guid? sessionId)
+    public void RemoveFarmSession(Guid? sessionId)
     {
-        await _farmService.RemoveFarmSessionAsync(sessionId);
+        string cacheKey = sessionId + " " + _farmDataKey;
+        _farmService.RemoveFarmSessionAsync(cacheKey).GetAwaiter().GetResult();
+
+    }
+    public FarmViewModel? GetFarmDataBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _farmDataBeforeUpdateSessionKey;
+        return _farmService.GetFarmFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetFarmDataBeforeUpdateToSession(FarmViewModel farm)
+    {
+        string cacheKey = farm.SessionId + " " + _farmDataBeforeUpdateSessionKey;
+        _farmService.SetFarmToSessionAsync(farm, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveFarmDataBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _farmDataBeforeUpdateSessionKey;
+        _farmService.RemoveFarmSessionAsync(cacheKey).GetAwaiter().GetResult();
 
     }
 
