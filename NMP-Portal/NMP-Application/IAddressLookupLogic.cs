@@ -4,5 +4,5 @@ namespace NMP.Application;
 public interface IAddressLookupLogic
 {
   Task<List<AddressLookupResponse>> AddressesAsync(string postcode, int offset);
-    void SetAddressesToSession(List<AddressLookupResponse> addresses, string? cacheKey);
+    void SetAddressesToSession(List<AddressLookupResponse> addresses, string? postcode);
 }
