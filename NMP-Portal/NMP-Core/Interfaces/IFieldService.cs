@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 namespace NMP.Core.Interfaces;
 public interface IFieldService : IService
 {
@@ -26,4 +27,9 @@ public interface IFieldService : IService
     Task<(Field?, Error)> UpdateFieldDataAsync(Field field);
     Task<List<CommonResponse>> FetchPscIndexAsync();
     Task<CommonResponse?> FetchPscIndexByIdAsync(int id);
+    Task<FieldViewModel?> LoadFieldDataFromSession(string? cacheKey);
+
+    Task SetFieldDataToSession(FieldViewModel field, string? cacheKey);
+    Task RemoveFieldDataFromSession(string? cacheKey);
+
 }

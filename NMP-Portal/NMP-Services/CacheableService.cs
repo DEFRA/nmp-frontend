@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
+using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Core.Interfaces;
 using System;
@@ -31,13 +34,23 @@ namespace NMP.Services
             return null;
         }
         // Writes to both tiers so they stay in sync.
-        protected async Task SetCacheAsync<T>(string cacheKey, T value) where T : class
+        protected async Task SetCacheAsync<T>(string cacheKey, T value, TimeSpan? cacheDuration = null) where T : class
         {
-            await _redisCacheService.SetAsync(cacheKey, value, DefaultCacheDuration);
-            _memoryCacheService.Set(cacheKey, value, DefaultCacheDuration);
+            var duration = cacheDuration ?? DefaultCacheDuration;
+            try
+            {
+                await _redisCacheService.SetAsync(cacheKey, value, duration);
+            }
+            catch (Exception)
+            {
+                _memoryCacheService.Set(cacheKey, value, duration);
+            }
             Console.WriteLine(string.Format(Resource.lblCacheSet, cacheKey));
-
         }
-        
+        protected async Task RemoveCacheAsync(string cacheKey)
+        {
+            await _redisCacheService.RemoveAsync(cacheKey);
+            _memoryCacheService.Remove(cacheKey);
+        }
     }
 }

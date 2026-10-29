@@ -23,7 +23,7 @@ using Error = NMP.Commons.ServiceResponses.Error;
 namespace NMP.Portal.Controllers;
 
 [Authorize]
-public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider,
+public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider, ISoilAnalysisLogic soilAnalysisLogic,
      IFieldLogicDependencies logicDependencies) : Controller
 {
     private readonly ILogger<FieldController> _logger = logger;
@@ -34,6 +34,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private readonly IFieldLogic _fieldLogic = logicDependencies.FieldLogic;
     private readonly ISoilLogic _soilService = logicDependencies.SoilLogic;
     private readonly ICropLogic _cropLogic = logicDependencies.CropLogic;
+    private readonly ISoilAnalysisLogic _soilAnalysisLogic = soilAnalysisLogic;
     private readonly IPreviousCroppingLogic _previousCroppingLogic = logicDependencies.PreviousCroppingLogic;
     private const string _checkAnswerActionName = "CheckAnswer";
     private const string _updateFieldActionName = "UpdateField";
@@ -82,17 +83,17 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         _logger.LogTrace("Field Controller : CreateFieldCancel({Id}) action called", id);
         if (string.IsNullOrWhiteSpace(q))
         {
-            RemoveFieldDataFromSession(sessionId);
+            _fieldLogic.RemoveFieldDataFromSession(sessionId);
             return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { Id = id, sessionId = sessionId }));
         }
         else
         {
-            FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+            FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
             if (model != null)
             {
                 BindNMPTFarmIdAndNameForNavigation(model);
-                RemoveFieldDataFromSession(sessionId);
+                _fieldLogic.RemoveFieldDataFromSession(sessionId);
 
                 if (!string.IsNullOrWhiteSpace(model.EncryptedFieldId) && !string.IsNullOrWhiteSpace(model.EncryptedFarmId))
                 {
@@ -103,7 +104,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
             else
             {
-                RemoveFieldDataFromSession(sessionId);
+                _fieldLogic.RemoveFieldDataFromSession(sessionId);
                 return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { Id = id, sessionId = sessionId }));
             }
         }
@@ -112,7 +113,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> BackActionForAddField(string id, Guid sessionId)
     {
         _logger.LogTrace("Field Controller : BackActionForAddField({Id}) action called", id);
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         try
         {
@@ -120,7 +121,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             int fieldCount = await _fieldLogic.FetchFieldCountByFarmIdAsync(Convert.ToInt32(farmID));
             if (model == null)
             {
-                RemoveFieldDataFromSession(sessionId);
+                _fieldLogic.RemoveFieldDataFromSession(sessionId);
                 return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { id = id, sessionId = sessionId }));
             }
             else
@@ -131,7 +132,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     return value;
                 }
             }
-            RemoveFieldDataFromSession(sessionId);
+            _fieldLogic.RemoveFieldDataFromSession(sessionId);
             return await Task.FromResult(RedirectToAction(_farmSummaryActionName, "Farm", new { id = id, sessionId = sessionId }));
         }
         catch (Exception ex)
@@ -162,7 +163,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ReportViewModel? reportViewModel = HttpContext.Session.GetObjectFromJson<ReportViewModel>("ReportData");
             if (reportViewModel != null)
             {
-                RemoveFieldDataFromSession(sessionId);
+                _fieldLogic.RemoveFieldDataFromSession(sessionId);
                 return (flowControl: false, value: await Task.FromResult(RedirectToAction("ExportFieldsOrCropType", "Report")));
             }
 
@@ -170,7 +171,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         else if (model.HarvestYear != null && (!string.IsNullOrWhiteSpace(model.EncryptedHarvestYear)))
         {
-            RemoveFieldDataFromSession(sessionId);
+            _fieldLogic.RemoveFieldDataFromSession(sessionId);
             return (flowControl: false, value: await Task.FromResult(RedirectToAction("HarvestYearOverview", "Crop", new
             {
                 id = model.EncryptedFarmId,
@@ -212,7 +213,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         Error? error = null;
         if (!string.IsNullOrEmpty(q))
         {
-            model = LoadFieldDataFromSession(sessionId) ?? new FieldViewModel();
+            model = _fieldLogic.LoadFieldDataFromSession(sessionId) ?? new FieldViewModel();
             model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.EncryptedFarmId = q;
             model.SessionId = sessionId;
@@ -224,16 +225,16 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
                 model.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
             }
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
         }
         if (!string.IsNullOrWhiteSpace(r) && model != null)
         {
             model.EncryptedHarvestYear = r;
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
         }
 
-        model = LoadFieldDataFromSession(sessionId);
+        model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         BindNMPTFarmIdAndNameForNavigation(model);
         try
         {
@@ -265,7 +266,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer)
         {
@@ -311,7 +312,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 }
 
                 model.SoilType = soilType?.SoilType;
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
             }
             else
             {
@@ -350,7 +351,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult FieldMeasurements(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : FieldMeasurements() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : FieldMeasurements() action : Field data is not available in session");
@@ -391,7 +392,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             field.IsWithinNVZForFarm = farm.NVZFields == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
             field.IsAbove300SeaLevelForFarm = farm.FieldsAbove300SeaLevel == (int)NMP.Commons.Enums.NvzFields.SomeFieldsInNVZ;
         }
-        SetFieldDataToSession(field);
+        _fieldLogic.SetFieldDataToSession(field);
 
         if (field.IsCheckAnswer)
         {
@@ -486,7 +487,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> NVZField(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : NVZField() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -500,14 +501,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         var result = await HandleNvzLogicAsync(model);
 
         if (result != null)
         {
             return result;
         }
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         return RedirectToAction(_elevationFieldActionName, new { sessionId = model.SessionId });
     }
 
@@ -533,7 +534,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.IsNVZProgrammeNeedToShow = false;
             model.NVZProgrammeID = (int)NMP.Commons.Enums.NvzProgram.NotInNVZ;
         }
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer)
         {
@@ -554,7 +555,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         return RedirectToAction(_elevationFieldActionName, new { sessionId = model.SessionId });
 
@@ -577,7 +578,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     if (farmNvzListCount > 1)
                     {
                         model.IsNVZProgrammeNeedToShow = true;
-                        SetFieldDataToSession(model);
+                        _fieldLogic.SetFieldDataToSession(model);
                         return RedirectToAction("NitrateVulnerableZones", new { sessionId = model.SessionId });
                     }
                 }
@@ -603,7 +604,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 {
                     model.NVZProgrammeID = farmsNvzList[0].NVZProgrammeID;
                 }
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
                 return farmsNvzList.Count;
             }
             else
@@ -619,7 +620,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> ElevationField(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : ElevationField() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -639,7 +640,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             model.IsAbove300SeaLevel = Convert.ToBoolean(farm.FieldsAbove300SeaLevel);
         }
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         return RedirectToAction("SoilType", new { sessionId = model.SessionId });
     }
 
@@ -660,7 +661,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(field);
         }
 
-        SetFieldDataToSession(field);
+        _fieldLogic.SetFieldDataToSession(field);
 
         if (field.IsCheckAnswer)
         {
@@ -679,7 +680,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> SoilType(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilType() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         try
         {
@@ -738,7 +739,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             SoilTypesResponse? soilType = soilTypes.FirstOrDefault(x => x.SoilTypeId == model.SoilTypeID);
             model.SoilType = soilType?.SoilType;
             bool isSoilTypeChange = false;
-            FieldViewModel? fieldData = LoadFieldDataFromSession(model.SessionId);
+            FieldViewModel? fieldData = _fieldLogic.LoadFieldDataFromSession(model.SessionId);
 
             if (fieldData == null)
             {
@@ -752,7 +753,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 isSoilTypeChange = true;
             }
 
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
 
             if (model.SoilTypeID == (int)NMP.Commons.Enums.SoilTypeEngland.Shallow)
             {
@@ -763,20 +764,20 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 model.IsSoilReleasingClay = false;
                 model.SoilReleasingClay = null;
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
                 return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
             if (soilType != null && soilType.KReleasingClay)
             {
                 model.IsSoilReleasingClay = true;
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
                 return RedirectToAction("SoilReleasingClay", new { sessionId = model.SessionId });
             }
 
             model.SoilReleasingClay = null;
             model.IsSoilReleasingClay = false;
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
 
             if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate))
             {
@@ -801,7 +802,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult SoilReleasingClay(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilReleasingClay() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilReleasingClay() action : Field data is not available in session");
@@ -842,7 +843,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             field.SoilReleasingClay = false;
         }
 
-        SetFieldDataToSession(field);
+        _fieldLogic.SetFieldDataToSession(field);
 
         if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
         {
@@ -861,7 +862,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult SulphurDeficient(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SulphurDeficient() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SulphurDeficient() action : Field data is not available in session");
@@ -889,7 +890,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return await Task.FromResult(View(model));
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer && (!model.IsRecentSoilAnalysisQuestionChange))
         {
@@ -903,7 +904,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> SoilDate(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilDateAndPHLevel() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilDateAndPHLevel() action : Field data is not available in session");
@@ -932,7 +933,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         if (model.IsCheckAnswer && (!model.IsRecentSoilAnalysisQuestionChange))
         {
             return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
@@ -1001,7 +1002,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public Task<IActionResult> SoilNutrientValueType(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilNutrientValueType() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilNutrientValueType() action : Field data is not available in session");
@@ -1029,22 +1030,22 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (model.IsCheckAnswer)
         {
-            FieldViewModel? fieldViewModel = LoadFieldDataFromSession(model.SessionId);
+            FieldViewModel? fieldViewModel = _fieldLogic.LoadFieldDataFromSession(model.SessionId);
             if (fieldViewModel != null && fieldViewModel.SoilAnalyses != null && fieldViewModel.SoilAnalyses.SoilNutrientValueType == model.SoilAnalyses.SoilNutrientValueType)
             {
                 model.SoilAnalyses.IsSoilNutrientValueTypeChange = false;
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
                 return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else
             {
                 model.SoilAnalyses.IsSoilNutrientValueTypeChange = true;
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
             }
         }
         model.SoilAnalyses = SoilAnalysisNutrientValuesLogic
       .BindSoilNutrientValueType(model.SoilAnalyses);
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         return RedirectToAction("SoilNutrientValue", new { sessionId = model.SessionId });
     }
@@ -1055,7 +1056,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> SoilNutrientValue(Guid? sessionId)
     {
         _logger.LogTrace("Field Controller : SoilNutrientValue() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilNutrientValue() action : Field data is not available in session");
@@ -1114,7 +1115,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 }
             }
 
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
 
             return model.IsCheckAnswer
                 ? RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId })
@@ -1507,7 +1508,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> CropGroups(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : CropGroups() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -1562,7 +1563,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(field);
         }
 
-        FieldViewModel? fieldData = LoadFieldDataFromSession(field.SessionId);
+        FieldViewModel? fieldData = _fieldLogic.LoadFieldDataFromSession(field.SessionId);
 
         if (fieldData == null)
         {
@@ -1577,7 +1578,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         field.CropGroup = await _fieldLogic.FetchCropGroupById(field.CropGroupId.Value);
-        SetFieldDataToSession(field);
+        _fieldLogic.SetFieldDataToSession(field);
 
         return RedirectToAction(_cropTypesActionName, new { sessionId = field.SessionId });
     }
@@ -1586,7 +1587,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> CropTypes(Guid? sessionId)
     {
         _logger.LogTrace($"Field Controller : CropTypes() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         try
         {
@@ -1603,7 +1604,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 model.CropTypeID = cropTypeList[0].CropTypeId;
                 model.CropType = cropTypeList[0].CropType;
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
                 if (model.IsCheckAnswer)
                 {
                     return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
@@ -1614,7 +1615,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             _logger.LogTrace(ex, "Field Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorTempData] = ex.Message;
-            return RedirectToAction(_cropGroupsActionName, new {sessionId=sessionId});
+            return RedirectToAction(_cropGroupsActionName, new { sessionId = sessionId });
         }
 
         return View(model);
@@ -1637,7 +1638,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(field);
         }
         field.CropType = await _fieldLogic.FetchCropTypeById(field.CropTypeID.Value);
-        SetFieldDataToSession(field);
+        _fieldLogic.SetFieldDataToSession(field);
         if (field.IsCheckAnswer)
         {
             if (field.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && field.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
@@ -1661,7 +1662,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> CropInfoOne(Guid? sessionId)
     {
         _logger.LogTrace($"Field Controller : CropTypes() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         try
         {
@@ -1704,7 +1705,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 return View(model);
             }
 
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
             if (model.IsCheckAnswer)
             {
                 return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
@@ -1728,7 +1729,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> BackCheckAnswer(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : BackCheckAnswer() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -1737,7 +1738,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         model.IsCheckAnswer = false;
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         if (model.PreviousCroppings.HasGrassInLastThreeYear != null && model.PreviousCroppings.HasGrassInLastThreeYear.Value)
         {
             if (!model.PreviousGrassYears.Contains(model.LastHarvestYear ?? 0))
@@ -1767,7 +1768,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> CheckAnswer(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : CheckAnswer() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         try
         {
             if (model == null)
@@ -1803,7 +1804,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             await FetchMethodologyName(model);
             await FetchPscIndexName(model);
             ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
 
         }
         catch (Exception ex)
@@ -1855,7 +1856,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 string success = _farmDataProtector.Protect("true");
                 string fieldName = _farmDataProtector.Protect(fieldResponse.Name);
-                RemoveFieldDataFromSession(model.SessionId);
+                _fieldLogic.RemoveFieldDataFromSession(model.SessionId);
 
                 return RedirectToAction(_manageFarmFieldsActionName, new { id = model.EncryptedFarmId, q = success, name = fieldName });
             }
@@ -2437,7 +2438,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ViewBag.FieldsList = model.Fields;
             model.EncryptedFarmId = id;
         }
-        RemoveFieldDataFromSession(model.SessionId);
+        _fieldLogic.RemoveFieldDataFromSession(model.SessionId);
         return View(model);
     }
 
@@ -2459,24 +2460,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace("Field Controller : FieldSoilAnalysisDetail() action called");
 
-        if (HttpContext.Session.Exists(sessionId + " " + "SoilAnalysisDataBeforeUpdate"))
-        {
-            HttpContext.Session.Remove(sessionId + " " + "SoilAnalysisDataBeforeUpdate");
-        }
-        RemoveFieldDataFromSession(sessionId);
-        if (HttpContext.Session.Exists(sessionId + " " + _fieldDataBeforeUpdateKey))
-        {
-            HttpContext.Session.Remove(sessionId + " " + _fieldDataBeforeUpdateKey);
-        }
-        if (HttpContext.Session.Exists(sessionId + " " + _fieldRemoveKey))
-        {
-            HttpContext.Session.Remove(sessionId + " " + _fieldRemoveKey);
-        }
+        _soilAnalysisLogic.RemoveSoilAnalysisBeforeUpdateFromSession(sessionId);
+        _fieldLogic.RemoveFieldDataFromSession(sessionId);
+        _fieldLogic.RemoveFieldDataBeforeUpdateFromSession(sessionId);
+        _soilAnalysisLogic.RemoveSoilAnalysisDataFromSession(sessionId);
+        _fieldLogic.RemoveFieldDataJourneySession(sessionId);
 
-        if (HttpContext.Session.Exists(sessionId + " " + "SoilAnalysisData"))
-        {
-            HttpContext.Session.Remove(sessionId + " " + "SoilAnalysisData");
-        }
 
         FieldViewModel model = new FieldViewModel();
         Error? error = new Error();
@@ -2920,7 +2909,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult RecentSoilAnalysisQuestion(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : RecentSoilAnalysisQuestion() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         try
         {
@@ -2935,7 +2924,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             _logger.LogTrace(ex, "Field Controller : Exception in RecentSoilAnalysisQuestion() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorTempData] = ex.Message;
-            return RedirectToAction("SoilType", new {sessionId=sessionId});
+            return RedirectToAction("SoilType", new { sessionId = sessionId });
         }
         return View(model);
     }
@@ -2959,7 +2948,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             if (model.IsCheckAnswer)
             {
-                FieldViewModel? fieldData = LoadFieldDataFromSession(model.SessionId);
+                FieldViewModel? fieldData = _fieldLogic.LoadFieldDataFromSession(model.SessionId);
                 if (fieldData == null)
                 {
                     _logger.LogTrace("Field Controller : RecentSoilAnalysisQuestion() post action : No field data found in session.");
@@ -2972,7 +2961,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 }
             }
 
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
 
             if (model.RecentSoilAnalysisQuestion.HasValue && model.RecentSoilAnalysisQuestion.Value)
             {
@@ -2990,7 +2979,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilAnalyses.MagnesiumIndex = null;
                 model.SoilAnalyses.PhosphorusIndex = null;
                 model.SoilAnalyses.SoilNutrientValueType = null;
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
 
                 if (model.IsCheckAnswer)
                 {
@@ -3012,7 +3001,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult SoilOverChalk(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilOverChalk() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilOverChalk() action : No field data found in session.");
@@ -3038,7 +3027,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(field);
         }
 
-        SetFieldDataToSession(field);
+        _fieldLogic.SetFieldDataToSession(field);
 
         if (field.IsCheckAnswer && (!field.IsRecentSoilAnalysisQuestionChange))
         {
@@ -3117,11 +3106,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
                 await ModelInitialisationByFieldId(fieldId, farmId, model, cropPlans, hasGrassInLastThreeYear, prevCroppings, prevCroppingDataForScotland);
 
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
             }
             else
             {
-                model = LoadFieldDataFromSession(sessionId);
+                model = _fieldLogic.LoadFieldDataFromSession(sessionId);
                 cropPlans = await GetCropPlans(model, cropPlans);
 
                 if (model == null)
@@ -3140,15 +3129,12 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                     BindPreviousGrassesData(model);
                 }
                 ResetSoilOverChalkAndReleasingClay(model);
-                SetFieldDataToSession(model);//get plans of field
+                _fieldLogic.SetFieldDataToSession(model);//get plans of field
                 await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
 
             }
             await BindCropInfoViewBag(model);
-            if (!string.IsNullOrWhiteSpace(fieldId))
-            {
-                HttpContext.Session.SetObjectAsJson(model.SessionId + " " + _fieldDataBeforeUpdateKey, model);
-            }
+            _fieldLogic.SetFieldDataBeforeUpdateToSession(model);
 
             BindNMPTFarmIdAndNameForNavigation(model);
         }
@@ -3245,11 +3231,8 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (string.IsNullOrWhiteSpace(error?.Message) && fieldResponse != null)
             {
                 string success = _farmDataProtector.Protect(Resource.lblTrue);
-                RemoveFieldDataFromSession(model.SessionId);
-                if (HttpContext.Session.Exists(model.SessionId + " " + _fieldDataBeforeUpdateKey))
-                {
-                    HttpContext.Session.Remove(model.SessionId + " " + _fieldDataBeforeUpdateKey);
-                }
+                _fieldLogic.RemoveFieldDataFromSession(model.SessionId);
+                _fieldLogic.RemoveFieldDataBeforeUpdateFromSession(model.SessionId);
                 return RedirectToAction("FieldSoilAnalysisDetail", new { farmId = model.EncryptedFarmId, fieldId = model.EncryptedFieldId, q = success, r = _fieldDataProtector.Protect(Resource.lblField) });
             }
             else
@@ -3605,7 +3588,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 ViewBag.NoNeedToShowPreviousCroppingDetail = true;
             }
         }
-        var previousModel = HttpContext.Session.GetObjectFromJson<FieldViewModel>(model.SessionId + " " + _fieldDataBeforeUpdateKey);
+        var previousModel = _fieldLogic.GetFieldDataBeforeUpdateFromSession(model.SessionId);
 
         bool isDataChanged = false;
         string action = "Action";
@@ -3640,11 +3623,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult FieldRemove(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : FieldRemove() action called");
-        FieldViewModel? model = null;
-        if (HttpContext.Session.Exists(sessionId + " " + _fieldRemoveKey))
-        {
-            model = HttpContext.Session.GetObjectFromJson<FieldViewModel>(sessionId + " " + _fieldRemoveKey);
-        }
+        FieldViewModel? model = _fieldLogic.GetFieldDataRemoveJourneyFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : FieldRemove() action : No field data found in session.");
@@ -3689,10 +3668,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 string isDeleted = _fieldDataProtector.Protect("true");
                 string name = _fieldDataProtector.Protect(field.Name);
-                if (HttpContext.Session.Exists(field.SessionId + " " + _fieldRemoveKey))
-                {
-                    HttpContext.Session.Remove(field.SessionId + " " + _fieldRemoveKey);
-                }
+                _fieldLogic.RemoveFieldDataJourneySession(field.SessionId);
                 return RedirectToAction(_manageFarmFieldsActionName, new { id = field.EncryptedFarmId, name = name, isDeleted = isDeleted, sessionId = Guid.NewGuid() });
             }
         }
@@ -3702,7 +3678,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     public IActionResult BackActionForCopyExistingField(string farmId, Guid sessionId)
     {
-        RemoveFieldDataFromSession(sessionId);
+        _fieldLogic.RemoveFieldDataFromSession(sessionId);
         return RedirectToAction(_manageFarmFieldsActionName, new { id = farmId, sessionId = sessionId });
     }
 
@@ -3718,7 +3694,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (!string.IsNullOrEmpty(q))
         {
-            model = LoadFieldDataFromSession(sessionId) ?? new FieldViewModel();
+            model = _fieldLogic.LoadFieldDataFromSession(sessionId) ?? new FieldViewModel();
             model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.EncryptedFarmId = q;
             model.SessionId = sessionId.Value;
@@ -3728,9 +3704,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.FarmName = farm.Name;
             }
 
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
         }
-        model = LoadFieldDataFromSession(sessionId);
+        model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         BindNMPTFarmIdAndNameForNavigation(model);
         return View(model);
@@ -3752,7 +3728,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(field);
         }
 
-        SetFieldDataToSession(field);
+        _fieldLogic.SetFieldDataToSession(field);
 
         if (field.IsCheckAnswer)
         {
@@ -3771,7 +3747,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> CopyFields(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : CopyFields() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -3787,7 +3763,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ViewBag.FieldList = fieldList;
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         return View(model);
     }
 
@@ -3813,7 +3789,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View("CopyFields", field);
         }
 
-        SetFieldDataToSession(field);
+        _fieldLogic.SetFieldDataToSession(field);
 
         if (field.IsCheckAnswer)
         {
@@ -3828,7 +3804,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace("Field Controller : HasGrassInLastThreeYear() action called");
 
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : HasGrassInLastThreeYear() : field data not found in session");
@@ -3836,7 +3812,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         return View(model);
     }
 
@@ -3859,7 +3835,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        FieldViewModel? fieldData = LoadFieldDataFromSession(model.SessionId);
+        FieldViewModel? fieldData = _fieldLogic.LoadFieldDataFromSession(model.SessionId);
 
         bool hasGrassChanged = HasGrassFlagChanged(model, fieldData);
         if (!string.IsNullOrWhiteSpace(model.EncryptedIsUpdate) && hasGrassChanged)
@@ -3876,7 +3852,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             }
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.PreviousCroppings.HasGrassInLastThreeYear == true)
         {
@@ -3893,7 +3869,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (hasGrassChanged)
         {
             ClearCropData(model);
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
         }
 
         return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
@@ -3920,7 +3896,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (!hasGrassChanged)
         {
             model.IsHasGrassInLastThreeYearChange = false;
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
 
             if (!model.IsLastHarvestYearChange)
             {
@@ -3931,20 +3907,20 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         model.IsHasGrassInLastThreeYearChange = true;
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.PreviousCroppings.HasGrassInLastThreeYear == false)
         {
             ClearCropData(model);
             ClearGrassData(model);
 
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
             return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
         }
 
         if (model.PreviousCroppings.HasGrassInLastThreeYear == true)
         {
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
             return RedirectToAction("GrassLastThreeHarvestYear", new { sessionId = model.SessionId });
         }
 
@@ -3984,7 +3960,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace($"Field Controller : GrassLastThreeHarvestYear() action called");
 
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : field data not found in session");
@@ -4006,7 +3982,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         ViewBag.PreviousCroppingsYear = previousYears;
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         return View(model);
     }
 
@@ -4039,7 +4015,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         model.IsPreviousYearGrass = model.PreviousGrassYears?.Contains(lastHarvestYear) == true;
         BindIsGrassLastThreeHarvestYearChange(model);
         ResetCropIfPreviousYearGrassChanged(model);
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.PreviousGrassYears?.Count == 3)
         {
@@ -4054,7 +4030,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return RedirectToAction("LayDuration", new { sessionId = model.SessionId });
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer && !model.IsHasGrassInLastThreeYearChange && !model.IsGrassLastThreeHarvestYearChange && !model.IsLastHarvestYearChange)
         {
@@ -4066,7 +4042,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     private void BindIsGrassLastThreeHarvestYearChange(FieldViewModel model)
     {
-        FieldViewModel? fieldData = LoadFieldDataFromSession(model.SessionId);
+        FieldViewModel? fieldData = _fieldLogic.LoadFieldDataFromSession(model.SessionId);
         var current = model.PreviousGrassYears ?? new List<int>();
         var previous = fieldData?.PreviousGrassYears ?? new List<int>();
 
@@ -4077,7 +4053,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     private void ResetCropIfPreviousYearGrassChanged(FieldViewModel model)
     {
-        FieldViewModel? fieldData = LoadFieldDataFromSession(model.SessionId);
+        FieldViewModel? fieldData = _fieldLogic.LoadFieldDataFromSession(model.SessionId);
 
         if (fieldData?.IsPreviousYearGrass != model.IsPreviousYearGrass &&
             model.IsPreviousYearGrass == true)
@@ -4088,7 +4064,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             model.CropType = string.Empty;
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
     }
 
 
@@ -4096,7 +4072,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> GrassManagementOptions(Guid sessionId)
     {
         _logger.LogTrace($"Field Controller : GrassManagementOptions() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -4106,7 +4082,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         BindNMPTFarmIdAndNameForNavigation(model);
         ViewBag.GrassManagementOptions = await _fieldLogic.GetGrassManagementOptions();
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         return View(model);
     }
 
@@ -4129,7 +4105,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.PreviousCroppings.GrassManagementOptionID == (int)NMP.Commons.Enums.GrassManagementOption.GrazedOnly)
         {
@@ -4154,7 +4130,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     {
         _logger.LogTrace("Field Controller : HasGreaterThan30PercentClover() action called");
 
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("Field Controller : HasGreaterThan30PercentClover(): field data not found in session");
@@ -4162,7 +4138,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         return Task.FromResult<IActionResult>(View(model));
     }
 
@@ -4183,7 +4159,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange) && (!model.IsLastHarvestYearChange))
         {
@@ -4193,7 +4169,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
         {
             model.PreviousCroppings.SoilNitrogenSupplyItemID = null;
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
             if (model.IsPreviousYearGrass == false)
             {
                 return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
@@ -4216,7 +4192,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> SoilNitrogenSupplyItems(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : SoilNitrogenSupplyItems() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -4250,7 +4226,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange))
         {
@@ -4274,7 +4250,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> LayDuration(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : LayDuration() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -4283,7 +4259,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         return await Task.FromResult(View(model));
     }
 
@@ -4304,7 +4280,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return Task.FromResult<IActionResult>(View(model));
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsLastHarvestYearChange) && (!model.IsGrassLastThreeHarvestYearChange))
         {
@@ -4323,7 +4299,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult Cancel(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : Cancel() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         try
         {
             if (model == null)
@@ -4385,7 +4361,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public IActionResult LastHarvestYear(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : LastHarvestYear() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -4416,14 +4392,14 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(_lastHarvestYearActionName, model);
         }
 
-        FieldViewModel? fieldViewModel = LoadFieldDataFromSession(model.SessionId);
+        FieldViewModel? fieldViewModel = _fieldLogic.LoadFieldDataFromSession(model.SessionId);
 
         if (fieldViewModel != null && fieldViewModel.LastHarvestYear != model.LastHarvestYear)
         {
             model.IsLastHarvestYearChange = true;
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
         if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
             return RedirectToAction("HasGrassInLastThreeYear", new { sessionId = model.SessionId });
@@ -4431,7 +4407,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         else
         {
             model.PreviousCroppings.HasGrassInLastThreeYear = false;
-            SetFieldDataToSession(model);
+            _fieldLogic.SetFieldDataToSession(model);
             return RedirectToAction("CropGroups", new { sessionId = model.SessionId });
         }
     }
@@ -4463,32 +4439,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         ViewBag.SecondLastHarvestYear = secondLastHarvestYear;
     }
 
-    private FieldViewModel? LoadFieldDataFromSession(Guid? sessionId)
-    {
-        if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _fieldDataKey))
-        {
-            return HttpContext.Session.GetObjectFromJson<FieldViewModel>(sessionId + " " + _fieldDataKey);
-        }
-        return null;
-    }
 
-    private void SetFieldDataToSession(FieldViewModel model)
-    {
-        HttpContext.Session.SetObjectAsJson(model.SessionId + " " + _fieldDataKey, model);
-    }
-    private void RemoveFieldDataFromSession(Guid? sessionId)
-    {
-        if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + _fieldDataKey))
-        {
-            HttpContext.Session.Remove(sessionId + " " + _fieldDataKey);
-        }
-    }
+
+
 
     [HttpGet]
     public IActionResult LPIDNumber(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : LPIDNumber() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -4513,7 +4472,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer)
         {
@@ -4532,7 +4491,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> NitrateVulnerableZones(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : NitrateVulnerableZones() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -4561,7 +4520,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
         model.IsNVZProgrammeNeedToShow = true;
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer)
         {
@@ -4584,7 +4543,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> PscIndex(Guid sessionId)
     {
         _logger.LogTrace("Field Controller : PscIndex() action called");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
 
         if (model == null)
         {
@@ -4613,7 +4572,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             return View(model);
         }
 
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         if (model.IsCheckAnswer)
         {
@@ -4650,7 +4609,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     public async Task<IActionResult> SoilAnalysesMethod(Guid sessionId)
     {
         _logger.LogTrace($"Field Controller: SoilAnalysesMethod() action called.");
-        FieldViewModel? model = LoadFieldDataFromSession(sessionId);
+        FieldViewModel? model = _fieldLogic.LoadFieldDataFromSession(sessionId);
         if (model == null)
         {
             _logger.LogTrace("SoilAnalysisController: Session expired in SoilAnalysesMethod() action.");
@@ -4680,11 +4639,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         if (model.IsCheckAnswer)
         {
-            FieldViewModel? fieldViewModel = LoadFieldDataFromSession(model.SessionId);
+            FieldViewModel? fieldViewModel = _fieldLogic.LoadFieldDataFromSession(model.SessionId);
             if (fieldViewModel != null && fieldViewModel.SoilAnalyses != null && fieldViewModel.SoilAnalyses.PhosphorusMethodologyID == model.SoilAnalyses.PhosphorusMethodologyID)
             {
                 model.SoilAnalyses.IsSoilAnalysesMethodChange = false;
-                SetFieldDataToSession(model);
+                _fieldLogic.SetFieldDataToSession(model);
                 return await Task.FromResult(RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
             }
             else
@@ -4695,7 +4654,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.SoilAnalyses.SoilNutrientValueType = null;
             }
         }
-        SetFieldDataToSession(model);
+        _fieldLogic.SetFieldDataToSession(model);
 
         return await Task.FromResult(RedirectToAction("SoilNutrientValueType", new { sessionId = model.SessionId }));
 
@@ -4720,7 +4679,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             model.FarmName = _farmDataProtector.Unprotect(t);
         }
-        HttpContext.Session.SetObjectAsJson(model.SessionId + " " + _fieldRemoveKey, model);
+        _fieldLogic.SetFieldDataRemoveJourneyToSession(model);
         _logger.LogTrace("Field Controller : RedirectForFieldRemove() action called");
         return RedirectToAction(_fieldRemoveKey, _fieldKey, new { sessionId = model.SessionId });
     }

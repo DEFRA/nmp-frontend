@@ -7,6 +7,7 @@ using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
@@ -785,5 +786,24 @@ public class CropService(ILogger<CropService> logger, IHttpContextAccessor httpC
             Content = content
         };
         return requestMessage;
+    }
+    public async Task<PlanViewModel?> LoadCropDataFromSession(string? cacheKey)
+    {
+        var cached = await GetFromCacheAsync<List<PlanViewModel>>(cacheKey);
+        if (cached != null)
+        {
+            return cached.FirstOrDefault();
+        }
+        return null;
+    }
+
+    public async Task SetCropDataToSession(PlanViewModel field, string? cacheKey)
+    {
+        await SetCacheAsync(cacheKey, new List<PlanViewModel> { field });
+    }
+    public async Task RemoveCropDataFromSession(string? cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
     }
 }

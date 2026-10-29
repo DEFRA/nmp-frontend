@@ -11,21 +11,28 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IAddressLookupService
+public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IAddressLookupService
 {
     private readonly ILogger<AddressLookupService> _logger = logger;
+    private const string _addressListKey = "AddressList";
 
     public async Task<List<AddressLookupResponse>> AddressesAsync(string postcode, int offset)
     {
-        List<AddressLookupResponse> addresses = new();
+        string cacheKey = postcode + " " + _addressListKey;
+        List<AddressLookupResponse>? addressLookupResponses = await GetAddressesFromSession(cacheKey);
+        if (addressLookupResponses != null && addressLookupResponses.Count > 0)
+        {
+            return addressLookupResponses;
+        }
         try
         {
             HttpClient httpClient = await GetNMPAPIClient();
             var requisteUrl = string.Format(ApiurlHelper.AddressLookupAPI, HttpUtility.UrlEncode(postcode), HttpUtility.UrlEncode(offset.ToString()));
             var response = await httpClient.GetAsync(requisteUrl);
-            
+
+            addressLookupResponses = new List<AddressLookupResponse>();
             if (response.IsSuccessStatusCode)
-            {
+            {    
                 string result = await response.Content.ReadAsStringAsync();
                 ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
                 if (responseWrapper != null && responseWrapper.Data != null && responseWrapper?.Data?.GetType().Name.ToLower() != "string")
@@ -33,7 +40,7 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
                     AddressLookupResponseWrapper? addressLookupResponseWrapper = responseWrapper?.Data?.ToObject<AddressLookupResponseWrapper>();
                     if (addressLookupResponseWrapper != null && addressLookupResponseWrapper.Results != null)
                     {
-                        addresses.AddRange(addressLookupResponseWrapper.Results);
+                        addressLookupResponses.AddRange(addressLookupResponseWrapper.Results);
                     }
                 }
                 else
@@ -51,6 +58,25 @@ public class AddressLookupService(ILogger<AddressLookupService> logger, IHttpCon
             _logger.HandleException(ex, null);
         }
 
-        return addresses;
+        return addressLookupResponses;
+    }
+    public async Task<List<AddressLookupResponse>?> GetAddressesFromSession(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<List<AddressLookupResponse>>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
+
+    public async Task SetAddressesToSession(List<AddressLookupResponse> addresses, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, addresses, TimeSpan.FromMinutes(30));
+    }
+    public async Task RemoveAddressesSession(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
     }
 }
