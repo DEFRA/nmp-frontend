@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 namespace NMP.Application;
 
 public interface IFieldLogic
@@ -41,4 +42,17 @@ public interface IFieldLogic
     Task<List<CommonResponse>> FetchPscIndex();
     Task<CommonResponse?> FetchPscIndexById(int id);
     Task<(List<SoilNutrientStatusResponse>?, Error?)> FetchSoilNutrientStatusList(int methodologyId);
+    FieldViewModel? LoadFieldDataFromSession(Guid? sessionId);
+
+    void SetFieldDataToSession(FieldViewModel field);
+    void RemoveFieldDataFromSession(Guid? sessionId);
+
+    FieldViewModel? GetFieldDataBeforeUpdateFromSession(Guid? sessionId);
+
+    void SetFieldDataBeforeUpdateToSession(FieldViewModel field);
+    void RemoveFieldDataBeforeUpdateFromSession(Guid? sessionId);
+    FieldViewModel? GetFieldDataRemoveJourneyFromSession(Guid? sessionId);
+
+    void SetFieldDataRemoveJourneyToSession(FieldViewModel field);
+    void RemoveFieldDataJourneySession(Guid? sessionId);
 }

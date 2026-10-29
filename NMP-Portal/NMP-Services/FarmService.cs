@@ -7,6 +7,7 @@ using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Net;
@@ -16,7 +17,7 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IFarmService
+public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IFarmService
 {
     private readonly ILogger<FarmService> _logger = logger;
     private const string _applicationJson = "application/json";
@@ -146,7 +147,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
         var response = await httpClient.GetAsync(url);
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        if (response.IsSuccessStatusCode &&  responseWrapper?.Data?.avarageAnnualRainfall != null)
+        if (response.IsSuccessStatusCode && responseWrapper?.Data?.avarageAnnualRainfall != null)
         {
             rainfallAverage = responseWrapper?.Data?.avarageAnnualRainfall.value;
         }
@@ -206,7 +207,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         string result = await response.Content.ReadAsStringAsync();
         ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
-        
+
         if (response.IsSuccessStatusCode && responseWrapper?.Data is JObject data)
         {
             message = data["message"]?.Value<string>() ?? string.Empty;
@@ -339,7 +340,7 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (excessWinterRainfallOption, error);
     }
-    
+
     public async Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId)
     {
         FarmAndFarmsNvzResponse? farmsAndNvz = null;
@@ -439,4 +440,24 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (farmList, error);
     }
+    public async Task<FarmViewModel?> GetFarmFromSessionAsync(string? cacheKey)
+    {
+        var cached = await GetFromCacheAsync<List<FarmViewModel>>(cacheKey);
+        if (cached != null)
+        {
+            return cached.FirstOrDefault();
+        }
+        return null;
+    }
+
+    public async Task SetFarmToSessionAsync(FarmViewModel farm, string? cacheKey)
+    {
+        await SetCacheAsync(cacheKey, new List<FarmViewModel> { farm });
+    }
+    public async Task RemoveFarmSessionAsync(string? cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+    }
+
+
 }

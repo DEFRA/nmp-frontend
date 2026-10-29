@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 namespace NMP.Core.Interfaces;
 public interface ICropService
 {
@@ -34,4 +35,7 @@ public interface ICropService
     Task<bool> FetchIsPerennialByCropTypeIdAsync(int cropTypeId);
     Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClassAsync(List<int> fieldIds);
     Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int year);
+    Task<PlanViewModel?> LoadCropDataFromSession(string? cacheKey);
+    Task SetCropDataToSession(PlanViewModel field, string? cacheKey);
+    Task RemoveCropDataFromSession(string? cacheKey);
 }

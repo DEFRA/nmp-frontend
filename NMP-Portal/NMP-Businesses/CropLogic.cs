@@ -35,6 +35,10 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
     private readonly IDataProtector _fieldDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FieldController");
     private readonly IDataProtector _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");
+    private const string _cropDataBeforeUpdateSessionKey = "CropDataBeforeUpdate";
+    private const string _cropDataSessionKey = "CropData";
+    private const string _excessWinterRainfallSessionKey = "ExcessWinterRainfall";
+    private const string _harvestYearSessionKey = "HarvestYearPlan";
     public async Task<(bool, Error?)> AddCropNutrientManagementPlan(CropDataWrapper cropData)
     {
         _logger.LogTrace("Adding crop nutrient management plan");
@@ -132,7 +136,7 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
     public async Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward, int countryId)
     {
         _logger.LogTrace("Fetching defoliation sequences for SwardTypeId: {SwardTypeId}, SwardManagementId: {SwardManagementId}, NumberOfCut: {NumberOfCut}, IsNewSward: {IsNewSward},CountryId: {CountryId}", swardTypeId, swardManagementId, numberOfCut, isNewSward, countryId);
-        return await _rb209Service.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutAsync(swardTypeId, swardManagementId, numberOfCut, isNewSward,countryId);
+        return await _rb209Service.FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutAsync(swardTypeId, swardManagementId, numberOfCut, isNewSward, countryId);
     }
 
     public async Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds)
@@ -688,5 +692,71 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
         _logger.LogTrace("check is grass in previous or arable in next year for FieldIds: {FieldIds}, {HarvestYear}", string.Join(", ", fieldIds), year);
         return await _cropService.CheckIsGrassInPrevOrArableInNextYearAsync(fieldIds, year);
     }
-    
+    public PlanViewModel? GetCropFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _cropDataSessionKey;
+        return _cropService.LoadCropDataFromSession(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetCropToSession(PlanViewModel field)
+    {
+        string cacheKey = field.SessionId + " " + _cropDataSessionKey;
+        _cropService.SetCropDataToSession(field, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveCropSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _cropDataSessionKey;
+        _cropService.RemoveCropDataFromSession(cacheKey).GetAwaiter().GetResult();
+
+    }
+    public PlanViewModel? GetCropDataBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _cropDataBeforeUpdateSessionKey;
+        return _cropService.LoadCropDataFromSession(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetCropDataBeforeUpdateToSession(PlanViewModel field)
+    {
+        string cacheKey = field.SessionId + " " + _cropDataBeforeUpdateSessionKey;
+        _cropService.SetCropDataToSession(field, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveCropDataBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _cropDataBeforeUpdateSessionKey;
+        _cropService.RemoveCropDataFromSession(cacheKey).GetAwaiter().GetResult();
+
+    }
+    public PlanViewModel? GetExcessWinterRainfallFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _excessWinterRainfallSessionKey;
+        return _cropService.LoadCropDataFromSession(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetExcessWinterRainfallToSession(PlanViewModel field)
+    {
+        string cacheKey = field.SessionId + " " + _excessWinterRainfallSessionKey;
+        _cropService.SetCropDataToSession(field, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveExcessWinterRainfallFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _excessWinterRainfallSessionKey;
+        _cropService.RemoveCropDataFromSession(cacheKey).GetAwaiter().GetResult();
+
+    }
+    public PlanViewModel? GetHarvestYearFromSession(int? farmId, int? year)
+    {
+        string cacheKey = farmId + " " + year + " " + _harvestYearSessionKey;
+        return _cropService.LoadCropDataFromSession(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetHarvestYearToSession(PlanViewModel field)
+    {
+        string cacheKey = field.FarmID + " " + field.Year + " " + _harvestYearSessionKey;
+        _cropService.SetCropDataToSession(field, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveHarvestYearFromSession(int? farmId, int? year)
+    {
+        string cacheKey = farmId + " " + year + " " + _harvestYearSessionKey;
+        _cropService.RemoveCropDataFromSession(cacheKey).GetAwaiter().GetResult();
+    }
 }

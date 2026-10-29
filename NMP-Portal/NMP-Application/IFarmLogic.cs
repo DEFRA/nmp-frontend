@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 
 namespace NMP.Application;
 
@@ -24,4 +25,13 @@ public interface IFarmLogic
     Task<(List<FarmAverageYields>?, Error?)> FetchFarmAverageYieldByFarmIdAndHarvestYear(int farmId, int harvestYear);
     Task<(List<FarmAverageYields>?, Error?)> AddFarmAverageYieldsAsync(List<FarmAverageYields> farmAverageYieldData);
     Task<(List<FarmListSummary>, Error?)> FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(Guid orgId);
+    FarmViewModel? GetFarmFromSession(Guid? sessionId);
+
+     void SetFarmToSession(FarmViewModel farm);
+     void RemoveFarmSession(Guid? sessionId);
+    FarmViewModel? GetFarmDataBeforeUpdateFromSession(Guid? sessionId);
+
+    void SetFarmDataBeforeUpdateToSession(FarmViewModel farm);
+    void RemoveFarmDataBeforeUpdateFromSession(Guid? sessionId);
+    
 }

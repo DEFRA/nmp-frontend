@@ -61,4 +61,22 @@ public interface ICropLogic
     PlanViewModel FilterOrganicAndInorganicListForHarvestYearOverview(PlanViewModel model, string? s, string? u, string? t);
     Task<(List<GrassSiteClassResponse>, Error?)> FetchGrassSiteClass(List<int> fieldIds);
     Task<(List<GrassInPrevOrArableInNextYearResponse>?, Error?)> CheckIsGrassInPrevOrArableInNextYearAsync(List<int> fieldIds, int year);
+    PlanViewModel? GetCropFromSession(Guid? sessionId);
+
+    void SetCropToSession(PlanViewModel field);
+    void RemoveCropSession(Guid? sessionId);
+
+    PlanViewModel? GetCropDataBeforeUpdateFromSession(Guid? sessionId);
+
+    void SetCropDataBeforeUpdateToSession(PlanViewModel field);
+    void RemoveCropDataBeforeUpdateFromSession(Guid? sessionId);
+    
+    PlanViewModel? GetExcessWinterRainfallFromSession(Guid? sessionId);
+
+    void SetExcessWinterRainfallToSession(PlanViewModel field);
+    void RemoveExcessWinterRainfallFromSession(Guid? sessionId);
+    PlanViewModel? GetHarvestYearFromSession(int? farmId,int? year);
+
+    void SetHarvestYearToSession(PlanViewModel field);
+    void RemoveHarvestYearFromSession(int? farmId, int? year);
 }

@@ -7,6 +7,7 @@ using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
@@ -14,7 +15,7 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ISoilAnalysisService
+public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), ISoilAnalysisService
 {
     private readonly ILogger<SoilAnalysisService> _logger = logger;
     private const string _applicationJson = "application/json";
@@ -88,6 +89,26 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
             return obj["message"]?.Value<string>() ?? string.Empty;
         }
         return string.Empty;
+    }
+
+    public async Task<SoilAnalysisViewModel?> LoadFieldDataFromSession(string? cacheKey)
+    {
+        var cached = await GetFromCacheAsync<List<SoilAnalysisViewModel>>(cacheKey);
+        if (cached != null)
+        {
+            return cached.FirstOrDefault();
+        }
+        return null;
+    }
+
+    public async Task SetFieldDataToSession(SoilAnalysisViewModel field, string? cacheKey)
+    {
+        await SetCacheAsync(cacheKey, new List<SoilAnalysisViewModel> { field });
+    }
+    public async Task RemoveFieldDataFromSession(string? cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
     }
 
 }

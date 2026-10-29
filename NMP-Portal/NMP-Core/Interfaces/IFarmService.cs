@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 namespace NMP.Core.Interfaces;
 
 public interface IFarmService:IService
@@ -19,4 +20,9 @@ public interface IFarmService:IService
     Task<(CommonResponse, Error)> FetchExcessWinterRainfallOptionByIdAsync(int id);
     Task<(FarmAndFarmsNvzResponse?, Error?)> FetchFarmAndFarmsNvzByFarmIdAsync(int farmId);
     Task<(List<FarmListSummary>, Error?)> FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(Guid orgId);
+    Task<FarmViewModel?> GetFarmFromSessionAsync(string? cacheKey);
+
+    Task SetFarmToSessionAsync(FarmViewModel farm, string? cacheKey);
+    Task RemoveFarmSessionAsync(string? cacheKey);
+  
 }
