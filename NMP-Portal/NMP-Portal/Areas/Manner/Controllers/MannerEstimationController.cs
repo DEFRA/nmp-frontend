@@ -162,14 +162,6 @@ namespace NMP.Portal.Areas.Manner.Controllers
             return RedirectToAction("MannerFarmList");
         }
 
-        private void RemoveMannerEstimationSession(string sessionId)
-        {
-            //need to remove basd on session id
-            if (HttpContext.Session.Exists(sessionId))
-            {
-                HttpContext.Session.Remove(sessionId);
-            }
-        }
 
         private void BindFarmNameAndId(MannerEstimationViewModel model)
         {
@@ -6597,7 +6589,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             if (!string.IsNullOrWhiteSpace(sessionId))
             {
-                RemoveMannerEstimationSession(sessionId);
+               _mannerEstimationLogic.RemoveMannerEstimationSession(sessionId);
             }
         }
         private async Task<List<SelectListItem>> FetchRemoveMannerFarmSelectList()

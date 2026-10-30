@@ -150,34 +150,36 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
 
     public MannerEstimationViewModel? GetMannerEstimationFromSession(string? sessionId = null)
     {
-        var session = _httpContextAccessor.HttpContext?.Session;
-        if (session == null)
-            return null;
-
-        // Use provided sessionId or try to get from current request
         var targetSessionId = sessionId ?? GetCurrentSessionId();
-        if (string.IsNullOrWhiteSpace(targetSessionId))
-            return null;
+        return _mannerEstimationService.GetMannerEstimationFromSessionAsync(targetSessionId).GetAwaiter().GetResult();
+        //var session = _httpContextAccessor.HttpContext?.Session;
+        //if (session == null)
+        //    return null;
 
-        var mannerEstimation = session.GetObjectFromJson<MannerEstimationViewModel>(targetSessionId);
+        //// Use provided sessionId or try to get from current request
+        //var targetSessionId = sessionId ?? GetCurrentSessionId();
+        //if (string.IsNullOrWhiteSpace(targetSessionId))
+        //    return null;
 
-        return mannerEstimation;
+        //var mannerEstimation = session.GetObjectFromJson<MannerEstimationViewModel>(targetSessionId);
+
     }
+        
+    public void RemoveMannerEstimationSession(string? sessionId)
+    {
+        _mannerEstimationService.RemoveMannerEstimationSessionAsync(sessionId).GetAwaiter().GetResult();
 
+    }
     public string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel)
     {
-        var session = _httpContextAccessor.HttpContext?.Session;
-        if (session == null)
-            return "";
-
         // If SessionId is empty, generate a new one
-        if (string.IsNullOrWhiteSpace(mannerEstimationViewModel.SessionId))
-        {
-            mannerEstimationViewModel.SessionId = Guid.NewGuid().ToString();
-        }
+        //if (string.IsNullOrWhiteSpace(mannerEstimationViewModel.SessionId))
+        //{
+        //    mannerEstimationViewModel.SessionId = Guid.NewGuid().ToString();
+        //}
 
         // Store the manner estimation data with the session ID as part of the key
-        session.SetObjectAsJson(mannerEstimationViewModel.SessionId, mannerEstimationViewModel);
+        _mannerEstimationService.SetMannerEstimationToSessionAsync(mannerEstimationViewModel, mannerEstimationViewModel.SessionId).GetAwaiter().GetResult();
         return mannerEstimationViewModel.SessionId;
     }
 

@@ -20,7 +20,7 @@ using System.Web;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class MannerEstimationService(ILogger<MannerEstimationService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IMannerEstimationService
+public class MannerEstimationService(ILogger<MannerEstimationService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IMannerEstimationService
 {
     private readonly ILogger<MannerEstimationService> _logger = logger;
     private const string _dateFormat = "yyyy-MM-dd";
@@ -807,6 +807,25 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
 
         return (mannerEstimation, error);
 
+    }
+    public async Task<MannerEstimationViewModel?> GetMannerEstimationFromSessionAsync(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<MannerEstimationViewModel>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
+
+    public async Task<string> SetMannerEstimationToSessionAsync(MannerEstimationViewModel mannerEstimationView, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, mannerEstimationView);
+        return cacheKey;
+    }
+    public async Task RemoveMannerEstimationSessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
     }
 }
 

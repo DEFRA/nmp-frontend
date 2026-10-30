@@ -163,5 +163,9 @@ public class FarmLogic(ILogger<FarmLogic> logger, IFarmService farmService, IFie
         _farmService.RemoveFarmSessionAsync(cacheKey).GetAwaiter().GetResult();
 
     }
+    public void RemoveNmptSession(string cacheKey)
+    {
+        _farmService.RemoveNmptSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
 
 }

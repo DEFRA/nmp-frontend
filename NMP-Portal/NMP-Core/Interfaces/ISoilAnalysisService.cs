@@ -8,7 +8,7 @@ public interface ISoilAnalysisService
     Task<(SoilAnalysis?, Error?)> UpdateSoilAnalysisAsync(int id, string soilData);
     Task<(SoilAnalysis?, Error?)> AddSoilAnalysisAsync(string soilAnalysisData);
     Task<(string, Error?)> DeleteSoilAnalysisByIdAsync(int soilAnalysisId);
-    Task<SoilAnalysisViewModel?> LoadFieldDataFromSession(string? cacheKey);
-    Task SetFieldDataToSession(SoilAnalysisViewModel field, string? cacheKey);
-    Task RemoveFieldDataFromSession(string? cacheKey);
+    Task<SoilAnalysisViewModel?> LoadFieldDataFromSession(string cacheKey);
+    Task SetFieldDataToSession(SoilAnalysisViewModel field, string cacheKey);
+    Task RemoveFieldDataFromSession(string cacheKey);
 }

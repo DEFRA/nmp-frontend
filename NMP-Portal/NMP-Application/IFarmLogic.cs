@@ -33,5 +33,5 @@ public interface IFarmLogic
 
     void SetFarmDataBeforeUpdateToSession(FarmViewModel farm);
     void RemoveFarmDataBeforeUpdateFromSession(Guid? sessionId);
-    
+    void RemoveNmptSession(string cacheKey);
 }
