@@ -22,7 +22,9 @@ public interface IFarmService:IService
     Task<(List<FarmListSummary>, Error?)> FetchAllFarmsWithLastUpdatedDateByOrgIdAsync(Guid orgId);
     Task<FarmViewModel?> GetFarmFromSessionAsync(string? cacheKey);
 
-    Task SetFarmToSessionAsync(FarmViewModel farm, string? cacheKey);
-    Task RemoveFarmSessionAsync(string? cacheKey);
-  
+    Task SetFarmToSessionAsync(FarmViewModel farm, string cacheKey);
+    Task RemoveFarmSessionAsync(string cacheKey);
+    Task RemoveNmptSessionAsync(string cacheKey);
+
+
 }

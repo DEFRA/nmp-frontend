@@ -27,9 +27,9 @@ public interface IFieldService : IService
     Task<(Field?, Error)> UpdateFieldDataAsync(Field field);
     Task<List<CommonResponse>> FetchPscIndexAsync();
     Task<CommonResponse?> FetchPscIndexByIdAsync(int id);
-    Task<FieldViewModel?> LoadFieldDataFromSession(string? cacheKey);
+    Task<FieldViewModel?> LoadFieldDataFromSession(string cacheKey);
 
-    Task SetFieldDataToSession(FieldViewModel field, string? cacheKey);
-    Task RemoveFieldDataFromSession(string? cacheKey);
+    Task SetFieldDataToSession(FieldViewModel field, string cacheKey);
+    Task RemoveFieldDataFromSession(string cacheKey);
 
 }

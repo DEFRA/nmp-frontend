@@ -44,35 +44,35 @@ public class SoilAnalysisLogic(ILogger<SoilAnalysisLogic> logger, ISoilAnalysisS
     public SoilAnalysisViewModel? GetSoilAnalysisFromSession(Guid? sessionId)
     {
         string cacheKey = sessionId + " " + _soilAnalysisDataKey;
-        return _soilAnalysisService.LoadFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+        return _soilAnalysisService.LoadSoilAnalysisDataFromSession(cacheKey).GetAwaiter().GetResult();
     }
 
-    public void SetSoilAnalysisDataToSession(SoilAnalysisViewModel field)
+    public void SetSoilAnalysisDataToSession(SoilAnalysisViewModel soilAnalysis)
     {
-        string cacheKey = field.SessionId + " " + _soilAnalysisDataKey;
-        _soilAnalysisService.SetFieldDataToSession(field, cacheKey).GetAwaiter().GetResult();
+        string cacheKey = soilAnalysis.SessionId + " " + _soilAnalysisDataKey;
+        _soilAnalysisService.SetSoilAnalysisDataToSession(soilAnalysis, cacheKey).GetAwaiter().GetResult();
     }
     public void RemoveSoilAnalysisDataFromSession(Guid? sessionId)
     {
         string cacheKey = sessionId + " " + _soilAnalysisDataKey;
-        _soilAnalysisService.RemoveFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+        _soilAnalysisService.RemoveSoilAnalysisDataFromSession(cacheKey).GetAwaiter().GetResult();
 
     }
     public SoilAnalysisViewModel? GetSoilAnalysisBeforeUpdateFromSession(Guid? sessionId)
     {
         string cacheKey = sessionId + " " + _soilAnalysisDataBeforeUpdateKey;
-        return _soilAnalysisService.LoadFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+        return _soilAnalysisService.LoadSoilAnalysisDataFromSession(cacheKey).GetAwaiter().GetResult();
     }
 
-    public void SetSoilAnalysisBeforeUpdateToSession(SoilAnalysisViewModel field)
+    public void SetSoilAnalysisBeforeUpdateToSession(SoilAnalysisViewModel soilAnalysis)
     {
-        string cacheKey = field.SessionId + " " + _soilAnalysisDataBeforeUpdateKey;
-        _soilAnalysisService.SetFieldDataToSession(field, cacheKey).GetAwaiter().GetResult();
+        string cacheKey = soilAnalysis.SessionId + " " + _soilAnalysisDataBeforeUpdateKey;
+        _soilAnalysisService.SetSoilAnalysisDataToSession(soilAnalysis, cacheKey).GetAwaiter().GetResult();
     }
     public void RemoveSoilAnalysisBeforeUpdateFromSession(Guid? sessionId)
     {
         string cacheKey = sessionId + " " + _soilAnalysisDataBeforeUpdateKey;
-        _soilAnalysisService.RemoveFieldDataFromSession(cacheKey).GetAwaiter().GetResult();
+        _soilAnalysisService.RemoveSoilAnalysisDataFromSession(cacheKey).GetAwaiter().GetResult();
 
     }
 }

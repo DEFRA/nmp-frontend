@@ -484,7 +484,7 @@ namespace NMP.Portal.Controllers
 
         private async Task<List<AddressLookupResponse>> LoadAddressesAsync(FarmViewModel farm)
         {
-                return await _addressLookupLogic.AddressesAsync(farm.Postcode, 0);
+            return await _addressLookupLogic.AddressesAsync(farm.Postcode, 0);
         }
 
         private void PopulateAddressViewBags(List<AddressLookupResponse> addresses)
@@ -1736,8 +1736,8 @@ namespace NMP.Portal.Controllers
                 return RedirectToAction("FarmDetails", new { id = model.EncryptedFarmId, sessionId = model.SessionId });
             }
         }
-   
-      
+
+
 
         private async Task<List<SelectListItem>> GetNvzActionProgramItemsByCountryIdAsync(int countryId)
         {
@@ -1806,14 +1806,14 @@ namespace NMP.Portal.Controllers
 
         private void SoilAnalysisDataSessionRemoved(Guid? sessionId)
         {
-            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "SoilAnalysisDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove(sessionId + " " + "SoilAnalysisDataBeforeUpdate");
-            }
-            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "SoilAnalysisData"))
-            {
-                HttpContext.Session.Remove(sessionId + " " + "SoilAnalysisData");
-            }
+            string cacheKey = sessionId + " " + "SoilAnalysisDataBeforeUpdate";
+            //SoilAnalysisDataBeforeUpdate
+            _farmLogic.RemoveNmptSession(cacheKey);
+
+            //SoilAnalysisData
+            cacheKey = sessionId + " " + "SoilAnalysisData";
+            _farmLogic.RemoveNmptSession(cacheKey);
+
         }
 
         private void SnsDataSessionRemoved()
@@ -1865,21 +1865,17 @@ namespace NMP.Portal.Controllers
 
         private void FieldSessionRemoved(Guid? sessionId)
         {
+            string cacheKey = sessionId + " " + "FieldData";
+            //FieldData
+            _farmLogic.RemoveNmptSession(cacheKey);
 
-            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "FieldData"))
-            {
-                HttpContext.Session.Remove(sessionId + " " + "FieldData");
-            }
-            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "FieldDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove(sessionId + " " + "FieldDataBeforeUpdate");
-            }
-            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "FieldRemove"))
-            {
-                HttpContext.Session.Remove(sessionId + " " + "FieldRemove");
-            }
+            //FieldDataBeforeUpdate
+            cacheKey = sessionId + " " + "FieldDataBeforeUpdate";
+            _farmLogic.RemoveNmptSession(cacheKey);
 
-
+            //FieldRemove
+            cacheKey = sessionId + " " + "FieldRemove";
+            _farmLogic.RemoveNmptSession(cacheKey);
         }
 
         private void FertiliserSessionRemoved()
@@ -1902,27 +1898,28 @@ namespace NMP.Portal.Controllers
 
         private void CropSessionRemoved(Guid? sessionId, string? farmId, string? year)
         {
-            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "CropData"))
-            {
-                HttpContext.Session.Remove(sessionId + " " + "CropData");
-            }
-            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "CropDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove(sessionId + " " + "CropDataBeforeUpdate");
-            }
+            string cacheKey = sessionId + " " + "CropData";
+            //CropData
+            _farmLogic.RemoveNmptSession(cacheKey);
+
+            //CropDataBeforeUpdate
+            cacheKey = sessionId + " " + "CropDataBeforeUpdate";
+            _farmLogic.RemoveNmptSession(cacheKey);
+
+            
             if (!string.IsNullOrWhiteSpace(farmId) && !string.IsNullOrWhiteSpace(year))
             {
                 int decryptedFarmId = Convert.ToInt32(_dataProtector.Unprotect(farmId));
                 int decryptedYear = Convert.ToInt32(_dataProtector.Unprotect(year));
-                if (HttpContext.Session.Keys.Contains(decryptedFarmId + " " + decryptedYear + " " + "HarvestYearPlan"))
-                {
-                    HttpContext.Session.Remove(decryptedFarmId + " " + decryptedYear + " " + "HarvestYearPlan");
-                }
+                //HarvestYearPlan
+                cacheKey = decryptedFarmId + " " + decryptedYear + " " + "HarvestYearPlan";
+                _farmLogic.RemoveNmptSession(cacheKey);
+                
             }
-            if (sessionId.HasValue && HttpContext.Session.Exists(sessionId + " " + "ExcessWinterRainfall"))
-            {
-                HttpContext.Session.Remove(sessionId + " " + "ExcessWinterRainfall");
-            }
+
+            //ExcessWinterRainfall
+            cacheKey = sessionId + " " + "ExcessWinterRainfall";
+            _farmLogic.RemoveNmptSession(cacheKey);
         }
     }
 }

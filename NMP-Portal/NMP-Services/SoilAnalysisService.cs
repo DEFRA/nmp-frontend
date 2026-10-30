@@ -91,21 +91,21 @@ public class SoilAnalysisService(ILogger<SoilAnalysisService> logger, IHttpConte
         return string.Empty;
     }
 
-    public async Task<SoilAnalysisViewModel?> LoadFieldDataFromSession(string? cacheKey)
+    public async Task<SoilAnalysisViewModel?> LoadSoilAnalysisDataFromSession(string cacheKey)
     {
-        var cached = await GetFromCacheAsync<List<SoilAnalysisViewModel>>(cacheKey);
+        var cached = await GetFromCacheAsync<SoilAnalysisViewModel>(cacheKey);
         if (cached != null)
         {
-            return cached.FirstOrDefault();
+            return cached;
         }
         return null;
     }
 
-    public async Task SetFieldDataToSession(SoilAnalysisViewModel field, string? cacheKey)
+    public async Task SetSoilAnalysisDataToSession(SoilAnalysisViewModel soilAnalysis, string cacheKey)
     {
-        await SetCacheAsync(cacheKey, new List<SoilAnalysisViewModel> { field });
+        await SetCacheAsync(cacheKey, soilAnalysis);
     }
-    public async Task RemoveFieldDataFromSession(string? cacheKey)
+    public async Task RemoveSoilAnalysisDataFromSession(string cacheKey)
     {
         await RemoveCacheAsync(cacheKey);
 
