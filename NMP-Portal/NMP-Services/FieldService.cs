@@ -662,21 +662,21 @@ public class FieldService(ILogger<FieldService> logger, IHttpContextAccessor htt
         }
         return pscIndex;
     }
-    public async Task<FieldViewModel?> LoadFieldDataFromSession(string? cacheKey)
+    public async Task<FieldViewModel?> LoadFieldDataFromSession(string cacheKey)
     {
-        var cached = await GetFromCacheAsync<List<FieldViewModel>>(cacheKey);
+        var cached = await GetFromCacheAsync<FieldViewModel>(cacheKey);
         if (cached != null)
         {
-            return cached.FirstOrDefault();
+            return cached;
         }
         return null;
     }
 
-    public async Task SetFieldDataToSession(FieldViewModel field, string? cacheKey)
+    public async Task SetFieldDataToSession(FieldViewModel field, string cacheKey)
     {
-        await SetCacheAsync(cacheKey, new List<FieldViewModel> { field });
+        await SetCacheAsync(cacheKey,  field );
     }
-    public async Task RemoveFieldDataFromSession(string? cacheKey)
+    public async Task RemoveFieldDataFromSession(string cacheKey)
     {
         await RemoveCacheAsync(cacheKey);
 

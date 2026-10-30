@@ -42,5 +42,9 @@ namespace NMP.Core.Interfaces
         Task<bool> FetchIsExistMannerFarmByOrgIdAndNameAPI(Guid organisationId, string name);
         Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeAsync(int mannerEstimationId, string dateFrom, string dateTo, int? mannerApplicationId, bool isPoultry);
         Task<(MannerEstimation?, Error?)> UpdateMannerEstimationByIdWithApplicationAsync(string mannerEstimationData);
+        Task<MannerEstimationViewModel?> GetMannerEstimationFromSessionAsync(string cacheKey);
+
+        Task<string> SetMannerEstimationToSessionAsync(MannerEstimationViewModel mannerEstimation, string cacheKey);
+        Task RemoveMannerEstimationSessionAsync(string cacheKey);
     }
 }

@@ -440,21 +440,26 @@ public class FarmService(ILogger<FarmService> logger, IHttpContextAccessor httpC
 
         return (farmList, error);
     }
-    public async Task<FarmViewModel?> GetFarmFromSessionAsync(string? cacheKey)
+    public async Task<FarmViewModel?> GetFarmFromSessionAsync(string cacheKey)
     {
-        var cached = await GetFromCacheAsync<List<FarmViewModel>>(cacheKey);
+        var cached = await GetFromCacheAsync<FarmViewModel>(cacheKey);
         if (cached != null)
         {
-            return cached.FirstOrDefault();
+            return cached;
         }
         return null;
     }
 
-    public async Task SetFarmToSessionAsync(FarmViewModel farm, string? cacheKey)
+    public async Task SetFarmToSessionAsync(FarmViewModel farm, string cacheKey)
     {
-        await SetCacheAsync(cacheKey, new List<FarmViewModel> { farm });
+        await SetCacheAsync(cacheKey, farm);
     }
-    public async Task RemoveFarmSessionAsync(string? cacheKey)
+    public async Task RemoveFarmSessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+    }
+
+    public async Task RemoveNmptSessionAsync(string cacheKey)
     {
         await RemoveCacheAsync(cacheKey);
     }

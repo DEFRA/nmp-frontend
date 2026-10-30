@@ -148,36 +148,21 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return null;
     }
 
-    public MannerEstimationViewModel? GetMannerEstimationFromSession(string? sessionId = null)
+    public MannerEstimationViewModel? GetMannerEstimationFromSession(string? cacheKey = null)
     {
-        var session = _httpContextAccessor.HttpContext?.Session;
-        if (session == null)
-            return null;
-
-        // Use provided sessionId or try to get from current request
-        var targetSessionId = sessionId ?? GetCurrentSessionId();
-        if (string.IsNullOrWhiteSpace(targetSessionId))
-            return null;
-
-        var mannerEstimation = session.GetObjectFromJson<MannerEstimationViewModel>(targetSessionId);
-
-        return mannerEstimation;
+        var targetSessionId = cacheKey ?? GetCurrentSessionId();
+        return _mannerEstimationService.GetMannerEstimationFromSessionAsync(targetSessionId).GetAwaiter().GetResult();
     }
 
+    public void RemoveMannerEstimationSession(string cacheKey)
+    {
+        _mannerEstimationService.RemoveMannerEstimationSessionAsync(cacheKey).GetAwaiter().GetResult();
+
+    }
     public string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel)
     {
-        var session = _httpContextAccessor.HttpContext?.Session;
-        if (session == null)
-            return "";
-
-        // If SessionId is empty, generate a new one
-        if (string.IsNullOrWhiteSpace(mannerEstimationViewModel.SessionId))
-        {
-            mannerEstimationViewModel.SessionId = Guid.NewGuid().ToString();
-        }
-
         // Store the manner estimation data with the session ID as part of the key
-        session.SetObjectAsJson(mannerEstimationViewModel.SessionId, mannerEstimationViewModel);
+        _mannerEstimationService.SetMannerEstimationToSessionAsync(mannerEstimationViewModel, mannerEstimationViewModel.SessionId).GetAwaiter().GetResult();
         return mannerEstimationViewModel.SessionId;
     }
 
@@ -816,7 +801,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         if (manureType != null)
         {
             mannerEstimationViewModel.MannerEstimationStep26.IsManureTypeLiquid = manureType.IsLiquid;
-            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;            
+            mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass : manureType.ApplicationRateArable;
         }
         mannerEstimationViewModel.MannerEstimationStep26.FarmRB209CountryId = mannerEstimationViewModel.MannerEstimationStep2.FarmRB209CountryId ?? 0;
         mannerEstimationViewModel.MannerEstimationStep26.CountryId = mannerEstimationViewModel.IsComingForAddNewApplication ? mannerEstimationViewModel.CountryId ?? 0 : mannerEstimationViewModel.MannerEstimationStep2.CountryID;
@@ -850,7 +835,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
 
             if (application != null)
             {
-               BindApplicationRateForStep26(mannerEstimationStep26, application);
+                BindApplicationRateForStep26(mannerEstimationStep26, application);
             }
         }
         SetMannerEstimationToSession(mannerEstimationViewModel);
@@ -2020,14 +2005,14 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
 
     private static void BindApplicationRateMethod(MannerEstimationViewModel mannerEstimationViewModel, MannerEstimationApplication mannerEstimateApplication, ManureType manureType)
     {
-        int defaultRate = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass??0 : manureType.ApplicationRateArable??0;
+        int defaultRate = mannerEstimationViewModel.MannerEstimationStep9.CropTypeId == (int)NMP.Commons.Enums.CropTypes.Grass ? manureType.ApplicationRateGrass ?? 0 : manureType.ApplicationRateArable ?? 0;
         mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateMethod = DetermineApplicationRateMethod(mannerEstimateApplication, defaultRate);
         mannerEstimationViewModel.MannerEstimationStep26.ApplicationRateArable = defaultRate;
     }
 
-    private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication,int defaultRate)
+    private static int DetermineApplicationRateMethod(MannerEstimationApplication mannerEstimateApplication, int defaultRate)
     {
-        
+
         if (mannerEstimateApplication.AreaSpread != null && mannerEstimateApplication.ManureQuantity != null)
         {
             return (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity;
@@ -2306,7 +2291,7 @@ mannerEstimationViewModel.SoilTypeOrCropTypeChangeMannerEstimationApplication !=
         {
             (MannerEstimationApplication mannerEstimationApplicationItem, error) = await FetchMannerApplicationById(application.ID.Value);
             if (mannerEstimationApplicationItem != null)
-            {                
+            {
                 mannerEstimationApplicationItem.ApplicationDate = application.ApplicationDate;
                 mannerEstimationApplicationItem.ApplicationMethodID = application.ApplicationMethodID;
                 mannerEstimationApplicationItem.IncorporationMethodID = application.IncorporationMethodID;
