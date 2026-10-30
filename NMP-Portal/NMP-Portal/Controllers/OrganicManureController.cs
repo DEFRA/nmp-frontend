@@ -88,7 +88,7 @@ namespace NMP.Portal.Controllers
         private const string _uricAcidKey = "UricAcid";
         private void BindNMPTFarmIdAndNameForNavigation(OrganicManureViewModel? model)
         {
-            
+
             ViewBag.NMPTFarmId = model?.EncryptedFarmId;
             ViewBag.NMPTFarmName = model?.FarmName;
 
@@ -1522,6 +1522,8 @@ managementPeriod.CropID.HasValue
             {
                 model.IsWarningMsgNeedToShow = false;
                 model.IsApplicationDateChange = true;
+                model.IsTotalRainfallEnteredManual = false;
+                model.TotalRainfall = null;
             }
 
             model.IsClosedPeriodWarning = false;
@@ -3836,7 +3838,7 @@ managementPeriod.CropID.HasValue
         // Fetches total rainfall for the application/drainage date range, if not already set.
         private async Task SetTotalRainfallAsync(OrganicManureViewModel model, string halfPostCode)
         {
-            if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue)
+            if (model.TotalRainfall == null && !model.IsTotalRainfallEnteredManual)
             {
                 var rainfallPostCodeApplication = new
                 {
@@ -5643,7 +5645,12 @@ managementPeriod.CropID.HasValue
             {
                 return View(_soilDrainageEndDateKey, model);
             }
-
+            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+            if (organicManureViewModel != null && organicManureViewModel.SoilDrainageEndDate != model.SoilDrainageEndDate)
+            {
+                model.IsTotalRainfallEnteredManual = false;
+                model.TotalRainfall = null;
+            }
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             return RedirectToAction(_conditionsAffectingNutrients);
         }
@@ -5810,7 +5817,7 @@ managementPeriod.CropID.HasValue
             {
                 return View("EffectiveRainfallManual", model);
             }
-
+            model.IsTotalRainfallEnteredManual = true;
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             return RedirectToAction(_conditionsAffectingNutrients);
         }

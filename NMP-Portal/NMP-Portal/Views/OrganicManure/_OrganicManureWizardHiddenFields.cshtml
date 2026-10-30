@@ -282,7 +282,8 @@
 
      <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCalculateBasedOnDryMatter" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFieldId" />
-
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsTotalRainfallEnteredManual" />
+            
     @* warning model properties end *@
 
     @if (Model.OrganicManures != null && Model.OrganicManures.Count > 0)
