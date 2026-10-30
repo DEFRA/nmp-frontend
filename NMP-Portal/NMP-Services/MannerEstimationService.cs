@@ -818,9 +818,9 @@ public class MannerEstimationService(ILogger<MannerEstimationService> logger, IH
         return null;
     }
 
-    public async Task<string> SetMannerEstimationToSessionAsync(MannerEstimationViewModel mannerEstimationView, string cacheKey)
+    public async Task<string> SetMannerEstimationToSessionAsync(MannerEstimationViewModel mannerEstimation, string cacheKey)
     {
-        await SetCacheAsync(cacheKey, mannerEstimationView);
+        await SetCacheAsync(cacheKey, mannerEstimation);
         return cacheKey;
     }
     public async Task RemoveMannerEstimationSessionAsync(string cacheKey)

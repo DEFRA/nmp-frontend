@@ -148,15 +148,15 @@ public class MannerEstimationLogic(ILogger<MannerEstimationLogic> logger, IManne
         return null;
     }
 
-    public MannerEstimationViewModel? GetMannerEstimationFromSession(string? sessionId = null)
+    public MannerEstimationViewModel? GetMannerEstimationFromSession(string? cacheKey = null)
     {
-        var targetSessionId = sessionId ?? GetCurrentSessionId();
+        var targetSessionId = cacheKey ?? GetCurrentSessionId();
         return _mannerEstimationService.GetMannerEstimationFromSessionAsync(targetSessionId).GetAwaiter().GetResult();
     }
 
-    public void RemoveMannerEstimationSession(string? sessionId)
+    public void RemoveMannerEstimationSession(string cacheKey)
     {
-        _mannerEstimationService.RemoveMannerEstimationSessionAsync(sessionId).GetAwaiter().GetResult();
+        _mannerEstimationService.RemoveMannerEstimationSessionAsync(cacheKey).GetAwaiter().GetResult();
 
     }
     public string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel)

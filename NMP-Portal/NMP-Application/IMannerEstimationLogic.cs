@@ -108,8 +108,6 @@ namespace NMP.Application
 
         Task<(List<NutrientProductResponse>, Error?)> FetchNutrientProductByNutrientId(int nurteintId);
         Task<(MannerEstimation?, Error?)> FetchMannerEstimateById(int mannerEstimateId);
-        //MannerEstimationViewModel? GetMannerEstimationFromSession(string? sessionId = null);
-        //string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
         string? GetCurrentSessionId();
         Task<(MannerEstimation?, Error?)> UpdateMannerEstimation(int MannerEstimationId);
         MannerEstimationStep36ViewModel GetMannerEstimationStep36();
@@ -160,7 +158,7 @@ namespace NMP.Application
         void BindApplicationRateMethodIfSoilOrCropTypeChange(MannerEstimationViewModel mannerEstimationViewModel, ManureType manureType);
         MannerEstimationViewModel? GetMannerEstimationFromSession(string? cacheKey = null);
 
-        string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimation);
+        string SetMannerEstimationToSession(MannerEstimationViewModel mannerEstimationViewModel);
         void RemoveMannerEstimationSession(string cacheKey);
     }
 }

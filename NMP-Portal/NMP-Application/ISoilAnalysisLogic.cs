@@ -12,11 +12,11 @@ public interface ISoilAnalysisLogic
     Task<(string, Error?)> DeleteSoilAnalysisByIdAsync(int soilAnalysisId);
     SoilAnalysisViewModel? GetSoilAnalysisFromSession(Guid? sessionId);
 
-    void SetSoilAnalysisDataToSession(SoilAnalysisViewModel  field);
+    void SetSoilAnalysisDataToSession(SoilAnalysisViewModel soilAnalysis);
     void RemoveSoilAnalysisDataFromSession(Guid? sessionId);
 
     SoilAnalysisViewModel? GetSoilAnalysisBeforeUpdateFromSession(Guid? sessionId);
 
-    void SetSoilAnalysisBeforeUpdateToSession(SoilAnalysisViewModel field);
+    void SetSoilAnalysisBeforeUpdateToSession(SoilAnalysisViewModel soilAnalysis);
     void RemoveSoilAnalysisBeforeUpdateFromSession(Guid? sessionId);
 }
