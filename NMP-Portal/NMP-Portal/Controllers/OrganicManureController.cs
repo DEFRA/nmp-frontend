@@ -253,7 +253,7 @@ namespace NMP.Portal.Controllers
         {
             string fieldId = model.FieldList[0];
             // Crop plans
-             (var cropPlans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
+            (var cropPlans, _) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.HarvestYear.Value, model.FarmId.Value);
 
             model = await BindGrassPropertyForField(model, cropPlans);
             var (manIds, error) = await _fertiliserManureLogic
@@ -1002,7 +1002,7 @@ namespace NMP.Portal.Controllers
                         ? null
                         : model.FieldGroup,
                     model.FieldGroup == Resource.lblSelectSpecificFields || model.FieldGroup == Resource.lblAll
-                    ? model.CropOrder: null);
+                    ? model.CropOrder : null);
 
             if (error != null) return error;
 
@@ -1441,8 +1441,14 @@ managementPeriod.CropID.HasValue
                 }
 
                 //check for closed period warning.
-
-                CheckClosedPeriodWarningForManureApplyingDate(model);
+                OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
+                if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
+                {
+                    model.IsTotalRainfallEnteredManual = false;
+                    model.TotalRainfall = null;
+                    SetOrganicManureToSession(model);
+                }
+                CheckClosedPeriodWarningForManureApplyingDate(model, organicManureViewModel);
 
                 if (model.FieldList.Count >= 1)
                 {
@@ -1499,10 +1505,10 @@ managementPeriod.CropID.HasValue
             return RedirectToAction(_checkAnswer);
         }
 
-        private void CheckClosedPeriodWarningForManureApplyingDate(OrganicManureViewModel model)
+        private void CheckClosedPeriodWarningForManureApplyingDate(OrganicManureViewModel model, OrganicManureViewModel organicManureViewModel)
         {
-            OrganicManureViewModel organicManureViewModel = GetOrganicManureFromSession();
-            if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
+
+            if (organicManureViewModel != null && model.ApplicationDate != organicManureViewModel.ApplicationDate)
             {
                 model.IsWarningMsgNeedToShow = false;
                 model.IsApplicationDateChange = true;
@@ -3800,7 +3806,7 @@ managementPeriod.CropID.HasValue
         // Fetches total rainfall for the application/drainage date range, if not already set.
         private async Task SetTotalRainfallAsync(OrganicManureViewModel model, string halfPostCode)
         {
-            if (model.ApplicationDate.HasValue && model.SoilDrainageEndDate.HasValue)
+            if (model.TotalRainfall == null && !model.IsTotalRainfallEnteredManual)
             {
                 var rainfallPostCodeApplication = new
                 {
@@ -5598,7 +5604,12 @@ managementPeriod.CropID.HasValue
             {
                 return View(_soilDrainageEndDateKey, model);
             }
-
+            OrganicManureViewModel? organicManureViewModel = GetOrganicManureFromSession();
+            if (organicManureViewModel != null && organicManureViewModel.SoilDrainageEndDate != model.SoilDrainageEndDate)
+            {
+                model.IsTotalRainfallEnteredManual = false;
+                model.TotalRainfall = null;
+            }
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             return RedirectToAction(_conditionsAffectingNutrients);
         }
@@ -5759,6 +5770,7 @@ managementPeriod.CropID.HasValue
             {
                 return View("EffectiveRainfallManual", model);
             }
+            model.IsTotalRainfallEnteredManual = true;
 
             HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
             return RedirectToAction(_conditionsAffectingNutrients);
@@ -8753,14 +8765,14 @@ managementPeriod.CropID.HasValue
                 }
 
 
-               
-                    IActionResult? earlyResult;
-                    (model, earlyResult) = await ProcessManureTypeSelectionAsync(model, orgManureViewModel, manureTypeList);
-                    if (earlyResult != null)
-                    {
-                        return earlyResult;
-                    }
-                
+
+                IActionResult? earlyResult;
+                (model, earlyResult) = await ProcessManureTypeSelectionAsync(model, orgManureViewModel, manureTypeList);
+                if (earlyResult != null)
+                {
+                    return earlyResult;
+                }
+
 
                 HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
 
