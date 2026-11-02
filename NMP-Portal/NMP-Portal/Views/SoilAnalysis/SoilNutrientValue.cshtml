@@ -24,6 +24,8 @@
         || (Model.Phosphorus == null && Model.Potassium == null && Model.Magnesium == null));
     }
     ViewBag.CurrentStep = (int)SoilAnalysisWizardSteps.SoilNutrientValue;
+    bool isCountryScotland = Model.FarmRB209CountryID.HasValue && Model.FarmRB209CountryID.Value == (int)NMP.Commons.Enums.RB209Country.Scotland;
+    string phosphorusAndMagnisiumHintText = string.Format(Resource.MsgEnterValidValueForNutrientIndex, 9);
 }
 
 
@@ -85,15 +87,30 @@
 
                         <govuk-input for="@Model.PhosphorusIndex" type="number" step="1" input-class="govuk-input--width-5">
                             <govuk-input-label is-page-heading="false">@Resource.lblPhosphorusIndexOptional</govuk-input-label>
+                            @if (isCountryScotland)
+                            {
+                                <govuk-input-hint>@phosphorusAndMagnisiumHintText</govuk-input-hint>
+                            }
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" for="@Model.PotassiumIndexValue">
                             <govuk-input-label is-page-heading="false">@Resource.lblPotassiumIndexOptional</govuk-input-label>
-                            <govuk-input-hint>@Resource.MsgEnterTheValueOYourSoilAnalysisHint3</govuk-input-hint>
+                            @if (isCountryScotland)
+                            {
+                                <govuk-input-hint>@Resource.lblHintTextForPotassiumForScotland</govuk-input-hint>
+                            }
+                            else
+                            {
+                                <govuk-input-hint>@Resource.MsgEnterTheValueOYourSoilAnalysisHint3</govuk-input-hint>
+                            }
                         </govuk-input>
 
                         <govuk-input input-class="govuk-input--width-5" for="@Model.MagnesiumIndex" type="number" step="1">
                             <govuk-input-label is-page-heading="false">@Resource.lblMagnesiumIndexOptional</govuk-input-label>
+                            @if (isCountryScotland)
+                            {
+                                <govuk-input-hint>@phosphorusAndMagnisiumHintText</govuk-input-hint>
+                            }
                         </govuk-input>
 
                     }

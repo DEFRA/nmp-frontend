@@ -7725,6 +7725,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter an index between 0 and 9. Potassium (K) index 2 must be entered as either 2- or 2+.
+        /// </summary>
+        public static string lblHintTextForPotassiumForScotland {
+            get {
+                return ResourceManager.GetString("lblHintTextForPotassiumForScotland", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Holding nitrogen limit ‘the 170 limit’ 2026.
         /// </summary>
         public static string lblHoldingNitrogenLimitForYear {
@@ -15725,6 +15734,15 @@ namespace NMP.Commons.Resources {
         public static string lblSourceRb209 {
             get {
                 return ResourceManager.GetString("lblSourceRb209", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crop need is from the AHDB Nutrient Management Guide (RB209). Nutrient supply from manures is calculated using MANNER-NPK (Nutrient Calculation Engine)..
+        /// </summary>
+        public static string lblSourceRB209ForEngland {
+            get {
+                return ResourceManager.GetString("lblSourceRB209ForEngland", resourceCulture);
             }
         }
         
