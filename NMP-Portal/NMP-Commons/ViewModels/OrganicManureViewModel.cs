@@ -168,4 +168,5 @@ public class OrganicManureViewModel
     public int ApplicationJulyToSeptCodeID { get; set; }
     public int ApplicationJulyToSeptLevelID { get; set; }
     public bool IsCalculateBasedOnDryMatter { get; set; } = false;
+    public bool IsTotalRainfallEnteredManual { get; set; } = false;
 }
