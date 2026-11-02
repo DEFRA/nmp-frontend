@@ -57,4 +57,8 @@ public interface IOrganicManureLogic
     Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(int cropTypeId, int soilTypeId, int residueGroup);
     Task<(SoilTypeSoilTextureResponse, Error)> FetchSoilTypeSoilTextureBySoilTypeIdAsync(int soilTypeId);
     Task<(List<CropTypeLinkingResponse>, Error)> FetchAllCropTypeLinking();
+    OrganicManureViewModel? GetOrganicManureFromSession(Guid? sessionId);
+
+    void SetOrganicManureToSession(OrganicManureViewModel organicManureViewModel);
+    void RemoveOrganicManureSession(Guid? sessionId);
 }
