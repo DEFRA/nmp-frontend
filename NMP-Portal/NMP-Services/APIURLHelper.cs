@@ -65,7 +65,7 @@ internal static class ApiurlHelper
 
     public const string FetchWindspeedDataDefault = "windspeeds/default";
     public const string FetchMoisterTypeDefaultByApplicationDate = "moisture-types/default/{0}";
-    public const string FetchRainTypeDefault = "rain-types/default";
+    public const string FetchRainTypeDefault = "vendors/manner/rain-types/default";
     public const string FetchRainTypesAPI = "rain-types";
     public const string FetchWindspeedsAPI = "windspeeds";
     public const string FetchMoisterTypesAPI = "moisture-types";
