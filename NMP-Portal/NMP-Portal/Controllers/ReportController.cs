@@ -1318,10 +1318,22 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 return null;
             }
+            if (cropData.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+            {
+                return await GetScotlandGrassNMax(cropData);
+            }
             nMaxLimit = await CalculateNmax(recommendation, nMaxLimit, cropData, isAutumn, scotlandNMaxValueList);
         }
 
         return nMaxLimit;
+    }
+
+    private async Task<int?> GetScotlandGrassNMax(HarvestYearPlanResponse cropData)
+    {
+        (List<GrassSiteClassResponse> grassSiteClasses, _) = await _cropLogic.FetchGrassSiteClass(new List<int> { cropData.FieldID });
+        int siteClass = grassSiteClasses?.FirstOrDefault()?.SiteClassId ?? 0;
+        (int? grassNMax, _) = await _organicManureLogic.FetchScotlandGrassNmax(cropData.SwardTypeID ?? 0, cropData.SwardManagementID ?? 0, cropData.DefoliationSequenceID ?? 0, siteClass);
+        return grassNMax;
     }
     private static async Task<int?> CalculateNmax(Recommendation recommendation, int? nMaxLimit, HarvestYearPlanResponse cropData, bool isAutumn, List<ScotlandNMaxValue>? scotlandNMaxValueList)
     {
