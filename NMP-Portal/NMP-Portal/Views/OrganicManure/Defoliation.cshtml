@@ -22,7 +22,7 @@
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.Defoliation;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsManureTypeChange) && (!Model.IsAnyChangeInSameDefoliationFlag) && (!Model.IsDoubleCropValueChange)) ? "CheckAnswer" : "Defoliation") asp-controller="OrganicManure" asp-route-q="@Model.DefoliationEncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsAnyChangeInField) && (!Model.IsManureTypeChange) && (!Model.IsAnyChangeInSameDefoliationFlag) && (!Model.IsDoubleCropValueChange)) ? "CheckAnswer" : "Defoliation") asp-controller="OrganicManure" asp-route-q="@Model.DefoliationEncryptedCounter" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -54,7 +54,7 @@
                     </div>
                     @if (Model.DefoliationCurrentCounter == i)
                     {
-                        <govuk-radios asp-for="@Model.DefoliationList[i].Defoliation">
+                        <govuk-radios for="@Model.DefoliationList[i].Defoliation">
                             <govuk-radios-fieldset>
                                 <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                     @if (Model.IsSameDefoliationForAll.HasValue && Model.IsSameDefoliationForAll.Value && Model.GrassCropCount > 1)
@@ -92,11 +92,11 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                    <a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
         </form>

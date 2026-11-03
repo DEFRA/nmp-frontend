@@ -10,10 +10,10 @@
 @section BeforeContent {
     @if(Model.IsCheckAnswer&&(!Model.IsAnyChangeInField)&&(!Model.IsManureTypeChange))
     {
-        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else{
-    <govuk-back-link asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="DoubleCrop" asp-controller="OrganicManure" asp-route-q="@Model.DoubleCropEncryptedCounter" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
 
 }
@@ -66,11 +66,11 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                    <a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
         </form>

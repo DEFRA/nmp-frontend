@@ -34,7 +34,7 @@
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.ManualNutrientValue;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="ManualNutrientValues" asp-controller="OrganicManure" method="post" autocomplete="off">
@@ -44,7 +44,7 @@
             @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
             <h1 class="govuk-heading-l">@((Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials || Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials) ? string.Format(Resource.lblAddAnalysisValues, Model.OtherMaterialName) : string.Format(Resource.lblEnterTheValuesForYour, Model.ManureTypeName))</h1>
 
-            <govuk-input asp-for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.DryMatterPercent inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblDryMatter
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>
@@ -61,56 +61,56 @@
                     @Resource.lblUpdateNutrientValuesBasedOnDryMatterContent
                 </govuk-button>
             }
-            <govuk-input asp-for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblTotalNitrogenN
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
-            <govuk-input asp-for=@Model.NH4N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.NH4N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblAmmoniumHypenN
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
-            <govuk-input asp-for=@Model.UricAcid inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.UricAcid inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblUricAcidN
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
-            <govuk-input asp-for=@Model.NO3N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.NO3N inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblNitrateHypenN
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
-            <govuk-input asp-for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.P2O5 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblPhosphateP2O5
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
-            <govuk-input asp-for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.K2O inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblPotashK2O
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
-            <govuk-input asp-for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.SO3 inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblSulphurSO3
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@suffixUnit</govuk-input-suffix>
             </govuk-input>
-            <govuk-input asp-for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.MgO inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblMagnesiumMgO
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, suffixUnit)</span>
@@ -123,11 +123,11 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                    <a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
 

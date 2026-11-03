@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="ManureGroup" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="ManureGroup" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -22,7 +22,7 @@
                     <govuk-error-summary-item href="#">@TempData["ManureTypeError"]</govuk-error-summary-item>
                 </govuk-error-summary>
             }
-            <govuk-radios asp-for="@Model.ManureTypeId">
+            <govuk-radios for="@Model.ManureTypeId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @if(Model.ManureGroupIdForFilter!=(int)NMP.Commons.Enums.ManureGroup.AnotherTypeOfOrganicMaterial)
@@ -54,11 +54,11 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                    <a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
 

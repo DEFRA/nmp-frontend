@@ -113,10 +113,10 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Organic Manure Controller : FieldGroup({Q}, {R}, {S}, {SessionId}) action called", q, r, s, sessionId);
 
             OrganicManureViewModel? model =  _organicManureLogic.GetOrganicManureFromSession(sessionId);
-            if(!sessionId.HasValue)
-            {
-                model = new OrganicManureViewModel();
-            }
+            //if(!sessionId.HasValue)
+            //{
+            //    model = new OrganicManureViewModel();
+            //}
             try
             {
                 if (!await ValidateQueryParametersAsync(q, r, model))
@@ -380,7 +380,7 @@ namespace NMP.Portal.Controllers
                 model.IsFieldGroupChange = true;
             }
             _organicManureLogic.SetOrganicManureToSession(model);
-            return View("Views/OrganicManure/FieldGroup.cshtml");
+            return View("Views/OrganicManure/FieldGroup.cshtml",model);
         }
 
 
@@ -546,10 +546,10 @@ namespace NMP.Portal.Controllers
 
                 model = await BindGrassPropertyForField(model, cropPlans);
 
-                if (!HttpContext.Session.Keys.Contains(model.SessionId + " " + _organicManureSessionKey))
-                {
-                    return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
-                }
+                //if (!HttpContext.Session.Keys.Contains(model.SessionId + " " + _organicManureSessionKey))
+                //{
+                //    return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
+                //}
 
                 var sessionModel = _organicManureLogic.GetOrganicManureFromSession(sessionId);
 
@@ -579,7 +579,7 @@ namespace NMP.Portal.Controllers
                         .FirstOrDefault(x => x.Value == model.FieldList[0])?.Text;
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
 
                 return RedirectToAction(_manureGroup, new { sessionId = sessionId });
             }
@@ -671,7 +671,7 @@ namespace NMP.Portal.Controllers
                 // Detect field change
                 model = await FieldChangeLogic(model, sessionModel, cropPlans);
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -1286,10 +1286,10 @@ managementPeriod.CropID.HasValue
 
         private IActionResult RedirectForManureGroup(OrganicManureViewModel model)
         {
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             if (model.IsDoubleCropAvailable)
             {
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 return RedirectToAction(_doubleCropAction, new { sessionId = model.SessionId });
             }
             else
@@ -1411,7 +1411,7 @@ managementPeriod.CropID.HasValue
                 model.IsClosedPeriodWarning = false;
                 model.IsApplicationJulyToSeptWarning = false;
                 model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks = false;
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 return View(model);
             }
             catch (Exception ex)
@@ -1472,7 +1472,7 @@ managementPeriod.CropID.HasValue
                     return RedirectForManureApplyingDateIfCheckAsnwerTrue(model);
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 return RedirectToAction("ApplicationMethod", new { sessionId = model.SessionId });
             }
             catch (Exception ex)
@@ -1493,18 +1493,18 @@ managementPeriod.CropID.HasValue
                 model.TotalRainfall = null;
                 model.AutumnCropNitrogenUptake = null;
                 model.AutumnCropNitrogenUptakes = null;
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
         }
 
         private void CheckClosedPeriodWarningForManureApplyingDate(OrganicManureViewModel model)
         {
             OrganicManureViewModel organicManureViewModel = _organicManureLogic.GetOrganicManureFromSession(model.SessionId);
-            if (model.ApplicationDate != organicManureViewModel.ApplicationDate)
+            if (organicManureViewModel!=null&&model.ApplicationDate != organicManureViewModel.ApplicationDate)
             {
                 model.IsWarningMsgNeedToShow = false;
                 model.IsApplicationDateChange = true;
@@ -1524,7 +1524,7 @@ managementPeriod.CropID.HasValue
                 if (!model.IsWarningMsgNeedToShow)
                 {
                     model.IsWarningMsgNeedToShow = true;
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                     return (flowControl: false, value: View(model));
                 }
             }
@@ -1663,7 +1663,7 @@ managementPeriod.CropID.HasValue
             {
                 model.IsApplicationMethodChange = true;
             }
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
         }
 
         private (bool flowControl, IActionResult? value) RedirectForCheckAnswerApplicationMethod(OrganicManureViewModel model)
@@ -1690,7 +1690,7 @@ managementPeriod.CropID.HasValue
                 }
                 if (!(model.IsFieldGroupChange) && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
                 {
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                     return (flowControl: false, value: RedirectToAction(_checkAnswer, new { sessionId = model.SessionId }));
                 }
             }
@@ -1701,18 +1701,18 @@ managementPeriod.CropID.HasValue
         public async Task<IActionResult> ApplicationMethod(Guid? sessionId)
         {
             _logger.LogTrace($"Organic Manure Controller : ApplicationMethod() action called");
-            OrganicManureViewModel? model = new OrganicManureViewModel();
+            OrganicManureViewModel? model = _organicManureLogic.GetOrganicManureFromSession(sessionId);
             Error? error = null;
             try
             {
-                if (HttpContext.Session.Keys.Contains(sessionId + " " + _organicManureSessionKey))
-                {
-                    model = _organicManureLogic.GetOrganicManureFromSession(sessionId);
-                }
-                else
-                {
-                    return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
-                }
+                //if (HttpContext.Session.Keys.Contains(sessionId + " " + _organicManureSessionKey))
+                //{
+                //    model = _organicManureLogic.GetOrganicManureFromSession(sessionId);
+                //}
+                //else
+                //{
+                //    return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
+                //}
                 BindNMPTFarmIdAndNameForNavigation(model);
 
                 List<ManureType> manureTypeList = new List<ManureType>();
@@ -1755,10 +1755,10 @@ managementPeriod.CropID.HasValue
                     }
 
 
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
 
 
-                    return RedirectToAction("DefaultNutrientValues");
+                    return RedirectToAction("DefaultNutrientValues", new { sessionId = model.SessionId });
                 }
                 BindIsApplicationMethodChange(model);
 
@@ -1767,7 +1767,7 @@ managementPeriod.CropID.HasValue
             {
                 _logger.LogError(ex, "Organic Manure Controller : Exception in ApplicationMethod() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 ViewBag.Error = ex.Message;
-                return RedirectToAction(_manureApplyingDateAction);
+                return RedirectToAction(_manureApplyingDateAction, new { sessionId = model.SessionId });
             }
             return View(model);
         }
@@ -1827,7 +1827,7 @@ managementPeriod.CropID.HasValue
                     ResetIncorporationMethodAndDelay(model, organicManureViewModel);
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 if (model.IsCheckAnswer && model.IsApplicationMethodChange)
                 {
                     return RedirectToAction(_incorporationMethodAction, new { sessionId = model.SessionId });
@@ -1879,7 +1879,7 @@ managementPeriod.CropID.HasValue
                     return (flowControl: false, value: value);
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
 
             return (flowControl: true, value: null);
@@ -1910,7 +1910,7 @@ managementPeriod.CropID.HasValue
                         x.IncorporationMethodID = model.IncorporationMethod.Value;
                         x.IncorporationDelayID = model.IncorporationDelay.Value;
                     });
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                     if (model.IsCheckAnswer && model.IsApplicationMethodChange && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
                     {
                         return (flowControl: false, value: RedirectToAction(_checkAnswer, new { sessionId = model.SessionId }));
@@ -2009,7 +2009,7 @@ managementPeriod.CropID.HasValue
                     if (!IsOtherManureType(model.ManureGroupIdForFilter))
                     {
                         model.DefaultNutrientValue = Resource.lblIwantToEnterARecentOrganicMaterialAnalysis;
-                        HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                        _organicManureLogic.SetOrganicManureToSession(model);
                         return RedirectToAction(_manualNutrientValuesKey, new { sessionId = sessionId });
                     }
 
@@ -2029,7 +2029,7 @@ managementPeriod.CropID.HasValue
                 }
 
                 model.IsDefaultNutrient = true;
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -2070,7 +2070,7 @@ managementPeriod.CropID.HasValue
                     if (model.DryMatterPercent == null)
                         BindNutrientsFromManureType(model);
 
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                     return RedirectToAction(_manualNutrientValuesKey, new { sessionId = model.SessionId });
                 }
 
@@ -2091,7 +2091,7 @@ managementPeriod.CropID.HasValue
                     UpdateOrganicManuresFromModel(model, model.ManureType);
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
 
                 (flowControl, value) = RedirectIfCheckAnswerForDefaultNutrientValues(model);
                 if (!flowControl && value != null)
@@ -2136,7 +2136,7 @@ managementPeriod.CropID.HasValue
                     {
                         model.IsThisDefaultValueOfRB209 = true;
                         ViewBag.RB209ApiOption = Resource.lblTrue;
-                        HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                        _organicManureLogic.SetOrganicManureToSession(model);
                         return (flowControl: false, value: View(model));
                     }
 
@@ -2194,7 +2194,7 @@ managementPeriod.CropID.HasValue
             if (organicManureViewModel.DefaultNutrientValue != model.DefaultNutrientValue && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
             {
                 ViewBag.RB209ApiOption = Resource.lblTrue;
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 if (organicManureViewModel.DefaultNutrientValue != model.DefaultNutrientValue && (organicManureViewModel.DefaultNutrientValue != Resource.lblIwantToEnterARecentOrganicMaterialAnalysis || organicManureViewModel.DefaultNutrientValue != Resource.lblYesUseTheseValues)
                       && model.DefaultNutrientValue == Resource.lblYesUseTheseStandardNutrientValues)
                 {
@@ -2225,7 +2225,7 @@ managementPeriod.CropID.HasValue
                     ViewBag.FarmManureApiOption = Resource.lblTrue;
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 (bool isSuccess, IActionResult? action) = RedirectToDefaultNutrientValues(model, organicManureViewModel);
                 if (!isSuccess && action != null)
                 {
@@ -2373,7 +2373,7 @@ managementPeriod.CropID.HasValue
                     UpdateOrganicManuresFromModel(model, null);
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 (bool flowControl, IActionResult? value) = RedirectIfCheckAnswerForManualNutrientValues(model);
                 if (!flowControl && value != null)
                 {
@@ -2666,7 +2666,7 @@ managementPeriod.CropID.HasValue
             if (IsOtherManure(model))
             {
                 model.IsAnyNeedToStoreNutrientValueForFuture = true;
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 return RedirectToAction(_applicationRateMethodAction, new { sessionId = sessionId });
             }
             return View(model);
@@ -2691,7 +2691,7 @@ managementPeriod.CropID.HasValue
                 return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             return RedirectToAction(_applicationRateMethodAction, new { sessionId = model.SessionId });
         }
 
@@ -2736,7 +2736,7 @@ managementPeriod.CropID.HasValue
                     ViewBag.Error = error1.Message;
                 }
                 ResetWarnings(model, true);
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -2768,7 +2768,7 @@ managementPeriod.CropID.HasValue
                     return View(_applicationRateMethodAction, model);
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 bool flowControl = false; IActionResult? value = null;
                 (var shouldContinue, var result, model) = await HandleApplicationRateMethodSelection(model, manureTypeList, error);
 
@@ -2781,7 +2781,7 @@ managementPeriod.CropID.HasValue
                 {
                     return value;
                 }
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 return RedirectToAction(_incorporationMethodAction, new { sessionId = model.SessionId });
             }
             catch (Exception ex)
@@ -2799,15 +2799,15 @@ managementPeriod.CropID.HasValue
                 case NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate:
                     model.Area = null;
                     model.Quantity = null;
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
 
-                    return (false, RedirectToAction("ManualApplicationRate"), model);
+                    return (false, RedirectToAction("ManualApplicationRate", new { sessionId = model.SessionId }), model);
 
                 case NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity:
                     model.ApplicationRate = null;
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
 
-                    return (false, RedirectToAction("AreaQuantity"), model);
+                    return (false, RedirectToAction("AreaQuantity", new { sessionId = model.SessionId }), model);
 
                 case NMP.Commons.Enums.ApplicationRate.UseDefaultApplicationRate:
 
@@ -2871,7 +2871,7 @@ managementPeriod.CropID.HasValue
                 if (!model.IsWarningMsgNeedToShow)
                 {
                     model.IsWarningMsgNeedToShow = true;
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                     return (flowControl: false, value: View(model), model);
                 }
             }
@@ -2879,7 +2879,7 @@ managementPeriod.CropID.HasValue
             {
                 ResetWarnings(model, true);
             }
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             return (flowControl: true, value: null, model);
         }
 
@@ -2956,7 +2956,7 @@ managementPeriod.CropID.HasValue
                 (List<CommonResponse> manureGroupList, Error error1) = await _mannerLogic.FetchManureGroupList();
                 model.ManureGroupName = (error1 == null && manureGroupList.Count > 0) ? manureGroupList.FirstOrDefault(x => x.Id == model.ManureGroupId)?.Name : string.Empty;
                 ResetWarnings(model, true);
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 return View(model);
             }
             catch (Exception ex)
@@ -3010,7 +3010,7 @@ managementPeriod.CropID.HasValue
                     if (!model.IsWarningMsgNeedToShow)
                     {
                         model.IsWarningMsgNeedToShow = true;
-                        HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                        _organicManureLogic.SetOrganicManureToSession(model);
                         return View(model);
                     }
                 }
@@ -3021,7 +3021,7 @@ managementPeriod.CropID.HasValue
 
                 FinalizeApplicationRate(model);
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange) && (!model.IsAnyChangeInField))
                 {
                     return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
@@ -3170,7 +3170,7 @@ managementPeriod.CropID.HasValue
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             ResetWarnings(model, true);
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             return View(model);
         }
 
@@ -3215,7 +3215,7 @@ managementPeriod.CropID.HasValue
                 if (!model.IsWarningMsgNeedToShow)
                 {
                     model.IsWarningMsgNeedToShow = true;
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                     return View(model);
                 }
             }
@@ -3224,7 +3224,7 @@ managementPeriod.CropID.HasValue
                 ResetWarnings(model, true);
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange) && (!model.IsAnyChangeInField))
             {
                 return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
@@ -3306,7 +3306,7 @@ managementPeriod.CropID.HasValue
             model = _organicManureLogic.GetOrganicManureFromSession(sessionId);
             if (model == null)
             {
-                return RedirectToAction(_farmList, "Farm");
+                return RedirectToAction(_farmList, "Farm", new { sessionId = model.SessionId });
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             if ((model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.DeepInjection2530cm) || (model.ApplicationMethod == (int)NMP.Commons.Enums.ApplicationMethod.ShallowInjection57cm))
@@ -3384,7 +3384,7 @@ managementPeriod.CropID.HasValue
                     return earlyResult;
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -3477,7 +3477,7 @@ managementPeriod.CropID.HasValue
                         return await BuildIncorporationMethodErrorViewAsync(model, error.Message);
                     }
 
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                 }
                 else if (error != null)
                 {
@@ -3491,10 +3491,10 @@ managementPeriod.CropID.HasValue
 
             if (model.IsCheckAnswer && (!model.IsFieldGroupChange) && (!model.IsManureTypeChange) && (!model.IsAnyChangeInField))
             {
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_conditionsAffectingNutrients);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
         }
 
         // Handles the branch taken when an incorporation method other than "Not Incorporated" is selected.
@@ -3616,7 +3616,7 @@ managementPeriod.CropID.HasValue
                     return View(model);
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 if ((!model.IsFieldGroupChange) && (!model.IsManureTypeChange) && model.IsCheckAnswer && (!model.IsAnyChangeInField))// && model.IsApplicationMethodChange)
                 {
                     return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
@@ -3679,7 +3679,7 @@ managementPeriod.CropID.HasValue
                     return earlyResult;
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -3731,7 +3731,7 @@ managementPeriod.CropID.HasValue
                         i++;
                     }
                 }
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -3906,14 +3906,14 @@ managementPeriod.CropID.HasValue
             if (model.IsCheckAnswer)
             {
                 model.ManureGroupIdForFilter = model.ManureGroupId;
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 (CommonResponse manureGroup, Error error) = await _mannerLogic.FetchManureGroupById(model.ManureGroupId.Value);
                 if (error == null)
                 {
                     if (manureGroup != null)
                     {
                         model.ManureGroupName = manureGroup.Name;
-                        HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                        _organicManureLogic.SetOrganicManureToSession(model);
                     }
                 }
                 else
@@ -4545,7 +4545,7 @@ managementPeriod.CropID.HasValue
 
             model = await BuildAutumnCropUptakeIfFieldListAsync(model, organicManure);
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
             return (model, null);
         }
@@ -5173,7 +5173,7 @@ managementPeriod.CropID.HasValue
             {
                 TempData[_addOrganicManureError] = Resource.MsgWeCounldNotAddOrganicManure;
                 await PrepareFieldDataAsync(model);
-                return (success, error, View(model));
+                return (success, error, View("CheckAnswer",model));
             }
 
             return (success, error, null);
@@ -5185,7 +5185,7 @@ managementPeriod.CropID.HasValue
         {
             string successMsg = Resource.lblOrganicManureCreatedSuccessfullyForAllField;
             string successMsgSecond = Resource.lblSelectAFieldToSeeItsUpdatedNutrientRecommendation;
-            HttpContext.Session.Remove(_organicManureSessionKey);
+            _organicManureLogic.RemoveOrganicManureSession(model.SessionId);
 
             if (!model.IsComingFromRecommendation)
             {
@@ -5377,7 +5377,7 @@ managementPeriod.CropID.HasValue
             if (string.IsNullOrWhiteSpace(model.EncryptedOrgManureId))
             {
                 TempData["ConditionsAffectingNutrientsError"] = error.Message;
-                return RedirectToAction(_conditionsAffectingNutrients);
+                return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
             }
 
             HttpContext.Session.Remove(_organicManureSessionKey);
@@ -5493,7 +5493,7 @@ managementPeriod.CropID.HasValue
                 return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
             }
             model.IsCheckAnswer = false;
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             if (!string.IsNullOrWhiteSpace(model.EncryptedOrgManureId) && (!model.IsComingFromRecommendation))
             {
                 HttpContext.Session.Remove(_organicManureSessionKey);
@@ -5508,7 +5508,7 @@ managementPeriod.CropID.HasValue
                 HttpContext.Session.Remove(_organicManureSessionKey);
                 return RedirectToRecommendation(model);
             }
-            return RedirectToAction(_conditionsAffectingNutrients);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = sessionId });
         }
 
         [HttpGet]
@@ -5586,8 +5586,8 @@ managementPeriod.CropID.HasValue
             {
                 model.AutumnCropNitrogenUptakes[0].AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptake ?? 0;
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                return RedirectToAction(_conditionsAffectingNutrients);
+                _organicManureLogic.SetOrganicManureToSession(model);
+                return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
             }
             else
             {
@@ -5596,8 +5596,8 @@ managementPeriod.CropID.HasValue
                      .ToList()
                      .ForEach(detail => detail.AutumnCropNitrogenUptake = model.AutumnCropNitrogenUptake ?? 0);
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                return RedirectToAction("AutumnCropNitrogenUptakeDetail");
+                _organicManureLogic.SetOrganicManureToSession(model);
+                return RedirectToAction("AutumnCropNitrogenUptakeDetail", new { sessionId = model.SessionId });
             }
 
         }
@@ -5637,7 +5637,7 @@ managementPeriod.CropID.HasValue
                 model.IsTotalRainfallEnteredManual = false;
                 model.TotalRainfall = null;
             }
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             return RedirectToAction(_conditionsAffectingNutrients);
         }
 
@@ -5719,8 +5719,8 @@ managementPeriod.CropID.HasValue
                 return View("RainfallWithinSixHour", model);
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(_conditionsAffectingNutrients);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
@@ -5747,8 +5747,8 @@ managementPeriod.CropID.HasValue
                 return View("EffectiveRainfall", model);
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(_conditionsAffectingNutrients);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
@@ -5803,8 +5803,8 @@ managementPeriod.CropID.HasValue
                 return View("EffectiveRainfallManual", model);
             }
             model.IsTotalRainfallEnteredManual = true;
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(_conditionsAffectingNutrients);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
@@ -5844,8 +5844,8 @@ managementPeriod.CropID.HasValue
                 return await Task.FromResult(View("Windspeed", model));
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(_conditionsAffectingNutrients);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
@@ -5885,8 +5885,8 @@ managementPeriod.CropID.HasValue
                 return View("TopsoilMoisture", model);
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(_conditionsAffectingNutrients);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
         }
         private async Task<(OrganicManureViewModel, Error?)> IsNFieldLimitWarningMessage(OrganicManureViewModel model, int managementId, int fieldId, Farm farm)
         {
@@ -7463,8 +7463,8 @@ managementPeriod.CropID.HasValue
                 return View("AutumnCropNitrogenUptakeDetail", model);
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(_conditionsAffectingNutrients);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
         }
 
 
@@ -7485,7 +7485,7 @@ managementPeriod.CropID.HasValue
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in OtherMaterialName() get action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["CropTypeError"] = ex.Message;
-                return RedirectToAction("ManureTypes");
+                return RedirectToAction("ManureTypes", new { sessionId = sessionId });
             }
             return View(model);
         }
@@ -7522,7 +7522,7 @@ managementPeriod.CropID.HasValue
                 {
                     manure.ManureTypeName = model.OtherMaterialName;
                 }
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -7531,10 +7531,10 @@ managementPeriod.CropID.HasValue
                 return View(model);
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
             if (model.IsDoubleCropAvailable)
             {
-                return RedirectToAction(_doubleCropAction);
+                return RedirectToAction(_doubleCropAction, new { sessionId = model.SessionId });
             }
             else
             {
@@ -7546,8 +7546,8 @@ managementPeriod.CropID.HasValue
                 return HandleGrassCrop(model);
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(_manureApplyingDateAction);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(_manureApplyingDateAction, new { sessionId = model.SessionId });
         }
 
 
@@ -7631,7 +7631,7 @@ managementPeriod.CropID.HasValue
                 {
                     model.IsComingFromRecommendation = true;
                     BindDataForRemoveOrganic(q, r, s, t, u, model);
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                 }
             }
             catch (Exception ex)
@@ -7644,7 +7644,7 @@ managementPeriod.CropID.HasValue
                 }
 
                 TempData[_addOrganicManureError] = ex.Message;
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = sessionId });
             }
             return View(model);
         }
@@ -7665,7 +7665,7 @@ managementPeriod.CropID.HasValue
             {
                 if (!model.IsDeleteOrganic.Value)
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
                 else
                 {
@@ -7693,7 +7693,7 @@ managementPeriod.CropID.HasValue
                         }
                     }
                 }
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -7767,7 +7767,7 @@ managementPeriod.CropID.HasValue
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_addOrganicManureError] = ex.Message;
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = sessionId });
             }
 
             return View(model);
@@ -7786,7 +7786,7 @@ managementPeriod.CropID.HasValue
             }
             if (!model.IsCancel.Value)
             {
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
             else
             {
@@ -7835,10 +7835,10 @@ managementPeriod.CropID.HasValue
             catch (Exception ex)
             {
                 TempData[_updateOrganicManureError] = ex.Message;
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_checkAnswer);
+            return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
         }
 
         // ===================== Validation =====================
@@ -7858,7 +7858,7 @@ managementPeriod.CropID.HasValue
 
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
 
             return null;
@@ -7876,7 +7876,7 @@ managementPeriod.CropID.HasValue
             (FarmResponse farmData, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
             if (farmData == null || !string.IsNullOrWhiteSpace(error?.Message))
             {
-                return BuildUpdateFailureRedirect();
+                return BuildUpdateFailureRedirect(model.SessionId);
             }
 
             if (model.UpdatedOrganicIds == null || model.UpdatedOrganicIds.Count == 0)
@@ -7902,10 +7902,10 @@ managementPeriod.CropID.HasValue
         }
 
         // Shared by every failure path that redirects to CheckAnswer with the same error message.
-        private IActionResult BuildUpdateFailureRedirect()
+        private IActionResult BuildUpdateFailureRedirect(Guid? sessionId)
         {
             TempData[_updateOrganicManureError] = Resource.MsgWeCouldNotUpdateOrganicManure;
-            return RedirectToAction(_checkAnswer);
+            return RedirectToAction(_checkAnswer, new { sessionId = sessionId });
         }
 
         // ===================== Building the per-organic-manure update list =====================
@@ -7917,19 +7917,19 @@ managementPeriod.CropID.HasValue
             (ManureType? manureTypeData, Error? error) = await _mannerLogic.FetchManureTypeByManureTypeId(model.ManureTypeId.Value);
             if (error != null && string.IsNullOrWhiteSpace(error.Message))
             {
-                return (organicManureList, BuildUpdateFailureRedirect());
+                return (organicManureList, BuildUpdateFailureRedirect(model.SessionId));
             }
             (List<CropTypeLinkingResponse> cropTypeLinkingList, error) = await _organicManureLogic.FetchAllCropTypeLinking();
             if (error != null && string.IsNullOrWhiteSpace(error.Message))
             {
-                return (organicManureList, BuildUpdateFailureRedirect());
+                return (organicManureList, BuildUpdateFailureRedirect(model.SessionId));
             }
             foreach (OrganicManureDataViewModel organic in model.OrganicManures)
             {
                 (OrganicManureUpdateData? organicManure, Error? orgError) = await FetchManureOutput(model, farmData, organic, currentApplicationNitrogen, cropTypeLinkingList, manureTypeData);
                 if (orgError != null && !string.IsNullOrWhiteSpace(orgError.Message))
                 {
-                    return (organicManureList, BuildUpdateFailureRedirect());
+                    return (organicManureList, BuildUpdateFailureRedirect(model.SessionId));
                 }
 
                 organicManureList.Add(organicManure);
@@ -7971,7 +7971,7 @@ managementPeriod.CropID.HasValue
             (List<OrganicManure> organicManures, Error? error) = await _organicManureLogic.UpdateOrganicManure(jsonString);
             if (error != null || organicManures.Count == 0)
             {
-                return BuildUpdateFailureRedirect();
+                return BuildUpdateFailureRedirect(model.SessionId);
             }
 
             bool success = true;
@@ -8168,12 +8168,12 @@ managementPeriod.CropID.HasValue
                     }
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
                 TempData[_manureTypeError] = ex.Message;
-                return RedirectToAction(_manureTypeAction);
+                return RedirectToAction(_manureTypeAction, new { sessionId = sessionId });
             }
 
             return View(model);
@@ -8206,7 +8206,7 @@ managementPeriod.CropID.HasValue
                 await AdvanceDoubleCropCounterAsync(model);
 
                 model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
 
                 if (model.IsCheckAnswer || model.DoubleCrop.Count == model.DoubleCropCurrentCounter)
                 {
@@ -8238,7 +8238,7 @@ managementPeriod.CropID.HasValue
             {
                 model.DoubleCropCurrentCounter = 0;
                 model.DoubleCropEncryptedCounter = _fieldDataProtector.Protect(model.DoubleCropCurrentCounter.ToString());
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             else if (!string.IsNullOrWhiteSpace(q) && model.DoubleCrop != null && model.DoubleCrop.Count > 0)
             {
@@ -8264,24 +8264,24 @@ managementPeriod.CropID.HasValue
         {
             model.DoubleCropCurrentCounter = 0;
             model.DoubleCropEncryptedCounter = string.Empty;
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
             if (model.IsCheckAnswer && (!model.IsManureTypeChange) && (!model.IsFieldGroupChange) && (!model.IsAnyChangeInSameDefoliationFlag))
             {
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
 
             if (IsOtherMaterialGroup(model))
             {
-                return RedirectToAction(_manureGroup);
+                return RedirectToAction(_manureGroup, new { sessionId = model.SessionId });
             }
             else if (IsOtherManure(model))
             {
-                return RedirectToAction(_otherMaterialName);
+                return RedirectToAction(_otherMaterialName, new { sessionId = model.SessionId });
             }
             else
             {
-                return RedirectToAction(_manureTypeAction);
+                return RedirectToAction(_manureTypeAction, new { sessionId = model.SessionId });
             }
         }
 
@@ -8351,7 +8351,7 @@ managementPeriod.CropID.HasValue
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData[_manureTypeError] = error.Message;
-                    return (model, RedirectToAction(_manureTypeAction));
+                    return (model, RedirectToAction(_manureTypeAction, new { sessionId = model.SessionId }));
                 }
 
                 if (cropList != null && cropList.Count == 2)
@@ -8390,7 +8390,7 @@ managementPeriod.CropID.HasValue
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData[_manureTypeError] = error.Message;
-                return (model, RedirectToAction(_manureTypeAction));
+                return (model, RedirectToAction(_manureTypeAction, new { sessionId = model.SessionId }));
             }
 
             if (cropList != null && cropList.Count == 2)
@@ -8406,7 +8406,7 @@ managementPeriod.CropID.HasValue
                     });
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 ViewBag.DoubleCropOptions = cropOptions;
             }
 
@@ -8437,7 +8437,7 @@ managementPeriod.CropID.HasValue
                 if (cropList != null && cropList.Count == 2)
                 {
                     var cropOptions = await BuildCropOptionsAsync(cropList);
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                     ViewBag.DoubleCropOptions = cropOptions;
                 }
             }
@@ -8716,8 +8716,8 @@ managementPeriod.CropID.HasValue
 
         private IActionResult SaveSessionAndRedirect(OrganicManureViewModel model, string actionName)
         {
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(actionName);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(actionName, new { sessionId = model.SessionId });
         }
 
         // ===================== "Not yet done" view (more double crops to process) =====================
@@ -8730,7 +8730,7 @@ managementPeriod.CropID.HasValue
             if (cropList.Count == 2)
             {
                 var cropOptions = await BuildCropOptionsAsync(cropList);
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 ViewBag.DoubleCropOptions = cropOptions;
             }
 
@@ -8768,14 +8768,14 @@ managementPeriod.CropID.HasValue
                 else
                 {
                     TempData[_manureGroupError] = error.Message;
-                    return RedirectToAction(_manureGroup, model);
+                    return RedirectToAction(_manureGroup,  new { sessionId = sessionId });
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Organic Manure Controller : Exception in ManureType() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_manureGroupError] = ex.Message;
-                return RedirectToAction(_manureGroup, model);
+                return RedirectToAction(_manureGroup,  new { sessionId = sessionId });
             }
         }
 
@@ -8820,7 +8820,7 @@ managementPeriod.CropID.HasValue
                     return earlyResult;
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
 
                 return BuildManureTypeFinalRedirect(model);
             }
@@ -9051,8 +9051,8 @@ managementPeriod.CropID.HasValue
         {
             if (IsOtherManure(model))
             {
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                return RedirectToAction(_otherMaterialName);
+                _organicManureLogic.SetOrganicManureToSession(model);
+                return RedirectToAction(_otherMaterialName, new { sessionId = model.SessionId });
             }
 
             if (model.IsCheckAnswer && !model.IsAnyChangeInField && !model.IsManureTypeChange)
@@ -9062,17 +9062,17 @@ managementPeriod.CropID.HasValue
                     model.GrassCropCount = null;
                     model.IsSameDefoliationForAll = null;
                     model.IsAnyChangeInSameDefoliationFlag = false;
-                    HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                    _organicManureLogic.SetOrganicManureToSession(model);
                 }
 
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
             if (model.IsDoubleCropAvailable)
             {
-                return RedirectToAction(_doubleCropAction);
+                return RedirectToAction(_doubleCropAction, new {sessionId=model.SessionId});
             }
             else
             {
@@ -9084,8 +9084,8 @@ managementPeriod.CropID.HasValue
                 return HandleGrassCrop(model);
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-            return RedirectToAction(_manureApplyingDateAction);
+            _organicManureLogic.SetOrganicManureToSession(model);
+            return RedirectToAction(_manureApplyingDateAction, new { sessionId = model.SessionId });
         }
 
         private IActionResult HandleGrassCrop(OrganicManureViewModel model)
@@ -9097,15 +9097,15 @@ managementPeriod.CropID.HasValue
 
             if (model.GrassCropCount > 1)
             {
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
-                return RedirectToAction(_isSameDefoliationForAll);
+                _organicManureLogic.SetOrganicManureToSession(model);
+                return RedirectToAction(_isSameDefoliationForAll, new { sessionId = model.SessionId });
             }
 
             model.IsSameDefoliationForAll = true;
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
-            return RedirectToAction(_defoliationAction);
+            return RedirectToAction(_defoliationAction, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
@@ -9139,7 +9139,7 @@ managementPeriod.CropID.HasValue
                     }
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
             }
             catch (Exception ex)
             {
@@ -9183,7 +9183,7 @@ managementPeriod.CropID.HasValue
                 }
                 else
                 {
-                    return RedirectToAction(_farmList, "Farm");
+                    return RedirectToAction(_farmList, "Farm", new { sessionId = model.SessionId });
                 }
                 if (model.IsAnyChangeInSameDefoliationFlag)
                 {
@@ -9194,10 +9194,10 @@ managementPeriod.CropID.HasValue
                     }
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 if (!model.IsAnyChangeInSameDefoliationFlag && model.IsCheckAnswer && (!model.IsAnyChangeInField) && (!model.IsManureTypeChange))
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
             }
             catch (Exception ex)
@@ -9205,7 +9205,7 @@ managementPeriod.CropID.HasValue
                 TempData["IsSameDefoliationForAllError"] = ex.Message;
                 return View(model);
             }
-            return RedirectToAction(_defoliationAction);
+            return RedirectToAction(_defoliationAction, new { sessionId = model.SessionId });
         }
 
         // ===================== Exception handling =====================
@@ -9215,12 +9215,12 @@ managementPeriod.CropID.HasValue
             if (model.IsDoubleCropAvailable)
             {
                 TempData[_doubleCropError] = ex.Message;
-                return RedirectToAction(_doubleCropAction, new { q = model.EncryptedCounter });
+                return RedirectToAction(_doubleCropAction, new { q = model.EncryptedCounter,sessionId=model.SessionId });
             }
             else
             {
                 TempData[_manureTypeError] = ex.Message;
-                return RedirectToAction(_manureTypeAction);
+                return RedirectToAction(_manureTypeAction, new { sessionId = model.SessionId });
             }
         }
 
@@ -9305,9 +9305,9 @@ managementPeriod.CropID.HasValue
             model = await ApplyNoCommonDefoliationFieldAsync(model);
             model.IsSameDefoliationForAll = false;
             model.NeedToShowSameDefoliationForAll = false;
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
-            return (model, RedirectToAction(_defoliationAction));
+            return (model, RedirectToAction(_defoliationAction, new { sessionId = model.SessionId }));
         }
 
         // Sets the current field/counter to the first grass field missing a defoliation entry, when applicable.
@@ -9375,7 +9375,7 @@ managementPeriod.CropID.HasValue
                     ViewBag.DefoliationList = ToSelectList(defoliationsList, f => f.Value, f => f.Text);
                 }
 
-                HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+                _organicManureLogic.SetOrganicManureToSession(model);
                 return View(model);
             }
             catch (Exception ex)
@@ -9467,7 +9467,7 @@ managementPeriod.CropID.HasValue
                 model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.FieldID.Value)).Name;
             }
 
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
         }
 
         private async Task<(OrganicManureViewModel Model, IActionResult? EarlyResult)> HandleDefoliationIndexAsync(OrganicManureViewModel model, string q)
@@ -9482,14 +9482,14 @@ managementPeriod.CropID.HasValue
 
             if (model.IsCheckAnswer && model.IsDoubleCropAvailable && model.IsDoubleCropValueChange && !model.NeedToShowSameDefoliationForAll)
             {
-                return (model, RedirectToAction(_doubleCropAction, new { q = model.DoubleCropEncryptedCounter }));
+                return (model, RedirectToAction(_doubleCropAction, new { q = model.DoubleCropEncryptedCounter,sessionId=model.SessionId }));
             }
 
             model.FieldID = model.DefoliationList[index].FieldID;
             model.FieldName = (await _fieldLogic.FetchFieldByFieldId(model.DefoliationList[index].FieldID)).Name;
             model.DefoliationCurrentCounter = index;
             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
             return (model, null);
         }
@@ -9498,26 +9498,26 @@ managementPeriod.CropID.HasValue
         {
             model.DefoliationCurrentCounter = 0;
             model.DefoliationEncryptedCounter = string.Empty;
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
             if (model.GrassCropCount != null && model.GrassCropCount.Value > 1 && model.NeedToShowSameDefoliationForAll)
             {
-                return RedirectToAction(_isSameDefoliationForAll);
+                return RedirectToAction(_isSameDefoliationForAll, new { sessionId = model.SessionId });
             }
             if (model.IsDoubleCropAvailable || model.IsDoubleCropValueChange)
             {
-                return RedirectToAction(_doubleCropAction, new { q = model.DoubleCropEncryptedCounter });
+                return RedirectToAction(_doubleCropAction, new { q = model.DoubleCropEncryptedCounter,sessionId=model.SessionId });
             }
             if (IsOtherMaterialGroup(model))
             {
-                return RedirectToAction(_manureGroup);
+                return RedirectToAction(_manureGroup, new { sessionId = model.SessionId });
             }
             if (IsOtherManure(model))
             {
-                return RedirectToAction(_otherMaterialName);
+                return RedirectToAction(_otherMaterialName, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_manureTypeAction);
+            return RedirectToAction(_manureTypeAction, new { sessionId = model.SessionId });
         }
 
         // ===================== Building the defoliation list for grass fields =====================
@@ -9668,13 +9668,13 @@ managementPeriod.CropID.HasValue
             {
                 if (model.IsCheckAnswer && !model.IsAnyChangeInField && !model.IsManureTypeChange)
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
 
-                return RedirectToAction(_manureApplyingDateAction);
+                return RedirectToAction(_manureApplyingDateAction, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_defoliationAction, new { r = _organicManureProtector.Protect(true.ToString()) });
+            return RedirectToAction(_defoliationAction, new { r = _organicManureProtector.Protect(true.ToString()),sessionId=model.SessionId });
         }
 
         // ---------- "Different defoliation per field" branch ----------
@@ -9706,11 +9706,11 @@ managementPeriod.CropID.HasValue
             }
 
             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
             if (model.IsCheckAnswer && !model.IsAnyChangeInSameDefoliationFlag && !model.IsAnyChangeInField && !model.IsManureTypeChange)
             {
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
 
             return null;
@@ -9765,14 +9765,14 @@ managementPeriod.CropID.HasValue
             }
 
             model.DefoliationEncryptedCounter = _fieldDataProtector.Protect(model.DefoliationCurrentCounter.ToString());
-            HttpContext.Session.SetObjectAsJson(_organicManureSessionKey, model);
+            _organicManureLogic.SetOrganicManureToSession(model);
 
             if (model.IsCheckAnswer && !model.IsAnyChangeInField && !model.IsManureTypeChange)
             {
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_manureApplyingDateAction);
+            return RedirectToAction(_manureApplyingDateAction, new { sessionId = model.SessionId });
         }
 
         private async Task ProcessSameDefoliationForField(OrganicManureViewModel model, int i)
@@ -9898,15 +9898,15 @@ managementPeriod.CropID.HasValue
                 {
                     TempData[_doubleCropError] = errorMessage;
                     return RedirectToAction(_doubleCropAction,
-                        new { q = model.DoubleCropEncryptedCounter });
+                        new { q = model.DoubleCropEncryptedCounter, sessionId = model.SessionId });
                 }
 
                 TempData[_manureGroupError] = errorMessage;
-                return RedirectToAction(_manureGroup);
+                return RedirectToAction(_manureGroup, new { sessionId = model.SessionId });
             }
 
             TempData[_checkYourAnswerError] = errorMessage;
-            return RedirectToAction(_checkAnswer);
+            return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
         }
 
 
@@ -9922,26 +9922,26 @@ managementPeriod.CropID.HasValue
 
             if (model.IsAnyCropIsGrass.HasValue && model.IsAnyCropIsGrass.Value)
             {
-                return RedirectToAction(_defoliationAction, new { q = model.DefoliationEncryptedCounter });
+                return RedirectToAction(_defoliationAction, new { q = model.DefoliationEncryptedCounter,sessionId=sessionId });
             }
 
             if (model.IsDoubleCropAvailable)
             {
-                return RedirectToAction(_doubleCropAction, new { q = model.DoubleCropEncryptedCounter });
+                return RedirectToAction(_doubleCropAction, new { q = model.DoubleCropEncryptedCounter, sessionId = sessionId });
             }
 
             if (IsOtherMaterialGroup(model))
             {
-                return RedirectToAction(_manureGroup);
+                return RedirectToAction(_manureGroup, new { sessionId = sessionId });
             }
 
             if (IsOtherManure(model))
             {
-                return RedirectToAction(_otherMaterialName);
+                return RedirectToAction(_otherMaterialName, new { sessionId = sessionId });
             }
             else
             {
-                return RedirectToAction(_manureTypeAction);
+                return RedirectToAction(_manureTypeAction, new { sessionId = sessionId });
             }
         }
 

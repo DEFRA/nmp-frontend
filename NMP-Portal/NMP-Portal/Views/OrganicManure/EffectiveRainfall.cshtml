@@ -6,7 +6,7 @@
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.EffectiveRainfall;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="EffectiveRainfall" asp-controller="OrganicManure" method="post" autocomplete="off">
@@ -33,11 +33,11 @@
             <p class="govuk-body cancel-link">
                 @if (!Model.IsCheckAnswer)
                 {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
+                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
                 else
                 {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
+                    <a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                 }
             </p>
 

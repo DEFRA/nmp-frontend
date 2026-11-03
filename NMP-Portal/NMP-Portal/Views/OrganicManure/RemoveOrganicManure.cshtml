@@ -24,7 +24,7 @@
 {
 
     @section BeforeContent {
-            <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure">
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblBack
             </govuk-back-link>
     }
@@ -74,7 +74,7 @@
                         </ul>
                     </p>
                 }
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsDeleteOrganic">
+                <govuk-radios class="govuk-radios--inline" for="@Model.IsDeleteOrganic">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend>
                             @Resource.lblAreYouSureYouWantToContinue
@@ -86,7 +86,7 @@
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-                    <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a></p>
+                    <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
             </div>
         </div>
     </form>
