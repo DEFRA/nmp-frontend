@@ -80,6 +80,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly string _nitrogenStandard = "NitrogenStandard";
     private readonly string _livestockDataBeforeUpdate = "LivestockDataBeforeUpdate";
     private readonly string _report = "Report";
+    private readonly string _farmAreaForLivestockManureAction = "FarmAreaForLivestockManure";
     private void BindNMPTFarmIdAndNameForNavigation(ReportViewModel? model)
     {
         
@@ -1879,7 +1880,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         try
         {
-            if (!model.IsCheckList)
+            if (!model.IsCheckList && model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
                 (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
@@ -1908,7 +1909,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
 
             }
-            if (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
+            if (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales || model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
                 model.IsGrasslandDerogation = false;
                 var (savedData, error) = await SaveGrasslandDerogationAsync(model);
@@ -1919,7 +1920,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 }
                 SetReportDataToSession(model);
 
-                return RedirectToAction(_livestockManureNitrogenReportChecklist);
+                return RedirectToAction(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland? _farmAreaForLivestockManureAction : _livestockManureNitrogenReportChecklist);
             }
         }
         catch (Exception ex)
@@ -2147,6 +2148,32 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     model.Country = farm.CountryID;
                 }
             }
+            if (!model.IsCheckList && model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            {
+                (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+                if (!string.IsNullOrWhiteSpace(error?.Message))
+                {
+                    TempData["ErrorOnFarmAreaForLivestockManure"] = error.Message;
+                    return View(model);
+                }
+                if (nutrientsLoadingFarmDetails != null)
+                {
+                    model.IsGrasslandDerogation = nutrientsLoadingFarmDetails.Derogation;
+                    if (nutrientsLoadingFarmDetails.TotalFarmed != null)
+                    {
+                        model.TotalFarmArea = nutrientsLoadingFarmDetails.TotalFarmed;
+                        model.TotalAreaInNVZ = nutrientsLoadingFarmDetails.LandInNVZ;
+                    }
+                    else 
+                    {
+                        return View(model);
+                    }
+
+
+                        SetReportDataToSession(model);
+                    return RedirectToAction(_livestockManureNitrogenReportChecklist, model);
+                }
+            }
             SetReportDataToSession(model);
         }
         catch (Exception ex)
@@ -2339,7 +2366,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         else
         {
-            return RedirectToAction(_isGrasslandDerogation);
+            return RedirectToAction(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? _farmAreaForLivestockManureAction : _isGrasslandDerogation);
         }
     }
 

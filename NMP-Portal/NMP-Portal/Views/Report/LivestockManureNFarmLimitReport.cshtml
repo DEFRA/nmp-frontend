@@ -59,7 +59,7 @@
     </div>
     <div class="govuk-grid-column-two-third">
 
-        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
+        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales && Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
         {
             @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
             {
