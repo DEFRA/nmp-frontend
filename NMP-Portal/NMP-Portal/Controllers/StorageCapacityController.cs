@@ -330,12 +330,10 @@ namespace NMP.Portal.Controllers
                 {
                     model.IsStorageTypeChange = true;
                 }
-                if (model.IsCheckAnswer)
+                if (model.IsCheckAnswer && (storageModel != null && model.StorageTypeID == storageModel.StorageTypeID && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
                 {
-                    if (storageModel != null && model.StorageTypeID == storageModel.StorageTypeID && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
-                    {
-                        return RedirectToAction(_checkAnswer);
-                    }
+                    return RedirectToAction(_checkAnswer);
+
                 }
 
                 await BindStorageTypesName(model);
@@ -856,7 +854,7 @@ namespace NMP.Portal.Controllers
                 if (error == null || string.IsNullOrWhiteSpace(error.Message))
                 {
                     model.SolidManureDensity = solidManureTypeResponse.Density;
-                    if (!model.IsCapacityWeightChange || model.IsStorageTypeChange||model.IsLengthWidthDepthChange)
+                    if (!model.IsCapacityWeightChange || model.IsStorageTypeChange || model.IsLengthWidthDepthChange)
                     {
                         model.CapacityWeight = Math.Round((model.Length * model.Width * model.Depth) * (solidManureTypeResponse.Density) ?? 0);  //solid manure weight capacity calculation
                     }
