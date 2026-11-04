@@ -1290,7 +1290,6 @@ namespace NMP.Portal.Controllers
                 }
 
                 model = await BindDataForCheckAnswer(model);
-                //model.IsCapacityWeightChange = false;
                 model.IsLengthWidthDepthChange = false;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
