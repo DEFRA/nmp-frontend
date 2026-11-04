@@ -38,7 +38,7 @@ namespace NMP.Portal.Controllers
         private const string _removeStorageCapacity = "RemoveStorageCapacity";
         private void BindNMPTFarmIdAndNameForNavigation(StorageCapacityViewModel? model)
         {
-            
+
             ViewBag.NMPTFarmId = model?.EncryptedFarmID;
             ViewBag.NMPTFarmName = model?.FarmName;
 
@@ -326,15 +326,15 @@ namespace NMP.Portal.Controllers
                 {
                     storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
                 }
+                if (storageModel != null && model.StorageTypeID != storageModel.StorageTypeID)
+                {
+                    model.IsStorageTypeChange = true;
+                }
                 if (model.IsCheckAnswer)
                 {
                     if (storageModel != null && model.StorageTypeID == storageModel.StorageTypeID && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                     {
                         return RedirectToAction(_checkAnswer);
-                    }
-                    else
-                    {
-                        model.IsStorageTypeChange = true;
                     }
                 }
 
@@ -683,6 +683,16 @@ namespace NMP.Portal.Controllers
         private void ValidateLengthWidthAndDepth(StorageCapacityViewModel model)
         {
 
+            StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+            {
+                storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
+            }
+            if (storageModel != null && (model.Length != storageModel.Length || model.Width != storageModel.Width || model.Depth != storageModel.Depth))
+            {
+                model.IsLengthWidthDepthChange = true;
+            }
+
             ValidateLength(model);
             ValidateDepth(model);
             ValidateWidth(model);
@@ -846,7 +856,10 @@ namespace NMP.Portal.Controllers
                 if (error == null || string.IsNullOrWhiteSpace(error.Message))
                 {
                     model.SolidManureDensity = solidManureTypeResponse.Density;
-                    model.CapacityWeight = Math.Round((model.Length * model.Width * model.Depth) * (solidManureTypeResponse.Density) ?? 0);  //solid manure weight capacity calculation
+                    if (!model.IsCapacityWeightChange || model.IsStorageTypeChange||model.IsLengthWidthDepthChange)
+                    {
+                        model.CapacityWeight = Math.Round((model.Length * model.Width * model.Depth) * (solidManureTypeResponse.Density) ?? 0);  //solid manure weight capacity calculation
+                    }
                     _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
                 }
 
@@ -884,7 +897,7 @@ namespace NMP.Portal.Controllers
                 {
                     return RedirectToAction(_checkAnswer);
                 }
-
+                model.IsCapacityWeightChange = true;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
                 return RedirectToAction(_checkAnswer);
@@ -1277,7 +1290,8 @@ namespace NMP.Portal.Controllers
                 }
 
                 model = await BindDataForCheckAnswer(model);
-
+                //model.IsCapacityWeightChange = false;
+                model.IsLengthWidthDepthChange = false;
                 _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
 
                 if (!string.IsNullOrWhiteSpace(storeCapId))
@@ -1661,7 +1675,7 @@ namespace NMP.Portal.Controllers
                 PopulateNavigationFlagsReport(model, x, v);
 
                 model.FarmID = Convert.ToInt32(_farmDataProtector.Unprotect(q));
-                
+
                 var (storeCapacities, error) =
                     await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID.Value);
 
@@ -1724,12 +1738,12 @@ namespace NMP.Portal.Controllers
                     List<int> fixedYearList = GetReportYearsList();
                     (FarmResponse farm, Error error) = await _farmLogic.FetchFarmByIdAsync(decryptedFarmId);
                     if (string.IsNullOrWhiteSpace(error?.Message) && farm != null)
-                    {                        
+                    {
                         ViewBag.FarmName = farm.Name;
                         ViewBag.NMPTFarmId = q;
                         ViewBag.NMPTFarmName = farm.Name;
                     }
-               
+
                     await BindYearListInViewBegForStorageCapacityManagement(decryptedFarmId, fixedYearList, error);
                 }
                 catch (Exception ex)

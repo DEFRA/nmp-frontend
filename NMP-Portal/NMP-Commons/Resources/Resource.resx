@@ -8678,4 +8678,7 @@ following crop year 2</value>
   <data name="lblHintTextForPotassiumForScotland" xml:space="preserve">
     <value>Enter an index between 0 and 9. Potassium (K) index 2 must be entered as either 2- or 2+</value>
   </data>
+  <data name="lblRecipient" xml:space="preserve">
+    <value>Recipient</value>
+  </data>
 </root>
