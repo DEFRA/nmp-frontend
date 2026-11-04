@@ -62,4 +62,7 @@ public interface IOrganicManureLogic
 
     void SetOrganicManureToSession(OrganicManureViewModel organicManureViewModel);
     void RemoveOrganicManureSession(Guid? sessionId);
+    OrganicManureViewModel? GetOrganicManureBeforeUpdateFromSession(Guid? sessionId);
+    void SetOrganicManureBeforeUpdateToSession(OrganicManureViewModel organicManureViewModel);
+    void RemoveOrganicManureBeforeUpdateSession(Guid? sessionId);
 }

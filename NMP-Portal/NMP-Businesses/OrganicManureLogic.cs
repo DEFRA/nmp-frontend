@@ -16,6 +16,7 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
     private readonly IOrganicManureService _organicManureService = organicManureService;
     private readonly ICropTypeLinkingService _cropTypeLinkingService = cropTypeLinkingService;
     private const string _organicManureSessionKey = "OrganicManure";
+    private const string _organicDataBeforeUpdateSessionKey = "OrganicDataBeforeUpdate";
     public async Task<(bool, Error?)> AddOrganicManuresAsync(string organicManureData)
     {
         _logger.LogTrace("OrganicManureLogic : AddOrganicManuresAsync() called");
@@ -294,6 +295,24 @@ public class OrganicManureLogic(ILogger<OrganicManureLogic> logger, IOrganicManu
     public void RemoveOrganicManureSession(Guid? sessionId)
     {
         string cacheKey = sessionId + " " + _organicManureSessionKey;
+        _organicManureService.RemoveOrganicManureSessionAsync(cacheKey).GetAwaiter().GetResult();
+
+    }
+
+    public OrganicManureViewModel? GetOrganicManureBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _organicDataBeforeUpdateSessionKey;
+        return _organicManureService.GetOrganicManureFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetOrganicManureBeforeUpdateToSession(OrganicManureViewModel organicManureViewModel)
+    {
+        string cacheKey = organicManureViewModel.SessionId + " " + _organicDataBeforeUpdateSessionKey;
+        _organicManureService.SetOrganicManureToSessionAsync(organicManureViewModel, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveOrganicManureBeforeUpdateSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _organicDataBeforeUpdateSessionKey;
         _organicManureService.RemoveOrganicManureSessionAsync(cacheKey).GetAwaiter().GetResult();
 
     }
