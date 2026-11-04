@@ -6340,7 +6340,16 @@ managementPeriod.CropID.HasValue
                     residueGroup = Convert.ToInt32(recommendation.NIndex);
                 }
 
-                (scotlandNmax, error) = await _organicManureLogic.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(crop.CropTypeID.Value, field.SoilTypeID ?? 0, residueGroup);
+                if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
+                {
+                    (List<GrassSiteClassResponse> grassSiteClasses, error) = await _cropLogic.FetchGrassSiteClass(new List<int> { fieldId });
+                    int siteClass = grassSiteClasses?.FirstOrDefault()?.SiteClassId ?? 0;
+                    (scotlandNmax, error) = await _organicManureLogic.FetchScotlandGrassNmax(crop.SwardTypeID ?? 0, crop.SwardManagementID ?? 0, crop.DefoliationSequenceID ?? 0, siteClass);
+                }
+                else
+                {
+                    (scotlandNmax, error) = await _organicManureLogic.FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroup(crop.CropTypeID.Value, field.SoilTypeID ?? 0, residueGroup);
+                }
                 if (scotlandNmax == null)
                 {
                     scotlandNmax = Convert.ToInt32(recommendation?.CropN);
