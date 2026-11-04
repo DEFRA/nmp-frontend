@@ -5633,7 +5633,7 @@ managementPeriod.CropID.HasValue
                 model.TotalRainfall = null;
             }
             _organicManureLogic.SetOrganicManureToSession(model);
-            return RedirectToAction(_conditionsAffectingNutrients);
+            return RedirectToAction(_conditionsAffectingNutrients, new { sessionId = model.SessionId });
         }
 
         private void ValidateMinMaxSoilDrainageDate(OrganicManureViewModel model)
