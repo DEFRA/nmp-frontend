@@ -64,7 +64,7 @@
                         @Resource.lblFarmArea
                     </govuk-fieldset-legend>
                     <p class="govuk-hint">
-                        @Resource.lblDoNotIncludeSurfaceWaterBuildingYards
+                        @(Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDoNotIncludeSurfaceWaterBuildingYards : Resource.lblScotlandNFarmLimitFarmAreaHint)
                     </p>
                     <govuk-input asp-for=@Model.TotalFarmArea type="number" step="any" input-class="govuk-input--width-5" spellcheck="false">
                         <govuk-input-label>

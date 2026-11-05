@@ -8681,4 +8681,7 @@ following crop year 2</value>
   <data name="lblRecipient" xml:space="preserve">
     <value>Recipient</value>
   </data>
+  <data name="lblScotlandNFarmLimitFarmAreaHint" xml:space="preserve">
+    <value>The farm area includes the utilisable agricultural area, including rough grazing. It does not include surface waters, areas of hardstanding, buildings or woodland (unless the woodland is used for grazing), and any land covered by a greenhouse. Include land that is on a formal lease of 2 years or more.</value>
+  </data>
 </root>
