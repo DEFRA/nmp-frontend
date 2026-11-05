@@ -1373,5 +1373,55 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         return (scotlandNmax, error);
     }
 
+    public async Task<(int?, Error?)> FetchScotlandGrassNmaxAsync(int swardTypeId, int swardManagementId, int defoliationSequenceId, int siteClass)
+    {
+        Error? error = null;
+        int? scotlandNmax = null;
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
 
+            string requestUrl = string.Format(ApiurlHelper.FetchScotlandGrassNMaxValueAPI, swardTypeId, swardManagementId, defoliationSequenceId, siteClass);
+
+            var response = await httpClient.GetAsync(requestUrl);
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode)
+            {
+                scotlandNmax = responseWrapper?.Data != null ? (int?)Convert.ToInt32(responseWrapper.Data.ScotlandNMax) : null;
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            error = _logger.HandleException(ex, error);
+        }
+        return (scotlandNmax, error);
+    }
+    public async Task<OrganicManureViewModel?> GetOrganicManureFromSessionAsync(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<OrganicManureViewModel>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
+
+    public async Task SetOrganicManureToSessionAsync(OrganicManureViewModel organicManureViewModel, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, organicManureViewModel);
+    }
+    public async Task RemoveOrganicManureSessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
+    }
 }

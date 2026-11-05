@@ -3586,12 +3586,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             _cropLogic.RemoveExcessWinterRainfallFromSession(sessionId);
             _cropLogic.RemoveCropDataBeforeUpdateFromSession(sessionId);
-            RemoveOrganicDataBeforeUpdateFromSession();
+
+            RemoveOrganicDataFromSession(sessionId);
             RemoveFertiliserDataBeforeUpdateFromSession();
             RemoveReportDataFromSession();
             RemoveStorageCapacityDataFromSession();
             RemoveFertiliserManureFromSession();
-            RemoveOrganicManureFromSession();
             _cropLogic.RemoveCropSession(sessionId);
             await BindSuccessMsgForHarvestYearOverviewPage(q, r, v, w, sessionId);
 
@@ -3993,14 +3993,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         ViewBag.Success = true;
     }
 #pragma warning restore S107
-    private void RemoveOrganicManureFromSession()
-    {
-        if (HttpContext.Session.Exists(_organicManureKey))
-        {
-            HttpContext.Session.Remove(_organicManureKey);
-        }
-    }
-
+  
     private void RemoveFertiliserManureFromSession()
     {
         if (HttpContext.Session.Exists(_fertiliserManureKey))
@@ -4033,12 +4026,19 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
     }
 
-    private void RemoveOrganicDataBeforeUpdateFromSession()
+    private void RemoveOrganicDataFromSession(Guid? sessionId)
     {
-        if (HttpContext.Session.Exists(_organicDataBeforeUpdateKey))
+        if (!sessionId.HasValue)
         {
-            HttpContext.Session.Remove(_organicDataBeforeUpdateKey);
+            return;
         }
+        string cacheKey = sessionId + " " + _organicDataBeforeUpdateKey;
+       
+        _farmLogic.RemoveNmptSession(cacheKey);
+         cacheKey = sessionId + " " + _organicManureKey;
+     
+        _farmLogic.RemoveNmptSession(cacheKey);
+        
     }
 
 

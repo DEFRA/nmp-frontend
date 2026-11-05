@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsCheckAnswer&&Model.IsFieldGroupChange)?"CheckAnswer":"HarvestYearOverview") asp-controller=@((Model.IsCheckAnswer&&Model.IsFieldGroupChange)?"OrganicManure":"Crop") asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer && Model.IsFieldGroupChange) ? "CheckAnswer" : "HarvestYearOverview") asp-controller=@((Model.IsCheckAnswer && Model.IsFieldGroupChange) ? "OrganicManure" : "Crop") asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="FieldGroup" asp-controller="OrganicManure" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -21,7 +21,7 @@
                 </govuk-error-summary>
             }
 
-            <govuk-radios asp-for="@Model.FieldGroup">
+            <govuk-radios for="@Model.FieldGroup">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @Resource.lblWhichFieldsWouldYouLikeToPlanAnOrganic
@@ -41,16 +41,8 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
-                }
-            </p>
+          
+            <partial name="_CancelLink" model="@Model" />
         </div>
 
     </div>

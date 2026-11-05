@@ -49,4 +49,9 @@ public interface IOrganicManureService
     Task<(decimal?, Error?)> FetchTotalApplicationRateByDateRangeAsync(int cropId, string dateFrom, string dateTo, int? organicManureId, bool isPoultry);
     Task<(bool, Error)> CheckGreenCompostExistanceByDateRangeAsync(int fieldId, string dateFrom, string dateTo, int? organicManureId);
     Task<(int?, Error?)> FetchScotlandNmaxByCropIdSoilTypeIdAndResidueGroupAsync(int cropTypeId, int soilTypeId, int residueGroup);
+    Task<(int?, Error?)> FetchScotlandGrassNmaxAsync(int swardTypeId, int swardManagementId, int defoliationSequenceId, int siteClass);
+    Task<OrganicManureViewModel?> GetOrganicManureFromSessionAsync(string cacheKey);
+
+    Task SetOrganicManureToSessionAsync(OrganicManureViewModel organicManureViewModel, string cacheKey);
+    Task RemoveOrganicManureSessionAsync(string cacheKey);
 }
