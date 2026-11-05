@@ -897,7 +897,7 @@ else
                             @foreach (var importOfLivestockManure in ViewBag.ImportOfLivestockManureList)
                             {
                                 <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@importOfLivestockManure.Manure.ManureDate.Date.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) </td>
+                                    <td class="govuk-table__cell">@importOfLivestockManure.Manure.ManureDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) </td>
                                     <td class="govuk-table__cell">@importOfLivestockManure.Manure.ManureType </td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0} {1}", importOfLivestockManure.Manure.Quantity, importOfLivestockManure.Unit)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N2}{1}", importOfLivestockManure.Manure.NContent, importOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
@@ -975,12 +975,12 @@ else
                                     <th scope="col" class="govuk-table__header manure_nitrogen">@Resource.lblPhosphateP2O5</th>
                                     <th scope="col" class="govuk-table__header manure_total_nitrogen">@Resource.lblTotalPhosphate</th>
                                 }
-                                <th scope="col" class="govuk-table__header">@Resource.lblReceiver</th>
+                                <th scope="col" class="govuk-table__header">@Resource.lblRecipient</th>
                             </tr>
                             @foreach (var exportOfLivestockManure in ViewBag.ExportOfLivestockManureList)
                             {
                                 <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@exportOfLivestockManure.Manure.ManureDate.Date.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) </td>
+                                    <td class="govuk-table__cell">@exportOfLivestockManure.Manure.ManureDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) </td>
                                     <td class="govuk-table__cell">@exportOfLivestockManure.Manure.ManureType </td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0} {1}", exportOfLivestockManure.Manure.Quantity, exportOfLivestockManure.Unit)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N2}{1}", exportOfLivestockManure.Manure.NContent, exportOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>

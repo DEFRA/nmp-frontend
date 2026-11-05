@@ -40,5 +40,7 @@ namespace NMP.Commons.ViewModels
         public int? YearToCopyFrom { get; set; }
         public bool? IsDelete { get; set; }
         public string? IsRemovedRecently { get; set; }
+        public bool IsCapacityWeightChange { get; set; } = false;
+        public bool IsLengthWidthDepthChange { get; set; } = false;
     }
 }
