@@ -3,10 +3,32 @@
 @{
     ViewData["Title"] = $"{Resource.lblFarmArea} {Resource.lblHyphen} {Resource.lblLivestockManureNitrogenFarmLimit}";
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.FarmAreaForLivestockManure;
+
+    var backAction = "";
+    if (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+    {
+        if (Model.IsCheckList)
+        {
+            backAction = "LivestockManureNitrogenReportChecklist";
+        }
+        else if (Model.IsComingFromPlan.HasValue && !Model.IsComingFromPlan.Value)
+        {
+            backAction = "Year";
+        }
+        else
+        {
+            backAction = "NVZComplianceReports";
+        }
+    }
+    else
+    {
+        backAction = "LivestockManureNitrogenReportChecklist";
+    }
+
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnFarmAreaForLivestockManure"] != null)
 {
