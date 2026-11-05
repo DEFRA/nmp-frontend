@@ -1924,25 +1924,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    private async Task<(bool flowControl, IActionResult value)> DerogationRedirect(ReportViewModel model)
-    {
-        if (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales || model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
-        {
-            model.IsGrasslandDerogation = false;
-            var (savedData, error) = await SaveGrasslandDerogationAsync(model);
-            if (savedData == null && !string.IsNullOrWhiteSpace(error?.Message))
-            {
-                TempData["DerogationSaveError"] = error.Message;
-                return (flowControl: false, value: View(model));
-            }
-            SetReportDataToSession(model);
-
-            return (flowControl: false, value: RedirectToAction(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? _farmAreaForLivestockManureAction : _livestockManureNitrogenReportChecklist));
-        }
-
-        return (flowControl: true, value: null);
-    }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> IsGrasslandDerogation(ReportViewModel model)
@@ -1981,6 +1962,26 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return View(model);
         }
     }
+
+    private async Task<(bool flowControl, IActionResult value)> DerogationRedirect(ReportViewModel model)
+    {
+        if (model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales || model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+        {
+            model.IsGrasslandDerogation = false;
+            var (savedData, error) = await SaveGrasslandDerogationAsync(model);
+            if (savedData == null && !string.IsNullOrWhiteSpace(error?.Message))
+            {
+                TempData["DerogationSaveError"] = error.Message;
+                return (flowControl: false, value: View(model));
+            }
+            SetReportDataToSession(model);
+
+            return (flowControl: false, value: RedirectToAction(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? _farmAreaForLivestockManureAction : _livestockManureNitrogenReportChecklist));
+        }
+
+        return (flowControl: true, value: null);
+    }
+    
     private async Task<(List<NutrientsLoadingManures>, List<NutrientsLoadingLiveStockViewModel>)> BindViewBegForLivestockManureCheckList(ReportViewModel model)
     {
         (List<NutrientsLoadingManures> nutrientsLoadingManuresList, _) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
@@ -2180,34 +2181,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         return View(model);
     }
 
-    private async Task<(bool flowControl, IActionResult value)> RedirectForScotland(ReportViewModel model)
-    {
-        (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
-        if (!string.IsNullOrWhiteSpace(error?.Message))
-        {
-            TempData["ErrorOnFarmAreaForLivestockManure"] = error.Message;
-            return (flowControl: false, value: View(model));
-        }
-        if (nutrientsLoadingFarmDetails != null)
-        {
-            model.IsGrasslandDerogation = nutrientsLoadingFarmDetails.Derogation;
-            if (nutrientsLoadingFarmDetails.TotalFarmed != null)
-            {
-                model.TotalFarmArea = nutrientsLoadingFarmDetails.TotalFarmed;
-                model.TotalAreaInNVZ = nutrientsLoadingFarmDetails.LandInNVZ;
-            }
-            else
-            {
-                return (flowControl: false, value: View(model));
-            }
-
-
-            SetReportDataToSession(model);
-            return (flowControl: false, value: RedirectToAction(_livestockManureNitrogenReportChecklist, model));
-        }
-
-        return (flowControl: true, value: null);
-    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -2262,6 +2235,34 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             TempData["ErrorOnFarmAreaForLivestockManure"] = ex.Message;
             return View(model);
         }
+    }
+    private async Task<(bool flowControl, IActionResult value)> RedirectForScotland(ReportViewModel model)
+    {
+        (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+        if (!string.IsNullOrWhiteSpace(error?.Message))
+        {
+            TempData["ErrorOnFarmAreaForLivestockManure"] = error.Message;
+            return (flowControl: false, value: View(model));
+        }
+        if (nutrientsLoadingFarmDetails != null)
+        {
+            model.IsGrasslandDerogation = nutrientsLoadingFarmDetails.Derogation;
+            if (nutrientsLoadingFarmDetails.TotalFarmed != null)
+            {
+                model.TotalFarmArea = nutrientsLoadingFarmDetails.TotalFarmed;
+                model.TotalAreaInNVZ = nutrientsLoadingFarmDetails.LandInNVZ;
+            }
+            else
+            {
+                return (flowControl: false, value: View(model));
+            }
+
+
+            SetReportDataToSession(model);
+            return (flowControl: false, value: RedirectToAction(_livestockManureNitrogenReportChecklist, model));
+        }
+
+        return (flowControl: true, value: null);
     }
 
     private void ValidationForFarmAreaLivestockManure(ReportViewModel model, string totalFarmAreaKey, string totalAreaInNVZKey)
