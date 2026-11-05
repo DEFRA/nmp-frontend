@@ -113,10 +113,7 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("Organic Manure Controller : FieldGroup({Q}, {R}, {S}, {SessionId}) action called", q, r, s, sessionId);
 
             OrganicManureViewModel? model = _organicManureLogic.GetOrganicManureFromSession(sessionId);
-            //if(!sessionId.HasValue)
-            //{
-            //    model = new OrganicManureViewModel();
-            //}
+
             try
             {
                 if (!await ValidateQueryParametersAsync(q, r, model))
@@ -196,6 +193,7 @@ namespace NMP.Portal.Controllers
             OrganicManureViewModel? model = new OrganicManureViewModel();
             model.FarmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
             model.HarvestYear = Convert.ToInt32(_farmDataProtector.Unprotect(r));
+            _cropLogic.RemoveHarvestYearFromSession(model.FarmId ?? 0, model.HarvestYear ?? 0);
             model.EncryptedFarmId = q;
             model.EncryptedHarvestYear = r;
             (FarmResponse? farm, Error? error) = await _farmLogic.FetchFarmByIdAsync(model.FarmId.Value);
@@ -545,11 +543,6 @@ namespace NMP.Portal.Controllers
                 model.IsDoubleCropAvailable = false;
 
                 model = await BindGrassPropertyForField(model, cropPlans);
-
-                //if (!HttpContext.Session.Keys.Contains(model.SessionId + " " + _organicManureSessionKey))
-                //{
-                //    return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
-                //}
 
                 var sessionModel = _organicManureLogic.GetOrganicManureFromSession(sessionId);
 
@@ -1707,14 +1700,11 @@ managementPeriod.CropID.HasValue
             Error? error = null;
             try
             {
-                //if (HttpContext.Session.Keys.Contains(sessionId + " " + _organicManureSessionKey))
-                //{
-                //    model = _organicManureLogic.GetOrganicManureFromSession(sessionId);
-                //}
-                //else
-                //{
-                //    return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
-                //}
+                if (model == null)
+                {
+                    return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
+                }
+
                 BindNMPTFarmIdAndNameForNavigation(model);
 
                 List<ManureType> manureTypeList = new List<ManureType>();
@@ -5681,6 +5671,7 @@ managementPeriod.CropID.HasValue
             OrganicManureViewModel? model = _organicManureLogic.GetOrganicManureFromSession(sessionId);
             if (model == null)
             {
+                return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             (List<RainTypeResponse> rainType, Error error) = await _organicManureLogic.FetchRainTypeList();
