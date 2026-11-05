@@ -1405,5 +1405,23 @@ public class OrganicManureService(ILogger<OrganicManureService> logger, IHttpCon
         }
         return (scotlandNmax, error);
     }
+    public async Task<OrganicManureViewModel?> GetOrganicManureFromSessionAsync(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<OrganicManureViewModel>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
 
+    public async Task SetOrganicManureToSessionAsync(OrganicManureViewModel organicManureViewModel, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, organicManureViewModel);
+    }
+    public async Task RemoveOrganicManureSessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
+    }
 }

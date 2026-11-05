@@ -6,7 +6,7 @@
 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="AutumnCropNitrogenUptakeDetail" asp-controller="OrganicManure" method="post" autocomplete="off">
@@ -37,7 +37,7 @@
                                 <td class="govuk-table__cell">@AutumnData.FieldName</td>
                                 <td class="govuk-table__cell">@AutumnData.CropTypeName</td>
                                 <td class="govuk-table__cell">@string.Format(Resource.lblAutumnKgPerHectare, (AutumnData.AutumnCropNitrogenUptake == 0.0m ? 0 : AutumnData.AutumnCropNitrogenUptake.ToString("#.#")))</td>
-                                <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure" asp-route-f="@AutumnData.EncryptedFieldId">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblAutumnCropNitrogenUptake</span></a></td>
+                                <td class="govuk-table__cell"><a asp-action="AutumnCropNitrogenUptake" asp-controller="OrganicManure" asp-route-f="@AutumnData.EncryptedFieldId" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblAutumnCropNitrogenUptake</span></a></td>
                             </tr>
                         }
                     }
@@ -48,7 +48,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+            <p class="govuk-body cancel-link"><a asp-action="ConditionsAffectingNutrients" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
 
         </div>
 

@@ -8,6 +8,7 @@ public class OrganicManureViewModel
     public OrganicManureViewModel()
     {
         ManureType = new ManureType();
+        SessionId=Guid.NewGuid();
     }
     public string? FieldGroup { get; set; }
     public string? EncryptedFarmId { get; set; }
@@ -172,5 +173,6 @@ ErrorMessageResourceName = nameof(Resource.MsgEnterAValueBetween0And9999))]
     public int ApplicationJulyToSeptLevelID { get; set; }
     public bool IsCalculateBasedOnDryMatter { get; set; } = false;
     public bool IsTotalRainfallEnteredManual { get; set; } = false;
+    public Guid SessionId { get; set; }
     
 }

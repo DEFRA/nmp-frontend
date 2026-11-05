@@ -8,7 +8,7 @@
 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsCheckAnswer&&(!Model.IsManureTypeChange)&&(!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ManureType") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsManureTypeChange) && (!Model.IsFieldGroupChange)) ? "CheckAnswer" : "ManureType") asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="OtherMaterialName" asp-controller="OrganicManure" method="post" autocomplete="off">
@@ -23,22 +23,14 @@
             }
 
            @await Html.PartialAsync("~/Views/OrganicManure/_OrganicManureWizardHiddenFields.cshtml", Model)
-                <govuk-input asp-for="@Model.OtherMaterialName">
+                <govuk-input for="@Model.OtherMaterialName">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</govuk-input-label>
                 </govuk-input>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="OtherMaterialName">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
-                }
-            </p>
+         
+            <partial name="_CancelLink" model="@Model" />
 
         </div>
 
