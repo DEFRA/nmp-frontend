@@ -10,25 +10,25 @@
 
     @if (Model.IsCheckAnswer && Model.IsApplicationMethodChange)
     {
-        <govuk-back-link asp-action="ApplicationMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="ApplicationMethod" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else if (Model.IsCheckAnswer && (!Model.IsApplicationMethodChange) && (!Model.IsFieldGroupChange) && (!Model.IsManureTypeChange))
     {
-        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else
     {
         @if (Model.ApplicationRateMethod.HasValue && Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.EnterAnApplicationRate)
         {
-            <govuk-back-link asp-action="ManualApplicationRate" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="ManualApplicationRate" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
         }
         else if (Model.ApplicationRateMethod.HasValue && Model.ApplicationRateMethod.Value == (int)NMP.Commons.Enums.ApplicationRate.CalculateBasedOnAreaAndQuantity)
         {
-            <govuk-back-link asp-action="AreaQuantity" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="AreaQuantity" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
         }
         else
         {
-            <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="ApplicationRateMethod" asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
         }
     }
 
@@ -75,16 +75,8 @@
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="IncorporationMethod">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
-                }
-            </p>
+          
+            <partial name="_CancelLink" model="@Model" />
         </form>
     </div>
 

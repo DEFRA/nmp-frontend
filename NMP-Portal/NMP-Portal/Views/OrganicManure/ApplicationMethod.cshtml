@@ -7,7 +7,7 @@
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.OrganicManureWizardSteps.ApplicationMethod;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer&&Model.IsApplicationMethodChange?"CheckAnswer":"ManureApplyingDate") asp-controller="OrganicManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer && Model.IsApplicationMethodChange ? "CheckAnswer" : "ManureApplyingDate") asp-controller="OrganicManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 
@@ -45,17 +45,8 @@
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="ApplicationMethod">
                 @Resource.lblContinue
             </govuk-button>
-
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a asp-action="CreateManureCancel" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a asp-action="CheckAnswer" asp-controller="OrganicManure">@Resource.lblCancel</a>
-                }
-            </p>
+            
+            <partial name="_CancelLink" model="@Model" />
         </form>
     </div>
 

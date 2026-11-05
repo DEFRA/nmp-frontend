@@ -247,11 +247,11 @@
                         <h2 class="govuk-heading-m non-standard">@Resource.lblOrganicMaterialApplications</h2>
                         @if (ViewBag.AddMannerDisabled != null && ViewBag.AddMannerDisabled)
                         {
-                            <a class="govuk-button disabled add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblAddAnOrganicMaterialApplication</a>
+                            <a class="govuk-button disabled add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnOrganicMaterialApplication</a>
                         }
                         else
                         {
-                            <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">@Resource.lblAddAnOrganicMaterialApplication</a>
+                            <a class="govuk-button add-button" asp-action="FieldGroup" asp-controller="OrganicManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblAddAnOrganicMaterialApplication</a>
                         }
                         @if (Model.HarvestYearPlans != null && Model.HarvestYearPlans.OrganicManureList != null && Model.HarvestYearPlans.OrganicManureList.Any())
                         {
@@ -296,7 +296,7 @@
                                                 <td class="govuk-table__cell">
                                                     @string.Format("{0} {1}", organicManure.Rate, organicManure.RateUnit)
                                                 </td>
-                                                <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@organicManure.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, organicManure.Field))" asp-route-sessionId="@Model.SessionId">@Resource.lblViewOrChange</a></td>
+                                                <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="OrganicManure" asp-route-q="@organicManure.EncryptedId" asp-route-r="@Model.EncryptedFarmId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-t="@organicManure.EncryptedFieldName" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, organicManure.Field))">@Resource.lblViewOrChange</a></td>
                                             </tr>
                                         }
                                     </tbody>
