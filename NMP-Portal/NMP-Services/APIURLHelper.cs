@@ -191,7 +191,7 @@ internal static class ApiurlHelper
     public const string FetchSnsAnalysisByCropIdAPI = "sns-analyses/crop/{0}";
     public const string AddSnsAnalysisAPI = "sns-analyses";
 
-    public const string FetchGrassSeasonsAPI = "vendors/rb209/Grassland/GrasslandSeasons/{0}";
+    public const string FetchGrassSeasonsAPI = "vendors/rb209/Grass/GrassSeasons/{0}";
     public const string FetchGrassGrowthClassesAPI = "grass-growth/byFieldIds";
 
     public const string UpdateOrganicManureAPI = "organic-manures";
