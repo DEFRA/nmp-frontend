@@ -39,10 +39,10 @@
                 <govuk-fieldset-legend class="govuk-fieldset__legend--l">
                     
                 </govuk-fieldset-legend>
-                <govuk-input asp-for=@Model.LivestockQuantity type="number" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false" min="0" max="999999">
+                <govuk-input for=@Model.LivestockQuantity type="number" inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false" min="0" max="999999">
                     <govuk-input-label is-page-heading="true" class="govuk-label--l">
                         @(string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
-                                                Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, unit)</span>@Resource.lblQuestionMark
+                                                Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))@Resource.lblQuestionMark
                     </govuk-input-label>
                     <govuk-input-hint>
                         @Resource.lblQuantityMustBeBetweenOneTo9999999

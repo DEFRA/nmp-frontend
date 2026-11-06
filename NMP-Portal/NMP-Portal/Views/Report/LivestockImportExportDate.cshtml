@@ -3,7 +3,7 @@
 @{
     string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1);
     string heading = (string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
-                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));
+                                                        Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));    
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     var backAction = "";
    
@@ -38,7 +38,7 @@
         @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <govuk-date-input asp-for="@Model.LivestockImportExportDate">
+                <govuk-date-input for="@Model.LivestockImportExportDate">
                     <govuk-date-input-fieldset>
                         <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @heading
