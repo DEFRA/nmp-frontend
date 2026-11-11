@@ -142,7 +142,7 @@
                 }
                 <govuk-summary-list-row>
                     <govuk-summary-list-row-key>
-                        @(string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
+                        @(string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblWhenDidYouThisLivestockManureOptional : Resource.lblWhenDidYouThisLivestockManure), Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                     Resource.lblImport.ToLower() : Resource.lblExport.ToLower()))
                     </govuk-summary-list-row-key>
                     <govuk-summary-list-row-value>

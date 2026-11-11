@@ -45,7 +45,7 @@
                             </p>
                         </govuk-details-text>
                     </govuk-details>
-                    <govuk-input asp-for=@Model.AverageOccupancy type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.AverageOccupancy type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblWhatIsTheOccupancyForThis, Model.LivestockGroupName.ToLower(), Model.Year)<span class="govuk-visually-hidden">@string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>@Resource.lblQuestionMark
                         </govuk-input-label>

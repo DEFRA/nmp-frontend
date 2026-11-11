@@ -2,8 +2,9 @@
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
     string action = !string.IsNullOrWhiteSpace(Model.EncryptedId) ? Resource.lblUpdate : Char.ToUpper(Resource.lblAdd[0]) + Resource.lblAdd.Substring(1);
-    string heading = (string.Format(Resource.lblWhenDidYouThisLivestockManure, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
+    string heading = (string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblWhenDidYouThisLivestockManureOptional : Resource.lblWhenDidYouThisLivestockManure), Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblImport.ToLower() : Resource.lblExport.ToLower()));    
+                                                        
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {action} {Resource.lblImportsExportsOfLivestockManure}";
     var backAction = "";
    
