@@ -634,34 +634,34 @@
                                 @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null && ViewBag.NutrientsLoadingLiveStockGrazingList == null &&
                                                             ViewBag.ImportOfLivestockManureList == null && ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : string.Format("{0:N0}{1}", ViewBag.TotalNLoading, Resource.lblkg))
 
-                        </th>
-                                                }
+                            </th>
+                        }
                         else
                         {
                             <th scope="col" class="govuk-table__header">
                                 @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null && ViewBag.NutrientsLoadingLiveStockGrazingList == null &&
                                                             ViewBag.ImportOfLivestockManureList == null && ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : string.Format("{0:N0}{1}", ((ViewBag.TotalNImportedGrazingLivestock ?? 0) +
                                                             (ViewBag.NutrientsLoadingLiveStockGrazingTotalN ?? 0) - (ViewBag.TotalNExportedGrazingLivestock ?? 0)), Resource.lblkg))
-                                                                                                                                                                                </th>
-                                                                                                                                                                                <th scope="col" class="govuk-table__header">
+                            </th>
+                            <th scope="col" class="govuk-table__header">
                                 @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null && ViewBag.NutrientsLoadingLiveStockGrazingList == null &&
                                                             ViewBag.ImportOfLivestockManureList == null && ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : string.Format("{0:N0}{1}", ((ViewBag.TotalNImportedNonGrazingLivestock ?? 0) +
                                                             (ViewBag.NutrientsLoadingLiveStockNonGrazingTotalN ?? 0) -
                                                             (ViewBag.TotalNExportedNonGrazingLivestock ?? 0)), Resource.lblkg))
-                                                                                                                           </th>
-                                                                                                                           <th scope="col" class="govuk-table__header">
+                            </th>
+                            <th scope="col" class="govuk-table__header">
                                 @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null && ViewBag.NutrientsLoadingLiveStockGrazingList == null &&
                                                             ViewBag.ImportOfLivestockManureList == null && ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : string.Format("{0:N0}{1}", ((ViewBag.TotalPImportedGrazingLivestock ?? 0) +
                                                             (ViewBag.NutrientsLoadingLiveStockGrazingTotalP ?? 0) -
                                                             (ViewBag.TotalPExportedGrazingLivestock ?? 0)), Resource.lblkg))
-                                                                                                                        </th>
-                                                                                                                        <th scope="col" class="govuk-table__header">
+                            </th>
+                            <th scope="col" class="govuk-table__header">
                                 @((ViewBag.NutrientsLoadingLiveStockNonGrazingList == null && ViewBag.NutrientsLoadingLiveStockGrazingList == null &&
                                                             ViewBag.ImportOfLivestockManureList == null && ViewBag.ExportOfLivestockManureList == null) ? Resource.lblHyphen : string.Format("{0:N0}{1}", ((ViewBag.TotalPImportedNonGrazingLivestock ?? 0) +
                                                             (ViewBag.NutrientsLoadingLiveStockNonGrazingTotalP ?? 0) -
                                                             (ViewBag.TotalPExportedNonGrazingLivestock ?? 0)), Resource.lblkg))
-                        </th>
-                                                }
+                            </th>
+                        }
                     </tr>
                 </tbody>
             </table>
@@ -870,7 +870,7 @@ else
         <div class="govuk-grid-column-full margin-bottom-ten">
             <h2 class="govuk-heading-m">@Resource.lblLivestockReportContentThirtyTwo</h2>
             <p class="govuk-body">
-                @Resource.lblLivestockReportContentThirtyThree                
+                @Resource.lblLivestockReportContentThirtyThree
                 <span class="">@string.Format(Resource.lblLivestockReportContentThirtyFour, ViewBag.TotalImportExportTotalN)</span>
             </p>
             @if (ViewBag.ImportOfLivestockManureList != null)
@@ -897,7 +897,7 @@ else
                             @foreach (var importOfLivestockManure in ViewBag.ImportOfLivestockManureList)
                             {
                                 <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@importOfLivestockManure.Manure.ManureDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) </td>
+                                    <td class="govuk-table__cell">@(importOfLivestockManure.Manure.ManureDate != null ? importOfLivestockManure.Manure.ManureDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered) </td>
                                     <td class="govuk-table__cell">@importOfLivestockManure.Manure.ManureType </td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0} {1}", importOfLivestockManure.Manure.Quantity, importOfLivestockManure.Unit)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N2}{1}", importOfLivestockManure.Manure.NContent, importOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
@@ -980,7 +980,7 @@ else
                             @foreach (var exportOfLivestockManure in ViewBag.ExportOfLivestockManureList)
                             {
                                 <tr class="govuk-table__row">
-                                    <td class="govuk-table__cell">@exportOfLivestockManure.Manure.ManureDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) </td>
+                                    <td class="govuk-table__cell">@(exportOfLivestockManure.Manure.ManureDate != null ? exportOfLivestockManure.Manure.ManureDate.ToLocalTime().Date.ToString("dd/MM/yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotEntered) </td>
                                     <td class="govuk-table__cell">@exportOfLivestockManure.Manure.ManureType </td>
                                     <td class="govuk-table__cell">@string.Format("{0:N0} {1}", exportOfLivestockManure.Manure.Quantity, exportOfLivestockManure.Unit)</td>
                                     <td class="govuk-table__cell">@string.Format("{0:N2}{1}", exportOfLivestockManure.Manure.NContent, exportOfLivestockManure.Unit == Resource.lblCubicMeters ? Resource.lblKgPerMeterCube : Resource.lblKgPerTonne)</td>
