@@ -2,7 +2,7 @@
 
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    string title = string.Format(Resource.lblDidYouHaveAnyImportsAndExports, Model.FarmName, Model.Year);
+    string title = string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year);
     ViewData["Title"] = $"{title} {Resource.lblHyphen} {Resource.lblAdd} {Resource.lblImportsExports}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);
@@ -11,7 +11,7 @@
 
 @section BeforeContent {
     <govuk-back-link asp-action=@(Model.IsCheckAnswer ?
-                                      "LivestockImportExportCheckAnswer" : "LivestockManureNitrogenReportChecklist") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+                                                                                "LivestockImportExportCheckAnswer" : "LivestockManureNitrogenReportChecklist") asp-controller="Report">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnIsAnyLivestockImportExport"] != null)
 {
@@ -29,17 +29,17 @@
         @Html.AntiForgeryToken()
         @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds-from-desktop">                
-                    <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsAnyLivestockImportExport">
-                        <govuk-radios-fieldset>
-                            <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+                <govuk-radios class="govuk-radios--inline" for="@Model.IsAnyLivestockImportExport">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                             @title
-                            </govuk-radios-fieldset-legend>
-                            <govuk-radios-hint>@Resource.lblSelectOneOption</govuk-radios-hint>
-                            <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
-                            <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
-                        </govuk-radios-fieldset>
-                    </govuk-radios>
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblImportExportHint:Resource.lblSelectOneOption)</govuk-radios-hint>
+                        <govuk-radios-item value=@yes>@Resource.lblYes</govuk-radios-item>
+                        <govuk-radios-item value=@no>@Resource.lblNo</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>

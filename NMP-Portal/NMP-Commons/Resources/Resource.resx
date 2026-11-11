@@ -4888,7 +4888,7 @@ cubic metres per hectare  not set</value>
     <value>When did you {0} this livestock manure?</value>
   </data>
   <data name="lblHowMuchDidYouImport" xml:space="preserve">
-    <value>How much did you {0}</value>
+    <value>How many tonnes or cubic meters did you {0}</value>
   </data>
   <data name="lblEnterTheAmountYouImportedInTonnes" xml:space="preserve">
     <value>Enter the amount you imported in tonnes</value>
@@ -5149,7 +5149,7 @@ cubic metres per hectare  not set</value>
     <value>places</value>
   </data>
   <data name="lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced" xml:space="preserve">
-    <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal. Accounting for the occupancy.</value>
+    <value>The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal accounting for the occupancy.</value>
   </data>
   <data name="lblTheseAnimalsAreCountedByTheNumberOfPlacesForThem" xml:space="preserve">
     <value>These animals are counted by the number of places for them on the farm. Occupancy means the proportion of the year that these places are occupied by animals.</value>
@@ -7113,10 +7113,10 @@ Regulations</value>
     <value>Lettuce fields</value>
   </data>
   <data name="lblAboutRecommendationForScotlandContent1" xml:space="preserve">
-    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the FAS SRUC Technical Notes.</value>
+    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (Defra), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC (‘Defra and partners’). Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the FAS SRUC Technical Notes.</value>
   </data>
   <data name="lblAboutRecommendationForScotlandContent2" xml:space="preserve">
-    <value>While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, DEFRA and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​</value>
+    <value>While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​</value>
   </data>
   <data name="lblAboutRecommendationForScotlandContent3" xml:space="preserve">
     <value>Users are responsible for the accuracy of their own data and the application of guidance provided. This tool should not be relied upon as the sole source of nutrient management guidance. Always consider local conditions and, if necessary, consult a FACTS Qualified Adviser before making nutrient management decisions.</value>
@@ -8667,7 +8667,7 @@ following crop year 2</value>
     <value>Enter fresh weight yield for {0}</value>
   </data>
   <data name="lblAboutRecommendationForScotlandContent1New" xml:space="preserve">
-    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC.</value>
+    <value>This tool was developed by the Department for Environment, Food and Rural Affairs (Defra), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC (‘Defra and partners’).</value>
   </data>
   <data name="lblAboutRecommendationGuidenceAdviceContentForEnglandAndWales1New" xml:space="preserve">
     <value>NMPT-GB (‘this tool’) was developed by Department for Environment, Food &amp;amp; Rural Affairs (Defra), ADAS and RSK Business Solutions (‘Defra and partners’).</value>
@@ -8680,5 +8680,20 @@ following crop year 2</value>
   </data>
   <data name="lblRecipient" xml:space="preserve">
     <value>Recipient</value>
+  </data>
+  <data name="lblScotlandNFarmLimitFarmAreaHint" xml:space="preserve">
+    <value>The farm area includes the utilisable agricultural area, including rough grazing. It does not include surface waters, areas of hardstanding, buildings or woodland (unless the woodland is used for grazing), and any land covered by a greenhouse. Include land that is on a formal lease of 2 years or more.</value>
+  </data>
+  <data name="lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear" xml:space="preserve">
+    <value>Did you have any imports of livestock manure to {0} in {1}?</value>
+  </data>
+  <data name="lblImportExportHint" xml:space="preserve">
+    <value>Include any imports of livestock manure from other farms/suppliers that are to be spread on NVZ land on your farm.</value>
+  </data>
+  <data name="MsgSelectYesIfYouHadAnyImportsOfLivestockManure" xml:space="preserve">
+    <value>Select yes if you had any imports of livestock manure</value>
+  </data>
+  <data name="lblWhenDidYouThisLivestockManureOptional" xml:space="preserve">
+    <value>When did you {0} this livestock manure (optional)?</value>
   </data>
 </root>

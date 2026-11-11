@@ -828,7 +828,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC. Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the FAS SRUC Technical Notes..
+        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (Defra), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC (‘Defra and partners’). Nutrient recommendations are derived from the AHDB Nutrient Management Application Programming Interface (API) and are based on recommendations in the FAS SRUC Technical Notes..
         /// </summary>
         public static string lblAboutRecommendationForScotlandContent1 {
             get {
@@ -837,7 +837,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (DEFRA), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC..
+        ///   Looks up a localized string similar to This tool was developed by the Department for Environment, Food and Rural Affairs (Defra), the Scottish Government (SG), the Agricultural and Horticultural Development Board (AHDB), ADAS, RSK-BSL and SAC (‘Defra and partners’)..
         /// </summary>
         public static string lblAboutRecommendationForScotlandContent1New {
             get {
@@ -846,7 +846,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to While DEFRA, Scottish Government and partners seek to ensure that the information provided by this tool is accurate at the time of use, DEFRA and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​.
+        ///   Looks up a localized string similar to While Defra and partners seek to ensure that the information provided by this tool is accurate at the time of use, Defra and partners accept no liability for loss, damage or injury howsoever caused (including that caused by negligence) or suffered directly or indirectly in relation to information contained in or omitted from this tool.​.
         /// </summary>
         public static string lblAboutRecommendationForScotlandContent2 {
             get {
@@ -4781,6 +4781,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Did you have any imports of livestock manure to {0} in {1}?.
+        /// </summary>
+        public static string lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear {
+            get {
+                return ResourceManager.GetString("lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Did you have any livestock on {0} in {1}?.
         /// </summary>
         public static string lblDidYouHaveAnyLivestockOn {
@@ -8121,7 +8130,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How much did you {0}.
+        ///   Looks up a localized string similar to How many tonnes or cubic meters did you {0}.
         /// </summary>
         public static string lblHowMuchDidYouImport {
             get {
@@ -8423,6 +8432,15 @@ namespace NMP.Commons.Resources {
         public static string lblImportant {
             get {
                 return ResourceManager.GetString("lblImportant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include any imports of livestock manure from other farms/suppliers that are to be spread on NVZ land on your farm..
+        /// </summary>
+        public static string lblImportExportHint {
+            get {
+                return ResourceManager.GetString("lblImportExportHint", resourceCulture);
             }
         }
         
@@ -14829,6 +14847,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The farm area includes the utilisable agricultural area, including rough grazing. It does not include surface waters, areas of hardstanding, buildings or woodland (unless the woodland is used for grazing), and any land covered by a greenhouse. Include land that is on a formal lease of 2 years or more..
+        /// </summary>
+        public static string lblScotlandNFarmLimitFarmAreaHint {
+            get {
+                return ResourceManager.GetString("lblScotlandNFarmLimitFarmAreaHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scotland - &lt;a target=&quot;_blank&quot; href=&quot;https://www.fas.scot/technical-notes/#fertiliser&quot;&gt;Scotland Rural College (SRUC) Technical Notes&lt;/a&gt;. (opens in a new window), part of the Scottish Government&apos;s Farm Advisory Service.
         /// </summary>
         public static string lblScotlandRecommendationTool {
@@ -16629,7 +16656,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal. Accounting for the occupancy..
+        ///   Looks up a localized string similar to The nitrogen (N) standard figure is the average nitrogen (N) produced by this type of animal accounting for the occupancy..
         /// </summary>
         public static string lblTheNitrogenStandardFigureIsTheAverageNitrogenProduced {
             get {
@@ -20363,6 +20390,15 @@ namespace NMP.Commons.Resources {
         public static string lblWhenDidYouThisLivestockManure {
             get {
                 return ResourceManager.GetString("lblWhenDidYouThisLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When did you {0} this livestock manure (optional)?.
+        /// </summary>
+        public static string lblWhenDidYouThisLivestockManureOptional {
+            get {
+                return ResourceManager.GetString("lblWhenDidYouThisLivestockManureOptional", resourceCulture);
             }
         }
         
@@ -24910,6 +24946,15 @@ namespace NMP.Commons.Resources {
         public static string MsgSelectWhetherYouAreARegisteredOrganicProducer {
             get {
                 return ResourceManager.GetString("MsgSelectWhetherYouAreARegisteredOrganicProducer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select yes if you had any imports of livestock manure.
+        /// </summary>
+        public static string MsgSelectYesIfYouHadAnyImportsOfLivestockManure {
+            get {
+                return ResourceManager.GetString("MsgSelectYesIfYouHadAnyImportsOfLivestockManure", resourceCulture);
             }
         }
         

@@ -83,7 +83,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly string _farmAreaForLivestockManureAction = "FarmAreaForLivestockManure";
     private void BindNMPTFarmIdAndNameForNavigation(ReportViewModel? model)
     {
-        
+
         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
         ViewBag.NMPTFarmName = model?.FarmName;
 
@@ -1981,7 +1981,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         return (flowControl: true, value: null);
     }
-    
+
     private async Task<(List<NutrientsLoadingManures>, List<NutrientsLoadingLiveStockViewModel>)> BindViewBegForLivestockManureCheckList(ReportViewModel model)
     {
         (List<NutrientsLoadingManures> nutrientsLoadingManuresList, _) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.FarmId.Value);
@@ -2415,7 +2415,8 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             if (model.IsAnyLivestockImportExport == null)
             {
-                ModelState.AddModelError(_isAnyLivestockImportExportAction, Resource.MsgSelectYesIfYouHadAnyImportsOrExportsOfLivestockManure);
+                string validationMsg = model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.MsgSelectYesIfYouHadAnyImportsOfLivestockManure : Resource.MsgSelectYesIfYouHadAnyImportsOrExportsOfLivestockManure;
+                ModelState.AddModelError(_isAnyLivestockImportExportAction, validationMsg);
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
