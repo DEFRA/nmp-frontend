@@ -4097,8 +4097,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                     model.ManureTypeName = nutrientsLoadingManure.ManureType;
                     model.EncryptedId = i;
                     model.N = nutrientsLoadingManure.NContent;
-                    model.FarmId = nutrientsLoadingManure.FarmID;
-                    model.Year =model.Year;
+                    model.FarmId = nutrientsLoadingManure.FarmID;                    
                     model.P2O5 = nutrientsLoadingManure.PContent;
                     model.ManureType = new ManureType();
                     model.ManureType.TotalN = nutrientsLoadingManure.NContent;
@@ -5400,13 +5399,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             }
             if (!ModelState.IsValid)
             {
-                var nitrogenError = ModelState["NitrogenStandard"]?.Errors.Count > 0 ?
-                            ModelState["NitrogenStandard"]?.Errors[0].ErrorMessage.ToString() : null;
+                var nitrogenError = ModelState[_nitrogenStandard]?.Errors.Count > 0 ?
+                            ModelState[_nitrogenStandard]?.Errors[0].ErrorMessage.ToString() : null;
 
-                if (nitrogenError != null && nitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState["NitrogenStandard"]?.RawValue, Resource.lblNitrogenStandardForError)))
+                if (nitrogenError != null && nitrogenError.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_nitrogenStandard]?.RawValue, Resource.lblNitrogenStandardForError)))
                 {
-                    ModelState["NitrogenStandard"]?.Errors.Clear();
-                    ModelState["NitrogenStandard"]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
+                    ModelState[_nitrogenStandard]?.Errors.Clear();
+                    ModelState[_nitrogenStandard]?.Errors.Add(Resource.MsgEnterAValueBetween0And9999);
                 }
             }
             BindNMPTFarmIdAndNameForNavigation(model);
