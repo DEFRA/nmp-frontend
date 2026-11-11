@@ -81,11 +81,11 @@ public class ReportService(ILogger<ReportService> logger, IHttpContextAccessor h
 
         return (data ?? new NutrientsLoadingFarmDetail(), error);
     }
-    public async Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmIdAsync(int farmId)
+    public async Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmIdAsync(int farmId,int year)
     {
         var (data, error) = await SendRequestAsync<List<NutrientsLoadingManures>>(
             client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchNutrientsloadingFarmDetailsFarmIdAPI, farmId)
+                string.Format(ApiurlHelper.FetchNutrientsloadingFarmDetailsFarmIdAPI, farmId,year)
             ),
             wrapper =>
             {

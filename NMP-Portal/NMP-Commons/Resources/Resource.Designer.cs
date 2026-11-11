@@ -11470,6 +11470,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NitrogenStandard.
+        /// </summary>
+        public static string lblNitrogenStandardForError {
+            get {
+                return ResourceManager.GetString("lblNitrogenStandardForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nitrogen (N) standard per animal, per year.
         /// </summary>
         public static string lblNitrogenStandardPerAnimalPerYear {
@@ -19719,7 +19728,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}?.
+        ///   Looks up a localized string similar to What is the occupancy for this {0} type in {1}.
         /// </summary>
         public static string lblWhatIsTheOccupancyForThis {
             get {

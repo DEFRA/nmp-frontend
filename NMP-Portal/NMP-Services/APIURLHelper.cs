@@ -212,7 +212,7 @@ internal static class ApiurlHelper
     public const string AddNutrientsLoadingFarmDetailsAPI = "nutrientsLoadingFarmDetails";
     public const string FetchNutrientsLoadingFarmDetailsByfarmIdAndYearAPI = "nutrientsLoadingFarmDetails/{0}?year={1}";
     public const string UpdateNutrientsLoadingFarmDetailsAPI = "nutrientsLoadingFarmDetails";
-    public const string FetchNutrientsloadingFarmDetailsFarmIdAPI = "/nutrientsLoadingManures/{0}";
+    public const string FetchNutrientsloadingFarmDetailsFarmIdAPI = "/nutrientsLoadingManures/{0}?year={1}";
     public const string AddNutrientsLoadingManureAPI = "nutrientsLoadingManures";
     public const string FetchNutrientsLoadingFarmDetailsByFarmIdAPI = "nutrientsLoadingFarmDetailsByFarmId/{0}";
     public const string FetchLivestockGroupListAPI = "livestock-groups";

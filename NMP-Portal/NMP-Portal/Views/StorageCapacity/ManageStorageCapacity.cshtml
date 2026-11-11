@@ -131,7 +131,7 @@
                                 {
                                     dynamic slurryStorage = slurryList[i];
                                     totalCapacity += slurryStorage.CapacityVolume;
-                                    totalSurfaceArea += slurryStorage.SurfaceArea;
+                                    totalSurfaceArea += slurryStorage.SurfaceArea??0;
                                     string isCoveredText;
                                     if (slurryStorage.IsCovered == null)
                                     {
@@ -149,7 +149,7 @@
                                         <td class="govuk-table__cell">@slurryStorage.StoreName</td>
                                         <td class="govuk-table__cell">@slurryStorage.StorageTypeName</td>
                                         <td class="govuk-table__cell">@isCoveredText</td>
-                                        <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", slurryStorage.SurfaceArea, Resource.lblMetresSquared)</td>
+                                        <td class="govuk-table__cell"> @(string.Format("{0:N0} {1}", slurryStorage.SurfaceArea??0, Resource.lblMetresSquared))</td>
                                         <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", slurryStorage.CapacityVolume, Resource.lblCubicMeters)</td>
                                         <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-storeCapId="@slurryStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan" aria-label="@(string.Format("{0} {1}", Resource.lblChange, slurryStorage.StoreName))">@Resource.lblChange</a></td>
                                     </tr>
@@ -240,12 +240,12 @@
                                 dynamic solidStorage = solidList[i];
                                 totalCapacity += solidStorage.CapacityVolume;
                                 totalWeight += solidStorage.CapacityWeight;
-                                totalSurfaceAreaSolid += solidStorage.SurfaceArea;
+                                totalSurfaceAreaSolid += solidStorage.SurfaceArea??0;
 
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@solidStorage.StoreName</td>
                                     <td class="govuk-table__cell">@solidStorage.SolidManureTypeName</td>
-                                    <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidStorage.SurfaceArea, Resource.lblMetresSquared)</td>
+                                    <td class="govuk-table__cell"> @(string.Format("{0:N0} {1}", solidStorage.SurfaceArea??0, Resource.lblMetresSquared))</td>
                                     <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidStorage.CapacityVolume, Resource.lblCubicMeters)</td>
                                     <td class="govuk-table__cell"> @string.Format("{0:N0} {1}", solidStorage.CapacityWeight, Resource.lbltonnes)</td>
                                     <td class="govuk-table__cell"><a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-storeCapId="@solidStorage.EncryptedStoreCapacityId" asp-route-q="@Model.IsComingFromManageToHubPage" asp-route-r="@ViewBag.IsPlan" aria-label="@(string.Format("{0} {1}", Resource.lblChange, solidStorage.StoreName))">@Resource.lblChange</a></td>
