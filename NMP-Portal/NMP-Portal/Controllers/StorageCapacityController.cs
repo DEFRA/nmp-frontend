@@ -1279,12 +1279,12 @@ namespace NMP.Portal.Controllers
                     {
                         return RedirectToFarmList();
                     }
-
                     CalculateCapacityVolumnAndSurfaceArea(model);
                 }
                 else
                 {
                     model = await BindDataForUpdate(storeCapId, q, r);
+                    model.IsCapacityWeightChange = true;
                 }
 
                 model = await BindDataForCheckAnswer(model);

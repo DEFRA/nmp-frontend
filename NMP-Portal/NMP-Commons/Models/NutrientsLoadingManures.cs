@@ -3,6 +3,7 @@ public class NutrientsLoadingManures
 {
     public int? ID { get; set; }
     public int? FarmID { get; set; }
+    public int? Year { get; set; }
     public string? ManureLookupType { get; set; }
     public int ManureTypeID { get; set; }
     public string? ManureType { get; set; }

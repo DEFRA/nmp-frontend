@@ -7,7 +7,7 @@ public interface IReportService
     Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData);
     Task<(NutrientsLoadingFarmDetail, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(int farmId,int year);
     Task<(NutrientsLoadingFarmDetail, Error)> UpdateNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData);
-    Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmIdAsync(int farmId);
+    Task<(List<NutrientsLoadingManures>, Error)> FetchNutrientsLoadingManuresByFarmIdAsync(int farmId, int year);
     Task<(NutrientsLoadingManures, Error)> AddNutrientsLoadingManuresAsync(string nutrientsLoadingManure);
     Task<(List<NutrientsLoadingFarmDetail>, Error)> FetchNutrientsLoadingFarmDetailsByFarmIdAsync(int farmId);
     Task<(List<CommonResponse>, Error)> FetchLivestockGroupListAsync();

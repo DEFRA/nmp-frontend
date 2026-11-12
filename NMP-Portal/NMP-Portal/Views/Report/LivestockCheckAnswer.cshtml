@@ -269,7 +269,7 @@
 
                                 <govuk-summary-list-row class=@(!Model.AverageOccupancy.HasValue ? "govuk-error-message":"")>
                                     <govuk-summary-list-row-key>
-                                        @string.Format(Resource.lblWhatIsTheOccupancyForThis, Model.LivestockGroupName.ToLower(), Model.Year)
+                                        @string.Format("{0}{1}", string.Format(Resource.lblWhatIsTheOccupancyForThis, Model.LivestockGroupName.ToLower(), Model.Year),Resource.lblQuestionMark)
                                     </govuk-summary-list-row-key>
                                     <govuk-summary-list-row-value>
                                         @(Model.AverageOccupancy.HasValue ? (string.Concat(Model.AverageOccupancy, Resource.lblPercentage)) : Resource.lblNotSet)
