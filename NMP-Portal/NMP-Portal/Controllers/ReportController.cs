@@ -81,6 +81,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     private readonly string _livestockDataBeforeUpdate = "LivestockDataBeforeUpdate";
     private readonly string _report = "Report";
     private readonly string _farmAreaForLivestockManureAction = "FarmAreaForLivestockManure";
+    private readonly string _averageOccupancy = "AverageOccupancy";
     private void BindNMPTFarmIdAndNameForNavigation(ReportViewModel? model)
     {
 
@@ -5070,6 +5071,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 ModelState.AddModelError(_averageNumber, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 999999));
             }
         }
+        if (!ModelState.IsValid)
+        {
+            UpdateNumericValidationError(_averageNumber, Resource.lblValue.ToLower(), Resource.lblAverageNumberForError, 0, 999999);
+        }
     }
 
     [HttpGet]
@@ -5110,7 +5115,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 ModelState.AddModelError("AverageNumberOfPlaces", string.Format(Resource.MsgEnterTheAverageTotalNumberOfThis, model.LivestockGroupName, model.Year));
             }
-
+            if (!ModelState.IsValid)
+            {
+                UpdateNumericValidationError("AverageNumberOfPlaces", Resource.lblValue.ToLower(), Resource.lblAverageNumberOfPlacesForError, 0, 999999);
+            }
             BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
@@ -5313,13 +5321,16 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             Error? error = new Error();
             if (model.AverageOccupancy == null)
             {
-                ModelState.AddModelError("AverageOccupancy", Resource.MsgEnterTheAverageOccupancy);
+                ModelState.AddModelError(_averageOccupancy, Resource.MsgEnterTheAverageOccupancy);
             }
             else if (model.AverageOccupancy < 0 || model.AverageOccupancy > 100)
             {
-                ModelState.AddModelError("AverageOccupancy", string.Format(Resource.MsgEnterValueInBetween, Resource.lblOccupancy, 0, 100));
+                ModelState.AddModelError(_averageOccupancy, string.Format(Resource.MsgEnterValueInBetween, Resource.lblOccupancy, 0, 100));
             }
-
+            if (!ModelState.IsValid)
+            {
+                UpdateNumericValidationError(_averageOccupancy,  Resource.lblValue.ToLower(), Resource.lblWhatIsTheAverageOccupancy, 0, 100);
+            }
 
             BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
@@ -5368,6 +5379,35 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
+    private void UpdateNumericValidationError(
+    string propertyName,
+    string fieldLabel,
+    string resourceLabel,int minValue,int maxValue)
+    {
+        var modelState = ModelState[propertyName];
+
+        if (modelState?.Errors.Count > 0)
+        {
+            var errorMessage = modelState.Errors[0].ErrorMessage;
+
+            var numericError = string.Format(
+                Resource.lblEnterNumericValue,
+                modelState.RawValue,
+                resourceLabel);
+
+            if (errorMessage.Equals(numericError))
+            {
+                modelState.Errors.Clear();
+
+                modelState.Errors.Add(new ModelError(
+                    string.Format(
+                        Resource.MsgEnterValueInBetween,
+                        fieldLabel,
+                        minValue,
+                        maxValue)));
+            }
+        }
+    }
     [HttpGet]
     public IActionResult NitrogenStandard()
     {
