@@ -20,7 +20,7 @@
             @await Html.PartialAsync("~/Views/Farm/_FarmWizardHiddenFields.cshtml", Model)
             <govuk-input for="@Model.Name">
                 <govuk-input-label class="govuk-label--l" is-page-heading="true">@Resource.lblWhatIsTheFarmName</govuk-input-label>
-                <govuk-input-hint>@Resource.lblIfYouhaveMoreThanOneHolding</govuk-input-hint>
+                <govuk-input-hint>@Resource.lblFarmHintTextForEngAnsWales</govuk-input-hint>
             </govuk-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
