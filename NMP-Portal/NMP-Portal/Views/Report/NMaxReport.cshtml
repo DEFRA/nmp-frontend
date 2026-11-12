@@ -320,7 +320,7 @@
                                     @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                     {
                                         <td class="govuk-table__cell">
-                                            @string.Format("{0:N1}{1}", nmaxLimitReportResponse.CropArea, Resource.lblHectareForReport)
+                                            @string.Format("{0:N2}{1}", nmaxLimitReportResponse.CropArea, Resource.lblHectareForReport)
                                         </td>
                                         @if (nmaxLimit.GroupName.Equals(Resource.lblGroup1Vegetables)
                                                                 || nmaxLimit.GroupName.Equals(Resource.lblGroup2Vegetables) || nmaxLimit.GroupName.Equals(Resource.lblGroup3Vegetables))
@@ -398,7 +398,7 @@
                                 @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                 {
                                     <th scope="col" class="govuk-table__header">
-                                        @(nmaxLimit.NMaxLimitReportResponse.Sum(x => x.CropArea) > 0 ? string.Format("{0:N1}{1}", nmaxLimit.NMaxLimitReportResponse.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
+                                        @(nmaxLimit.NMaxLimitReportResponse.Sum(x => x.CropArea) > 0 ? string.Format("{0:N2}{1}", nmaxLimit.NMaxLimitReportResponse.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
                                     </th>
                                     @if (nmaxLimit.GroupName.Equals(Resource.lblGroup1Vegetables)
                                                             || nmaxLimit.GroupName.Equals(Resource.lblGroup2Vegetables) || nmaxLimit.GroupName.Equals(Resource.lblGroup3Vegetables))
@@ -495,7 +495,7 @@
                                         @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                         {
                                             <td class="govuk-table__cell">
-                                                @string.Format("{0:N1}{1}", nitrogenApplications.CropArea, Resource.lblHectareForReport)
+                                                @string.Format("{0:N2}{1}", nitrogenApplications.CropArea, Resource.lblHectareForReport)
                                             </td>
                                         }
                                         <td class="govuk-table__cell">@((nitrogenApplications.InorganicNRate != null && nitrogenApplications.InorganicNRate > 0) ? string.Format("{0:N0}{1}", nitrogenApplications.InorganicNRate, Resource.lblkg) : Resource.lblHyphen)</td>
@@ -598,7 +598,7 @@
                                     @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                                     {
                                         <th scope="col" class="govuk-table__header">
-                                            @(allNitrogenApps.Sum(x => x.CropArea) > 0 ? string.Format("{0:N1}{1}", allNitrogenApps.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
+                                            @(allNitrogenApps.Sum(x => x.CropArea) > 0 ? string.Format("{0:N2}{1}", allNitrogenApps.Sum(x => x.CropArea), Resource.lblHectareForReport) : Resource.lblHyphen)
                                         </th>
                                     }
                                     <th scope="col" class="nonbold govuk-table__header">@Resource.lblHyphen</th>
