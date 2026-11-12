@@ -927,6 +927,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About soil analysis methods.
+        /// </summary>
+        public static string lblAboutSoilAnalysisMethods {
+            get {
+                return ResourceManager.GetString("lblAboutSoilAnalysisMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This tool is currently in a private beta phase. This means that we are testing the tool with a group of invited users. As such, some functionality may not work as expected and some features have not yet been developed..
         /// </summary>
         public static string lblAboutTermsOfUseLine1 {
@@ -2723,6 +2732,33 @@ namespace NMP.Commons.Resources {
         public static string lblAverageForTheYear {
             get {
                 return ResourceManager.GetString("lblAverageForTheYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AverageNumber.
+        /// </summary>
+        public static string lblAverageNumberForError {
+            get {
+                return ResourceManager.GetString("lblAverageNumberForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average number of places.
+        /// </summary>
+        public static string lblAverageNumberOfPlaces {
+            get {
+                return ResourceManager.GetString("lblAverageNumberOfPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AverageNumberOfPlaces.
+        /// </summary>
+        public static string lblAverageNumberOfPlacesForError {
+            get {
+                return ResourceManager.GetString("lblAverageNumberOfPlacesForError", resourceCulture);
             }
         }
         
@@ -6280,6 +6316,15 @@ namespace NMP.Commons.Resources {
         public static string lblFarmFields {
             get {
                 return ResourceManager.GetString("lblFarmFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If your business includes more than one holding, add each holding as a separate farm..
+        /// </summary>
+        public static string lblFarmHintTextForEngAnsWales {
+            get {
+                return ResourceManager.GetString("lblFarmHintTextForEngAnsWales", resourceCulture);
             }
         }
         
@@ -15135,7 +15180,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SEPA publish rainfall data for Scotland. &lt;a href=&quot;https://www2.sepa.org.uk/rainfall&quot; target=&quot;_blank&quot;&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;.
+        ///   Looks up a localized string similar to SEPA publish rainfall data for Scotland. &lt;a href=&quot;https://www2.sepa.org.uk/rainfall&quot; target=&quot;_blank&quot;&gt;View SEPA rainfall data (opens in a new window)&lt;/a&gt;.
         /// </summary>
         public static string lblSEPAPublishRainfallDataForScotland {
             get {

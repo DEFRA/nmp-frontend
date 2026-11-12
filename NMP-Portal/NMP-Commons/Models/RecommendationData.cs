@@ -13,4 +13,5 @@ public class RecommendationData
     public int? CropTypeID { get; set; }
     public int? ManagementTableIndex  { get; set; }
     public string? DefoliationSequenceName { get; set; }
+    public int? FarmRb209CountryID { get; set; }
 }

@@ -7572,7 +7572,7 @@ released later in the year – see &lt;strong&gt;Next Releases&lt;/strong&gt; be
     <value>Is the winter rainfall (from 1 October {0} to 1 March {1}) at {2} 450mm or more?</value>
   </data>
   <data name="lblSEPAPublishRainfallDataForScotland" xml:space="preserve">
-    <value>SEPA publish rainfall data for Scotland. &lt;a href="https://www2.sepa.org.uk/rainfall" target="_blank"&gt;View SEPA rainfall data (open in a new window)&lt;/a&gt;</value>
+    <value>SEPA publish rainfall data for Scotland. &lt;a href="https://www2.sepa.org.uk/rainfall" target="_blank"&gt;View SEPA rainfall data (opens in a new window)&lt;/a&gt;</value>
   </data>
   <data name="lblUpdateRainfall" xml:space="preserve">
     <value>Update rainfall</value>
@@ -8698,5 +8698,20 @@ following crop year 2</value>
   </data>
   <data name="lblNitrogenStandardForError" xml:space="preserve">
     <value>NitrogenStandard</value>
+  </data>
+  <data name="lblAboutSoilAnalysisMethods" xml:space="preserve">
+    <value>About soil analysis methods</value>
+  </data>
+  <data name="lblAverageNumberOfPlacesForError" xml:space="preserve">
+    <value>AverageNumberOfPlaces</value>
+  </data>
+  <data name="lblAverageNumberOfPlaces" xml:space="preserve">
+    <value>Average number of places</value>
+  </data>
+  <data name="lblAverageNumberForError" xml:space="preserve">
+    <value>AverageNumber</value>
+  </data>
+  <data name="lblFarmHintTextForEngAnsWales" xml:space="preserve">
+    <value>If your business includes more than one holding, add each holding as a separate farm.</value>
   </data>
 </root>

@@ -6,17 +6,24 @@
 <govuk-radios for="@Model.PhosphorusMethodologyID">
 
     <govuk-radios-fieldset>
-
         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
             @Resource.lblWhichSoilAnalysisMethodWasUsed
         </govuk-radios-fieldset-legend>
+       
+         <govuk-radios-hint>
+            <govuk-details>
+                <govuk-details-summary>
+                    @Resource.lblAboutSoilAnalysisMethods
+                </govuk-details-summary>
 
-        <govuk-radios-hint>
-            @Resource.lblSoilAnalysisMethodHintRb209
-            <br />
-            <br />
-            @Resource.lblSoilAnalysisMethodHintSac
-        </govuk-radios-hint>
+                <govuk-details-text class="explanations">
+                    @Resource.lblSoilAnalysisMethodHintRb209
+                    <br />
+                    <br />
+                    @Resource.lblSoilAnalysisMethodHintSac
+                </govuk-details-text>
+            </govuk-details>
+        </govuk-radios-hint> 
 
         @if (ViewBag.SoilMethologiesList != null)
         {
