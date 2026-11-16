@@ -2,7 +2,7 @@
 
 @model NMP.Commons.ViewModels.ReportViewModel
 @{
-    string title = string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyExportsOfLivestockManure : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year);
+    string title =string.Format(Resource.lblDidYouHaveAnyExportsOfLivestockManure, Model.FarmName, Model.Year);
     ViewData["Title"] = $"{title} {Resource.lblHyphen} {Resource.lblAdd} {Resource.lblImportsExports}";
     var yes = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True);
     var no = Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False);

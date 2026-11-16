@@ -97,22 +97,7 @@
                                     break;
                             }
                         }
-                        @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
-                        {
-                            <govuk-summary-list-row>
-                                <govuk-summary-list-row-key class=@((!Model.IsAnyLivestockImport.HasValue) ? "govuk-error-message" : "")>
-                                    @string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)
-                                </govuk-summary-list-row-key>
-                                <govuk-summary-list-row-value>
-                                    @IsAnyLivestockImportExport
-                                </govuk-summary-list-row-value>
-                                <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="IsAnyLivestockImport" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
-                                </govuk-summary-list-row-actions>
-                            </govuk-summary-list-row>
-                        }
-                        else
-                        {
+                      
                             if (Model.IsAnyLivestockImport != null)
                             {
                                 <govuk-summary-list-row>
@@ -141,11 +126,9 @@
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
-                        }
+                        
                     }
-                    @if (Model.IsImport == null && (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.England ||
-    (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland &&
-     Model.IsManageImportExport==true)))
+                    @if (Model.IsImport == null &&  Model.IsManageImportExport)
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key class=@((!Model.ImportExport.HasValue) ? "govuk-error-message" : "")>
