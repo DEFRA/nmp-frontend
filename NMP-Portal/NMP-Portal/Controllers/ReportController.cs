@@ -1996,7 +1996,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ViewBag.EncryptedImport = _reportDataProtector.Protect(Resource.lblImport);
             ViewBag.EncryptedExport = _reportDataProtector.Protect(Resource.lblExport);
         
-        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, _) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, _) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
         ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
         return (nutrientsLoadingManuresList, nutrientsLoadingLiveStockList);
     }
