@@ -35,7 +35,7 @@ namespace NMP.Commons.Enums
         Occupancy = 25,
         OccupancyAndStandard=26,
         ImportExportOption=27,
-        IsAnyLivestockImportExport = 28,
+        IsAnyLivestockImport = 28,
         LivestockImportExportDate = 29,
         LivestockManualNutrientValue = 30,
         LivestockManureNFarmLimitReport = 31,
@@ -45,6 +45,7 @@ namespace NMP.Commons.Enums
         ManureGroup=35,
         ManureType = 36,
         UpdateLivestockImportExport = 37,
-        OtherMaterialName=38
+        OtherMaterialName=38,
+        IsAnyLivestockExport = 39,
     }
 }
