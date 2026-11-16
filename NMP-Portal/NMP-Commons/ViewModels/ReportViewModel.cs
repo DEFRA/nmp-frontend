@@ -31,7 +31,8 @@ namespace NMP.Commons.ViewModels
 
         public decimal? TotalAreaInNVZ { get; set; }
         public decimal? LivestockNumbers { get; set; }
-        public bool? IsAnyLivestockImportExport { get; set; }
+        public bool? IsAnyLivestockImport { get; set; }
+        public bool? IsAnyLivestockExport { get; set; }
         public decimal? ImportsExportsOfLivestockManure { get; set; }
         public bool IsCheckList { get; set; } = false;
         public int? ImportExport { get; set; }

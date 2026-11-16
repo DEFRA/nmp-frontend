@@ -205,7 +205,7 @@
                             {
                                 <tr class="govuk-table__row">
                                     <td class="govuk-table__cell">@fieldDetail.FieldName</td>
-                                    <td class="govuk-table__cell">@string.Format("{0:N0}{1}", fieldDetail.CroppedArea, Resource.lblHectareForReport)</td>
+                                    <td class="govuk-table__cell">@string.Format("{0:N2}{1}", fieldDetail.CroppedArea, Resource.lblHectareForReport)</td>
                                     <td class="govuk-table__cell">@fieldDetail.PreviousCrop</td>
                                     <td class="govuk-table__cell">@fieldDetail.SoilType</td>
                                     <td class="govuk-table__cell">@fieldDetail.NitrogenResidueGroup</td>
@@ -226,7 +226,7 @@
                                         }
                                         else if (allCroppedArea > 0)
                                         {
-                                            allCroppedAreaText = string.Format("{0:N0}{1}", allCroppedArea, Resource.lblHectareForReport);
+                                            allCroppedAreaText = string.Format("{0:N2}{1}", allCroppedArea, Resource.lblHectareForReport);
                                         }
                                         else
                                         {
