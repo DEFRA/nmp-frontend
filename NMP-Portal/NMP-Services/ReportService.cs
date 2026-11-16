@@ -282,11 +282,11 @@ public class ReportService(ILogger<ReportService> logger, IHttpContextAccessor h
         return (data ?? new NutrientsLoadingLiveStock(), error);
     }
 
-    public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYearAsync(int farmId, int year)
+    public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYearAsync(int farmId, int year, bool isScotland)
     {
         var (data, error) = await SendRequestAsync<List<NutrientsLoadingLiveStockViewModel>>(
             client => client.GetAsync(
-                string.Format(ApiurlHelper.FetchNutrientsLoadingLivestockByFarmIdAndYearAPI, farmId, year)
+                string.Format(ApiurlHelper.FetchNutrientsLoadingLivestockByFarmIdAndYearAPI, farmId, year, isScotland)
             ),
             wrapper =>
             {
