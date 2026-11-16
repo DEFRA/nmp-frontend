@@ -8714,4 +8714,13 @@ following crop year 2</value>
   <data name="lblFarmHintTextForEngAnsWales" xml:space="preserve">
     <value>If your business includes more than one holding, add each holding as a separate farm.</value>
   </data>
+  <data name="lblDidYouHaveAnyExportsOfLivestockManure" xml:space="preserve">
+    <value>Did you have any exports of livestock manure to {0} in {1}?</value>
+  </data>
+  <data name="MsgImportsOfManureForMustBeCompleted" xml:space="preserve">
+    <value>Imports of manure for {0} must be completed</value>
+  </data>
+  <data name="MsgExportsOfManureForMustBeCompleted" xml:space="preserve">
+    <value>Exports of manure for {0} must be completed</value>
+  </data>
 </root>

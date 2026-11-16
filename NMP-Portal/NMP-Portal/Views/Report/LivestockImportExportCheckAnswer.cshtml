@@ -22,19 +22,7 @@
     {
         importExport = Enum.GetName(typeof(NMP.Commons.Enums.ImportExport), Model.ImportExport);
     }
-    var IsAnyLivestockImportExport = "";
-    if (Model.IsAnyLivestockImportExport != null)
-    {
-        switch (Model.IsAnyLivestockImportExport)
-        {
-            case true:
-                IsAnyLivestockImportExport = Resource.lblYes;
-                break;
-            case false:
-                IsAnyLivestockImportExport = Resource.lblNo;
-                break;
-        }
-    }
+
     string unit = "";
     if (Model.IsManureTypeLiquid != null)
     {
@@ -79,21 +67,85 @@
 
          
                 <govuk-summary-list>
+
                     @if (!Model.IsManageImportExport && string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
                     {
-                        <govuk-summary-list-row>
-                            <govuk-summary-list-row-key class=@((!Model.IsAnyLivestockImportExport.HasValue) ? "govuk-error-message" : "")>
-                                @string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)
-                            </govuk-summary-list-row-key>
-                            <govuk-summary-list-row-value>
-                                @IsAnyLivestockImportExport
-                            </govuk-summary-list-row-value>
-                            <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="IsAnyLivestockImportExport" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
-                            </govuk-summary-list-row-actions>
-                        </govuk-summary-list-row>
+
+                        var IsAnyLivestockImportExport = "";
+                        @if (Model.IsAnyLivestockImport != null)
+                        {
+                            switch (Model.IsAnyLivestockImport)
+                            {
+                                case true:
+                                    IsAnyLivestockImportExport = Resource.lblYes;
+                                    break;
+                                case false:
+                                    IsAnyLivestockImportExport = Resource.lblNo;
+                                    break;
+                            }
+                        }
+                        var IsAnyLivestockExport = "";
+                        @if (Model.IsAnyLivestockExport != null)
+                        {
+                            switch (Model.IsAnyLivestockExport)
+                            {
+                                case true:
+                                    IsAnyLivestockExport = Resource.lblYes;
+                                    break;
+                                case false:
+                                    IsAnyLivestockExport = Resource.lblNo;
+                                    break;
+                            }
+                        }
+                        @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+                        {
+                            <govuk-summary-list-row>
+                                <govuk-summary-list-row-key class=@((!Model.IsAnyLivestockImport.HasValue) ? "govuk-error-message" : "")>
+                                    @string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)
+                                </govuk-summary-list-row-key>
+                                <govuk-summary-list-row-value>
+                                    @IsAnyLivestockImportExport
+                                </govuk-summary-list-row-value>
+                                <govuk-summary-list-row-actions>
+                                    <govuk-summary-list-row-action asp-action="IsAnyLivestockImport" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
+                                </govuk-summary-list-row-actions>
+                            </govuk-summary-list-row>
+                        }
+                        else
+                        {
+                            if (Model.IsAnyLivestockImport != null)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class=@((!Model.IsAnyLivestockImport.HasValue) ? "govuk-error-message" : "")>
+                                        @string.Format(Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear, Model.FarmName, Model.Year)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @IsAnyLivestockImportExport
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="IsAnyLivestockImport" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                          else  if (Model.IsAnyLivestockExport != null)
+                            {
+                                <govuk-summary-list-row>
+                                    <govuk-summary-list-row-key class=@((!Model.IsAnyLivestockExport.HasValue) ? "govuk-error-message" : "")>
+                                        @string.Format(Resource.lblDidYouHaveAnyExportsOfLivestockManure, Model.FarmName, Model.Year)
+                                    </govuk-summary-list-row-key>
+                                    <govuk-summary-list-row-value>
+                                        @IsAnyLivestockExport
+                                    </govuk-summary-list-row-value>
+                                    <govuk-summary-list-row-actions>
+                                        <govuk-summary-list-row-action asp-action="IsAnyLivestockExport" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDidYouHaveAnyExportsOfLivestockManure, Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
+                                    </govuk-summary-list-row-actions>
+                                </govuk-summary-list-row>
+                            }
+                        }
                     }
-                    @if (Model.IsImport == null)
+                    @if (Model.IsImport == null && (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.England ||
+    (Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland &&
+     Model.IsManageImportExport==true)))
                     {
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key class=@((!Model.ImportExport.HasValue) ? "govuk-error-message" : "")>
@@ -107,6 +159,7 @@
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
+
                     <govuk-summary-list-row>
                         <govuk-summary-list-row-key class=@((!Model.ManureTypeId.HasValue) ? "govuk-error-message" : "")>
                             @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,

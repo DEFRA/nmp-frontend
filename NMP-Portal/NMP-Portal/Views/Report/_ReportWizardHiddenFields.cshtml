@@ -154,10 +154,13 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ImportExport" />
     }
-    @if (currentStep != (int)ReportWizardSteps.IsAnyLivestockImportExport)
+    @if (currentStep != (int)ReportWizardSteps.IsAnyLivestockImport)
     {
-
-        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImportExport" value="@Model.IsAnyLivestockImportExport" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockImport" value="@Model.IsAnyLivestockImport" />
+    }
+    @if (currentStep != (int)ReportWizardSteps.IsAnyLivestockExport)
+    {
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsAnyLivestockExport" value="@Model.IsAnyLivestockExport" />
     }
     @if (currentStep != (int)ReportWizardSteps.LivestockImportExportDate)
     {
@@ -174,6 +177,7 @@
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.K2O" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MgO" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SO3" />
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsImport" />
     }
 
     @if (currentStep != (int)ReportWizardSteps.LivestockQuantity)

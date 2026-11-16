@@ -11,7 +11,8 @@ public class NutrientsLoadingFarmDetail
     public int? GrassPercentage { get; set; }
     public bool? ContingencyPlan { get; set; } = false;
     public bool? IsAnyLivestockNumber { get; set; } = false;
-    public bool? IsAnyLivestockImportExport { get; set; } = false;
+    public bool? IsAnyLivestockImport { get; set; } = false;
+    public bool? IsAnyLivestockExport { get; set; } = false;
     public DateTime CreatedOn { get; set; }
     public int? CreatedByID { get; set; }
     public DateTime? ModifiedOn { get; set; } = null;
