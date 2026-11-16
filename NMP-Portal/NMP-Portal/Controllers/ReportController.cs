@@ -4394,10 +4394,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     public async Task<IActionResult> ManageImportExport(string q, string y, string r, string s, string t)
     {
         _logger.LogTrace($"Report Controller : ManageImportExport() action called");
-        if (HttpContext.Session.Keys.Contains(_previousSessionName))
-        {
-            HttpContext.Session.Remove(_previousSessionName);
-        }
+        RemovePreviousSessionName();
         List<NutrientsLoadingManures> nutrientsLoadingManuresList = new List<NutrientsLoadingManures>();
         ReportViewModel model = new ReportViewModel();
         string action = string.Empty;
@@ -4426,7 +4423,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             model.FarmName = farm.Name;
             model.FarmId = decryptedFarmId;
             model.EncryptedFarmId = q;
-            List <HarvestYear> harvestYearList = new List<HarvestYear>();
+            List<HarvestYear> harvestYearList = new List<HarvestYear>();
             (nutrientsLoadingManuresList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(decryptedFarmId, model.Year ?? 0);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
@@ -4437,7 +4434,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             if (nutrientsLoadingManuresList?.Count > 0)
             {
                 (flowControl, redirectAction) = await BindDataForManageImportExport(model, error, harvestYearList, nutrientsLoadingManuresList);
-                if (!flowControl&& redirectAction != null)
+                if (!flowControl && redirectAction != null)
                 {
                     return redirectAction;
                 }
@@ -4461,6 +4458,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         model.IsManageImportExport = true;
         SetReportDataToSession(model);
         return View(model);
+    }
+
+    private void RemovePreviousSessionName()
+    {
+        if (HttpContext.Session.Keys.Contains(_previousSessionName))
+        {
+            HttpContext.Session.Remove(_previousSessionName);
+        }
     }
 
     private (bool flowControl, IActionResult? value) RedirectForImportExportIfNoRecord(List<NutrientsLoadingManures> nutrientsLoadingManuresList, ReportViewModel model, string action)
@@ -7671,10 +7676,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 : null,
             ContingencyPlan = false,
             IsAnyLivestockImport = (model.IsAnyLivestockImport.HasValue || (nutrientsLoadingFarmDetail != null && nutrientsLoadingFarmDetail.IsAnyLivestockImport.HasValue))
-                ? nutrientsLoadingManures?.Where(c => c.ManureLookupType == Resource.lblImport).Any() == true
+                ? nutrientsLoadingManures?.Any(c => c.ManureLookupType == Resource.lblImport) == true
                 : null,
             IsAnyLivestockExport = (model.IsAnyLivestockExport.HasValue || (nutrientsLoadingFarmDetail != null && nutrientsLoadingFarmDetail.IsAnyLivestockExport.HasValue))
-                ? nutrientsLoadingManures?.Where(c => c.ManureLookupType == Resource.lblExport).Any() == true
+                ? nutrientsLoadingManures?.Any(c => c.ManureLookupType == Resource.lblExport) == true
                 : null,
             IsAnyLivestockNumber = model.IsAnyLivestockNumber.HasValue
                 ? nutrientsLoadingLiveStockList?.Any() == true
