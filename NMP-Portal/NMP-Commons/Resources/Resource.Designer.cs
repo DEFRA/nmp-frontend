@@ -4808,6 +4808,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Did you have any exports of livestock manure to {0} in {1}?.
+        /// </summary>
+        public static string lblDidYouHaveAnyExportsOfLivestockManure {
+            get {
+                return ResourceManager.GetString("lblDidYouHaveAnyExportsOfLivestockManure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Did you have any imports or exports of livestock manure at {0} in {1}?.
         /// </summary>
         public static string lblDidYouHaveAnyImportsAndExports {
@@ -23690,6 +23699,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exports of manure for {0} must be completed.
+        /// </summary>
+        public static string MsgExportsOfManureForMustBeCompleted {
+            get {
+                return ResourceManager.GetString("MsgExportsOfManureForMustBeCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A farm with that name and postcode has already been added. You or someone else who works on the farm may have already added it..
         /// </summary>
         public static string MsgFarmAlreadyExist {
@@ -24073,6 +24091,15 @@ namespace NMP.Commons.Resources {
         public static string MsgImportsAndExportsOfManureForYearMustBeCompleted {
             get {
                 return ResourceManager.GetString("MsgImportsAndExportsOfManureForYearMustBeCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imports of manure for {0} must be completed.
+        /// </summary>
+        public static string MsgImportsOfManureForMustBeCompleted {
+            get {
+                return ResourceManager.GetString("MsgImportsOfManureForMustBeCompleted", resourceCulture);
             }
         }
         

@@ -1,0 +1,49 @@
+﻿@using NMP.Commons.Resources
+
+@model NMP.Commons.ViewModels.ReportViewModel
+@{
+    string heading =string.Format(Resource.lblDidYouHaveAnyExportsOfLivestockManure, Model.FarmName, Model.Year);
+    ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblAdd} {Resource.lblImportsExports}";
+    
+    ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.IsAnyLivestockExport;
+}
+
+@section BeforeContent {
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer ? "LivestockImportExportCheckAnswer" : "LivestockManureNitrogenReportChecklist") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+}
+@if (TempData["ErrorOnIsAnyLivestockExport"] != null)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <govuk-error-summary>
+                <govuk-error-summary-item href="#">@TempData["ErrorOnIsAnyLivestockExport"]</govuk-error-summary-item>
+            </govuk-error-summary>
+        </div>
+    </div>
+}
+@if (Model != null)
+{
+    <form asp-action="IsAnyLivestockExport" asp-controller="Report" method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+                <govuk-radios class="govuk-radios--inline" for="@Model.IsAnyLivestockExport">
+                    <govuk-radios-fieldset>
+                        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+                            @heading
+                        </govuk-radios-fieldset-legend>
+                        <govuk-radios-hint>@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblImportExportHint:Resource.lblSelectOneOption)</govuk-radios-hint>
+                        <govuk-radios-item value=@Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.True)>@Resource.lblYes</govuk-radios-item>
+                        <govuk-radios-item value=@Convert.ToBoolean((int)NMP.Commons.Enums.TrueFalse.False)>@Resource.lblNo</govuk-radios-item>
+                    </govuk-radios-fieldset>
+                </govuk-radios>
+                <govuk-button type="submit" class="margin-bottom-forty">
+                    @Resource.lblContinue
+                </govuk-button>
+
+                <partial name="_CancelLinkForImportExport" model="@Model" />
+            </div>
+        </div>
+    </form>
+}

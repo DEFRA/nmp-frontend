@@ -1,0 +1,40 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
+<p class="govuk-body cancel-link">
+    @if (Model.IsCheckAnswer)
+    {
+        <a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report">
+            @Resource.lblCancel
+        </a>
+    }
+    else
+    {
+        if (Model.IsManageImportExport)
+        {
+            <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
+                @Resource.lblCancel
+            </a>
+        }
+        else if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
+        {
+            if (!Model.IsCheckList)
+            {
+                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                    @Resource.lblCancel
+                </a>
+            }
+            else
+            {
+                <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
+                    @Resource.lblCancel
+                </a>
+            }
+        }
+        else
+        {
+            <a asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">
+                @Resource.lblCancel
+            </a>
+        }
+    }
+</p>
