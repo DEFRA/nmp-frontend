@@ -53,10 +53,10 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
         return await _reportService.DeleteNutrientsLoadingManureByIdAsync(nutrientsLoadingManureId);
     }
 
-    public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year)
+    public async Task<(List<NutrientsLoadingLiveStockViewModel>, Error)> FetchLivestockByFarmIdAndYear(int farmId, int year, bool isScotland)
     {
         _logger.LogTrace("Fetching live stock by Farm Id and Year");
-        return await _reportService.FetchLivestockByFarmIdAndYearAsync(farmId, year);
+        return await _reportService.FetchLivestockByFarmIdAndYearAsync(farmId, year, isScotland);
     }
 
     public async Task<(CommonResponse, Error)> FetchLivestockGroupById(int livestockGroupId)

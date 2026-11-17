@@ -1204,9 +1204,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         string previousCrop =
             await _reportLogic.GetPreviousCropAsync(field.ID.Value, model.Year.Value);
 
-        bool isScotland =
-            model.FarmRB209CountryID ==
-            (int)NMP.Commons.Enums.RB209Country.Scotland;
+        bool isScotland = IsScotland(model);
 
         if (!isScotland)
         {
@@ -1998,7 +1996,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             ViewBag.EncryptedImport = _reportDataProtector.Protect(Resource.lblImport);
             ViewBag.EncryptedExport = _reportDataProtector.Protect(Resource.lblExport);
         
-        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, _) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, _) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
         ViewBag.NutrientLivestockData = nutrientsLoadingLiveStockList;
         return (nutrientsLoadingManuresList, nutrientsLoadingLiveStockList);
     }
@@ -4622,7 +4620,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 return RedirectToAction(_farmListAction, "Farm");
             }
             BindNMPTFarmIdAndNameForNavigation(model);
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, _) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, _) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
             ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
 
         }
@@ -4665,7 +4663,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
             if (model.IsAnyLivestockNumber == false)
             {
-                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error? error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error? error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
 
                 (var NutrientsLoadingFarmDetailsData, error) = await BindNutrientsLoadingFarmDetailData(model);
                 if (NutrientsLoadingFarmDetailsData != null && error == null)
@@ -4712,7 +4710,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         BindNMPTFarmIdAndNameForNavigation(model);
         try
         {
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
             ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
             (List<CommonResponse> livestockGroups, error) = await _reportLogic.FetchLivestockGroupList();
             if (error == null || string.IsNullOrWhiteSpace(error.Message))
@@ -4751,7 +4749,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
-                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+                (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
                 ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
                 (List<CommonResponse> livestockGroups, error) = await _reportLogic.FetchLivestockGroupList();
                 if (livestockGroups?.Any() == true)
@@ -4844,7 +4842,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 ModelState.AddModelError("LivestockTypeId", Resource.MsgSelectAnOptionBeforeContinuing);
             }
             (List<LivestockTypeResponse> livestockTypes, Error error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-            model.LivestockTypeName = livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Name;
+            model.LivestockTypeName = GetLivestockTypeName(livestockTypes.FirstOrDefault(x => x.ID == model.LivestockTypeId), IsScotland(model));
 
             BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
@@ -4979,6 +4977,16 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             ViewBag.LivestockCategory = model.LivestockGroupName?.ToLower();
         }
+    }
+
+    private static bool IsScotland(ReportViewModel model)
+    {
+        return model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
+    }
+
+    private static string? GetLivestockTypeName(LivestockTypeResponse? livestockType, bool isScotland)
+    {
+        return isScotland ? livestockType?.ScotlandName : livestockType?.Name;
     }
 
     private void BindLivestockCategory(ReportViewModel model)
@@ -5858,13 +5866,14 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 model.LivestockGroupName = livestockGroup.Name;
 
                 (List<LivestockTypeResponse> livestockType, error) = await _reportLogic.FetchLivestockTypesByGroupId(model.LivestockGroupId ?? 0);
-                model.LivestockTypeName = livestockType.FirstOrDefault(x => x.ID == model.LivestockTypeId)?.Name;
+
+                model.LivestockTypeName = GetLivestockTypeName(livestockType.FirstOrDefault(x => x.ID == model.LivestockTypeId), IsScotland(model));
 
                 SetReportDataToSession(model);
             }
 
             BindViewBegForLivestockCheckAnswer(model);
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
             ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
 
             decimal totalNProduced = 0;
@@ -5929,7 +5938,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             var poultry = (int)NMP.Commons.Enums.LivestockGroup.Poultry;
             var sheep = (int)NMP.Commons.Enums.LivestockGroup.Sheep;
             var goatsDeerOrHorses = (int)NMP.Commons.Enums.LivestockGroup.GoatsDeerOrHorses;
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
             ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
             ValidationForLivestockCheckAnswerProperties(model, cattle, pigs, poultry, sheep, goatsDeerOrHorses);
 
@@ -6182,7 +6191,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 model.Year = Convert.ToInt32(_farmDataProtector.Unprotect(y));
                 model.EncryptedHarvestYear = y;
             }
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(decryptedFarmId, model.Year ?? 0);
+            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(decryptedFarmId, model.Year ?? 0, IsScotland(model));
 
             if (string.IsNullOrWhiteSpace(error?.Message))
             {
@@ -6268,12 +6277,13 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private void BindLivestockListInViewBegForManageLivestock(ReportViewModel model, List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Dictionary<int, LivestockTypeResponse> cattleTypeDict, Dictionary<int, LivestockTypeResponse> pigsTypeDict, Dictionary<int, LivestockTypeResponse> poultryTypeDict, Dictionary<int, LivestockTypeResponse> sheepTypeDict, Dictionary<int, LivestockTypeResponse> goatsDeerOrHorsesTypeDict)
     {
+        bool isScotland = IsScotland(model);
         ViewBag.CattleList = nutrientsLoadingLiveStockList
             .Where(x => x.CalendarYear == model.Year && cattleTypeDict.ContainsKey(x.LiveStockTypeID ?? 0))
             .Select(x => new
             {
                 EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
-                LivestockTypeName = cattleTypeDict[x.LiveStockTypeID ?? 0].Name,
+                LivestockTypeName = GetLivestockTypeName(cattleTypeDict[x.LiveStockTypeID ?? 0], isScotland),
                 x.Units,
                 x.NByUnit,
                 x.TotalNProduced,
@@ -6287,7 +6297,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             .Select(x => new
             {
                 EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
-                LivestockTypeName = pigsTypeDict[x.LiveStockTypeID ?? 0].Name,
+                LivestockTypeName = GetLivestockTypeName(pigsTypeDict[x.LiveStockTypeID ?? 0], isScotland),
                 x.Units,
                 x.Occupancy,
                 x.NByUnit,
@@ -6302,7 +6312,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             .Select(x => new
             {
                 EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
-                LivestockTypeName = poultryTypeDict[x.LiveStockTypeID ?? 0].Name,
+                LivestockTypeName = GetLivestockTypeName(poultryTypeDict[x.LiveStockTypeID ?? 0], isScotland),
                 x.Units,
                 x.Occupancy,
                 x.NByUnit,
@@ -6317,7 +6327,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             .Select(x => new
             {
                 EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
-                LivestockTypeName = sheepTypeDict[x.LiveStockTypeID ?? 0].Name,
+                LivestockTypeName = GetLivestockTypeName(sheepTypeDict[x.LiveStockTypeID ?? 0], isScotland),
                 x.Units,
                 x.NByUnit,
                 x.TotalNProduced,
@@ -6331,7 +6341,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             .Select(x => new
             {
                 EncryptedID = _reportDataProtector.Protect(x.ID.ToString()),
-                LivestockTypeName = goatsDeerOrHorsesTypeDict[x.LiveStockTypeID ?? 0].Name,
+                LivestockTypeName = GetLivestockTypeName(goatsDeerOrHorsesTypeDict[x.LiveStockTypeID ?? 0], isScotland),
                 x.Units,
                 x.NByUnit,
                 x.TotalNProduced,
@@ -7013,7 +7023,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ViewBag.TotalLivestockManureCapacity = totalLivestockManureCapacity;
         ViewBag.AreaInsideNVZ = nutrientsLoadingFarmDetail.LandInNVZ;
         ViewBag.AreaOutsideNVZ = nutrientsLoadingFarmDetail.LandNotNVZ;
-        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.Farm.ID, model.Year.Value);
+        (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.Farm.ID, model.Year.Value, IsScotland(model));
         if (!string.IsNullOrWhiteSpace(error?.Message))
         {
             TempData[_tempDataErrorOnLivestockManureNitrogenReport] = error.Message;
@@ -7557,7 +7567,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         else
         {
-            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year.Value);
+            (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year.Value, IsScotland(model));
             if (string.IsNullOrWhiteSpace(error?.Message))
             {
                 return SuccessRedirectForDeleteNLLivestock(model, nutrientsLoadingLiveStockList);
@@ -7645,7 +7655,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     {
         // Fetch livestock
         Error? error = null;
-        (List<NutrientsLoadingLiveStockViewModel>? nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0);
+        (List<NutrientsLoadingLiveStockViewModel>? nutrientsLoadingLiveStockList, error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
         if (!string.IsNullOrWhiteSpace(error?.Message))
         {
             return (null, error);

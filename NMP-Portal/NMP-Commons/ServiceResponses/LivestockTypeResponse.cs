@@ -11,6 +11,9 @@ public class LivestockTypeResponse
     [JsonProperty("name")]
     public string Name { get; set; }
 
+    [JsonProperty("ScotlandName")]
+    public string ScotlandName { get; set; }
+
     [JsonProperty("nByUnit")]
     public decimal? NByUnit { get; set; }
 

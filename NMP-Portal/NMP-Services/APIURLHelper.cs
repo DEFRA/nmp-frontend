@@ -221,7 +221,7 @@ internal static class ApiurlHelper
     public const string UpdateNutrientsLoadingManureAPI = "nutrientsLoadingManures";
     public const string FetchLivestockTypesByGroupIdAPI = "livestock-types/{0}";
     public const string AddNutrientsLoadingLivestockAPI = "nutrients-loading-live-stocks";
-    public const string FetchNutrientsLoadingLivestockByFarmIdAndYearAPI = "nutrients-loading-live-stocks/{0}?year={1}";
+    public const string FetchNutrientsLoadingLivestockByFarmIdAndYearAPI = "nutrients-loading-live-stocks/{0}?year={1}&isScotland={2}";
     public const string FetchLivestockTypesAPI = "livestock-types";
     public const string FetchStoreCapacityAPI = "store-capacities/{0}";
     public const string FetchMaterialStatesListAPI = "material-states";
