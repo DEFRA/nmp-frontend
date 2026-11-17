@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -8256,7 +8256,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How was the grass managed?.
+        ///   Looks up a localized string similar to {0} was grass last year. How was the grass managed?.
         /// </summary>
         public static string lblHowWasTheGrassManaged {
             get {
@@ -16692,7 +16692,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The management of the grass crop is needed to determine the nitrogen (N) residue group for the following arable crop. Select the option that best matches how the grass was managed..
+        ///   Looks up a localized string similar to The management of the previous grass crop is needed to determine the nitrogen (N) residue group for this arable crop. Select the option that best matches how the grass was managed..
         /// </summary>
         public static string lblTheManagementOfTheGrassCropIsNeeded {
             get {

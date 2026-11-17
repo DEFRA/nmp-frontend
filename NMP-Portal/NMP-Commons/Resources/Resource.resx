@@ -8634,7 +8634,7 @@ following crop year 2</value>
     <value>Nitrogen supply efficiency</value>
   </data>
   <data name="lblTheManagementOfTheGrassCropIsNeeded" xml:space="preserve">
-    <value>The management of the grass crop is needed to determine the nitrogen (N) residue group for the following arable crop. Select the option that best matches how the grass was managed.</value>
+    <value>The management of the previous grass crop is needed to determine the nitrogen (N) residue group for this arable crop. Select the option that best matches how the grass was managed.</value>
   </data>
   <data name="lblIsThisAPermanentSward" xml:space="preserve">
     <value>Is this a permanent sward?</value>
@@ -8643,7 +8643,7 @@ following crop year 2</value>
     <value>Permanent grass remains in place for over 5 years.</value>
   </data>
   <data name="lblHowWasTheGrassManaged" xml:space="preserve">
-    <value>How was the grass managed?</value>
+    <value>{0} was grass last year. How was the grass managed?</value>
   </data>
   <data name="lblHowWasTheGrassManagedFor" xml:space="preserve">
     <value>How was the grass managed for {0}?</value>
