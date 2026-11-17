@@ -8,6 +8,8 @@
     {
         livestockGroupName = "pig";
     }
+    var isScotland = Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland;
+
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.LivestockType;
 }
 
@@ -44,7 +46,17 @@
                         {
                             foreach (var livestockType in ViewBag.LivestockTypes)
                             {
-                                <govuk-radios-item value="@livestockType.ID">@livestockType.Name</govuk-radios-item>
+                                @if (isScotland)
+                                {
+                                    if (livestockType.ScotlandName != null)
+                                    {
+                                        <govuk-radios-item value="@livestockType.ID">@livestockType.ScotlandName</govuk-radios-item>
+                                    }
+                                }
+                                else
+                                {
+                                    <govuk-radios-item value="@livestockType.ID">@livestockType.Name</govuk-radios-item>
+                                }
                             }
                         }
                     </govuk-radios-fieldset>
