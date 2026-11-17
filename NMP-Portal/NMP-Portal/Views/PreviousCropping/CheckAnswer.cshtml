@@ -216,7 +216,7 @@
 
                             <govuk-summary-list-row class=@(Model.PreviousGrassID == null ?"govuk-error-message":"")>
                                 <govuk-summary-list-row-key>
-                                    @Resource.lblHowWasTheGrassManaged
+                                    @(string.Format(Resource.lblHowWasTheGrassManaged, Model.FieldName))
                                 </govuk-summary-list-row-key>
                                 <govuk-summary-list-row-value>
                                     @(Model.PreviousGrassID == null ? Resource.lblNotSet : previousGrassName)

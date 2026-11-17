@@ -1125,9 +1125,7 @@
                         {
                             continue;
                         }
-                        var questionText = Model.Crops.Count == 1
-                        ? Resource.lblHowWasTheGrassManaged
-                        : string.Format(Resource.lblHowWasTheGrassManagedFor, crop.FieldName);
+                        var questionText = string.Format(Resource.lblHowWasTheGrassManaged, crop.FieldName);
 
                         var previousGrassName = crop.PreviousGrass.HasValue
                         ? previousGrassManagementList
