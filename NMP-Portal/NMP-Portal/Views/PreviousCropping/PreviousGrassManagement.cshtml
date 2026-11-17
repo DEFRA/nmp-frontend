@@ -2,7 +2,7 @@
 @using NMP.Commons.Enums
 @model NMP.Commons.ViewModels.PreviousCroppingViewModel
 @{
-    string heading = Resource.lblHowWasTheGrassManaged;
+    string heading = string.Format(Resource.lblHowWasTheGrassManaged, Model.FieldName);
     ViewData["Title"] = $"{heading} {Resource.lblHyphen} {Resource.lblAddPreviousCrop}";
     ViewBag.CurrentStep = (int)PreviousCroppingWizardSteps.PreviousGrssManagement;
 }

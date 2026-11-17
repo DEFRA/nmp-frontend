@@ -2389,8 +2389,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
         {
             if (model.DryMatterPercent != null)
             {
-                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
-                    model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry)
+                if (model.IsManureTypeLiquid.HasValue && model.IsManureTypeLiquid.Value)
                 {
                     MinMaxValidationForDryMatterAndTotalN(model.DryMatterPercent, _dryMatterPercentKey, Resource.lblDryMatter.ToLower(), 0, 25);
                 }

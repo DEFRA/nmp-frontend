@@ -2485,8 +2485,7 @@ managementPeriod.CropID.HasValue
         {
             if (model.DryMatterPercent != null)
             {
-                if (model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.PigSlurry ||
-                    model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.CattleSlurry)
+                if (model.IsManureTypeLiquid.HasValue && model.IsManureTypeLiquid.Value)
                 {
                     if (model.DryMatterPercent < 0 || model.DryMatterPercent > 25)
                     {
