@@ -39,4 +39,7 @@ public interface IFertiliserManureLogic
     bool IsRedirectWithDoubleCropData(FertiliserManureViewModel model, string q);
     bool IsComingFirstTimeForDefoliationGet(FertiliserManureViewModel model, string q);
     bool IsRedirectRequestForDefoliationGet(FertiliserManureViewModel model, string q);
+    FertiliserManureViewModel? GetFertilserManureFromSession(Guid? sessionId);
+    void SetFertilserManureToSession(FertiliserManureViewModel fertiliserManureViewModel);
+    void RemoveFertilserManureSession(Guid? sessionId);
 }

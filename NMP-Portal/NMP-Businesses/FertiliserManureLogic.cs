@@ -23,6 +23,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
     private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
     private readonly ICropLogic _cropLogic = cropLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
+    private const string _fertiliserManureSessionKey = "FertiliserManure";
     public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure)
     {
         _logger.LogTrace("Adding Fertiliser Manure");
@@ -509,4 +510,22 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
                model.FertiliserManures.Count > 0;
     }
     //Defoliation end
+
+    public FertiliserManureViewModel? GetFertilserManureFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fertiliserManureSessionKey;
+        return _fertiliserManureService.GetFertiliserManureFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetFertilserManureToSession(FertiliserManureViewModel fertiliserManureViewModel)
+    {
+        string cacheKey = fertiliserManureViewModel.SessionId + " " + _fertiliserManureSessionKey;
+        _fertiliserManureService.SetFertiliserManureToSessionAsync(fertiliserManureViewModel, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveFertilserManureSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fertiliserManureSessionKey;
+        _fertiliserManureService.RemoveFertiliserManureSessionAsync(cacheKey).GetAwaiter().GetResult();
+
+    }
 }
