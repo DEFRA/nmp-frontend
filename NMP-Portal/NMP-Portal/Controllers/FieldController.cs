@@ -2317,13 +2317,16 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         else
         {
-            ValidateCropGroupOrCropType(model);
+            if (hasGrass.HasValue)
+            {
+                ValidateCropGroupOrCropType(model);
+            }
         }
     }
 
     private void ValidateGrassJourneyFieldsForEngland(FieldViewModel model, bool? hasGrass)
     {
-        if (model.PreviousCroppings != null && (!hasGrass.HasValue))
+        if (ViewBag.NoNeedToShowPreviousCroppingDetail==null && (!hasGrass.HasValue))
         {
             ModelState.AddModelError("HasGrassInLastThreeYear", string.Format(_stringFormat, string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, model.Name), Resource.lblNotSet));
         }
@@ -3158,15 +3161,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         try
         {
-            ValidateCheckAnwser(model, false);
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
             List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(fieldId);
+            await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
+            ValidateCheckAnwser(model, false);
             BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 await FetchSelectedNVZName(model);
                 await FetchPscIndexName(model);
-                await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
                 ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
 
                 ViewData["ModelStateErrors"] = ModelState;
@@ -3177,8 +3180,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             bool onlyFieldUpdate = false;
             if (cropPlans.Any())
             {
+                int highestYearOfPlan = cropPlans.Max(cp => cp.Year) - 1;
                 List<int> yearsToCheck = YearsToCheck(cropPlans);
-                if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
+                bool isEnglandAndOnlyFieldUpdate = (model.FarmRB209CountryID!=(int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3);
+                bool isScotlandAndOnlyFieldUpdate = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => x.Year == highestYearOfPlan) == 1);
+                if (isEnglandAndOnlyFieldUpdate || isScotlandAndOnlyFieldUpdate)
                 {
                     onlyFieldUpdate = true;
                 }
@@ -3206,7 +3212,10 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 ModifiedOn = DateTime.Now,
                 ModifiedByID = userId
             };
-            await BindPreviousCroppingsListForUpdateFieldScotland(model, fieldId);
+            if (!onlyFieldUpdate)
+            {
+                await BindPreviousCroppingsListForUpdateFieldScotland(model, fieldId);
+            }
             Field? fieldResponse = null;
             Error? error = null;
             if (!onlyFieldUpdate)
@@ -3582,8 +3591,11 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (cropPlans.Any())
         {
             ViewBag.IsAnyPlan = true;
+            int highestYearOfPlan = cropPlans.Max(cp => cp.Year) - 1;
             List<int> yearsToCheck = YearsToCheck(cropPlans);
-            if (cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
+            bool isEnglandAndOnlyFieldUpdate = (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3);
+            bool isScotlandAndOnlyFieldUpdate = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => x.Year == highestYearOfPlan) == 1);
+            if (isEnglandAndOnlyFieldUpdate || isScotlandAndOnlyFieldUpdate)
             {
                 ViewBag.NoNeedToShowPreviousCroppingDetail = true;
             }
