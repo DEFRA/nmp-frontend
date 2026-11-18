@@ -14109,7 +14109,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1st October 2026.
+        ///   Looks up a localized string similar to 18th November 2026.
         /// </summary>
         public static string lblReleaseScheduleDate {
             get {
