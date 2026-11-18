@@ -624,7 +624,7 @@ public class Rb209Service(ILogger<Rb209Service> logger, IHttpContextAccessor htt
             ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
             if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
             {
-                var yieldList = responseWrapper.Data.ToObject<List<DefaultFreshWeightYieldResponse>>();
+                var yieldList = responseWrapper?.Data?.ToObject<List<DefaultFreshWeightYieldResponse>>();
                 if (yieldList != null)
                 {
                     defaultFreshWeightYields.AddRange(yieldList);
