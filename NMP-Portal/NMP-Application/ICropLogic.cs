@@ -31,6 +31,7 @@ public interface ICropLogic
     Task<(List<GrassGrowthClassResponse>, Error?)> FetchGrassGrowthClass(List<int> fieldIds);
 
     Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCut(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward, int countryId);
+    Task<(List<DefaultFreshWeightYieldResponse>, Error)> FetchDefaultFreshWeightYieldsByDefoliationSequenceId(int defoliationSequenceId);
     Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId);
     Task<(List<SwardManagementResponse>, Error)> FetchSwardManagements();
     Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesByCountry(int countryId);
