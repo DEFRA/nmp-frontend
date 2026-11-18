@@ -7900,40 +7900,26 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (selectedDefoliationSequence?.DefoliationSequence != null)
         {
-            int yield = 5;
-            for (int i = 0; i < selectedDefoliationSequence.DefoliationSequence.Length; i++)
+            List<DefaultFreshWeightYieldResponse> defaultFreshWeightYields = new List<DefaultFreshWeightYieldResponse>();
+            if (model.DefoliationSequenceId != null)
             {
-                char sequence = selectedDefoliationSequence.DefoliationSequence[i];
-
-                string defoliation = i switch
-                {
-                    0 => "One",
-                    1 => "Two",
-                    2 => "Three",
-                    3 => "Four",
-                    4 => "Five",
-                    _ => (i + 1).ToString()
-                };
-
-                string cutOrGrazing = sequence switch
-                {
-                    'E' => "Establishment",
-                    'G' => "Grazing",
-                    'S' => "Silage",
-                    'H' => "Hay",
-                    _ => string.Empty
-                };
+                (defaultFreshWeightYields, _) = await _cropLogic.FetchDefaultFreshWeightYieldsByDefoliationSequenceId(model.DefoliationSequenceId.Value);
+            }
+            foreach (var defaultFreshWeightYield in defaultFreshWeightYields.OrderBy(x => x.SequencePosition))
+            {
+                string defoliation = GetDefoliationName(defaultFreshWeightYield.SequencePosition - 1);
 
                 defoliationDetails.Add(new
                 {
                     FieldId = model.FieldID,
-                    DefoliationNumber = i + 1,
+                    DefoliationNumber = defaultFreshWeightYield.SequencePosition,
                     Defoliation = defoliation,
-                    CutOrGrazing = cutOrGrazing,
-                    DisplayText = $"{defoliation} - {cutOrGrazing}",
-                    Yield = sequence == 'E' ? (int?)null : yield++
+                    CutOrGrazing = defaultFreshWeightYield.SequenceTypeName,
+                    DisplayText = $"{defoliation} - {defaultFreshWeightYield.SequenceTypeName}",
+                    Yield = defaultFreshWeightYield.SequenceType == "E" || defaultFreshWeightYield.Yield == null ? (int?)null : (int)Math.Round(defaultFreshWeightYield.Yield.Value)
                 });
             }
+
         }
 
         ViewBag.FreshWeightYieldDetails = defoliationDetails;
@@ -7942,8 +7928,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
     // resetToDefaults: true = always overwrite this field's yields with computed defaults (Default step).
     // false = only seed defaults if this field has nothing yet; never overwrite existing values (Manual step).
-    private async Task BindFreshWeightYieldDetails(PlanViewModel model, bool resetToDefaults = true)
+    // fieldIndex: index into model.Crops of the field being bound. FieldID/FieldName are derived from it because
+    // they can be stale (e.g. after the Manual step moves on, or when going back), which bound the wrong field and
+    // left the current field's FreshWeightYields null.
+    private async Task BindFreshWeightYieldDetails(PlanViewModel model, int fieldIndex, bool resetToDefaults = true)
     {
+        if (model.Crops != null && fieldIndex >= 0 && fieldIndex < model.Crops.Count)
+        {
+            model.FieldID = model.Crops[fieldIndex].FieldID;
+            model.FieldName = model.Crops[fieldIndex].FieldName;
+        }
+
         var defoliationDetails = await GetDefoliationDetails(model);
 
         model.FreshWeightYieldsPerField ??= new List<FreshWeightYieldForFieldViewModel>();
@@ -8007,7 +8002,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 int fieldId = crop.FieldID ?? 0;
                 if (!model.FreshWeightYieldsPerField.Any(x => x.FieldId == fieldId))
                 {
-                    model.FreshWeightYieldsPerField.Add(new FreshWeightYieldForFieldViewModel { FieldId = fieldId, FieldName = crop.FieldName });
+                    model.FreshWeightYieldsPerField.Add(new FreshWeightYieldForFieldViewModel { FieldId = fieldId, FieldName = crop.FieldName, FreshWeightYields = new List<FreshWeightYieldViewModel>() });
                 }
             }
 
@@ -8048,7 +8043,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
             }
 
-            await BindFreshWeightYieldDetails(model);
+            await BindFreshWeightYieldDetails(model, model.FreshWeightDefaultCounter);
 
             _cropLogic.SetCropToSession(model);
         }
@@ -8096,7 +8091,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         await SetGrassClassViewBagAndYieldRange(model, grassGrowthClasses, grassSiteClasses, isScotland);
 
         // model.FieldID is still THIS field - recompute/refresh its defaults.
-        await BindFreshWeightYieldDetails(model);
+        await BindFreshWeightYieldDetails(model, currentIndex);
 
         if (!ModelState.IsValid)
         {
@@ -8112,7 +8107,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         // "Yes" - defaults already bound above. Advance to the next field.
         model.FreshWeightDefaultCounter++;
-        model.FreshWeightManualCounter++;
+        model.FreshWeightManualCounter = model.FreshWeightDefaultCounter;
 
         if (currentIndex + 1 < model.Crops.Count)
         {
@@ -8148,6 +8143,10 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     {
         if (!wantsDefaultValues)
         {
+            // Manual step must point at the field just answered "No". The counters can be out of step
+            // (e.g. after coming back from Check Answer), so set it explicitly instead of relying on its old value.
+            model.FreshWeightManualCounter = model.FreshWeightDefaultCounter;
+            model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
             model.FreshWeightDefaultCounter++;
             model.FreshWeightDefaultEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightDefaultCounter.ToString());
             _cropLogic.SetCropToSession(model);
@@ -8176,8 +8175,6 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
             }
             BindNMPTFarmIdAndNameForNavigation(model);
-            await BindFreshWeightYieldDetails(model, resetToDefaults: false);
-
             if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
             {
                 model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
@@ -8205,6 +8202,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 model.FreshWeightManualEncryptedCounter = _fieldDataProtector.Protect(model.FreshWeightManualCounter.ToString());
             }
 
+            await BindFreshWeightYieldDetails(model, model.FreshWeightManualCounter, resetToDefaults: false);
 
             _cropLogic.SetCropToSession(model);
         }

@@ -200,6 +200,7 @@ internal static class ApiurlHelper
 
     //Grass API Urls
     public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}/{3}/{4}";
+    public const string FetchDefaultFreshWeightYieldsByDefoliationSequenceIdAPI = "vendors/rb209/Grass/DefaultYields/{0}";
     public const string FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAPI = "vendors/rb209/Grass/PotentialCuts/{0}/{1}";
     public const string FetchSwardManagementsAPI = "vendors/rb209/Grass/SwardManagements";
     public const string FetchSwardTypesAPI = "vendors/rb209/Grass/SwardTypesByCountryId/{0}";

@@ -187,6 +187,12 @@ public class CropLogic(ILogger<CropLogic> logger, IDataProtectionProvider dataPr
         return await _rb209Service.FetchPotatoVarietiesAsync();
     }
 
+    public async Task<(List<DefaultFreshWeightYieldResponse>, Error)> FetchDefaultFreshWeightYieldsByDefoliationSequenceId(int defoliationSequenceId)
+    {
+        _logger.LogTrace("Fetching default yields for DefoliationSequenceId: {DefoliationSequenceId}", defoliationSequenceId);
+        return await _rb209Service.FetchDefaultFreshWeightYieldsByDefoliationSequenceIdAsync(defoliationSequenceId);
+    }
+
     public async Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementId(int swardTypeId, int swardManagementId)
     {
         _logger.LogTrace("Fetching potential cuts for SwardTypeId: {SwardTypeId}, SwardManagementId: {SwardManagementId}", swardTypeId, swardManagementId);
