@@ -16,7 +16,7 @@ namespace NMP.Portal.Controllers
     [AllowAnonymous]
 
     [Route("[Controller]")]
-    public class ErrorController : Controller
+    public class ErrorController : BaseController
     {        
         //[Route("Error/{statusCode}")]
         [HttpGet("{statusCode}")]

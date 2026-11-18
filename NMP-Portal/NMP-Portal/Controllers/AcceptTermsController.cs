@@ -8,7 +8,7 @@ using NMP.Application;
 
 
 namespace NMP.Portal.Controllers;
-public class AcceptTermsController(ILogger<AcceptTermsController> logger, IAcceptTermsLogic acceptTermsLogic) : Controller
+public class AcceptTermsController(ILogger<AcceptTermsController> logger, IAcceptTermsLogic acceptTermsLogic) : BaseController
 {
     private readonly ILogger<AcceptTermsController> _logger = logger;
     private readonly IAcceptTermsLogic _acceptTermsLogic = acceptTermsLogic;

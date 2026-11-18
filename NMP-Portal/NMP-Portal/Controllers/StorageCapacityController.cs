@@ -16,7 +16,7 @@ namespace NMP.Portal.Controllers
         IDataProtectionProvider dataProtectionProvider,
         IFarmLogic farmLogic,
         IStorageCapacityLogic storageCapacityLogic,
-        IHttpContextAccessor httpContextAccessor) : Controller
+        IHttpContextAccessor httpContextAccessor) : BaseController
     {
         private readonly ILogger<StorageCapacityController> _logger = logger;
         private readonly IDataProtector _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");

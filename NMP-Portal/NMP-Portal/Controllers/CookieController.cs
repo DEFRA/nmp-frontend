@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
-    public class CookieController(ILogger<CookieController> logger) : Controller
+    public class CookieController(ILogger<CookieController> logger) : BaseController
     {
         private readonly ILogger<CookieController> _logger = logger;
         public IActionResult Index()

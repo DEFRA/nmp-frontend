@@ -5,7 +5,7 @@ using NMP.Application;
 namespace NMP.Portal.Controllers
 {
     [Authorize]
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
         public IActionResult Index()
         {            

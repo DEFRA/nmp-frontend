@@ -6,7 +6,7 @@ using NMP.Commons.ViewModels;
 namespace NMP.Portal.Controllers
 {
     [Authorize]
-    public class AboutServiceController(ILogger<AboutServiceController> logger ,IAboutServiceLogic aboutServiceLogic) : Controller
+    public class AboutServiceController(ILogger<AboutServiceController> logger ,IAboutServiceLogic aboutServiceLogic) : BaseController
     {
         private readonly ILogger<AboutServiceController> _logger = logger;
         private readonly IAboutServiceLogic _aboutServiceLogic = aboutServiceLogic;

@@ -3,7 +3,7 @@
 namespace NMP.Portal.Controllers
 {
     [Route("Session/[action]")]
-    public class SessionController : Controller
+    public class SessionController : BaseController
     {
         [HttpGet]
         public IActionResult KeepAlive()

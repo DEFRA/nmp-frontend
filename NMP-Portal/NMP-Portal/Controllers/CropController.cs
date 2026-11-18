@@ -30,7 +30,7 @@ namespace NMP.Portal.Controllers;
 [Authorize]
 public class CropController(ILogger<CropController> logger, IDataProtectionProvider dataProtectionProvider,
      IFarmLogic farmLogic, IFieldLogic fieldLogic, ICropLogic cropLogic,
-     IPreviousCroppingLogic previousCroppingLogic, IMannerLogic mannerLogic) : Controller
+     IPreviousCroppingLogic previousCroppingLogic, IMannerLogic mannerLogic) : BaseController
 {
     private readonly ILogger<CropController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -271,7 +271,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in HarvestYearForPlan() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             (FarmResponse? farm, _) = await _farmLogic.FetchFarmByIdAsync(Convert.ToInt32(_farmDataProtector.Unprotect(model.EncryptedFarmId)));
@@ -331,7 +331,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (CropData == null)
             {
                 _logger.LogError("Crop Controller : Session not found in CropGroups() post action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             else
             {
@@ -528,7 +528,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in CropTypes() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -799,7 +799,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in VarietyName() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
         }
@@ -868,7 +868,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in CropFields() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -969,12 +969,12 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             bool success = BuildCropList(model, allFields, harvestYearPlanResponseForFilter, fieldsAllowedForSecondCrop, selectListItem);
             if (!success)
             {
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             (model, var redirect, bool matchFound) = BindSowingOrYieldProperty(model, planViewModel);
             if (redirect != null)
             {
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             return RedirectForField(model, harvestYearPlanResponseForFilter, matchFound);
 
@@ -1077,7 +1077,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             else
             {
                 _logger.LogError("Crop Controller : Session not found in CropFields() post action");
-                return (model, Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict), matchFound);
+                return (model, HandleExpiredSession(), matchFound);
             }
         }
 
@@ -1156,7 +1156,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         else
         {
             _logger.LogError("Crop Controller : Session not found in CropFields() post action");
-            return (crop, Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+            return (crop, HandleExpiredSession());
         }
         return (crop, null);
     }
@@ -1233,7 +1233,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in SowingDateQuestion() action");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1293,7 +1293,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (sessionModel == null)
         {
             _logger.LogError("Crop Controller : Session not found in SowingDateQuestion() post action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         if (IsSameSowingQuestionWithNoChanges(sessionModel, model))
@@ -1390,7 +1390,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in SowingDate() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
         try
@@ -1646,7 +1646,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in YieldQuestion() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
         try
@@ -1691,7 +1691,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (planViewModel == null)
                 {
                     _logger.LogError("Crop Controller : Session not found in YieldQuestion() post action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 if (planViewModel.YieldQuestion == model.YieldQuestion && (!model.IsAnyChangeInField) && (!model.IsCropGroupChange) && (!model.IsCropTypeChange))
@@ -1735,7 +1735,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in Yield() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1955,7 +1955,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in CropInfoOne() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -2150,7 +2150,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogError("Crop Controller : Session not found in CropInfoTwo() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -2242,7 +2242,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 if (model == null)
                 {
                     _logger.LogError("Crop Controller : Session not found in CheckAnswer() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
@@ -3091,7 +3091,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in BackCheckAnswer() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         string action = string.Empty;
@@ -3736,7 +3736,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogError("Crop Controller : Session not found in HarvestYearOverview() action");
-            return (flowControl: false, value: Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict), model: model);
+            return (flowControl: false, value: HandleExpiredSession(), model: model);
         }
 
         return (flowControl: true, value: null, model: model);
@@ -4657,7 +4657,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogTrace("Crop Controller : SortOrganicList() - HarvestYearPlan not found in session, redirecting to FarmList");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         if (!string.IsNullOrWhiteSpace(q))
@@ -4716,7 +4716,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogTrace("Crop Controller : session not found in SortInOrganicList() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -4760,7 +4760,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogTrace("Crop Controller : session not found in CropGroupName() action");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -4902,7 +4902,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r))
             {
                 _logger.LogTrace("Crop Controller : session not found in RemoveCrop() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             if (!string.IsNullOrWhiteSpace(v))
@@ -5166,7 +5166,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : session not found in ExcessWinterRainfall() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -5242,7 +5242,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : session not found in IsWinterRainfallMoreThan450() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -5306,7 +5306,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : session not found in ExcessOrWinterRainfallCheckAnswer() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -5349,7 +5349,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller :ExcessWinterRainfall session not found in ExcessOrWinterRainfallCheckAnswer() post action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             string successMsg = string.Format(Resource.MsgAddExcessWinterRainfallContentOne, model.Year.Value);
@@ -6074,7 +6074,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : GrassSeason() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -6143,7 +6143,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : SwardType() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -6217,7 +6217,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : GrassManagement() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -6297,7 +6297,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : Defoliation() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -6416,7 +6416,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : DefoliationSequence() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -6638,7 +6638,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 _logger.LogTrace("Crop Controller : GrassClass() action called - CropData session is null");
 
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -6954,7 +6954,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : DryMatterYield() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -7232,7 +7232,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : Cancel() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -7514,7 +7514,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : CopyPlanYears() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -7585,7 +7585,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called - CropData session is null");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -7629,7 +7629,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : CopyOrganicInorganicApplications() action called - CropData session is null");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -7702,7 +7702,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogTrace("Crop Controller : BackCopyCheckAnswer() action called - CropData session is null");
-            return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+            return await Task.FromResult(HandleExpiredSession());
         }
 
         model.IsCheckAnswer = false;
@@ -7722,7 +7722,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             if (model == null)
             {
                 _logger.LogTrace("Crop Controller : Session not found in AddOrRemoveField() get action");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -7996,7 +7996,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             {
                 _logger.LogTrace("Crop Controller : FreshWeightYieldsDefault() action called - CropData session is null");
 
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             List<int> fieldIds = model.Crops.Select(crop => crop.FieldID ?? 0).ToList();
@@ -8173,7 +8173,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         {
             if (model == null)
             {
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             await BindFreshWeightYieldDetails(model, resetToDefaults: false);
@@ -8294,7 +8294,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         if (model == null)
         {
             _logger.LogTrace("SoilAnalysisController: Session expired in PreviousGrassManagement() action.");
-            return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+            return await Task.FromResult(HandleExpiredSession());
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 

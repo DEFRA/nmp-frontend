@@ -24,7 +24,7 @@ namespace NMP.Portal.Controllers
 {
     [Authorize]
     public class FarmController(ILogger<FarmController> logger, IDataProtectionProvider dataProtectionProvider, IAddressLookupLogic addressLookupLogic,
-        IFarmLogic farmLogic, IAboutServiceLogic aboutServiceLogic) : Controller
+        IFarmLogic farmLogic, IAboutServiceLogic aboutServiceLogic) : BaseController
     {
         private readonly ILogger<FarmController> _logger = logger;
         private readonly IDataProtector _dataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -166,7 +166,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Country() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
@@ -241,7 +241,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in FarmingRules() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -311,7 +311,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in PostCode() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -404,7 +404,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Address() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -519,7 +519,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in AddressNotFound() post action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -534,7 +534,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in ManualAddress() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -655,7 +655,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in ClimatePostCode() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 bool rainfallNotAvailable = !model.Rainfall.HasValue || model.Rainfall <= 0;
@@ -769,7 +769,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Rainfall() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 if (model.Rainfall == 0 || model.Rainfall == null)
@@ -828,7 +828,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in RainfallManual() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -894,7 +894,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in NVZ() action");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -945,7 +945,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in Elevation() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID ?? 0);
@@ -989,7 +989,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in Elevation() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1032,7 +1032,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in Organic() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
@@ -1075,7 +1075,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in CheckAnswer({Q}) action", q);
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
 
             if (string.IsNullOrWhiteSpace(model.FullAddress))
@@ -1269,7 +1269,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in BackCheckAnswer() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             bool isUpdate = false;
             if (model.EncryptedIsUpdate != null)
@@ -1624,7 +1624,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in FarmRemove() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1695,7 +1695,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Cancel() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
             }
             catch (Exception ex)

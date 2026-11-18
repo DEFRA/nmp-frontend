@@ -28,7 +28,7 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class ReportController(ILogger<ReportController> logger, IDataProtectionProvider dataProtectionProvider,
-     IReportLogic reportLogic, IStorageCapacityLogic storageCapacityLogic, IReportLogicDependencies dependencies) : Controller
+     IReportLogic reportLogic, IStorageCapacityLogic storageCapacityLogic, IReportLogicDependencies dependencies) : BaseController
 {
     private readonly ILogger<ReportController> _logger = logger;
     private readonly IDataProtector _reportDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.ReportController");
@@ -3434,7 +3434,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         ApplyFarmManureValues(model, farmManure);
     }
 
-    private static (bool flowControl, IActionResult value) BindDefaultNutrientValuesIfOther(ReportViewModel model, List<FarmManureTypeResponse> farmManureList)
+    private (bool flowControl, IActionResult value) BindDefaultNutrientValuesIfOther(ReportViewModel model, List<FarmManureTypeResponse> farmManureList)
     {
         bool isOtherGroup = model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherLiquidMaterials
                          || model.ManureGroupIdForFilter == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials;
@@ -3445,7 +3445,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 .FirstOrDefault(x => x.ManureTypeID == model.ManureGroupIdForFilter);
 
             if (farmManure == null)
-                return (flowControl: false, value: Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+                return (flowControl: false, value: HandleExpiredSession());
 
             ApplyFarmManure(model, farmManure);
             model.IsDefaultNutrient = true;
@@ -4049,7 +4049,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         if (manureType == null)
         {
             _logger.LogTrace("Report Controller : LivestockImportExportCheckAnswer() action : ManureType is null");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         model.DefaultNutrientValue = AreStandardNutrientValues(manureType, model)

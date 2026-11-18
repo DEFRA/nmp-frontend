@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace NMP.Portal.Controllers;
 
 [AllowAnonymous]
-public class HelpAndFeedbackController : Controller
+public class HelpAndFeedbackController : BaseController
 {
     public IActionResult Index()
     {

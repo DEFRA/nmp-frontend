@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace NMP.Portal.Controllers;
 
 [AllowAnonymous]
-public class ReleaseScheduleController : Controller
+public class ReleaseScheduleController : BaseController
 {
     public IActionResult Index()
     {

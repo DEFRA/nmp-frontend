@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using NMP.Application;
 using NMP.Commons.ViewModels;
-using NMP.Core.Interfaces;
+using NMP.Portal.Controllers;
 
 namespace NMP.Portal.Areas.Manner.Controllers
 {
     [Area("Manner")]
     [Authorize]
-    public class AboutMannerController(ILogger<AboutMannerController> logger, IAboutMannerLogic aboutMannerLogic) : Controller
+    public class AboutMannerController(ILogger<AboutMannerController> logger, IAboutMannerLogic aboutMannerLogic) : BaseController
     {
         private readonly ILogger<AboutMannerController> _logger = logger;
         private readonly IAboutMannerLogic _aboutMannerLogic = aboutMannerLogic;

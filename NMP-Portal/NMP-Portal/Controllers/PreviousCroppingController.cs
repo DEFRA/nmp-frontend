@@ -17,7 +17,7 @@ using System.Net;
 namespace NMP.Portal.Controllers
 {
     [Authorize]
-    public class PreviousCroppingController(ILogger<PreviousCroppingController> logger, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmLogic farmLogic, ICropLogic cropLogic) : Controller
+    public class PreviousCroppingController(ILogger<PreviousCroppingController> logger, IDataProtectionProvider dataProtectionProvider, IFieldLogic fieldLogic, IPreviousCroppingLogic previousCroppingLogic, IFarmLogic farmLogic, ICropLogic cropLogic) : BaseController
     {
         private readonly ILogger<PreviousCroppingController> _logger = logger;
         private readonly IFieldLogic _fieldLogic = fieldLogic;
@@ -80,7 +80,7 @@ namespace NMP.Portal.Controllers
                 if (string.IsNullOrWhiteSpace(q) && string.IsNullOrWhiteSpace(r) && model == null)
                 {
                     _logger.LogTrace($"Previous Croppping Controller : HasGrassInLastThreeYear() action : FarmId and FieldId parameters missing");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.BadRequest);
+                    return HandleExpiredSession();
                 }
 
                 if (!string.IsNullOrWhiteSpace(q) && !string.IsNullOrWhiteSpace(r) && !string.IsNullOrWhiteSpace(s))
@@ -231,7 +231,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogTrace($"Previous Croppping Controller : CropGroups() action : PreviousCropping data is not available in session");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 BindNMPTFarmIdAndNameForNavigation(model);
@@ -274,7 +274,7 @@ namespace NMP.Portal.Controllers
             else
             {
                 _logger.LogTrace($"Previous Croppping Controller : CropGroups() post action : PreviousCropping data is not available in session");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             SetPreviousCroppingToSession(model);
@@ -293,7 +293,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogTrace($"Previous Croppping Controller : CropTypes() action : PreviousCropping data is not available in session");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -373,7 +373,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Previous Croppping Controller : Session not found in CropInfoOne() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
                 await BindCropInfoViewBag(model);
@@ -429,7 +429,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("PreviousCropppingController: Session expired in PreviousGrassManagement() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
 
             try
@@ -531,7 +531,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() action : PreviousCropping data is not available in session");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
                 List<int> previousYears = BindViewBagForGrassLatsThreeYear(model);
@@ -624,7 +624,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace($"Previous Croppping Controller : GrassManagementOptions() action : PreviousCropping data is not available in session");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -674,7 +674,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace($"Previous Croppping Controller : HasGreaterThan30PercentClover() action : PreviousCropping data is not available in session");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -731,7 +731,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace($"Previous Croppping Controller : SoilNitrogenSupplyItems() action : PreviousCropping data is not available in session");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -780,7 +780,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace($"Previous Croppping Controller : LayDuration() action : PreviousCropping data is not available in session");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -824,7 +824,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogTrace($"Previous Croppping Controller : CheckAnswer() action : PreviousCropping data is not available in session");
-                    return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 BindNMPTFarmIdAndNameForNavigation(model);
@@ -1207,7 +1207,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace($"Previous cropping Controller : BackCheckAnswer() action : PreviousCropping data is not available in session");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             model.IsCheckAnswer = false;
@@ -1257,7 +1257,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogTrace("Previous cropping Controller : Cancel() action - PreviousCroppingData not found in session");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
             }

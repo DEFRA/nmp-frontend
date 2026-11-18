@@ -15,7 +15,7 @@ using System.Net.Http;
 namespace NMP.Portal.Controllers
 {
     [AllowAnonymous]
-    public class AccountController(ILogger<AccountController> logger, IOptionsMonitor<OpenIdConnectOptions> openIdConnectOptions) : Controller
+    public class AccountController(ILogger<AccountController> logger, IOptionsMonitor<OpenIdConnectOptions> openIdConnectOptions) : BaseController
     {
         private readonly ILogger _logger = logger;
         private readonly IOptionsMonitor<OpenIdConnectOptions> _openIdConnectOptions = openIdConnectOptions;

@@ -19,7 +19,7 @@ namespace NMP.Portal.Controllers
 {
     [Authorize]
     public class SoilAnalysisController(ILogger<SoilAnalysisController> logger, IDataProtectionProvider dataProtectionProvider, IFarmLogic farmLogic, ISoilLogic soilLogic,
-        IFieldLogic fieldLogic, ISoilAnalysisLogic soilAnalysisLogic, IPKBalanceLogic pKBalanceLogic) : Controller
+        IFieldLogic fieldLogic, ISoilAnalysisLogic soilAnalysisLogic, IPKBalanceLogic pKBalanceLogic) : BaseController
     {
         private readonly ILogger<SoilAnalysisController> _logger = logger;
         private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -144,7 +144,7 @@ namespace NMP.Portal.Controllers
                     if (model == null)
                     {
                         _logger.LogTrace("SoilAnalysisController: Session expired in ChangeSoilAnalysis() action.");
-                        return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                        return HandleExpiredSession();
                     }
                 }
                 else if (!string.IsNullOrWhiteSpace(i))
@@ -307,7 +307,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in Date() action.");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -402,7 +402,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilNutrientValueType() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return await Task.FromResult(View(model));
@@ -430,7 +430,7 @@ namespace NMP.Portal.Controllers
             if (soilAnalysisViewModel == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilNutrientValueType() post action.");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             if (model.SoilNutrientValueType.HasValue && model.SoilNutrientValueType.Value == (int)NMP.Commons.Enums.SoilNutrientValueType.Index &&
@@ -482,7 +482,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilNutrientValue() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -964,7 +964,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SulphurDeficient() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -1174,7 +1174,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in RemoveSoilAnalysis() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1227,7 +1227,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in Cancel() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             try
             {
@@ -1281,7 +1281,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("Soil Analysis Controller: Session expired in BackActionForCheckAnswer action.");
-                return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             try
             {
@@ -1347,7 +1347,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogTrace("SoilAnalysisController: Session expired in SoilAnalysesMethod() action.");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+                return await Task.FromResult(HandleExpiredSession());
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             Error? error = await FetchMethologies(model);

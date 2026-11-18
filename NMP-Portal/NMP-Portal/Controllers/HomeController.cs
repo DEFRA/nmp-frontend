@@ -4,7 +4,7 @@ using NMP.Application;
 using NMP.Commons.Resources;
 namespace NMP.Portal.Controllers;
 [AllowAnonymous]
-public class HomeController : Controller
+public class HomeController : BaseController
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IHomeLogic _homeLogic;

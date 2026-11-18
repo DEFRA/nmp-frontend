@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace NMP.Portal.Controllers;
 [AllowAnonymous]
-public class MaintenanceController : Controller
+public class MaintenanceController : BaseController
 {
     public IActionResult Index()
     {

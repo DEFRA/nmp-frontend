@@ -36,7 +36,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
     [Area("Manner")]
     [Route("[area]/[controller]")]
     [Authorize]
-    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IDataProtectionProvider dataProtectionProvider, IMannerEstimationLogicDependencies dependencies) : Controller
+    public class MannerEstimationController(ILogger<MannerEstimationController> logger, IMannerEstimationLogic mannerEstimationLogic, IDataProtectionProvider dataProtectionProvider, IMannerEstimationLogicDependencies dependencies) : BaseController
     {
         private readonly ILogger<MannerEstimationController> _logger = logger;
         private readonly IMannerEstimationLogic _mannerEstimationLogic = mannerEstimationLogic;
@@ -251,7 +251,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (model == null)
                 {
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in Country() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
@@ -324,7 +324,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog}  Session not found in PostCode() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             BindMannerFarmNameAndIdOnNavigation(sid);
@@ -424,7 +424,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AverageAnnualRainfallManual() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindMannerFarmNameAndIdOnNavigation(sid);
 
@@ -492,7 +492,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in FieldName() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindMannerFarmNameAndIdOnNavigation(sid);
 
@@ -544,7 +544,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in NVZField() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindMannerFarmNameAndIdOnNavigation(sid);
 
@@ -589,7 +589,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             ViewBag.SoilTypesList = await _mannerLogic.FetchSoilTypesByRB209CountryId(model.FarmRB209CountryId);
             BindMannerFarmNameAndIdOnNavigation(sid);
@@ -633,7 +633,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CropGroup() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             ViewBag.CropGroupList = await _fieldLogic.FetchCropGroups();
             BindMannerFarmNameAndIdOnNavigation(sid);
@@ -680,7 +680,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CropType() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             ViewBag.CropTypeList = await _fieldLogic.FetchCropTypes(model.CropGroupId ?? 0, model.FarmRB209CountryId);
             BindMannerFarmNameAndIdOnNavigation(sid);
@@ -732,7 +732,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IsEarlySown() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             return View(model);
         }
@@ -771,7 +771,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManureGroup() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             (List<SelectListItem> manureGroupList, Error? error) = await FetchManureGroup();
@@ -892,7 +892,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManureType() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             (List<SelectListItem> manureTypeList, Error? error) = await FetchManureType(model);
             if (error == null)
@@ -991,7 +991,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in SoilType() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             MannerEstimationViewModel mannerEstimationViewModel = _mannerEstimationLogic.GetMannerEstimationFromSession();
 
@@ -1537,7 +1537,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (model == null)
                 {
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyExistingFarmAndFieldDetails() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 (_, bool isAnyFarmExists) = await BindAllFarmList(Resource.lblTrue);
@@ -1838,7 +1838,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IsFarmOrganic() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindMannerFarmNameAndIdOnNavigation(sid);
             return View(model);
@@ -2192,7 +2192,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ApplicationMethod() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindMannerFarmNameAndIdOnNavigation(sid);
             List<ApplicationMethodResponse> applicationMethodList = await BindViewBegForApplicationMethod(model);
@@ -2278,7 +2278,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in DefaultNutrientValues() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             BindMannerFarmNameAndIdOnNavigation(sid);
@@ -2489,7 +2489,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManualNutrientValues() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             BindMannerFarmNameAndIdOnNavigation(sid);
@@ -2582,7 +2582,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ApplicationRateMethod() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             ResetWarnings(model, true);
             model = await _mannerEstimationLogic.SetMannerEstimationStep26(model);
@@ -2736,7 +2736,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in ManualApplicationRate() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             ResetWarnings(model, true);
             model = await _mannerEstimationLogic.SetMannerEstimationStep27(model);
@@ -2882,7 +2882,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in AreaQuantity() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             ResetWarnings(model, true);
             model = await _mannerEstimationLogic.SetMannerEstimationStep28(model);
@@ -3120,7 +3120,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (model == null)
                 {
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyEstimate() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
                 bool isEstimateExist = false;
                 Guid organisationId = GetOrganisationId();
@@ -3208,7 +3208,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
                 if (model == null)
                 {
                     _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in CopyFromEstimates() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
                 BindSessionIdInViewBeg(sid);
                 await LoadMannerEstimations();
@@ -3438,7 +3438,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IncorporationMethod() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             _mannerEstimationLogic.SetMannerEstimationStep29(model);
             BindMannerFarmNameAndIdOnNavigation(sid);
@@ -3550,7 +3550,7 @@ namespace NMP.Portal.Areas.Manner.Controllers
             if (model == null)
             {
                 _logger.LogError($"{_mannerEstimationControllerForLog} Session not found in IncorporationDelay() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             _mannerEstimationLogic.SetMannerEstimationStep30(model);
             BindMannerFarmNameAndIdOnNavigation(sid);

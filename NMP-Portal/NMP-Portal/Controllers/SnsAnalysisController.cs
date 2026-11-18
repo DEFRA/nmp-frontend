@@ -12,7 +12,7 @@ using System.Globalization;
 namespace NMP.Portal.Controllers
 {
     public class SnsAnalysisController(ILogger<SnsAnalysisController> logger, IDataProtectionProvider dataProtectionProvider,
-         IFieldLogic fieldLogic, ICropLogic cropLogic, ISnsAnalysisLogic snsAnalysisLogic, IFarmLogic farmLogic) : Controller
+         IFieldLogic fieldLogic, ICropLogic cropLogic, ISnsAnalysisLogic snsAnalysisLogic, IFarmLogic farmLogic) : BaseController
     {
         private readonly ILogger<SnsAnalysisController> _logger = logger;
         private readonly IDataProtector _cropDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.CropController");

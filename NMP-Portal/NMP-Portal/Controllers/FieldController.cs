@@ -24,7 +24,7 @@ namespace NMP.Portal.Controllers;
 
 [Authorize]
 public class FieldController(ILogger<FieldController> logger, IDataProtectionProvider dataProtectionProvider, ISoilAnalysisLogic soilAnalysisLogic,
-     IFieldLogicDependencies logicDependencies) : Controller
+     IFieldLogicDependencies logicDependencies) : BaseController
 {
     private readonly ILogger<FieldController> _logger = logger;
     private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -355,7 +355,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : FieldMeasurements() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -492,7 +492,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : NVZField() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -625,7 +625,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : ElevationField() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -687,7 +687,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (model == null)
             {
                 _logger.LogTrace("Field Controller : SoilType() action : Field data is not available in session");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -744,7 +744,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (fieldData == null)
             {
                 _logger.LogTrace("Field Controller : SoilType() post action : Field data is not available in session");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             if (fieldData.SoilTypeID != (int)NMP.Commons.Enums.SoilTypeEngland.DeepClayey &&
@@ -806,7 +806,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilReleasingClay() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -866,7 +866,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SulphurDeficient() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         model.IsSoilReleasingClay = false;
 
@@ -908,7 +908,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilDateAndPHLevel() action : Field data is not available in session");
-            return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+            return await Task.FromResult(HandleExpiredSession());
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -1006,7 +1006,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilNutrientValueType() action : Field data is not available in session");
-            return Task.FromResult<IActionResult>(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+            return Task.FromResult<IActionResult>(HandleExpiredSession());
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1060,7 +1060,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilNutrientValue() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1513,7 +1513,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : CropGroups() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -1568,7 +1568,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (fieldData == null)
         {
             _logger.LogTrace("Field Controller : CropGroups() post action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         if (fieldData.CropGroupId != field.CropGroupId)
@@ -1594,7 +1594,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (model == null)
             {
                 _logger.LogTrace("Field Controller : CropTypes() action : Field data is not available in session");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -1669,7 +1669,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (model == null)
             {
                 _logger.LogError("Field Controller : Session not found in CropInfoOne() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             await BindCropInfoViewBag(model);
@@ -1734,7 +1734,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : BackCheckAnswer() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         model.IsCheckAnswer = false;
@@ -1774,7 +1774,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (model == null)
             {
                 _logger.LogTrace("Field Controller : CheckAnswer() Field Data session not found");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             model.IsGrassLastThreeHarvestYearChange = false;
@@ -2916,7 +2916,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (model == null)
             {
                 _logger.LogTrace("Field Controller : RecentSoilAnalysisQuestion() action : No field data found in session.");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
         }
@@ -2952,7 +2952,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 if (fieldData == null)
                 {
                     _logger.LogTrace("Field Controller : RecentSoilAnalysisQuestion() post action : No field data found in session.");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
                 if (fieldData.RecentSoilAnalysisQuestion != model.RecentSoilAnalysisQuestion)
@@ -3005,7 +3005,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilOverChalk() action : No field data found in session.");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -3116,7 +3116,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 if (model == null)
                 {
                     _logger.LogTrace("Field Controller : UpdateField() post action : No field data found in session.");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return HandleExpiredSession();
                 }
 
 
@@ -3752,7 +3752,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : CopyFields() : field data not found in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -3808,7 +3808,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : HasGrassInLastThreeYear() : field data not found in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -3964,7 +3964,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : field data not found in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
         int lastHarvestYear = model.LastHarvestYear ?? 0;
@@ -4077,7 +4077,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : GrassManagementOptions: field data not found in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -4134,7 +4134,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : HasGreaterThan30PercentClover(): field data not found in session");
-            return Task.FromResult<IActionResult>(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+            return Task.FromResult<IActionResult>(HandleExpiredSession());
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -4197,7 +4197,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : SoilNitrogenSupplyItems() : field data not found in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -4255,7 +4255,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : LayDuration() : field data not found in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -4305,7 +4305,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (model == null)
             {
                 _logger.LogTrace("Field Controller : field data not found in session");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
             }
             else
             {
@@ -4366,7 +4366,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : LastHarvestYear() : field data not found in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
 
         BindNMPTFarmIdAndNameForNavigation(model);
@@ -4452,7 +4452,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : LPIDNumber() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -4496,7 +4496,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : NitrateVulnerableZones() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
         await BindNitrateVulnerableZones(model);
@@ -4548,7 +4548,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("Field Controller : PscIndex() action : Field data is not available in session");
-            return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+            return HandleExpiredSession();
         }
         BindNMPTFarmIdAndNameForNavigation(model);
         await FetchPscIndexList();
@@ -4613,7 +4613,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         if (model == null)
         {
             _logger.LogTrace("SoilAnalysisController: Session expired in SoilAnalysesMethod() action.");
-            return await Task.FromResult(Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict));
+            return await Task.FromResult(HandleExpiredSession());
         }
         BindNMPTFarmIdAndNameForNavigation(model);
         await SoilAnalysisViewModel(model);

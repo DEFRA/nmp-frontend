@@ -31,7 +31,7 @@ namespace NMP.Portal.Controllers
 {
     [Authorize]
     public class OrganicManureController(ILogger<OrganicManureController> logger, IDataProtectionProvider dataProtectionProvider,
-          IOrganicManureLogicDependencies dependencies) : Controller
+          IOrganicManureLogicDependencies dependencies) : BaseController
     {
         private readonly ILogger<OrganicManureController> _logger = logger;
         private readonly IDataProtector _farmDataProtector = dataProtectionProvider.CreateProtector("NMP.Portal.Controllers.FarmController");
@@ -729,7 +729,7 @@ namespace NMP.Portal.Controllers
                 return null;
 
             if (!ValidateSession(model.SessionId))
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return HandleExpiredSession();
 
             var sessionModel = _organicManureLogic.GetOrganicManureFromSession(model.SessionId);
 
@@ -9600,7 +9600,7 @@ managementPeriod.CropID.HasValue
             if (firstManagement?.ID == null)
             {
                 _logger.LogError("Organic Manure Controller : Management period not found in Defoliation() action");
-                return (null, Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+                return (null, HandleExpiredSession());
             }
 
             var field = await _fieldLogic.FetchFieldByFieldId(fieldId);
@@ -10546,7 +10546,7 @@ managementPeriod.CropID.HasValue
                 _logger.LogTrace("Organic Manure Controller : {Action}() action - Session expired",
                     actionName);
 
-                redirect = Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                redirect = HandleExpiredSession();
 
                 return false;
             }
