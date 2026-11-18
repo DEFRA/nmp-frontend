@@ -3182,11 +3182,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 int highestYearOfPlan = cropPlans.Max(cp => cp.Year) - 1;
                 List<int> yearsToCheck = YearsToCheck(cropPlans);
-                if (model.FarmRB209CountryID!=(int)NMP.Commons.Enums.RB209Country.Scotland&& cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
-                {
-                    onlyFieldUpdate = true;
-                }
-                else if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => x.Year == highestYearOfPlan) == 1)
+                bool isEnglandAndOnlyFieldUpdate = (model.FarmRB209CountryID!=(int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3);
+                bool isScotlandAndOnlyFieldUpdate = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => x.Year == highestYearOfPlan) == 1);
+                if (isEnglandAndOnlyFieldUpdate || isScotlandAndOnlyFieldUpdate)
                 {
                     onlyFieldUpdate = true;
                 }
@@ -3595,11 +3593,9 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             ViewBag.IsAnyPlan = true;
             int highestYearOfPlan = cropPlans.Max(cp => cp.Year) - 1;
             List<int> yearsToCheck = YearsToCheck(cropPlans);
-            if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland&&cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3)
-            {
-                ViewBag.NoNeedToShowPreviousCroppingDetail = true;
-            }
-            else if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => x.Year == highestYearOfPlan) == 1)
+            bool isEnglandAndOnlyFieldUpdate = (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3);
+            bool isScotlandAndOnlyFieldUpdate = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => x.Year == highestYearOfPlan) == 1);
+            if (isEnglandAndOnlyFieldUpdate || isScotlandAndOnlyFieldUpdate)
             {
                 ViewBag.NoNeedToShowPreviousCroppingDetail = true;
             }
