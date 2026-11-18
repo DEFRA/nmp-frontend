@@ -2323,7 +2323,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
     private void ValidateGrassJourneyFieldsForEngland(FieldViewModel model, bool? hasGrass)
     {
-        if (model.PreviousCroppings != null && (!hasGrass.HasValue))
+        if (ViewBag.NoNeedToShowPreviousCroppingDetail==null && (!hasGrass.HasValue))
         {
             ModelState.AddModelError("HasGrassInLastThreeYear", string.Format(_stringFormat, string.Format(Resource.lblHasBeenUsedForGrassInAnyOfTheLast3Year, model.Name), Resource.lblNotSet));
         }
@@ -3158,15 +3158,15 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
 
         try
         {
-            ValidateCheckAnwser(model, false);
             int fieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
             List<Crop> cropPlans = await _fieldLogic.FetchCropsByFieldId(fieldId);
+            await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
+            ValidateCheckAnwser(model, false);
             BindNMPTFarmIdAndNameForNavigation(model);
             if (!ModelState.IsValid)
             {
                 await FetchSelectedNVZName(model);
                 await FetchPscIndexName(model);
-                await FetchViewBegDataForUpdate(model, null, cropPlans, null, false);
                 ViewBag.farmNvzListCount = await BindNitrateVulnerableZones(model);
 
                 ViewData["ModelStateErrors"] = ModelState;
