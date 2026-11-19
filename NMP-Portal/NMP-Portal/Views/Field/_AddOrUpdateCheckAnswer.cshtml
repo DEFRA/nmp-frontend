@@ -686,7 +686,7 @@
                 Value = ((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType),
                 ActionName = "CropTypes",
                 ControllerName = "Field",
-                ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+                ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other&&Model.CropGroupId!=null)
             });
         }
     }
@@ -707,7 +707,7 @@
             Value = ((string.IsNullOrWhiteSpace(Model.CropType)) ? Resource.lblNotSet : Model.CropType),
             ActionName = "CropTypes",
             ControllerName = "Field",
-            ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
+            ShowAction = (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other&&Model.CropGroupId!=null)
         });
         if (Model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && Model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
         {

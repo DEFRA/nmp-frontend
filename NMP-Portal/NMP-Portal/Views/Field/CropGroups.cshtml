@@ -6,17 +6,17 @@
 
 
     var backAction = "";
-    if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue)
-    {
-        if (Model.IsCheckAnswer)
+    if (Model.IsCheckAnswer&&(!Model.IsHasGrassInLastThreeYearChange))
         {
             backAction = "CheckAnswer";
         }
-        else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate))
+        else if (!string.IsNullOrWhiteSpace(Model.EncryptedIsUpdate)&&(!Model.IsHasGrassInLastThreeYearChange))
         {
             backAction = "UpdateField";
         }
-        else if (Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
+        else if (Model.PreviousCroppings.HasGrassInLastThreeYear.HasValue)
+    {
+         if (Model.PreviousCroppings.HasGrassInLastThreeYear.Value)
         {
             if (Model.PreviousCroppings.HasGreaterThan30PercentClover.HasValue && !Model.PreviousCroppings.HasGreaterThan30PercentClover.Value)
             {
@@ -49,7 +49,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer && (!Model.IsHasGrassInLastThreeYearChange)) ? "CheckAnswer" : backAction)" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="Field" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CropGroups" asp-controller="Field" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
