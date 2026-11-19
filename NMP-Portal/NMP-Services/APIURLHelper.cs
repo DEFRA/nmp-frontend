@@ -89,8 +89,8 @@ internal static class ApiurlHelper
     public const string FetchCropTypeLinkingsByCropTypeIdAPI = "crop-type-linkings/{0}";
     public const string FetchOrganicManureExistanceByDateRangeAPI = "organic-manures/check-existence?managementPeriodID={0}&dateFrom={1}&dateTo={2}&confirm={3}&isSlurryOnly={4}";
     public const string FetchSeasonsAPI = "vendors/rb209/Measurement/Seasons";
-    public const string FetchSNSIndexByMeasurementMethodAPI = "vendors/rb209/Measurement/MeasurementMethod";
-    public const string FetchSNSIndexByMeasurementMethodForScotlandAPI = "vendors/rb209/MeasurementScotland/MeasurementMethod";
+    public const string FetchSNSIndexByMeasurementMethodAPI = "vendors/rb209/Measurement/MeasurementMethodEngWal";
+    public const string FetchSNSIndexByMeasurementMethodForScotlandAPI = "vendors/rb209/Measurement/MeasurementMethodScotland";
     public const string FetchSecondCropListByFirstCropIdAPI = "second-crop-linkings/{0}?rB209CountryID={1}";
     public const string FetchSoilAnalysisByIdAPI = "soil-analyses/{0}";
     public const string UpdateSoilAnalysisAPI = "soil-analyses/{0}";
@@ -200,6 +200,7 @@ internal static class ApiurlHelper
 
     //Grass API Urls
     public const string FetchDefoliationSequencesBySwardTypeIdAndNumberOfCutAPI = "vendors/rb209/Grass/DefoliationSequences/{0}/{1}/{2}/{3}/{4}";
+    public const string FetchDefaultFreshWeightYieldsByDefoliationSequenceIdAPI = "vendors/rb209/Grass/DefaultYields/{0}";
     public const string FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAPI = "vendors/rb209/Grass/PotentialCuts/{0}/{1}";
     public const string FetchSwardManagementsAPI = "vendors/rb209/Grass/SwardManagements";
     public const string FetchSwardTypesAPI = "vendors/rb209/Grass/SwardTypesByCountryId/{0}";
