@@ -2565,7 +2565,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         catch (Exception ex)
         {
             TempData[_checkYourAnswerErrorDataKey] = ex.Message;
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
         return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
     }
