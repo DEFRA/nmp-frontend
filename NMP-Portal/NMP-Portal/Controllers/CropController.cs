@@ -76,7 +76,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _harvestYearPlanActionName = "HarvestYearPlan";
     private const string _organicManureKey = "OrganicManure";
     private const string _fertiliserManureKey = "FertiliserManure";
-    private const string _fertiliserDataBeforeUpdateKey = "FertiliserDataBeforeUpdate";
+    private const string _fertiliserDataBeforeUpdateKey = "FertiliserManureBeforeUpdate";
     private const string _organicDataBeforeUpdateKey = "OrganicDataBeforeUpdate";
     private const string _currentSwardActionName = "CurrentSward";
     private const string _twoParamStringFormat = "{0} {1}";  //DefoliationError

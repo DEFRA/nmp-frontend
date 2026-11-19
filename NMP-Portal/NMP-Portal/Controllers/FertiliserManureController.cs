@@ -41,8 +41,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     private const string _doubleCropActionName = "DoubleCrop";
     private const string _recommendationsActionName = "Recommendations";
     private const string _fieldsActionName = "Fields";
-    private const string _fieldGroupActionName = "FieldGroup";
-    private const string _fertiliserManureBeforeUpdateSessionKey = "FertiliserManureBeforeUpdate";  //FieldGroupError
+    private const string _fieldGroupActionName = "FieldGroup";    
     private const string _fieldGroupErrorTempDataKey = "FieldGroupError";
     private const string _fieldErrorTempDataKey = "FieldError";
     private const string _inOrgnaicManureDurationErrorTempDataKey = "InOrgnaicManureDurationError";
@@ -62,17 +61,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
         ViewBag.NMPTFarmName = model?.FarmName;
 
-    }
-
-
-    //private void SetFertiliserManureToSession(FertiliserManureViewModel fertiliserManureViewModel)
-    //{
-    //    HttpContext.Session.SetObjectAsJson(_fertiliserManureSessionKey, fertiliserManureViewModel);
-    //}
-
-    private void RemoveFertiliserManureSession()
-    {
-        HttpContext.Session.Remove(_fertiliserManureSessionKey);
     }
 
     public IActionResult Index()
@@ -1794,6 +1782,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                     string successMsgSecond = Resource.lblSelectAFieldToSeeItsUpdatedNutrientRecommendation;
                     bool success = true;
                     _fertiliserManureLogic.RemoveFertilserManureSession(model.SessionId);
+                    _fertiliserManureLogic.RemoveFertiliserManureBeforeUpdateToSession(model.SessionId);
                     return RedirectForCheckAnswerSuccess(model, successMsg, successMsgSecond, success);
                 }
                 TempData[_checkYourAnswerErrorDataKey] = error?.Message;
@@ -2045,12 +2034,12 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
             !string.IsNullOrWhiteSpace(r) &&
             !string.IsNullOrWhiteSpace(s))
         {
-            SetFertiliserManureBeforeUpdateToSession(model);
+            _fertiliserManureLogic.SetFertiliserManureBeforeUpdateToSession(model);
         }
     }
     private bool CheckIfDataChanged(FertiliserManureViewModel model)
     {
-        var previous = GetFertiliserManureBeforeUpdateFromSession();
+        var previous =_fertiliserManureLogic.GetFertiliserManureBeforeUpdateFromSession(model.SessionId);
         if (previous == null) return false;
 
         string oldJson = JsonConvert.SerializeObject(previous);
@@ -4413,18 +4402,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     }
 
 
-    private FertiliserManureViewModel? GetFertiliserManureBeforeUpdateFromSession()
-    {
-        if (HttpContext.Session.Exists(_fertiliserManureBeforeUpdateSessionKey))
-        {
-            return HttpContext.Session.GetObjectFromJson<FertiliserManureViewModel>(_fertiliserManureBeforeUpdateSessionKey);
-        }
-        return null;
-    }
-    private void SetFertiliserManureBeforeUpdateToSession(FertiliserManureViewModel fertiliserManureViewModel)
-    {
-        HttpContext.Session.SetObjectAsJson(_fertiliserManureBeforeUpdateSessionKey, fertiliserManureViewModel);
-    }
+   
     private async Task<FertiliserManureViewModel> ApplyGrassCropLogicAsync(FertiliserManureViewModel model, List<HarvestYearPlanResponse>? cropPlans)
     {
         int grassCropCounter = 0;

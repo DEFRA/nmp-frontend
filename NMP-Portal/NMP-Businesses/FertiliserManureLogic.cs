@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NMP.Application;
@@ -24,6 +25,7 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
     private readonly ICropLogic _cropLogic = cropLogic;
     private readonly IFieldLogic _fieldLogic = fieldLogic;
     private const string _fertiliserManureSessionKey = "FertiliserManure";
+    private const string _fertiliserManureBeforeUpdateSessionKey = "FertiliserManureBeforeUpdate";  //FieldGroupError
     public async Task<(List<FertiliserManure>, Error)> AddFertiliserManureAsync(string fertiliserManure)
     {
         _logger.LogTrace("Adding Fertiliser Manure");
@@ -525,6 +527,22 @@ public class FertiliserManureLogic(ILogger<FertiliserManureLogic> logger, IFerti
     public void RemoveFertilserManureSession(Guid? sessionId)
     {
         string cacheKey = sessionId + " " + _fertiliserManureSessionKey;
+        _fertiliserManureService.RemoveFertiliserManureSessionAsync(cacheKey).GetAwaiter().GetResult();
+
+    }
+    public FertiliserManureViewModel? GetFertiliserManureBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fertiliserManureBeforeUpdateSessionKey;
+        return _fertiliserManureService.GetFertiliserManureFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+    public void SetFertiliserManureBeforeUpdateToSession(FertiliserManureViewModel fertiliserManureViewModel)
+    {
+        string cacheKey = fertiliserManureViewModel.SessionId + " " + _fertiliserManureBeforeUpdateSessionKey;
+        _fertiliserManureService.SetFertiliserManureToSessionAsync(fertiliserManureViewModel, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveFertiliserManureBeforeUpdateToSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _fertiliserManureBeforeUpdateSessionKey;
         _fertiliserManureService.RemoveFertiliserManureSessionAsync(cacheKey).GetAwaiter().GetResult();
 
     }

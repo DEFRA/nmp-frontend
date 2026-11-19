@@ -42,4 +42,7 @@ public interface IFertiliserManureLogic
     FertiliserManureViewModel? GetFertilserManureFromSession(Guid? sessionId);
     void SetFertilserManureToSession(FertiliserManureViewModel fertiliserManureViewModel);
     void RemoveFertilserManureSession(Guid? sessionId);
+    FertiliserManureViewModel? GetFertiliserManureBeforeUpdateFromSession(Guid? sessionId);
+    void SetFertiliserManureBeforeUpdateToSession(FertiliserManureViewModel fertiliserManureViewModel);
+    void RemoveFertiliserManureBeforeUpdateToSession(Guid? sessionId);
 }
