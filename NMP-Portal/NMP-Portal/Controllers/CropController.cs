@@ -6544,16 +6544,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         if (string.IsNullOrWhiteSpace(q) && model.Crops != null && model.Crops.Count > 0)
         {
+            if (model.GrassClassCounter >= model.Crops.Count)
+            {
+                model.GrassClassCounter = model.Crops.Count - 1;
+            }
             model.GrassClassEncryptedCounter = _fieldDataProtector.Protect(model.GrassClassCounter.ToString());
 
-            if (model.GrassClassCounter == 0)
-            {
-                model.FieldID = model.Crops[0].FieldID.Value;
-                model.FieldName = model.Crops[model.GrassClassCounter].FieldName;
-                ViewBag.FieldName = model.Crops[model.GrassClassCounter].FieldName;
+            model.FieldID = model.Crops[model.GrassClassCounter].FieldID.Value;
+            model.FieldName = model.Crops[model.GrassClassCounter].FieldName;
+            ViewBag.FieldName = model.Crops[model.GrassClassCounter].FieldName;
 
-                await SetGrassClassViewBagAndYieldRange(model, grassGrowthClasses, grassSiteClasses, isScotland);
-            }
+            await SetGrassClassViewBagAndYieldRange(model, grassGrowthClasses, grassSiteClasses, isScotland);
 
             _cropLogic.SetCropToSession(model);
         }
