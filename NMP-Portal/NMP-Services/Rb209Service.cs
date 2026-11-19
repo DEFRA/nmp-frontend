@@ -610,6 +610,42 @@ public class Rb209Service(ILogger<Rb209Service> logger, IHttpContextAccessor htt
         return (defoliationSequenceResponses, error);
     }
 
+    public async Task<(List<DefaultFreshWeightYieldResponse>, Error)> FetchDefaultFreshWeightYieldsByDefoliationSequenceIdAsync(int defoliationSequenceId)
+    {
+        Error? error = null;
+        List<DefaultFreshWeightYieldResponse> defaultFreshWeightYields = new List<DefaultFreshWeightYieldResponse>();
+        try
+        {
+            HttpClient httpClient = await GetNMPAPIClient();
+            var requestUrl = string.Format(ApiurlHelper.FetchDefaultFreshWeightYieldsByDefoliationSequenceIdAPI, HttpUtility.UrlEncode(defoliationSequenceId.ToString()));
+            var response = await httpClient.GetAsync(requestUrl);
+
+            string result = await response.Content.ReadAsStringAsync();
+            ResponseWrapper? responseWrapper = JsonConvert.DeserializeObject<ResponseWrapper>(result);
+            if (response.IsSuccessStatusCode && responseWrapper != null && responseWrapper.Data != null)
+            {
+                var yieldList = responseWrapper?.Data?.ToObject<List<DefaultFreshWeightYieldResponse>>();
+                if (yieldList != null)
+                {
+                    defaultFreshWeightYields.AddRange(yieldList);
+                }
+            }
+            else
+            {
+                error = _logger.ExtractError(responseWrapper, error);
+            }
+        }
+        catch (HttpRequestException hre)
+        {
+            error = _logger.HandleHttpRequestException(hre, error);
+        }
+        catch (Exception ex)
+        {
+            error = _logger.HandleException(ex, error);
+        }
+        return (defaultFreshWeightYields, error);
+    }
+
     public async Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsync(int swardTypeId, int swardManagementId)
     {
         Error? error = null;

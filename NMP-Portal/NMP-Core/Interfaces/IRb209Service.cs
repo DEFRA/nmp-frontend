@@ -33,6 +33,7 @@ namespace NMP.Core.Interfaces
         Task<(SoilMethologiesResponse?, Error?)> FetchSoilMethodologyNameByNutrientIdAndMethodologyId(int nutrientId, int methodologyId);
         Task<List<GrassSeasonResponse>> FetchGrassSeasonsAsync();
         Task<(List<DefoliationSequenceResponse>, Error)> FetchDefoliationSequencesBySwardManagementIdAndNumberOfCutAsync(int swardTypeId, int swardManagementId, int numberOfCut, bool isNewSward, int countryId);
+        Task<(List<DefaultFreshWeightYieldResponse>, Error)> FetchDefaultFreshWeightYieldsByDefoliationSequenceIdAsync(int defoliationSequenceId);
         Task<(List<PotentialCutResponse>, Error)> FetchPotentialCutsBySwardTypeIdAndSwardManagementIdAsync(int swardTypeId, int swardManagementId);
         Task<(List<SwardManagementResponse>, Error)> FetchSwardManagementsAsync();
         Task<(List<SwardTypeResponse>, Error)> FetchSwardTypesServiceByCountryAsync(int countryId);

@@ -2509,6 +2509,12 @@ namespace NMP.Portal.Areas.Manner.Controllers
                     ValidateManualNutrientValues();
                 }
 
+                if (model.IsManureTypeLiquid == null)
+                {
+                    MannerEstimationStep25ViewModel sessionModel = await _mannerEstimationLogic.GetMannerEstimationStep25(false);
+                    model.IsManureTypeLiquid = sessionModel.IsManureTypeLiquid;
+                }
+
                 CheckNutrientValuesIfNull(model);
                 ValidateNutrientValues(model);
 
