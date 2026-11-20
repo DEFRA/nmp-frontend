@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NMP.Application;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 
@@ -13,6 +14,7 @@ public class StorageCapacityLogic(ILogger<StorageCapacityLogic> logger, IStorage
 {
     private readonly ILogger<StorageCapacityLogic> _logger = logger;
     private readonly IStorageCapacityService _storageCapacityService = storageCapacityService;
+    private const string _storageCapacityDataSessionKey = "StorageCapacityData";
     public async Task<(StoreCapacity, Error)> AddStoreCapacityAsync(StoreCapacity storeCapacityData)
     {
         _logger.LogTrace("Add store capacity");
@@ -101,5 +103,22 @@ public class StorageCapacityLogic(ILogger<StorageCapacityLogic> logger, IStorage
     {
         _logger.LogTrace("Update store capacity");
         return await _storageCapacityService.UpdateStoreCapacityAsync(storeCapacityData);
+    }
+    public StorageCapacityViewModel? GetStorageCapacityFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _storageCapacityDataSessionKey;
+        return _storageCapacityService.GetStorageCapacityFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetStorageCapacityToSession(StorageCapacityViewModel storageCapacityViewModel)
+    {
+        string cacheKey = storageCapacityViewModel.SessionId + " " + _storageCapacityDataSessionKey;
+        _storageCapacityService.SetStorageCapacityToSessionAsync(storageCapacityViewModel, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveStorageCapacitySession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _storageCapacityDataSessionKey;
+        _storageCapacityService.RemoveStorageCapacitySessionAsync(cacheKey).GetAwaiter().GetResult();
+
     }
 }
