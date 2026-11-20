@@ -1619,12 +1619,12 @@
                                                 @foreach (var soilAnalysis in field.SoilAnalysis)
                                                 {
 
-                                                    string GetIndexOrDefault(string? value) =>
+                                                  static  string GetIndexOrDefault(string? value) =>
                                                     !string.IsNullOrWhiteSpace(value)
                                                     ? $"{Resource.lblIndex} {value}"
                                                     : Resource.lblNotEntered;
 
-                                                    string GetStatusOrDefault(string? value) =>
+                                                    static  string GetStatusOrDefault(string? value) =>
                                                     !string.IsNullOrWhiteSpace(value)
                                                     ? $"{Resource.lblStatus} {value}"
                                                     : Resource.lblNotEntered;
