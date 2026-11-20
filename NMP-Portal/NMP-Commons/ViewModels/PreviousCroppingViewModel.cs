@@ -2,6 +2,11 @@
 namespace NMP.Commons.ViewModels;
 public class PreviousCroppingViewModel:PreviousCropping
 {
+    public PreviousCroppingViewModel()
+    {
+        SessionId = Guid.NewGuid();
+    }
+    public Guid SessionId { get; set; }
     public string? EncryptedFarmID { get; set; }
     public string? EncryptedFieldID { get; set; }
     public string? EncryptedYear { get; set; }

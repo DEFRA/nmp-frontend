@@ -20,7 +20,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@action" asp-controller=@controller asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@action" asp-controller=@controller asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-sessionId=@Model.SessionId>@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SoilSampleDate" asp-controller="SnsAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -34,7 +34,7 @@
                 </govuk-error-summary>
             }
 
-            <govuk-date-input asp-for="@Model.SampleDate">
+            <govuk-date-input for="@Model.SampleDate">
                 <govuk-date-input-fieldset>
                     <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)
@@ -51,16 +51,8 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>           
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
-                }
-            </p>
+
+           <partial name="./_CancelLink.cshtml" model="@Model" />
         </div>
     </div>
 </form>

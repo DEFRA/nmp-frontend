@@ -6,7 +6,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CalculateNitrogenInCurrentCropQuestion")" asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@(Model.IsCheckAnswer ? "CheckAnswer" :"CalculateNitrogenInCurrentCropQuestion")" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="NumberOfShoots" asp-controller="SnsAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -21,9 +21,9 @@
             }
             <h1 class="govuk-heading-l">@Resource.lblEnterTheNumberOfShootsPerSquareMetre</h1>
 
-            <govuk-input asp-for="@Model.NumberOfShoots" input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false"></govuk-input>
+            <govuk-input for="@Model.NumberOfShoots" input-class="govuk-input--width-5" inputmode="numeric" spellcheck="false"></govuk-input>
 
-            <govuk-radios asp-for="@Model.SeasonId">
+            <govuk-radios for="@Model.SeasonId">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend>
                         @Resource.lblWhenWasThisMeasured
@@ -41,16 +41,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
-                }
-            </p>
+            <partial name="./_CancelLink.cshtml" model="@Model" />
         </div>
 
     </div>

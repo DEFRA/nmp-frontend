@@ -4,6 +4,11 @@ using System.ComponentModel.DataAnnotations;
 namespace NMP.Commons.ViewModels;
 public class SnsAnalysisViewModel:SnsAnalysis
 {
+    public SnsAnalysisViewModel()
+    {
+        SessionId = Guid.NewGuid();
+    }
+    public Guid SessionId { get; set; }
     [Display(ResourceType = typeof(Resource), Name = nameof(Resource.lblFieldName))]
     public string? FieldName { get; set; } = string.Empty;
     public bool IsCheckAnswer { get; set; } = false;

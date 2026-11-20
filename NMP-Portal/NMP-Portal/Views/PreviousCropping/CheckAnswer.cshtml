@@ -32,7 +32,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="PreviousCropping">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="CheckAnswer" asp-controller="PreviousCropping" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -63,7 +63,7 @@
                                 @grassText
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="HasGrassInLastThreeYear" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear, Model.FieldName))</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="HasGrassInLastThreeYear" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHasFieldNameBeenUsedForGrassInAnyOfTheLastThreeYear, Model.FieldName))</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
@@ -90,7 +90,7 @@
                                 </govuk-summary-list-row-value>
 
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="GrassLastThreeHarvestYear" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.FieldName))</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="GrassLastThreeHarvestYear" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblInWhichYearsWasUsedForGrass, Model.FieldName))</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
 
                             </govuk-summary-list-row>
@@ -104,7 +104,7 @@
                                         @layDurationText
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="LayDuration" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0]))</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="LayDuration" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheLengthOfTheLayInYear, Model.PreviousGrassYears?[0]))</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -118,7 +118,7 @@
                                     @(ViewBag.GrassManagementOptions == null ? Resource.lblNotSet : ViewBag.GrassManagementOptions)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="GrassManagementOptions" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblHowWasTheGrassTypicallyManagedEachYear)</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="GrassManagementOptions" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(Resource.lblHowWasTheGrassTypicallyManagedEachYear)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
@@ -130,7 +130,7 @@
                                     @cloverText
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="HasGreaterThan30PercentClover" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.FieldName))</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="HasGreaterThan30PercentClover" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblDoesFieldTypicallyHaveMoreThan30PercentClover, Model.FieldName))</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
@@ -145,7 +145,7 @@
                                         @* @ViewBag.SoilNitrogenSupplyItems *@
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="SoilNitrogenSupplyItems" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.FieldName))</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="SoilNitrogenSupplyItems" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblHowMuchNitrogenHasBeenAppliedToFieldEachYear, Model.FieldName))</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -165,7 +165,7 @@
                                     @(ViewBag.CropGroupName == null ? Resource.lblNotSet : ViewBag.CropGroupName)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheCropType, Model.HarvestYear))</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="CropGroups" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheCropType, Model.HarvestYear))</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
@@ -181,7 +181,7 @@
                                 @if (Model.CropTypeID != (int)NMP.Commons.Enums.CropTypes.Other)
                                 {
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheCropType, Model.HarvestYear))</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="CropTypes" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(string.Format(Resource.lblWhatWasTheCropType, Model.HarvestYear))</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 }
                             </govuk-summary-list-row>
@@ -197,7 +197,7 @@
                                     @(Model.CropInfo1 == null ? Resource.lblNotSet : ViewBag.CropInfo1Name)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="CropInfoOne" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.CropInfo1 == null ? Resource.lblNotSet : ViewBag.CropInfo1Name)</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="CropInfoOne" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.CropInfo1 == null ? Resource.lblNotSet : ViewBag.CropInfo1Name)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                                 
                             </govuk-summary-list-row>
@@ -222,7 +222,7 @@
                                     @(Model.PreviousGrassID == null ? Resource.lblNotSet : previousGrassName)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="PreviousGrassManagement" asp-controller="PreviousCropping">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.PreviousGrassID == null ? Resource.lblNotSet : previousGrassName)</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="PreviousGrassManagement" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@(Model.PreviousGrassID == null ? Resource.lblNotSet : previousGrassName)</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
 
                             </govuk-summary-list-row>
@@ -238,11 +238,11 @@
                 <p class="govuk-body cancel-link">
                     @if (!Model.IsCheckAnswer)
                     {
-                        <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear">@Resource.lblCancel</a>
+                        <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                     }
                     else
                     {
-                        <a asp-action="Cancel" asp-controller="PreviousCropping">@Resource.lblCancel</a>
+                        <a asp-action="Cancel" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                     }
                 </p>
             }
