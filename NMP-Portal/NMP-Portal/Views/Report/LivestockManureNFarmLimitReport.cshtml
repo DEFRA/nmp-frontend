@@ -278,7 +278,7 @@
                             <td class="govuk-table__cell">@string.Format("{0:N2} {1}", ViewBag.AreaOutsideNVZ, Resource.lblHectares)</td>
                             @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
                             {
-                                <td class="govuk-table__cell">@(ViewBag.AreaOutsideNVZ != null ? (string.Format("{0:N2}{1}", (ViewBag.AreaOutsideNVZ * 250), Resource.lblkg)) : 0)</td>
+                                <td class="govuk-table__cell">@(ViewBag.AreaOutsideNVZ != null ? (string.Format("{0:N2}{1}", (ViewBag.IsScotland == true ? 0 : ViewBag.AreaOutsideNVZ * 250), Resource.lblkg)) : 0)</td>
                             }
                         }
                     </tr>
