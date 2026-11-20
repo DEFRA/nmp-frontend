@@ -14,7 +14,7 @@ using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IPreviousCroppingService
+public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IPreviousCroppingService
 {
     private readonly ILogger<PreviousCroppingService> _logger = logger;
 
@@ -246,5 +246,24 @@ public class PreviousCroppingService(ILogger<PreviousCroppingService> logger, IH
         }
 
         return (previousGrass, error);
+    }
+    public async Task<PreviousCroppingViewModel?> GetPreviousCroppingFromSessionAsync(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<PreviousCroppingViewModel>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
+
+    public async Task SetPreviousCroppingToSessionAsync(PreviousCroppingViewModel previousCroppingViewModel, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, previousCroppingViewModel);
+    }
+    public async Task RemovePreviousCroppingSessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
     }
 }

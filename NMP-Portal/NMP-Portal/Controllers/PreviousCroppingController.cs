@@ -37,43 +37,22 @@ namespace NMP.Portal.Controllers
 
         private void BindNMPTFarmIdAndNameForNavigation(PreviousCroppingViewModel? model)
         {
-            
+
             ViewBag.NMPTFarmId = model?.EncryptedFarmID;
             ViewBag.NMPTFarmName = model?.FarmName;
 
         }
-        private PreviousCroppingViewModel? GetPreviousCroppingFromSession()
-        {
-            if (HttpContext.Session.Exists(_previousCroppingSessionKey))
-            {
-                return HttpContext.Session.GetObjectFromJson<PreviousCroppingViewModel>(_previousCroppingSessionKey);
-            }
-            return null;
-        }
-
-        private void SetPreviousCroppingToSession(PreviousCroppingViewModel previousCroppingViewModel)
-        {
-            HttpContext.Session.SetObjectAsJson(_previousCroppingSessionKey, previousCroppingViewModel);
-        }
-
-        private void RemovePreviousCroppingFromSession()
-        {
-            if (HttpContext.Session.Exists(_previousCroppingSessionKey))
-            {
-                HttpContext.Session.Remove(_previousCroppingSessionKey);
-            }
-        }
-
+       
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> HasGrassInLastThreeYear(string? q, string? r, string? s)
+        public async Task<IActionResult> HasGrassInLastThreeYear(string? q, string? r, string? s, Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller: HasGrassInLastThreeYear() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
 
             try
             {
@@ -104,10 +83,10 @@ namespace NMP.Portal.Controllers
                     if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
                     {
                         model.HasGrassInLastThreeYear = false;
-                        SetPreviousCroppingToSession(model);
-                        return RedirectToAction(_cropGroupsActionName);
+                        _previousCroppingLogic.SetPreviousCroppingToSession(model);
+                        return RedirectToAction(_cropGroupsActionName, new {sessionId=sessionId});
                     }
-                    SetPreviousCroppingToSession(model);
+                    _previousCroppingLogic.SetPreviousCroppingToSession(model);
                 }
             }
             catch (Exception ex)
@@ -138,7 +117,7 @@ namespace NMP.Portal.Controllers
                 return await Task.FromResult(View(model));
             }
 
-            PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? previousCroppingData =_previousCroppingLogic.GetPreviousCroppingFromSession(model.SessionId);
 
             if (model.IsCheckAnswer)
             {
@@ -151,22 +130,22 @@ namespace NMP.Portal.Controllers
                 }
             }
 
-            SetPreviousCroppingToSession(model);
+           _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (model.HasGrassInLastThreeYear == true)
             {
-                return RedirectToAction("GrassLastThreeHarvestYear");
+                return RedirectToAction("GrassLastThreeHarvestYear", new { sessionId = model.SessionId });
             }
 
             ResetGrassData(model);
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_cropGroupsActionName);
+            return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
         }
         private IActionResult? HandleCheckAnswer(PreviousCroppingViewModel model, PreviousCroppingViewModel? previousCroppingData)
         {
@@ -181,9 +160,9 @@ namespace NMP.Portal.Controllers
             if (!hasGrassChanged)
             {
                 model.IsHasGrassInLastThreeYearChange = false;
-                SetPreviousCroppingToSession(model);
+               _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
             model.IsHasGrassInLastThreeYearChange = true;
@@ -192,16 +171,16 @@ namespace NMP.Portal.Controllers
             {
                 ResetGrassData(model);
 
-                SetPreviousCroppingToSession(model);
+                _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
-                return RedirectToAction(_cropGroupsActionName);
+                return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
             }
 
             if (model.HasGrassInLastThreeYear == true)
             {
-                SetPreviousCroppingToSession(model);
+                _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
-                return RedirectToAction("GrassLastThreeHarvestYear");
+                return RedirectToAction("GrassLastThreeHarvestYear", new { sessionId = model.SessionId });
             }
 
             return null;
@@ -221,10 +200,10 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> CropGroups()
+        public async Task<IActionResult> CropGroups(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : CropGroups() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
 
             try
             {
@@ -241,7 +220,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropGroups() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["HasGrassInLastThreeYearError"] = ex.Message;
-                return RedirectToAction(_hasGrassInLastThreeYearText);
+                return RedirectToAction(_hasGrassInLastThreeYearText, new { sessionId = sessionId });
             }
             return View(model);
         }
@@ -262,7 +241,7 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? previousCroppingData =_previousCroppingLogic.GetPreviousCroppingFromSession(model.SessionId);
             if (previousCroppingData != null)
             {
                 if (previousCroppingData.CropGroupID != model.CropGroupID)
@@ -277,16 +256,16 @@ namespace NMP.Portal.Controllers
                 return Functions.RedirectToErrorHandler((int)System.Net.HttpStatusCode.Conflict);
             }
 
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
-            return RedirectToAction("CropTypes");
+            return RedirectToAction("CropTypes", new { sessionId = model.SessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> CropTypes()
+        public async Task<IActionResult> CropTypes(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : CropTypes() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model =_previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
 
             try
             {
@@ -304,15 +283,15 @@ namespace NMP.Portal.Controllers
                 {
                     model.CropTypeID = cropTypeList[0].CropTypeId;
                     model.CropTypeName = cropTypeList[0].CropType;
-                    SetPreviousCroppingToSession(model);
+                    _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
                     if (model.IsCheckAnswer)
                     {
-                        return RedirectToAction(_checkAnswerActionName);
+                        return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
                     }
                     if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
                     {
-                        return RedirectToAction(_previousGrassManagement);
+                        return RedirectToAction(_previousGrassManagement, new { sessionId = model.SessionId });
                     }
                 }
 
@@ -321,7 +300,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempData] = ex.Message;
-                return RedirectToAction(_cropGroupsActionName);
+                return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
             }
 
             return View(model);
@@ -346,28 +325,28 @@ namespace NMP.Portal.Controllers
             }
 
             model.CropTypeName = await _fieldLogic.FetchCropTypeById(model.CropTypeID.Value);
-            SetPreviousCroppingToSession(model);
+           _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (model.IsCheckAnswer)
             {
                 if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                 {
-                    return RedirectToAction("CropInfoOne");
+                    return RedirectToAction("CropInfoOne", new { sessionId = model.SessionId });
                 }
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
-                return RedirectToAction("CropInfoOne");
+                return RedirectToAction("CropInfoOne", new { sessionId = model.SessionId });
             }
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> CropInfoOne()
+        public async Task<IActionResult> CropInfoOne(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : CropTypes() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
             try
             {
                 if (model == null)
@@ -383,7 +362,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempData] = ex.Message;
-                return RedirectToAction(_cropGroupsActionName);
+                return RedirectToAction(_cropGroupsActionName, new { sessionId = sessionId });
             }
 
             return View(model);
@@ -409,23 +388,23 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                SetPreviousCroppingToSession(model);
-                return RedirectToAction(_checkAnswerActionName);
+                _previousCroppingLogic.SetPreviousCroppingToSession(model);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropInfoOne() post action : {Message}, {StackTrace}",
                     ex.Message, ex.StackTrace);
                 TempData["CropInfoOneError"] = ex.Message;
-                return RedirectToAction("CropInfo1");
+                return RedirectToAction("CropInfoOne", new { sessionId = model.SessionId });
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> PreviousGrassManagement(string? q)
+        public async Task<IActionResult> PreviousGrassManagement(string? q, Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : PreviousGrassManagement() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace("PreviousCropppingController: Session expired in PreviousGrassManagement() action.");
@@ -440,9 +419,9 @@ namespace NMP.Portal.Controllers
             catch (Exception ex)
             {
                 TempData["PreviousGrassManagementError"] = ex.Message;
-                return RedirectToAction("PreviousGrassManagement");
+                return RedirectToAction("PreviousGrassManagement", new { sessionId = sessionId });
             }
-            SetPreviousCroppingToSession(model);
+           _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             List<int> fieldIds = new List<int>();
             fieldIds.Add(model.FieldID);
@@ -456,13 +435,13 @@ namespace NMP.Portal.Controllers
 
             var currentInfo = grassInPrevOrArableInNextYearList[0];
             model.IsArableInNextYear = currentInfo.IsArableInNextYear;
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (currentInfo.IsArableInNextYear == true)
             {
                 return View(model);
             }
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         [HttpPost]
@@ -481,9 +460,9 @@ namespace NMP.Portal.Controllers
                 await GetPreviousGrassManagementListAsync(model);
                 return View(model);
             }
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
         private async Task GetPreviousGrassManagementListAsync(PreviousCroppingViewModel model)
         {
@@ -521,13 +500,13 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult GrassLastThreeHarvestYear()
+        public IActionResult GrassLastThreeHarvestYear(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() action called");
 
             try
             {
-                PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+                PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
                 if (model == null)
                 {
                     _logger.LogTrace($"Previous Croppping Controller : GrassLastThreeHarvestYear() action : PreviousCropping data is not available in session");
@@ -536,13 +515,13 @@ namespace NMP.Portal.Controllers
                 BindNMPTFarmIdAndNameForNavigation(model);
                 List<int> previousYears = BindViewBagForGrassLatsThreeYear(model);
                 ViewBag.PreviousGrassesYear = previousYears;
-                SetPreviousCroppingToSession(model);
+                _previousCroppingLogic.SetPreviousCroppingToSession(model);
                 return View(model);
             }
             catch (Exception ex)
             {
                 TempData["HasGrassInLastThreeYearError"] = ex.Message;
-                return RedirectToAction(_hasGrassInLastThreeYearText);
+                return RedirectToAction(_hasGrassInLastThreeYearText, new { sessionId = sessionId });
             }
         }
 
@@ -577,16 +556,16 @@ namespace NMP.Portal.Controllers
             }
             else
             {
-                return RedirectToAction("LayDuration");
+                return RedirectToAction("LayDuration", new { sessionId = model.SessionId });
             }
 
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange))
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
-            return RedirectToAction("GrassManagementOptions");
+            return RedirectToAction("GrassManagementOptions", new { sessionId = model.SessionId });
         }
 
         private PreviousCroppingViewModel BindPerropertyForGrassLastThreeYear(PreviousCroppingViewModel model)
@@ -605,21 +584,21 @@ namespace NMP.Portal.Controllers
 
             lastHarvestYear = model.HarvestYear ?? 0;
             model.IsPreviousYearGrass = model.PreviousGrassYears != null && model.PreviousGrassYears.Contains(lastHarvestYear);
-            PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? previousCroppingData = _previousCroppingLogic.GetPreviousCroppingFromSession(model.SessionId);
             if (model.IsCheckAnswer && previousCroppingData != null && previousCroppingData.PreviousGrassYears != null && model.PreviousGrassYears != null &&
                 (!model.PreviousGrassYears.OrderBy(x => x).SequenceEqual(previousCroppingData.PreviousGrassYears.OrderBy(x => x))))
             {
                 model.IsGrassLastThreeHarvestYearChange = true;
             }
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             return model;
         }
         [HttpGet]
-        public async Task<IActionResult> GrassManagementOptions()
+        public async Task<IActionResult> GrassManagementOptions(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : GrassManagementOptions() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
 
             if (model == null)
             {
@@ -650,26 +629,26 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (model.GrassManagementOptionID == (int)NMP.Commons.Enums.GrassManagementOption.GrazedOnly)
             {
-                return RedirectToAction(_sasGreaterThan30PercentCloverActionName);
+                return RedirectToAction(_sasGreaterThan30PercentCloverActionName, new { sessionId = model.SessionId });
             }
 
             if (model.IsCheckAnswer && !model.IsHasGrassInLastThreeYearChange && (!model.IsGrassLastThreeHarvestYearChange))
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_sasGreaterThan30PercentCloverActionName);
+            return RedirectToAction(_sasGreaterThan30PercentCloverActionName, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> HasGreaterThan30PercentClover()
+        public async Task<IActionResult> HasGreaterThan30PercentClover(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : HasGreaterThan30PercentClover() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
 
             if (model == null)
             {
@@ -697,37 +676,37 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            PreviousCroppingViewModel? previousCroppingData = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? previousCroppingData = _previousCroppingLogic.GetPreviousCroppingFromSession(model.SessionId);
             if (model.IsCheckAnswer && previousCroppingData != null && (model.HasGreaterThan30PercentClover != previousCroppingData.HasGreaterThan30PercentClover))
             {
                 model.IsHasGreaterThan30PercentCloverChange = true;
             }
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsHasGreaterThan30PercentCloverChange) && (!model.IsGrassLastThreeHarvestYearChange))
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
             if (model.HasGreaterThan30PercentClover.HasValue && model.HasGreaterThan30PercentClover.Value)
             {
                 if (model.IsPreviousYearGrass == false)
                 {
-                    return RedirectToAction(_cropGroupsActionName);
+                    return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
                 }
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             else
             {
-                return RedirectToAction("SoilNitrogenSupplyItems");
+                return RedirectToAction("SoilNitrogenSupplyItems", new { sessionId = model.SessionId });
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> SoilNitrogenSupplyItems()
+        public async Task<IActionResult> SoilNitrogenSupplyItems(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : SoilNitrogenSupplyItems() action called");
 
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace($"Previous Croppping Controller : SoilNitrogenSupplyItems() action : PreviousCropping data is not available in session");
@@ -736,7 +715,7 @@ namespace NMP.Portal.Controllers
             BindNMPTFarmIdAndNameForNavigation(model);
 
             ViewBag.SoilNitrogenSupplyItems = (await _fieldLogic.GetSoilNitrogenSupplyItems()).OrderBy(x => x.Id);
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
             return View(model);
         }
 
@@ -757,26 +736,26 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange))
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
             if (model.IsPreviousYearGrass == false)
             {
-                return RedirectToAction(_cropGroupsActionName);
+                return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_checkAnswerActionName);
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
-        public IActionResult LayDuration()
+        public IActionResult LayDuration(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : LayDuration() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace($"Previous Croppping Controller : LayDuration() action : PreviousCropping data is not available in session");
@@ -788,7 +767,7 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]  
         public IActionResult LayDuration(PreviousCroppingViewModel model)
         {
             _logger.LogTrace($"Previous Croppping Controller : LayDuration() post action called");
@@ -803,21 +782,21 @@ namespace NMP.Portal.Controllers
                 return View(model);
             }
 
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (model.IsCheckAnswer && (!model.IsHasGrassInLastThreeYearChange) && (!model.IsGrassLastThreeHarvestYearChange))
             {
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction("GrassManagementOptions");
+            return RedirectToAction("GrassManagementOptions", new { sessionId = model.SessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer()
+        public async Task<IActionResult> CheckAnswer(Guid? sessionId)
         {
             _logger.LogTrace($"Previous Croppping Controller : CheckAnswer() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
 
             try
             {
@@ -844,12 +823,12 @@ namespace NMP.Portal.Controllers
                 }
                 await BindCropInfoViewBag(model);
 
-                if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
+                if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
                 {
                     await GetPreviousGrassManagementListAsync(model);
                 }
 
-                SetPreviousCroppingToSession(model);
+                _previousCroppingLogic.SetPreviousCroppingToSession(model);
             }
             catch (Exception ex)
             {
@@ -887,7 +866,7 @@ namespace NMP.Portal.Controllers
                     ? BuildIsPreviousYearGrassTrueList(model, previousCropList, error)
                     : BuildIsPreviousYearGrassFalseList(model, previousCropList, error);
             }
-            if(model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
+            if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
                 previousCropping.Add(new PreviousCropping
                 {
@@ -1071,18 +1050,18 @@ namespace NMP.Portal.Controllers
                 GrassManagementOptionID = null,
                 HasGreaterThan30PercentClover = null,
                 SoilNitrogenSupplyItemID = null,
-                CropInfo1=model.CropInfo1
+                CropInfo1 = model.CropInfo1
             });
 
-                if (model.PreviousGrassYears != null)
-                {
-                    BuildNonGrassWithPreviousGrassYears(previousCropping, model, previousCropList, error);
-                }
-                else
-                {
-                    BuildNonGrassWithoutPreviousGrassYears(previousCropping, model, previousCropList, error);
-                }
-            
+            if (model.PreviousGrassYears != null)
+            {
+                BuildNonGrassWithPreviousGrassYears(previousCropping, model, previousCropList, error);
+            }
+            else
+            {
+                BuildNonGrassWithoutPreviousGrassYears(previousCropping, model, previousCropList, error);
+            }
+
             return previousCropping;
         }
 
@@ -1184,7 +1163,7 @@ namespace NMP.Portal.Controllers
 
             if (string.IsNullOrWhiteSpace(error?.Message) && success)
             {
-                RemovePreviousCroppingFromSession();
+                _previousCroppingLogic.RemovePreviousCroppingSession(model.SessionId);
                 return RedirectToAction("Recommendations", "Crop", new
                 {
                     q = model.EncryptedFarmID,
@@ -1200,10 +1179,10 @@ namespace NMP.Portal.Controllers
             return View(model);
         }
 
-        public IActionResult BackCheckAnswer()
+        public IActionResult BackCheckAnswer(Guid? sessionId)
         {
             _logger.LogTrace($"Previous cropping Controller : BackCheckAnswer() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
             if (model == null)
             {
                 _logger.LogTrace($"Previous cropping Controller : BackCheckAnswer() action : PreviousCropping data is not available in session");
@@ -1211,47 +1190,47 @@ namespace NMP.Portal.Controllers
             }
 
             model.IsCheckAnswer = false;
-            SetPreviousCroppingToSession(model);
+            _previousCroppingLogic.SetPreviousCroppingToSession(model);
 
             if (model.HasGrassInLastThreeYear != null && model.HasGrassInLastThreeYear.Value)
             {
                 if (model.PreviousGrassYears != null && !model.PreviousGrassYears.Contains(model.HarvestYear ?? 0))
                 {
-                    return RedirectToAction("CropTypes");
+                    return RedirectToAction("CropTypes", new { sessionId = sessionId });
                 }
                 else
                 {
                     if (model.HasGreaterThan30PercentClover == false)
                     {
-                        return RedirectToAction("SoilNitrogenSupplyItems");
+                        return RedirectToAction("SoilNitrogenSupplyItems", new { sessionId = sessionId });
                     }
                     else
                     {
-                        return RedirectToAction(_sasGreaterThan30PercentCloverActionName);
+                        return RedirectToAction(_sasGreaterThan30PercentCloverActionName, new { sessionId = sessionId });
                     }
                 }
             }
             if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
-                return RedirectToAction("CropInfoOne");
+                return RedirectToAction("CropInfoOne", new { sessionId = sessionId });
             }
             if (model.PreviousGrassID != null)
             {
-                return RedirectToAction(_previousGrassManagement);
+                return RedirectToAction(_previousGrassManagement, new { sessionId = sessionId });
             }
             if (model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
             {
-                return RedirectToAction("CropGroups");
+                return RedirectToAction("CropGroups", new { sessionId = sessionId });
             }
-            return RedirectToAction("CropTypes");
+            return RedirectToAction("CropTypes", new { sessionId = sessionId });
         }
 
 
         [HttpGet]
-        public IActionResult Cancel()
+        public IActionResult Cancel(Guid? sessionId)
         {
             _logger.LogTrace("Previous cropping Controller : Cancel() action called");
-            PreviousCroppingViewModel? model = GetPreviousCroppingFromSession();
+            PreviousCroppingViewModel? model = _previousCroppingLogic.GetPreviousCroppingFromSession(sessionId);
             try
             {
                 if (model == null)
@@ -1265,7 +1244,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Previous cropping  Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempData] = ex.Message;
-                return RedirectToAction(_checkAnswerActionName);
+                return RedirectToAction(_checkAnswerActionName, new { sessionId = sessionId });
             }
 
             return View(model);
@@ -1290,7 +1269,7 @@ namespace NMP.Portal.Controllers
 
             if (model.IsCancel.HasValue && !model.IsCancel.Value)
             {
-                return await Task.FromResult(RedirectToAction(_checkAnswerActionName));
+                return await Task.FromResult(RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId }));
             }
             else
             {
@@ -1299,6 +1278,7 @@ namespace NMP.Portal.Controllers
                     q = model.EncryptedFarmID,
                     r = model.EncryptedFieldID,
                     s = model.EncryptedYear,
+                    sessionId = model.SessionId
                 }));
             }
         }

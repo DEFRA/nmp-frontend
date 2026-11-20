@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -26,20 +26,20 @@
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblEnterTheSoilMineralNitrogenAnalysisResult, Model.FieldName)</h1>
             </legand>
-            <govuk-input name="SoilMineralNitrogenAt030CM" asp-for=@Model.SoilMineralNitrogenAt030CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input name="SoilMineralNitrogenAt030CM" for=@Model.SoilMineralNitrogenAt030CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true">@Resource.lblSoilMineralNitrogenAt0To30CM
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
             </govuk-input>
-            <govuk-input name="SoilMineralNitrogenAt3060CM" asp-for=@Model.SoilMineralNitrogenAt3060CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input name="SoilMineralNitrogenAt3060CM" for=@Model.SoilMineralNitrogenAt3060CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true">
                     @Resource.lblSoilMineralNitrogenAt3060CMForError
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>
                 </govuk-input-label>
                 <govuk-input-suffix>@Resource.lblKgPerHectare</govuk-input-suffix>
             </govuk-input>
-            <govuk-input name="SoilMineralNitrogenAt6090CM" asp-for=@Model.SoilMineralNitrogenAt6090CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input name="SoilMineralNitrogenAt6090CM" for=@Model.SoilMineralNitrogenAt6090CM inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true">
                     @string.Format("{0} {1}",Resource.lblSoilMineralNitrogenAt6090CMForError,Resource.lblOptional)
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>
@@ -50,16 +50,7 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
-            }
-        </p>
-        @* <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p> *@
+       <partial name="./_CancelLink.cshtml" model="@Model" />
+        @* <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-se>@Resource.lblCancel</a></p> *@
     </div>
 </div>

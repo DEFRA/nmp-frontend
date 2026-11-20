@@ -42,11 +42,11 @@
 @section BeforeContent {
     @if (Model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
     {
-        <govuk-back-link asp-action="@((Model.IsCheckAnswer) ? "CheckAnswer" : backAction)" asp-controller="PreviousCropping">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="@((Model.IsCheckAnswer) ? "CheckAnswer" : backAction)" asp-controller="PreviousCropping" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else
     {
-        <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
 }
 <form asp-action="CropGroups" asp-controller="PreviousCropping" method="post" autocomplete="off">
@@ -63,7 +63,7 @@
             }
 
 
-            <govuk-radios asp-for="@Model.CropGroupID">
+            <govuk-radios for="@Model.CropGroupID">
                 <govuk-radios-fieldset>
                     <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                         @* @(Model.WantToApplySns == true ? Resource.lblWhatWasThePreviousCropGroup : Resource.lblWhatIsTheCurrentCropGroup) *@
@@ -84,16 +84,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmID" asp-route-r="@Model.EncryptedFieldID" asp-route-s="@Model.EncryptedYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a asp-action="CheckAnswer" asp-controller="PreviousCropping">@Resource.lblCancel</a>
-                }
-            </p>
+            <partial name="./_CancelLink.cshtml" model="@Model" />  
 
         </div>
 

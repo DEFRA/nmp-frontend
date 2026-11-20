@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="IsBasedOnSoilOrganicMatter" asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="IsBasedOnSoilOrganicMatter" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -22,7 +22,7 @@
         <form asp-action="AdjustmentValue" method="post" asp-controller="SnsAnalysis" autocomplete="off">
             @Html.AntiForgeryToken()
             @await Html.PartialAsync("~/Views/SnsAnalysis/_SnsAnalysisWizardHiddenFields.cshtml", Model)
-            <govuk-input asp-for=@Model.AdjustmentValue inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.AdjustmentValue inputmode="number" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">
                     @Resource.lblWhatIsTheAdjustmentValuePerPectareSuffix<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblKgPerHectare)</span>@Resource.lblQuestionMark
                 </govuk-input-label>
@@ -33,16 +33,7 @@
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
-            }
-        </p>
+        <partial name="./_CancelLink.cshtml" model="@Model" />
         @* <p class="govuk-body cancel-link"><a asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p> *@
     </div>
 </div>

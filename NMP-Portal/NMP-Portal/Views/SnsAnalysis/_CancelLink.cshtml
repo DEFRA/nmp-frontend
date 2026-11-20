@@ -1,0 +1,12 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.SnsAnalysisViewModel
+<p class="govuk-body cancel-link">
+    @if (!Model.IsCheckAnswer)
+    {
+        <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-sessionId=@Model.SessionId>@Resource.lblCancel</a>
+    }
+    else
+    {
+        <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblCancel</a>
+    }
+</p>

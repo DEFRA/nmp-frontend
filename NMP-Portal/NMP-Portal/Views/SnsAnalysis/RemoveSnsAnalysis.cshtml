@@ -13,7 +13,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-    <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">
+    <govuk-back-link asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-sessionId=@Model.SessionId>
         @Resource.lblBack
     </govuk-back-link>
     }
@@ -43,7 +43,7 @@
                 </p>
 
 
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsSnsRemove">
+                <govuk-radios class="govuk-radios--inline" for="@Model.IsSnsRemove">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend>
                             @Resource.lblAreYouSureYouWantToContinue
@@ -56,7 +56,7 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link"><a asp-action="Recommendations" asp-controller="Crop" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear" asp-route-sessionId=@Model.SessionId>@Resource.lblCancel</a></p>
 
             </div>
         </div>

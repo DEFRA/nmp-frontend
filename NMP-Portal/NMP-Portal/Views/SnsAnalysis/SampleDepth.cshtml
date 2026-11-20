@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblBack</govuk-back-link>
 }
 
 <div class="govuk-grid-row">
@@ -27,25 +27,16 @@
             <legand class="govuk-fieldset__legend govuk-fieldset__legend--l">
                 <h1 class="govuk-fieldset__heading">@string.Format(Resource.lblAddSoilMineralNitrogen, Model.FieldName)</h1>
             </legand>
-            <govuk-input name="SampleDepth" asp-for=@Model.SampleDepth inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input name="SampleDepth" for=@Model.SampleDepth inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true">@Resource.lblWhatWasTheSampleDepth</govuk-input-label>
             </govuk-input>
-            <govuk-input name="SoilMineralNitrogen" asp-for=@Model.SoilMineralNitrogen inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input name="SoilMineralNitrogen" for=@Model.SoilMineralNitrogen inputmode="numeric" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="true">@Resource.lblWhatWasTheSoilMineralNitrogen</govuk-input-label>
             </govuk-input>
             <govuk-button type="submit" data-prevent-double-click="true" class="govuk-button margin-bottom-forty margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
         </form>
-        <p class="govuk-body cancel-link">
-            @if (!Model.IsCheckAnswer)
-            {
-                <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-            }
-            else
-            {
-                <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
-            }
-        </p>
+       <partial name="./_CancelLink.cshtml" model="@Model" />
     </div>
 </div>

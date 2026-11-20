@@ -3,17 +3,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
-using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), ISnsAnalysisService
+public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService,redisCacheService, memoryCacheService), ISnsAnalysisService
 {
     private readonly ILogger<SnsAnalysisService> _logger = logger;
 
@@ -116,5 +117,24 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
             error = _logger.HandleException(ex, error);
         }
         return (message, error);
+    }
+    public async Task<SnsAnalysisViewModel?> GetSnsFromSessionAsync(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<SnsAnalysisViewModel>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
+
+    public async Task SetSnsToSessionAsync(SnsAnalysisViewModel snsAnalysisViewModel, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, snsAnalysisViewModel);
+    }
+    public async Task RemoveSnsSessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
     }
 }
