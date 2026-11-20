@@ -1143,7 +1143,7 @@ namespace NMP.Portal.Controllers
                 if (HasSnsDataInSession(model.SessionId))
                 {
                     SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
-                    if (snsViewModel?.NumberOfShoots == model.NumberOfShoots)
+                    if (snsViewModel?.NumberOfShoots == model.NumberOfShoots && snsViewModel?.SeasonId == model.SeasonId)
                     {
                         return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
@@ -1225,7 +1225,10 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, $"SnsAnalysis Controller : Exception in GreenAreaIndexOrCropHeightQuestion() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace(ex,
+    "SnsAnalysis Controller : Exception in GreenAreaIndexOrCropHeightQuestion() action : {Message}, {StackTrace}",
+    ex.Message,
+    ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
                 return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction, new { sessionId });
             }
@@ -1308,7 +1311,11 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, $"Field Controller : Exception in CropHeight() action : {ex.Message}, {ex.StackTrace}");
+                _logger.LogTrace(ex,
+    "SnsAnalysis Controller : Exception in CropHeight() action : {Message}, {StackTrace}",
+    ex.Message,
+    ex.StackTrace);
+                
                 TempData[_errorTempDataKey] = ex.Message;
                 return RedirectToAction("GreenAreaIndexOrCropHeightQuestion", new { sessionId });
             }
@@ -1334,7 +1341,7 @@ namespace NMP.Portal.Controllers
                 if (HasSnsDataInSession(model.SessionId))
                 {
                     SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
-                    if (snsViewModel.CropHeight == model.CropHeight)
+                    if (snsViewModel?.CropHeight == model.CropHeight && snsViewModel?.SeasonId == model.SeasonId)
                     {
                         return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
@@ -1435,7 +1442,7 @@ namespace NMP.Portal.Controllers
                 if (HasSnsDataInSession(model.SessionId))
                 {
                     SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
-                    if (snsViewModel.GreenAreaIndex == model.GreenAreaIndex)
+                    if (snsViewModel?.GreenAreaIndex == model.GreenAreaIndex && snsViewModel?.SeasonId == model.SeasonId)
                     {
                         return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
