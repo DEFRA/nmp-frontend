@@ -4,6 +4,11 @@ using NMP.Commons.ServiceResponses;
 namespace NMP.Commons.ViewModels;
 public class FertiliserManureViewModel
 {
+    public FertiliserManureViewModel()
+    {
+        SessionId = Guid.NewGuid();
+    }
+    public Guid SessionId { get; set; }
     public string? FieldGroup { get; set; }
     public string? EncryptedFarmId { get; set; }
     public string? EncryptedHarvestYear { get; set; }

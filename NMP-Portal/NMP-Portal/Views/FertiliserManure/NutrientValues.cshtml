@@ -21,7 +21,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsAnyChangeInField)) ? "CheckAnswer" : "InOrgnaicManureDuration") asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedCounter">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsAnyChangeInField)) ? "CheckAnswer" : "InOrgnaicManureDuration") asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedCounter" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
 
@@ -259,16 +259,7 @@
                 @Resource.lblContinue
             </govuk-button>
 
-            <p class="govuk-body cancel-link">
-                @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId) && (!Model.IsCheckAnswer))
-                {
-                    <a asp-action="CreateFertiliserManureCancel" asp-controller="FertiliserManure" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a>
-                }
-            </p>
+           <partial name="_CancelLink" model="@Model" />
         </div>
 
     </form>

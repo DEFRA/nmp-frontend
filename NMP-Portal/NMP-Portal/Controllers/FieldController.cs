@@ -2317,7 +2317,13 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         }
         else
         {
-            if (hasGrass.HasValue)
+            PreviousCropping? prevCroppingDataForScotland = null;
+            if (!string.IsNullOrWhiteSpace(model.EncryptedFieldId)&&model.LastHarvestYear!=null)
+            {
+                int decrptedFieldId = Convert.ToInt32(_fieldDataProtector.Unprotect(model.EncryptedFieldId));
+                (prevCroppingDataForScotland, _) =  _previousCroppingLogic.FetchDataByFieldIdAndYear(decrptedFieldId, model.LastHarvestYear.Value).GetAwaiter().GetResult();
+            }
+            if (hasGrass.HasValue || (prevCroppingDataForScotland == null && model.LastHarvestYear != null))
             {
                 ValidateCropGroupOrCropType(model);
             }
@@ -3062,7 +3068,6 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
                 model.CropType = await _fieldLogic.FetchCropTypeById(model.CropTypeID.Value);
             }
         }
-
         return (error, prevCroppingDataForScotland);
     }
 
@@ -3182,7 +3187,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             {
                 int highestYearOfPlan = cropPlans.Max(cp => cp.Year) - 1;
                 List<int> yearsToCheck = YearsToCheck(cropPlans);
-                bool isEnglandAndOnlyFieldUpdate = (model.FarmRB209CountryID!=(int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3);
+                bool isEnglandAndOnlyFieldUpdate = (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => yearsToCheck.Contains(x.Year)) == 3);
                 bool isScotlandAndOnlyFieldUpdate = (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && cropPlans.Count(x => x.Year == highestYearOfPlan) == 1);
                 if (isEnglandAndOnlyFieldUpdate || isScotlandAndOnlyFieldUpdate)
                 {

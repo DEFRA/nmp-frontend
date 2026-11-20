@@ -20,5 +20,8 @@ namespace NMP.Core.Interfaces
         Task<(decimal?, Error)> FetchTotalNByManagementPeriodIDAsync(int managementPeriodID);
         Task<(string?, Error?)> FetchFertiliserManureClosedPeriodAsync(int countryId, int cropTypeId, int? nvzProgramId);
         Task<(decimal?, Error?)> FetchTotalNByManagementPeriodIDIsAutumnAsync(int managementPeriodID, bool isAutumn);
+        Task<FertiliserManureViewModel?> GetFertiliserManureFromSessionAsync(string cacheKey);
+        Task SetFertiliserManureToSessionAsync(FertiliserManureViewModel fertiliserManureViewModel, string cacheKey);
+        Task RemoveFertiliserManureSessionAsync(string cacheKey);
     }
 }

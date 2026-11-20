@@ -18,7 +18,7 @@
 {
 
     @section BeforeContent {
-            <govuk-back-link asp-action="CheckAnswer" asp-controller="FertiliserManure">
+            <govuk-back-link asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblBack
             </govuk-back-link>
 
@@ -92,7 +92,7 @@
                 }
                 else
                 { *@
-                    <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a></p>
+                    <p class="govuk-body cancel-link"><a asp-action="CheckAnswer" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
 
                 @* } *@
 
