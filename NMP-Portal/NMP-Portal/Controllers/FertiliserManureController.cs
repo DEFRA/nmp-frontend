@@ -133,9 +133,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
         return RedirectToAction(_fieldGroupActionName, new {sessionId=model.SessionId});
     }
-    private IActionResult RedirectForFieldGroupGet(FertiliserManureViewModel? model)
+    private IActionResult RedirectForFieldGroupGet(FertiliserManureViewModel model)
     {
-        if (model!=null&&model.IsDoubleCropAvailable)
+        if (model.IsDoubleCropAvailable)
         {
            _fertiliserManureLogic.SetFertilserManureToSession(model);
             return RedirectToAction(_doubleCropActionName, new {sessionId=model.SessionId});
@@ -330,7 +330,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         return (cropGroupList, selectListItem, error);
     }
 
-    private async Task<FertiliserManureViewModel?> BindGrassAndDoubleCropForFieldGroup(FertiliserManureViewModel? model)
+    private async Task<FertiliserManureViewModel> BindGrassAndDoubleCropForFieldGroup(FertiliserManureViewModel model)
     {
         if (model.FertiliserManures != null)
         {
