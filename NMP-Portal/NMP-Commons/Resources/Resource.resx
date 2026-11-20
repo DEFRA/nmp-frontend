@@ -8723,4 +8723,7 @@ following crop year 2</value>
   <data name="MsgExportsOfManureForMustBeCompleted" xml:space="preserve">
     <value>Exports of manure for {0} must be completed</value>
   </data>
+  <data name="lblIncludeCattleSheepPigsGoatsAndHorses" xml:space="preserve">
+    <value>Include cattle, sheep, pigs, goats and horses that are maintained on the NVZ area of the farm.</value>
+  </data>
 </root>

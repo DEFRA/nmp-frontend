@@ -7017,8 +7017,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction(_livestockManureNitrogenReportChecklist);
         }
         model.IsGrasslandDerogation = nutrientsLoadingFarmDetail.Derogation.Value;
+        bool isScotland = IsScotland(model);
+        ViewBag.IsScotland = isScotland;
         BindFarmLimitForLivestockReport(nutrientsLoadingFarmDetail);
-        totalLivestockManureCapacity = BindTotalLivestockManureCapacityLivestockReport(totalLivestockManureCapacity, nutrientsLoadingFarmDetail);
+        totalLivestockManureCapacity = BindTotalLivestockManureCapacityLivestockReport(totalLivestockManureCapacity, nutrientsLoadingFarmDetail, isScotland);
 
         ViewBag.TotalLivestockManureCapacity = totalLivestockManureCapacity;
         ViewBag.AreaInsideNVZ = nutrientsLoadingFarmDetail.LandInNVZ;
@@ -7030,8 +7032,10 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction(_livestockManureNitrogenReportChecklist);
         }
         ViewBag.LivestockManureTotalNCapacityForNVZ = nutrientsLoadingFarmDetail.LandInNVZ * 170;
-        ViewBag.LivestockManureTotalNCapacityForNotInNVZ = nutrientsLoadingFarmDetail.LandNotNVZ * 250;
-        ViewBag.LivestockManureTotalNCapacity = (int)Math.Round((((nutrientsLoadingFarmDetail.LandInNVZ ?? 0) * 170) + ((nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250)), 0);
+        // Scotland: only land in NVZ counts towards the livestock manure total N capacity
+        decimal landOutsideNVZCapacity = isScotland ? 0 : (nutrientsLoadingFarmDetail.LandNotNVZ ?? 0) * 250;
+        ViewBag.LivestockManureTotalNCapacityForNotInNVZ = landOutsideNVZCapacity;
+        ViewBag.LivestockManureTotalNCapacity = (int)Math.Round(((nutrientsLoadingFarmDetail.LandInNVZ ?? 0) * 170) + landOutsideNVZCapacity, 0);
 
 
         (List<NutrientsLoadingManures> nutrientsLoadingManureList, error) = await _reportLogic.FetchNutrientsLoadingManuresByFarmId(model.Farm.ID, model.Year ?? 0);
@@ -7376,9 +7380,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
     }
 
-    private int BindTotalLivestockManureCapacityLivestockReport(int totalLivestockManureCapacity, NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetail)
+    private int BindTotalLivestockManureCapacityLivestockReport(int totalLivestockManureCapacity, NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetail, bool isScotland)
     {
-        if (nutrientsLoadingFarmDetail.LandInNVZ != null && nutrientsLoadingFarmDetail.LandNotNVZ != null
+        if (!isScotland && nutrientsLoadingFarmDetail.LandInNVZ != null && nutrientsLoadingFarmDetail.LandNotNVZ != null
             && nutrientsLoadingFarmDetail.LandInNVZ > 0 && nutrientsLoadingFarmDetail.LandNotNVZ > 0)
         {
             ViewBag.IsAllInNVZ = true;
@@ -7386,7 +7390,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         }
         else if (nutrientsLoadingFarmDetail.LandInNVZ != null && nutrientsLoadingFarmDetail.LandInNVZ > 0)
         {
-            ViewBag.IsAllNotInNVZ = true;
+            // Scotland only uses the 170 limit for land in NVZ, so the "outside NVZ" 250 limit text is not shown
+            if (!isScotland)
+            {
+                ViewBag.IsAllNotInNVZ = true;
+            }
             totalLivestockManureCapacity = (int)Math.Round(nutrientsLoadingFarmDetail.LandInNVZ.Value * 170, 0);
         }
 
