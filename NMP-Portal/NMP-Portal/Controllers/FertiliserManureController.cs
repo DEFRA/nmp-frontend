@@ -109,9 +109,6 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
 
     private IActionResult BackActionForInOrganicAndDoubleCrop(FertiliserManureViewModel model)
     {
-        if (model == null)
-            return RedirectToAction(_fieldGroupActionName, new {sessionId=model.SessionId});
-
         if (model.FieldGroup == Resource.lblSelectSpecificFields)
         {
             if (model.IsComingFromRecommendation &&
@@ -138,7 +135,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
     }
     private IActionResult RedirectForFieldGroupGet(FertiliserManureViewModel? model)
     {
-        if (model.IsDoubleCropAvailable)
+        if (model!=null&&model.IsDoubleCropAvailable)
         {
            _fertiliserManureLogic.SetFertilserManureToSession(model);
             return RedirectToAction(_doubleCropActionName, new {sessionId=model.SessionId});
