@@ -15,6 +15,7 @@ public class StorageCapacityLogic(ILogger<StorageCapacityLogic> logger, IStorage
     private readonly ILogger<StorageCapacityLogic> _logger = logger;
     private readonly IStorageCapacityService _storageCapacityService = storageCapacityService;
     private const string _storageCapacityDataSessionKey = "StorageCapacityData";
+    private const string _storageCapacityDataSessionKeyBeforeUpdate = "StorageCapacityDataBeforeUpdate";
     public async Task<(StoreCapacity, Error)> AddStoreCapacityAsync(StoreCapacity storeCapacityData)
     {
         _logger.LogTrace("Add store capacity");
@@ -118,6 +119,23 @@ public class StorageCapacityLogic(ILogger<StorageCapacityLogic> logger, IStorage
     public void RemoveStorageCapacitySession(Guid? sessionId)
     {
         string cacheKey = sessionId + " " + _storageCapacityDataSessionKey;
+        _storageCapacityService.RemoveStorageCapacitySessionAsync(cacheKey).GetAwaiter().GetResult();
+
+    }
+    public StorageCapacityViewModel? GetStorageCapacityBeforeUpdateFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _storageCapacityDataSessionKeyBeforeUpdate;
+        return _storageCapacityService.GetStorageCapacityFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetStorageCapacityBeforeUpdateToSession(StorageCapacityViewModel storageCapacityViewModel)
+    {
+        string cacheKey = storageCapacityViewModel.SessionId + " " + _storageCapacityDataSessionKeyBeforeUpdate;
+        _storageCapacityService.SetStorageCapacityToSessionAsync(storageCapacityViewModel, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveStorageCapacityBeforeUpdateSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _storageCapacityDataSessionKeyBeforeUpdate;
         _storageCapacityService.RemoveStorageCapacitySessionAsync(cacheKey).GetAwaiter().GetResult();
 
     }

@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="CopyExistingManureStorage" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="CopyExistingManureStorage" asp-controller="StorageCapacity" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnCopyExistingManureStorageYearList"] != null)
 {
@@ -49,13 +49,13 @@
                 <p class="govuk-body cancel-link">
                     @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
                         {
-                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">
                                 @Resource.lblCancel
                             </a>
                         }
                         else
                         {
-                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
+                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID" asp-route-sessionId="@Model.SessionId">
                                 @Resource.lblCancel
                             </a>
                         }

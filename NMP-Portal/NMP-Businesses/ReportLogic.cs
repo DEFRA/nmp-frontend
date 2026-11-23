@@ -22,6 +22,7 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
     private readonly IFarmLogic _farmLogic = farmLogic;
     private readonly IFertiliserManureLogic _fertiliserManureLogic = fertiliserManureLogic;
     private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
+    private readonly string _reportDataSessionKey = "ReportData";
 
     public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
@@ -765,6 +766,23 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
     {
         _logger.LogTrace("Fetching last update dates for livestock N farm limit report by farmId and year");
         return await _reportService.FetchLastUpdatedDateByFarmIdAndYearAsync(farmId, years);
+    }
+    public ReportViewModel? GetReportDataFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _reportDataSessionKey;
+        return _reportService.GetReportDataFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetReportDataToSession(ReportViewModel reportViewModel)
+    {
+        string cacheKey = reportViewModel.SessionId + " " + _reportDataSessionKey;
+        _reportService.SetReportDataToSessionAsync(reportViewModel, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveReportDataFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _reportDataSessionKey;
+        _reportService.RemoveReportDataSessionAsync(cacheKey).GetAwaiter().GetResult();
+
     }
 }
 

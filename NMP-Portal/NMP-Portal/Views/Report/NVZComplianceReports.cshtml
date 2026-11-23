@@ -50,7 +50,7 @@
         @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <govuk-radios asp-for="@Model.NVZReportOption">                    
+                <govuk-radios -for="@Model.NVZReportOption">                    
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend class="govuk-fieldset__legend--l" is-page-heading="true">
                             @heading

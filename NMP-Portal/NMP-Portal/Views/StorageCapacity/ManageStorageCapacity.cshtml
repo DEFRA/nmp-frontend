@@ -22,17 +22,17 @@
 @section BeforeContent {
     @if (string.IsNullOrWhiteSpace(Model.IsComingFromManageToHubPage))
     {
-        <govuk-back-link asp-action="@backAction" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="@backAction" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else
     {
         if (!string.IsNullOrWhiteSpace(Model.IsComingFromManageToHubPage))
         {
-            <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="StorageCapacityManagement" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
         }
         else
         {
-            <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">@Resource.lblBack</govuk-back-link>
+            <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
         }
     }
 }
