@@ -34,6 +34,7 @@ namespace NMP.Portal.Controllers
         private const string _sasGreaterThan30PercentCloverActionName = "HasGreaterThan30PercentClover";
         private const string _errorTempData = "Error";
         private const string _previousGrassManagement = "PreviousGrassManagement";
+        private const string _cropInfoOne = "CropInfoOne";
 
         private void BindNMPTFarmIdAndNameForNavigation(PreviousCroppingViewModel? model)
         {
@@ -287,11 +288,11 @@ namespace NMP.Portal.Controllers
 
                     if (model.IsCheckAnswer)
                     {
-                        return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
+                        return RedirectToAction(_checkAnswerActionName, new { sessionId = sessionId });
                     }
                     if (model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland && model.CropGroupID == (int)NMP.Commons.Enums.CropGroup.Grass)
                     {
-                        return RedirectToAction(_previousGrassManagement, new { sessionId = model.SessionId });
+                        return RedirectToAction(_previousGrassManagement, new { sessionId = sessionId });
                     }
                 }
 
@@ -300,7 +301,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempData] = ex.Message;
-                return RedirectToAction(_cropGroupsActionName, new { sessionId = model.SessionId });
+                return RedirectToAction(_cropGroupsActionName, new { sessionId = sessionId });
             }
 
             return View(model);
@@ -331,13 +332,13 @@ namespace NMP.Portal.Controllers
             {
                 if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
                 {
-                    return RedirectToAction("CropInfoOne", new { sessionId = model.SessionId });
+                    return RedirectToAction(_cropInfoOne, new { sessionId = model.SessionId });
                 }
                 return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
             }
             if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
-                return RedirectToAction("CropInfoOne", new { sessionId = model.SessionId });
+                return RedirectToAction(_cropInfoOne, new { sessionId = model.SessionId });
             }
             return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
         }
@@ -396,7 +397,7 @@ namespace NMP.Portal.Controllers
                 _logger.LogTrace(ex, "Previous Croppping Controller : Exception in CropInfoOne() post action : {Message}, {StackTrace}",
                     ex.Message, ex.StackTrace);
                 TempData["CropInfoOneError"] = ex.Message;
-                return RedirectToAction("CropInfoOne", new { sessionId = model.SessionId });
+                return RedirectToAction(_cropInfoOne, new { sessionId = model.SessionId });
             }
         }
 
@@ -441,7 +442,7 @@ namespace NMP.Portal.Controllers
             {
                 return View(model);
             }
-            return RedirectToAction(_checkAnswerActionName, new { sessionId = model.SessionId });
+            return RedirectToAction(_checkAnswerActionName, new { sessionId = sessionId });
         }
 
         [HttpPost]
@@ -1212,7 +1213,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.CropTypeID == (int)NMP.Commons.Enums.CropTypes.FodderBeet && model.FarmRB209CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
             {
-                return RedirectToAction("CropInfoOne", new { sessionId = sessionId });
+                return RedirectToAction(_cropInfoOne, new { sessionId = sessionId });
             }
             if (model.PreviousGrassID != null)
             {
