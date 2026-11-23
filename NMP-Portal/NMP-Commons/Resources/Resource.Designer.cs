@@ -17216,7 +17216,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This gives the following range for annual dry matter yield..
+        ///   Looks up a localized string similar to This gives the following range for annual dry matter yield:.
         /// </summary>
         public static string lblThisGivesTheFollowingRangeForAnnualDryMatterYield {
             get {
@@ -17293,6 +17293,15 @@ namespace NMP.Commons.Resources {
         public static string lblThisShouldBeWithinTheFollowingRange {
             get {
                 return ResourceManager.GetString("lblThisShouldBeWithinTheFollowingRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This site class gives a range for annual dry matter yield of:.
+        /// </summary>
+        public static string lblThisSiteClassGivesARangeForAnnualDryMatterYieldOf {
+            get {
+                return ResourceManager.GetString("lblThisSiteClassGivesARangeForAnnualDryMatterYieldOf", resourceCulture);
             }
         }
         

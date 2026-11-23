@@ -4099,7 +4099,7 @@ cubic metres per hectare  not set</value>
     <value>Target dry matter yield for {0}</value>
   </data>
   <data name="lblThisGivesTheFollowingRangeForAnnualDryMatterYield" xml:space="preserve">
-    <value>This gives the following range for annual dry matter yield.</value>
+    <value>This gives the following range for annual dry matter yield:</value>
   </data>
   <data name="lblThisGrowthClassGivesARangeForAnnualDryMatterYieldOf" xml:space="preserve">
     <value>This growth class gives a range for annual dry matter yield of:</value>
@@ -8731,5 +8731,8 @@ following crop year 2</value>
   </data>
   <data name="lblBasedOnYourDataTheSiteClassForXField" xml:space="preserve">
     <value>Based on your data, the site class for {0} is:</value>
+  </data>
+  <data name="lblThisSiteClassGivesARangeForAnnualDryMatterYieldOf" xml:space="preserve">
+    <value>This site class gives a range for annual dry matter yield of:</value>
   </data>
 </root>
