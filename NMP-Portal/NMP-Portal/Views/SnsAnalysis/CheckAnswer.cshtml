@@ -8,7 +8,7 @@
 
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackCheckAnswer" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblBack</govuk-back-link>
 }
 <form class="form-with-overlay" asp-action="CheckAnswer" asp-controller="SnsAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -36,7 +36,7 @@
                         @(Model.SampleDate.HasValue? Model.SampleDate.Value.Date.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="SoilSampleDate" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="SoilSampleDate" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhenWasTheSampleForSoilMineralNitrogenTaken, Model.FieldName)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
 
@@ -52,7 +52,7 @@
                                 @(Model.SampleDepth.HasValue? Model.SampleDepth: Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SampleDepth" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWasTheSampleDepth</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SampleDepth" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWasTheSampleDepth</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row class=@((!Model.SoilMineralNitrogen.HasValue)?"govuk-error-message":"")>
@@ -63,7 +63,7 @@
                                 @(Model.SoilMineralNitrogen.HasValue? Model.SoilMineralNitrogen: Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SampleDepth" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWasTheSoilMineralNitrogen</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SampleDepth" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatWasTheSoilMineralNitrogen</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
 
@@ -78,7 +78,7 @@
                                 @(Model.SoilMineralNitrogenAt030CM.HasValue ? string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt030CM, Resource.lblkg) : Resource.lblNotSet)
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt030CM</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt030CM</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         <govuk-summary-list-row class=@((!Model.SoilMineralNitrogenAt3060CM.HasValue)?"govuk-error-message":"")>
@@ -96,7 +96,7 @@
                                 }
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt3060CM</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                         @if (Model.SoilMineralNitrogenAt6090CM != null)
@@ -109,7 +109,7 @@
                                     @string.Format("{0:N0}{1}", Model.SoilMineralNitrogenAt6090CM, Resource.lblkg)
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="SoilMineralNitrogenAnalysisResults" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblKilogramsOfSoilMineralNitrogenAt6090CMOptional</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                         }
@@ -137,7 +137,7 @@
                                     }            
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="CalculateNitrogenInCurrentCropQuestion" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeUsToHelpYouCalculateTheNitrogen</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="CalculateNitrogenInCurrentCropQuestion" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeUsToHelpYouCalculateTheNitrogen</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
 
@@ -153,7 +153,7 @@
                                             @(Model.NumberOfShoots.HasValue ? string.Format(Resource.lblShootsPerSquareMetre, string.Format("{0:N0}", Model.NumberOfShoots)) : Resource.lblNotSet)
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="NumberOfShoots" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheNumberOfShootsPerSquareMetre</span></govuk-summary-list-row-action>
+                                            <govuk-summary-list-row-action asp-action="NumberOfShoots" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheNumberOfShootsPerSquareMetre</span></govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
                                     <govuk-summary-list-row class=@((Model.SeasonId==0)?"govuk-error-message":"")>
@@ -171,7 +171,7 @@
                                             }  
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="NumberOfShoots" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhenWasThisMeasured</span></govuk-summary-list-row-action>
+                                            <govuk-summary-list-row-action asp-action="NumberOfShoots" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhenWasThisMeasured</span></govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
                                 }
@@ -199,7 +199,7 @@
                                             }
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="GreenAreaIndexOrCropHeightQuestion" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToEnterGAIOrCropHeight</span></govuk-summary-list-row-action>
+                                            <govuk-summary-list-row-action asp-action="GreenAreaIndexOrCropHeightQuestion" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToEnterGAIOrCropHeight</span></govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
                                     if (Model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight)
@@ -212,7 +212,7 @@
                                                 @(Model.CropHeight.HasValue? Model.CropHeight + Resource.lblcm: Resource.lblNotSet)
                                             </govuk-summary-list-row-value>
                                             <govuk-summary-list-row-actions>
-                                                <govuk-summary-list-row-action asp-action="CropHeight" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheCropHeight</span></govuk-summary-list-row-action>
+                                                <govuk-summary-list-row-action asp-action="CropHeight" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheCropHeight</span></govuk-summary-list-row-action>
                                             </govuk-summary-list-row-actions>
                                         </govuk-summary-list-row>
                                         <govuk-summary-list-row class=@((Model.SeasonId==0)?"govuk-error-message":"")>
@@ -230,7 +230,7 @@
                                                 }
                                             </govuk-summary-list-row-value>
                                             <govuk-summary-list-row-actions>
-                                                <govuk-summary-list-row-action asp-action="CropHeight" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhenWasThisMeasured</span></govuk-summary-list-row-action>
+                                                <govuk-summary-list-row-action asp-action="CropHeight" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhenWasThisMeasured</span></govuk-summary-list-row-action>
                                             </govuk-summary-list-row-actions>
                                         </govuk-summary-list-row>
                                     }
@@ -244,7 +244,7 @@
                                                 @(Model.GreenAreaIndex.HasValue? Model.GreenAreaIndex: Resource.lblNotSet)
                                             </govuk-summary-list-row-value>
                                             <govuk-summary-list-row-actions>
-                                                <govuk-summary-list-row-action asp-action="GreenAreaIndex" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheGreenAreaIndexGAI</span></govuk-summary-list-row-action>
+                                                <govuk-summary-list-row-action asp-action="GreenAreaIndex" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheGreenAreaIndexGAI</span></govuk-summary-list-row-action>
                                             </govuk-summary-list-row-actions>
                                         </govuk-summary-list-row>
 
@@ -276,7 +276,7 @@
                                     }
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="EstimateOfNitrogenMineralisationQuestion" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation</span></govuk-summary-list-row-action>
+                                    <govuk-summary-list-row-action asp-action="EstimateOfNitrogenMineralisationQuestion" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWouldYouLikeToAddAnEstimateOfNitrogenMineralisation</span></govuk-summary-list-row-action>
                                 </govuk-summary-list-row-actions>
                             </govuk-summary-list-row>
                             @if (Model.IsEstimateOfNitrogenMineralisation == true)
@@ -303,7 +303,7 @@
                                         }
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="IsBasedOnSoilOrganicMatter" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation, Model.FieldName)</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="IsBasedOnSoilOrganicMatter" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblHowWouldYouLikeToCalculateTheSoilNitrogenMineralisation, Model.FieldName)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                                 @if (Model.IsBasedOnSoilOrganicMatter == true)
@@ -333,7 +333,7 @@
 
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="SoilOrganicMatter" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsThePercentageOfOrganicMatter</span></govuk-summary-list-row-action>
+                                            <govuk-summary-list-row-action asp-action="SoilOrganicMatter" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsThePercentageOfOrganicMatter</span></govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
                                 }
@@ -363,7 +363,7 @@
                                             }
                                         </govuk-summary-list-row-value>
                                         <govuk-summary-list-row-actions>
-                                            <govuk-summary-list-row-action asp-action="AdjustmentValue" asp-controller="SnsAnalysis">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAdjustmentValuePerHectare</span></govuk-summary-list-row-action>
+                                            <govuk-summary-list-row-action asp-action="AdjustmentValue" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblWhatIsTheAdjustmentValuePerHectare</span></govuk-summary-list-row-action>
                                         </govuk-summary-list-row-actions>
                                     </govuk-summary-list-row>
                                 }
@@ -398,7 +398,7 @@
                 @Resource.lblAddTheseAnalysisResults
             </govuk-button>
             <p class="govuk-body cancel-link">                
-                <a class="govuk-link" asp-action="Cancel" asp-controller="SnsAnalysis">@Resource.lblCancel</a>               
+                <a class="govuk-link" asp-action="Cancel" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblCancel</a>               
             </p>
         </div>
     </div>

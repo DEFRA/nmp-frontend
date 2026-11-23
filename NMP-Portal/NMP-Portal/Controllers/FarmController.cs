@@ -1761,13 +1761,13 @@ namespace NMP.Portal.Controllers
             FarmSessionRemoved(sessionId);
 
             //Fertiliser session
-            FertiliserSessionRemoved();
+            FertiliserSessionRemoved(sessionId);
 
             //Field session
             FieldSessionRemoved(sessionId);
 
             //OrganicManure session
-            OrganicManureSessionRemoved();
+            OrganicManureSessionRemoved(sessionId);
 
             //PreviousCroppingData session
             PreviousCroppingDataSessionRemoved();
@@ -1849,18 +1849,15 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private void OrganicManureSessionRemoved()
+        private void OrganicManureSessionRemoved(Guid? sessionId)
         {
-            //OrganicManure session
-            if (HttpContext.Session.Exists("OrganicManure"))
-            {
-                HttpContext.Session.Remove("OrganicManure");
-            }
+            string cacheKey = sessionId + " " + "OrganicManure";
+            //OrganicManure
+            _farmLogic.RemoveNmptSession(cacheKey);
 
-            if (HttpContext.Session.Exists("OrganicDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove("OrganicDataBeforeUpdate");
-            }
+            cacheKey = sessionId + " " + "OrganicDataBeforeUpdate";
+            //OrganicDataBeforeUpdate
+            _farmLogic.RemoveNmptSession(cacheKey);
         }
 
         private void FieldSessionRemoved(Guid? sessionId)
@@ -1878,16 +1875,14 @@ namespace NMP.Portal.Controllers
             _farmLogic.RemoveNmptSession(cacheKey);
         }
 
-        private void FertiliserSessionRemoved()
+        private void FertiliserSessionRemoved(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists("FertiliserManure"))
-            {
-                HttpContext.Session.Remove("FertiliserManure");
-            }
-            if (HttpContext.Session.Exists("FertiliserManureBeforeUpdate"))
-            {
-                HttpContext.Session.Remove("FertiliserManureBeforeUpdate");
-            }
+            string cacheKey = sessionId + " " + "FertiliserManure";
+            //FertiliserManure
+            _farmLogic.RemoveNmptSession(cacheKey);
+            cacheKey = sessionId + " " + "FertiliserManureBeforeUpdate";
+            //FertiliserManureBeforeUpdate
+            _farmLogic.RemoveNmptSession(cacheKey);
         }
 
         private void FarmSessionRemoved(Guid? sessionId)

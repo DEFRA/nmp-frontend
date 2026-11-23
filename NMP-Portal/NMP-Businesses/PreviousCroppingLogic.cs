@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NMP.Application;
 using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 
@@ -13,6 +14,7 @@ public class PreviousCroppingLogic(ILogger<PreviousCroppingLogic> logger, IPrevi
 {
     private readonly ILogger<PreviousCroppingLogic> _logger = logger;
     private readonly IPreviousCroppingService _previousCroppingService = previousCroppingService;
+    private const string _previousCroppingSessionKey = "PreviousCroppingData";
     public async Task<(List<PreviousCroppingData>, Error)> FetchDataByFieldId(int fieldId, int? year)
     {
         _logger.LogTrace("Fetching previous cropping data for FieldId: {FieldId}, Year: {Year}", fieldId, year);
@@ -45,5 +47,22 @@ public class PreviousCroppingLogic(ILogger<PreviousCroppingLogic> logger, IPrevi
     {
         _logger.LogTrace("Fetching previous grass list by Id: {Id}", id);
         return await _previousCroppingService.FetchPreviousGrassByIdAsync(id);
+    }
+    public PreviousCroppingViewModel? GetPreviousCroppingFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _previousCroppingSessionKey;
+        return _previousCroppingService.GetPreviousCroppingFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetPreviousCroppingToSession(PreviousCroppingViewModel previousCroppingViewModel)
+    {
+        string cacheKey = previousCroppingViewModel.SessionId + " " + _previousCroppingSessionKey;
+        _previousCroppingService.SetPreviousCroppingToSessionAsync(previousCroppingViewModel, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemovePreviousCroppingSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _previousCroppingSessionKey;
+        _previousCroppingService.RemovePreviousCroppingSessionAsync(cacheKey).GetAwaiter().GetResult();
+
     }
 }

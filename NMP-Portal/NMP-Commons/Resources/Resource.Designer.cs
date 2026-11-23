@@ -8562,6 +8562,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include cattle, sheep, pigs, goats and horses that are maintained on the NVZ area of the farm..
+        /// </summary>
+        public static string lblIncludeCattleSheepPigsGoatsAndHorses {
+            get {
+                return ResourceManager.GetString("lblIncludeCattleSheepPigsGoatsAndHorses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include cattle, sheep, pigs, poultry, goats, deer and horses..
         /// </summary>
         public static string lblIncludeCattleSheepPigsPoultryGoats {

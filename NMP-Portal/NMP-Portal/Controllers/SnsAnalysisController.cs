@@ -45,7 +45,7 @@ namespace NMP.Portal.Controllers
         private const string _greenAreaIndexAction = "GreenAreaIndex";
         private void BindNMPTFarmIdAndNameForNavigation(SnsAnalysisViewModel? model)
         {
-            
+
             ViewBag.NMPTFarmId = model?.EncryptedFarmId;
             ViewBag.NMPTFarmName = model?.FarmName;
 
@@ -55,26 +55,28 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Sns Controller : Index() action called");
             return View();
         }
-        public IActionResult SnsAnalysisCancel(string q, string r, string? s)
+        public IActionResult SnsAnalysisCancel(string q, string r, string? s, Guid? sessionId)
         {
             _logger.LogTrace("SnsAnalysis Controller : SnsAnalysisCancel action called");
-            HttpContext.Session.Remove(_snsDataKey);
+
+            _snsAnalysisLogic.RemoveSnsSession(sessionId);
+
             return RedirectToAction(_recommendationsAction, "Crop", new { q = q, r = r, s = s });
         }
 
         [HttpGet]
-        public async Task<IActionResult> SoilSampleDate(string? q, string? r, string? s, string? c, string? f)   //q=farmId,r=fieldId,s=harvestYear, c=cropId (ID from crop table),f=fieldName
+        public async Task<IActionResult> SoilSampleDate(string? q, string? r, string? s, string? c, string? f, Guid? sessionId)   //q=farmId,r=fieldId,s=harvestYear, c=cropId (ID from crop table),f=fieldName
         {
             _logger.LogTrace("SnsAnalysis Controller : SoilSampleDate() action called");
             SnsAnalysisViewModel model = new SnsAnalysisViewModel();
-            if (HasSnsDataInSession())
+            if (HasSnsDataInSession(sessionId))
             {
-                model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
             }
+            
             if (string.IsNullOrWhiteSpace(model.EncryptedFarmId))
             {
                 model.EncryptedFarmId = q ?? string.Empty;
-
             }
             if (string.IsNullOrWhiteSpace(model.EncryptedFieldId))
             {
@@ -121,7 +123,7 @@ namespace NMP.Portal.Controllers
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+            _snsAnalysisLogic.SetSnsToSession(model);
             return View(model);
         }
 
@@ -130,7 +132,7 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> SoilSampleDate(SnsAnalysisViewModel model)
         {
             _logger.LogTrace("SnsAnalysis Controller : SoilSampleDate() post action called");
-            ValidateSoilSampleDateProperties(model); 
+            ValidateSoilSampleDateProperties(model);
             BindNMPTFarmIdAndNameForNavigation(model);
 
             if (!ModelState.IsValid)
@@ -139,31 +141,31 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel snsViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (snsViewModel.SampleDate == model.SampleDate)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel?.SampleDate == model.SampleDate)
                     {
                         return RedirectToAction(_checkAnswerAction);
                     }
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new {sessionId=model.SessionId});
                 }
             }
 
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+            _snsAnalysisLogic.SetSnsToSession(model);
 
             int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
             model.SnsCategoryId = snsCategoryId;
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+            _snsAnalysisLogic.SetSnsToSession(model);
             if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables || model.FarmRB209CountryId == (int)NMP.Commons.Enums.RB209Country.Scotland)
             {
-                return RedirectToAction(_sampleDepthAction);
+                return RedirectToAction(_sampleDepthAction, new {sessionId=model.SessionId});
             }
 
-            return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction);
+            return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction, new {sessionId=model.SessionId});
         }
 
         private void ValidateSoilSampleDateProperties(SnsAnalysisViewModel model)
@@ -209,18 +211,18 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult SoilMineralNitrogenAnalysisResults()
+        public IActionResult SoilMineralNitrogenAnalysisResults(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : SoilMineralNitrogenAnalysisResults() action called");
 
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
                     return RedirectToAction(_farmListAction, "Farm");
                 }
 
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
 
                 return View(model);
@@ -229,7 +231,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in SoilMineralNitrogenAnalysisResults() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction("SoilSampleDate");
+                return RedirectToAction("SoilSampleDate", new { sessionId = sessionId });
             }
 
         }
@@ -247,12 +249,12 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.SoilMineralNitrogenAt030CM == model.SoilMineralNitrogenAt030CM && fieldViewModel.SoilMineralNitrogenAt3060CM == model.SoilMineralNitrogenAt3060CM && fieldViewModel.SoilMineralNitrogenAt6090CM == model.SoilMineralNitrogenAt6090CM)
+                    SnsAnalysisViewModel? fieldViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (fieldViewModel?.SoilMineralNitrogenAt030CM == model.SoilMineralNitrogenAt030CM && fieldViewModel?.SoilMineralNitrogenAt3060CM == model.SoilMineralNitrogenAt3060CM && fieldViewModel?.SoilMineralNitrogenAt6090CM == model.SoilMineralNitrogenAt6090CM)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -278,23 +280,23 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
 
             int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
             model.SnsCategoryId = snsCategoryId;
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+            _snsAnalysisLogic.SetSnsToSession(model);
             if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
             {
-                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
+                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction, new { sessionId = model.SessionId });
             }
             else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
             {
-                return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction);
+                return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction);
+            return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction, new { sessionId = model.SessionId });
         }
 
         private void ValidateSoilMineralNitrogenAnalysisProperties(SnsAnalysisViewModel model)
@@ -316,31 +318,31 @@ namespace NMP.Portal.Controllers
     string validationLabel,
     int minValue,
     int maxValue)
-{
-    if (!ModelState.IsValid && ModelState.ContainsKey(modelStateKey))
-    {
-        var invalidFormatError = ModelState[modelStateKey]?.Errors.Count > 0
-            ? ModelState[modelStateKey]?.Errors[0].ErrorMessage
-            : null;
-
-        if (invalidFormatError != null &&
-            invalidFormatError.Equals(
-                string.Format(
-                    Resource.lblEnterNumericValue,
-                    ModelState[modelStateKey].AttemptedValue,
-                    displayLabel)))
         {
-            ModelState[modelStateKey]?.Errors.Clear();
+            if (!ModelState.IsValid && ModelState.ContainsKey(modelStateKey))
+            {
+                var invalidFormatError = ModelState[modelStateKey]?.Errors.Count > 0
+                    ? ModelState[modelStateKey]?.Errors[0].ErrorMessage
+                    : null;
 
-            ModelState[modelStateKey]?.Errors.Add(
-                string.Format(
-                    Resource.MsgValidateSoilMineralNitrogenMinMax,
-                    validationLabel,
-                    minValue,
-                    maxValue));
+                if (invalidFormatError != null &&
+                    invalidFormatError.Equals(
+                        string.Format(
+                            Resource.lblEnterNumericValue,
+                            ModelState[modelStateKey].AttemptedValue,
+                            displayLabel)))
+                {
+                    ModelState[modelStateKey]?.Errors.Clear();
+
+                    ModelState[modelStateKey]?.Errors.Add(
+                        string.Format(
+                            Resource.MsgValidateSoilMineralNitrogenMinMax,
+                            validationLabel,
+                            minValue,
+                            maxValue));
+                }
+            }
         }
-    }
-}
 
         private void ValidateSoilMineralNitrogenAnalysis()
         {
@@ -383,18 +385,18 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EstimateOfNitrogenMineralisationQuestion()
+        public async Task<IActionResult> EstimateOfNitrogenMineralisationQuestion(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : EstimateOfNitrogenMineralisationQuestion() action called");
 
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
                     return RedirectToAction(_farmListAction, "Farm");
 
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
 
@@ -403,7 +405,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Field Controller : Exception in EstimateOfNitrogenMineralisationQuestion() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
+                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction, new { sessionId = sessionId });
             }
         }
 
@@ -424,12 +426,12 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.IsEstimateOfNitrogenMineralisation == model.IsEstimateOfNitrogenMineralisation)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel != null && snsViewModel.IsEstimateOfNitrogenMineralisation == model.IsEstimateOfNitrogenMineralisation)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -442,37 +444,37 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
 
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+            _snsAnalysisLogic.SetSnsToSession(model);
             if (model.IsEstimateOfNitrogenMineralisation == true)
             {
-                return RedirectToAction(_isBasedOnSoilOrganicMatterAction);
+                return RedirectToAction(_isBasedOnSoilOrganicMatterAction, new { sessionId = model.SessionId });
             }
             else
             {
                 model.AdjustmentValue = null;
                 model.SoilOrganicMatter = null;
                 model.IsBasedOnSoilOrganicMatter = null;
-                HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-                return RedirectToAction(_soilNitrogenSupplyIndexAction);
+                _snsAnalysisLogic.SetSnsToSession(model);
+                return RedirectToAction(_soilNitrogenSupplyIndexAction, new { sessionId = model.SessionId });
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> IsBasedOnSoilOrganicMatter()
+        public async Task<IActionResult> IsBasedOnSoilOrganicMatter(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : IsBasedOnSoilOrganicMatter() action called");
 
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
                     return RedirectToAction(_farmListAction, "Farm");
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View("CalculateSoilNitrogenMineralisation", model);
 
@@ -481,7 +483,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in IsBasedOnSoilOrganicMatter() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction);
+                return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction, new { sessionId = sessionId });
             }
         }
 
@@ -502,12 +504,12 @@ namespace NMP.Portal.Controllers
                 }
                 if (model.IsCheckAnswer)
                 {
-                    if (HasSnsDataInSession())
+                    if (HasSnsDataInSession(model.SessionId))
                     {
-                        SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                        if (fieldViewModel.IsBasedOnSoilOrganicMatter == model.IsBasedOnSoilOrganicMatter)
+                        SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                        if (snsViewModel?.IsBasedOnSoilOrganicMatter == model.IsBasedOnSoilOrganicMatter)
                         {
-                            return RedirectToAction(_checkAnswerAction);
+                            return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                         }
                         else
                         {
@@ -519,25 +521,24 @@ namespace NMP.Portal.Controllers
                     }
                     else
                     {
-                        return RedirectToAction(_farmListAction, "Farm");
+                        return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                     }
                 }
-
-                HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                _snsAnalysisLogic.SetSnsToSession(model);
                 if (model.IsBasedOnSoilOrganicMatter.Value)
                 {
-                    return RedirectToAction(_soilOrganicMatterAction);
+                    return RedirectToAction(_soilOrganicMatterAction, new { sessionId = model.SessionId });
                 }
                 else
                 {
-                    return RedirectToAction(_adjustmentValueAction);
+                    return RedirectToAction(_adjustmentValueAction, new { sessionId = model.SessionId });
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in IsBasedOnSoilOrganicMatter() post action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_isBasedOnSoilOrganicMatterAction);
+                return RedirectToAction(_isBasedOnSoilOrganicMatterAction, new { sessionId = model.SessionId });
             }
         }
 
@@ -693,7 +694,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.SnsIndex = snsResponse.SnsIndex;
                     model.SnsValue = snsResponse.SnsValue;
-                    HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                    _snsAnalysisLogic.SetSnsToSession(model);
                 }
             }
             else
@@ -703,7 +704,7 @@ namespace NMP.Portal.Controllers
                 {
                     model.SnsIndex = snsResponse.ResidueGroupId;
                     model.NitrogenResidueGroup = snsResponse.ResidueGroup;
-                    HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                    _snsAnalysisLogic.SetSnsToSession(model);
                 }
             }
         }
@@ -745,18 +746,18 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SoilNitrogenSupplyIndex()
+        public async Task<IActionResult> SoilNitrogenSupplyIndex(Guid? sessionId)
         {
             _logger.LogTrace($"Field Controller : SoilNitrogenSupplyIndex() action called");
 
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
                 }
 
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
 
                 BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -788,7 +789,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_checkAnswerAction);
+                    return RedirectToAction(_checkAnswerAction, new { sessionId = sessionId });
                 }
 
                 await BindSnsIndex(model, postMeasurementData, postMeasurementDataForScotland);
@@ -800,7 +801,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in SoilNitrogenSupplyIndex() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
+                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction, new { sessionId = sessionId });
             }
         }
         [HttpPost]
@@ -811,28 +812,28 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace("SnsAnalysis Controller : SoilNitrogenSupplyIndex() post action called");
             BindNMPTFarmIdAndNameForNavigation(model);
 
-            return RedirectToAction(_checkAnswerAction);
+            return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> SoilOrganicMatter()
+        public async Task<IActionResult> SoilOrganicMatter(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : SoilOrganicMatter() action called");
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, "Field Controller : Exception in SoilOrganicMatter() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in SoilOrganicMatter() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_isBasedOnSoilOrganicMatterAction);
+                return RedirectToAction(_isBasedOnSoilOrganicMatterAction, new { sessionId = sessionId });
             }
         }
 
@@ -851,12 +852,12 @@ namespace NMP.Portal.Controllers
             model.AdjustmentValue = null;
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.SoilOrganicMatter == model.SoilOrganicMatter)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel?.SoilOrganicMatter == model.SoilOrganicMatter)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -868,12 +869,12 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
 
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-            return RedirectToAction(_soilNitrogenSupplyIndexAction);
+            _snsAnalysisLogic.SetSnsToSession(model);
+            return RedirectToAction(_soilNitrogenSupplyIndexAction, new { sessionId = model.SessionId });
         }
 
         private void ValidateSoilOrganicMatterProperties(SnsAnalysisViewModel model)
@@ -909,17 +910,17 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> AdjustmentValue()
+        public async Task<IActionResult> AdjustmentValue(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : AdjustmentValue() action called");
 
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model =_snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
             }
@@ -927,7 +928,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Field Controller : Exception in AdjustmentValue() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_isBasedOnSoilOrganicMatterAction);
+                return RedirectToAction(_isBasedOnSoilOrganicMatterAction, new { sessionId = sessionId });
             }
         }
 
@@ -945,12 +946,12 @@ namespace NMP.Portal.Controllers
             model.SoilOrganicMatter = null;
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.AdjustmentValue == model.AdjustmentValue)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel?.AdjustmentValue == model.AdjustmentValue)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -961,12 +962,12 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
 
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-            return RedirectToAction(_soilNitrogenSupplyIndexAction);
+            _snsAnalysisLogic.SetSnsToSession(model);
+            return RedirectToAction(_soilNitrogenSupplyIndexAction, new { sessionId = model.SessionId });
         }
 
         private void ValidateAdjustmentValues(SnsAnalysisViewModel model)
@@ -1000,16 +1001,16 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CalculateNitrogenInCurrentCropQuestion()
+        public async Task<IActionResult> CalculateNitrogenInCurrentCropQuestion(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : CalculateNitrogenInCurrentCropQuestion() action called");
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
             }
@@ -1017,7 +1018,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Field Controller : Exception in CalculateNitrogenInCurrentCropQuestion() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction);
+                return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction, new { sessionId = sessionId });
             }
         }
 
@@ -1037,12 +1038,12 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.IsCalculateNitrogen == model.IsCalculateNitrogen)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel?.IsCalculateNitrogen == model.IsCalculateNitrogen)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -1065,7 +1066,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
             return await RedirectForCalculateNitrogenUnCurrentCrop(model);
@@ -1074,41 +1075,41 @@ namespace NMP.Portal.Controllers
         private async Task<IActionResult> RedirectForCalculateNitrogenUnCurrentCrop(SnsAnalysisViewModel model)
         {
             int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+            _snsAnalysisLogic.SetSnsToSession(model);
 
             if (model.IsCalculateNitrogen == true)
             {
                 if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals)
                 {
-                    return RedirectToAction(_numberOfShootsAction);
+                    return RedirectToAction(_numberOfShootsAction, new { sessionId = model.SessionId });
                 }
                 if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape)
                 {
-                    return RedirectToAction("GreenAreaIndexOrCropHeightQuestion");
+                    return RedirectToAction("GreenAreaIndexOrCropHeightQuestion", new { sessionId = model.SessionId });
                 }
             }
             else
             {
                 model.IsCalculateNitrogenNo = true;
-                HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-                return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction);
+                _snsAnalysisLogic.SetSnsToSession(model);
+                return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction, new { sessionId = model.SessionId });
             }
 
-            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction);
+            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction, new { sessionId = model.SessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> NumberOfShoots()
+        public async Task<IActionResult> NumberOfShoots(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : NumberOfShoots() action called");
 
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId });
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 List<SeasonResponse> seasons = await _fieldLogic.FetchSeasons();
                 ViewBag.SeasonList = seasons;
                 BindNMPTFarmIdAndNameForNavigation(model);
@@ -1119,7 +1120,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "Field Controller : Exception in NumberOfShoots() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
+                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction, new { sessionId });
             }
         }
 
@@ -1139,12 +1140,12 @@ namespace NMP.Portal.Controllers
             model.IsNumberOfShoots = true;
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.NumberOfShoots == model.NumberOfShoots && fieldViewModel.SeasonId == model.SeasonId)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel?.NumberOfShoots == model.NumberOfShoots && snsViewModel?.SeasonId == model.SeasonId)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -1164,12 +1165,12 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
 
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction);
+            _snsAnalysisLogic.SetSnsToSession(model);
+            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction, new { sessionId = model.SessionId });
         }
 
         private void ValidateNumberOfShootsProperties(SnsAnalysisViewModel model)
@@ -1206,17 +1207,17 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GreenAreaIndexOrCropHeightQuestion()
+        public async Task<IActionResult> GreenAreaIndexOrCropHeightQuestion(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : GreenAreaIndexOrCropHeightQuestion() action called");
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId });
                 }
 
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 List<CropGroupResponse> cropGroups = await _fieldLogic.FetchCropGroups();
                 ViewBag.CropGroupList = cropGroups;
                 BindNMPTFarmIdAndNameForNavigation(model);
@@ -1224,9 +1225,12 @@ namespace NMP.Portal.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in GreenAreaIndexOrCropHeightQuestion() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex,
+    "SnsAnalysis Controller : Exception in GreenAreaIndexOrCropHeightQuestion() action : {Message}, {StackTrace}",
+    ex.Message,
+    ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
+                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction, new { sessionId });
             }
         }
 
@@ -1247,12 +1251,12 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.GreenAreaIndexOrCropHeight == model.GreenAreaIndexOrCropHeight)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel?.GreenAreaIndexOrCropHeight == model.GreenAreaIndexOrCropHeight)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -1273,43 +1277,47 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+            _snsAnalysisLogic.SetSnsToSession(model);
 
             if (model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.CropHeight)
             {
-                return RedirectToAction(_cropHeightAction);
+                return RedirectToAction(_cropHeightAction, new { sessionId = model.SessionId });
             }
             if (model.GreenAreaIndexOrCropHeight == (int)NMP.Commons.Enums.GreenAreaIndexOrCropHeight.GAI)
             {
-                return RedirectToAction(_greenAreaIndexAction);
+                return RedirectToAction(_greenAreaIndexAction, new { sessionId = model.SessionId });
             }
-            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction);
+            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction, new { sessionId = model.SessionId });
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> CropHeight()
+        public async Task<IActionResult> CropHeight(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : CropHeight() action called");
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId });
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 ViewBag.SeasonList = await _fieldLogic.FetchSeasons();
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
             }
             catch (Exception ex)
             {
-                _logger.LogTrace(ex, "Field Controller : Exception in CropHeight() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
+                _logger.LogTrace(ex,
+    "SnsAnalysis Controller : Exception in CropHeight() action : {Message}, {StackTrace}",
+    ex.Message,
+    ex.StackTrace);
+                
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction("GreenAreaIndexOrCropHeightQuestion");
+                return RedirectToAction("GreenAreaIndexOrCropHeightQuestion", new { sessionId });
             }
         }
 
@@ -1330,12 +1338,12 @@ namespace NMP.Portal.Controllers
             model.IsCropHeight = true;
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.CropHeight == model.CropHeight && fieldViewModel.SeasonId == model.SeasonId)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel?.CropHeight == model.CropHeight && snsViewModel?.SeasonId == model.SeasonId)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -1352,11 +1360,11 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction);
+            _snsAnalysisLogic.SetSnsToSession(model);
+            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction, new { sessionId = model.SessionId });
         }
 
         private void ValidateCropHeightProperties(SnsAnalysisViewModel model)
@@ -1393,16 +1401,16 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public IActionResult GreenAreaIndex()
+        public IActionResult GreenAreaIndex(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : GreenAreaIndex() action called");
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId });
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
 
@@ -1411,7 +1419,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in GreenAreaIndex() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction("GreenAreaIndexOrCropHeightQuestion");
+                return RedirectToAction("GreenAreaIndexOrCropHeightQuestion", new { sessionId });
             }
         }
 
@@ -1431,12 +1439,12 @@ namespace NMP.Portal.Controllers
             model.IsGreenAreaIndex = true;
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.GreenAreaIndex == model.GreenAreaIndex && fieldViewModel.SeasonId == model.SeasonId)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel?.GreenAreaIndex == model.GreenAreaIndex && snsViewModel?.SeasonId == model.SeasonId)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -1453,12 +1461,12 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
 
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction);
+            _snsAnalysisLogic.SetSnsToSession(model);
+            return RedirectToAction(_estimateOfNitrogenMineralisationQuestionAction, new { sessionId = model.SessionId });
         }
 
         private void ValidateGrenAreaIndexProperties(SnsAnalysisViewModel model)
@@ -1486,87 +1494,87 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BackActionForCalculateNitrogenCropQuestion()
+        public async Task<IActionResult> BackActionForCalculateNitrogenCropQuestion(Guid? sessionId)
         {
             _logger.LogTrace("Field Controller : BackActionForCalculateNitrogenCropQuestion() action called");
-            if (!HasSnsDataInSession())
+            if (!HasSnsDataInSession(sessionId))
             {
-                return RedirectToAction(_farmListAction, "Farm");
+                return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
             }
-            SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+            SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
 
             int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction(_checkAnswerAction);
+                return RedirectToAction(_checkAnswerAction, new { sessionId = sessionId });
             }
             if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape ||
                 snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
             {
-                return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction);
+                return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction, new { sessionId = sessionId });
             }
             else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
             {
-                return RedirectToAction(_sampleDepthAction);
+                return RedirectToAction(_sampleDepthAction, new { sessionId = sessionId });
             }
 
             return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> BackActionForEstimateOfNitrogenMineralisationQuestion()
+        public async Task<IActionResult> BackActionForEstimateOfNitrogenMineralisationQuestion(Guid? sessionId)
         {
             _logger.LogTrace($"Field Controller : BackActionForEstimateOfNitrogenMineralisationQuestion() action called");
-            if (!HasSnsDataInSession())
+            if (!HasSnsDataInSession(sessionId))
             {
-                return RedirectToAction(_farmListAction, "Farm");
+                return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
             }
-            SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+            SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
             if (model.IsCheckAnswer)
             {
-                return RedirectToAction(_checkAnswerAction);
+                return RedirectToAction(_checkAnswerAction, new { sessionId = sessionId });
             }
             else if (model.IsCalculateNitrogenNo)
             {
-                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction);
+                return RedirectToAction(_calculateNitrogenInCurrentCropQuestionAction, new { sessionId = sessionId });
             }
             else if (model.IsNumberOfShoots)
             {
-                return RedirectToAction(_numberOfShootsAction);
+                return RedirectToAction(_numberOfShootsAction, new { sessionId = sessionId });
             }
             else if (model.IsCropHeight)
             {
-                return RedirectToAction(_cropHeightAction);
+                return RedirectToAction(_cropHeightAction, new { sessionId = sessionId });
             }
             else if (model.IsGreenAreaIndex)
             {
-                return RedirectToAction(_greenAreaIndexAction);
+                return RedirectToAction(_greenAreaIndexAction, new { sessionId = sessionId });
             }
             int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
 
             if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterCereals || snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.WinterOilseedRape ||
                 snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.OtherArableAndPotatoes)
             {
-                return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction);
+                return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction, new { sessionId = sessionId });
             }
             else if (snsCategoryId == (int)NMP.Commons.Enums.SnsCategories.Vegetables)
             {
-                return RedirectToAction(_sampleDepthAction);
+                return RedirectToAction(_sampleDepthAction, new { sessionId = sessionId });
             }
-            return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction);
+            return RedirectToAction(_soilMineralNitrogenAnalysisResultsAction, new { sessionId = sessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> SampleDepth()
+        public async Task<IActionResult> SampleDepth(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : SampleDepth() action called");
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
             }
@@ -1574,7 +1582,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in SampleDepth() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction("SoilSampleDate");
+                return RedirectToAction("SoilSampleDate", new { sessionId = sessionId });
             }
         }
 
@@ -1592,12 +1600,12 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCheckAnswer)
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(model.SessionId))
                 {
-                    SnsAnalysisViewModel fieldViewModel = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
-                    if (fieldViewModel.SampleDepth == model.SampleDepth && fieldViewModel.SoilMineralNitrogen == model.SoilMineralNitrogen)
+                    SnsAnalysisViewModel? snsViewModel = _snsAnalysisLogic.GetSnsFromSession(model.SessionId);
+                    if (snsViewModel.SampleDepth == model.SampleDepth && snsViewModel.SoilMineralNitrogen == model.SoilMineralNitrogen)
                     {
-                        return RedirectToAction(_checkAnswerAction);
+                        return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                     }
                     else
                     {
@@ -1620,12 +1628,12 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = model.SessionId });
                 }
             }
 
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
-            return RedirectToAction(_soilNitrogenSupplyIndexAction);
+            _snsAnalysisLogic.SetSnsToSession(model);
+            return RedirectToAction(_soilNitrogenSupplyIndexAction, new { sessionId = model.SessionId });
         }
 
         private void ValidateSampleDepthProperties(SnsAnalysisViewModel model)
@@ -1713,19 +1721,19 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer()
+        public async Task<IActionResult> CheckAnswer(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : CheckAnswer() action called");
             SnsAnalysisViewModel? model = null;
             try
             {
-                if (HasSnsDataInSession())
+                if (HasSnsDataInSession(sessionId))
                 {
-                    model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                    model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 }
                 else
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
                 }
 
                 if (model == null)
@@ -1736,13 +1744,13 @@ namespace NMP.Portal.Controllers
                 model.IsCheckAnswer = true;
                 BindNMPTFarmIdAndNameForNavigation(model);
 
-                HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                _snsAnalysisLogic.SetSnsToSession(model);
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in CheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_errorTempDataKey] = ex.Message;
-                return RedirectToAction("CropTypes");
+                return RedirectToAction("CropTypes", new { sessionId = sessionId });
             }
             return View(model);
 
@@ -1792,54 +1800,54 @@ namespace NMP.Portal.Controllers
                 if (string.IsNullOrWhiteSpace(error?.Message) && snsResponse != null)
                 {
                     string success = _cropDataProtector.Protect("true");
-                    HttpContext.Session.Remove(_snsDataKey);
-                    return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, sns = success });
+                    _snsAnalysisLogic.RemoveSnsSession(model.SessionId);
+                    return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, sns = success,sessionId=model.SessionId });
                 }
                 else
                 {
                     TempData["CheckAnswerError"] = Resource.MsgWeCouldNotAddYourSnsPleaseTryAgainLater;
-                    return RedirectToAction(_checkAnswerAction);
+                    return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
                 }
             }
             catch (Exception ex)
             {
                 TempData["CheckAnswerError"] = ex.Message;
-                return RedirectToAction(_checkAnswerAction);
+                return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
             }
         }
 
-        public async Task<IActionResult> BackCheckAnswer()
+        public async Task<IActionResult> BackCheckAnswer(Guid? sessionId)
         {
             _logger.LogTrace($"SnsAnalysis Controller : BackCheckAnswer() action called");
             SnsAnalysisViewModel? model = null;
-            if (HasSnsDataInSession())
+            if (HasSnsDataInSession(sessionId))
             {
-                model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
             }
             else
             {
-                return RedirectToAction(_farmListAction, "Farm");
+                return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
             }
 
             model.IsCheckAnswer = false;
-            HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+            _snsAnalysisLogic.SetSnsToSession(model);
 
             int snsCategoryId = await _fieldLogic.FetchSNSCategoryIdByCropTypeId(model.CropTypeId ?? 0);
 
             if (snsCategoryId > 0)
             {
-                return RedirectToAction(_soilNitrogenSupplyIndexAction);
+                return RedirectToAction(_soilNitrogenSupplyIndexAction, new { sessionId = sessionId });
             }
             else
             {
-                return RedirectToAction(_checkAnswerAction);
+                return RedirectToAction(_checkAnswerAction, new { sessionId = sessionId });
             }
 
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> RemoveSnsAnalysis(string? q, string? r, string? s, string? c)
+        public async Task<IActionResult> RemoveSnsAnalysis(string? q, string? r, string? s, string? c,Guid? sessionId)
         {
             _logger.LogTrace("SnsAnalysis Controller : RemoveSnsAnalysis() action called");
             SnsAnalysisViewModel model = new SnsAnalysisViewModel();
@@ -1871,14 +1879,14 @@ namespace NMP.Portal.Controllers
                     model.EncryptedCropId = c;
                     model.CropId = Convert.ToInt32(_cropDataProtector.Unprotect(c));
                 }
-                HttpContext.Session.SetObjectAsJson(_snsDataKey, model);
+                _snsAnalysisLogic.SetSnsToSession(model);
 
             }
             catch (Exception ex)
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in RemoveSnsAnalysis() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["NutrientRecommendationsError"] = ex.Message;
-                return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear });
+                return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, sessionId = sessionId });
             }
             return View(model);
 
@@ -1902,7 +1910,7 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsSnsRemove == false)
             {
-                return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear });
+                return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear,sessionId=model.SessionId });
             }
             else
             {
@@ -1912,7 +1920,7 @@ namespace NMP.Portal.Controllers
                     (string message, Error error) = await _snsAnalysisLogic.RemoveSnsAnalysisAsync(snsAnalysis.ID.Value);
                     if (string.IsNullOrWhiteSpace(error?.Message) && (!string.IsNullOrWhiteSpace(message)))
                     {
-                        return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(string.Format(Resource.MsgYourDataSuccessfullyRemoved, Resource.lblSoilNitrogenSupplyAnalysis)) });
+                        return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, t = _cropDataProtector.Protect(string.Format(Resource.MsgYourDataSuccessfullyRemoved, Resource.lblSoilNitrogenSupplyAnalysis)), sessionId = model.SessionId });
                     }
                     else
                     {
@@ -1925,16 +1933,16 @@ namespace NMP.Portal.Controllers
 
         }
         [HttpGet]
-        public IActionResult Cancel()
+        public IActionResult Cancel(Guid? sessionId)
         {
             _logger.LogTrace("SnsAnalysis Controller : Cancel() action called");
             try
             {
-                if (!HasSnsDataInSession())
+                if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
                 }
-                SnsAnalysisViewModel model = HttpContext.Session.GetObjectFromJson<SnsAnalysisViewModel>(_snsDataKey);
+                SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
                 return View(model);
             }
@@ -1942,7 +1950,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogTrace(ex, "SnsAnalysis Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["CheckAnswerError"] = ex.Message;
-                return RedirectToAction(_checkAnswerAction);
+                return RedirectToAction(_checkAnswerAction, new { sessionId = sessionId });
             }
         }
 
@@ -1962,17 +1970,18 @@ namespace NMP.Portal.Controllers
             }
             if (model.IsCancel.HasValue && !model.IsCancel.Value)
             {
-                return RedirectToAction(_checkAnswerAction);
+                return RedirectToAction(_checkAnswerAction, new { sessionId = model.SessionId });
             }
             else
             {
-                HttpContext.Session.Remove(_snsDataKey);
-                return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear });
+                _snsAnalysisLogic.RemoveSnsSession(model.SessionId);
+                return RedirectToAction(_recommendationsAction, "Crop", new { q = model.EncryptedFarmId, r = model.EncryptedFieldId, s = model.EncryptedHarvestYear, sessionId = model.SessionId });
             }
         }
-        private bool HasSnsDataInSession()
+        private bool HasSnsDataInSession(Guid? sessionId)
         {
-            return HttpContext.Session.Keys.Contains(_snsDataKey);
+           SnsAnalysisViewModel? model =_snsAnalysisLogic.GetSnsFromSession(sessionId);
+            return model != null;
         }
     }
 }

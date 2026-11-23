@@ -79,7 +79,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="FertiliserManure">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackCheckAnswer") asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -128,7 +128,7 @@
                                 @Model.CropGroupName
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="FertiliserManure">@Resource.lblChange
+                                <govuk-summary-list-row-action asp-action="FieldGroup" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblChange
                                    <span class="govuk-visually-hidden">
                                    @GetFertiliserText(Resource.lblWhichFieldsWouldYouLikeToAddInorganicFertiliserApplications,Resource.lblWhichFieldsWouldYouLikeToEditAnOrganic)
                                    </span>
@@ -146,7 +146,7 @@
                                 @Model.FieldName
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                 <govuk-summary-list-row-action class="govuk-visually-hidden"  asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure"  aria-hidden="false">@Resource.lblChange
+                                 <govuk-summary-list-row-action class="govuk-visually-hidden"  asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure"  aria-hidden="false" asp-route-sessionId="@Model.SessionId">@Resource.lblChange
                                 
                                     </govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
@@ -164,7 +164,7 @@
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
                                 
-                                <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">
+                                <govuk-summary-list-row-action class=@((ViewBag.Fields != null && ViewBag.Fields.Count > 1)?"":"govuk-visually-hidden") asp-action="@(string.IsNullOrWhiteSpace(Model.EncryptedFertId)?"FieldGroup":"Fields")" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId" aria-hidden="@((ViewBag.Fields != null && ViewBag.Fields.Count > 1) ? "false" : "true")">
                                        @Resource.lblChange                                        
                                     @if (ViewBag.Fields != null && ViewBag.Fields.Count > 1)
                                     {         
@@ -190,7 +190,7 @@
                                     @Resource.lblNotSet
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="FertiliserManure" asp-route-q="@Model.DoubleCropEncryptedCounter">@Resource.lblChange
+                                    <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="FertiliserManure" asp-route-q="@Model.DoubleCropEncryptedCounter" asp-route-sessionId="@Model.SessionId">@Resource.lblChange
                                         <span class="govuk-visually-hidden">
                                             @string.Format(Resource.lblWhichCropIsThisFertiliserApplication, Model.FieldName)
                                         </span>
@@ -210,7 +210,7 @@
                                         @((doubleCrop.CropID == 0) ? Resource.lblNotSet : string.Format("{0} {1} {2}{3}{4}", Resource.lblCrop, doubleCrop.CropOrder, "(", doubleCrop.CropName, ")"))
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="FertiliserManure" asp-route-q="@doubleCrop.EncryptedCounter">@Resource.lblChange
+                                        <govuk-summary-list-row-action asp-action="DoubleCrop" asp-controller="FertiliserManure" asp-route-q="@doubleCrop.EncryptedCounter" asp-route-sessionId="@Model.SessionId">@Resource.lblChange
                                             <span class="govuk-visually-hidden">
                                                 @string.Format(Resource.lblWhichCropIsThisFertiliserApplication, doubleCrop.FieldName)
                                             </span>
@@ -250,7 +250,7 @@
                                 @defoliationValue
                                 </govuk-summary-list-row-value>
                                 <govuk-summary-list-row-actions>
-                                    <govuk-summary-list-row-action asp-action="IsSameDefoliationForAll" asp-controller="FertiliserManure">@Resource.lblChange
+                                    <govuk-summary-list-row-action asp-action="IsSameDefoliationForAll" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblChange
                                         <span class="govuk-visually-hidden">
                                         @isSameDefoliationForAllHeading
                                         </span>
@@ -278,7 +278,7 @@
                                         <govuk-summary-list-row-action
                                             asp-action="Defoliation"
                                             asp-controller="FertiliserManure"
-                                            asp-route-q="@Model.DefoliationEncryptedCounter">
+                                            asp-route-q="@Model.DefoliationEncryptedCounter" asp-route-sessionId="@Model.SessionId">
                                             @Resource.lblChange
                             
                                             <span class="govuk-visually-hidden">
@@ -304,7 +304,7 @@
                                          @(defoliation.Defoliation.HasValue ? defoliation.DefoliationName : Resource.lblNotSet) 
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="FertiliserManure" asp-route-q="@defoliation.EncryptedCounter">@Resource.lblChange
+                                        <govuk-summary-list-row-action asp-action="Defoliation" asp-controller="FertiliserManure" asp-route-q="@defoliation.EncryptedCounter" asp-route-sessionId="@Model.SessionId">@Resource.lblChange
                                             <span class="govuk-visually-hidden">
                                                 @string.Format(Resource.lblWhichCutOrGrazingInThisInorganicApplicationForInField, defoliation.FieldName)
                                             </span>
@@ -322,7 +322,7 @@
                             @((Model.Date.HasValue) ? Model.Date.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB")) : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure">@Resource.lblChange
+                            <govuk-summary-list-row-action asp-action="InOrgnaicManureDuration" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblChange
                                 <span class="govuk-visually-hidden">
                                     @GetApplicationDateLabel()
                                 </span>
@@ -346,7 +346,7 @@
                             }
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure">@Resource.lblChange
+                            <govuk-summary-list-row-action asp-action="NutrientValues" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblChange
                                 <span class="govuk-visually-hidden">
                                    @GetFertiliserText(Resource.lblHowMuchOfEachNutrientDoYouPlan,Resource.lblHowMuchOfEachNutrientDoYouPlanforUpdate)
                                 </span>
@@ -362,7 +362,7 @@
                     <p class="govuk-body margin-bottom-forty">
                         @Resource.lblYouCanAlso
                         @*     <a asp-action="DeletePlanOrganicAndFertiliser" asp-controller="Crop" asp-route-q="@Model.EncryptedFertId" asp-route-r="@ViewBag.Fertliser">@Resource.lblRemoveThisApplication</a> *@
-                        <a asp-action="RemoveFertiliser" asp-controller="FertiliserManure">
+                        <a asp-action="RemoveFertiliser" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">
                             @if (ViewBag.SelectedFields != null && ViewBag.SelectedFields.Count == 1)
                             {
                                 @string.Format(Resource.lblRemoveThisApplicationFromField, Model.FieldName)
@@ -384,7 +384,7 @@
             <p class="govuk-body cancel-link">
             @if (string.IsNullOrWhiteSpace(Model.EncryptedFertId))
             {
-                <a asp-action="Cancel" asp-controller="FertiliserManure">@Resource.lblCancel</a>
+                <a asp-action="Cancel" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
 
                     
             }
@@ -392,11 +392,11 @@
             {
                  @if(ViewBag.IsDataChange != null && ViewBag.IsDataChange)
                  {
-                     <a asp-action="Cancel" asp-controller="FertiliserManure">@Resource.lblCancel</a>
+                     <a asp-action="Cancel" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                  }
                  else
                  {
-                     <a asp-action="BackCheckAnswer" asp-controller="FertiliserManure">@Resource.lblCancel</a>
+                     <a asp-action="BackCheckAnswer" asp-controller="FertiliserManure" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
                  }
             }
                

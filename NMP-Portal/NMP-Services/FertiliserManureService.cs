@@ -13,14 +13,11 @@ using System.Text;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class FertiliserManureService : Service, IFertiliserManureService
+public class FertiliserManureService(ILogger<FertiliserManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService): CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService),  IFertiliserManureService
 {
-    private readonly ILogger<FertiliserManureService> _logger;
+    private readonly ILogger<FertiliserManureService> _logger= logger;
     private const string _logError = "{Code} : {Message} : {Stack} : {Path}";
-    public FertiliserManureService(ILogger<FertiliserManureService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : base(httpContextAccessor, clientFactory, tokenRefreshService)
-    {
-        _logger = logger;
-    }
+   
     public async Task<(List<int>, Error)> FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAsync(int harvestYear, string fieldIds, string? cropGroupName, int? cropOrder)
     {
         string url = string.Format(ApiurlHelper.FetchManagementIdsByFieldIdAndHarvestYearAndCropGroupNameAPI,
@@ -310,5 +307,24 @@ public class FertiliserManureService : Service, IFertiliserManureService
         }
 
         return (default, error);
+    }
+    public async Task<FertiliserManureViewModel?> GetFertiliserManureFromSessionAsync(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<FertiliserManureViewModel>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
+
+    public async Task SetFertiliserManureToSessionAsync(FertiliserManureViewModel fertiliserManureViewModel, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, fertiliserManureViewModel);
+    }
+    public async Task RemoveFertiliserManureSessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
+
     }
 }

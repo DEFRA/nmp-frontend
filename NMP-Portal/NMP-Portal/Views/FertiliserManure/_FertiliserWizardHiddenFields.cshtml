@@ -43,7 +43,8 @@
     {
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsDeleteFertliser" />
     }
-
+    
+    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SessionId" value="@Model.SessionId"/>
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.HarvestYear" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear" />
     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmId" />

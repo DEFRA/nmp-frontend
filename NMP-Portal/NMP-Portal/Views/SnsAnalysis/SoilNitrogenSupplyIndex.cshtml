@@ -27,7 +27,7 @@
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.SnsAnalysisWizardSteps.SoilNitrogenSupplyIndex;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="@actionMethod" asp-controller="SnsAnalysis">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@actionMethod" asp-controller="SnsAnalysis" asp-route-sessionId=@Model.SessionId>@Resource.lblBack</govuk-back-link>
 }
 <form asp-action="SoilNitrogenSupplyIndex" asp-controller="SnsAnalysis" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
@@ -61,16 +61,7 @@
                 @Resource.lblContinue
             </govuk-button>
 
-            <p class="govuk-body cancel-link">
-                @if (!Model.IsCheckAnswer)
-                {
-                    <a class="govuk-link" asp-action="SnsAnalysisCancel" asp-controller="SnsAnalysis" asp-route-q="@Model.EncryptedFarmId" asp-route-r="@Model.EncryptedFieldId" asp-route-s="@Model.EncryptedHarvestYear">@Resource.lblCancel</a>
-                }
-                else
-                {
-                    <a class="govuk-link" asp-action="CheckAnswer" asp-controller="SnsAnalysis">@Resource.lblCancel</a>
-                }
-            </p>
+          <partial name="./_CancelLink.cshtml" model="@Model" />
         </div>
 
     </div>
