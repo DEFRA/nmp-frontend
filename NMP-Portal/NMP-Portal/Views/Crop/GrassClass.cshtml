@@ -62,11 +62,11 @@
                             <div class="text_group">
                                 @if (Model.Crops.Count > 1 && Model.GrassClassDistinctCount == 1)
                                 {
-                                    <p class="govuk-body">@Resource.lblBasedOnYourDataTheGrassGrowthClassForTheseField</p>
+                                <p class="govuk-body">@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblBasedOnYourDataTheSiteClassForTheseField : Resource.lblBasedOnYourDataTheGrassGrowthClassForTheseField)</p>
                                 }
                                 @if (Model.Crops.Count == 1 || Model.GrassClassDistinctCount > 1)
                                 {
-                                    <p class="govuk-body">@string.Format(Resource.lblBasedOnYourDataTheGrassGrowthClassForXField, Model.FieldName)</p>
+                                <p class="govuk-body">@(Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? string.Format(Resource.lblBasedOnYourDataTheSiteClassForXField, Model.FieldName) : string.Format(Resource.lblBasedOnYourDataTheGrassGrowthClassForXField, Model.FieldName))</p>
                                 }
                                 @if (ViewBag.GrassClass != null)
                                 {

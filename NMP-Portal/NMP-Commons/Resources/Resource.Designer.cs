@@ -2997,6 +2997,24 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Based on your data, the site class for these Field is:.
+        /// </summary>
+        public static string lblBasedOnYourDataTheSiteClassForTheseField {
+            get {
+                return ResourceManager.GetString("lblBasedOnYourDataTheSiteClassForTheseField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Based on your data, the site class for {0} is:.
+        /// </summary>
+        public static string lblBasedOnYourDataTheSiteClassForXField {
+            get {
+                return ResourceManager.GetString("lblBasedOnYourDataTheSiteClassForXField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ( {0} ).
         /// </summary>
         public static string lblBracketWithName {
