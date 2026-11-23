@@ -85,7 +85,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.HasGrassInLastThreeYear = false;
                         _previousCroppingLogic.SetPreviousCroppingToSession(model);
-                        return RedirectToAction(_cropGroupsActionName, new {sessionId=sessionId});
+                        return RedirectToAction(_cropGroupsActionName, new {sessionId=model.SessionId});
                     }
                     _previousCroppingLogic.SetPreviousCroppingToSession(model);
                 }
