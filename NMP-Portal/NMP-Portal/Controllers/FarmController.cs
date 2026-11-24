@@ -1793,6 +1793,9 @@ namespace NMP.Portal.Controllers
             string cacheKey = sessionId + " " + "StorageCapacityData";
             //StorageCapacityData
             _farmLogic.RemoveNmptSession(cacheKey);
+            cacheKey = sessionId + " " + "StorageCapacityDataBeforeUpdate";
+            //StorageCapacityDataBeforeUpdate
+            _farmLogic.RemoveNmptSession(cacheKey);
 
         }
         private void WarningListSessionRemoved()
