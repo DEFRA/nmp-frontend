@@ -41,7 +41,7 @@ public class RedisCacheService(IDistributedCache distributedCache, ILogger<Redis
             await _distributedCache.SetAsync(key, bytes, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = expiration,
-                SlidingExpiration= TimeSpan.FromMinutes(2)
+                SlidingExpiration = expiration
             }, token);
         }
         catch (Exception ex)

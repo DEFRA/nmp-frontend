@@ -42,7 +42,8 @@ namespace NMP.Services;
             {
                 _memoryCache.Set(key, value, new MemoryCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = expiration
+                    AbsoluteExpirationRelativeToNow = expiration,
+                    SlidingExpiration = expiration
                 });
             }
             catch (Exception ex)
