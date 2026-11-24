@@ -31,6 +31,8 @@
 {
     <form class="form-with-overlay" asp-action="CheckAnswer" asp-controller="StorageCapacity" method="post" autocomplete="off">
         @Html.AntiForgeryToken()
+              @await Html.PartialAsync("~/Views/StorageCapacity/_StorageCapacityWizardHiddenFields.cshtml", Model)
+
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds-from-desktop">
                 @if (!string.IsNullOrWhiteSpace(Model.EncryptedStoreCapacityId))
@@ -48,54 +50,6 @@
                         @Resource.lblCheckYourAnswers
                     </h1>
                 }
-
-
-                <div hidden="hidden">
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SessionId" value="@Model.SessionId" />
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmID"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportOption"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ReportTypeName"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.NVZReportOption"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FieldAndPlanReportOption"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateID"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeID"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageTypeName"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.MaterialStateName"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StoreName"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Length"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Width"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Depth"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCircumference"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Circumference"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Diameter"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCovered"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityWeight" value="@Model.CapacityWeight"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SolidManureDensity" value="@Model.SolidManureDensity"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.StorageBagCapacity"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleID"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.BankSlopeAngleName"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FreeBoardHeight" value="@Model.FreeBoardHeight"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.Slope" value="@Model.Slope"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsCheckAnswer" value="@Model.IsCheckAnswer"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromPlan"/>
-
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.CapacityVolume" value="@Model.CapacityVolume"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SurfaceArea" value="@Model.SurfaceArea"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStoreCapacityExist" value="@Model.IsStoreCapacityExist"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedMaterialStateID" value="@Model.EncryptedMaterialStateID"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromManageToHubPage"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsComingFromMaterialToHubPage"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsMaterialTypeChange" value="@Model.IsMaterialTypeChange"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsStorageTypeChange" value="@Model.IsStorageTypeChange"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedStoreCapacityId"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.IsRemovedRecently"/>
-                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.ID" value="@Model.ID"/>
-                </div>
-
-
                     <govuk-summary-list>
                         @if (string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
                         {

@@ -992,7 +992,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 TempData[_errorOnSelectField] = error.Message;
                 return RedirectToAction(_exportFieldsOrCropTypeAction, new { sessionId = model.SessionId });
             }
-            model.FarmRB209CountryID = model.Farm.RB209CountryID;
+            model.FarmRB209CountryID = model.Farm.RB209CountryID;            
             (List<HarvestYearPlanResponse> harvestYearPlanResponse, error) = await _cropLogic.FetchHarvestYearPlansByFarmId(model.Year.Value, model.FarmId.Value);
             if (harvestYearPlanResponse.Count > 0)
             {
@@ -1024,7 +1024,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
         {
             _logger.LogTrace(ex, "Report Controller : Exception in NMaxReport() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
             TempData[_errorOnSelectField] = ex.Message;
-            return RedirectToAction(_exportFieldsOrCropTypeAction, new { sessionId = model.SessionId });
+            return RedirectToAction(_exportFieldsOrCropTypeAction, new { sessionId = sessionId });
         }
         return View(model);
     }
@@ -5173,7 +5173,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             _logger.LogTrace(ex, "Report Controller : Exception in AverageNumber() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
 
             TempData["ErrorOnAverageNumber"] = ex.Message;
-            return RedirectToAction(_livestockNumberQuestion, new {sessionId = model.SessionId});
+            return RedirectToAction(_livestockNumberQuestion, new {sessionId});
 
         }
         return View(model);
@@ -5990,7 +5990,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 (_, error) = await _reportLogic.UpdateNutrientsLoadingLiveStockAsync(nutrientsLoadingLiveStock);
             }
-            //HttpContext.Session.SetObjectAsJson("StorageCapacityData", model);
             if (!string.IsNullOrWhiteSpace(error?.Message))
             {
                 TempData["ErrorOnLivestockCheckAnswer"] = error.Message;

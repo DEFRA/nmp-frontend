@@ -37,6 +37,7 @@ namespace NMP.Portal.Controllers
         private const string _tempDataErrorOnCheckAnswer = "ErrorOnCheckAnswer";
         private const string _manageStorageCapacity = "ManageStorageCapacity";
         private const string _removeStorageCapacity = "RemoveStorageCapacity";
+        private const string _farmList = "FarmList";
         private void BindNMPTFarmIdAndNameForNavigation(StorageCapacityViewModel? model)
         {
 
@@ -287,7 +288,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToAction("FarmList", new { sessionId = sessionId });
+                    return RedirectToAction(_farmList, new { sessionId = sessionId });
                 }
 
                 BindNMPTFarmIdAndNameForNavigation(model);
@@ -424,7 +425,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToAction("FarmList", new { sessionId = sessionId });
+                    return RedirectToAction(_farmList, new { sessionId = sessionId });
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
@@ -1988,13 +1989,13 @@ namespace NMP.Portal.Controllers
 
             if (!TryGetStorageSession(sessionId, out _))
             {
-                return RedirectToAction("FarmList", "Farm", new { sessionId });
+                return RedirectToAction(_farmList, "Farm", new { sessionId });
             }
 
             StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
             if (model == null || !model.FarmID.HasValue)
             {
-                return RedirectToAction("FarmList", "Farm", new { sessionId });
+                return RedirectToAction(_farmList, "Farm", new { sessionId });
             }
 
             try
@@ -2646,7 +2647,7 @@ namespace NMP.Portal.Controllers
 
         private IActionResult RedirectToFarmList(Guid? sessionId)
         {
-            return RedirectToAction("FarmList", "Farm", new { sessionId = sessionId });
+            return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
         }
     }
 }
