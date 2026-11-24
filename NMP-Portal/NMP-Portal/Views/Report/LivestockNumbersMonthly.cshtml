@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "LivestockNumberQuestion")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "LivestockNumberQuestion")" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockNumbersMonthly"] != null)
 {
@@ -46,7 +46,7 @@
                             <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, Model.PhosphateStandard)</p>
                         }
                     </div>
-                    <govuk-input asp-for=@Model.NumbersInJanuary type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInJanuary type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblJanuary, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -57,7 +57,7 @@
                                                  </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInFebruary type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInFebruary type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblFebruary, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -68,7 +68,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInMarch type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInMarch type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblMarch, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -79,7 +79,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInApril type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInApril type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblApril, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -90,7 +90,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInMay type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInMay type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblMay, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -101,7 +101,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInJune type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInJune type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblJune, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -112,7 +112,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInJuly type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInJuly type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblJuly, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -123,7 +123,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInAugust type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInAugust type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblAugust, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -134,7 +134,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInSeptember type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInSeptember type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblSeptember, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -145,7 +145,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInOctober type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInOctober type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblOctober, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -156,7 +156,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInNovember type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInNovember type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblNovember, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -167,7 +167,7 @@
                     </govuk-input-suffix>
 
                     </govuk-input>
-                    <govuk-input asp-for=@Model.NumbersInDecember type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NumbersInDecember type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblNumberInMonthSuffix, Resource.lblDecember, Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory)</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -185,29 +185,8 @@
 
 
 
-                <p class="govuk-body cancel-link">
-                    @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
-                    {
-                        @if (!Model.IsLivestockCheckAnswer)
-                        {
-                            <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="LivestockCheckAnswer" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                    }
-                    else
-                    {
-                        <a asp-action="ManageLivestock" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                </p>
+               
+                <partial name="_CancelLinkForLivestockManure" model="@Model" />
 
             </div>
 

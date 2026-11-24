@@ -23,6 +23,7 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
     private readonly IFertiliserManureLogic _fertiliserManureLogic = fertiliserManureLogic;
     private readonly IOrganicManureLogic _organicManureLogic = organicManureLogic;
     private readonly string _reportDataSessionKey = "ReportData";
+    private readonly string _livestockDataBeforeUpdate = "LivestockDataBeforeUpdate";
 
     public async Task<(NutrientsLoadingFarmDetail, Error)> AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetail nutrientsLoadingFarmDetailsData)
     {
@@ -781,6 +782,24 @@ public class ReportLogic(ILogger<ReportLogic> logger, IReportService reportServi
     public void RemoveReportDataFromSession(Guid? sessionId)
     {
         string cacheKey = sessionId + " " + _reportDataSessionKey;
+        _reportService.RemoveReportDataSessionAsync(cacheKey).GetAwaiter().GetResult();
+
+    }
+
+    public ReportViewModel? GetLivestockDataFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _livestockDataBeforeUpdate;
+        return _reportService.GetReportDataFromSessionAsync(cacheKey).GetAwaiter().GetResult();
+    }
+
+    public void SetLivestockDataToSession(ReportViewModel reportViewModel)
+    {
+        string cacheKey = reportViewModel.SessionId + " " + _livestockDataBeforeUpdate;
+        _reportService.SetReportDataToSessionAsync(reportViewModel, cacheKey).GetAwaiter().GetResult();
+    }
+    public void RemoveLivestockDataFromSession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + _livestockDataBeforeUpdate;
         _reportService.RemoveReportDataSessionAsync(cacheKey).GetAwaiter().GetResult();
 
     }

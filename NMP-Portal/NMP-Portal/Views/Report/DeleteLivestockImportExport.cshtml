@@ -21,7 +21,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-        <govuk-back-link asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-Id="@Model.EncryptedFarmId">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
 
     <form asp-action="DeleteLivestockImportExport" asp-controller="Report" method="post" autocomplete="off">
@@ -34,7 +34,7 @@
                         @title
                 </govuk-fieldset-legend>
                 <p class="govuk-body">@Resource.lblDeletLivestockImportExportContentOne</p>
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsDeleteLivestockImportExport">
+                <govuk-radios class="govuk-radios--inline" for="@Model.IsDeleteLivestockImportExport">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend>
                             @Resource.lblAreYouSureYouWantToContinue
@@ -47,7 +47,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
 
         </div>
     </div>

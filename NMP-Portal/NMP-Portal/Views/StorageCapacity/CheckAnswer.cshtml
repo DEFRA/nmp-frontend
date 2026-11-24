@@ -51,6 +51,7 @@
 
 
                 <div hidden="hidden">
+                    <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SessionId" value="@Model.SessionId" />
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"/>
                     <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>

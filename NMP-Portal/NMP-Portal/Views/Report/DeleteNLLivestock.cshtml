@@ -18,7 +18,7 @@
 @if (Model != null)
 {
     @section BeforeContent {
-        <govuk-back-link asp-action="LivestockCheckAnswer" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
 
     <form asp-action="DeleteNLLivestock" asp-controller="Report" method="post" autocomplete="off">
@@ -31,7 +31,7 @@
                         @title
                 </govuk-fieldset-legend>
                     <p class="govuk-body">@string.Format(Resource.lblRemoveNLLivetsockContent, Model.LivestockTypeName,Model.Year)</p>
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsDeleteNLLivestock">
+                <govuk-radios class="govuk-radios--inline" for="@Model.IsDeleteNLLivestock">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend>
                             @Resource.lblAreYouSureYouWantToContinue
@@ -44,7 +44,7 @@
             <govuk-button type="submit" class="margin-bottom-forty">
                 @Resource.lblContinue
             </govuk-button>
-                <p class="govuk-body cancel-link"><a asp-action="LivestockCheckAnswer" asp-controller="Report">@Resource.lblCancel</a></p>
+                <p class="govuk-body cancel-link"><a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a></p>
 
         </div>
     </div>

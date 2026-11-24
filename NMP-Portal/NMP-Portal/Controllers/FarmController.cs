@@ -1770,30 +1770,29 @@ namespace NMP.Portal.Controllers
             OrganicManureSessionRemoved(sessionId);
 
             //PreviousCroppingData session
-            PreviousCroppingDataSessionRemoved();
+            PreviousCroppingDataSessionRemoved(sessionId);
 
             //ReportData session
-            ReportDataSessionRemoved();
+            ReportDataSessionRemoved(sessionId);
 
             //SnsData session
-            SnsDataSessionRemoved();
+            SnsDataSessionRemoved(sessionId);
 
             //SoilAnalysisData session
             SoilAnalysisDataSessionRemoved(sessionId);
 
             //StorageCapacityData session
-            StorageCapacityDataSessionRemoved();
+            StorageCapacityDataSessionRemoved(sessionId);
 
             //WarningList session
             WarningListSessionRemoved();
         }
 
-        private void StorageCapacityDataSessionRemoved()
+        private void StorageCapacityDataSessionRemoved(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists("StorageCapacityData"))
-            {
-                HttpContext.Session.Remove("StorageCapacityData");
-            }
+            string cacheKey = sessionId + " " + "StorageCapacityData";
+            //StorageCapacityData
+            _farmLogic.RemoveNmptSession(cacheKey);
 
         }
         private void WarningListSessionRemoved()
@@ -1816,37 +1815,46 @@ namespace NMP.Portal.Controllers
 
         }
 
-        private void SnsDataSessionRemoved()
+        private void SnsDataSessionRemoved(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists("SnsData"))
+            if (!sessionId.HasValue)
             {
-                HttpContext.Session.Remove("SnsData");
+                return;
             }
+            string cacheKey = sessionId + " " + "SnsData";
+            //SnsData
+            _farmLogic.RemoveNmptSession(cacheKey);
         }
 
-        private void ReportDataSessionRemoved()
+        private void ReportDataSessionRemoved(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists("ReportData"))
+            if (!sessionId.HasValue)
             {
-                HttpContext.Session.Remove("ReportData");
+                return;
             }
+            string cacheKey = sessionId + " " + "ReportData";
+            //ReportData
+            _farmLogic.RemoveNmptSession(cacheKey);
 
-            if (HttpContext.Session.Exists("LivestockDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove("LivestockDataBeforeUpdate");
-            }
-            if (HttpContext.Session.Exists("LivestockImportExportDataBeforeUpdate"))
-            {
-                HttpContext.Session.Remove("LivestockImportExportDataBeforeUpdate");
-            }
+            cacheKey = sessionId + " " + "LivestockDataBeforeUpdate";
+            //LivestockDataBeforeUpdate
+            _farmLogic.RemoveNmptSession(cacheKey);
+
+            cacheKey = sessionId + " " + "LivestockImportExportDataBeforeUpdate";
+            //LivestockImportExportDataBeforeUpdate
+            _farmLogic.RemoveNmptSession(cacheKey);
+
         }
 
-        private void PreviousCroppingDataSessionRemoved()
+        private void PreviousCroppingDataSessionRemoved(Guid? sessionId)
         {
-            if (HttpContext.Session.Exists("PreviousCroppingData"))
+            if (!sessionId.HasValue)
             {
-                HttpContext.Session.Remove("PreviousCroppingData");
+                return;
             }
+            string cacheKey = sessionId + " " + "PreviousCroppingData";
+            //PreviousCroppingData
+            _farmLogic.RemoveNmptSession(cacheKey);
         }
 
         private void OrganicManureSessionRemoved(Guid? sessionId)

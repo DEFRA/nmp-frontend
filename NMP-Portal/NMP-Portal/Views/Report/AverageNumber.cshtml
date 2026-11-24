@@ -9,7 +9,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "LivestockNumberQuestion")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "LivestockNumberQuestion")" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnAverageNumber"] != null)
 {
@@ -39,7 +39,7 @@
                     {
                         <p class="govuk-body">@string.Format(Resource.lblPhosphateStandard, Model.PhosphateStandard)</p>
                     }
-                    <govuk-input asp-for=@Model.AverageNumber type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.AverageNumber type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblWhatIsTheAverageTotalNumberOfThisSuffix, ViewBag.LivestockCategory?.ToLower(), Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ViewBag.LivestockCategory?.ToLower())</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -55,32 +55,11 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                <p class="govuk-body cancel-link">
-                    @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
-                    {
-                        @if (!Model.IsLivestockCheckAnswer)
-                        {
-                            <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="LivestockCheckAnswer" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                    }
-                    else
-                    {
-                        <a asp-action="ManageLivestock" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                </p>
+               
 
             </div>
 
         </div>
+        <partial name="_CancelLinkForLivestockManure" model="@Model" />
     </form>
 }

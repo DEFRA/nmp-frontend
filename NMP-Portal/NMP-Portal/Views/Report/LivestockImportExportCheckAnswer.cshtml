@@ -40,7 +40,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackLivestockImportExportCheckAnswer") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(ViewBag.IsDataChange ? "Cancel" : "BackLivestockImportExportCheckAnswer") asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnCheckYourAnswers"] != null)
 {
@@ -108,7 +108,7 @@
                                         @IsAnyLivestockImportExport
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="IsAnyLivestockImport" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="IsAnyLivestockImport" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblDidYouHaveAnyImportsOfLivestockManureToFarmNameInYear : Resource.lblDidYouHaveAnyImportsAndExports), Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -122,7 +122,7 @@
                                         @IsAnyLivestockExport
                                     </govuk-summary-list-row-value>
                                     <govuk-summary-list-row-actions>
-                                        <govuk-summary-list-row-action asp-action="IsAnyLivestockExport" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDidYouHaveAnyExportsOfLivestockManure, Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
+                                        <govuk-summary-list-row-action asp-action="IsAnyLivestockExport" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDidYouHaveAnyExportsOfLivestockManure, Model.FarmName, Model.Year)</span></govuk-summary-list-row-action>
                                     </govuk-summary-list-row-actions>
                                 </govuk-summary-list-row>
                             }
@@ -138,7 +138,7 @@
                                 @importExport
                             </govuk-summary-list-row-value>
                             <govuk-summary-list-row-actions>
-                                <govuk-summary-list-row-action asp-action="ImportExportOption" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure</span></govuk-summary-list-row-action>
+                                <govuk-summary-list-row-action asp-action="ImportExportOption" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@Resource.lblDoYouWantToAddAnImportOrAnExportOfLivestockManure</span></govuk-summary-list-row-action>
                             </govuk-summary-list-row-actions>
                         </govuk-summary-list-row>
                     }
@@ -153,7 +153,7 @@
                             @Model.ManureTypeName
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="ManureType" asp-controller="Report">
+                            <govuk-summary-list-row-action asp-action="ManureType" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                                 @Resource.lblChange<span class="govuk-visually-hidden">
                                 @string.Format(Resource.lblWhatTypeOfLivestockManureAreYouImportingOrExporting,
                                                                     Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImporting :
@@ -172,7 +172,7 @@
                             @((Model.OtherMaterialName != null) ? Model.OtherMaterialName : Resource.lblNotSet)
                         </govuk-summary-list-row-value>
                         <govuk-summary-list-row-actions>
-                            <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</span></govuk-summary-list-row-action>
+                            <govuk-summary-list-row-action asp-action="OtherMaterialName" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblWhatIsTheNameOfTheMaterial, (Model.ManureTypeId == (int)NMP.Commons.Enums.ManureTypes.OtherSolidMaterials) ? Resource.lblSolid : Resource.lblLiquid)</span></govuk-summary-list-row-action>
                         </govuk-summary-list-row-actions>
                     </govuk-summary-list-row>
                 }
@@ -185,7 +185,7 @@
                         @((!Model.LivestockImportExportDate.HasValue) ? Resource.lblNotEntered : (Model.LivestockImportExportDate.Value.ToLocalTime().Date.ToString("dd MMMM yyyy", CultureInfo.GetCultureInfo("en-GB"))))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="LivestockImportExportDate" asp-controller="Report">
+                        <govuk-summary-list-row-action asp-action="LivestockImportExportDate" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                             @Resource.lblChange
                             <span class="govuk-visually-hidden">
                                 @(string.Format((Model.FarmRB209CountryID == (int)NMP.Commons.Enums.RB209Country.Scotland ? Resource.lblWhenDidYouThisLivestockManureOptional : Resource.lblWhenDidYouThisLivestockManure), Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
@@ -203,7 +203,7 @@
                         @((!Model.LivestockQuantity.HasValue) ? Resource.lblNotSet : string.Format("{0:N0} {1}", Model.LivestockQuantity.Value, unit))
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report">
+                        <govuk-summary-list-row-action asp-action="LivestockQuantity" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                             @Resource.lblChange<span class="govuk-visually-hidden">
                             @(string.Format("{0}{1}", string.Format(Resource.lblHowMuchDidYouImport, Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                                 Resource.lblImport.ToLower() : Resource.lblExport.ToLower()), Resource.lblQuestionMark))
@@ -239,7 +239,7 @@
                         @defaultNutrientText
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report">
+                        <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                             @Resource.lblChange<span class="govuk-visually-hidden">
                             @(Model.DefaultNutrientValue == Resource.lblYesUseTheseValues ? string.Format(Resource.lblDefaultNutrientValueContentSecond, Model.ManureTypeName) :
                                                                 string.Format(Resource.lblUseTheTypicalNutrientValuesForManureTypeName, Model.ManureTypeName))
@@ -261,7 +261,7 @@
                         @(!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) ? Resource.lblYesUseTheseValues : Resource.lblNotSet)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="LivestockDefaultNutrientValue" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblDoYouWantToUseExistingNutrientValuesFor, Model.OtherMaterialName)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
                 <govuk-summary-list-row>
@@ -304,7 +304,7 @@
                         @await Html.PartialAsync("_nutrientListForDefaultValues", Model)
                     </govuk-summary-list-row-value>
                     <govuk-summary-list-row-actions>
-                        <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)</span></govuk-summary-list-row-action>
+                        <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblNutrientValuesForMixedManure, Model.OtherMaterialName)</span></govuk-summary-list-row-action>
                     </govuk-summary-list-row-actions>
                 </govuk-summary-list-row>
             }
@@ -350,7 +350,7 @@
                     @if (!string.IsNullOrWhiteSpace(Model.DefaultNutrientValue) &&
                                                 (Model.DefaultNutrientValue == Resource.lblIwantToEnterARecentOrganicMaterialAnalysis))
                     {
-                        <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report">
+                        <govuk-summary-list-row-action asp-action="LivestockManualNutrientValue" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                             @Resource.lblChange<span class="govuk-visually-hidden">@string.Format(Resource.lblNutrientValuesForMixedManure, Model.ManureTypeName)</span>
                         </govuk-summary-list-row-action>
                     }
@@ -374,7 +374,7 @@
 
             </govuk-summary-list-row-value>
             <govuk-summary-list-row-actions>
-                <govuk-summary-list-row-action asp-action="LivestockReceiver" asp-controller="Report">
+                <govuk-summary-list-row-action asp-action="LivestockReceiver" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                     @Resource.lblChange<span class="govuk-visually-hidden">
                     @(Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
                                                         Resource.lblWhoAreYouImportingThisLivestockManureFrom :
@@ -393,7 +393,7 @@
             @(string.IsNullOrWhiteSpace(Model.Comment) ? Resource.lblNotEntered : Model.Comment)
         </govuk-summary-list-row-value>
         <govuk-summary-list-row-actions>
-            <govuk-summary-list-row-action asp-action="LivestockComment" asp-controller="Report">
+            <govuk-summary-list-row-action asp-action="LivestockComment" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblChange<span class="govuk-visually-hidden">
                 @string.Format(Resource.lblLivestockCommentContent1,
                                                     Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?
@@ -436,7 +436,7 @@
 {
     <p class="govuk-body margin-bottom-forty">
         @Resource.lblYouCanAlso
-        <a asp-action="DeleteLivestockImportExport" asp-controller="Report">
+        <a asp-action="DeleteLivestockImportExport" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
             @string.Format(Resource.lblRemoveThis,
             Model.ImportExport == (int)NMP.Commons.Enums.ImportExport.Import ? Resource.lblImport.ToLower() : Resource.lblExport.ToLower())
 
@@ -475,17 +475,17 @@
 
     @if (string.IsNullOrWhiteSpace(Model.EncryptedId))
     {
-        <a asp-action="Cancel" asp-controller="Report">@Resource.lblCancel</a>
+        <a asp-action="Cancel" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
     }
     else
     {
         if (ViewBag.IsDataChange != null && ViewBag.IsDataChange)
         {
-            <a asp-action="Cancel" asp-controller="Report">@Resource.lblCancel</a>
+            <a asp-action="Cancel" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
         }
         else
         {
-            <a asp-action="BackLivestockImportExportCheckAnswer" asp-controller="Report">@Resource.lblCancel</a>
+            <a asp-action="BackLivestockImportExportCheckAnswer" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
         }
     }
 </p>

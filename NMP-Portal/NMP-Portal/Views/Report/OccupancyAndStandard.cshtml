@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "NonGrazingLivestockAverageNumber")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "NonGrazingLivestockAverageNumber")" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnOccupancyAndStandard"] != null)
 {
@@ -95,7 +95,7 @@
 
                     </tbody>
                 </table>
-                <govuk-radios asp-for="@Model.OccupancyAndNitrogenOptions">
+                <govuk-radios for="@Model.OccupancyAndNitrogenOptions">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false">
                             @string.Format(Resource.lblDoYouWantToUseTheseValuesForThis, Model.LivestockGroupName.ToLower())
@@ -116,29 +116,8 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                <p class="govuk-body cancel-link">
-                    @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
-                    {
-                        @if (!Model.IsLivestockCheckAnswer)
-                        {
-                            <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="LivestockCheckAnswer" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                    }
-                    else
-                    {
-                        <a asp-action="ManageLivestock" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                </p>
+                
+                <partial name="_CancelLinkForLivestockManure" model="@Model" />
 
             </div>
 
