@@ -92,6 +92,7 @@ namespace NMP.Portal.Controllers
 
             ViewBag.NMPTFarmId = model?.EncryptedFarmId;
             ViewBag.NMPTFarmName = model?.FarmName;
+            ViewBag.SessionId = model?.SessionId;
 
         }
 

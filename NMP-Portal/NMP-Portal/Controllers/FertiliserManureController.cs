@@ -60,6 +60,7 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
         
         ViewBag.NMPTFarmId = model?.EncryptedFarmId;
         ViewBag.NMPTFarmName = model?.FarmName;
+        ViewBag.SessionId = model?.SessionId;
 
     }
 
@@ -2375,7 +2376,9 @@ public class FertiliserManureController(ILogger<FertiliserManureController> logg
                 decimal nitrogenWithinWarningPeriod = 0;
                 //if we are coming for update then we will exclude the fertiliserId.
                 (error, nitrogenWithinWarningPeriod) = await _fertiliserManureLogic.BindNitrogenWithInWarningPeriod(model, managementId, fieldId, error, start, end, nitrogenWithinWarningPeriod);
+               
                 (model, warningResponse, isNitrogenRateExceeded) = await _fertiliserManureLogic.WarningForGrass(model, warningResponse, startPeriod, isNitrogenRateExceeded, nitrogenWithinWarningPeriod);
+                
             }
 
 

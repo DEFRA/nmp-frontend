@@ -88,6 +88,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
     private const string _previousGrassManagement = "PreviousGrassManagement";
     private const string _isPermanentSward = "IsPermanentSward";
     private const string _dryMatterYieldActionName = "DryMatterYield";
+    private const string _previousCroppingSessionKey = "PreviousCroppingData";
 
     private void BindNMPTFarmIdAndNameForNavigation(PlanViewModel? model)
     {
@@ -4037,7 +4038,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         _farmLogic.RemoveNmptSession(cacheKey);
     }
+    private void RemovePreviousCroppingFromSession(Guid? sessionId)
+    {
+        if (!sessionId.HasValue)
+        {
+            return;
+        }
 
+        string cacheKey = sessionId + " " + _previousCroppingSessionKey;
+        _farmLogic.RemoveNmptSession(cacheKey);
+
+    }
     private void RemoveOrganicDataFromSession(Guid? sessionId)
     {
         if (!sessionId.HasValue)
@@ -4061,7 +4072,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return;
         }
         RemoveFertiliserDataBeforeUpdateFromSession(sessionId);
-        RemoveOrganicDataFromSession(sessionId);
+        RemoveOrganicDataFromSession(sessionId);        
         string cacheKey = sessionId + " " + _fertiliserManureKey;
         _farmLogic.RemoveNmptSession(cacheKey);
     }
@@ -4161,6 +4172,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         RemoveInoganicAndOrganicSession(sessionId);
         _cropLogic.RemoveCropSession(sessionId);
+        RemovePreviousCroppingFromSession(sessionId);
         _cropLogic.RemoveCropDataBeforeUpdateFromSession(sessionId);
         _cropLogic.RemoveExcessWinterRainfallFromSession(sessionId);
         RemoveReportDataFromSession(sessionId);
@@ -4205,6 +4217,17 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return await Task.FromResult(View(model));
         }
         return View(model);
+    }
+    private  void RemoveFieldJourneySession(Guid? sessionId)
+    {
+        string cacheKey = sessionId + " " + "FieldDataBeforeUpdate";
+        _farmLogic.RemoveNmptSession(cacheKey);
+
+        cacheKey = sessionId + " " + "FieldRemove";
+        _farmLogic.RemoveNmptSession(cacheKey);
+
+        cacheKey = sessionId + " " + "FieldData";
+        _farmLogic.RemoveNmptSession(cacheKey);
     }
     private PlanViewModel FetchHarvestYearList(PlanViewModel model, List<PlanSummaryResponse> planSummaryResponse, int? topPrevCroppingYear, int currentHarvestYear, List<int> yearList, bool isComingFromPlanAndOverview)
     {
@@ -4412,11 +4435,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         RemoveFertiliserManureFromSession(sessionId);
         _cropLogic.RemoveCropSession(sessionId);
         _cropLogic.RemoveCropDataBeforeUpdateFromSession(sessionId);
-        
-        if (HttpContext.Session.Exists("PreviousCroppingData"))
-        {
-            HttpContext.Session.Remove("PreviousCroppingData");
-        }
+        RemovePreviousCroppingFromSession(sessionId);       
     }
     private async Task<(bool flowControl, IActionResult? value, RecommendationViewModel, string)> BindAllRecommendationData(string q, string? s, RecommendationViewModel model, Error? error, List<RecommendationHeader> recommendations, string firstCropName)
     {
