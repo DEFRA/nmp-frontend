@@ -10207,54 +10207,56 @@ managementPeriod.CropID.HasValue
             if (string.IsNullOrWhiteSpace(closedPeriod))
                 return (null, null);
 
-            string pattern = @"(\d{1,2})\s(\w+)\s*to\s*(\d{1,2})\s(\w+)";
-            Regex regex = new Regex(pattern, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
+            var regex = new Regex(@"(\d{1,2})\s+(\w+)\s*to\s*(\d{1,2})\s+(\w+)",
+                                  RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
             Match match = regex.Match(closedPeriod);
             if (!match.Success)
                 return (null, null);
 
             int startDay = int.Parse(match.Groups[1].Value);
-            string startMonthStr = match.Groups[2].Value;
-
             int endDay = int.Parse(match.Groups[3].Value);
-            string endMonthStr = match.Groups[4].Value;
 
-            Dictionary<int, string> dtfi = new Dictionary<int, string>()
-            {
-                {0, Resource.lblJanuary},
-                {1, Resource.lblFebruary},
-                {2, Resource.lblMarch},
-                {3, Resource.lblApril},
-                {4, Resource.lblMay},
-                {5, Resource.lblJune},
-                {6, Resource.lblJuly},
-                {7, Resource.lblAugust},
-                {8, Resource.lblSeptember},
-                {9, Resource.lblOctober},
-                {10, Resource.lblNovember},
-                {11, Resource.lblDecember}
-            };
+            int? startMonth = GetMonthNumber(match.Groups[2].Value);
+            int? endMonth = GetMonthNumber(match.Groups[4].Value);
+            if (startMonth is null || endMonth is null)
+                return (null, null);
 
-            int startMonth = dtfi.FirstOrDefault(v => v.Value == startMonthStr).Key + 1;
-            int endMonth = dtfi.FirstOrDefault(v => v.Value == endMonthStr).Key + 1;
+            int startYear = GetCalendarYear(startMonth.Value, harvestYear);
+            int endYear = GetCalendarYear(endMonth.Value, harvestYear);
 
+            // Guard against invalid days (e.g. 29 Feb in a non-leap year, 31 Apr)
+            if (startDay < 1 || startDay > DateTime.DaysInMonth(startYear, startMonth.Value) ||
+                endDay < 1 || endDay > DateTime.DaysInMonth(endYear, endMonth.Value))
+                return (null, null);
 
-            DateTime startDate;
-            DateTime endDate;
+            var startDate = new DateTime(startYear, startMonth.Value, startDay, 0, 0, 0, DateTimeKind.Utc);
+            var endDate = new DateTime(endYear, endMonth.Value, endDay, 0, 0, 0, DateTimeKind.Utc);
 
-            if (startMonth <= endMonth)
-            {
-                startDate = new DateTime(harvestYear - 1, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
-                endDate = new DateTime(harvestYear - 1, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
-            }
-            else
-            {
-                startDate = new DateTime(harvestYear - 1, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
-                endDate = new DateTime(harvestYear, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
-            }
+            if (startDate > endDate)
+                return (null, null); // e.g. "10 Mar to 5 Feb": invalid inside one harvest year
 
             return (startDate, endDate);
+        }
+
+        // Aug–Dec → previous calendar year, Jan–Jul → harvest year
+        private static int GetCalendarYear(int month, int harvestYear)
+            => month >= 8 ? harvestYear - 1 : harvestYear;
+
+        private static int? GetMonthNumber(string monthName)
+        {
+            string[] months =
+            {
+               Resource.lblJanuary, Resource.lblFebruary, Resource.lblMarch,
+               Resource.lblApril,   Resource.lblMay,      Resource.lblJune,
+               Resource.lblJuly,    Resource.lblAugust,   Resource.lblSeptember,
+               Resource.lblOctober, Resource.lblNovember, Resource.lblDecember
+            };
+
+            int index = Array.FindIndex(months,
+                m => string.Equals(m, monthName.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            return index >= 0 ? index + 1 : null;
         }
         private async Task<(List<SelectListItem>, Error?)> FetchManureGroup()
         {
