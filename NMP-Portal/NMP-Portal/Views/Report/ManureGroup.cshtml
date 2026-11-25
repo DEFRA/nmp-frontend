@@ -59,44 +59,8 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                <p class="govuk-body cancel-link">
-                    @if (Model.IsCheckAnswer)
-                    {
-                        <a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                    else
-                    {
-                        if (Model.IsManageImportExport)
-                        {
-                            <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
-                        {
-                            if (!Model.IsCheckList)
-                            {
-                                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">
-                                    @Resource.lblCancel
-                                </a>
-                            }
-                            else
-                            {
-                                <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
-                                    @Resource.lblCancel
-                                </a>
-                            }
-                        }
-                        else
-                        {
-                            <a asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                    }
-                </p>
+          
+                <partial name="_CancelLinkForImportExport" model="@Model" />
             </div>
         </div>
     </form>

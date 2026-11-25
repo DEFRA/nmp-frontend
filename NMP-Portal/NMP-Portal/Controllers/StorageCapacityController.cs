@@ -52,7 +52,10 @@ namespace NMP.Portal.Controllers
 
             var model = new StorageCapacityViewModel();
             ClearStorageSessions(sessionId);
-
+            if (sessionId != null)
+            {
+                model.SessionId = sessionId??model.SessionId;
+            }
             if (string.IsNullOrWhiteSpace(q))
                 return View(model);
             if (!string.IsNullOrWhiteSpace(y))
@@ -1574,11 +1577,145 @@ namespace NMP.Portal.Controllers
             }
             else
             {
+                ClearStorageSessions(sessionId);
                 return RedirectToAction(_manageStorageCapacity, new
                 {
                     q = model.EncryptedFarmID,
                     sessionId = sessionId,
                 });
+            }
+
+        }
+        public IActionResult BackStoreCapacityForStoreName(Guid? sessionId)
+        {
+            _logger.LogTrace($"StorageCapacity Controller : BackStoreCapacityForStoreName() action called");
+         
+            StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
+            if (model == null)
+            {
+                return RedirectToFarmList(sessionId);
+            }
+
+            if (model.IsCheckAnswer && !model.IsMaterialTypeChange)
+            {
+                return RedirectToAction(_checkAnswer, new
+                {
+                    q = model.EncryptedFarmID,
+                    t = model.IsComingFromManageToHubPage,
+                    isPlan = model.IsComingFromPlan,
+                    u = model.IsRemovedRecently,
+                    sessionId = sessionId
+                });
+            }
+            else if (!string.IsNullOrWhiteSpace(model.EncryptedMaterialStateID))
+            {
+                var tabId = "";
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
+                {
+                    tabId = "slurryStorageList";
+                }
+                else if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
+                {
+                    tabId = "dirtyWaterList";
+                }
+                else if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                {
+                    tabId = "solidManureStorageList";
+                }
+                ClearStorageSessions(sessionId);
+                return RedirectToAction(_manageStorageCapacity, _storageCapacityActionName, routeValues: new
+                {
+                    q = model.EncryptedFarmID,
+                    t = model.IsComingFromManageToHubPage,
+                    isPlan = model.IsComingFromPlan,
+                    u = model.IsRemovedRecently,
+                    sessionId = sessionId
+                }, fragment: tabId);
+            }
+            else
+            {
+                return RedirectToAction("MaterialStates", new
+                {
+                    q = model.EncryptedFarmID,
+                    t = model.IsComingFromManageToHubPage,
+                    isPlan = model.IsComingFromPlan,
+                    u = model.IsRemovedRecently,
+                    sessionId = sessionId
+                });
+
+            }
+
+        }
+        public IActionResult BackStoreCapacityForMaterialState(Guid? sessionId)
+        {
+            _logger.LogTrace($"StorageCapacity Controller : BackStoreCapacityForMaterialState() action called");
+            StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
+            if (model == null)
+            {
+                return RedirectToFarmList(sessionId);
+            }
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction(_checkAnswer, new
+                {
+                    q = model.EncryptedFarmID,
+                    t = model.IsComingFromManageToHubPage,
+                    isPlan = model.IsComingFromPlan,
+                    u = model.IsRemovedRecently,
+                    sessionId = sessionId
+                });
+            }
+            else
+            {
+                if (model.IsCopyExistingManureStorage.HasValue && (!model.IsCopyExistingManureStorage.Value))
+                {
+                    return RedirectToAction("CopyExistingManureStorage", new
+                    {
+                        q = model.EncryptedFarmID,
+                        t = model.IsComingFromManageToHubPage,
+                        isPlan = model.IsComingFromPlan,
+                        u = model.IsRemovedRecently,
+                        sessionId = sessionId
+                    });
+                }
+                else if (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))
+                {
+                    return RedirectToAction("StorageCapacityManagement", new
+                    {
+                        q = model.EncryptedFarmID,
+                        t = model.IsComingFromManageToHubPage,
+                        isPlan = model.IsComingFromPlan,
+                        u = model.IsRemovedRecently,
+                        sessionId = sessionId
+                    });
+                }
+                else
+                {
+                    if (model.IsStoreCapacityExist || !string.IsNullOrWhiteSpace(model.IsRemovedRecently))
+                    {
+                        ClearStorageSessions(sessionId);
+                        return RedirectToAction(_manageStorageCapacity, _storageCapacityActionName, routeValues: new
+                        {
+                            q = model.EncryptedFarmID,
+                            t = model.IsComingFromManageToHubPage,
+                            isPlan = model.IsComingFromPlan,
+                            u = model.IsRemovedRecently,
+                            sessionId = sessionId
+                        });
+                    }
+                    else
+                    {
+                        return RedirectToAction("OrganicMaterialStorageNotAvailable", new
+                        {
+                            q = model.EncryptedFarmID,
+                            t = model.IsComingFromManageToHubPage,
+                            isPlan = model.IsComingFromPlan,
+                            u = model.IsRemovedRecently,
+                            sessionId = sessionId
+                        });
+
+                    }
+                }
             }
 
         }
@@ -1711,6 +1848,7 @@ namespace NMP.Portal.Controllers
                 try
                 {
                     _storageCapacityLogic.RemoveStorageCapacitySession(sessionId);
+                    _storageCapacityLogic.RemoveStorageCapacityBeforeUpdateSession(sessionId);
 
                     if (!string.IsNullOrWhiteSpace(r))
                     {
@@ -2436,28 +2574,10 @@ namespace NMP.Portal.Controllers
 
         private async Task<StorageCapacityViewModel> PopulateFarmAndStoreCapacityAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? manageToHub, string? removedRecently)
         {
-            if (string.IsNullOrWhiteSpace(encryptedFarmId))
-                return model;
-
-            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(encryptedFarmId));
-            var (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-
-            if (!string.IsNullOrWhiteSpace(error?.Message) || farm == null)
-                return model;
-
-            if (model == null)
-            {
-                model = new StorageCapacityViewModel();
-            }
-            model.FarmName = farm.Name;
-            model.FarmID = farmId;
-            model.EncryptedFarmID = encryptedFarmId;
-            model.IsComingFromPlan = isPlan;
+            await PopulateFarmDetailsAsync(model, encryptedFarmId, isPlan, removedRecently);
             model.IsComingFromManageToHubPage = manageToHub;
-            model.IsRemovedRecently = removedRecently;
-
             var (storeCapacityList, storeError) =
-                await _storageCapacityLogic.FetchStoreCapacityByFarmId(farmId);
+                await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID ?? 0);
 
             if (string.IsNullOrWhiteSpace(storeError?.Message) && storeCapacityList.Any())
             {
