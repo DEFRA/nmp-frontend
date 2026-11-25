@@ -4053,6 +4053,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         string cacheKey = sessionId + " " + _previousCroppingSessionKey;
         _farmLogic.RemoveNmptSession(cacheKey);
+        cacheKey = sessionId + " " + "SnsData";
+        _farmLogic.RemoveNmptSession(cacheKey);
 
     }
     private void RemoveOrganicDataFromSession(Guid? sessionId)
@@ -4441,7 +4443,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         RemoveFertiliserManureFromSession(sessionId);
         _cropLogic.RemoveCropSession(sessionId);
         _cropLogic.RemoveCropDataBeforeUpdateFromSession(sessionId);
-        RemovePreviousCroppingFromSession(sessionId);
+        RemovePreviousCroppingFromSession(sessionId);        
     }
     private async Task<(bool flowControl, IActionResult? value, RecommendationViewModel, string)> BindAllRecommendationData(string q, string? s, RecommendationViewModel model, Error? error, List<RecommendationHeader> recommendations, string firstCropName)
     {
@@ -4452,7 +4454,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         foreach (var recommendation in recommendations)
         {
             var crop = recommendation.Crops;
-            CropViewModel matchingCrop = model.Crops?.FirstOrDefault(c => c.ID == crop.ID);
+            CropViewModel? matchingCrop = model.Crops?.FirstOrDefault(c => c.ID == crop.ID);
             cropCounter++;
             if (crop?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && matchingCrop != null)
             {
