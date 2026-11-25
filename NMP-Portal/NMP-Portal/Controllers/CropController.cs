@@ -4078,7 +4078,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return;
         }
         RemoveFertiliserDataBeforeUpdateFromSession(sessionId);
-        RemoveOrganicDataFromSession(sessionId);        
+        RemoveOrganicDataFromSession(sessionId);
         string cacheKey = sessionId + " " + _fertiliserManureKey;
         _farmLogic.RemoveNmptSession(cacheKey);
     }
@@ -4441,7 +4441,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         RemoveFertiliserManureFromSession(sessionId);
         _cropLogic.RemoveCropSession(sessionId);
         _cropLogic.RemoveCropDataBeforeUpdateFromSession(sessionId);
-        RemovePreviousCroppingFromSession(sessionId);       
+        RemovePreviousCroppingFromSession(sessionId);
     }
     private async Task<(bool flowControl, IActionResult? value, RecommendationViewModel, string)> BindAllRecommendationData(string q, string? s, RecommendationViewModel model, Error? error, List<RecommendationHeader> recommendations, string firstCropName)
     {
@@ -4451,17 +4451,23 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         foreach (var recommendation in recommendations)
         {
-            cropCounter++;
             var crop = recommendation.Crops;
-            if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
+            CropViewModel matchingCrop = model.Crops?.FirstOrDefault(c => c.ID == crop.ID);
+            cropCounter++;
+            if (crop?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && matchingCrop != null)
             {
-                List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim())
-                    .ToList();
+                if (!string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
+                {
+                    List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim())
+                        .ToList();
+                    matchingCrop.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList); ;
+                }
+                matchingCrop.CurrentSward = (crop.Establishment == (int)NMP.Commons.Enums.Season.Autumn || crop.Establishment == (int)NMP.Commons.Enums.Season.Spring) ? Resource.lblNewSwards : Resource.lblExistingSwards;
 
-                crop.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
             }
+            
             await BindViewBegForRecommendation(cropCounter, crop);
             string defolicationName = await _cropLogic.BindDefoliationNameForRecommendation(recommendation, crop);
 
@@ -4484,6 +4490,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                 }
             }
         }
+        //model.Crops = cropList;
 
         return (flowControl: true, value: null, model, firstCropName);
     }

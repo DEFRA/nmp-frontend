@@ -8735,4 +8735,16 @@ following crop year 2</value>
   <data name="lblThisSiteClassGivesARangeForAnnualDryMatterYieldOf" xml:space="preserve">
     <value>This site class gives a range for annual dry matter yield of:</value>
   </data>
+  <data name="lblAverageAnnualRainfallMM" xml:space="preserve">
+    <value>Average annual rainfall (mm)</value>
+  </data>
+  <data name="lblGreenAreaIndexPlaceholder" xml:space="preserve">
+    <value>eg: 2.04</value>
+  </data>
+  <data name="lblOrganicMatterPercentageForError" xml:space="preserve">
+    <value>OrganicMatterPercentage</value>
+  </data>
+  <data name="MsgOrganicMatterPercentage" xml:space="preserve">
+    <value>Enter the value for organic matter percentage as a whole number (without decimal places).</value>
+  </data>
 </root>
