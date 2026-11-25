@@ -21,7 +21,7 @@
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@string.Format(Resource.lblBackToYourPlan, Model.Year)</govuk-back-link>
+        <govuk-back-link asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@string.Format(Resource.lblBackToYourPlan, Model.Year)</govuk-back-link>
     </div>
 
 }

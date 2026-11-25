@@ -46,4 +46,10 @@ public interface IReportLogic
     Task<string> GetPreviousCropAsync(int fieldId, int year);
     Task<(OrganicManureFertiliserResponse, Error?)> FetchOrganicManureFertiliserByCropId(int cropId);
     Task<(List<ReportYearLastUpdatedDateResponse>, Error?)> FetchLastUpdatedDateByFarmIdAndYearAsync(int farmId, string years);
+    ReportViewModel? GetReportDataFromSession(Guid? sessionId);
+    void SetReportDataToSession(ReportViewModel reportViewModel);
+    void RemoveReportDataFromSession(Guid? sessionId);
+    ReportViewModel? GetLivestockDataFromSession(Guid? sessionId);
+    void SetLivestockDataToSession(ReportViewModel reportViewModel);
+    void RemoveLivestockDataFromSession(Guid? sessionId);
 }

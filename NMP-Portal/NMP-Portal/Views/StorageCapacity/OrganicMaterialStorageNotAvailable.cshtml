@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="NVZComplianceReports" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="NVZComplianceReports" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnOrganicMaterialStorageNotAvailable"] != null)
 {
@@ -29,20 +29,20 @@
                 @Resource.lblYouHaveNotEnteredAnyOrganicMaterialStorage
             </h1>
             <p class="govuk-body">
-                <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" >
+                <a class="govuk-button" asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@Model.EncryptedFarmID" asp-route-y="@Model.EncryptedHarvestYear" asp-route-isPlan="@ViewBag.IsPlan" asp-route-sessionId="@Model.SessionId">
                     @Resource.lblAddAManureStore
                 </a>
             </p>
             <p class="govuk-body cancel-link">
                 @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
                 {
-                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                    <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">
                         @Resource.lblCancel
                     </a>
                 }
                 else
                 {
-                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
+                    <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID" asp-route-sessionId="@Model.SessionId">
                         @Resource.lblCancel
                     </a>
                 }

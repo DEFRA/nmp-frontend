@@ -8,7 +8,7 @@
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.ReportWizardSteps.OtherMaterialName;
 }
 @section BeforeContent {
-    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "LivestockImportExportCheckAnswer" : "ManureType") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@((Model.IsCheckAnswer && (!Model.IsManureTypeChange)) ? "LivestockImportExportCheckAnswer" : "ManureType") asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 
 <form asp-action="OtherMaterialName" asp-controller="Report" method="post" autocomplete="off">
@@ -23,50 +23,14 @@
             }
 
             @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
-            <govuk-input asp-for="@Model.OtherMaterialName">
+            <govuk-input for="@Model.OtherMaterialName">
                 <govuk-input-label is-page-heading="true" class="govuk-label--l">@heading</govuk-input-label>
             </govuk-input>
             <govuk-button type="submit" class="margin-bottom-forty" asp-action="OtherMaterialName">
                 @Resource.lblContinue
             </govuk-button>
-            <p class="govuk-body cancel-link">
-                @if (Model.IsCheckAnswer)
-                {
-                    <a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report">
-                        @Resource.lblCancel
-                    </a>
-                }
-                else
-                {
-                    if (Model.IsManageImportExport)
-                    {
-                        <a asp-action="ManageImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                    else if (string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
-                    {
-                        if (!Model.IsCheckList)
-                        {
-                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                    }
-                    else
-                    {
-                        <a asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                }
-            </p>
+            
+                <partial name="_CancelLinkForImportExport" model="@Model" />
         </div>
     </div>
 </form>

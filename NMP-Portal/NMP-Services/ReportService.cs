@@ -14,7 +14,7 @@ using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class ReportService(ILogger<ReportService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IReportService
+public class ReportService(ILogger<ReportService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IReportService
 {
     private readonly ILogger<ReportService> _logger = logger;
     private const string _applicationJson = "application/json";
@@ -420,5 +420,23 @@ public class ReportService(ILogger<ReportService> logger, IHttpContextAccessor h
         );
 
         return (data ?? null, error);
+    }
+    public async Task<ReportViewModel?> GetReportDataFromSessionAsync(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<ReportViewModel>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
+
+    public async Task SetReportDataToSessionAsync(ReportViewModel reportViewModel, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, reportViewModel);
+    }
+    public async Task RemoveReportDataSessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
     }
 }

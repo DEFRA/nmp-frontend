@@ -12,13 +12,14 @@
     };
 }
 @section BeforeContent {
-    <govuk-back-link asp-action="CheckAnswer" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 
 }
 
 <form asp-controller="StorageCapacity" asp-action="Cancel" method="post" autocomplete="off">
     @Html.AntiForgeryToken()
     <div hidden="true">
+        <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.SessionId" value="@Model.SessionId" />
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.FarmName"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedFarmID"/>
         <input class="govuk-visually-hidden" type="hidden" asp-for="@Model.EncryptedHarvestYear"/>
@@ -65,5 +66,5 @@
     </govuk-button>
 </form>
 <p class="govuk-body cancel-link">
-    <a asp-action="CheckAnswer" asp-controller="StorageCapacity">@Resource.lblCancel</a>
+    <a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
 </p>

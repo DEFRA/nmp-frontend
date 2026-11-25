@@ -7,6 +7,11 @@ namespace NMP.Commons.ViewModels
 {
     public class ReportViewModel
     {
+        public ReportViewModel()
+        {
+            SessionId = Guid.NewGuid();
+        }
+        public Guid SessionId { get; set; }
         public List<string>? FieldList { get; set; }
         public string EncryptedFarmId { get; set; } = string.Empty;
         public string? EncryptedHarvestYear { get; set; } = string.Empty;

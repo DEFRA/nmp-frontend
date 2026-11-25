@@ -6,6 +6,11 @@ namespace NMP.Commons.ViewModels
 {
     public class StorageCapacityViewModel:StoreCapacity
     {
+        public StorageCapacityViewModel()
+        {
+            SessionId = Guid.NewGuid();
+        }
+        public Guid SessionId { get; set; }
         public string EncryptedFarmID { get; set; } = string.Empty;
         public string? EncryptedHarvestYear { get; set; } = string.Empty;
         public string? LastModifiedOn { get; set; }
