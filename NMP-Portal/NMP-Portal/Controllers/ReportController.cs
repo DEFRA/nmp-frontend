@@ -2141,16 +2141,6 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
     private void ValidateImportExportForLivestockCheckList(ReportViewModel model, List<NutrientsLoadingManures> nutrientsLoadingManuresList)
     {
-        if (model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
-        {
-            if (!model.IsAnyLivestockExport.HasValue && !model.IsAnyLivestockImport.HasValue && nutrientsLoadingManuresList.Count == 0 &&
-                ViewBag.IsAnyLivestockImportExportFromFarmDetail == null)
-            {
-                ModelState.AddModelError(string.Empty, string.Format(Resource.MsgImportsAndExportsOfManureForYearMustBeCompleted, model.Year));
-            }
-        }
-        else
-        {
             if (!model.IsAnyLivestockImport.HasValue && !nutrientsLoadingManuresList.Any(x => x.ManureLookupType == Resource.lblImport) &&
          ViewBag.IsAnyLivestockImportFromFarmDetail == null)
             {
@@ -2161,7 +2151,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             {
                 ModelState.AddModelError(string.Empty, string.Format(Resource.MsgExportsOfManureForMustBeCompleted, model.Year));
             }
-        }
+        
     }
 
     [HttpGet]
