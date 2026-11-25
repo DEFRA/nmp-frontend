@@ -8747,4 +8747,10 @@ following crop year 2</value>
   <data name="MsgOrganicMatterPercentage" xml:space="preserve">
     <value>Enter the value for organic matter percentage as a whole number (without decimal places).</value>
   </data>
+  <data name="lblEnterANumberBetweenValueAndValue" xml:space="preserve">
+    <value>Enter a value between {0} and {1}</value>
+  </data>
+  <data name="lblYouMayUseUpToTwoDecimalPlaces" xml:space="preserve">
+    <value>You may use up to 2 decimal places</value>
+  </data>
 </root>

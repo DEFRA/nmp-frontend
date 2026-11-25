@@ -5501,6 +5501,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value between {0} and {1}.
+        /// </summary>
+        public static string lblEnterANumberBetweenValueAndValue {
+            get {
+                return ResourceManager.GetString("lblEnterANumberBetweenValueAndValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a number for each month.
         /// </summary>
         public static string lblEnterANumberForEachMonth {
@@ -21776,6 +21785,15 @@ namespace NMP.Commons.Resources {
         public static string lblYouHaveUpdatedManureStorage {
             get {
                 return ResourceManager.GetString("lblYouHaveUpdatedManureStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You may use up to 2 decimal places.
+        /// </summary>
+        public static string lblYouMayUseUpToTwoDecimalPlaces {
+            get {
+                return ResourceManager.GetString("lblYouMayUseUpToTwoDecimalPlaces", resourceCulture);
             }
         }
         
