@@ -37,7 +37,7 @@ namespace NMP.Portal.Controllers
         private const string _tempDataErrorOnCheckAnswer = "ErrorOnCheckAnswer";
         private const string _manageStorageCapacity = "ManageStorageCapacity";
         private const string _removeStorageCapacity = "RemoveStorageCapacity";
-        private const string _farmList = "FarmList";
+        private const string _farmList = "FarmList";        
         private void BindNMPTFarmIdAndNameForNavigation(StorageCapacityViewModel? model)
         {
 
@@ -46,34 +46,34 @@ namespace NMP.Portal.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> ManageStorageCapacity(string y, string q, string? r, string? s, string? isPlan, string? t, string? u, Guid? sessionId)
+        public async Task<IActionResult> ManageStorageCapacity(StorageCapacityParameters parameters)
         {
             _logger.LogTrace("StorageCapacity Controller : ManageStorageCapacity() action called");
 
             var model = new StorageCapacityViewModel();
-            ClearStorageSessions(sessionId);
-            if (sessionId != null)
+            ClearStorageSessions(parameters.SessionId);
+            if (parameters.SessionId != null)
             {
-                model.SessionId = sessionId??model.SessionId;
+                model.SessionId = parameters.SessionId.Value;
             }
-            if (string.IsNullOrWhiteSpace(q))
+            if (string.IsNullOrWhiteSpace(parameters.Q))
                 return View(model);
-            if (!string.IsNullOrWhiteSpace(y))
+            if (!string.IsNullOrWhiteSpace(parameters.Y))
             {
-                model.EncryptedHarvestYear = y;
+                model.EncryptedHarvestYear = parameters.Y;
             }
-            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(parameters.Q));
             var (farm, farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
             if (!string.IsNullOrWhiteSpace(farmError?.Message) || farm == null)
-                return RedirectToFarmSummary(q, farmError?.Message ?? "", sessionId);
+                return RedirectToFarmSummary(parameters.Q, farmError?.Message ?? "", parameters.SessionId);
 
-            PopulateFarmDetails(model, farm, farmId, q, isPlan, t);
+            PopulateFarmDetails(model, farm, farmId, parameters.Q, parameters.IsPlan, parameters.T);
 
             var (storeCapacityList, storeError) =
                 await _storageCapacityLogic.FetchStoreCapacityByFarmId(farmId);
 
-            HandleSuccessMessages(r, s, model, storeCapacityList);
+            HandleSuccessMessages(parameters.R, parameters.S, model, storeCapacityList);
             BindNMPTFarmIdAndNameForNavigation(model);
 
             if (string.IsNullOrWhiteSpace(storeError.Message) && storeCapacityList.Any())
@@ -88,10 +88,10 @@ namespace NMP.Portal.Controllers
 
             //copy logic write here...
 
-            if (!string.IsNullOrWhiteSpace(u))
-                model.IsRemovedRecently = u;
-
-            if (storeCapacityList.Any() || !string.IsNullOrWhiteSpace(u))
+            if (!string.IsNullOrWhiteSpace(parameters.U))
+                model.IsRemovedRecently = parameters.U;
+            SaveStorageCapacityToSession(model);
+            if (storeCapacityList.Any() || !string.IsNullOrWhiteSpace(parameters.U))
             {
                 ViewBag.StorageCapacityList = storageCapacityList.Any() ? storageCapacityList : null;
                 return View(model);
@@ -100,7 +100,7 @@ namespace NMP.Portal.Controllers
             return RedirectToAction(
                 "OrganicMaterialStorageNotAvailable",
                 _storageCapacityActionName,
-                new { f = q, y = y, isPlan });
+                new { f = parameters.Q, y = parameters.Y, isPlan = parameters.IsPlan, sessionId = model.SessionId });
         }
 
 
@@ -108,9 +108,13 @@ namespace NMP.Portal.Controllers
         public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? y, string? isPlan, Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : OrganicMaterialStorageNotAvailable() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
             try
             {
+                if(model==null)
+                {
+                    model = new StorageCapacityViewModel();
+                }
                 if (!string.IsNullOrWhiteSpace(f))
                 {
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(f));
@@ -1152,7 +1156,7 @@ namespace NMP.Portal.Controllers
             return model;
         }
 
-        private async Task<StorageCapacityViewModel> BindDataForUpdate(string? storeCapId, string? q, string? r)
+        private async Task<StorageCapacityViewModel> BindDataForUpdate(string? storeCapId, string? q, string? r,Guid? sessionId)
         {
 
             int storeCapacityId = Convert.ToInt32(_storageCapacityProtector.Unprotect(storeCapId));
@@ -1181,7 +1185,10 @@ namespace NMP.Portal.Controllers
                 ModifiedOn = storeCapacity.ModifiedOn,
                 ModifiedByID = storeCapacity.ModifiedByID,
             };
-
+            if (sessionId!=null)
+            {
+                model.SessionId = sessionId.Value;
+            }
             if (!string.IsNullOrWhiteSpace(q))
             {
                 model.IsComingFromManageToHubPage = q;
@@ -1268,7 +1275,7 @@ namespace NMP.Portal.Controllers
                 }
                 else
                 {
-                    model = await BindDataForUpdate(storeCapId, q, r);
+                    model = await BindDataForUpdate(storeCapId, q, r,sessionId);
                     model.IsCapacityWeightChange = true;
                 }
 
@@ -1384,7 +1391,8 @@ namespace NMP.Portal.Controllers
                                r = _reportDataProtector.Protect(successMsg),
                                s = _reportDataProtector.Protect(success.ToString()),
                                isPlan = string.IsNullOrWhiteSpace(model.IsComingFromPlan) ? null : model.IsComingFromPlan,
-                               t = model.IsComingFromManageToHubPage
+                               t = model.IsComingFromManageToHubPage,
+                               sessionId=model.SessionId
                            },
                            fragment: tabId
                        );
