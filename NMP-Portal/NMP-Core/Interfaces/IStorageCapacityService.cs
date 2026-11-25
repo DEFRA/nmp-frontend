@@ -1,5 +1,6 @@
 ﻿using NMP.Commons.Models;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 namespace NMP.Core.Interfaces;
 public interface IStorageCapacityService
 {
@@ -18,4 +19,7 @@ public interface IStorageCapacityService
     Task<(List<StoreCapacityResponse>, Error)> CopyExistingStorageCapacity(string copyStorageManureCapacityData);
     Task<(string, Error)> RemoveStorageCapacity(int id);
     Task<(StoreCapacity, Error)> UpdateStoreCapacityAsync(StoreCapacity storeCapacityData);
+    Task<StorageCapacityViewModel?> GetStorageCapacityFromSessionAsync(string cacheKey);
+    Task SetStorageCapacityToSessionAsync(StorageCapacityViewModel storageCapacityViewModel, string cacheKey);
+    Task RemoveStorageCapacitySessionAsync(string cacheKey);
 }

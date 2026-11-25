@@ -7,7 +7,7 @@
     {
         @if (Model.IsStoreCapacityExist)
         {
-            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently">
+            <a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblCancel
             </a>
         }
@@ -15,13 +15,13 @@
         {
             @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
             {
-                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
+                <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">
                     @Resource.lblCancel
                 </a>
             }
             else
             {
-                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
+                <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID" asp-route-sessionId="@Model.SessionId">
                     @Resource.lblCancel
                 </a>
             }
@@ -29,7 +29,7 @@
     }
     else
     {
-        <a asp-action="CheckAnswer" asp-controller="StorageCapacity">@Resource.lblCancel</a>
+        <a asp-action="CheckAnswer" asp-controller="StorageCapacity" asp-route-sessionId="@Model.SessionId">@Resource.lblCancel</a>
     }
 
 </p>

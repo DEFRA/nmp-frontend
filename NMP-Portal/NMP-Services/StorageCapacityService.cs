@@ -3,17 +3,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NMP.Commons.Helpers;
 using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
+using NMP.Commons.ViewModels;
 using NMP.Core.Attributes;
 using NMP.Core.Interfaces;
 using System.Text;
-using NMP.Commons.Helpers;
 namespace NMP.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService) : Service(httpContextAccessor, clientFactory, tokenRefreshService), IStorageCapacityService
+public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHttpContextAccessor httpContextAccessor, IHttpClientFactory clientFactory, TokenRefreshService tokenRefreshService, IRedisCacheService redisCacheService, IMemoryCacheService memoryCacheService) : CacheableService(httpContextAccessor, clientFactory, tokenRefreshService, redisCacheService, memoryCacheService), IStorageCapacityService
 {
     private readonly ILogger<StorageCapacityService> _logger = logger;
     private const string _recordsKey = "records";
@@ -291,5 +292,23 @@ public class StorageCapacityService(ILogger<StorageCapacityService> logger, IHtt
             return obj["message"]?.Value<string>() ?? string.Empty;
         }
         return string.Empty;
+    }
+    public async Task<StorageCapacityViewModel?> GetStorageCapacityFromSessionAsync(string cacheKey)
+    {
+        var cached = await GetFromCacheAsync<StorageCapacityViewModel>(cacheKey);
+        if (cached != null)
+        {
+            return cached;
+        }
+        return null;
+    }
+
+    public async Task SetStorageCapacityToSessionAsync(StorageCapacityViewModel storageCapacityViewModel, string cacheKey)
+    {
+        await SetCacheAsync(cacheKey, storageCapacityViewModel);
+    }
+    public async Task RemoveStorageCapacitySessionAsync(string cacheKey)
+    {
+        await RemoveCacheAsync(cacheKey);
     }
 }

@@ -10,8 +10,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer ?
-                                      "LivestockImportExportCheckAnswer" : "LivestockReceiver") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer ? "LivestockImportExportCheckAnswer" : "LivestockReceiver") asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockComment"] != null)
 {
@@ -30,7 +29,7 @@
         @await Html.PartialAsync("~/Views/Report/_ReportWizardHiddenFields.cshtml", Model)
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <govuk-textarea asp-for="@Model.Comment" rows="5">
+                <govuk-textarea for="@Model.Comment" rows="5">
                     <govuk-textarea-label is-page-heading="true" class="govuk-fieldset__legend--l">
                         @string.Format(Resource.lblLivestockCommentContent1,
                         Model.ImportExport.Value == (int)NMP.Commons.Enums.ImportExport.Import ?

@@ -14,8 +14,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@(Model.IsCheckAnswer ?
-                                      "LivestockImportExportCheckAnswer" : "LivestockImportExportDate") asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@(Model.IsCheckAnswer ? "LivestockImportExportCheckAnswer" : "LivestockImportExportDate") asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnLivestockQuantity"] != null)
 {

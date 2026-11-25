@@ -8,7 +8,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="FarmAverageYieldAdjustment" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="FarmAverageYieldAdjustment" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnFarmAverageYieldValue"] != null)
 {
@@ -40,7 +40,7 @@
                     {
                         @for (int i = 0; i < Model.FarmAverageYields.Count; i++)
                         {
-                            <govuk-input  asp-for=@Model.FarmAverageYields[i].AverageYield type="number" inputmode="decimal"
+                            <govuk-input  for=@Model.FarmAverageYields[i].AverageYield type="number" inputmode="decimal"
                                          pattern="^\d+(\.\d{0,3})?$" step="any" input-class="govuk-input--width-5" spellcheck="false">
                                 <govuk-input-label>
                                     @string.Format(Resource.lblFarmAverageYieldValuesContentTwo, Model.FarmAverageYields[i].CropGroupName)
@@ -55,20 +55,7 @@
                  <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button> 
-                <p class="govuk-body cancel-link">
-                    @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
-                    {
-                        <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                </p>
+             <partial name="_CancelLinkForMainPage" model="@Model" />
 
             </div>
 

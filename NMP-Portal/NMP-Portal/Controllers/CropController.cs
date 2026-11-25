@@ -3591,8 +3591,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
             RemoveOrganicDataFromSession(sessionId);
             RemoveFertiliserDataBeforeUpdateFromSession(sessionId);
-            RemoveReportDataFromSession();
-            RemoveStorageCapacityDataFromSession();
+            RemoveReportDataFromSession(sessionId);
+            RemoveStorageCapacityDataFromSession(sessionId);
             RemoveFertiliserManureFromSession(sessionId);
             await BindSuccessMsgForHarvestYearOverviewPage(q, r, v, w, sessionId);
 
@@ -4006,20 +4006,32 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         _farmLogic.RemoveNmptSession(cacheKey);
     }
 
-    private void RemoveStorageCapacityDataFromSession()
+    private void RemoveStorageCapacityDataFromSession(Guid? sessionId)
     {
-        if (HttpContext.Session.Exists("StorageCapacityData"))
+        if (!sessionId.HasValue)
         {
-            HttpContext.Session.Remove("StorageCapacityData");
+            return;
         }
+        string cacheKey = sessionId + " " + "StorageCapacityData";
+
+        _farmLogic.RemoveNmptSession(cacheKey);
+        cacheKey = sessionId + " " + "StorageCapacityDataBeforeUpdate";
+
+        _farmLogic.RemoveNmptSession(cacheKey);
     }
 
-    private void RemoveReportDataFromSession()
+    private void RemoveReportDataFromSession(Guid? sessionId)
     {
-        if (HttpContext.Session.Exists("ReportData"))
+        if (!sessionId.HasValue)
         {
-            HttpContext.Session.Remove("ReportData");
+            return;
         }
+        string cacheKey = sessionId + " " + "ReportData";
+
+        _farmLogic.RemoveNmptSession(cacheKey);
+        cacheKey = sessionId + " " + "LivestockDataBeforeUpdate";
+
+        _farmLogic.RemoveNmptSession(cacheKey);
     }
 
     private void RemoveFertiliserDataBeforeUpdateFromSession(Guid? sessionId)
@@ -4169,6 +4181,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         RemovePreviousCroppingFromSession(sessionId);
         _cropLogic.RemoveCropDataBeforeUpdateFromSession(sessionId);
         _cropLogic.RemoveExcessWinterRainfallFromSession(sessionId);
+        RemoveReportDataFromSession(sessionId);
+        RemoveStorageCapacityDataFromSession(sessionId);
         if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(year))
         {
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(id));

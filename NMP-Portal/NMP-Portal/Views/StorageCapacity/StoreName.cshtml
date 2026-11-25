@@ -3,41 +3,12 @@
 @{
     string title = (!string.IsNullOrEmpty(Model.EncryptedStoreCapacityId)) ? Resource.lblUpdateOrganicMaterialStorage : Resource.lblAddAManureStore;
     ViewData["Title"] = $"{Resource.lblWhatDoYouWantToCallThisManureStore} {Resource.lblHyphen} {title}";
-    var backAction = "";
-    if (Model.IsCheckAnswer && !Model.IsMaterialTypeChange)
-    {
-        backAction = "CheckAnswer";
-    }
-    else
-    {
-        if (!string.IsNullOrWhiteSpace(Model.EncryptedMaterialStateID))
-        {
-            backAction = "ManageStorageCapacity";
-        }
-        else
-        {
-            backAction = "MaterialStates";
-        }
-    }
-
-    var tabId = "";
-    if (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
-    {
-        tabId = "slurryStorageList";
-    }
-    else if (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
-    {
-        tabId = "dirtyWaterList";
-    }
-    else if (Model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
-    {
-        tabId = "solidManureStorageList";
-    }
+    
     ViewBag.CurrentStep = (int)NMP.Commons.Enums.StorageCapacityWizardStep.StoreName;
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-u="@Model.IsRemovedRecently" asp-fragment="@tabId">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="BackStoreCapacityForStoreName" asp-controller="StorageCapacity" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnStoreName"] != null)
 {

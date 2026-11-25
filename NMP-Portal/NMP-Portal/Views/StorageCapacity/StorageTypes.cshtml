@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsCheckAnswer && !Model.IsMaterialTypeChange) ? "CheckAnswer" : "StoreName")" asp-controller="StorageCapacity">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsCheckAnswer && !Model.IsMaterialTypeChange) ? "CheckAnswer" : "StoreName")" asp-controller="StorageCapacity" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnStorageTypes"] != null)
 {

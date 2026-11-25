@@ -7,7 +7,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "OccupancyAndStandard")" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@((Model.IsLivestockCheckAnswer && !Model.IsLivestockGroupChange) ? "LivestockCheckAnswer" : "OccupancyAndStandard")" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnOccupancy"] != null)
 {
@@ -56,29 +56,8 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                <p class="govuk-body cancel-link">
-                    @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
-                    {
-                        @if (!Model.IsLivestockCheckAnswer)
-                        {
-                            <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="LivestockCheckAnswer" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                    }
-                    else
-                    {
-                        <a asp-action="ManageLivestock" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                </p>
+               
+                <partial name="_CancelLinkForLivestockManure" model="@Model" />
 
             </div>
 

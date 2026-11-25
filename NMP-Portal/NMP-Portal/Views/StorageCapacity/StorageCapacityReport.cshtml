@@ -16,7 +16,7 @@
 
 @section BeforeContent {
     <div class="noprint">
-        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@ViewBag.IsPlan" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 
     </div>
 

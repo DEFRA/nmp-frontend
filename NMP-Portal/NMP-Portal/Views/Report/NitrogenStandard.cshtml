@@ -16,7 +16,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action="@backAction" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action="@backAction" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnNitrogenStandard"] != null)
 {
@@ -54,7 +54,7 @@
                             </p>
                         </govuk-details-text>
                     </govuk-details>
-                    <govuk-input asp-for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
+                    <govuk-input for=@Model.NitrogenStandard type="number" step="any" spellcheck="false">
                         <govuk-input-label is-page-heading="false">
                             @string.Format(Resource.lblWhatIsTheNitrogenNStandardForThisSuffix, Model.LivestockGroupName.ToLower(), Model.Year)<span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, ((Model.LivestockGroupId == (int)NMP.Commons.Enums.LivestockGroup.Pigs || Model.LivestockTypeId == (int)NMP.Commons.Enums.Livestock.OneOstrich) ? Resource.lblKgOfNitrogenNPerPlace : Resource.lblKgOfNitrogenNPer1000Places))</span>@Resource.lblQuestionMark
                         </govuk-input-label>
@@ -68,29 +68,8 @@
                     @Resource.lblContinue
                 </govuk-button>
 
-                <p class="govuk-body cancel-link">
-                    @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
-                    {
-                        @if (!Model.IsLivestockCheckAnswer)
-                        {
-                            <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="LivestockCheckAnswer" asp-controller="Report">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                    }
-                    else
-                    {
-                        <a asp-action="ManageLivestock" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear">
-                            @Resource.lblCancel
-                        </a>
-                    }
-                </p>
+           
+                <partial name="_CancelLinkForLivestockManure" model="@Model" />
 
             </div>
 

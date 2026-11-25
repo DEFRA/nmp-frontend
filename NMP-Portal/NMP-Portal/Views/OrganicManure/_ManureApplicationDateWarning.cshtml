@@ -10,35 +10,33 @@
                    (int)NMP.Commons.Enums.FarmCountry.Wales
     };
 
-    if (Model.IsClosedPeriodWarning)
+    void AddWarning(bool showWarning, string? para1, string? para2, string? para3)
     {
-        warningModel.Warnings.Add(new WarningMessage
+        if (showWarning && !string.IsNullOrWhiteSpace(para1))
         {
-            Header = Model.ClosedPeriodWarningPara1,
-            Para2 = Model.ClosedPeriodWarningPara2,
-            Para3 = Model.ClosedPeriodWarningPara3
-        });
+            warningModel.Warnings.Add(new WarningMessage
+            {
+                Header = para1,
+                Para2 = para2,
+                Para3 = para3
+            });
+        }
     }
 
-    if (Model.IsApplicationJulyToSeptWarning)
-    {
-        warningModel.Warnings.Add(new WarningMessage
-        {
-            Header = Model.ApplicationJulyToSeptPara1,
-            Para2 = Model.ApplicationJulyToSeptPara2,
-            Para3 = Model.ApplicationJulyToSeptPara3
-        });
-    }
+    AddWarning(Model.IsClosedPeriodWarning,
+        Model.ClosedPeriodWarningPara1,
+        Model.ClosedPeriodWarningPara2,
+        Model.ClosedPeriodWarningPara3);
 
-    if (Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks)
-    {
-        warningModel.Warnings.Add(new WarningMessage
-        {
-            Header = Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1,
-            Para2 = Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2,
-            Para3 = Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3
-        });
-    }
+    AddWarning(Model.IsApplicationJulyToSeptWarning,
+        Model.ApplicationJulyToSeptPara1,
+        Model.ApplicationJulyToSeptPara2,
+        Model.ApplicationJulyToSeptPara3);
+
+    AddWarning(Model.IsEndClosedPeriodFebruaryExistWithinThreeWeeks,
+        Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara1,
+        Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara2,
+        Model.EndClosedPeriodFebruaryExistWithinThreeWeeksPara3);
 }
 
 @await Html.PartialAsync(

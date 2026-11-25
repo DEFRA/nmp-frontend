@@ -8,6 +8,7 @@ using NMP.Commons.Models;
 using NMP.Commons.Resources;
 using NMP.Commons.ServiceResponses;
 using NMP.Commons.ViewModels;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using Error = NMP.Commons.ServiceResponses.Error;
 
 namespace NMP.Portal.Controllers
@@ -36,6 +37,7 @@ namespace NMP.Portal.Controllers
         private const string _tempDataErrorOnCheckAnswer = "ErrorOnCheckAnswer";
         private const string _manageStorageCapacity = "ManageStorageCapacity";
         private const string _removeStorageCapacity = "RemoveStorageCapacity";
+        private const string _farmList = "FarmList";        
         private void BindNMPTFarmIdAndNameForNavigation(StorageCapacityViewModel? model)
         {
 
@@ -44,31 +46,34 @@ namespace NMP.Portal.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> ManageStorageCapacity(string y, string q, string? r, string? s, string? isPlan, string? t, string? u)
+        public async Task<IActionResult> ManageStorageCapacity(StorageCapacityParameters parameters)
         {
             _logger.LogTrace("StorageCapacity Controller : ManageStorageCapacity() action called");
 
             var model = new StorageCapacityViewModel();
-            ClearStorageSessions();
-
-            if (string.IsNullOrWhiteSpace(q))
-                return View(model);
-            if (!string.IsNullOrWhiteSpace(y))
+            ClearStorageSessions(parameters.SessionId);
+            if (parameters.SessionId != null)
             {
-                model.EncryptedHarvestYear = y;
+                model.SessionId = parameters.SessionId.Value;
             }
-            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(q));
+            if (string.IsNullOrWhiteSpace(parameters.Q))
+                return View(model);
+            if (!string.IsNullOrWhiteSpace(parameters.Y))
+            {
+                model.EncryptedHarvestYear = parameters.Y;
+            }
+            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(parameters.Q));
             var (farm, farmError) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
             if (!string.IsNullOrWhiteSpace(farmError?.Message) || farm == null)
-                return RedirectToFarmSummary(q, farmError?.Message ?? "");
+                return RedirectToFarmSummary(parameters.Q, farmError?.Message ?? "", parameters.SessionId);
 
-            PopulateFarmDetails(model, farm, farmId, q, isPlan, t);
+            PopulateFarmDetails(model, farm, farmId, parameters.Q, parameters.IsPlan, parameters.T);
 
             var (storeCapacityList, storeError) =
                 await _storageCapacityLogic.FetchStoreCapacityByFarmId(farmId);
 
-            HandleSuccessMessages(r, s, model, storeCapacityList);
+            HandleSuccessMessages(parameters.R, parameters.S, model, storeCapacityList);
             BindNMPTFarmIdAndNameForNavigation(model);
 
             if (string.IsNullOrWhiteSpace(storeError.Message) && storeCapacityList.Any())
@@ -83,10 +88,10 @@ namespace NMP.Portal.Controllers
 
             //copy logic write here...
 
-            if (!string.IsNullOrWhiteSpace(u))
-                model.IsRemovedRecently = u;
-
-            if (storeCapacityList.Any() || !string.IsNullOrWhiteSpace(u))
+            if (!string.IsNullOrWhiteSpace(parameters.U))
+                model.IsRemovedRecently = parameters.U;
+            SaveStorageCapacityToSession(model);
+            if (storeCapacityList.Any() || !string.IsNullOrWhiteSpace(parameters.U))
             {
                 ViewBag.StorageCapacityList = storageCapacityList.Any() ? storageCapacityList : null;
                 return View(model);
@@ -95,17 +100,21 @@ namespace NMP.Portal.Controllers
             return RedirectToAction(
                 "OrganicMaterialStorageNotAvailable",
                 _storageCapacityActionName,
-                new { f = q, y = y, isPlan });
+                new { f = parameters.Q, y = parameters.Y, isPlan = parameters.IsPlan, sessionId = model.SessionId });
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? y, string? isPlan)
+        public async Task<IActionResult> OrganicMaterialStorageNotAvailable(string? f, string? y, string? isPlan, Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : OrganicMaterialStorageNotAvailable() action called");
-            StorageCapacityViewModel model = new StorageCapacityViewModel();
+            StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
             try
             {
+                if(model==null)
+                {
+                    model = new StorageCapacityViewModel();
+                }
                 if (!string.IsNullOrWhiteSpace(f))
                 {
                     int decryptedFarmId = Convert.ToInt32(_farmDataProtector.Unprotect(f));
@@ -125,7 +134,7 @@ namespace NMP.Portal.Controllers
                             ViewBag.IsPlan = isPlan;
                         }
                     }
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                    _storageCapacityLogic.SetStorageCapacityToSession(model);
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
@@ -134,22 +143,22 @@ namespace NMP.Portal.Controllers
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in OrganicMaterialStorageNotAvailable() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
 
                 TempData["ErrorOnYear"] = ex.Message;
-                return RedirectToAction("Year", "Report");
+                return RedirectToAction("Year", "Report", new { sessionId = sessionId });
             }
             return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> MaterialStates(string? f, string? isPlan, string? x, string? v, string? w)
+        public async Task<IActionResult> MaterialStates(string? f, string? isPlan, string? x, string? v, string? w, Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : MaterialStates() action called");
 
-            StorageCapacityViewModel model = GetOrCreateSessionModel();
+            StorageCapacityViewModel? model = _storageCapacityLogic.GetStorageCapacityFromSession(sessionId);
 
             try
             {
                 await LoadMaterialStatesAsync();
-                await PopulateFarmDetailsAsync(model, f, isPlan, w);
+                model = await PopulateFarmDetailsAsync(model, f, isPlan, w);
                 PopulateNavigationFlags(model, x, v);
 
                 await CheckStoreCapacityAsync(model);
@@ -182,11 +191,11 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                var storageModel = GetStorageCapacityFromSession();
+                var storageModel = GetStorageCapacityFromSession(model.SessionId);
 
                 if (ShouldRedirectToCheckAnswer(model, storageModel))
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
 
                 HandleMaterialTypeChange(model, storageModel);
@@ -195,7 +204,7 @@ namespace NMP.Portal.Controllers
 
                 SaveStorageCapacityToSession(model);
 
-                return RedirectToAction(_storeName);
+                return RedirectToAction(_storeName, new { sessionId = model.SessionId });
             }
             catch (Exception ex)
             {
@@ -208,15 +217,15 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> StoreName(string? f, string? isPlan, string? q, string? x, string? w)
+        public async Task<IActionResult> StoreName(string? f, string? isPlan, string? q, string? x, string? w, Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : StoreName() action called");
 
-            StorageCapacityViewModel model = GetSessionModel();
+            StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
 
             try
             {
-                await PopulateFarmAndStoreCapacityAsync(model, f, isPlan, x, w);
+                model = await PopulateFarmAndStoreCapacityAsync(model, f, isPlan, x, w);
                 await PopulateMaterialStateAsync(model, q);
 
                 BindNMPTFarmIdAndNameForNavigation(model);
@@ -227,7 +236,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "Exception in StoreName(): {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnMaterialStates"] = ex.Message;
-                return RedirectToAction("MaterialStates");
+                return RedirectToAction("MaterialStates", new { sessionId = sessionId });
             }
         }
 
@@ -260,15 +269,15 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
                 if (model.IsCheckAnswer && !model.IsMaterialTypeChange)
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
 
-                return RedirectToAction("StorageTypes");
+                return RedirectToAction("StorageTypes", new { sessionId = model.SessionId });
             }
             catch (Exception ex)
             {
@@ -278,15 +287,15 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> StorageTypes()
+        public async Task<IActionResult> StorageTypes(Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : StorageTypes() action called");
-            StorageCapacityViewModel model;
+            StorageCapacityViewModel? model;
             try
             {
-                if (!TryGetStorageSession(out model))
+                if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToFarmList();
+                    return RedirectToAction(_farmList, new { sessionId = sessionId });
                 }
 
                 BindNMPTFarmIdAndNameForNavigation(model);
@@ -296,7 +305,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in StorageTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_tempDataErrorOnStoreName] = ex.Message;
-                return RedirectToAction(_storeName);
+                return RedirectToAction(_storeName, new { sessionId = sessionId });
 
             }
             return View(model);
@@ -321,23 +330,19 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-                {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
+                StorageCapacityViewModel? storageModel = GetStorageCapacityFromSession(model.SessionId);
                 if (storageModel != null && model.StorageTypeID != storageModel.StorageTypeID)
                 {
                     model.IsStorageTypeChange = true;
                 }
                 if (model.IsCheckAnswer && (storageModel != null && model.StorageTypeID == storageModel.StorageTypeID && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
 
                 }
 
                 await BindStorageTypesName(model);
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
                 return RedirectForStorageTypes(model);
 
             }
@@ -386,12 +391,12 @@ namespace NMP.Portal.Controllers
                 model.IsCircumference = null;
                 model.BankSlopeAngleID = null;
                 model.BankSlopeAngleName = null;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
-                return RedirectToAction(_storageBagCapacity);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
+                return RedirectToAction(_storageBagCapacity, new { sessionId = model.SessionId });
             }
             else
             {
-                return RedirectToAction("Dimensions");
+                return RedirectToAction("Dimensions", new { sessionId = model.SessionId });
             }
         }
 
@@ -419,15 +424,15 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult Dimensions()
+        public IActionResult Dimensions(Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : Dimension() action called");
-            StorageCapacityViewModel model;
+            StorageCapacityViewModel? model;
             try
             {
-                if (!TryGetStorageSession(out model))
+                if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToFarmList();
+                    return RedirectToAction(_farmList, new { sessionId = sessionId });
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
@@ -435,7 +440,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in Dimension() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnStorageTypes"] = ex.Message;
-                return RedirectToAction("StorageTypes");
+                return RedirectToAction("StorageTypes", new { sessionId = sessionId });
             }
             return View(model);
         }
@@ -477,9 +482,9 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                StorageCapacityViewModel? storageModel = FetchPreviousSessionData();
+                StorageCapacityViewModel? storageModel = FetchPreviousSessionData(model.SessionId);
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
                 return RedirectForDimension(model, storageModel);
             }
             catch (Exception ex)
@@ -496,9 +501,9 @@ namespace NMP.Portal.Controllers
             {
                 if (model.IsCheckAnswer && (storageModel != null && model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
-                return RedirectToAction("WeightCapacity");
+                return RedirectToAction("WeightCapacity", new { sessionId = model.SessionId });
             }
             if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage || model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
             {
@@ -506,25 +511,21 @@ namespace NMP.Portal.Controllers
                 {
                     if (model.IsCheckAnswer && (storageModel != null && model.Length == storageModel.Length && model.Width == storageModel.Width && model.Depth == storageModel.Depth && model.IsCovered == storageModel.IsCovered && !model.IsMaterialTypeChange && !model.IsStorageTypeChange))
                     {
-                        return RedirectToAction(_checkAnswer);
+                        return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                     }
-                    return RedirectToAction("BankSlopeAngle");
+                    return RedirectToAction("BankSlopeAngle", new { sessionId = model.SessionId });
                 }
                 else
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
             }
-            return RedirectToAction(_checkAnswer);
+            return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
         }
 
-        private StorageCapacityViewModel? FetchPreviousSessionData()
+        private StorageCapacityViewModel? FetchPreviousSessionData(Guid? sessionId)
         {
-            StorageCapacityViewModel? storageModel = new StorageCapacityViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-            {
-                storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-            }
+            StorageCapacityViewModel? storageModel = _storageCapacityLogic.GetStorageCapacityBeforeUpdateFromSession(sessionId);
 
             return storageModel;
         }
@@ -621,13 +622,13 @@ namespace NMP.Portal.Controllers
                     {
                         ValidateCircumference(model);
                         model.Diameter = null;
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                        _storageCapacityLogic.SetStorageCapacityToSession(model);
                     }
                     else
                     {
                         ValidateDiameter(model);
                         model.Circumference = null;
-                        _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                        _storageCapacityLogic.SetStorageCapacityToSession(model);
                     }
                 }
                 ValidateDepth(model);
@@ -680,12 +681,7 @@ namespace NMP.Portal.Controllers
 
         private void ValidateLengthWidthAndDepth(StorageCapacityViewModel model)
         {
-
-            StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-            {
-                storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-            }
+            StorageCapacityViewModel? storageModel = _storageCapacityLogic.GetStorageCapacityFromSession(model.SessionId);
             if (storageModel != null && (model.Length != storageModel.Length || model.Width != storageModel.Width || model.Depth != storageModel.Depth))
             {
                 model.IsLengthWidthDepthChange = true;
@@ -840,15 +836,15 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> WeightCapacity()
+        public async Task<IActionResult> WeightCapacity(Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : WeightCapacity() action called");
             StorageCapacityViewModel model;
             try
             {
-                if (!TryGetStorageSession(out model))
+                if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToFarmList();
+                    return RedirectToFarmList(sessionId);
                 }
                 (SolidManureTypeResponse solidManureTypeResponse, Error error) = await _storageCapacityLogic.FetchSolidManureTypeById(model.StorageTypeID.Value);
                 if (error == null || string.IsNullOrWhiteSpace(error.Message))
@@ -858,7 +854,7 @@ namespace NMP.Portal.Controllers
                     {
                         model.CapacityWeight = Math.Round((model.Length * model.Width * model.Depth) * (solidManureTypeResponse.Density) ?? 0);  //solid manure weight capacity calculation
                     }
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                    _storageCapacityLogic.SetStorageCapacityToSession(model);
                 }
 
                 BindNMPTFarmIdAndNameForNavigation(model);
@@ -867,7 +863,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in WeightCapacity() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnDimension"] = ex.Message;
-                return RedirectToAction("Dimensions");
+                return RedirectToAction("Dimensions", new { sessionId = sessionId });
             }
             return View(model);
         }
@@ -886,19 +882,15 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-                {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
+                StorageCapacityViewModel? storageModel = _storageCapacityLogic.GetStorageCapacityFromSession(model.SessionId);
                 if (model.IsCheckAnswer && storageModel != null && model.CapacityWeight == storageModel.CapacityWeight && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
                 model.IsCapacityWeightChange = true;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
 
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
             catch (Exception ex)
             {
@@ -956,15 +948,15 @@ namespace NMP.Portal.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> StorageBagCapacity()
+        public async Task<IActionResult> StorageBagCapacity(Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : StorageBagCapacity() action called");
             StorageCapacityViewModel model;
             try
             {
-                if (!TryGetStorageSession(out model))
+                if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToFarmList();
+                    return RedirectToFarmList(sessionId);
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
@@ -972,7 +964,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in StorageBagCapacity() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnStorageTypes"] = ex.Message;
-                return RedirectToAction("StorageTypes");
+                return RedirectToAction("StorageTypes", new { sessionId = sessionId });
             }
             return View(model);
         }
@@ -989,18 +981,15 @@ namespace NMP.Portal.Controllers
                 {
                     return View(model);
                 }
-                StorageCapacityViewModel storageModel = new StorageCapacityViewModel();
-                if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-                {
-                    storageModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                }
+                StorageCapacityViewModel? storageModel = _storageCapacityLogic.GetStorageCapacityFromSession(model.SessionId);
+
                 if (model.IsCheckAnswer && storageModel != null && model.StorageBagCapacity == storageModel.StorageBagCapacity && !model.IsMaterialTypeChange && !model.IsStorageTypeChange)
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
 
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
             catch (Exception ex)
             {
@@ -1047,15 +1036,15 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> BankSlopeAngle()
+        public async Task<IActionResult> BankSlopeAngle(Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : BankSlopeAngle() action called");
             StorageCapacityViewModel model;
             try
             {
-                if (!TryGetStorageSession(out model))
+                if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToFarmList();
+                    return RedirectToFarmList(sessionId);
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
                 (List<BankSlopeAnglesResponse> bankSlopeAngles, Error error) = await _storageCapacityLogic.FetchBankSlopeAngles();
@@ -1066,7 +1055,7 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["ErrorOnSlopeQuestion"] = error.Message;
-                    return RedirectToAction("SlopeQuestion");
+                    return RedirectToAction("SlopeQuestion", new { sessionId = sessionId });
                 }
 
             }
@@ -1074,7 +1063,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in StorageTypes() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData["ErrorOnSlopeQuestion"] = ex.Message;
-                return RedirectToAction("SlopeQuestion");
+                return RedirectToAction("SlopeQuestion", new { sessionId = sessionId });
 
             }
             return View(model);
@@ -1112,11 +1101,11 @@ namespace NMP.Portal.Controllers
                 else
                 {
                     TempData["ErrorOnBankSlopeAngle"] = error.Message;
-                    return RedirectToAction("BankSlopeAngle");
+                    return RedirectToAction("BankSlopeAngle", new { sessionId = model.SessionId });
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
 
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
             catch (Exception ex)
             {
@@ -1167,7 +1156,7 @@ namespace NMP.Portal.Controllers
             return model;
         }
 
-        private async Task<StorageCapacityViewModel> BindDataForUpdate(string? storeCapId, string? q, string? r)
+        private async Task<StorageCapacityViewModel> BindDataForUpdate(string? storeCapId, string? q, string? r,Guid? sessionId)
         {
 
             int storeCapacityId = Convert.ToInt32(_storageCapacityProtector.Unprotect(storeCapId));
@@ -1196,7 +1185,10 @@ namespace NMP.Portal.Controllers
                 ModifiedOn = storeCapacity.ModifiedOn,
                 ModifiedByID = storeCapacity.ModifiedByID,
             };
-
+            if (sessionId!=null)
+            {
+                model.SessionId = sessionId.Value;
+            }
             if (!string.IsNullOrWhiteSpace(q))
             {
                 model.IsComingFromManageToHubPage = q;
@@ -1267,7 +1259,7 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> CheckAnswer(string? storeCapId, string? q, string? r)
+        public async Task<IActionResult> CheckAnswer(string? storeCapId, string? q, string? r, Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : CheckAnswer() action called");
             StorageCapacityViewModel model;
@@ -1275,28 +1267,27 @@ namespace NMP.Portal.Controllers
             {
                 if (string.IsNullOrWhiteSpace(storeCapId))
                 {
-                    if (!TryGetStorageSession(out model))
+                    if (!TryGetStorageSession(sessionId, out model))
                     {
-                        return RedirectToFarmList();
+                        return RedirectToFarmList(sessionId);
                     }
                     CalculateCapacityVolumnAndSurfaceArea(model);
                 }
                 else
                 {
-                    model = await BindDataForUpdate(storeCapId, q, r);
+                    model = await BindDataForUpdate(storeCapId, q, r,sessionId);
                     model.IsCapacityWeightChange = true;
                 }
 
                 model = await BindDataForCheckAnswer(model);
                 model.IsLengthWidthDepthChange = false;
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
 
                 if (!string.IsNullOrWhiteSpace(storeCapId))
                 {
-                    _httpContextAccessor.HttpContext?.Session.SetObjectAsJson("StorageCapacityDataBeforeUpdate", model);
-
+                    _storageCapacityLogic.SetStorageCapacityBeforeUpdateToSession(model);
                 }
-                var previousModel = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<StorageCapacityViewModel>("StorageCapacityDataBeforeUpdate");
+                var previousModel = _storageCapacityLogic.GetStorageCapacityBeforeUpdateFromSession(sessionId);
 
                 bool isDataChanged = false;
 
@@ -1315,7 +1306,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in CheckAnswer() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_tempDataErrorOnCheckAnswer] = ex.Message;
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = sessionId });
             }
             return View(model);
         }
@@ -1337,7 +1328,7 @@ namespace NMP.Portal.Controllers
                 }
 
 
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
 
                 if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
@@ -1377,15 +1368,16 @@ namespace NMP.Portal.Controllers
                 {
                     (_, error) = await _storageCapacityLogic.UpdateStoreCapacityAsync(storeCapacityData);
                 }
-                _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
                 {
                     TempData[_tempDataErrorOnCheckAnswer] = error.Message;
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
                 else
                 {
-                    HttpContext?.Session.Remove(_storageCapacityDataSessionKey);
+                    _storageCapacityLogic.RemoveStorageCapacityBeforeUpdateSession(model.SessionId);
+                    _storageCapacityLogic.RemoveStorageCapacitySession(model.SessionId);
                     bool success = true;
                     string successMsg = string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId) ? Resource.lblYouHaveAddedManureStorage : Resource.lblYouHaveUpdatedManureStorage;
                     string tabId = BindTabId(model);
@@ -1399,7 +1391,8 @@ namespace NMP.Portal.Controllers
                                r = _reportDataProtector.Protect(successMsg),
                                s = _reportDataProtector.Protect(success.ToString()),
                                isPlan = string.IsNullOrWhiteSpace(model.IsComingFromPlan) ? null : model.IsComingFromPlan,
-                               t = model.IsComingFromManageToHubPage
+                               t = model.IsComingFromManageToHubPage,
+                               sessionId=model.SessionId
                            },
                            fragment: tabId
                        );
@@ -1535,7 +1528,7 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("Circumference", Resource.MsgWhatIsTheCircumferenceNotSet);
                     }
                     model.Diameter = null;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                    _storageCapacityLogic.SetStorageCapacityToSession(model);
                 }
                 else
                 {
@@ -1544,7 +1537,7 @@ namespace NMP.Portal.Controllers
                         ModelState.AddModelError("Diameter", Resource.MsgWhatIsTheDiameterNotSet);
                     }
                     model.Circumference = null;
-                    _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                    _storageCapacityLogic.SetStorageCapacityToSession(model);
                 }
             }
             if (model.Depth == null)
@@ -1557,45 +1550,180 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        public IActionResult BackStoreCapacityCheckAnswer()
+        public IActionResult BackStoreCapacityCheckAnswer(Guid? sessionId)
         {
             _logger.LogTrace($"Farm Controller : BackLivestockCheckAnswer() action called");
             StorageCapacityViewModel? model = null;
-            if (!TryGetStorageSession(out model))
+            if (!TryGetStorageSession(sessionId, out model))
             {
-                return RedirectToFarmList();
+                return RedirectToFarmList(sessionId);
             }
             model.IsCheckAnswer = false;
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+            _storageCapacityLogic.SetStorageCapacityToSession(model);
             if (string.IsNullOrWhiteSpace(model.EncryptedStoreCapacityId))
             {
                 if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
                 {
-                    return RedirectToAction("WeightCapacity");
+                    return RedirectToAction("WeightCapacity", new { sessionId = sessionId });
                 }
                 else
                 {
                     if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.StorageBag)
                     {
-                        return RedirectToAction(_storageBagCapacity);
+                        return RedirectToAction(_storageBagCapacity, new { sessionId = sessionId });
                     }
                     else if (model.StorageTypeID == (int)NMP.Commons.Enums.StorageTypes.EarthBankedLagoon)
                     {
-                        return RedirectToAction("BankSlopeAngle");
+                        return RedirectToAction("BankSlopeAngle", new { sessionId = sessionId });
 
                     }
                     else
                     {
-                        return RedirectToAction("Dimensions");
+                        return RedirectToAction("Dimensions", new { sessionId = sessionId });
                     }
                 }
             }
             else
             {
+                ClearStorageSessions(sessionId);
                 return RedirectToAction(_manageStorageCapacity, new
                 {
-                    q = model.EncryptedFarmID
+                    q = model.EncryptedFarmID,
+                    sessionId = sessionId,
                 });
+            }
+
+        }
+        public IActionResult BackStoreCapacityForStoreName(Guid? sessionId)
+        {
+            _logger.LogTrace($"StorageCapacity Controller : BackStoreCapacityForStoreName() action called");
+         
+            StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
+            if (model == null)
+            {
+                return RedirectToFarmList(sessionId);
+            }
+
+            if (model.IsCheckAnswer && !model.IsMaterialTypeChange)
+            {
+                return RedirectToAction(_checkAnswer, new
+                {
+                    q = model.EncryptedFarmID,
+                    t = model.IsComingFromManageToHubPage,
+                    isPlan = model.IsComingFromPlan,
+                    u = model.IsRemovedRecently,
+                    sessionId = sessionId
+                });
+            }
+            else if (!string.IsNullOrWhiteSpace(model.EncryptedMaterialStateID))
+            {
+                var tabId = "";
+                if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SlurryStorage)
+                {
+                    tabId = "slurryStorageList";
+                }
+                else if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage)
+                {
+                    tabId = "dirtyWaterList";
+                }
+                else if (model.MaterialStateID == (int)NMP.Commons.Enums.MaterialState.SolidManureStorage)
+                {
+                    tabId = "solidManureStorageList";
+                }
+                ClearStorageSessions(sessionId);
+                return RedirectToAction(_manageStorageCapacity, _storageCapacityActionName, routeValues: new
+                {
+                    q = model.EncryptedFarmID,
+                    t = model.IsComingFromManageToHubPage,
+                    isPlan = model.IsComingFromPlan,
+                    u = model.IsRemovedRecently,
+                    sessionId = sessionId
+                }, fragment: tabId);
+            }
+            else
+            {
+                return RedirectToAction("MaterialStates", new
+                {
+                    q = model.EncryptedFarmID,
+                    t = model.IsComingFromManageToHubPage,
+                    isPlan = model.IsComingFromPlan,
+                    u = model.IsRemovedRecently,
+                    sessionId = sessionId
+                });
+
+            }
+
+        }
+        public IActionResult BackStoreCapacityForMaterialState(Guid? sessionId)
+        {
+            _logger.LogTrace($"StorageCapacity Controller : BackStoreCapacityForMaterialState() action called");
+            StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
+            if (model == null)
+            {
+                return RedirectToFarmList(sessionId);
+            }
+            if (model.IsCheckAnswer)
+            {
+                return RedirectToAction(_checkAnswer, new
+                {
+                    q = model.EncryptedFarmID,
+                    t = model.IsComingFromManageToHubPage,
+                    isPlan = model.IsComingFromPlan,
+                    u = model.IsRemovedRecently,
+                    sessionId = sessionId
+                });
+            }
+            else
+            {
+                if (model.IsCopyExistingManureStorage.HasValue && (!model.IsCopyExistingManureStorage.Value))
+                {
+                    return RedirectToAction("CopyExistingManureStorage", new
+                    {
+                        q = model.EncryptedFarmID,
+                        t = model.IsComingFromManageToHubPage,
+                        isPlan = model.IsComingFromPlan,
+                        u = model.IsRemovedRecently,
+                        sessionId = sessionId
+                    });
+                }
+                else if (!string.IsNullOrWhiteSpace(model.IsComingFromMaterialToHubPage))
+                {
+                    return RedirectToAction("StorageCapacityManagement", new
+                    {
+                        q = model.EncryptedFarmID,
+                        t = model.IsComingFromManageToHubPage,
+                        isPlan = model.IsComingFromPlan,
+                        u = model.IsRemovedRecently,
+                        sessionId = sessionId
+                    });
+                }
+                else
+                {
+                    if (model.IsStoreCapacityExist || !string.IsNullOrWhiteSpace(model.IsRemovedRecently))
+                    {
+                        ClearStorageSessions(sessionId);
+                        return RedirectToAction(_manageStorageCapacity, _storageCapacityActionName, routeValues: new
+                        {
+                            q = model.EncryptedFarmID,
+                            t = model.IsComingFromManageToHubPage,
+                            isPlan = model.IsComingFromPlan,
+                            u = model.IsRemovedRecently,
+                            sessionId = sessionId
+                        });
+                    }
+                    else
+                    {
+                        return RedirectToAction("OrganicMaterialStorageNotAvailable", new
+                        {
+                            q = model.EncryptedFarmID,
+                            t = model.IsComingFromManageToHubPage,
+                            isPlan = model.IsComingFromPlan,
+                            u = model.IsRemovedRecently,
+                            sessionId = sessionId
+                        });
+
+                    }
+                }
             }
 
         }
@@ -1660,12 +1788,17 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> StorageCapacityReport(string q, string? x, string v)
+        public async Task<IActionResult> StorageCapacityReport(string q, string? x, string v, Guid? sessionId)
         {
             StorageCapacityViewModel model = new StorageCapacityViewModel();
 
             try
             {
+                if (sessionId != null)
+                {
+                    model.SessionId = sessionId.Value;
+                }
+
                 if (string.IsNullOrWhiteSpace(q))
                     return View(model);
 
@@ -1716,16 +1849,15 @@ namespace NMP.Portal.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> StorageCapacityManagement(string q, string? r)
+        public async Task<IActionResult> StorageCapacityManagement(string q, string? r, Guid? sessionId)
         {
             if (!string.IsNullOrWhiteSpace(q))
             {
                 try
                 {
-                    if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-                    {
-                        HttpContext?.Session.Remove(_storageCapacityDataSessionKey);
-                    }
+                    _storageCapacityLogic.RemoveStorageCapacitySession(sessionId);
+                    _storageCapacityLogic.RemoveStorageCapacityBeforeUpdateSession(sessionId);
+
                     if (!string.IsNullOrWhiteSpace(r))
                     {
                         TempData["succesMsgContent1"] = _storageCapacityProtector.Unprotect(r);
@@ -1749,7 +1881,8 @@ namespace NMP.Portal.Controllers
                     _logger.LogTrace(ex, "StorageCapacity Controller : StorageCapacityManagement() get action called");
                     return RedirectToAction(_farmSummaryActionName, "Farm", new
                     {
-                        id = q
+                        id = q,
+                        sessionId = sessionId
                     });
                 }
             }
@@ -1861,15 +1994,15 @@ namespace NMP.Portal.Controllers
             return years;
         }
         [HttpGet]
-        public IActionResult Cancel()
+        public IActionResult Cancel(Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : Cancel() action called");
             StorageCapacityViewModel model;
             try
             {
-                if (!TryGetStorageSession(out model))
+                if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToFarmList();
+                    return RedirectToFarmList(sessionId);
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
@@ -1877,7 +2010,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in Cancel() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_tempDataErrorOnCheckAnswer] = ex.Message;
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = sessionId });
             }
 
             return View(model);
@@ -1899,7 +2032,7 @@ namespace NMP.Portal.Controllers
 
             if (!model.IsCancel.Value)
             {
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
             }
             else
             {
@@ -1909,7 +2042,8 @@ namespace NMP.Portal.Controllers
 
                     return RedirectToAction(_manageStorageCapacity, _storageCapacityActionName, new
                     {
-                        q = model.EncryptedFarmID
+                        q = model.EncryptedFarmID,
+                        sessionId = model.SessionId
                     });
                 }
                 else
@@ -1920,7 +2054,8 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction("HarvestYearOverview", "Crop", new
                         {
                             id = model.EncryptedFarmID,
-                            year = model.EncryptedHarvestYear
+                            year = model.EncryptedHarvestYear,
+                            sessionId = model.SessionId
                         });
                     }
                     else
@@ -1928,6 +2063,7 @@ namespace NMP.Portal.Controllers
                         return RedirectToAction(_farmSummaryActionName, "Farm", new
                         {
                             id = model.EncryptedFarmID,
+                            sessionId = model.SessionId
                         });
                     }
                 }
@@ -1936,11 +2072,11 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CopyExistingManureStorage(string q, string? isPlan, string? x, string? v)
+        public async Task<IActionResult> CopyExistingManureStorage(string q, string? isPlan, string? x, string? v, Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorage() action called");
 
-            StorageCapacityViewModel model = GetSessionModel();
+            StorageCapacityViewModel model = GetStorageCapacityFromSession(sessionId);
 
             try
             {
@@ -1973,14 +2109,14 @@ namespace NMP.Portal.Controllers
                     return View(model);
                 }
 
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                _storageCapacityLogic.SetStorageCapacityToSession(model);
                 if (!model.IsCopyExistingManureStorage.Value)
                 {
-                    return RedirectToAction("MaterialStates");
+                    return RedirectToAction("MaterialStates", new { sessionId = model.SessionId });
                 }
                 else
                 {
-                    return RedirectToAction("CopyExistingManureStorageYearList");
+                    return RedirectToAction("CopyExistingManureStorageYearList", new { sessionId = model.SessionId });
                 }
 
             }
@@ -1993,22 +2129,19 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CopyExistingManureStorageYearList()
+        public async Task<IActionResult> CopyExistingManureStorageYearList(Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : CopyExistingManureStorageYearList() action called");
 
-            if (_httpContextAccessor.HttpContext == null ||
-                !_httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
+            if (!TryGetStorageSession(sessionId, out _))
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm", new { sessionId });
             }
 
-            var model = _httpContextAccessor.HttpContext.Session
-                .GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-
+            StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
             if (model == null || !model.FarmID.HasValue)
             {
-                return RedirectToAction("FarmList", "Farm");
+                return RedirectToAction(_farmList, "Farm", new { sessionId });
             }
 
             try
@@ -2022,7 +2155,7 @@ namespace NMP.Portal.Controllers
                     "StorageCapacity Controller : Exception in CopyExistingManureStorageYearList");
 
                 TempData["ErrorOnCopyExistingManureStorage"] = ex.Message;
-                return RedirectToAction("CopyExistingManureStorage");
+                return RedirectToAction("CopyExistingManureStorage", new { sessionId });
             }
 
             return View(model);
@@ -2047,7 +2180,7 @@ namespace NMP.Portal.Controllers
                 }
 
 
-                _httpContextAccessor.HttpContext?.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+                SaveStorageCapacityToSession(model);
                 var data = new
                 {
                     FarmID = model.FarmID.Value,
@@ -2079,7 +2212,8 @@ namespace NMP.Portal.Controllers
                         r = _reportDataProtector.Protect(successMsgContent.ToString()),
                         s = _reportDataProtector.Protect(Resource.lblTrue),
                         isPlan = string.IsNullOrWhiteSpace(model.IsComingFromPlan) ? null : model.IsComingFromPlan,
-                        t = model.IsComingFromManageToHubPage
+                        t = model.IsComingFromManageToHubPage,
+                        sessionId = model.SessionId
                     }, fragment: tabId);
                 }
                 else
@@ -2108,15 +2242,15 @@ namespace NMP.Portal.Controllers
         }
 
         [HttpGet]
-        public IActionResult RemoveStorageCapacity()
+        public IActionResult RemoveStorageCapacity(Guid? sessionId)
         {
             _logger.LogTrace("StorageCapacity Controller : RemoveStorageCapacity() action called");
             StorageCapacityViewModel model;
             try
             {
-                if (!TryGetStorageSession(out model))
+                if (!TryGetStorageSession(sessionId, out model))
                 {
-                    return RedirectToFarmList();
+                    return RedirectToFarmList(sessionId);
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
             }
@@ -2124,7 +2258,7 @@ namespace NMP.Portal.Controllers
             {
                 _logger.LogError(ex, "StorageCapacity Controller : Exception in RemoveStorageCapacity() action : {Message}, {StackTrace}", ex.Message, ex.StackTrace);
                 TempData[_tempDataErrorOnCheckAnswer] = ex.Message;
-                return RedirectToAction(_checkAnswer);
+                return RedirectToAction(_checkAnswer, new { sessionId });
             }
 
             return View(model);
@@ -2145,7 +2279,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!model.IsDelete.Value)
                 {
-                    return RedirectToAction(_checkAnswer);
+                    return RedirectToAction(_checkAnswer, new { sessionId = model.SessionId });
                 }
                 else
                 {
@@ -2163,13 +2297,15 @@ namespace NMP.Portal.Controllers
                         TempData["ErrorOnRemove"] = error.Message;
                         return View(_removeStorageCapacity, model);
                     }
-
+                    _storageCapacityLogic.RemoveStorageCapacitySession(model.SessionId);
+                    _storageCapacityLogic.RemoveStorageCapacityBeforeUpdateSession(model.SessionId);
                     return RedirectToAction(_manageStorageCapacity, _storageCapacityActionName, new
                     {
                         q = model.EncryptedFarmID,
                         r = _reportDataProtector.Protect(Resource.lblRemove),
                         isPlan = string.IsNullOrWhiteSpace(model.IsComingFromPlan) ? null : model.IsComingFromPlan,
                         t = model.IsComingFromManageToHubPage,
+                        sessionId = model.SessionId,
                         u = storeCapacityList.Count == 0 ? _reportDataProtector.Protect(Resource.lblTrue) : null
                     });
                 }
@@ -2190,11 +2326,11 @@ namespace NMP.Portal.Controllers
             }
         }
 
-        private void ClearStorageSessions()
+        private void ClearStorageSessions(Guid? sessionId)
         {
-            var session = _httpContextAccessor.HttpContext?.Session;
-            session?.Remove(_storageCapacityDataSessionKey);
-            session?.Remove("StorageCapacityDataBeforeUpdate");
+            if (sessionId == null) return;
+            _storageCapacityLogic.RemoveStorageCapacitySession(sessionId);
+            _storageCapacityLogic.RemoveStorageCapacityBeforeUpdateSession(sessionId);
         }
         private void PopulateFarmDetails(StorageCapacityViewModel model, FarmResponse farm, int farmId, string encryptedFarmId, string? isPlan, string? t)
         {
@@ -2335,28 +2471,26 @@ namespace NMP.Portal.Controllers
                 _storageCapacityProtector.Protect(((int)NMP.Commons.Enums.MaterialState.DirtyWaterStorage).ToString());
         }
 
-        private IActionResult RedirectToFarmSummary(string q, string error)
+        private IActionResult RedirectToFarmSummary(string q, string error, Guid? sessionId)
         {
             TempData["Error"] = error;
-            return RedirectToAction(_farmSummaryActionName, "Farm", new { q });
+            return RedirectToAction(_farmSummaryActionName, "Farm", new { q, sessionId = sessionId });
         }
-        private StorageCapacityViewModel GetOrCreateSessionModel()
+        private StorageCapacityViewModel GetOrCreateSessionModel(Guid? sessionId)
         {
-            if (_httpContextAccessor.HttpContext?.Session.Keys.Contains(_storageCapacityDataSessionKey) == true)
+            if (TryGetStorageSession(sessionId, out var model))
             {
-                return _httpContextAccessor.HttpContext
-                    .Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey)
-                    ?? new StorageCapacityViewModel();
+                return model ?? new StorageCapacityViewModel();
             }
 
-            var model = new StorageCapacityViewModel();
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+            model = new StorageCapacityViewModel();
+            _storageCapacityLogic.SetStorageCapacityToSession(model);
             return model;
         }
 
         private void SaveSessionModel(StorageCapacityViewModel model)
         {
-            _httpContextAccessor.HttpContext?.Session.SetObjectAsJson(_storageCapacityDataSessionKey, model);
+            _storageCapacityLogic.SetStorageCapacityToSession(model);
         }
         private async Task LoadMaterialStatesAsync()
         {
@@ -2369,22 +2503,27 @@ namespace NMP.Portal.Controllers
                 ViewBag.MaterialStateList = materialStates;
             }
         }
-        private async Task PopulateFarmDetailsAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? removedRecently)
+        private async Task<StorageCapacityViewModel> PopulateFarmDetailsAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? removedRecently)
         {
             if (string.IsNullOrWhiteSpace(encryptedFarmId))
-                return;
+                return model;
 
             int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(encryptedFarmId));
             var (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
 
             if (!string.IsNullOrWhiteSpace(error?.Message) || farm == null)
-                return;
-
+                return model;
+            if (model == null)
+            {
+                model = new StorageCapacityViewModel();
+            }
             model.FarmName = farm.Name;
             model.FarmID = farmId;
             model.EncryptedFarmID = encryptedFarmId;
             model.IsComingFromPlan = isPlan;
             model.IsRemovedRecently = removedRecently;
+            _storageCapacityLogic.SetStorageCapacityToSession(model);
+            return model;
         }
         private static void PopulateNavigationFlags(StorageCapacityViewModel model, string? manageToHub, string? materialToHub)
         {
@@ -2438,45 +2577,23 @@ namespace NMP.Portal.Controllers
             TempData["ErrorOnYear"] = ex.Message;
             return RedirectToAction("Year", "Report");
         }
-        private StorageCapacityViewModel GetSessionModel()
+
+
+
+        private async Task<StorageCapacityViewModel> PopulateFarmAndStoreCapacityAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? manageToHub, string? removedRecently)
         {
-            if (_httpContextAccessor.HttpContext?.Session.Keys.Contains(_storageCapacityDataSessionKey) == true)
-            {
-                return _httpContextAccessor.HttpContext
-                    .Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey)
-                    ?? new StorageCapacityViewModel();
-            }
-
-            return new StorageCapacityViewModel();
-        }
-
-
-        private async Task PopulateFarmAndStoreCapacityAsync(StorageCapacityViewModel model, string? encryptedFarmId, string? isPlan, string? manageToHub, string? removedRecently)
-        {
-            if (string.IsNullOrWhiteSpace(encryptedFarmId))
-                return;
-
-            int farmId = Convert.ToInt32(_farmDataProtector.Unprotect(encryptedFarmId));
-            var (farm, error) = await _farmLogic.FetchFarmByIdAsync(farmId);
-
-            if (!string.IsNullOrWhiteSpace(error?.Message) || farm == null)
-                return;
-
-            model.FarmName = farm.Name;
-            model.FarmID = farmId;
-            model.EncryptedFarmID = encryptedFarmId;
-            model.IsComingFromPlan = isPlan;
+            await PopulateFarmDetailsAsync(model, encryptedFarmId, isPlan, removedRecently);
             model.IsComingFromManageToHubPage = manageToHub;
-            model.IsRemovedRecently = removedRecently;
-
             var (storeCapacityList, storeError) =
-                await _storageCapacityLogic.FetchStoreCapacityByFarmId(farmId);
+                await _storageCapacityLogic.FetchStoreCapacityByFarmId(model.FarmID ?? 0);
 
             if (string.IsNullOrWhiteSpace(storeError?.Message) && storeCapacityList.Any())
             {
                 ViewBag.StoreCapacityList = storeCapacityList;
                 model.IsStoreCapacityExist = true;
             }
+            _storageCapacityLogic.SetStorageCapacityToSession(model);
+            return model;
         }
 
         private async Task PopulateMaterialStateAsync(StorageCapacityViewModel model, string? encryptedMaterialStateId)
@@ -2627,17 +2744,12 @@ namespace NMP.Portal.Controllers
                     Resource.MsgSelectAnOptionBeforeContinuing);
             }
         }
-        private StorageCapacityViewModel GetStorageCapacityFromSession()
+        private StorageCapacityViewModel? GetStorageCapacityFromSession(Guid? sessionId)
         {
-            if (_httpContextAccessor.HttpContext != null &&
-                _httpContextAccessor.HttpContext.Session.Keys.Contains(_storageCapacityDataSessionKey))
-            {
-                return _httpContextAccessor.HttpContext
-                    .Session
-                    .GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-            }
+            if (sessionId == null)
+                return null;
 
-            return new StorageCapacityViewModel();
+            return _storageCapacityLogic.GetStorageCapacityFromSession(sessionId);
         }
 
         private async Task PopulateMaterialStateNameAsync(StorageCapacityViewModel model)
@@ -2652,32 +2764,18 @@ namespace NMP.Portal.Controllers
         }
         private void SaveStorageCapacityToSession(StorageCapacityViewModel model)
         {
-            _httpContextAccessor.HttpContext
-                ?.Session
-                .SetObjectAsJson(_storageCapacityDataSessionKey, model);
+            _storageCapacityLogic.SetStorageCapacityToSession(model);
         }
-        private bool TryGetStorageSession(out StorageCapacityViewModel model)
+        private bool TryGetStorageSession(Guid? sessionId, out StorageCapacityViewModel? model)
         {
-            model = new StorageCapacityViewModel();
+            model = GetStorageCapacityFromSession(sessionId);
 
-            var context = _httpContextAccessor.HttpContext;
-
-            if (context != null)
-            {
-                var data = context.Session.GetObjectFromJson<StorageCapacityViewModel>(_storageCapacityDataSessionKey);
-                if (data != null)
-                {
-                    model = data;
-                    return true;
-                }
-            }
-
-            return false;
+            return model != null;
         }
 
-        private IActionResult RedirectToFarmList()
+        private IActionResult RedirectToFarmList(Guid? sessionId)
         {
-            return RedirectToAction("FarmList", "Farm");
+            return RedirectToAction(_farmList, "Farm", new { sessionId = sessionId });
         }
     }
 }
