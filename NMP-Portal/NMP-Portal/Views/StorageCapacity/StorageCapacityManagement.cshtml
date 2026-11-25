@@ -19,7 +19,7 @@
 @section BeforeContent {
     @* <govuk-back-link asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@ViewBag.EncryptedFarmId">@Resource.lblBack</govuk-back-link> *@
     <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@ViewBag.EncryptedFarmId">
+        <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@ViewBag.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">
             @ViewBag.FarmName
         </govuk-breadcrumbs-item>
         <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
@@ -84,16 +84,16 @@
                             {
                                 @if (hasUpdate)
                                 {
-                                    <td class="govuk-table__cell"><a asp-action="CopyExistingManureStorage" asp-controller="StorageCapacity" asp-route-q="@ViewBag.EncryptedFarmId" asp-route-r="@yearList.EncryptedYear" asp-route-v="@ViewBag.EncryptedFarmId"> @string.Format(Resource.lblAddYearStorage, yearList.Year)</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="CopyExistingManureStorage" asp-controller="StorageCapacity" asp-route-q="@ViewBag.EncryptedFarmId" asp-route-r="@yearList.EncryptedYear" asp-route-v="@ViewBag.EncryptedFarmId" asp-route-sessionId="@Model.SessionId"> @string.Format(Resource.lblAddYearStorage, yearList.Year)</a></td>
                                 }
                                 else
                                 {
-                                    <td class="govuk-table__cell"><a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@ViewBag.EncryptedFarmId" asp-route-y="@yearList.EncryptedYear" asp-route-v="@ViewBag.EncryptedFarmId">@string.Format(Resource.lblAddYearStorage, yearList.Year)</a></td>
+                                    <td class="govuk-table__cell"><a asp-action="MaterialStates" asp-controller="StorageCapacity" asp-route-f="@ViewBag.EncryptedFarmId" asp-route-y="@yearList.EncryptedYear" asp-route-v="@ViewBag.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@string.Format(Resource.lblAddYearStorage, yearList.Year)</a></td>
                                 }
                             }
                             else
                             {
-                                <td class="govuk-table__cell"><a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@ViewBag.EncryptedFarmId" asp-route-t="@ViewBag.EncryptedFarmId">@string.Format(Resource.lblUpdateYearStorage, yearList.Year)</a></td>
+                                <td class="govuk-table__cell"><a asp-action="ManageStorageCapacity" asp-controller="StorageCapacity" asp-route-q="@ViewBag.EncryptedFarmId" asp-route-t="@ViewBag.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">@string.Format(Resource.lblUpdateYearStorage, yearList.Year)</a></td>
                             }
 
                         </tr>

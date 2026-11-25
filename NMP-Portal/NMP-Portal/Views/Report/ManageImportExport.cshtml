@@ -10,13 +10,13 @@
     @if (!string.IsNullOrWhiteSpace(Model.IsComingFromImportExportOverviewPage))
     {
         <govuk-breadcrumbs class="govuk-breadcrumbs-link">
-            <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm">
+            <govuk-breadcrumbs-item asp-action="FarmList" asp-controller="Farm" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblPlanningAndEstimating
             </govuk-breadcrumbs-item>
-            <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+            <govuk-breadcrumbs-item asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">
                 @Model.FarmName
             </govuk-breadcrumbs-item>
-            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item" asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId">
+            <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item" asp-action="UpdateLivestockImportExport" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblManureImportsAndExports
             </govuk-breadcrumbs-item>
             <govuk-breadcrumbs-item class="govuk-breadcrumbs__list-item">
@@ -27,7 +27,7 @@
     }
     else
     {
-        <govuk-back-link asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
 }
 <div class="govuk-grid-row">
@@ -42,7 +42,7 @@
                 @if (TempData["succesMsgContent2"] != null)
                 {
                     <p class="govuk-body">
-                        <a asp-action="ImportExportOption" asp-controller="Report">
+                        <a asp-action="ImportExportOption" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                             @TempData["succesMsgContent2"]
                         </a>
                     </p>
@@ -50,7 +50,7 @@
                 @if (TempData["succesMsgContent3"] != null)
                 {
                     <p class="govuk-body">
-                        <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-q="@ViewBag.isComingFromSuccessMsg">
+                        <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-q="@ViewBag.isComingFromSuccessMsg" asp-route-sessionId="@Model.SessionId">
                             @TempData["succesMsgContent3"]
                         </a>
                     </p>
@@ -72,11 +72,11 @@
         <h1 class="govuk-heading-l" id="header">@string.Format(Resource.lblOrganicMaterialImportsAndExportsYear, Model.Year)</h1>
 
         <p class="govuk-body">
-            <a class="govuk-button" asp-action="ImportExportOption" asp-controller="Report">
+            <a class="govuk-button" asp-action="ImportExportOption" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                 @Resource.lblAddAnImportOrExport
             </a>
         </p>
-        <p class="govuk-body"><a class="govuk-link" asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">@Resource.lblCreateAReportFromThisInformation</a></p>
+        <p class="govuk-body"><a class="govuk-link" asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblCreateAReportFromThisInformation</a></p>
 
         <govuk-tabs>
             <govuk-tabs-item id="imports" label=@Resource.lblImports>
@@ -106,7 +106,7 @@
                                         </td>
                                         <td class="govuk-table__cell">@import.Manure.FarmName</td>
 
-                                        <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@import.Manure.EncryptedID" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, import.Manure.ManureType))">@Resource.lblViewOrChange</a></td>
+                                        <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@import.Manure.EncryptedID" asp-route-sessionId="@Model.SessionId" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, import.Manure.ManureType))">@Resource.lblViewOrChange</a></td>
                                     </tr>
                                 }
                             </tbody>
@@ -117,7 +117,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyImports</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="ManureType" asp-controller="Report" asp-route-q="@ViewBag.IsImport">@Resource.lblAddAnImport</a>
+                        <a class="" asp-action="ManureType" asp-controller="Report" asp-route-q="@ViewBag.IsImport" asp-route-sessionId="@Model.SessionId">@Resource.lblAddAnImport</a>
                     </p>
                 }
             </govuk-tabs-item>
@@ -149,7 +149,7 @@
                                             @string.Format("{0:N0} {1}", export.Manure.Quantity, export.Unit)
                                         </td>
                                         <td class="govuk-table__cell">@export.Manure.FarmName</td>
-                                        <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@export.Manure.EncryptedID" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, export.Manure.ManureType))">@Resource.lblViewOrChange</a></td>
+                                        <td class="govuk-table__cell"><a asp-action="LivestockImportExportCheckAnswer" asp-controller="Report" asp-route-i="@export.Manure.EncryptedID" asp-route-sessionId="@Model.SessionId" aria-label="@(string.Format("{0} {1}", Resource.lblViewOrChange, export.Manure.ManureType))">@Resource.lblViewOrChange</a></td>
                                     </tr>
                                 }
                             </tbody>
@@ -160,7 +160,7 @@
                 {
                     <p class="govuk-body">@Resource.lblYouHaveNotAddedAnyExports</p>
                     <p class="govuk-body">
-                        <a class="" asp-action="ManureType" asp-controller="Report" asp-route-q="@ViewBag.IsExport">@Resource.lblAddAnExport</a>
+                        <a class="" asp-action="ManureType" asp-controller="Report" asp-route-q="@ViewBag.IsExport" asp-route-sessionId="@Model.SessionId">@Resource.lblAddAnExport</a>
                     </p>
                 }
 

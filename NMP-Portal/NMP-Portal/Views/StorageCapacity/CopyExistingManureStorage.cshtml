@@ -29,11 +29,11 @@
 @section BeforeContent {
     @if (backController == Resource.lblStorageCapacityForControllerName)
     {
-        <govuk-back-link asp-action=@backAction asp-controller=@backController asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan">@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action=@backAction asp-controller=@backController asp-route-q="@Model.EncryptedFarmID" asp-route-t="@Model.IsComingFromManageToHubPage" asp-route-isPlan="@Model.IsComingFromPlan" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
     else
     {
-        <govuk-back-link asp-action=@backAction asp-controller=@backController>@Resource.lblBack</govuk-back-link>
+        <govuk-back-link asp-action=@backAction asp-controller=@backController asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
     }
 }
 @if (TempData["ErrorOnCopyExistingManureStorage"] != null)
@@ -66,7 +66,7 @@
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                    <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsCopyExistingManureStorage">
+                    <govuk-radios class="govuk-radios--inline" for="@Model.IsCopyExistingManureStorage">
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
                                 @Resource.lblCopyExistingStorageManureContentOne
@@ -79,20 +79,7 @@
                 <govuk-button type="submit" class="margin-bottom-forty">
                     @Resource.lblContinue
                 </govuk-button>
-                <p class="govuk-body cancel-link">
-                    @if (!string.IsNullOrWhiteSpace(Model.IsComingFromPlan))
-                        {
-                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmID" asp-route-year="@Model.EncryptedHarvestYear">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmID">
-                                @Resource.lblCancel
-                            </a>
-                        }
-                </p>
+              @await Html.PartialAsync("~/views/StorageCapacity/_CancelLinkForCopyExisting.cshtml", Model)
 
             </div>
 

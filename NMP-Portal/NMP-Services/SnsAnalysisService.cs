@@ -135,6 +135,5 @@ public class SnsAnalysisService(ILogger<SnsAnalysisService> logger, IHttpContext
     public async Task RemoveSnsSessionAsync(string cacheKey)
     {
         await RemoveCacheAsync(cacheKey);
-
     }
 }

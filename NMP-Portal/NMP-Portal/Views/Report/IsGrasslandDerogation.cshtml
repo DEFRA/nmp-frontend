@@ -23,7 +23,7 @@
 }
 
 @section BeforeContent {
-    <govuk-back-link asp-action=@backAction asp-controller="Report">@Resource.lblBack</govuk-back-link>
+    <govuk-back-link asp-action=@backAction asp-controller="Report" asp-route-sessionId="@Model.SessionId">@Resource.lblBack</govuk-back-link>
 }
 @if (TempData["ErrorOnIsGrasslandDerogation"] != null)
 {
@@ -88,7 +88,7 @@
                     </govuk-details-text>
                 </govuk-details>
 
-                <govuk-radios class="govuk-radios--inline" asp-for="@Model.IsGrasslandDerogation">
+                <govuk-radios class="govuk-radios--inline" for="@Model.IsGrasslandDerogation">
 
                     <govuk-radios-fieldset>
                         <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--l">
@@ -106,13 +106,13 @@
                     {
                         @if ((Model.IsComingFromPlan.HasValue && Model.IsComingFromPlan.Value))
                         {
-                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear">
+                            <a asp-action="HarvestYearOverview" asp-controller="Crop" asp-route-id="@Model.EncryptedFarmId" asp-route-year="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">
                                 @Resource.lblCancel
                             </a>
                         }
                         else
                         {
-                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId">
+                            <a asp-action="FarmSummary" asp-controller="Farm" asp-route-Id="@Model.EncryptedFarmId" asp-route-sessionId="@Model.SessionId">
                                 @Resource.lblCancel
                             </a>
                         }
@@ -122,7 +122,7 @@
                     }
                     else
                     {
-                        <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report">
+                        <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
                             @Resource.lblCancel
                         </a>
                     }

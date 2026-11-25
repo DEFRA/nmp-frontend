@@ -1,0 +1,25 @@
+﻿@using NMP.Commons.Resources
+@model NMP.Commons.ViewModels.ReportViewModel
+<p class="govuk-body cancel-link">
+    @if (!Model.IsManageLivestock || (Model.IsManageLivestock && Model.IsLivestockCheckAnswer))
+    {
+        @if (!Model.IsLivestockCheckAnswer)
+        {
+            <a asp-action="LivestockManureNitrogenReportChecklist" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
+                @Resource.lblCancel
+            </a>
+        }
+        else
+        {
+            <a asp-action="LivestockCheckAnswer" asp-controller="Report" asp-route-sessionId="@Model.SessionId">
+                @Resource.lblCancel
+            </a>
+        }
+    }
+    else
+    {
+        <a asp-action="ManageLivestock" asp-controller="Report" asp-route-q="@Model.EncryptedFarmId" asp-route-y="@Model.EncryptedHarvestYear" asp-route-sessionId="@Model.SessionId">
+            @Resource.lblCancel
+        </a>
+    }
+</p>
