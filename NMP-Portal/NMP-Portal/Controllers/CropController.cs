@@ -4015,6 +4015,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         string cacheKey = sessionId + " " + "StorageCapacityData";
 
         _farmLogic.RemoveNmptSession(cacheKey);
+        cacheKey = sessionId + " " + "StorageCapacityDataBeforeUpdate";
+
+        _farmLogic.RemoveNmptSession(cacheKey);
     }
 
     private void RemoveReportDataFromSession(Guid? sessionId)
@@ -4024,6 +4027,9 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return;
         }
         string cacheKey = sessionId + " " + "ReportData";
+
+        _farmLogic.RemoveNmptSession(cacheKey);
+        cacheKey = sessionId + " " + "LivestockDataBeforeUpdate";
 
         _farmLogic.RemoveNmptSession(cacheKey);
     }
