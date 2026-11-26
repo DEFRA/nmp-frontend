@@ -43,6 +43,7 @@ namespace NMP.Portal.Controllers
         private const string _fieldController = "Field";
         private const string _phosphorusKey = "Phosphorus";
         private const string _soilAnalysisDataBeforeUpdateKey = "SoilAnalysisDataBeforeUpdate";
+        private const string _organicMatterPercentageKey = "OrganicMatterPercentage";
         private void BindNMPTFarmIdAndNameForNavigation(SoilAnalysisViewModel? model)
         {
 
@@ -729,9 +730,21 @@ namespace NMP.Portal.Controllers
             {
                 var value = model.OrganicMatterPercentage.Value;
 
-                if (value < 0 || value > 100 || decimal.Round(value, 1) != value)
+                if (value < 0 || value > 100 || value % 1 != 0)
                 {
-                    ModelState.AddModelError("OrganicMatterPercentage", string.Format(Resource.MsgEnterANumberFrom0To100With1Decimal, 0, 100));
+                    ModelState.AddModelError(_organicMatterPercentageKey, string.Format(Resource.MsgEnterANumberFrom0To100With1Decimal, 0, 100));
+                }
+            }
+            if ((!ModelState.IsValid) && ModelState.ContainsKey(_organicMatterPercentageKey))
+            {
+                var error = ModelState[_organicMatterPercentageKey]?.Errors.Count > 0 ?
+                                ModelState[_organicMatterPercentageKey]?.Errors[0].ErrorMessage.ToString() : null;
+
+                if (error != null && error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_organicMatterPercentageKey].AttemptedValue, Resource.lblOrganicMatterPercentageForError)))
+                {
+                    ModelState[_organicMatterPercentageKey]?.Errors.Clear();
+                    ModelState[_organicMatterPercentageKey]?.Errors.Add(Resource.MsgOrganicMatterPercentage);
+
                 }
             }
         }

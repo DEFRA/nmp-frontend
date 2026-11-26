@@ -47,7 +47,10 @@ public class SoilAnalysis
     public int? MagnesiumMethodologyID { get; set; }
     public string? MagnesiumStatus { get; set; }
     public string? NitrogenResidueGroup { get; set; }
-    public decimal? OrganicMatterPercentage { get; set; }
+    [Range(0, 100,
+    ErrorMessageResourceType = typeof(Resource),
+    ErrorMessageResourceName = nameof(Resource.MsgOrganicMatterPercentage))]
+    public int? OrganicMatterPercentage { get; set; }
     public string? Comments { get; set; }
     public int? PreviousID { get; set; }
     public DateTime? CreatedOn { get; set; }

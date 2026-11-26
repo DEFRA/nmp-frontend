@@ -1546,7 +1546,7 @@
     <value>Amount of rain (in mm) that falls in the 6 hours after the material is applied</value>
   </data>
   <data name="lblAverageRainfallBetweenManAppAndEndOfSoilDrainage" xml:space="preserve">
-    <value>Average rainfall (in mm) between material application and end of soil drainage</value>
+    <value>Average rainfall (in mm) between organic material application and end of soil drainage</value>
   </data>
   <data name="lblConditionsAffectingNutrientLoss" xml:space="preserve">
     <value>Conditions affecting nutrient loss</value>

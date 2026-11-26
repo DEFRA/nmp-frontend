@@ -63,6 +63,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
     private const string _fieldDataKey = "FieldData";
     private const string _fieldRemoveKey = "FieldRemove";
     private const string _fieldKey = "Field";
+    private const string _organicMatterPercentageKey = "SoilAnalyses.OrganicMatterPercentage";
     public async Task<IActionResult> Index()
     {
         _logger.LogTrace("Field Controller : Index() action called");
@@ -1362,11 +1363,22 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
         {
             var value = model.SoilAnalyses.OrganicMatterPercentage.Value;
 
-            if (value < 0 || value > 100 || decimal.Round(value, 1) != value)
+            if (value < 0 || value > 100 || value % 1 != 0)
             {
-                ModelState.AddModelError("SoilAnalyses.OrganicMatterPercentage", string.Format(Resource.MsgEnterANumberFrom0To100With1Decimal, 0, 100));
+                ModelState.AddModelError(_organicMatterPercentageKey, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
             }
+        }
+        if ((!ModelState.IsValid) && ModelState.ContainsKey(_organicMatterPercentageKey))
+        {
+            var error = ModelState[_organicMatterPercentageKey]?.Errors.Count > 0 ?
+                            ModelState[_organicMatterPercentageKey]?.Errors[0].ErrorMessage.ToString() : null;
 
+            if (error != null && error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_organicMatterPercentageKey].AttemptedValue, Resource.lblOrganicMatterPercentageForError)))
+            {
+                ModelState[_organicMatterPercentageKey]?.Errors.Clear();
+                ModelState[_organicMatterPercentageKey]?.Errors.Add(Resource.MsgOrganicMatterPercentage);
+
+            }
         }
     }
 

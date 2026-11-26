@@ -2781,7 +2781,7 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average rainfall (in mm) between material application and end of soil drainage.
+        ///   Looks up a localized string similar to Average rainfall (in mm) between organic material application and end of soil drainage.
         /// </summary>
         public static string lblAverageRainfallBetweenManAppAndEndOfSoilDrainage {
             get {
