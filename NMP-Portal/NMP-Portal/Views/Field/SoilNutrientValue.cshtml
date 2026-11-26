@@ -183,7 +183,7 @@
                 </govuk-fieldset>
 
             </div>
-            <govuk-input for=@Model.SoilAnalyses.OrganicMatterPercentage type="number" input-class="govuk-input--width-5" spellcheck="false">
+            <govuk-input for=@Model.SoilAnalyses.OrganicMatterPercentage pattern="^\d+$" step="any" type="number" input-class="govuk-input--width-5" spellcheck="false">
                 <govuk-input-label is-page-heading="false">
                     @Resource.lblOrganicMatter
                     <span class="govuk-visually-hidden"> @string.Format(Resource.lblInUnit, Resource.lblPercentage)</span>@Resource.lblOptional
