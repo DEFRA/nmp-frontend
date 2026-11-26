@@ -8735,4 +8735,10 @@ following crop year 2</value>
   <data name="lblThisSiteClassGivesARangeForAnnualDryMatterYieldOf" xml:space="preserve">
     <value>This site class gives a range for annual dry matter yield of:</value>
   </data>
+  <data name="lblScotlandComplianceWithNVZLivestockManureNitrogenFarmLimit" xml:space="preserve">
+    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit of 170kg of N per hectare</value>
+  </data>
+  <data name="lblAreaOfHoldingInsideAnNVZ" xml:space="preserve">
+    <value>Area of holding inside an NVZ</value>
+  </data>
 </root>
