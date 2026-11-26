@@ -15909,6 +15909,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to soil nitrogen supply (SNS) analysis.
+        /// </summary>
+        public static string lblSoilNitrogenSupplySNSAnalysisForCancel {
+            get {
+                return ResourceManager.GetString("lblSoilNitrogenSupplySNSAnalysisForCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Soil nutrient value Type.
         /// </summary>
         public static string lblSoilNutrientValueType {

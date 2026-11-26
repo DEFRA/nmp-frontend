@@ -8753,4 +8753,7 @@ following crop year 2</value>
   <data name="lblYouMayUseUpToTwoDecimalPlaces" xml:space="preserve">
     <value>You may use up to 2 decimal places</value>
   </data>
+  <data name="lblSoilNitrogenSupplySNSAnalysisForCancel" xml:space="preserve">
+    <value>soil nitrogen supply (SNS) analysis</value>
+  </data>
 </root>
