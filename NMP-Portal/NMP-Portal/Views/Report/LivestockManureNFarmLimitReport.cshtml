@@ -95,7 +95,18 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-m">
-            @(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales ? @Resource.lblComplianceWithHoldingNitrogenLimit : Resource.lblComplianceWithNVZLivestockManureNitrogenFarmLimit)
+            @if(Model.Country == (int)NMP.Commons.Enums.FarmCountry.Wales)
+            {
+                @Resource.lblComplianceWithHoldingNitrogenLimit
+            }
+            else if (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+            {
+                @Resource.lblScotlandComplianceWithNVZLivestockManureNitrogenFarmLimit
+            }
+            else
+            {
+                @Resource.lblComplianceWithNVZLivestockManureNitrogenFarmLimit
+            }
         </h2>
         <h3 class="govuk-heading-s">
             @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
@@ -122,51 +133,54 @@
             }
 
         </h3>
-
-        @if (ViewBag.IsAllNotInNVZ != null)
+        @if(Model.Country != (int)NMP.Commons.Enums.FarmCountry.Scotland)
         {
-            @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
+            @if (ViewBag.IsAllNotInNVZ != null)
             {
-                <p class="govuk-body-s">
-                    @string.Format("{0} {1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), string.Format(Resource.lblLivestockReportContentThreeForDerogationOrNonDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing))
-                </p>
+                @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
+                {
+                    <p class="govuk-body-s">
+                        @string.Format("{0} {1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), string.Format(Resource.lblLivestockReportContentThreeForDerogationOrNonDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing))
+                    </p>
+                }
+                else
+                {
+                    <p class="govuk-body-s">
+                        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                        {
+                            @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), string.Format(Resource.lblLivestockReportContentThreeForDerogationOrNonDerogation, ViewBag.FarmLimitForLandOutsideNVZ))
+                        }
+                        else
+                        {
+                            @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
+                        }
+                    </p>
+                }
             }
             else
             {
-                <p class="govuk-body-s">
-                    @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
-                    {
-                        @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), string.Format(Resource.lblLivestockReportContentThreeForDerogationOrNonDerogation, ViewBag.FarmLimitForLandOutsideNVZ))
-                    }
-                    else
-                    {
-                        @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
-                    }
-                </p>
+                @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
+                {
+                    <p class="govuk-body-s">
+                        @string.Format("{0}{1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), ".")
+                    </p>
+                }
+                else
+                {
+                    <p class="govuk-body-s">
+                        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                        {
+                            @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), ".")
+                        }
+                        else
+                        {
+                            @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
+                        }
+                    </p>
+                }
             }
         }
-        else
-        {
-            @if (Model.IsGrasslandDerogation != null && (Model.IsGrasslandDerogation.Value))
-            {
-                <p class="govuk-body-s">
-                    @string.Format("{0}{1}", string.Format(Resource.lblLivestockReportContentTwoForDerogation, ViewBag.FarmLimitForGrazing, ViewBag.FarmLimitForNonGrazing), ".")
-                </p>
-            }
-            else
-            {
-                <p class="govuk-body-s">
-                    @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
-                    {
-                        @string.Format("{0} {1}", string.Format(Resource.lblLivestockContentTwoForNonDerogation, ViewBag.FarmLimit), ".")
-                    }
-                    else
-                    {
-                        @string.Format(Resource.lblWaterResourceRegulationsForWales, ViewBag.FarmLimit)
-                    }
-                </p>
-            }
-        }
+        
 
         @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
         {
@@ -256,9 +270,13 @@
             <table class="data-table n-table govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
-                        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                        @if (Model.Country == (int)NMP.Commons.Enums.FarmCountry.England)
                         {
                             <th scope="col" class="govuk-table__header">@Resource.lblLivestockReportContentFive</th>
+                        }
+                        else if (Model.Country == (int)NMP.Commons.Enums.FarmCountry.Scotland)
+                        {
+                            <th scope="col" class="govuk-table__header">@Resource.lblAreaOfHoldingInsideAnNVZ</th>
                         }
                         <th scope="col" class="govuk-table__header">@Resource.lblAreas</th>
                         @if (Model.IsGrasslandDerogation != null && (!Model.IsGrasslandDerogation.Value))
@@ -281,7 +299,7 @@
                         }
                     </tr>
                     <tr class="govuk-table__row">
-                        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales && Model.Country != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                         {
                             <td class="govuk-table__cell">@Resource.lblLivestockReportContentEight</td>
                             <td class="govuk-table__cell">@string.Format("{0:N2} {1}", ViewBag.AreaOutsideNVZ, Resource.lblHectares)</td>
@@ -294,7 +312,7 @@
                         }
                     </tr>
                     <tr class="govuk-table__row total_row">
-                        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales)
+                        @if (Model.Country != (int)NMP.Commons.Enums.FarmCountry.Wales && Model.Country != (int)NMP.Commons.Enums.FarmCountry.Scotland)
                         {
                             <th scope="col" class="govuk-table__header">
                                 @Resource.lblTotals
