@@ -730,7 +730,7 @@ namespace NMP.Portal.Controllers
             {
                 var value = model.OrganicMatterPercentage.Value;
 
-                if (value < 0 || value > 100 || value % 1 != 0)
+                if (value < 0 || value > 100)
                 {
                     ModelState.AddModelError(_organicMatterPercentageKey, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
                 }
