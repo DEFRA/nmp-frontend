@@ -732,7 +732,7 @@ namespace NMP.Portal.Controllers
 
                 if (value < 0 || value > 100 || value % 1 != 0)
                 {
-                    ModelState.AddModelError(_organicMatterPercentageKey, string.Format(Resource.MsgEnterANumberFrom0To100With1Decimal, 0, 100));
+                    ModelState.AddModelError(_organicMatterPercentageKey, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
                 }
             }
             if ((!ModelState.IsValid) && ModelState.ContainsKey(_organicMatterPercentageKey))
