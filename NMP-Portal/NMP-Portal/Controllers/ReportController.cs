@@ -1875,7 +1875,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
 
         try
         {
-            if (!model.IsCheckList && model.FarmRB209CountryID != (int)NMP.Commons.Enums.RB209Country.Scotland)
+            if (!model.IsCheckList)
             {
                 (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, Error error) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
                 if (!string.IsNullOrWhiteSpace(error?.Message))
@@ -2031,6 +2031,9 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 model.TotalFarmArea = nutrientsLoadingFarmDetails.TotalFarmed;
                 model.TotalAreaInNVZ = nutrientsLoadingFarmDetails.LandInNVZ;
                 model.GrassPercentage = nutrientsLoadingFarmDetails.GrassPercentage;
+                model.IsAnyLivestockNumber = nutrientsLoadingFarmDetails.IsAnyLivestockNumber;
+                model.IsAnyLivestockImport = nutrientsLoadingFarmDetails.IsAnyLivestockImport;
+                model.IsAnyLivestockExport = nutrientsLoadingFarmDetails.IsAnyLivestockExport;
                 if (nutrientsLoadingFarmDetails.IsAnyLivestockNumber != null)
                 {
                     ViewBag.IsAnyLivestockNumberFromFarmDetail = true;
@@ -2409,7 +2412,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     }
 
     [HttpGet]
-    public IActionResult IsAnyLivestockImport(Guid? sessionId)
+    public async Task<IActionResult> IsAnyLivestockImport(Guid? sessionId)
     {
         _logger.LogTrace("Report Controller : IsAnyLivestockImport() action called");
         ReportViewModel? model = GetReportDataFromSession(sessionId);
@@ -2418,6 +2421,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
         }
         BindNMPTFarmIdAndNameForNavigation(model);
+        (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, _) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+        if (nutrientsLoadingFarmDetails != null)
+        {
+            model.IsAnyLivestockImport = nutrientsLoadingFarmDetails.IsAnyLivestockImport;
+        }
         return View(model);
     }
 
@@ -2485,7 +2493,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
     }
 
     [HttpGet]
-    public IActionResult IsAnyLivestockExport(Guid? sessionId)
+    public async Task<IActionResult> IsAnyLivestockExport(Guid? sessionId)
     {
         _logger.LogTrace("Report Controller : IsAnyLivestockExport() action called");
         ReportViewModel? model = GetReportDataFromSession(sessionId);
@@ -2494,6 +2502,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
         }
         BindNMPTFarmIdAndNameForNavigation(model);
+        (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, _) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+        if (nutrientsLoadingFarmDetails != null)
+        {
+            model.IsAnyLivestockExport = nutrientsLoadingFarmDetails.IsAnyLivestockExport;
+        }
         return View(model);
     }
 
@@ -4612,6 +4625,11 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
             BindNMPTFarmIdAndNameForNavigation(model);
             (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, _) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
             ViewBag.LiveStockList = nutrientsLoadingLiveStockList;
+            (NutrientsLoadingFarmDetail? nutrientsLoadingFarmDetails, _) = await _reportLogic.FetchNutrientsLoadingFarmDetailsByFarmIdAndYearAsync(model.FarmId ?? 0, model.Year ?? 0);
+            if (nutrientsLoadingFarmDetails != null)
+            {
+                model.IsAnyLivestockNumber = nutrientsLoadingFarmDetails.IsAnyLivestockNumber;
+            }
 
         }
         catch (Exception ex)
@@ -4656,7 +4674,7 @@ public class ReportController(ILogger<ReportController> logger, IDataProtectionP
                 (List<NutrientsLoadingLiveStockViewModel> nutrientsLoadingLiveStockList, Error? error) = await _reportLogic.FetchLivestockByFarmIdAndYear(model.FarmId.Value, model.Year ?? 0, IsScotland(model));
 
                 (var NutrientsLoadingFarmDetailsData, error) = await BindNutrientsLoadingFarmDetailData(model);
-                if (NutrientsLoadingFarmDetailsData != null && error == null)
+                if (NutrientsLoadingFarmDetailsData != null && string.IsNullOrWhiteSpace(error?.Message))
                 {
                     (_, error) = await _reportLogic.AddNutrientsLoadingFarmDetailsAsync(NutrientsLoadingFarmDetailsData);
                 }
