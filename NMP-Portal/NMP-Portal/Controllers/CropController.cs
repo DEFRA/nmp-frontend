@@ -4053,6 +4053,8 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         string cacheKey = sessionId + " " + _previousCroppingSessionKey;
         _farmLogic.RemoveNmptSession(cacheKey);
+        cacheKey = sessionId + " " + "SnsData";
+        _farmLogic.RemoveNmptSession(cacheKey);
 
     }
     private void RemoveOrganicDataFromSession(Guid? sessionId)
@@ -4078,7 +4080,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             return;
         }
         RemoveFertiliserDataBeforeUpdateFromSession(sessionId);
-        RemoveOrganicDataFromSession(sessionId);        
+        RemoveOrganicDataFromSession(sessionId);
         string cacheKey = sessionId + " " + _fertiliserManureKey;
         _farmLogic.RemoveNmptSession(cacheKey);
     }
@@ -4441,7 +4443,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         RemoveFertiliserManureFromSession(sessionId);
         _cropLogic.RemoveCropSession(sessionId);
         _cropLogic.RemoveCropDataBeforeUpdateFromSession(sessionId);
-        RemovePreviousCroppingFromSession(sessionId);       
+        RemovePreviousCroppingFromSession(sessionId);        
     }
     private async Task<(bool flowControl, IActionResult? value, RecommendationViewModel, string)> BindAllRecommendationData(string q, string? s, RecommendationViewModel model, Error? error, List<RecommendationHeader> recommendations, string firstCropName)
     {
@@ -4451,17 +4453,11 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
 
         foreach (var recommendation in recommendations)
         {
-            cropCounter++;
             var crop = recommendation.Crops;
-            if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && !string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
-            {
-                List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim())
-                    .ToList();
+            CropViewModel? matchingCrop = model.Crops?.FirstOrDefault(c => c.ID == crop.ID);
+            cropCounter++;
+            BindGrassDataForRecommendation(recommendation, crop, matchingCrop);
 
-                crop.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList);
-            }
             await BindViewBegForRecommendation(cropCounter, crop);
             string defolicationName = await _cropLogic.BindDefoliationNameForRecommendation(recommendation, crop);
 
@@ -4486,6 +4482,24 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         }
 
         return (flowControl: true, value: null, model, firstCropName);
+    }
+
+    private static void BindGrassDataForRecommendation(RecommendationHeader recommendation, CropViewModel? crop, CropViewModel? matchingCrop)
+    {
+        if (crop?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && matchingCrop != null)
+        {
+            if (!string.IsNullOrWhiteSpace(recommendation.Crops.DefoliationSequenceName))
+            {
+                List<string> defoliationList = recommendation.Crops.DefoliationSequenceName
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .ToList();
+                matchingCrop.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList); 
+            }
+            matchingCrop.CurrentSward = (crop.Establishment == (int)NMP.Commons.Enums.Season.Autumn || crop.Establishment == (int)NMP.Commons.Enums.Season.Spring) ? Resource.lblNewSwards : Resource.lblExistingSwards;
+
+        }
+
     }
 
     private async Task BindViewBegForRecommendation(int cropCounter, CropViewModel crop)
