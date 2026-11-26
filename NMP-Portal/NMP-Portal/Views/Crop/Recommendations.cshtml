@@ -404,12 +404,12 @@
 
 
                                         </tr>
-                                        @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && (!string.IsNullOrWhiteSpace(crop.EstablishmentName)))
+                                        @if (crop.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass)
                                         {
                                             <tr class="govuk-table__row">
                                                 <th class="govuk-table__cell" scope="row">@Resource.lblSward</th>
                                                 <td class="govuk-table__cell">
-                                                    @crop.EstablishmentName
+                                                    @crop.CurrentSward
                                                 </td>
                                             </tr>
                                         }

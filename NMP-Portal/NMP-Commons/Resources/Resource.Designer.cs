@@ -19,7 +19,7 @@ namespace NMP.Commons.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resource {
@@ -2732,6 +2732,15 @@ namespace NMP.Commons.Resources {
         public static string lblAverageAnnualRainfallHint {
             get {
                 return ResourceManager.GetString("lblAverageAnnualRainfallHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average annual rainfall (mm).
+        /// </summary>
+        public static string lblAverageAnnualRainfallMM {
+            get {
+                return ResourceManager.GetString("lblAverageAnnualRainfallMM", resourceCulture);
             }
         }
         
@@ -5501,6 +5510,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter a value between {0} and {1}.
+        /// </summary>
+        public static string lblEnterANumberBetweenValueAndValue {
+            get {
+                return ResourceManager.GetString("lblEnterANumberBetweenValueAndValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a number for each month.
         /// </summary>
         public static string lblEnterANumberForEachMonth {
@@ -7577,6 +7595,15 @@ namespace NMP.Commons.Resources {
         public static string lblGreenAreaIndexOrCropHeight {
             get {
                 return ResourceManager.GetString("lblGreenAreaIndexOrCropHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to eg: 2.04.
+        /// </summary>
+        public static string lblGreenAreaIndexPlaceholder {
+            get {
+                return ResourceManager.GetString("lblGreenAreaIndexPlaceholder", resourceCulture);
             }
         }
         
@@ -12757,6 +12784,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OrganicMatterPercentage.
+        /// </summary>
+        public static string lblOrganicMatterPercentageForError {
+            get {
+                return ResourceManager.GetString("lblOrganicMatterPercentageForError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to lblOrgenisation.
         /// </summary>
         public static string lblOrgenisation {
@@ -15887,6 +15923,15 @@ namespace NMP.Commons.Resources {
         public static string lblSoilNitrogenSupplyItems {
             get {
                 return ResourceManager.GetString("lblSoilNitrogenSupplyItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to soil nitrogen supply (SNS) analysis.
+        /// </summary>
+        public static string lblSoilNitrogenSupplySNSAnalysisForCancel {
+            get {
+                return ResourceManager.GetString("lblSoilNitrogenSupplySNSAnalysisForCancel", resourceCulture);
             }
         }
         
@@ -21771,6 +21816,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You may use up to 2 decimal places.
+        /// </summary>
+        public static string lblYouMayUseUpToTwoDecimalPlaces {
+            get {
+                return ResourceManager.GetString("lblYouMayUseUpToTwoDecimalPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must allow at least 3 weeks between applications..
         /// </summary>
         public static string lblYouMustAllowAtLeast3WeeksBetweenApplications {
@@ -24622,6 +24676,15 @@ namespace NMP.Commons.Resources {
         public static string MsgOrganicMaterialApplicationUpdated {
             get {
                 return ResourceManager.GetString("MsgOrganicMaterialApplicationUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the value for organic matter percentage as a whole number (without decimal places)..
+        /// </summary>
+        public static string MsgOrganicMatterPercentage {
+            get {
+                return ResourceManager.GetString("MsgOrganicMatterPercentage", resourceCulture);
             }
         }
         
