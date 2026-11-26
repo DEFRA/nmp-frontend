@@ -2502,6 +2502,15 @@ namespace NMP.Commons.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Area of holding inside an NVZ.
+        /// </summary>
+        public static string lblAreaOfHoldingInsideAnNVZ {
+            get {
+                return ResourceManager.GetString("lblAreaOfHoldingInsideAnNVZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Area required for livestock manure.
         /// </summary>
         public static string lblAreaRequiredForLivestockManure {
@@ -14969,6 +14978,15 @@ namespace NMP.Commons.Resources {
         public static string lblSBI {
             get {
                 return ResourceManager.GetString("lblSBI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compliance with NVZ livestock manure nitrogen (N) farm limit of 170kg of N per hectare.
+        /// </summary>
+        public static string lblScotlandComplianceWithNVZLivestockManureNitrogenFarmLimit {
+            get {
+                return ResourceManager.GetString("lblScotlandComplianceWithNVZLivestockManureNitrogenFarmLimit", resourceCulture);
             }
         }
         

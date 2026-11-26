@@ -8756,4 +8756,10 @@ following crop year 2</value>
   <data name="lblSoilNitrogenSupplySNSAnalysisForCancel" xml:space="preserve">
     <value>soil nitrogen supply (SNS) analysis</value>
   </data>
+  <data name="lblScotlandComplianceWithNVZLivestockManureNitrogenFarmLimit" xml:space="preserve">
+    <value>Compliance with NVZ livestock manure nitrogen (N) farm limit of 170kg of N per hectare</value>
+  </data>
+  <data name="lblAreaOfHoldingInsideAnNVZ" xml:space="preserve">
+    <value>Area of holding inside an NVZ</value>
+  </data>
 </root>
