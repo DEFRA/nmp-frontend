@@ -4456,7 +4456,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
             var crop = recommendation.Crops;
             CropViewModel? matchingCrop = model.Crops?.FirstOrDefault(c => c.ID == crop.ID);
             cropCounter++;
-            BindGrassDataForRecommendation(cropCounter, recommendation, crop, matchingCrop);
+            BindGrassDataForRecommendation(recommendation, crop, matchingCrop);
 
             await BindViewBegForRecommendation(cropCounter, crop);
             string defolicationName = await _cropLogic.BindDefoliationNameForRecommendation(recommendation, crop);
@@ -4484,7 +4484,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
         return (flowControl: true, value: null, model, firstCropName);
     }
 
-    private static void BindGrassDataForRecommendation(int cropCounter, RecommendationHeader recommendation, CropViewModel? crop, CropViewModel? matchingCrop)
+    private static void BindGrassDataForRecommendation(RecommendationHeader recommendation, CropViewModel? crop, CropViewModel? matchingCrop)
     {
         if (crop?.CropTypeID == (int)NMP.Commons.Enums.CropTypes.Grass && matchingCrop != null)
         {
@@ -4494,7 +4494,7 @@ public class CropController(ILogger<CropController> logger, IDataProtectionProvi
                     .Split(',', StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => s.Trim())
                     .ToList();
-                matchingCrop.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList); ;
+                matchingCrop.DefoliationSequenceName = CommonHelpers.ShorthandDefoliationSequence(defoliationList); 
             }
             matchingCrop.CurrentSward = (crop.Establishment == (int)NMP.Commons.Enums.Season.Autumn || crop.Establishment == (int)NMP.Commons.Enums.Season.Spring) ? Resource.lblNewSwards : Resource.lblExistingSwards;
 
