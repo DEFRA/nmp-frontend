@@ -735,16 +735,18 @@ namespace NMP.Portal.Controllers
                     ModelState.AddModelError(_organicMatterPercentageKey, string.Format(Resource.MsgEnterAnAmountBetweenXAndYWithNoDecimalPlaces, 0, 100));
                 }
             }
-            if ((!ModelState.IsValid) && ModelState.ContainsKey(_organicMatterPercentageKey))
+            if (!ModelState.IsValid &&
+     ModelState.TryGetValue(_organicMatterPercentageKey, out var modelState))
             {
-                var error = ModelState[_organicMatterPercentageKey]?.Errors.Count > 0 ?
-                                ModelState[_organicMatterPercentageKey]?.Errors[0].ErrorMessage.ToString() : null;
+                var error = modelState.Errors.FirstOrDefault()?.ErrorMessage;
 
-                if (error != null && error.Equals(string.Format(Resource.lblEnterNumericValue, ModelState[_organicMatterPercentageKey].AttemptedValue, Resource.lblOrganicMatterPercentageForError)))
+                if (error == string.Format(
+                    Resource.lblEnterNumericValue,
+                    modelState.AttemptedValue,
+                    Resource.lblOrganicMatterPercentageForError))
                 {
-                    ModelState[_organicMatterPercentageKey]?.Errors.Clear();
-                    ModelState[_organicMatterPercentageKey]?.Errors.Add(Resource.MsgOrganicMatterPercentage);
-
+                    modelState.Errors.Clear();
+                    modelState.Errors.Add(Resource.MsgOrganicMatterPercentage);
                 }
             }
         }
