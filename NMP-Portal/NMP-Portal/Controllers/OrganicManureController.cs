@@ -101,6 +101,10 @@ namespace NMP.Portal.Controllers
             _logger.LogTrace($"Organic Manure Controller : Index() action called");
             return View();
         }
+         public IActionResult RedirectToDashboard()
+    {
+            return RedirectToAction("Index", "Dashboard", new { area = "" });
+        }
         public IActionResult CreateManureCancel(string q, string r, Guid? sessionId)
         {
             _logger.LogTrace("Organic Manure Controller : CreateManureCancel({Q}, {R}, {SessionId}) action called", q, r, sessionId);
@@ -730,7 +734,7 @@ namespace NMP.Portal.Controllers
                 return null;
 
             if (!ValidateSession(model.SessionId))
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
 
             var sessionModel = _organicManureLogic.GetOrganicManureFromSession(model.SessionId);
 
@@ -10548,7 +10552,7 @@ managementPeriod.CropID.HasValue
                 _logger.LogTrace("Organic Manure Controller : {Action}() action - Session expired",
                     actionName);
 
-                redirect = Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                redirect = RedirectToDashboard();
 
                 return false;
             }

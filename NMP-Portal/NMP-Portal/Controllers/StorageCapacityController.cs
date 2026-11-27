@@ -45,6 +45,10 @@ namespace NMP.Portal.Controllers
             ViewBag.NMPTFarmName = model?.FarmName;
 
         }
+        public IActionResult RedirectToDashboard()
+        {
+            return RedirectToAction("Index", "Dashboard", new { area = "" });
+        }
         [HttpGet]
         public async Task<IActionResult> ManageStorageCapacity(StorageCapacityParameters parameters)
         {
@@ -1601,7 +1605,7 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
             if (model == null)
             {
-                return RedirectToFarmList(sessionId);
+                return RedirectToDashboard();
             }
 
             if (model.IsCheckAnswer && !model.IsMaterialTypeChange)
@@ -1660,7 +1664,7 @@ namespace NMP.Portal.Controllers
             StorageCapacityViewModel? model = GetStorageCapacityFromSession(sessionId);
             if (model == null)
             {
-                return RedirectToFarmList(sessionId);
+                return RedirectToDashboard();
             }
             if (model.IsCheckAnswer)
             {

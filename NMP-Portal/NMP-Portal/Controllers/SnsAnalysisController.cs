@@ -220,7 +220,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new {sessionId=sessionId});
                 }
 
                 SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
@@ -394,7 +394,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
 
                 }
                 SnsAnalysisViewModel model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
@@ -473,7 +473,7 @@ namespace NMP.Portal.Controllers
             {
                 if (!HasSnsDataInSession(sessionId))
                 {
-                    return RedirectToAction(_farmListAction, "Farm");
+                    return RedirectToAction(_farmListAction, "Farm", new { sessionId = sessionId });
                 }
                 SnsAnalysisViewModel? model = _snsAnalysisLogic.GetSnsFromSession(sessionId);
                 BindNMPTFarmIdAndNameForNavigation(model);
