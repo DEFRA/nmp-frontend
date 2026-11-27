@@ -245,7 +245,7 @@ public class FieldController(ILogger<FieldController> logger, IDataProtectionPro
             if (string.IsNullOrWhiteSpace(q) && model == null)
             {
                 _logger.LogTrace("Field Controller : AddField() action : Farm Id is null or empty");
-                return RedirectToDashboard();
+                return Functions.RedirectToErrorHandler((int)HttpStatusCode.BadRequest);
             }
             return View(model);
         }
