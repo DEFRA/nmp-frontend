@@ -47,6 +47,10 @@ namespace NMP.Portal.Controllers
             RemoveAllNmptSession();
             return RedirectToAction(_farmListActionName);
         }
+        public IActionResult RedirectToDashboard()
+        {
+            return RedirectToAction("Index", "Dashboard", new { area = "" });
+        }
 
         public async Task<IActionResult> FarmList(string? q, Guid? sessionId)
         {
@@ -166,7 +170,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Country() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return RedirectToDashboard();
                 }
 
                 ViewBag.CountryList = await _farmLogic.FetchCountryAsync();
@@ -241,7 +245,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in FarmingRules() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -273,7 +277,7 @@ namespace NMP.Portal.Controllers
             FarmViewModel? model = _farmLogic.GetFarmFromSession(sessionId);
             if (model == null)
             {
-                model = new FarmViewModel();
+                return RedirectToDashboard();
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -311,7 +315,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in PostCode() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -404,7 +408,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Address() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return RedirectToDashboard();
                 }
                 BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -519,7 +523,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in AddressNotFound() post action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -534,7 +538,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in ManualAddress() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             return View(model);
@@ -655,7 +659,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in ClimatePostCode() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return RedirectToDashboard();
                 }
 
                 bool rainfallNotAvailable = !model.Rainfall.HasValue || model.Rainfall <= 0;
@@ -769,7 +773,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Rainfall() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return RedirectToDashboard();
                 }
 
                 if (model.Rainfall == 0 || model.Rainfall == null)
@@ -828,7 +832,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in RainfallManual() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
 
             BindNMPTFarmIdAndNameForNavigation(model);
@@ -894,7 +898,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in NVZ() action");
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+                return RedirectToDashboard();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -945,7 +949,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in Elevation() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             ViewBag.NitrateVulnerableZones = await GetNvzActionProgramItemsByCountryIdAsync(model.CountryID ?? 0);
@@ -989,7 +993,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in Elevation() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1032,7 +1036,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in Organic() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
             if (model.CountryID == (int)NMP.Commons.Enums.FarmCountry.Scotland)
@@ -1075,7 +1079,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in CheckAnswer({Q}) action", q);
-                return await Task.FromResult(Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict));
+                return RedirectToDashboard();
             }
 
             if (string.IsNullOrWhiteSpace(model.FullAddress))
@@ -1269,7 +1273,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in BackCheckAnswer() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
             bool isUpdate = false;
             if (model.EncryptedIsUpdate != null)
@@ -1624,7 +1628,7 @@ namespace NMP.Portal.Controllers
             if (model == null)
             {
                 _logger.LogError("Farm Controller : Session not found in FarmRemove() action");
-                return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                return RedirectToDashboard();
             }
             BindNMPTFarmIdAndNameForNavigation(model);
 
@@ -1695,7 +1699,7 @@ namespace NMP.Portal.Controllers
                 if (model == null)
                 {
                     _logger.LogError("Farm Controller : Session not found in Cancel() action");
-                    return Functions.RedirectToErrorHandler((int)HttpStatusCode.Conflict);
+                    return RedirectToDashboard();
                 }
             }
             catch (Exception ex)
